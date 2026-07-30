@@ -129,8 +129,10 @@ expressible in `TauCeti/`, state its milestones in `Suggested.lean` (with `sorry
   and prove the formula there first. For real `K` the ordinary 2-rank can drop (`ℚ(√3)`
   has `t = 2` but class number `1`), and the `t − 1` count needs the narrow class group
   and the narrow genus field (unramified at finite places only). Mathlib has neither;
-  defining the narrow class group is part of this layer and the prerequisite for the real
-  case.
+  the narrow class group is defined in
+  [GlobalClassFieldTheory Layer 1](../GlobalClassFieldTheory/README.md), whose interface
+  milestone freezes the `Cl⁺ ↠ Cl` spelling this layer consumes as the prerequisite for
+  the real case.
 
 ### Long horizon (aspiration, not required for the early extraction)
 Explicit Kronecker–Weber for the abelian-over-`ℚ` case (every multiquadratic field embeds
