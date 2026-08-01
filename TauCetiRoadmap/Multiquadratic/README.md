@@ -134,11 +134,14 @@ expressible in `TauCeti/`, state its milestones in `Suggested.lean` (with `sorry
   milestone freezes the `Cl⁺ ↠ Cl` spelling this layer consumes as the prerequisite for
   the real case.
 
-### Long horizon (aspiration, not required for the early extraction)
-Explicit Kronecker–Weber for the abelian-over-`ℚ` case (every multiquadratic field embeds
-in a cyclotomic field, via Gauss sums); the Hilbert class field, of which the genus field
-is the part cut out by `Cl/Cl²`; ring class fields. These set the direction; the roadmap
-proper is Layers 0–3.
+### Scope exclusions and future directions
+
+The required deliverables of this roadmap are exactly Layers 0–3. Explicit
+Kronecker–Weber for the abelian-over-`ℚ` case (every multiquadratic field embeds in a
+cyclotomic field, via Gauss sums), the full Hilbert class field beyond the genus-field
+quotient cut out by `Cl/Cl²`, and ring class fields are not milestones here. They belong
+to GlobalClassFieldTheory and possible later roadmaps; this section records interfaces and
+motivation only and makes no completion claim.
 
 ## Worked examples (acceptance criteria, keeping the definitions honest)
 
