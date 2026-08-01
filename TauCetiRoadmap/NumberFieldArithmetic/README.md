@@ -28,16 +28,16 @@ the Mathlib paths that own each notion (and extending the TauCeti files that alr
 exactly these paths).
 
 This roadmap is a coordinated neighbor of several others. It **consumes**
-[local fields](../LocalFields/README.md) (roadmap in preparation) for the target vocabulary of
-the global↔local dictionary of Layer 6 — completions at finite places are `LocalFields`
-objects, and the bridging lemmas here are stated in that roadmap's conventions. It **supplies**
-[polynomial Galois groups](../PolynomialGaloisGroups/README.md) (roadmap in preparation) with
-its computational workhorse, the cycle-type form of **Dedekind's theorem** (Layer 3), and
-Artin representations (a planned roadmap) with Frobenius
-conjugacy classes and the conductor–discriminant reductions of Layer 5.
-[Global class field theory](../GlobalClassFieldTheory/README.md) (roadmap in preparation) will
-*prove* the abelian conductor–discriminant formula and the reciprocity behavior of the Artin
-symbol whose ideal-theoretic statements are pinned here. The
+[Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2), specifically
+Layers 0–2, for the target vocabulary and completion-side facts in the global↔local dictionary
+of Layer 6 — completions at finite places are `LocalFields` objects, and the bridging lemmas
+here are stated in that roadmap's conventions. It **supplies**
+[Polynomial Galois Groups PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10) with
+its computational workhorse, the fixed-point-completed cycle-type form of **Dedekind's
+theorem** (Layer 3). A future ArtinRepresentations roadmap may consume Layer 2's Frobenius
+classes and Layer 5's finite ramification filtration; it is not a supplier to this roadmap.
+[Global Class Field Theory PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) consumes
+the ideal-theoretic Artin map and owns the abelian conductor–discriminant theorem. The
 [multiquadratic roadmap](../Multiquadratic/README.md) (merged; its Layers 1–2 are largely
 landed in TauCeti) is a *content neighbor from below*: its prime-splitting law is the
 `(ℤ/2)ⁿ`-instance of the uniform Frobenius API built here, and the TauCeti files it produced
@@ -79,7 +79,7 @@ the `ℚ`-versions are corollaries (TauCeti's `SplitsCompletely.lean` keeps its 
 
 | object | convention | source of truth |
 |---|---|---|
-| Frobenius | **arithmetic**: `σ x ≡ x^q mod Q` with `q = Nat.card (A ⧸ Q.under A)` — exactly Mathlib's `AlgHom.IsArithFrobAt` / `IsArithFrobAt`; "Frobenius" unqualified always means arithmetic; the geometric Frobenius is its inverse and is always named `geometric`. Identical to the [LocalFields](../LocalFields/README.md) convention table row | `Mathlib/RingTheory/Frobenius.lean`; LocalFields Layer 2 |
+| Frobenius | **arithmetic**: `σ x ≡ x^q mod Q` with `q = Nat.card (A ⧸ Q.under A)` — exactly Mathlib's `AlgHom.IsArithFrobAt` / `IsArithFrobAt`; "Frobenius" unqualified always means arithmetic; the geometric Frobenius is its inverse and is always named `geometric`. Identical to the [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) convention table row | `Mathlib/RingTheory/Frobenius.lean`; LocalFields Layer 2 |
 | Frobenius at ramified primes | `IsArithFrobAt` is satisfiable at every prime with finite residue field, but is canonical only **modulo inertia** (`IsArithFrobAt.mul_inv_mem_inertia`); an unqualified "the Frobenius at `Q`" requires `Algebra.IsUnramifiedAt`; at ramified primes only the coset `σ·I(Q)` is spoken of | Layer 2 |
 | Artin symbol | `(p, L/K) : ConjClasses (L ≃ₐ[K] L)`, defined for `p` unramified in `L`; the element `Frob Q` at a chosen prime is well defined (unramified), the class depends only on `p`. For abelian `L/K` the class collapses to an element and the symbol is a monoid hom on ideals prime to the ramified set | Layer 2 |
 | decomposition group | `MulAction.stabilizer G Q` — Mathlib's spelling; **no rival named definition**. Inertia group: `Q.inertia G` (`Ideal.inertia`). Decomposition/inertia *fields*: the pin's `IsDecompositionField`/`IsInertiaField` classes, ⚠ slated for deprecation by mathlib PR [#41591](https://github.com/leanprover-community/mathlib4/pull/41591) in favor of ring-level `Ideal.IsDecompositionRing`/`IsInertiaRing` — follow that direction, flag affected milestones | `Mathlib/RingTheory/Ideal/Pointwise.lean`, `…/NumberTheory/RamificationInertia/HilbertTheory.lean`, PR #41591 |
@@ -91,7 +91,7 @@ the `ℚ`-versions are corollaries (TauCeti's `SplitsCompletely.lean` keeps its 
 | conductor of an order | Mathlib's bare-namespace `conductor R x : Ideal S`; the number-field index invariant is `RingOfIntegers.exponent θ` (root namespace; the absNorm of the conductor's contraction), ⚠ **not** the ℤ-module index `[𝓞 K : ℤ[θ]]` — the two have the same prime divisors (a Layer-7 lemma), and only the index satisfies `disc(θ) = index² · discr K` | `Mathlib/RingTheory/Conductor.lean`, pin `Ideal/KummerDedekind.lean`; Layer 7 |
 | completions at finite places | the pin's `v.adicCompletion K` for `v : HeightOneSpectrum (𝓞 K)`, with `FinitePlace K ≃ HeightOneSpectrum (𝓞 K)`; local-field structure is stated in the `IsNonarchimedeanLocalField`/`ValuativeRel` vocabulary — the class itself is already at the pin (`Mathlib/NumberTheory/LocalField/Basic.lean`, with DVR/finite-residue/completeness instances for abstract local fields), adopted by LocalFields; what is missing is the instance for `v.adicCompletion K`, which is Layer 6's milestone. ⚠ the pin's `adicCompletion` is `Valued`-based while `Valued` is slated for deprecation in favor of `ValuativeRel` (Zulip, Jiedong Jiang, 2026-03-23): Layer 6 states its instances so that the `Valued → ValuativeRel` migration is a refactor, not a re-proof | pin; LocalFields §Provenance |
 | absolute values at finite places | the pin's `HeightOneSpectrum.adicAbv`, normalized by `absNorm v.asIdeal` — this **is** LocalFields' `‖x‖ = q^{−v(x)}` normalization; the agreement is a named Layer-6 lemma, and the product formula is the cross-check | pin `Completion/FinitePlace.lean`, `ProductFormula.lean` |
-| LMFDB label | `d.r.|D|.i`: degree `d = finrank ℚ K`, `r = nrRealPlaces K`, `|D| = (discr K).natAbs`, and `i` the index in the LMFDB's canonical ordering of fields with the same `(d, r, |D|)`. The first three coordinates are theorems; the index `i` and the canonical defining polynomial are **data semantics** — predicates against a certified enumeration (finite by `NumberField.finite_of_discr_bdd`), with the certification interface aligned with C. Birkbeck's CertifyingInvariantsNF | Layer 8 |
+| LMFDB intrinsic label prefix | `d.r.|D|`: degree `d = finrank ℚ K`, `r = nrRealPlaces K`, and `|D| = (discr K).natAbs`. These three coordinates are intrinsic theorems. The database index `i` and canonical defining polynomial are deliberately not part of the current API: Hermite finiteness alone supplies neither the LMFDB ordering key nor a completeness/deduplication certificate | Layer 8 |
 
 ## What Mathlib already has (consume)
 
@@ -138,7 +138,7 @@ gaps below it are guesses**.
   (`2^{r₁}(2π)^{r₂}hR/(w√|d|)`), and
   **`tendsto_sub_one_mul_dedekindZeta_nhdsGT`** — the Dirichlet class number formula as a
   one-sided real limit at `s = 1⁺`. ⚠ No Euler product, continuation, or functional equation:
-  those are the [LFunctions](../LFunctions/README.md) sibling's (roadmap in preparation);
+  those are the [L-functions PR #8](https://github.com/roed-math/TauCetiRoadmap/pull/8) sibling's;
   this roadmap only *consumes* the residue as a worked-example cross-check.
 - **Ramification and inertia, Dedekind-generic:** `Mathlib/NumberTheory/RamificationInertia/`
   — `Ramification.lean`/`Inertia.lean`: `Ideal.ramificationIdx p P` (an `sSup`),
@@ -268,7 +268,7 @@ gaps below it are guesses**.
   weak approximation at infinite places, `AdeleRing.principalSubgroup`;
   `ProductFormula.lean` — **`NumberField.prod_abs_eq_one`** (the product formula) and
   `FinitePlace.prod_eq_inv_abs_norm`. ⚠ No idele group, no finiteness/compactness statements —
-  [GlobalClassFieldTheory](../GlobalClassFieldTheory/README.md)'s territory, not here.
+  [Global Class Field Theory PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6)'s territory, not here.
 - **Canonical embedding, geometry of numbers:** `CanonicalEmbedding/` — `mixedEmbedding`,
   convex bodies, `minkowskiBound`, the fundamental cone, `NormLeOne` (feeding the ideal-count
   asymptotics `Ideal/Asymptotics.lean`) — consumed by EffectiveBounds and cited here only for
@@ -281,14 +281,15 @@ gaps below it are guesses**.
   Dedekind's theorem (Layer 3); `Mathlib/GroupTheory/DoubleCoset.lean` — `DoubleCoset.Quotient`
   (the double-coset carrier for Layer 1's non-Galois splitting law).
 
-### What is in motion elsewhere (checked 2026-07-30; coordinate, cite, do not fork)
+### What is in motion elsewhere (refreshed 2026-08-01; coordinate, cite, do not fork)
 
 Mathlib is actively consolidating exactly this area, with two authors working in visible
 coordination; every overlapping milestone below carries a refactor-onto flag. (Method note:
 mathlib merges via Bors, so merged PRs read `state: CLOSED` with a `[Merged by Bors]` title —
 dates below are Bors merge dates.)
 
-- **xroblot's Hilbert-theory wave** (all OPEN as of 2026-07-30): **#41591** — ring-level
+- **xroblot's Hilbert-theory wave:** **#41591** remains open at head
+  `9a76f0e50eee06c57a752295f05f00e98ae29ee3` as of 2026-08-01 — ring-level
   `Ideal.IsDecompositionRing`/`Ideal.IsInertiaRing` predicates, **deprecating the field-level
   `IsDecompositionField`/`IsInertiaField` API and its lemmas**; #35808 — splitting in the
   inertia ring (`f = 1` above, `e` below, unramified over the base); #35991/#36733 —
@@ -323,10 +324,45 @@ dates below are Bors merge dates.)
   origin of the `ValuationSubring.decompositionSubgroup` stub; **Chebotarev** is a declared
   onward goal of PrimeNumberTheoremAnd (Kontorovich–Tao, stream `#PrimeNumberTheorem+`,
   announced 2024-01) — consistent with this roadmap deliberately *not* owning any density
-  statement (→ [LFunctions](../LFunctions/README.md)); the `Valued`-deprecation project
+  statement (→ [L-functions PR #8](https://github.com/roed-math/TauCetiRoadmap/pull/8)); the `Valued`-deprecation project
   (J. Jiang, 2026-03-23) and the `ValuativeRel` wave are tracked in the
-  [LocalFields](../LocalFields/README.md) §Provenance and constrain Layer 6's instance
+  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) §Provenance and constrain Layer 6's instance
   statements as noted in the conventions table.
+
+### Coordination and licence ledger
+
+- **Project / authors:** Mathlib ramification/inertia work, principally the authors and
+  reviewers of the PRs cited above.
+- **Exact revision or PR:** mathlib PR
+  [#41591](https://github.com/leanprover-community/mathlib4/pull/41591), open at
+  `9a76f0e50eee06c57a752295f05f00e98ae29ee3` when refreshed 2026-08-01; the
+  `ramificationIdx`/`inertiaDeg` switch-over series #41234/#41325 is already represented in
+  the current Mathlib API even though the individual Bors PR pages are closed.
+- **Licence:** Mathlib is Apache-2.0.
+- **Overlap:** decomposition/inertia predicates and the `e`/`f` names in Layers 1–2.
+- **Contact / coordination status:** no new author contact was made during this review pass;
+  the cited public PR discussions are the current coordination record.
+- **Agreed ownership:** Mathlib owns the generic ring-level API; this roadmap owns only the
+  number-field comparisons and downstream Frobenius packaging.
+- **Plan:** consume the landed Mathlib declarations and contribute missing generic comparison
+  lemmas upstream; do not freeze wrappers around the field-level API while #41591 is open.
+- **Refactor trigger:** re-elaborate Layers 1–2 at the first toolchain bump containing #41591.
+
+- **Project / authors:** C. Birkbeck,
+  [`CBirkbeck/CertifyingInvariantsNF`](https://github.com/CBirkbeck/CertifyingInvariantsNF).
+- **Exact revision or PR:** `59ae55dbe49840d26d267a86c3e5c8f4a866d169` (2026-06-30),
+  the repository head when refreshed 2026-08-01.
+- **Licence:** no licence is declared in the repository metadata; therefore no code or data
+  is to be copied or adapted without explicit permission.
+- **Overlap:** certified per-field invariant files and the eventual database-label interface.
+- **Contact / coordination status:** not contacted during this review pass.
+- **Agreed ownership:** none recorded. In particular, this roadmap does not claim the LMFDB
+  ordering/canonical-polynomial layer.
+- **Plan:** prove only the intrinsic `d.r.|D|` prefix here. A later data-index project may add
+  `.i` after its ordering, canonical-polynomial selection, isomorphism deduplication, bounded
+  list completeness, and position certificate have all been specified and coordinated.
+- **Refactor trigger:** an explicitly licensed, reviewed certification interface with those
+  five ingredients.
 
 ## What TauCeti already has (consume)
 
@@ -468,7 +504,7 @@ and packaging. Everything is stated in `IsArithFrobAt` vocabulary — no rival d
 - **The abelian collapse and the ideal-theoretic Artin map.** For abelian `L/K` the symbol is
   an element `((L/K)/p) ∈ Gal(L/K)`; extend multiplicatively to the monoid of ideals prime to
   the ramified set. Its reciprocity properties (kernel, surjectivity) are **not** stated here —
-  the map and its formal multiplicativity are; [GlobalClassFieldTheory](../GlobalClassFieldTheory/README.md)
+  the map and its formal multiplicativity are; [Global Class Field Theory PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6)
   owns the rest. This is the interface boundary, chosen so that GCFT can state reciprocity
   against this object without refactoring it.
 - **Computations.** Cyclotomic: `galEquivZMod n K (Frob Q) = ZMod.unitOfCoprime p hp` — the
@@ -479,11 +515,11 @@ and packaging. Everything is stated in `IsArithFrobAt` vocabulary — no rival d
   the stabilizer has order 2 (pin) — name its generator (the complex conjugation over `w`,
   via `ComplexEmbedding.IsConj`; `IsCMField.complexConj` is the CM instance) and define the
   archimedean "Frobenius" class the LMFDB displays.
-- **Profinite packaging** (later milestone, feeding the planned ArtinRepresentations roadmap):
-  the Frobenius class at unramified `p` in `Gal(K̄/K)`-quotients through finite levels, on top
-  of `stabilizerHom_surjective_of_profinite` — statement-level here, consumed there. ⚠ The
-  pin's existence lemma requires `[Finite G]`; the profinite existence statement is part of
-  this milestone, not assumed.
+- **Required profinite-packaging milestone.** Construct the Frobenius class at unramified `p`
+  through the finite quotients of `Gal(K̄/K)`, prove restriction compatibility and independence
+  of the chosen finite Galois level, on top of `stabilizerHom_surjective_of_profinite`. A
+  future ArtinRepresentations roadmap may consume this proved interface. ⚠ The pin's existence
+  lemma requires `[Finite G]`; the profinite existence theorem is proved here, not assumed.
 
 ### Layer 3: Dedekind–Kummer and Dedekind's theorem
 
@@ -498,7 +534,7 @@ and packaging. Everything is stated in `IsArithFrobAt` vocabulary — no rival d
   `f ≡ ∏ ḡᵢ^{eᵢ} mod p`, the criterion for `p ∤ [B : A[θ]]` in terms of
   `gcd(f̄, ḡ, (f − ∏ gᵢ^{eᵢ})/p)` — the practical monogenicity test at `p`, and the tool that
   certifies the worked examples' indices.
-- **Dedekind's theorem (the named statement, for [PolynomialGaloisGroups](../PolynomialGaloisGroups/README.md)).**
+- **Dedekind's theorem (the named statement, for [Polynomial Galois Groups PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10)).**
   Suggested name: `TauCeti.NumberField.factorizationType_eq_cycleType_isArithFrobAt`. For
   `K = ℚ(θ)`, `f = minpoly ℤ θ`, `p ∤ RingOfIntegers.exponent θ` with `f mod p` squarefree,
   `M` the splitting field of `f`, and `σ` any Frobenius at a prime of `𝓞 M` over `p`: the
@@ -510,13 +546,19 @@ and packaging. Everything is stated in `IsArithFrobAt` vocabulary — no rival d
   `p ∤ disc f` implies it and is the checkable form). Proof spine: Layer 1's double-coset law
   identifies primes of `K` over `p` with `⟨Frob⟩`-orbits on `H\G` = roots; the relative
   Dedekind–Kummer equivalence identifies primes with factors, matching `f`'s with orbit sizes.
+- **Polynomial-side exported corollary.** For monic `f : ℤ[X]` and prime `p ∤ f.discr`,
+  produce `σ : (f.map ℚ).Gal` whose arithmetic-Frobenius root action has `fullCycleType σ`
+  equal to the factor-degree multiset of `f mod p`. This is the exact interface consumed by
+  Polynomial Galois Groups PR #10: `p ∤ f.discr`, arithmetic orientation, fixed points
+  restored, and the canonical splitting-field Galois group. `Suggested.lean` states the same
+  equality with the definition of `fullCycleType` expanded.
 - **Common index divisors** (the caveat made into theory). Definition: `p` is a common index
   divisor of `K` if `p ∣ [𝓞 K : ℤ[θ]]` for **every** generator `θ` of `K/ℚ` integral over
   `ℤ`. The counting obstruction (elementary direction, proved here): if the splitting type of
   `p` in `K` requires more monic irreducible polynomials of some degree `d` over `𝔽_p` than
   exist, then `p` is a common index divisor; hence `𝓞 K` is then non-monogenic. The converse
   (Hensel's criterion: common index divisors are *exactly* the primes whose splitting type is
-  unrealizable mod `p`) is a definite later milestone in this layer, cited to Narkiewicz
+  unrealizable mod `p`) is explicitly outside this roadmap, cited to Narkiewicz
   (§Still-wanted references). Worked example: `2` in `ℚ[x]/(x³ − x² − 2x − 8)` (Dedekind's
   field; Neukirch III §2 Ex. 1): `2` splits completely (three primes of residue degree 1) but
   `𝔽₂` has only two monic linear polynomials.
@@ -540,7 +582,7 @@ ideal it never defined and the exact exponents it stops short of.
   `v_P(𝔡) = e − 1` ⟺ tame (`ringChar (A⧸p) ∤ e`), and in the wild case
   `e ≤ v_P(𝔡) ≤ e − 1 + v_P(e)`. Route: localize–complete and compute over the completion
   (the Layer-6 dictionary + Eisenstein generators), or the semi-local direct argument — pin
-  the completion route, since Layer 6 exists and [LocalFields](../LocalFields/README.md)
+  the completion route, since Layer 6 exists and [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)
   Layer 3 states the local computation.
 - **Discriminants of bases, connected.** The `Algebra.discr` tower formula
   (`disc_{M/K}(compatible bases) = disc_{L/K}^{[M:L]} · N(disc_{M/L})`); the link
@@ -551,13 +593,15 @@ ideal it never defined and the exact exponents it stops short of.
   LocalFields (its Layer 3); Layer 5 states the finite-level global filtration it needs, and
   the two meet through Layer 6's localization lemma — see the boundary in Layer 5.
 
-### Layer 5: conductor–discriminant — statements and reductions
+### Layer 5: finite ramification bookkeeping and integral conductor cases
 
-This layer owns the *statements and formal reductions*; the two proofs it cannot supply are
-named, gated milestones for other roadmaps ([GlobalClassFieldTheory](../GlobalClassFieldTheory/README.md)
-for the abelian case, the planned ArtinRepresentations roadmap for the general
-case and for integrality of the conductor exponents). Nothing here waits on them except the
-final two bullets.
+This layer deliberately does **not** define a general integral Artin-conductor ideal. The
+ramification sum is rational before Artin integrality, so an ordinary ideal with those
+exponents would be ill-typed mathematics. General Artin conductors, Artin integrality, and
+the general conductor–discriminant formula belong to a future ArtinRepresentations roadmap.
+The current deliverables are the finite ramification filtration, the different-exponent
+formula, and conductor identities whose exponents are already integral (Dirichlet and
+permutation-character cases).
 
 - **The finite-level ramification filtration, global spelling.** For `L/K` Galois, `Q` over
   `p`, define `G_i(Q) = {σ ∈ MulAction.stabilizer | ∀ x : 𝓞 L, σ x − x ∈ Q^{i+1}}` (so
@@ -569,20 +613,17 @@ final two bullets.
   `v_Q(differentIdeal) = Σ_{i≥0} (#G_i(Q) − 1)` (Serre LF IV §1 Prop. 4), proved through the
   Layer-6 completion bridge — this is what makes Layer 4's exact exponents and this layer's
   bookkeeping meet.
-- **Artin conductor exponents and the global conductor.** `f_p(χ) = Σ_{i≥0} (#G_i/#G_0)·(χ(1) − χ(G_i))`
-  for a character `χ` of `Gal(L/K)` (values in ℚ a priori), the global
-  `𝔣(χ) = ∏_p p^{f_p(χ)}` (finite product by the filtration's triviality at unramified
-  primes); additivity in `χ`, behavior under induction and inflation (Neukirch VII (11.7),
-  (11.8): `𝔡_{K'/K}`-twisted induction, `c(L|K, χ)` bookkeeping). **Integrality of `f_p(χ)`
-  (Artin's theorem) is explicitly deferred** to ArtinRepresentations — statements here treat
-  `f_p(χ) ∈ ℕ` as a hypothesis-or-milestone marker, never silently.
-- **The conductor–discriminant formula, both statements.** General (Neukirch VII (11.9)):
-  `relDiscr = ∏_χ 𝔣(χ)^{χ(1)}` over irreducible characters — *stated* here, its reduction to
-  the per-`p` identity `v_p(relDiscr) = Σ_χ χ(1)·f_p(χ)` *proved* here (from Layer 4's
-  `relDiscr = relNorm(𝔡)` and the `Σ(#G_i − 1)` formula, by character-orthogonality
-  bookkeeping — this reduction is the actual mathematical content this roadmap owns); abelian
-  (via Neukirch VI (6.4)/(6.5)-style local conductors): the specialization to 1-dimensional
-  `χ`, handed to GCFT as its named target.
+- **Permutation-character conductor bookkeeping.** For the permutation character attached to
+  an intermediate field, prove directly from the lower ramification filtration that the local
+  exponent equals the corresponding different/discriminant valuation. This is an integral
+  theorem in this special case and forms no general conductor ideal. Package the finite-level
+  filtration and this equality as the exact interface a future ArtinRepresentations roadmap
+  may generalize.
+- **Consumed theorems, not targets here.** General Artin integrality and the general
+  conductor–discriminant formula are outside this roadmap. Global Class Field Theory PR #6
+  owns the abelian formula. If a future ArtinRepresentations roadmap proves the general
+  theorem, this roadmap may add corollaries that consume its named integral-conductor object;
+  there is no placeholder theorem or junk-valued ideal in the meantime.
 - **Worked instances, fully proved here** (no CFT needed): quadratic — `𝔣(χ_d) = (|discr K|)`
   for the quadratic character of `K = ℚ(√d)`, i.e. discriminant = conductor, including `p = 2`
   ⚠ (the `d mod 4` case split is the point); cyclotomic — for `K = ℚ(ζ_p)`:
@@ -591,12 +632,12 @@ final two bullets.
 
 ### Layer 6: the global ↔ local dictionary
 
-Everything is stated in [LocalFields](../LocalFields/README.md)' vocabulary
+Everything is stated in [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s vocabulary
 (`IsNonarchimedeanLocalField`, their `v_K`/`‖·‖_K` normalizations, their `e`/`f`); their
 Layer 0 reconciles the local objects with `Ideal.ramificationIdx` once — the *global* halves
 of the reconciliation live here, and this is the single seam where the two roadmaps must
-agree. Statement-level work can start as soon as their Layer 0's vocabulary exists; the
-completion-side proofs consume their Layers 0–2.
+agree. Signatures can be written once their Layer-0 vocabulary exists; proofs of the four seam
+theorems consume the specific Local Fields Layers 0–2 results named below.
 
 - **Completions are local fields.** For `v : HeightOneSpectrum (𝓞 K)`:
   `IsNonarchimedeanLocalField (v.adicCompletion K)` — the class is the pin's
@@ -630,7 +671,7 @@ completion-side proofs consume their Layers 0–2.
   subfields of `K` ↔ subgroups between `Gal(M/K)` and `Gal(M/ℚ)` (anti-isomorphism);
   counting statements; `Gal(M/ℚ) ↪ S_n` via `Polynomial.Gal.galActionHom` with transitivity ⟺
   irreducibility (consume; the classification of which transitive groups occur — the LMFDB
-  `nTj` labels — is [PolynomialGaloisGroups](../PolynomialGaloisGroups/README.md)' and is not
+  `nTj` labels — is [Polynomial Galois Groups PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10)'s and is not
   duplicated here). Worked targets: the three subfields of `ℚ(ζ₅)`; `3.1.23.1` has no proper
   subfield.
 - **Integral bases and the index.** The ℤ-module index `i(θ) = [𝓞 K : ℤ[θ]]`
@@ -646,21 +687,17 @@ completion-side proofs consume their Layers 0–2.
   `p = 2` splitting law by `d mod 8` as the acceptance test; cyclotomic monogenicity
   (consume the pin); **non-monogenicity of Dedekind's field** via Layer 3's common-index
   divisor.
-- Relative integral bases and Steinitz classes: long horizon (below), flagged here because the
-  LMFDB's relative extension data will eventually want them.
-
-### Layer 8: LMFDB label semantics and the invariant suite
+### Layer 8: intrinsic LMFDB label-prefix semantics and the invariant suite
 
 The label grammar and the flagship examples; each invariant on an LMFDB number-field page is
 either a theorem from Layers 1–7/Mathlib, a sibling's named deliverable, or a data-semantic
 predicate — nothing unaccounted.
 
-- **The label predicate.** `IsLMFDBLabel K d r D i`: `finrank ℚ K = d ∧ nrRealPlaces K = r ∧
-  (discr K).natAbs = D` plus the index-`i` clause as a certified-enumeration predicate (the
-  finite set exists by `finite_of_discr_bdd`; the ordering and the canonical defining
-  polynomial are data semantics with a certification interface — coordinate with C. Birkbeck's
-  CertifyingInvariantsNF, which the modular-forms roadmap (#47) already uses at its Layer 9).
-  Sign recovery `discr = (−1)^{(d−r)/2}·D` from `sign_discr`.
+- **The intrinsic prefix predicate.** `HasLMFDBIntrinsicLabel K d r D` means
+  `finrank ℚ K = d ∧ nrRealPlaces K = r ∧ (discr K).natAbs = D`. Prove sign recovery
+  `discr = (−1)^{(d−r)/2}·D` from `sign_discr`. The full `.i` coordinate is not a current
+  deliverable: it requires an external, certified database ordering, not a choice extracted
+  from `finite_of_discr_bdd`.
 - **Page coverage map** (where each displayed invariant's mathematics lives): degree/signature/
   discriminant/root discriminant — Mathlib (consume); ramified primes — Layer 4; Galois group
   label — PolynomialGaloisGroups (interface: the `S_n`-embedding of Layer 7); class
@@ -675,14 +712,15 @@ predicate — nothing unaccounted.
   its dyadic Layer-4 milestone): `2.2.5.1`, `2.0.4.1`, `4.0.125.1`, `3.1.23.1`,
   `3.1.503.1`.
 
-### Long horizon (direction, not this roadmap's deliverables)
+### Explicit scope exclusions / future directions
 
-Chebotarev-type density of Frobenius classes (→ [LFunctions](../LFunctions/README.md), on
+Chebotarev-type density of Frobenius classes (→ L-functions PR #8, on
 PrimeNumberTheoremAnd's declared path); the absolute-Galois Frobenius formalism and Frobenius
 characteristic polynomials (→ ArtinRepresentations, seeded by Layer 2's profinite milestone);
-Hensel's realizability criterion completing Layer 3's common-index theory; relative integral
+Hensel's realizability criterion extending Layer 3's common-index theory; relative integral
 bases and Steinitz classes; power-integral-basis finiteness (Győry); arithmetic equivalence
 and Gassmann triples (the LMFDB's "sibling fields" and "arithmetically equivalent" data);
+the LMFDB `.i` ordering/canonical-polynomial certificate described above;
 the `Valued → ValuativeRel` migration of Layer 6's instances when mathlib completes the
 deprecation.
 
@@ -733,8 +771,8 @@ Layer 1's dictionary; Layer 3 needs Layer 1 (double cosets) and Layer 2 (Frobeni
 cycle-type theorem, but its relative Dedekind–Kummer half needs neither and can run in
 parallel with Layer 2. Layer 4 is independent of Layers 2–3 (pure `Different.lean`
 completion) and can start immediately; its exact-exponent milestone waits on Layer 6's
-bridge. Layer 5's filtration and bookkeeping need Layers 1 and 4; its two gated milestones
-wait on GCFT/ArtinRepresentations and block nothing else. Layer 6 is statement-expressible
+bridge. Layer 5's filtration and permutation-character bookkeeping need Layers 1 and 4;
+general Artin integrality is not a Layer-5 milestone. Layer 6 is statement-expressible
 once LocalFields Layer 0 lands and proof-complete against their Layers 0–2; its seam lemmas
 should be co-reviewed with that roadmap's authors. Layer 7 needs Layers 1–3; Layer 8
 assembles everything and its flagship targets discharge alongside the layers that enable
@@ -762,7 +800,7 @@ implementation time, not just at roadmap time.
 - J.-P. Serre, *Local Fields*, GTM 67 — Ch. I §§4–7 (Dedekind decomposition), Ch. III (the
   different: localization and the monogenic case), Ch. IV §1 (ramification filtration;
   Prop. 4 `v(𝔡) = Σ(#Gᵢ − 1)` — Layer 5's spine), Ch. VI §2 (the Artin conductor `f(χ)`).
-  The local side of every Layer-6 statement follows [LocalFields](../LocalFields/README.md)'
+  The local side of every Layer-6 statement follows [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s
   reading of this book.
 - S. Lang, *Algebraic Number Theory*, 2nd ed., GTM 110 — Ch. I (Dedekind theory, the
   decomposition group), Ch. III (the different and discriminant; alternative proofs of the
@@ -802,23 +840,24 @@ implementation time, not just at roadmap time.
   Frobenius are instances of Layers 1–2; its Layer 3 owns the narrow class group and genus
   field, which Layer 8's page-coverage map consumes; nothing here re-proves or re-states its
   targets.
-- **[LocalFields](../LocalFields/README.md)** (in preparation): the conventions table adopts
+- **[Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2):** the conventions table adopts
   its Frobenius row verbatim; Layer 6 is the seam — the `adicAbv`-normalization lemma, the
   `e·f` matching, the `D ≅ Gal(L_w/K_v)` isomorphism, and the different-localization lemma
   are the four statements both roadmaps must recognize; co-review them there. Its Layer-0
   "`primesOver` is a singleton for local fields" bridging lemma is theirs; the semi-local
   `Σ [L_w:K_v] = n` is ours.
-- **[GlobalClassFieldTheory](../GlobalClassFieldTheory/README.md)** (in preparation):
+- **[Global Class Field Theory PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6):**
   receives the ideal-theoretic Artin map (Layer 2's abelian collapse) as its stated-here
   interface object, and owes back the abelian conductor–discriminant proof (Layer 5's gated
   milestone) and the reciprocity properties deliberately not stated here.
-- **[PolynomialGaloisGroups](../PolynomialGaloisGroups/README.md)** (in preparation):
+- **[Polynomial Galois Groups PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10):**
   consumes Layer 3's named Dedekind theorem in `Polynomial.Gal.galActionHom` vocabulary and
   Layer 7's `S_n`-embedding; owns resolvents, transitive-group classification, and the `nTj`
   label semantics.
-- **ArtinRepresentations** (planned roadmap): consumes
-  Layer 2's profinite Frobenius packaging and Layer 5's conductor bookkeeping; owes back
-  `f_p(χ)`-integrality and the general conductor–discriminant proof.
+- **ArtinRepresentations** (future roadmap, not a current dependency): may consume
+  Layer 2's profinite Frobenius packaging and Layer 5's finite ramification bookkeeping;
+  it owns the general conductor object, Artin integrality, and the general
+  conductor–discriminant theorem. This roadmap forms no general integral conductor first.
 - **[EffectiveBounds](../../Completed/EffectiveBounds/README.md)** (completed): its bounds
   discharge the worked examples' class-number targets; Layer 7's index formula sharpens its
   discriminant inequality to an equation (a new statement, not a modification).

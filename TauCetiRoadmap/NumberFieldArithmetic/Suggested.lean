@@ -156,6 +156,26 @@ example {θ : 𝓞 K} (hgen : Algebra.adjoin ℚ {(θ : K)} = ⊤) {p : ℕ} [Fa
               (Polynomial.Gal.restrict (minpoly ℚ (θ : K)) M σ)))) 1 :=
   sorry
 
+attribute [local instance] Polynomial.Gal.splits_ℚ_ℂ
+
+open scoped Classical in
+/-- **Layer 3, exported polynomial-side corollary for Polynomial Galois Groups PR #10.**
+For a monic integral polynomial and a prime not dividing its polynomial discriminant, an
+arithmetic Frobenius in the splitting field realizes the complete factor-degree partition.
+The right side explicitly restores fixed points, exactly matching that roadmap's
+`fullCycleType`; the discriminant hypothesis implies both the needed index condition and
+squarefree reduction. -/
+example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr) :
+    ∃ σ : (f.map (Int.castRingHom ℚ)).Gal,
+      (Polynomial.Gal.galActionHom (f.map (Int.castRingHom ℚ)) ℂ σ).cycleType +
+          Multiset.replicate
+            (Fintype.card ((f.map (Int.castRingHom ℚ)).rootSet ℂ) -
+              (Polynomial.Gal.galActionHom
+                (f.map (Int.castRingHom ℚ)) ℂ σ).support.card) 1 =
+        Multiset.map (fun g => g.natDegree)
+          (UniqueFactorizationMonoid.normalizedFactors (f.map (Int.castRingHom (ZMod p)))) :=
+  sorry
+
 /-! ## Layer 4: the different and the relative discriminant -/
 
 /-- **Layer 4, the relative discriminant ideal, reconciled.** The relative norm of the
@@ -215,7 +235,12 @@ field is `0` or `1 mod 4`. -/
 example : NumberField.discr K % 4 = 0 ∨ NumberField.discr K % 4 = 1 :=
   sorry
 
-/-! ## Layer 5: conductor–discriminant, a worked instance -/
+/-! ## Layer 5: finite ramification bookkeeping and an integral worked instance
+
+The roadmap intentionally pins no general Artin-conductor ideal here: its local exponents
+are rational before Artin integrality. General Artin conductors belong to a future
+ArtinRepresentations roadmap. The theorem below uses Mathlib's already-integral
+`DirichletCharacter.conductor` and therefore does not smuggle in that missing theorem. -/
 
 /-- **Layer 5, conductor–discriminant for `ℚ(ζ₅)`, fully in reach of the pin**: the product
 of the conductors of the four Dirichlet characters mod `5` is `1·5·5·5 = 125 = |disc ℚ(ζ₅)|`.
@@ -277,11 +302,13 @@ example {θ : 𝓞 K} {d : ℤ} (hd : Squarefree d) (hd4 : d % 4 = 1)
     (Ideal.primesOver (Ideal.span {(2 : ℤ)}) (𝓞 K)).ncard = 2 ↔ d % 8 = 1 :=
   sorry
 
-/-! ## Layer 8: the LMFDB flagship suite
+/-! ## Layer 8: the intrinsic LMFDB label prefix and flagship suite
 
 Worked examples as acceptance criteria; the numerics are verified in `README.md`.
 Presentations follow the landed TauCeti idiom: a generator `θ : 𝓞 K` with its integral
-minimal polynomial and `Algebra.adjoin ℚ {(θ : K)} = ⊤`. -/
+minimal polynomial and `Algebra.adjoin ℚ {(θ : K)} = ⊤`. The displayed LMFDB names are
+external identifiers for the examples; this roadmap certifies only their intrinsic
+`d.r.|D|` prefix, not the database-order `.i` coordinate. -/
 
 section Flagship_2_2_5_1
 /-! **LMFDB `2.2.5.1` = ℚ(√5)**, presented by `θ = (1+√5)/2`, `minpoly = X² − X − 1`. -/
