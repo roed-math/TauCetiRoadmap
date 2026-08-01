@@ -30,7 +30,7 @@ unit-fundamental-domain machinery (`NumberField/CanonicalEmbedding/FundamentalCo
 `NumberField/Ideal/Asymptotics.lean`).
 
 And yet the subject the LMFDB's central section is *about* barely exists upstream. At the pin
-there is **no data model** for an L-function (nothing carries a degree, conductor, Gamma
+there is **no meromorphic data model** for an L-function (nothing carries a degree, conductor, Gamma
 data, root number, or motivic weight; even `‖rootNumber χ‖ = 1` is unproved for Dirichlet
 characters); `dedekindZeta` is a leaf with **no Euler product, no analytic continuation
 past `Re s > 1`, and no functional equation** (the file's own TODO asks to generalize the
@@ -42,7 +42,8 @@ and on today's master — though the ecosystem is moving fast here, see *What is
 **no Landau theorem, no Tauberian theorem, no PNT, no Mertens**; no zero-free region and no
 zero counting; modular forms have no L-series hook; and `WeierstrassCurve.LFunction` is a
 theorem-free formal Dirichlet series without a conductor. This roadmap builds that layer:
-the LMFDB's L-function axiomatics as honest predicates over `LSeries`, the analytic
+the LMFDB's L-function axiomatics as composable predicates over genuine meromorphic
+continuations of `LSeries`, the analytic
 continuation and functional equation of the Dedekind zeta function by Hecke's method on the
 pin's own Minkowski-space machinery, Hecke L-functions of ray-class characters and general
 Grossencharacters, the density theory culminating in the **Chebotarev density theorem**, the
@@ -57,17 +58,17 @@ Dedekind-zeta files should be positioned to refactor onto
 TODO they discharge.
 
 This roadmap is part of the 2026-07-30 wave and has one upstream sibling dependency: it
-**consumes** [GlobalClassFieldTheory](../GlobalClassFieldTheory/README.md) (roadmap in
+**consumes** [GlobalClassFieldTheory](https://github.com/roed-math/TauCetiRoadmap/pull/6) (roadmap in
 preparation) for everything ray-class — moduli, ray class groups `J^𝔪/P^𝔪`, their
 characters, and the idele-class description. The split is: **GCFT owns the character
 algebra; this roadmap owns their L-functions and every analytic statement.** Chebotarev is
 deliberately here, not in GCFT (its plan says so), and its pinned proof route (Layer 8) is
 the CFT-free one, so the whole density lane runs without GCFT; only Layer 5's *inputs* (the
 characters themselves) and the ray-class equidistribution statement wait on GCFT's
-definitions. It **aligns** with [LocalFields](../LocalFields/README.md) (sibling in
+definitions. It **aligns** with [LocalFields](https://github.com/roed-math/TauCetiRoadmap/pull/2) (sibling in
 review on branch `roadmap/local-fields`) on Frobenius and Euler-factor conventions (arithmetic
 Frobenius, uniformizer ↦ Frobenius normalization), **serves**
-[NumberFieldArithmetic](../NumberFieldArithmetic/README.md) (in preparation; owns the
+[NumberFieldArithmetic](https://github.com/roed-math/TauCetiRoadmap/pull/9) (in preparation; owns the
 uniform decomposition/Frobenius/Artin-symbol API this roadmap's Chebotarev statements will
 refactor onto), the Wave-2 **ArtinRepresentations** roadmap ("Wave 2" here and below =
 the planned second wave of LMFDB-background roadmaps, following the current Wave 1 this
@@ -86,7 +87,7 @@ enter *only* through the named norm-coefficient bridge of Layer 1 — never as a
 the pin's class number formula. Do not assume `K ≠ ℚ`: every construction must recover the
 classical object at `K = ℚ` (`dedekindZeta ℚ` versus `riemannZeta` is a worked example, not
 an afterthought). Characters of ray class groups are consumed from
-[GlobalClassFieldTheory](../GlobalClassFieldTheory/README.md) once its ray-class layer
+[GlobalClassFieldTheory](https://github.com/roed-math/TauCetiRoadmap/pull/6) once its ray-class layer
 exists; until then the modulus-one case (characters of `ClassGroup (𝓞 K)`, pin-expressible)
 is the stand-in, and no milestone below bakes a particular ray-class-group *encoding* into
 its statement. ⚠ Junk values are a standing trap: `LSeries f s = 0` where not summable, so
@@ -105,7 +106,7 @@ care required.
 | completed L-function | conductor power **included**: `Λ(s) = N^{s/2} · γ(s) · L(s)` with `γ` a product of `Gammaℝ (s + μ)` and `Gammaℂ (s + ν)` factors; then the FE is constant-free, `Λ(s) = ε · Λ^∨(1 − s)` with `‖ε‖ = 1` and `Λ^∨(s) = conj (Λ (conj s))` (the dual = conjugate L-function). The pin's `DirichletCharacter.completedLFunction` does *not* include `N^{s/2}` (its FE carries `N ^ (s - 1/2)`); the dictionary between the two shapes is a named lemma of Layer 0 | Layer 0; matches LMFDB semantics and Neukirch VII (8.6) |
 | completed Dedekind zeta | `Λ_K(s) = |d_K|^{s/2} · Gammaℝ(s)^{r₁} · Gammaℂ(s)^{r₂} · ζ_K(s)`; FE `Λ_K(s) = Λ_K(1 − s)`; simple poles at `s = 0, 1` only; `Res_{s=1} ζ_K = 2^{r₁}(2π)^{r₂} h R / (w √|d_K|)` = the pin's `dedekindZeta_residue` | Layer 3; Neukirch VII (5.10)/(5.11) |
 | Hecke L conductor | for `χ` primitive mod `𝔪` the completed level is `|d_K| · 𝔑(𝔪)`: `Λ(χ, s) = (|d_K| 𝔑(𝔪))^{s/2} L_∞(χ, s) L(χ, s)`, FE `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)`, `‖W(χ)‖ = 1` | Layer 5; Neukirch VII (8.6) |
-| Euler factors | Galois type at a finite prime `𝔭`: `det(1 − Frob_𝔭 · 𝔑𝔭^{-s} ∣ V^{I_𝔭})⁻¹` with **arithmetic** Frobenius — "Frobenius" unqualified always means arithmetic (`x ↦ x^q` on residue fields), the pin's `IsArithFrobAt`/`arithFrobAt` and the LocalFields convention; the geometric-Frobenius form (Deligne) is a translation lemma, never a second convention. For a ray-class character: `(1 − χ(𝔭) 𝔑𝔭^{-s})⁻¹` at `𝔭 ∤ 𝔪` and `1` at `𝔭 ∣ 𝔪` (`χ` primitive), compatible under the Artin map with the Galois form because GCFT's reciprocity sends uniformizers to arithmetic Frobenius | [LocalFields](../LocalFields/README.md) convention table; Layer 1 |
+| Euler factors | Galois type at a finite prime `𝔭`: `det(1 − Frob_𝔭 · 𝔑𝔭^{-s} ∣ V^{I_𝔭})⁻¹` with **arithmetic** Frobenius — "Frobenius" unqualified always means arithmetic (`x ↦ x^q` on residue fields), the pin's `IsArithFrobAt`/`arithFrobAt` and the LocalFields convention; the geometric-Frobenius form (Deligne) is a translation lemma, never a second convention. For a ray-class character: `(1 − χ(𝔭) 𝔑𝔭^{-s})⁻¹` at `𝔭 ∤ 𝔪` and `1` at `𝔭 ∣ 𝔪` (`χ` primitive), compatible under the Artin map with the Galois form because GCFT's reciprocity sends uniformizers to arithmetic Frobenius | [LocalFields](https://github.com/roed-math/TauCetiRoadmap/pull/2) convention table; Layer 1 |
 | arithmetic vs analytic normalization | analytic (unitary): coefficients bounded on average, FE center `s = 1/2`. Arithmetic (motivic weight `w`): FE center `s = (w+1)/2`. The dictionary `L_arith(s) = L_an(s − w/2)` is a **named definition plus translation lemmas**, not a convention drift; the dictionary carries `w` and relates both normalizations of the same instance. LMFDB stores both; degree, conductor, root number are normalization-independent | Layer 0 |
 | spectral parameters | Gamma data is carried as the multisets `{μ_j}` (for `Gammaℝ(s + μ_j)`) and `{ν_k}` (for `Gammaℂ(s + ν_k)`); `degree = #μ + 2·#ν`. LMFDB's `mu`/`nu` lists | Layer 0 |
 | Frobenius | `arithFrobAt R G Q` with `IsArithFrobAt` and conjugacy well-definedness `isConj_arithFrobAt`; decomposition group is `MulAction.stabilizer G Q` (there is no `decompositionSubgroup` for ideals at the pin); statements refactor onto NumberFieldArithmetic's Frobenius API when it lands | `Mathlib/RingTheory/Frobenius.lean`; Layer 8 |
@@ -289,7 +290,7 @@ naming quirks are the pin's, not typos here.
   (`NumberField.prod_abs_eq_one`), `RingTheory/DedekindDomain/FiniteAdeleRing.lean`.
   ⚠ No compactness of `𝔸_K/K`, no discreteness of `K`, no ideles, no idele class group.
 
-### What is in motion elsewhere (checked 2026-07-30; coordinate, cite, do not fork)
+### What is in motion elsewhere (refreshed 2026-08-01; coordinate, cite, do not fork)
 
 - **Chebotarev is already proved in Lean, outside Mathlib.** `CBirkbeck/AINTLIB`
   (`projects/Chebotarev/CebotarevDensity/`, 15 files, verified sorry-free 2026-07-30)
@@ -359,14 +360,14 @@ naming quirks are the pin's, not typos here.
   the wiring into the data model (degree 2, arithmetic conductor `N`, the
   `𝔮(f,s)`-analytic-conductor relation). **#68** (elliptic curves, open) has **no
   L-function layer** (deliberately); its Hasse-bound and Tate-algorithm/conductor layers
-  are the gates for the EC instance card. #81 (modular curves), #80 (adic spaces) are
+  can eventually supply raw-series data, but do not gate or justify a completed EC
+  instance. #81 (modular curves), #80 (adic spaces) are
   disjoint neighbors.
 - **FLT** (ImperialCollegeLondon/FLT): no L-functions and no classical modularity
   statement — its modularity notion is `GaloisRep.IsAutomorphicOfLevel` (quaternionic,
   totally-real-of-even-degree, self-described as "far more restrictive… than is found in
-  the literature"), so the EC card's "continuation = modularity" import is a statement
-  *this roadmap writes* (as a named conjecture predicate over the data model) and
-  coordinates with FLT — not one FLT currently exports. FLT's adele/Haar infrastructure
+  the literature"). Consequently FLT is **not** a supplier for an elliptic-curve
+  continuation/functional-equation instance in this roadmap. FLT's adele/Haar infrastructure
   is being upstreamed (e.g. #40535, adele-ring notation, merged 2026-07-29) and is the
   substrate the Long-horizon Tate layer would consume.
 - **MichaelStollBayreuth/EulerProducts**: maintenance mode (content frozen since early
@@ -418,15 +419,23 @@ L-function page instantiates.
 
 - **The data.** A structure carrying: coefficients `a : ℕ → ℂ` (with `a 1 = 1`); `degree`;
   `conductor : ℕ+`; spectral parameters as multisets `gammaR`, `gammaC` of complex shifts;
-  the completed function `Λ : ℂ → ℂ`; the root number `ε`; the polar locus (a `Set ℂ`,
-  finite by axiom, empty in the entire case). Named accessors: the gamma factor
+  a total representative `Λ : ℂ → ℂ`; the root number `ε`; and an **exact finite polar
+  divisor** `polarOrder : ℂ →₀ ℕ`. The representative exists because Mathlib's
+  `Meromorphic` predicate is stated on ordinary functions, but no axiom may inspect its
+  arbitrary values at poles. Named accessors: the gamma factor
   `γ(s) = ∏ Gammaℝ(s + μ) · ∏ Gammaℂ(s + ν)`, the conjugate-dual `Λ^∨(s) = conj (Λ (conj s))`.
 - **The axioms, as separable predicates** (not one monolith — instances satisfy different
-  subsets, and the model must say which): `degree = #gammaR + 2·#gammaC`; agreement
+  subsets, and the model must say which): `HasDirichletAgreement` for
+  `degree = #gammaR + 2·#gammaC` and agreement
   `Λ(s) = conductor^{s/2} γ(s) (L a)(s)` on `1 < Re s` (⚠ region hypothesis — junk values);
-  differentiability of `Λ` off the polar locus with meromorphy data at the poles (order-one
-  pole statements in the `Tendsto (s − p) • Λ` idiom of `WeakFEPair.Λ_residue_k`); the
-  functional equation `Λ(s) = ε · Λ^∨(1 − s)`; `‖ε‖ = 1`; the Euler-product predicate
+  `HasMeromorphicContinuation` for `Meromorphic Λ` plus
+  `meromorphicOrderAt Λ p = -polarOrder(p)` at every listed pole and nonnegative order
+  elsewhere; `HasFunctionalEquation` for `‖ε‖ = 1`, invariance of the polar divisor under
+  `s ↦ 1 - conj(s)`, and `Λ(s) = ε · Λ^∨(1 − s)` away from the combined polar loci.
+  Since both sides are meromorphic, this equality of punctured germs also fixes compatible
+  principal parts while ignoring junk values at the poles. Residues and higher principal
+  coefficients are instance theorems (required explicitly for Dedekind zeta in Layer 3).
+  Independent predicates cover the Euler-product predicate
   (Layer 1 supplies the definition); the Ramanujan-on-average bound
   `∑_{n ≤ x} ‖a n‖ = O(x^{1+δ})` (the honest, provable-for-all-instances form; pointwise
   Ramanujan is instance-specific and *not* an axiom).
@@ -436,7 +445,8 @@ L-function page instantiates.
   State once, prove for the model, apply per instance.
 - **Instance cards, immediately** (the model is validated the day it exists — both are
   complete at the pin): **ζ** (degree 1, conductor 1, `gammaR = {0}`, `ε = 1`,
-  `Λ = completedRiemannZeta`, poles `{0, 1}`; FE card = `completedRiemannZeta_one_sub`) and
+  `Λ = completedRiemannZeta`, exact simple poles at `{0, 1}`; FE card =
+  `completedRiemannZeta_one_sub` interpreted away from the polar locus) and
   **Dirichlet** (`χ` primitive mod `N > 1`: degree 1, conductor `N`, `gammaR = {0}` or
   `{1}` by parity, `Λ = N^{s/2} · completedLFunction χ`, `ε = rootNumber χ` — the
   conductor-included completion makes the pin's `N^{s−1/2}`-FE constant-free; card FE =
@@ -446,20 +456,23 @@ L-function page instantiates.
 - **The instance ledger** (the program of this roadmap, each row discharged in the layer
   named): ζ (Layer 0 ✓), Dirichlet (Layer 0 + the root-number gap), Dedekind ζ_K (Layer 3),
   ray-class Hecke (Layer 5), Grossencharacter (Layer 6), quadratic-field factorizations
-  (Layer 4), **modular forms** (statement-level card now; wiring milestone gated on the
+  (Layer 4), **modular forms** (a consumed-dependency card whose wiring milestone is gated on the
   upstream ModularForms roadmap PR #47, whose Layer 7 "L-functions" delivers convergence,
   the Euler product, the completed `Λ_N` with the two-form FE
   `Λ_N(k − s, f) = i^k Λ_N(s, g)`, entirety, and the analytic conductor pinned as
   Iwaniec–Kowalski (5.7) — cite, do not build; the card adds only the data-model wiring
-  and the arithmetic-conductor ↔ analytic-conductor relation), **elliptic curves** (card
-  over `WeierstrassCurve.LSeries` with: convergence from the Hasse bound — gated on PR
-  #68's Hasse layer —, conductor from #68's Tate-algorithm layer, and continuation/FE
-  recorded as **equivalent to modularity** — an FLT-facing ⚠ *named conjecture predicate
-  written here*, since FLT's `IsAutomorphicOfLevel` is deliberately more restrictive than
-  classical modularity and exports no EC L-function statement; never a proof obligation),
-  **Artin** (interface only: Layers 5–6 constitute the engine the Wave-2
-  ArtinRepresentations roadmap consumes via Brauer induction; the ledger row records the
-  induction-invariance shape it needs).
+  and the arithmetic-conductor ↔ analytic-conductor relation),
+  **Artin L-functions are a future consumer, not a card in this roadmap**: Layers 5–6 are
+  proved engine deliverables that the Wave-2 ArtinRepresentations roadmap may consume via
+  Brauer induction; that roadmap owns any Artin instance and induction theorem.
+
+  **Elliptic curves are excluded from the completed-instance ledger at present.** PR #68
+  may eventually supply Hasse bounds and conductor data for the raw
+  `WeierstrassCurve.LSeries`, but neither it nor FLT supplies classical modularity and the
+  resulting analytic continuation/functional equation. No `HasMeromorphicContinuation`,
+  `HasFunctionalEquation`, or “standard card” is asserted until a named roadmap makes
+  that theorem a proved deliverable. A future supplier can add the row without changing
+  the composable data model.
 
 ### Layer 1: ideal-indexed series, Euler products, and the cheap continuation strip
 
@@ -508,7 +521,10 @@ theta function. Discharges the `DedekindZeta.lean` TODO ("Generalize the constru
 ### Layer 2: the theta engine — lattice Poisson summation and the level-N FE frame
 
 The analytic core of the Hecke route; self-contained analysis, no number theory beyond the
-lattice vocabulary. Every piece is independently Mathlib-worthy.
+lattice vocabulary. Every piece is independently Mathlib-worthy. **This roadmap is the sole
+owner of the general analytic engine.** IntegralLattices PR #7 consumes the first two
+targets below and proves only its bilinear-integral-lattice specialization; it does not
+duplicate Poisson summation or the general theta transformation.
 
 - **Poisson summation for lattices in ℝ^n.** `∑_{v ∈ L} f v = covol(L)⁻¹ ∑_{w ∈ L^∨} 𝓕f w`
   for Schwartz `f` (or the `rpow`-decay hypotheses of the 1-dim pin version), `L` a
@@ -516,6 +532,9 @@ lattice vocabulary. Every piece is independently Mathlib-worthy.
   change of variables (`𝓕(f ∘ B) = |det B|⁻¹ 𝓕f ∘ B^{-T}`) and prove `ℤ^n` by multivariate
   Fourier series (`AddCircleMulti` — periodize, expand, evaluate at 0, exactly the 1-dim
   proof of `Real.tsum_eq_tsum_fourier`). Gaussian self-duality in `n` variables.
+  The exported interface is the `ZLattice`/`dualSubmodule`/`covolume` statement also needed
+  by the sphere-packing project and IntegralLattices; one proof and one declaration serve
+  all three consumers.
 - **Theta functions of positive quadratic forms.** `Θ_Q(t) = ∑_{v ∈ L} exp(−π t Q(v))`-type
   kernels and the transformation `Θ_{L}(1/t) = t^{n/2} covol(L)⁻¹ Θ_{L^∨}(t)` (positive-
   definite `Q` via its self-adjoint square root ⚠ — the matrix-square-root bookkeeping is
@@ -544,7 +563,8 @@ for the LMFDB's number-field pages.
 
 - **Per-class completion and FE.** For each ideal class `𝔎`:
   `Z(𝔎, s) = |d_K|^{s/2} Gammaℝ(s)^{r₁} Gammaℂ(s)^{r₂} ζ(s, 𝔎)` continues to
-  `ℂ ∖ {0, 1}` with simple poles at `0, 1` of residues `∓ 2^{r₁+r₂} R/w` (the
+  `ℂ ∖ {0, 1}` with **exact** simple poles at `0, 1`, recorded by
+  `meromorphicOrderAt = -1`, and residues `∓ 2^{r₁+r₂} R/w` (the
   completed-object constants: `Gammaℝ(1) = 1`, `Gammaℂ(1) = 1/π` absorb the
   `(2π)^{r₂}/√|d_K|` of the uncompleted residue), and
   `Z(𝔎, s) = Z(𝔎', 1 − s)` where `𝔎𝔎' = [𝔡]` — ⚠ **the FE permutes ideal classes through
@@ -555,7 +575,9 @@ for the LMFDB's number-field pages.
   `2^{r₁+r₂−1} R` — the regulator Jacobian, Lang p. 258, the layer's hard point), apply
   Layer 2's theta transformation and the `WeakFEPair` machinery.
 - **The completed Dedekind zeta.** `completedDedekindZeta K` (`Λ_K`) with
-  `Λ_K = ∑_𝔎 Z(𝔎, ·)`: entire except simple poles at `0, 1`, `Λ_K(s) = Λ_K(1 − s)`,
+  `Λ_K = ∑_𝔎 Z(𝔎, ·)`: meromorphic with exact simple poles at `0, 1`; its functional
+  equation is meromorphic equality (equivalently, equality away from those poles plus
+  matched principal parts), `Λ_K(s) = Λ_K(1 − s)`,
   residues `∓ 2^{r₁+r₂} hR/w` at `0, 1` (completed-object constants; the uncompleted
   `2^{r₁}(2π)^{r₂}hR/(w√|d_K|)` is Layer 4's CNF statement), consistent with
   `WeakFEPair.Λ_residue_k`; `Λ_K = |d_K|^{s/2} Gammaℝ^{r₁} Gammaℂ^{r₂} · ζ_K` on
@@ -656,7 +678,8 @@ infinity data, idele-class ↔ ideal-theoretic dictionary, Neukirch VII (6.11)�
 - **Equidistribution seeds.** `L(χ, 1 + it) ≠ 0` consequences packaged for consumers
   (Layer 7 supplies the proofs): Hecke's equidistribution of `arg 𝔭` for Gaussian primes
   (the worked example), and the compact-group equidistribution statement (Lang XV Thm 6
-  shape) that the SatoTateGroups roadmap's CM lane will instantiate. Interface only; the
+  shape) that the SatoTateGroups roadmap's CM lane will instantiate. This layer proves and
+  exports the nonvanishing input only; the
   Weyl-criterion equidistribution machinery is **not** at the pin (nothing under
   `Mathlib/Dynamics/` covers it) — building it is a named obligation of the SatoTateGroups
   roadmap (planned), which owns compact-group equidistribution; this layer packages only
@@ -665,8 +688,10 @@ infinity data, idele-class ↔ ideal-theoretic dictionary, Neukirch VII (6.11)�
 ### Layer 7: nonvanishing and the Landau toolkit
 
 The analytic input to every density theorem. **Pinned route: analytic, CFT-free** — the
-density lane must not gate on GCFT's existence theorem; GCFT's reciprocity is consumed
-only in Layer 8's Chebotarev endgame. (The CFT proof of nonvanishing — `ζ_L = ζ_K ∏ L(χ)`
+density lane must not gate on GCFT's existence theorem, and Chebotarev does not consume
+GCFT reciprocity. Reciprocity appears only in the second proof of ray-class
+equidistribution and in a later consistency cross-check. (The CFT proof of nonvanishing —
+`ζ_L = ζ_K ∏ L(χ)`
 over the class field, Neukirch (13.3), Janusz V 10.2, Milne VIII 7.1 — becomes a
 *cross-check corollary* once GCFT lands; record it, don't depend on it.)
 
@@ -713,7 +738,8 @@ independent-in-Tau-Ceti but statement-compatible by obligation (see *What is in 
   standard non-converse example *stated*; **polar ⇒ Dirichlet** (Milne 4.1(a)). ⚠ Every
   density statement fixes which density it asserts; "density" unqualified is banned in
   this roadmap's Lean statements.
-- **CFT-free density theorems** (nothing below this bullet needs GCFT or Layer 7):
+- **CFT-free density theorems** (nothing below this bullet needs GCFT; the individual
+  bullets state when Layer 7's analytic nonvanishing is used):
   the **splitting-density theorem** — primes of `K` splitting completely in a finite
   extension `L` have polar density `1/[M:K]`, `M` the Galois closure (Milne VI 3.4; the
   `n`-th-root trick is what polar density is for); `δ = 1/n ↔ Galois`; **Bauer's theorem**
@@ -849,22 +875,23 @@ Discharge alongside the layers; each catches a specific class of error.
   natural density `1/4`. Catches the Frobenius-normalization direction (arithmetic:
   `Frob_p = [p]`, not `[p]⁻¹`) — the single most consequential sign in the roadmap,
   aligned with LocalFields.
-- **The Δ instance card** (Layer 0 ledger; statement-level): degree 2, conductor 1,
+- **The Δ instance card** (Layer 0 ledger; consumed from PR #47): degree 2, conductor 1,
   `gammaC = {11/2}` analytic (weight-12 arithmetic via the dictionary), `ε = 1`;
   wiring milestone gated on the upstream ModularForms roadmap (PR #47)'s L-function
   layer. Catches the arithmetic↔analytic dictionary on a non-self-dual-normalization
   instance (`a(n) = τ(n)/n^{11/2}`).
-- **EC card at `K = ℚ`** (Layer 0 ledger; statement-level): `WeierstrassCurve.LSeries`
-  converges for `Re s > 3/2` given the Hasse bound (#68-gated); continuation + FE
-  recorded as the modularity import (FLT-facing ⚠, never proved here). Catches the
-  data-model's ability to carry *conjectural* continuation honestly (predicates asserted
-  as hypotheses, not theorems).
+- **Elliptic-curve scope gate** (Layer 0): verify that no completed EC card is present.
+  The raw `WeierstrassCurve.LSeries` may be wired to coefficient and conductor data after
+  PR #68, but continuation and FE remain absent until a named supplier proves classical
+  modularity and the resulting L-function theorem.
 
 ## Ordering and parallelism
 
 Layer 0 and Layer 1 first (0 needs nothing; 1 needs 0 only for the Euler-product
 predicate's home — they can be simultaneous). Then three independent lanes: the **FE lane**
-Layer 2 → 3 → (4 completes) → 5 → 6, where 5–6's *character* inputs arrive from GCFT
+Layer 2 → 3 → (4 completes) → 5 → 6, where Layer 2 is also the sole supplier of general
+lattice Poisson/theta transformation to IntegralLattices PR #7, and where 5–6's
+*character* inputs arrive from GCFT
 (their analytic content is unblocked as soon as GCFT's ray-class definitions exist —
 GCFT's reciprocity/existence theorems are **not** needed anywhere in this roadmap's
 critical path); the **density lane** Layer 7 → 8, needing only Layer 1 (strip + residues)
@@ -935,6 +962,72 @@ before Layers 8 and 9 respectively, per the in-motion notes above.
 
 ## Provenance and coordination
 
+The following is the actual status at the 2026-08-01 review refresh. **No outreach was
+performed during this review**, so every contact status below is honestly uncontacted and
+every ownership statement is a proposal, not an agreement.
+
+- **Project / authors:** Mathlib L-series/Dedekind-zeta/Hecke work (Loeffler, Stoll,
+  Roblot, Browning, and contributors).
+  **Exact revision or PR:** project pin `9caeba1000ef8f302920981f4a08651d325abc81`;
+  open PR #40735 at `ba5cc4688489de347cf90eb39a0ac52b6ddc66fc`, open PR #40736 at
+  `0355daa48adefe76d48876af00c8e288ecf09658`, and open PR #41765 at
+  `3b9cea123c30b72b3d23fe7ac0b9085ba6620752`.
+  **Licence:** Apache-2.0.
+  **Overlap:** completed-L conventions, Hecke-character/formal-Euler-product vocabulary,
+  Dedekind zeta continuation, and Dirichlet-density API.
+  **Contact / coordination status:** not contacted.
+  **Agreed ownership:** none yet; proposed split is upstream core vocabulary and formal
+  series in Mathlib, analytic continuation/FE and remaining density work here until landed.
+  **Plan:** align statement shapes; contribute generally reusable API upstream; otherwise
+  implement independently without copying code.
+  **Refactor trigger:** any of #40735/#40736/#41765 merges or the Dedekind-zeta TODO gains
+  an upstream implementation.
+- **Project / authors:** CBirkbeck/AINTLIB and CBirkbeck/chebotarev-density
+  (Birkbeck; rebuild reviewed by Brasca and Roblot).
+  **Exact revision or PR:** AINTLIB `1c1c74664e40071c2c2165bc55ca2616a67ccd6b`;
+  rebuild `c64095e6cc6483b401849c7fd9182d983d3bf261`; Mathlib #41765 as above.
+  **Licence:** Apache-2.0.
+  **Overlap:** CFT-free Dirichlet-density Chebotarev and supporting density calculus.
+  **Contact / coordination status:** not contacted.
+  **Agreed ownership:** none yet; this roadmap proposes to consume a reviewed/upstream
+  theorem and otherwise keep only statement-compatible independent work.
+  **Plan:** no code migration before author agreement; cite both lines and preserve the
+  cyclotomic/crossing/Deuring route.
+  **Refactor trigger:** the rebuild becomes sorry-free or #41765/its Chebotarev sequel lands.
+- **Project / authors:** thefundamentaltheor3m/Sphere-Packing-Lean and
+  math-inc/Sphere-Packing-Lean.
+  **Exact revision or PR:** `d5e6f1181c804a87f667e6f2fd0870e47f63de1a` and
+  `1e98fb493088948ca7bbf47d7faed49cc5b39fc4`; sphere-packing PR #341 at
+  `a6042330f897685ee6cd6d7a01e36e2460d60b18`.
+  **Licence:** Apache-2.0.
+  **Overlap:** the general `ZLattice` Poisson theorem and Gaussian/theta transformation.
+  **Contact / coordination status:** not contacted.
+  **Agreed ownership:** none yet; proposed ownership is this roadmap's Layer 2, consumed by
+  IntegralLattices and sphere packing through one shared interface.
+  **Plan:** first seek an upstream/shared landing; do not port the Gauss proof without
+  permission.
+  **Refactor trigger:** PR #341 lands or maintainers choose a different common home.
+- **Project / authors:** AlexKontorovich/PrimeNumberTheoremAnd (Kontorovich, Tao, Irving,
+  and contributors).
+  **Exact revision or PR:** `7fa0956d874f24de0c5222f3987868d42fafad12`;
+  Mathlib Mertens PR #41394 at `da1f94df976c7cd38117281c57d6ee3046c8d104`.
+  **Licence:** Apache-2.0.
+  **Overlap:** Wiener–Ikehara, prime counting, and natural-density upgrades.
+  **Contact / coordination status:** not contacted.
+  **Agreed ownership:** none yet; proposed ownership leaves PNT/Tauberian results with that
+  project and makes this roadmap a consumer.
+  **Plan:** consume or help upstream; do not re-prove PNT.
+  **Refactor trigger:** the needed Tauberian statement lands in Mathlib or changes shape.
+- **Project / authors:** ImperialCollegeLondon/FLT (Buzzard et al.).
+  **Exact revision or PR:** `bf70705a77242545d931db4923f2975cf7c9177d`.
+  **Licence:** Apache-2.0.
+  **Overlap:** future adelic/Haar substrate for Tate's thesis; no current classical
+  elliptic-curve modularity or L-function theorem.
+  **Contact / coordination status:** not contacted.
+  **Agreed ownership:** none; no present analytic EC dependency is claimed.
+  **Plan:** consume future adelic infrastructure only after coordination.
+  **Refactor trigger:** FLT exports the required adelic Fourier/Poisson interfaces.
+
 - **The Loeffler–Stoll line** (`Mathlib/NumberTheory/LSeries/`, `EulerProduct/`,
   `Gamma/Deligne.lean`, `AddCircleMulti.lean`; design paper arXiv:2503.00959, Annals of
   Formalized Mathematics 1 (2025) 43–56). This roadmap is a direct continuation of that
@@ -958,17 +1051,17 @@ before Layers 8 and 9 respectively, per the in-motion notes above.
   mathematics independently in Tau Ceti, pinned to the same (CFT-free) route, with three
   obligations: statement compatibility with #41765's density API (adopt on merge);
   citation of both repos on every Layer-8 milestone; coordination with
-  Birkbeck–Brasca–Roblot before Layer 8 starts, and again before any statement-level
+  Birkbeck–Brasca–Roblot before Layer 8 starts, and again before any API-level
   divergence. If their rebuild lands in Mathlib first, the corresponding Layer-8
   milestones become comparison-and-consume tasks (the LocalFields refactor-on-landing
   pattern), and the Tau Ceti value concentrates in the natural-density upgrade (Layer 9)
   and the ray-class/reciprocity consistency theorem.
 - **The Browning line** (`ArithmeticFunction/LFunction.lean` and
   `EllipticCurve/LFunction.lean` at the pin; open #40735 idele class group + #40736
-  formal Hecke L-functions; `RingTheory/Invariant`). Two touchpoints: Layer 5–6 supply
-  the analysis over his formal Hecke L (coordinate the character vocabulary through
-  GCFT), and the EC instance card wires his `WeierstrassCurve.LSeries` into the data
-  model. His `ArithmeticFunction.eulerProduct`/`Northcott` formalism and Layer 1's
+  formal Hecke L-functions; `RingTheory/Invariant`). Layers 5–6 supply the analysis over
+  his formal Hecke L (coordinate the character vocabulary through GCFT). The existing
+  `WeierstrassCurve.LSeries` is recorded only as raw prior art; no completed EC instance
+  is asserted. His `ArithmeticFunction.eulerProduct`/`Northcott` formalism and Layer 1's
   analytic Euler products must be bridged by a comparison lemma, not duplicated.
 - **PrimeNumberTheoremAnd** (Kontorovich, Tao, Irving, and many others; Zulip channel
   `#PrimeNumberTheorem+`; blueprint in-source since 2026-01). Layer 9's Tauberian input
@@ -982,22 +1075,23 @@ before Layers 8 and 9 respectively, per the in-motion notes above.
   L-functions (built from AINTLIB's proved `LFunctionFEqN` package); this roadmap's
   ledger card consumes it and supplies nothing modular. The analytic-conductor
   convention (IK (5.7)) pinned there is adopted here unchanged. **PR #68** (elliptic
-  curves): Hasse bound and Tate-algorithm/conductor layers gate the EC card. **PR #81 /
+  curves): Hasse bound and Tate-algorithm/conductor layers may later supply raw-series
+  metadata but do not supply continuation/FE. **PR #81 /
   #80**: disjoint. Worth a direct conversation with Birkbeck before this roadmap and #47
   both go up — he authors the two upstream PRs this roadmap cites most.
-- **FLT** (Buzzard et al.): the EC card's modularity predicate is written here as an
-  FLT-facing statement and flagged to them; the Long-horizon Tate layer consumes their
+- **FLT** (Buzzard et al.): no EC modularity predicate or completed card is claimed here;
+  the Long-horizon Tate layer consumes their
   adele/Haar upstreaming (e.g. #40535) when it exists. No FLT code is consumed today.
-- **Siblings.** [GlobalClassFieldTheory](../GlobalClassFieldTheory/README.md) (in
+- **Siblings.** [GlobalClassFieldTheory](https://github.com/roed-math/TauCetiRoadmap/pull/6) (in
   preparation): supplies ray-class/Hecke-character algebra (Layers 5–6 inputs, Layer 8's
   ray-class statement); the interface handshake — character vocabulary aligned with
   #40735/#40736, conductor-of-character API, characters-at-infinity data — happens
-  before Layer 5. [LocalFields](../LocalFields/README.md) (sibling, in preparation): the
+  before Layer 5. [LocalFields](https://github.com/roed-math/TauCetiRoadmap/pull/2) (sibling, in preparation): the
   arithmetic-Frobenius and uniformizer↦Frobenius conventions adopted here are its;
   Euler-factor conventions at bad primes (inertia invariants) must stay aligned.
-  [NumberFieldArithmetic](../NumberFieldArithmetic/README.md) (in preparation): owns the
+  [NumberFieldArithmetic](https://github.com/roed-math/TauCetiRoadmap/pull/9) (in preparation): owns the
   eventual Frobenius/Artin-symbol API; Layer 8 refactors onto it.
-  [ProfiniteCohomology](../ProfiniteCohomology/README.md) (sibling, in preparation): not consumed (no cohomology
+  [ProfiniteCohomology](https://github.com/roed-math/TauCetiRoadmap/pull/1) (sibling, in preparation): not consumed (no cohomology
   in this roadmap); listed to record the boundary. Wave 2: **ArtinRepresentations**
   consumes Layers 5–6 (the Brauer-induction engine — the FE of every Artin L-function
   reduces to Hecke's, which is why those layers exist at this generality);

@@ -16,7 +16,7 @@ functional equations, Roblot's `dedekindZeta` with the class number formula, and
 continuation or FE, no Hecke L-functions, no density notions, and no Chebotarev. We build
 that in `TauCeti/`.
 
-This file holds pin-elaborating targets from **Layer 0** (the data model with its ζ and
+This file holds pin-elaborating targets from **Layer 0** (the meromorphic data model with its ζ and
 Dirichlet instance cards), **Layer 1** (the ideal-norm coefficient bridge, Euler products,
 the ℚ-instance), **Layer 3** (continuation and FE of the Dedekind zeta function, in
 `∃`-form since the continued objects do not exist yet), **Layer 4** (the `ℚ(i)`
@@ -38,12 +38,14 @@ open IsDedekindDomain (HeightOneSpectrum)
 
 /-! ## Layer 0: the L-function data model -/
 
-/-- **Layer 0, the data an LMFDB L-function carries** (prototype; the axioms are the
-separate predicate `IsStandard` below, since instances satisfy different subsets).
+/-- **Layer 0, the data an LMFDB L-function carries.** Analytic properties are deliberately
+separate predicates below, since instances satisfy different subsets.
 Conventions (see `README.md`): the completed function *includes* the conductor power
 `N^{s/2}`, so the functional equation is constant-free; spectral parameters are the
-`Gammaℝ`/`Gammaℂ` shift multisets; the polar locus is carried as data (a set, finite by
-axiom), empty for entire instances. -/
+`Gammaℝ`/`Gammaℂ` shift multisets. `completed` is a total representative because that is
+Mathlib's function type, but no axiom below inspects its arbitrary values at poles.
+`polarOrder p = n` records an exact pole of order `n`; finite support is built into the
+data, and order zero means holomorphic (zeros are allowed). -/
 structure LFunctionData where
   /-- Dirichlet coefficients (the `n = 0` value is irrelevant, as in `LSeries`). -/
   coeff : ℕ → ℂ
@@ -57,8 +59,8 @@ structure LFunctionData where
   rootNumber : ℂ
   /-- The completed L-function `Λ`, conductor power included. -/
   completed : ℂ → ℂ
-  /-- The polar locus of `Λ`. -/
-  poles : Set ℂ
+  /-- Exact finite polar divisor: the value at `p` is the order of the pole at `p`. -/
+  polarOrder : ℂ →₀ ℕ
 
 namespace LFunctionData
 
@@ -75,18 +77,43 @@ instance is the instance with conjugate coefficients, and the functional equatio
 noncomputable def dualCompleted (d : LFunctionData) (s : ℂ) : ℂ :=
   starRingEnd ℂ (d.completed (starRingEnd ℂ s))
 
-/-- **Layer 0, the axioms** an LMFDB-standard L-function satisfies, as a predicate on the
-data. The Ramanujan bound is the on-average form (provable for every instance in the
-ledger); pointwise bounds are instance-specific and not axioms. -/
-structure IsStandard (d : LFunctionData) : Prop where
+/-- The point of the original completed function inspected by the right side of the
+functional equation at `s`. -/
+noncomputable def reflectedPoint (s : ℂ) : ℂ := 1 - starRingEnd ℂ s
+
+/-- **Layer 0, Dirichlet-series agreement.** This is intentionally independent of
+continuation, functional equation, Euler product, and coefficient bounds. -/
+structure HasDirichletAgreement (d : LFunctionData) : Prop where
   coeff_one : d.coeff 1 = 1
   degree_pos : 0 < d.degree
-  poles_finite : d.poles.Finite
-  norm_rootNumber : ‖d.rootNumber‖ = 1
   completes : ∀ s : ℂ, 1 < s.re →
     d.completed s = ((d.conductor : ℕ) : ℂ) ^ (s / 2) * d.gammaFactor s * LSeries d.coeff s
-  differentiableAt : ∀ s : ℂ, s ∉ d.poles → DifferentiableAt ℂ d.completed s
-  functional_equation : ∀ s : ℂ, d.completed s = d.rootNumber * d.dualCompleted (1 - s)
+
+/-- **Layer 0, genuine meromorphic continuation with exact polar behavior.** A positive
+entry in `polarOrder` is certified by `meromorphicOrderAt`; a zero entry requires
+nonnegative order, so the point is holomorphic but may be a zero. These conditions depend
+only on punctured germs and therefore ignore the representative's arbitrary point values
+at poles. -/
+structure HasMeromorphicContinuation (d : LFunctionData) : Prop where
+  meromorphic : Meromorphic d.completed
+  exact_pole_order : ∀ p : ℂ, d.polarOrder p ≠ 0 →
+    meromorphicOrderAt d.completed p = (- (d.polarOrder p : ℤ) : WithTop ℤ)
+  no_other_poles : ∀ p : ℂ, d.polarOrder p = 0 →
+    0 ≤ meromorphicOrderAt d.completed p
+
+/-- **Layer 0, meromorphic functional equation.** The polar divisor is invariant under
+`s ↦ 1 - conj s`, and equality is required only off the two polar loci. Together with
+`HasMeromorphicContinuation`, equality on this complement determines the same meromorphic
+germ and compatible principal part at every pole; no junk value at a pole is compared. -/
+structure HasFunctionalEquation (d : LFunctionData) : Prop where
+  norm_rootNumber : ‖d.rootNumber‖ = 1
+  polarOrder_reflect : ∀ s : ℂ, d.polarOrder s = d.polarOrder (reflectedPoint s)
+  eq_away : ∀ s : ℂ, d.polarOrder s = 0 → d.polarOrder (reflectedPoint s) = 0 →
+    d.completed s = d.rootNumber * d.dualCompleted (1 - s)
+
+/-- **Layer 0, coefficient growth.** The Ramanujan bound is the on-average form; pointwise
+bounds remain instance-specific. -/
+structure HasAverageCoefficientBound (d : LFunctionData) : Prop where
   coeff_avg : ∀ δ : ℝ, 0 < δ →
     (fun n : ℕ ↦ ∑ k ∈ Finset.Icc 1 n, ‖d.coeff k‖) =O[atTop] fun n ↦ (n : ℝ) ^ (1 + δ)
 
@@ -105,8 +132,8 @@ structure IsGaloisEulerProduct (a : ℕ → ℂ) (d : ℕ) : Prop where
         (Polynomial.eval ((p : ℂ) ^ (-s)) P)⁻¹
 
 /-- **Layer 0, the ζ instance card**: degree 1, conductor 1, `gammaR = {0}`, `ε = 1`,
-`Λ = completedRiemannZeta`, poles `{0, 1}`. Validates the model against the pin's
-`completedRiemannZeta_one_sub` and `differentiableAt_completedZeta`. -/
+`Λ = completedRiemannZeta`, with exact simple poles at `0` and `1`. Validates the model
+against the pin's `completedRiemannZeta_one_sub`, meromorphic API, and residue theorems. -/
 noncomputable def riemannZetaData : LFunctionData where
   coeff _ := 1
   conductor := 1
@@ -114,13 +141,18 @@ noncomputable def riemannZetaData : LFunctionData where
   gammaC := 0
   rootNumber := 1
   completed := completedRiemannZeta
-  poles := {0, 1}
+  polarOrder := Finsupp.single 0 1 + Finsupp.single 1 1
 
-/-- **Layer 0, non-vacuity**: the ζ card is standard. (The functional-equation field needs
-the conjugation symmetry of `completedRiemannZeta` on top of
-`completedRiemannZeta_one_sub`; conjugation-symmetry lemmas are in motion on Mathlib
-master.) -/
-example : riemannZetaData.IsStandard := sorry
+/-- **Layer 0, non-vacuity**: the ζ card agrees with its Dirichlet series. -/
+example : riemannZetaData.HasDirichletAgreement := sorry
+
+/-- **Layer 0, non-vacuity**: the ζ card is genuinely meromorphic with the exact two
+simple poles recorded by its polar divisor. -/
+example : riemannZetaData.HasMeromorphicContinuation := sorry
+
+/-- **Layer 0, non-vacuity**: the ζ functional equation is an equality of meromorphic
+functions, represented here away from the symmetric polar locus. -/
+example : riemannZetaData.HasFunctionalEquation := sorry
 
 /-- **Layer 0, the Dirichlet root number has absolute value 1** — asserted in the pin's
 docstring for `DirichletCharacter.rootNumber` but not proved there; the first gap the
@@ -184,7 +216,9 @@ number formula (`tendsto_sub_one_mul_dedekindZeta_nhdsGT`) to a genuine complex 
 example :
     ∃ Z : ℂ → ℂ,
       (∀ s : ℂ, 1 < s.re → Z s = dedekindZeta K s) ∧
-      (∀ s : ℂ, s ≠ 1 → DifferentiableAt ℂ Z s) ∧
+      Meromorphic Z ∧
+      meromorphicOrderAt Z 1 = (-1 : WithTop ℤ) ∧
+      (∀ s : ℂ, s ≠ 1 → 0 ≤ meromorphicOrderAt Z s) ∧
       Tendsto (fun s : ℂ ↦ (s - 1) * Z s) (𝓝[≠] 1)
         (𝓝 (dedekindZeta_residue K : ℂ)) := sorry
 
@@ -197,8 +231,19 @@ example :
       (∀ s : ℂ, 1 < s.re →
         Λ s = ((|discr K| : ℤ) : ℂ) ^ (s / 2) * Gammaℝ s ^ nrRealPlaces K *
           Gammaℂ s ^ nrComplexPlaces K * dedekindZeta K s) ∧
-      (∀ s : ℂ, s ≠ 0 → s ≠ 1 → DifferentiableAt ℂ Λ s) ∧
-      (∀ s : ℂ, Λ (1 - s) = Λ s) := sorry
+      Meromorphic Λ ∧
+      meromorphicOrderAt Λ 0 = (-1 : WithTop ℤ) ∧
+      meromorphicOrderAt Λ 1 = (-1 : WithTop ℤ) ∧
+      (∀ s : ℂ, s ≠ 0 → s ≠ 1 → 0 ≤ meromorphicOrderAt Λ s) ∧
+      Tendsto (fun s : ℂ ↦ (s - 1) * Λ s) (𝓝[≠] 1)
+        (𝓝 (((|discr K| : ℤ) : ℂ) ^ ((1 : ℂ) / 2) *
+          Gammaℝ 1 ^ nrRealPlaces K * Gammaℂ 1 ^ nrComplexPlaces K *
+          (dedekindZeta_residue K : ℂ))) ∧
+      Tendsto (fun s : ℂ ↦ s * Λ s) (𝓝[≠] 0)
+        (𝓝 (-(((|discr K| : ℤ) : ℂ) ^ ((1 : ℂ) / 2) *
+          Gammaℝ 1 ^ nrRealPlaces K * Gammaℂ 1 ^ nrComplexPlaces K *
+          (dedekindZeta_residue K : ℂ)))) ∧
+      (∀ s : ℂ, s ≠ 0 → s ≠ 1 → Λ (1 - s) = Λ s) := sorry
 
 /-! ## Layer 4: special values — the `ℚ(i)` factorization -/
 
