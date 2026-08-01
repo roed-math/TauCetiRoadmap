@@ -35,7 +35,7 @@ Suggested homes, mirroring Mathlib's directory conventions:
   groups. Mathlib keeps `QuadraticForm`, `BilinearForm` — including
   `BilinearForm/DualLattice.lean`, whose TODOs Layer 1 discharges — under
   `LinearAlgebra/`, and the [quadratic form invariants
-  roadmap](../QuadraticFormInvariants/README.md) (roadmap in preparation) puts the
+  roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/4) (roadmap in preparation) puts the
   ambient form theory at `TauCeti/LinearAlgebra/QuadraticForm/`; the lattice theory
   stays next to both.
 - `TauCeti/NumberTheory/IntegralLattice/` — Layers 3–8: localizations and Jordan
@@ -47,18 +47,21 @@ Suggested homes, mirroring Mathlib's directory conventions:
 **Scope exclusions** (choices, not omissions; separate roadmaps own or will own them):
 the invariant theory of quadratic forms over fields — square classes, Witt theory,
 Hasse invariants, the Hilbert symbol, the `(dim, d±, s)` local classification — is the
-[quadratic form invariants roadmap](../QuadraticFormInvariants/README.md)'s and is
+[quadratic form invariants roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/4)'s and is
 consumed here, never rebuilt; local-field structure theory is the
-[local fields roadmap](../LocalFields/README.md)'s (roadmap in preparation; this
+[local fields roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s (roadmap in preparation; this
 roadmap needs only `ℤ_p`, and states which results generalize to rings of integers of
 nonarchimedean local fields as hypothesis swaps); root-system combinatorics and the
 ADE classification are the
 [root systems roadmap](../RepresentationTheory/RootSystems/README.md)'s — we own the
 *integral-lattice packaging* of `Aₙ/Dₙ/E₆/E₇/E₈`, they own `RootPairing`, Weyl groups,
-and `DynkinType`; the *modularity* of theta series belongs to the classical
-modular-forms development (roadmap PR #47) and, for odd rank, to a future
-half-integral-weight roadmap — Layer 8 defines theta series and proves first
-properties, and states modularity as a citation-shaped interface only; lattices over
+and `DynkinType`; the general analytic lattice-Poisson and theta-transformation engine is
+owned by [LFunctions Layer 2](https://github.com/roed-math/TauCetiRoadmap/pull/8), and Layer 8 consumes its precise
+`ZLattice`/dual/covolume interface. Modular-form packaging is **out of scope**: roadmap PR
+#47 does not currently supply a theorem proving modularity of theta series of even
+lattices, and no future half-integral-weight project is treated as a dependency. Layer 8
+therefore stops after convergence and the arithmetic specialization of the consumed theta
+transformation; lattices over
 rings of integers of number fields (O'Meara's Dedekind-domain generality) are a
 natural future extension, flagged where the proofs are generic, but every statement
 here is over ℤ and ℤ_p; algorithmic reduction (LLL) beyond what finiteness needs, the
@@ -141,8 +144,8 @@ Decide these once; every layer states its results against this table.
   ⟺ `𝔫 ⊆ 2ℤ`. The **level** of a nondegenerate integral `L` is the least `N > 0`
   such that `N·G⁻¹` is an integral matrix with even diagonal (`G` any Gram matrix;
   basis-independent) — equivalently, for even `L`, the least `N` with `N·q_L = 0`.
-  This is the level in the LMFDB's lattice columns and the level of `Θ_L`'s
-  modularity statement.
+  This is the level in the LMFDB's lattice columns and the input a future
+  theta-modularity project would consume; no modularity theorem is claimed here.
 - **Genus symbols are Conway–Sloane's.** The `p`-adic symbols of SPLAG Chapter 15
   (mass-formula paper §§4–5 for the terminology used here): Jordan constituents
   `f_q` at scales `q = p^i`, with, for odd `p`, ranks and signs
@@ -266,9 +269,9 @@ All checked at the roadmap pin (`9caeba1000`, 2026-06-03) and rechecked on maste
   (`Complex.tsum_exp_neg_quadratic` — the rank-1 theta transformation);
   `Mathlib/Analysis/Fourier/PoissonSummation.lean` (`Real.tsum_eq_tsum_fourier`).
   ⚠ Poisson summation exists **only on ℝ** at the pin and on master: the
-  ℝⁿ/lattice version is a named Layer-8 milestone (in coordination with the
-  sphere-packing project, which states it — see "in motion").
-- **Modular forms** (for the citation-shaped modularity interface):
+  ℝⁿ/lattice version is owned by [LFunctions Layer 2](https://github.com/roed-math/TauCetiRoadmap/pull/8), whose
+  exported `ZLattice` theorem Layer 8 consumes after its sphere-packing coordination gate.
+- **Modular forms** (background only; no theorem is consumed by this roadmap):
   `Mathlib/NumberTheory/ModularForms/` — congruence subgroups, `SlashActions`,
   Eisenstein series, q-expansions, level-one dimension formulas; and
   `Mathlib/NumberTheory/Modular.lean` — the `SL₂(ℤ)` fundamental domain (the rank-2
@@ -297,7 +300,7 @@ All checked at the roadmap pin (`9caeba1000`, 2026-06-03) and rechecked on maste
   `linearIndependent_squareClass_iff` — the shared square-class language with the
   quadratic-form-invariants roadmap; unit-determinant square classes at odd `p`
   (Layer 3's `ε` signs) speak it.
-- **The [quadratic form invariants roadmap](../QuadraticFormInvariants/README.md)**
+- **The [quadratic form invariants roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/4)**
   (sibling, in preparation) — the ambient rational and local theory, consumed by
   name: its Layer 0 chain-equivalence engine and square-class calculus; its Layer 1
   Witt decomposition/cancellation over fields (the ambient `V = ℚ ⊗ L`); its Layer 3
@@ -309,7 +312,7 @@ All checked at the roadmap pin (`9caeba1000`, 2026-06-03) and rechecked on maste
   interface statement uses their convention table (their `[Invertible (2 : K)]`
   standing hypothesis lives on the *field* side of the base change; nothing on our
   ℤ/ℤ_p side ever assumes it).
-- **The [local fields roadmap](../LocalFields/README.md)** (sibling, in preparation)
+- **The [local fields roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/2)** (sibling, in preparation)
   — consumed only at the flagged generalization seams: which Layer-3 statements
   survive the swap `ℤ_p ⇝ 𝒪_K` for a nonarchimedean local field `K` (O'Meara's
   §§91–93 generality), and the `Kˣ/(Kˣ)²` finiteness their Layer 1 owns. Nothing here
@@ -347,8 +350,9 @@ All checked at the roadmap pin (`9caeba1000`, 2026-06-03) and rechecked on maste
   reconciliation milestone (Layer 6), so the two projects share one E₈ up to a proved
   isometry. Their `CohnElkies/Prereqs.lean` *states* Poisson summation for an
   arbitrary `IsZLattice` with dual `bilinFormOfRealInner.dualSubmodule Λ` (still
-  `sorry` in main; proved inside the Gauss contribution, open PR #341 there) — Layer
-  8's Poisson milestone must be coordinated with them (their `ForMathlib/` staging
+  `sorry` in main; proved inside the Gauss contribution, open PR #341 there) —
+  [LFunctions Layer 2](https://github.com/roed-math/TauCetiRoadmap/pull/8), not this roadmap, owns the shared
+  Poisson milestone and must coordinate with them (their `ForMathlib/` staging
   directory and open issue #416 "Prepare defs for mathlib" show active upstreaming
   intent on the packing/modular side; no lattice-arithmetic upstreaming is planned by
   them). The companion [math-inc/Sphere-Packing-Lean](https://github.com/math-inc/Sphere-Packing-Lean)
@@ -357,7 +361,7 @@ All checked at the roadmap pin (`9caeba1000`, 2026-06-03) and rechecked on maste
   (`thetaShell`/`thetaCoeff`, discriminant pairings, dual covolumes), and the
   rootless-Niemeier-is-Leech argument — all **hardcoded to
   `EuclideanSpace ℝ (Fin 24)`** and unreviewed by Mathlib standards: quarry and
-  citation for Layer 6's Niemeier/Leech data semantics, not a migration source
+  citation for Layer 6's Niemeier/Leech reference-data semantics, not a migration source
   without their agreement and a licensing-clean port plan.
 - **Mathlib PRs to track:** #41867 (ZLattice `AddSubgroupClass` refactor — touches
   Layer 2's consumption surface), #42071 (a Lie algebra is determined by its root
@@ -370,7 +374,7 @@ All checked at the roadmap pin (`9caeba1000`, 2026-06-03) and rechecked on maste
   unimodular/integral lattices, discriminant groups, theta series of lattices, Witt
   rings, or Hermite normal form.
 - **HassePrinciple** (mariainesdff/HassePrinciple) and the CSA/Brauer pipeline are
-  coordinated by the [quadratic form invariants roadmap](../QuadraticFormInvariants/README.md);
+  coordinated by the [quadratic form invariants roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/4);
   this roadmap reaches them only through its interfaces.
 
 ## What is missing (build here)
@@ -392,8 +396,9 @@ indefinite even lattices, 2-elementary classification, primitive embeddings — 
 the K3 toolkit; the classification of unimodular lattices in low rank (signature ≡ 0
 mod 8; indefinite classification; `E₈` unique in rank 8; rank 16 and the Niemeier
 data semantics); the Smith–Minkowski–Siegel mass formula in the Conway–Sloane
-normalization with its verification instances; and theta series with their first
-properties and the lattice Poisson summation they rest on. None of this exists
+normalization with its verification instances; and arithmetic theta series with their first
+properties, consuming the general lattice Poisson/theta transformation of LFunctions
+Layer 2. None of this exists
 upstream as stated.
 
 `Suggested.lean` pins Lean forms for the pin-expressible milestones of Layers 0–3, 5,
@@ -507,10 +512,9 @@ An independent lane after Layer 0; no dual-lattice input needed.
   correctly (a favorite trap): `O(L)` is infinite for every indefinite
   nondegenerate `L` of rank ≥ 3, while in rank 2 it is infinite exactly in the
   anisotropic (Pell) case — `O(U) ≅ (ℤ/2)²` is finite, `O(⟨1,−2⟩)` is infinite
-  (units of `ℤ[√2]`). Recorded as statement-level context here (it is why the mass
-  of Layer 7 is a definite-genus notion), with the rank-2 dichotomy as the worked
-  pair and the rank ≥ 3 statement proved in Layer 4's Eichler-transvection
-  toolkit.
+  (units of `ℤ[√2]`). The rank-2 dichotomy is a required worked pair and the rank ≥ 3
+  statement is proved in Layer 4's Eichler-transvection toolkit; these results explain
+  why Layer 7's mass is restricted to definite genera.
 - **The covolume bridge and Minkowski.** Realization of definite `L` in Euclidean
   space with `covolume(L)² = det L` (⚠ the `√det` bookkeeping, fixed once —
   `Suggested.lean`); Minkowski's convex-body bound
@@ -533,7 +537,7 @@ An independent lane after Layer 0; no dual-lattice input needed.
 ### Layer 3: localizations, Jordan splittings, and the genus
 
 Blocks on Layer 0 and (for the rational shadow) on the
-[quadratic form invariants roadmap](../QuadraticFormInvariants/README.md)'s Layers
+[quadratic form invariants roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/4)'s Layers
 0–3; its dyadic classification statements consume their Layer 6 only at the
 worked-example seam.
 
@@ -593,23 +597,25 @@ worked-example seam.
   quadratic-form-invariants square-class API), proper/improper classes
   (`cls⁺` vs `cls`), the spinor genus `spn L` and proper spinor genus `spn⁺ L`
   (O'Meara §102A definitions), and the **idele-index count** of proper spinor genera
-  in a genus (O'Meara 102:7) as a statement-level milestone with the abelian
-  square-class computation proved.
+  in a genus (O'Meara 102:7) as a required proved milestone, including the abelian
+  square-class computation.
 - **Eichler's theorem** (the layer's summit, honestly gated): for indefinite `L` of
   rank ≥ 3, `cls⁺ L = spn⁺ L` and `cls L = spn L` (O'Meara 104:5), by **strong
   approximation for the spin group** (O'Meara 104:4) — the strong-approximation
-  input is the layer's deep theorem and is *stated first, proved later within this
-  layer*, with its proof (Eichler/Kneser) flagged as the hard analytic-arithmetic
+  input is a required theorem in this layer, and Layer 4 is incomplete until its
+  Eichler/Kneser proof is finished; it is the hard analytic-arithmetic
   content; corollaries: indefinite class numbers are powers of 2 bounded by the
   spinor count; concrete one-class criteria.
-- **Kneser `p`-neighbors** (computational horizon, definition-level here): `L, M`
+- **Kneser `p`-neighbors, as data semantics:** `L, M`
   integral on `V` are `p`-neighbors if `[L : L ∩ M] = [M : L ∩ M] = p`; neighbors
-  have the same determinant and (for `p ∤ 2 det`) the same genus; the neighbor-step
-  construction from an isotropic vector mod `p`; **statements**: the neighbor graph
-  on a genus (definite, `p ∤ 2 det`) is connected on each proper spinor genus, and
-  spinor-genus-transitivity of the graph — the algorithm semantics behind the
-  LMFDB's genus enumeration (and the K3 pipeline's), stated with proofs deferred to
-  the horizon (Kneser 1957; Voight's neighbors survey as the modern reference).
+  have the same determinant and (for `p ∤ 2 det`) the same genus; and the neighbor-step
+  construction from an isotropic vector mod `p`, all with proved checker theorems.
+  These targets justify individual neighbor edges but **do not certify enumeration
+  completeness**. Connectivity of the neighbor graph on a proper spinor genus and
+  spinor-genus transitivity are explicit future directions, outside this roadmap; no
+  LMFDB/K3 consumer may infer a complete class list from neighbor traversal alone.
+  Completeness inside this roadmap must instead come from a separately proved
+  classification theorem or a Layer-7 mass certificate.
 
 ### Layer 5: discriminant forms and Nikulin's theory (the K3 toolkit)
 
@@ -681,24 +687,26 @@ matches the translation. ⚠ Nikulin's `E₈` is negative definite; translate tw
   even unimodular, and are **non-isometric** (root-system count: their norm-2 root
   systems differ) — proved; they lie in one genus (even unimodular of signature
   `(16,0)` is a single genus — from Layer 5's genus criterion); **completeness**
-  (Witt: these are the only two classes) is a definite later milestone in this
-  layer, by Kneser's neighbor method or via the mass computation of Layer 7.
-- **Rank 24, data semantics**: the Niemeier classification (24 classes, labeled by
-  their root systems; the Leech lattice as the rootless one) enters as label
-  semantics with statement-level classification, per the roadmap-family honesty
-  pattern for big finite classifications: define the 24 genera-mates by explicit
-  Gram data, prove the cheap invariants (even, unimodular, rank 24, the root-system
-  labels as norm-2 counts), state the classification and `rootless ⟹ Leech`
-  (coordinate with math-inc's hardcoded-ℝ²⁴ formalization — citation and quarry,
-  not silent migration), and leave the full proof as this layer's horizon.
+  (Witt: these are the only two classes) is a required classification theorem. Layer 6
+  is incomplete until this is proved, either by a fully proved neighbor argument or by
+  the fully proved mass certificate of Layer 7.
+- **Rank 24, reference-data semantics only:** define the 24 named Niemeier reference
+  lattices by explicit Gram/glue data and prove checker theorems for each row (even,
+  unimodular, rank 24, the advertised root-system label/norm-2 data, and pairwise
+  non-isometry where the checked invariants suffice). The name “Leech” denotes the
+  designated rootless reference row. This layer **does not assert** that every rank-24
+  even unimodular lattice is one of these rows, nor that every rootless one is isometric
+  to the designated Leech row. Those completeness/uniqueness theorems are explicit future
+  directions outside this roadmap. Coordinate with math-inc's hardcoded-ℝ²⁴ development
+  as a citation and possible quarry, never as a silent migration.
 - **Reconciliation with the sphere-packing `E₈`**: `Submodule.E8`/`E8Lattice`
   (their even-coordinate model) is isometric to our `CartanMatrix.E₈` Gram lattice —
   a stated milestone, so Lean has one `E₈` up to proved isometry rather than two
   rival ones.
-- **Theta cross-check (statement-level, feeding Layer 8)**: `Θ_{E₈²} = Θ_{D₁₆⁺}`
-  — via Layer 8's modularity interface and `dim M₈(SL₂(ℤ)) = 1`, the classical
-  "isospectral non-isometric" pair — recorded here as the ⚠ genus-vs-class
-  moral: neither the genus nor the theta series separates classes.
+- **Theta cross-check scope:** `Θ_{E₈²} = Θ_{D₁₆⁺}` is not a milestone here because its
+  proposed proof uses modular-form packaging that no current supplier roadmap owns. The
+  classical equality is recorded only as a future application; it cannot be used to
+  certify any Layer-6 classification claim.
 
 ### Layer 7: the Smith–Minkowski–Siegel mass formula (summit)
 
@@ -715,28 +723,30 @@ normalization source of record.
   octane ("oddity") bookkeeping with **bound/free constituents** (their "love
   forms" edge convention at dimension 0). The **standard mass** via zeta values
   (eqs. (6)–(9)) with the Bernoulli/Euler evaluations (eqs. (13), (15), (16)).
-- **The theorem** (statement summit): `m(f) = 2π^{−n(n+1)/4} ∏_{j≤n} Γ(j/2) ·
+- **The theorem** (required summit): `m(f) = 2π^{−n(n+1)/4} ∏_{j≤n} Γ(j/2) ·
   ∏_p 2 m_p(f)` for `n ≥ 2` (paper eq. (2)), stated with ⚠ the dimension guard
   (their §§3, 6: the naive formula is *wrong* in dimensions ≤ 1 — the
   low-dimensional convention is part of the statement, and `m(dim 1) = 1/2`,
   `m(dim 0) = 1` are pinned acceptance values); equivalence with the
   Siegel-density normalization (paper §12, eq. (18) — `m_p` vs `α_p`) as a stated
-  dictionary. **Proof layering, honestly:** (i) the statement + the verification
-  layer below land first; (ii) the odd-`p` local computations (proved); (iii) ⚠ the
+  dictionary. **Required proof layering:** (i) pin the statement and checker API;
+  (ii) prove the odd-`p` local computations; (iii) ⚠ prove the
   `p = 2` local factor — *stated by Conway–Sloane without proof; first proved by
   Cho (Compositio 151 (2015))* — is its own gated milestone citing Cho's
-  group-scheme route; (iv) the global theorem's proof (Siegel's analytic route, or
-  the Tamagawa-number route `τ(SO) = 2`) is the roadmap's long-horizon summit,
-  stated as a definite later layer with both routes named and neither begun
-  implicitly.
+  group-scheme route; (iv) prove the global theorem (Siegel's analytic route, or
+  the Tamagawa-number route `τ(SO) = 2`). Layer 7 is not complete after the statement or
+  numerical checks; it is complete only after this global proof and every required local
+  factor proof land.
 - **Verification instances** (the mass formula's acceptance suite, each a decidable
   computation once the layers exist): rank 8 even unimodular: `m = 1/696729600`
   with the class number 1 (E₈; `|O(E₈)| = |W(E₈)| = 696729600` — consume the
   root-systems roadmap's Weyl order, prove `O(E₈) = W(E₈)` reflection generation
   here) — ⚠ the paper itself never prints this number (its §9(iv) delegates
   unimodular masses to SPLAG ch. 16 Theorems 1–2, and Serre §2.3 tabulates `M₈`);
-  rank 16: the two-class check `1/|O(E₈²)| + 1/|O(D₁₆⁺)| = m₁₆` (completing Layer
-  6's rank-16 classification the honest way); the determinant-3 rank-2 instance
+  rank 16: the two-row check `1/|O(E₈²)| + 1/|O(D₁₆⁺)| = m₁₆`; **only after** the
+  mass theorem and both automorphism orders are proved does that equality certify that
+  no third class exists and discharge Layer 6's completeness theorem. Before then it is
+  data validation, not classification. The determinant-3 rank-2 instance is
   (`A₂`, `h = 1`).
 - **Mass-formula consequences**: class-number lower bounds (`h ≥ m·min|O|`), the
   explosion of class numbers (Serre §2.3's `n = 32` remark as a data-semantics
@@ -744,7 +754,7 @@ normalization source of record.
   enumeration uses (`∑ 1/|O| = m` certifies a complete list — the pipeline's
   practical reason this layer exists).
 
-### Layer 8: theta series (interface layer)
+### Layer 8: arithmetic lattice theta series
 
 - **Definition and convergence.** `Θ_L : ℍ → ℂ`, `Θ_L(τ) = ∑_{x ∈ L}
   exp(πiτ·β(x,x))` for definite `L`; absolute/locally-uniform convergence (the
@@ -753,29 +763,22 @@ normalization source of record.
   Layer-2 shell counts; `Θ_{L⊕M} = Θ_L·Θ_M`; `Θ_{L(a)}(τ) = Θ_L(aτ)`;
   **`Θ_ℤ = jacobiTheta`** (definitional reconciliation with Mathlib — the rank-1
   acceptance example) and `Θ_{Iₙ} = jacobiThetaⁿ`.
-- **Poisson summation for lattices** (the analytic build): the ℝⁿ/lattice Poisson
-  summation formula (Mathlib has only ℝ ⚠) in the form
-  `∑_{x ∈ L} f(x) = covolume(L)⁻¹ ∑_{y ∈ L^⋆} f̂(y)` for Schwartz/Gaussian-decay
-  `f` — **coordinate with the sphere-packing project**, whose
-  `SchwartzMap.PoissonSummation_Lattices` states exactly this shape (open `sorry`
-  in their main; proved in their Gauss line): the milestone is one proof landing in
-  one place both projects consume, and its statement here is fixed to their
-  `IsZLattice`+`dualSubmodule` vocabulary so the refactor is a file move.
-  Corollary: the **theta transformation**
+- **Consume the analytic engine from LFunctions Layer 2.** That precise supplier owns the
+  `ZLattice` Poisson theorem
+  `∑_{x ∈ L} f(x) = covolume(L)⁻¹ ∑_{y ∈ L^⋆} f̂(y)` and the positive-quadratic Gaussian
+  theta transformation in `IsZLattice`/`dualSubmodule`/`covolume` vocabulary. This layer's
+  required work is the arithmetic bridge: identify the analytic dual with Layer 1's
+  bilinear dual lattice, replace covolume by `√|det L|`, and derive
   `Θ_L(−1/τ) = (τ/i)^{n/2} (det L)^{−1/2} Θ_{L^⋆}(τ)` (Gaussian instance), with
-  `Θ_L(−1/τ) = (τ/i)^{n/2} Θ_L(τ)` for even unimodular `L` — proved, this is the
-  analytic heart of the layer and the only theta *theorem* owned here.
-- **Modularity, cited not built** ⚠: `Θ_L` for even `L` of rank `2k` is a modular
-  form of weight `k` on `Γ₀(level L)` with the quadratic character of discriminant
-  `(−1)^k det L` — stated as a citation-shaped interface to the classical
-  modular-forms development (roadmap PR #47's stack; the statement consumes its
-  `ModularForm` vocabulary when it lands, and the Layer-8 FE above is the input its
-  proof would use); odd rank is half-integral weight and belongs to the planned
-  half-integral-weight roadmap (the companion closing the lattice ↔ theta
-  loop). Instances as statements: `Θ_{E₈} = E₄` (weight 4, level 1, constant term
-  1 — the `dim M₄(SL₂(ℤ)) = 1` argument), `r_{E₈}(2) = 240` (proved arithmetically
-  in Layer 2 independently — the cross-check), and Layer 6's
-  `Θ_{E₈²} = Θ_{D₁₆⁺}`.
+  `Θ_L(−1/τ) = (τ/i)^{n/2} Θ_L(τ)` for even unimodular `L`. The general analytic theorem
+  is consumed, not re-proved; the determinant/dual dictionary and this arithmetic
+  specialization are the theorems owned here.
+- **Stop before modular-form packaging.** No current supplier proves that `Θ_L` is a
+  modular form on `Γ₀(level L)` with its quadratic character, so neither that claim nor
+  `Θ_{E₈} = E₄` nor `Θ_{E₈²} = Θ_{D₁₆⁺}` is a completion target. Integral- and
+  half-integral-weight modular packaging is an explicit future direction outside this
+  roadmap. The arithmetic shell theorem `r_{E₈}(2) = 240` remains a proved Layer-2 target
+  independent of modularity.
 - **Horizon notes**: Siegel–Weil (average of theta over a genus = Eisenstein
   series) as the analytic face of Layer 7, and Epstein zeta functions via the
   Mellin bridge (`MellinEqDirichlet`) — named, not scheduled; they belong to a
@@ -798,12 +801,12 @@ factor of 2, or a sign error.
 - `Aₙ` family: `det(Aₙ) = n+1` (`CartanMatrix.A`), `A_{Aₙ} ≅ ℤ/(n+1)` (Layers 0–1).
 - `E₈`: even, unimodular, positive definite, `min = 2` with 240 minimal vectors,
   signature `(8,0)`, `sign q_{E₈} = 0`; unique in rank 8; `|O(E₈)| = 696729600`;
-  mass of its genus `1/696729600`; `Θ_{E₈} = E₄` (statement); isometric to the
-  sphere-packing project's `E8Lattice` (Layers 0–2, 6–8).
+  mass of its genus `1/696729600`; isometric to the sphere-packing project's
+  `E8Lattice` (Layers 0–2, 6–8).
 - Even unimodular ⟹ `8 ∣ t₊ − t₋`; no even unimodular definite lattice in ranks
   1–7 (Layer 1).
-- Rank 16: `E₈²` and `D₁₆⁺` — same genus, equal theta series, non-isometric
-  (Layers 5, 6, 8).
+- Rank 16: `E₈²` and `D₁₆⁺` — same genus, non-isometric, and proved to exhaust the genus
+  by the required Layer-6 classification theorem (or its proved Layer-7 mass certificate).
 - `Λ_{K3} = U³ ⊕ E₈(−1)²`: even, unimodular, signature `(3,19)`, `det = −1`; the
   unique even unimodular lattice of its signature; `⟨2d⟩` embeds primitively,
   uniquely up to `O(Λ_{K3})`; every even lattice of signature `(1, ρ−1)`, `ρ ≤ 10`,
@@ -828,9 +831,10 @@ blocks on that sibling while the two lattice-side lanes do not). Layer 4 consume
 Layers 2–3; Layer 5 consumes Layers 1 and 3; Layer 6 consumes Layers 1, 2, 5 and
 the root-systems roadmap (for the definite rank-8 route); Layer 7 consumes Layers
 2–4 with Layer 6 as its verification suite; Layer 8's definition/convergence half
-needs only Layers 0–2, its Poisson/FE half is gated on the lattice Poisson
-milestone (coordinate with the sphere-packing project), and its modularity half is
-citation-shaped against the modular-forms roadmap PR #47. The Nikulin layer (5) is the K3 pipeline's
+needs only Layers 0–2, while its dual/determinant theta-transformation specialization
+consumes the general analytic engine owned by LFunctions Layer 2 after that layer's
+sphere-packing coordination gate. Modular-form packaging is outside this roadmap.
+The Nikulin layer (5) is the K3 pipeline's
 critical path: `0 → 1 → 5` plus the `3 → 5` genus bridge is the shortest route to
 the embedding theorems, and it avoids Layers 2, 4, 6–8 entirely.
 
@@ -904,30 +908,71 @@ the embedding theorems, and it avoids Layers 2, 4, 6–8 entirely.
 
 ## Provenance and coordination
 
+The following is the actual status at the 2026-08-01 review refresh. **No outreach was
+performed during this review**. Thus “not contacted” is deliberate, and proposed ownership
+does not become agreed ownership until the named gate is cleared.
+
+- **Project / authors:** thefundamentaltheor3m/Sphere-Packing-Lean (Birkbeck,
+  Hariharan, Mehta, Lee, and contributors).
+  **Exact revision or PR:** `d5e6f1181c804a87f667e6f2fd0870e47f63de1a`;
+  Poisson PR #341 at `a6042330f897685ee6cd6d7a01e36e2460d60b18`.
+  **Licence:** Apache-2.0.
+  **Overlap:** explicit `E₈`, the `ZLattice` Poisson theorem, and analytic theta machinery.
+  **Contact / coordination status:** not contacted.
+  **Agreed ownership:** none yet; proposed split is their analytic `E₈` model, LFunctions
+  Layer 2 for the shared Poisson/theta engine, and this roadmap for arithmetic lattice
+  invariants plus the proved isometry between `E₈` models.
+  **Plan:** cite; seek one shared/upstream declaration; do not copy the Gauss proof or
+  `E₈` code without author agreement.
+  **Refactor trigger:** PR #341 lands or maintainers select a different shared home.
+- **Project / authors:** math-inc/Sphere-Packing-Lean (Gauss output and contributors).
+  **Exact revision or PR:** `1e98fb493088948ca7bbf47d7faed49cc5b39fc4`.
+  **Licence:** Apache-2.0.
+  **Overlap:** hard-coded dimension-24 Leech/Niemeier reference data and theta checks.
+  **Contact / coordination status:** not contacted.
+  **Agreed ownership:** none; this roadmap currently claims only independent reference-data
+  semantics, not Niemeier completeness or rootless uniqueness.
+  **Plan:** cite as prior art and possible quarry; any migration requires author agreement
+  and a separately recorded port plan.
+  **Refactor trigger:** contact authorizes reuse or a reviewed general lattice API lands.
+- **Project / authors:** Mathlib root-system authors and upstream RootSystems roadmap.
+  **Exact revision or PR:** Mathlib pin `9caeba1000ef8f302920981f4a08651d325abc81`;
+  TauCetiRoadmap PR #47 is **not** a theta-modularity supplier (head
+  `7b82f7e25590f754d3c1f013a13dc9bcbb461814`).
+  **Licence:** Apache-2.0.
+  **Overlap:** `CartanMatrix.E₈`, ADE/root combinatorics, Weyl orders, and prospective
+  modular-form vocabulary.
+  **Contact / coordination status:** not contacted.
+  **Agreed ownership:** none yet; proposed split leaves root combinatorics upstream, this
+  roadmap the integral-lattice packaging, and scopes modular packaging out.
+  **Plan:** consume existing Cartan/root results; prove one reconciliation isometry; do not
+  declare a theta-modularity dependency until a supplier adds the exact proved theorem.
+  **Refactor trigger:** the root-system API or a genuine lattice-theta modularity theorem lands.
+
 - **Sibling boundaries.** The
-  [quadratic form invariants roadmap](../QuadraticFormInvariants/README.md) owns
+  [quadratic form invariants roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/4) owns
   everything over fields (Witt theory, `(dim, d±, s)`, Hilbert symbols, local
   classification); this roadmap owns everything over ℤ and ℤ_p, consumes their
   invariants through the base-change seam of Layer 3, and adopts their convention
   table wholesale (Hasse invariant `∏_{i<j}` Lam/Serre with quaternion-class
   values; `discr` vs `signedDiscr`; the square-class idiom `IsSquare (a*b)`; the
   `[Invertible (2 : K)]` ambient hypothesis, which never crosses to the ℤ-side).
-  The [local fields roadmap](../LocalFields/README.md) owns local-field structure
+  The [local fields roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/2) owns local-field structure
   theory; the [root systems roadmap](../RepresentationTheory/RootSystems/README.md)
   owns root-system combinatorics and the ADE classification (we own the lattices;
   the shared `E₈` coordinate model is coordinated, not duplicated);
   `Completed/EffectiveBounds` supplied the geometry-of-numbers counting engine
-  Layer 2 consumes. Theta modularity belongs to the modular-forms roadmap PR #47 (C. Birkbeck) and,
-  for odd rank, to the future half-integral-weight roadmap; Layer 8 builds only
-  the lattice-side inputs (definition, convergence, Poisson, FE).
+  Layer 2 consumes. LFunctions Layer 2 owns general Poisson/theta transformation; this
+  roadmap consumes it and adds arithmetic lattice specialization. Modular-form packaging
+  has no current supplier and is outside this roadmap.
 - **The sphere-packing project** is the one external formalization with real
   overlap: its sorry-free `E₈` (and the math-inc dimension-24 line) predates this
   roadmap, and the coordination contract is stated in "What is already in motion":
-  cite their `E8.lean`, prove the isometry to the Gram-matrix `E₈` once, fix the
-  lattice-Poisson statement in their vocabulary so one proof serves both projects,
-  and contact the maintainers (Hariharan, Birkbeck, Mehta, Lee; the project Zulip
-  channel; weekly packathons) before starting Layer 8's Poisson milestone or any
-  Niemeier/Leech work. Both repos are Apache-2.0; any code movement still requires
+  cite their `E8.lean`, prove the isometry to the Gram-matrix `E₈` once, and consume
+  LFunctions Layer 2's shared lattice-Poisson statement. Contact the maintainers
+  (Hariharan, Birkbeck, Mehta, Lee; the project Zulip channel; weekly packathons) before
+  LFunctions starts that Poisson milestone or before any Niemeier/Leech data migration.
+  Both repos are Apache-2.0; any code movement still requires
   author coordination per this repository's conventions.
 - **LMFDB and the K3 pipeline** are the demand side: the LMFDB lattice section
   stores Gram matrices, determinants, levels, class numbers, and Conway–Sloane
@@ -938,7 +983,6 @@ the embedding theorems, and it avoids Layers 2, 4, 6–8 entirely.
   motivated the layer boundaries but impose no conventions beyond the pinned
   Conway–Sloane symbols.
 - **Honest-classification pattern.** Following the roadmap family's convention for
-  big finite classifications: rank ≤ 9 unimodular is *proved* (O'Meara's route),
-  rank 16 completeness and the mass verifications are definite later milestones,
-  rank 24 (Niemeier) is data semantics with the classification stated and its
-  proof on the horizon; nothing is labeled optional.
+  big finite classifications: rank ≤ 9 unimodular is proved (O'Meara's route); rank 16
+  completeness is a required theorem, with a proved mass certificate as one permitted
+  route; rank 24 is reference-data semantics only and asserts no completeness theorem.

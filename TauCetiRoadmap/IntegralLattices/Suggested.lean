@@ -300,9 +300,10 @@ variable {L : Type u} [AddCommGroup L] [Module ℤ L] [Module.Free ℤ L] [Modul
 sum `∑_{x ∈ L} exp(−π t · β(x,x))` converges for every `t > 0` — the summability
 engine behind `Θ_L(τ) = ∑ exp(πiτ·β(x,x))` on the upper half-plane. Mathlib's
 `jacobiTheta` is exactly `Θ_ℤ` in this normalization (the rank-1 reconciliation is a
-worked example in `README.md`); the modularity of `Θ_L` is *cited*, not built here
-(the modular-forms roadmap PR #47's stack, and half-integral weight in a planned
-half-integral-weight roadmap). -/
+worked example in `README.md`). The general `ZLattice` Poisson/theta transformation is a
+precise consumed dependency from LFunctions Layer 2; this layer proves the arithmetic
+dual/determinant specialization after that theorem exists. Modular-form packaging has no
+current supplier and is explicitly outside this roadmap. -/
 example (β : LinearMap.BilinForm ℤ L) (hpos : (LinearMap.BilinMap.toQuadraticMap β).PosDef)
     {t : ℝ} (ht : 0 < t) :
     Summable fun x : L => Real.exp (-π * t * ((β x x : ℤ) : ℝ)) :=
