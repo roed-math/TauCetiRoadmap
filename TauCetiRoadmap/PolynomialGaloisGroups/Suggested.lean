@@ -85,6 +85,16 @@ noncomputable def galResolvent {F : Type u} [Field F] {L : Type v} [Field L] [Al
   ∏ Ψ ∈ Finset.univ.image fun σ : Equiv.Perm (Fin n) => MvPolynomial.rename (⇑σ) Φ,
     (X - C (MvPolynomial.aeval x Ψ))
 
+/-- **Layers 4 and 8, collision evidence for a specialized orbit resolvent.** A general
+resolvent supplies a sound subgroup upper bound only when specialization has preserved the
+full orbit degree and distinct orbit values. Over a field, separability records the latter.
+`GaloisCertificate.Checks` must contain this evidence (or the same evidence after a checked
+Tschirnhausen transform) before its upper-bound theorem may run. -/
+structure ResolventSeparationEvidence {F : Type u} [Field F] (R : F[X])
+    (expectedOrbitDegree : ℕ) : Prop where
+  fullOrbitDegree : R.natDegree = expectedOrbitDegree
+  specializationSeparated : R.Separable
+
 end Prototypes
 
 section GaloisSide
@@ -320,7 +330,7 @@ attribute [local instance] Polynomial.Gal.splits_ℚ_ℂ
 
 open scoped Classical in
 /-- **Layer 5 — THE CONSUMED INTERFACE** (Dedekind's theorem, supplied by the
-[NumberFieldArithmetic](../NumberFieldArithmetic/README.md) roadmap, in preparation; the
+[Number Field Arithmetic PR #9](https://github.com/roed-math/TauCetiRoadmap/pull/9), Layer 3; the
 shape is pinned here and in `README.md` so nothing downstream blocks; this `sorry` is a
 contract with that roadmap, not a target of this one): for monic `f : ℤ[X]` and a prime
 `p ∤ disc f`, some element of the Galois group realizes the factorization type of

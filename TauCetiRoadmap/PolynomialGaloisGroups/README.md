@@ -15,7 +15,7 @@ groups in any degree, no `nTj` label semantics, and no general wreath products o
 imprimitivity structure theory. We build all of that here: the permutation-group half as
 reusable group theory, the Galois half against Mathlib's `Polynomial.Gal`, up to the
 summits — every `Sₙ` (and, layered honestly, `Aₙ`) realized as a Galois group over `ℚ` —
-with Hilbert irreducibility as the explicit horizon.
+with Hilbert irreducibility as the required terminal layer.
 
 Suggested home: `TauCeti/GroupTheory/Permutation/` for the group-theoretic layers
 (blocks-and-stabilizers dictionary, wreath products and imprimitivity, Jordan-type
@@ -33,10 +33,11 @@ This roadmap is part of the LMFDB-background family (2026-07-30): it serves the 
 section `galois_groups` directly, supplies the Galois-group certification interface that
 the in-flight ModularForms roadmap (upstream PR #47, C. Birkbeck) names as its Layer-9
 dependency, and supplies the label semantics that the planned ArtinRepresentations and
-NumberFieldArithmetic roadmaps display. It **consumes** the
-[NumberFieldArithmetic](../NumberFieldArithmetic/README.md) roadmap (in preparation) at
-exactly one named point — Dedekind's theorem, that away from the index divisors the
-factorization type of `f mod p` is the cycle type of a Frobenius element — and pins the
+NumberFieldArithmetic roadmaps display. It **consumes**
+[Number Field Arithmetic PR #9](https://github.com/roed-math/TauCetiRoadmap/pull/9) at
+exactly one named point — its Layer-3 polynomial-side Dedekind theorem, that when a prime
+does not divide the polynomial discriminant the factorization type of `f mod p` is the
+cycle type of an arithmetic Frobenius element — and pins the
 expected statement shape below so work here never blocks on it. Frobenius *construction*
 (decomposition groups, `IsArithFrobAt`, ramification) is NumberFieldArithmetic's;
 character theory is the representation-theory family's; Artin representations are a
@@ -106,7 +107,7 @@ family; we own only the *permutation* data of `nTj`.
   and `resolventSextic` (of a quintic, the Cayley/Dummit resolvent), in the
   `TauCeti/FieldTheory/GaloisGroups/` namespace.
 - **Frobenius-specialization interface, pinned.** The consumed statement (supplied by
-  [NumberFieldArithmetic](../NumberFieldArithmetic/README.md); exact name theirs, shape
+  [Number Field Arithmetic PR #9](https://github.com/roed-math/TauCetiRoadmap/pull/9), Layer 3; exact name theirs, shape
   ours, stated in `Suggested.lean` so downstream layers elaborate today): for monic
   `f : ℤ[X]` and a prime `p` **not dividing `f.discr`**, there exists
   `σ : (f over ℚ).Gal` whose `fullCycleType` under the root action equals the multiset of
@@ -121,7 +122,10 @@ family; we own only the *permutation* data of `nTj`.
   computation as *certificate checking*, matching the interface upstream PR #47 (Layer 9)
   already names: a certificate bundles finitely many primes with the factorization types
   of `f mod p` (lower bounds via Dedekind), a discriminant square test, and resolvent
-  root/factorization data (upper bounds); the checker verifies each item by computation
+  root/factorization data (upper bounds). Every general resolvent claim also carries
+  specialization-separation evidence: the checked specialized resolvent has the expected
+  full orbit degree and is separable (equivalently here, squarefree), or the certificate
+  supplies and checks a separating Tschirnhausen transform. The checker verifies each item by computation
   and the soundness theorem concludes the label. Cycle types alone can never certify an
   upper bound (they only exhibit elements); resolvents and the discriminant do that. This
   asymmetry is a design principle of Layers 4–5 and 8, stated there as theorems and
@@ -301,9 +305,9 @@ fields. Consume the Chambert-Loir suite wholesale; build:
 - **General wreath products.** `WreathProduct D ι := (ι → D) ⋊ Equiv.Perm ι` (and, for a
   point-group `Q ≤ Perm ι`, the sub-wreath `(ι → D) ⋊ Q`), generalizing Mathlib's
   `RegularWreathProduct` (which is the case `ι = Q` with the translation action): the
-  imprimitive action on `ι × Λ` for a `D`-set `Λ`, the product action on `ι → Λ` as a
-  definite later milestone (it is the primitive O'Nan–Scott case; state it, use it
-  nowhere below), compatibility `D ≀ᵣ Q = ` sub-wreath of `WreathProduct D Q` along the
+  imprimitive action on `ι × Λ` for a `D`-set `Λ`; a required product-action milestone on
+  `ι → Λ` (the primitive O'Nan–Scott case, reusable beyond this roadmap); compatibility
+  `D ≀ᵣ Q = ` sub-wreath of `WreathProduct D Q` along the
   regular embedding, order formula `|D|^|ι| · |ι|!`. **Coordinate before building**: the
   `RegularWreathProduct` authors and Chambert-Loir's imprimitive-O'Nan–Scott TODO both
   border this file (see coordination); the design (which of `(ι → D) ⋊ Perm ι` and the
@@ -380,10 +384,9 @@ For irreducible separable `p` over `F` with a root `α` in `L = p.SplittingField
   `σ δ = sign (galActionHom σ) • δ`; hence the **discriminant test**:
   `IsSquare f.discr ⟺ (galActionHom …).range ≤ alternatingGroup`, and the quadratic
   subextension `F(δ)` is the fixed field of the even subgroup. ⚠ Char 2: the statement
-  fails (see conventions); record the failure as a documented non-theorem with the
-  Berlekamp-discriminant horizon note (Berlekamp 1976; the Artin–Schreier class of
-  `∑_{i<j} rᵢrⱼ/(rᵢ+rⱼ)²` replaces `√disc`) — a definite later milestone for char-2
-  completeness, consumed by nobody below.
+  fails (see conventions). The Berlekamp-discriminant replacement (Berlekamp 1976; the
+  Artin–Schreier class of `∑_{i<j} rᵢrⱼ/(rᵢ+rⱼ)²` replaces `√disc`) is an explicit scope
+  exclusion, not a theorem or interface claimed by this roadmap.
 - **Worked instances** (acceptance): degree 2 (the test is quadratic-formula folklore);
   degree 3 — irreducible separable cubic has group `A₃ = C₃` or `S₃` by squareness of the
   discriminant (`x³ − 3x − 1` vs `x³ − 2`, the Layer 6 table's degree-3 column); the
@@ -408,6 +411,12 @@ monic `f` of degree `n` over `F`, a numbering `e : Fin n ≃ rootSet`, a subgrou
   `Sₙ/H`, degrees = orbit sizes. Headline corollaries: `galResolvent` has a root in `F` ⟺
   the image is conjugate into `H`; more finely, the multiset of factor degrees equals the
   multiset of orbit sizes — the constraint the databases tabulate.
+- **Collision-safe upper-bound interface.** A general resolvent certificate records the
+  invariant and its exact stabilizer, the specialized resolvent recomputed from `f`, its
+  expected orbit degree `[Sₙ : H]`, and either (a) a separability proof for that full-degree
+  resolvent or (b) a certified separating Tschirnhausen transform whose transformed
+  resolvent has those properties. The subgroup-containment soundness theorem consumes this
+  checked evidence. A rational root or factor-degree list without it proves no upper bound.
 - ⚠ **Degeneracy and Tschirnhaus.** When the resolvent is inseparable (two coset
   invariants collide at the roots of this particular `f`) the theorem gives only the easy
   containment; the classical remedy is a Tschirnhaus transformation. Target, stated
@@ -536,7 +545,7 @@ the Layer 6 machinery has been through review once.
   sibling structure (a remark plus the two inequivalent degree-6 actions of `S₅`/`A₅` as
   worked data, not a theory of `Out(S₆)`).
 
-### Layer 8: degrees 8–11 as data semantics, with certification interfaces
+### Layer 8: degrees 8–11 as data semantics, with collision-safe certification interfaces
 
 The honesty pattern for big finite classifications (family ground rule): *state* the
 reference data, *prove* the checkable parts, *interface* the rest.
@@ -547,31 +556,34 @@ reference data, *prove* the checkable parts, *interface* the rest.
   parity, primitivity, solvability, cycle-type statistics — each decidable for an
   explicit finite subgroup, so these are `decide`/`Decidable.decide`-discharged theorems,
   engineered to actually reduce); the LMFDB display invariants as computable predicates.
-  What is **not** claimed at this layer: completeness (that the 50 classes of degree 8
-  are *all* transitive subgroups of `S₈`) — that is stated as a definite later milestone
-  per degree (the Hulpke §3 inflation method over Layer 1's wreath machinery is the
-  intended route), so the label predicates never silently assume it: `TransitiveGroupLabel`
-  membership is meaningful without completeness; only "every transitive group has a label"
-  waits for it.
+  Classification completeness for degrees 8–11 is an explicit scope exclusion of this
+  roadmap: it does **not** assert that every transitive subgroup of `Sₙ` is conjugate to
+  exactly one listed `T(n,j)`. The reference predicates remain meaningful and useful without
+  that theorem. A future classification roadmap may prove the four degree-by-degree
+  exhaustiveness-and-uniqueness theorems using the Hulpke §3 inflation method over Layer 1's
+  wreath machinery; until then no result here concludes "every transitive group has a label."
 - **The certificate checker** (the PR #47 Layer-9 interface, quoted from that roadmap:
   "a *certificate checker* rather than a search — Dedekind/Frobenius cycle-type
   certificates … and the discriminant square test"). A `GaloisCertificate` for monic
   `f : ℤ[X]` bundles: a list of primes with claimed factorization types of `f mod p`
   (checked by kernel computation over `ZMod p`; admissible only when `p ∤ discr f`,
   checked); a discriminant-square claim (checked); resolvent data when present (an
-  `Option` field: a resolvent polynomial, its claimed rational roots / factor degrees —
-  checked when supplied). Soundness theorems:
+  `Option` field containing the invariant/stabilizer specification, the recomputed resolvent,
+  its expected full orbit degree, rational roots/factor degrees, and the separation evidence
+  required above — all checked when supplied). Soundness theorems:
   a checked certificate yields the claimed lower bounds (Layer 5), upper bounds
   (Layers 3–4), and — when they pin a unique label through the order-recognition
-  theorems — `HasGaloisLabel f n j`. Design constraint: the checker is the API a
+  theorems — `HasGaloisLabel f n j`. The upper-bound theorem explicitly consumes the checked
+  separation field; omitting it leaves only lower-bound evidence. Design constraint: the checker is the API a
   downstream computational repo calls (`CBirkbeck/CertifyingInvariantsNF` is the existing
   implementation pattern — per-object `Results` files proving `K_discr' : discr K = …`
   etc.; our per-polynomial results files prove `HasGaloisLabel f n j`), and the label
   predicates are the declarations LMFDB knowls link via LeanBridge's `DEFINES` mechanism.
 - **Sibling/subfield semantics.** The LMFDB's "siblings" (other transitive actions of the
   same abstract group) and "resolvents/subfields" columns as mathematics: actions on block
-  systems (Layer 1) and on coset spaces of the reference subgroups; statement-level here,
-  consumed by the NumberFieldArithmetic subfield-lattice layer.
+  systems (Layer 1) and on coset spaces of the reference subgroups. This roadmap proves only
+  the semantics for named reference subgroups; exhaustive sibling classification is covered
+  by the degree-8–11 scope exclusion above.
 
 ### Layer 9: the inverse-Galois summits — `Sₙ` and `Aₙ` over `ℚ`
 
@@ -598,10 +610,9 @@ reference data, *prove* the checkable parts, *interface* the rest.
   `ℚ`" fact is recorded per-label as certified data (Layer 8), with these two families as
   the only general-`n` theorems.
 
-### Layer 10: Hilbert irreducibility (the horizon layer)
+### Layer 10: Hilbert irreducibility
 
-A definite later layer with definite content — the standard gate between "over `ℚ(t)`"
-and "over `ℚ`":
+This required terminal layer is the standard gate between "over `ℚ(t)`" and "over `ℚ`":
 
 - **Thin sets and HIT.** Thin subsets of `ℚⁿ` (Serre, *Topics*, §3.1); Hilbert's
   irreducibility theorem for `ℚ`: for `f(t, X)` irreducible over `ℚ(t)`, the
@@ -611,8 +622,8 @@ and "over `ℚ`":
   Fried–Jarden Ch. 12–13 as the cross-check citation.
 - **Consequences.** Galois-group preservation under specialization off a thin set;
   regular realizations over `ℚ(t)` descend to `ℚ`; completion of Layer 9's general-`Aₙ`
-  theorem; the statement-level bridge to Noether's problem and beyond is *cited*, not
-  scoped.
+  theorem. Noether's problem and further inverse-Galois consequences are explicit scope
+  exclusions, not Layer-10 milestones.
 
 ## Worked examples (acceptance criteria, keeping the definitions honest)
 
@@ -674,8 +685,9 @@ plus the symmetric-functions API; Layer 5's polynomial-side lemmas need Layer 3
 (base-change of `discr`) and its main theorem consumes NumberFieldArithmetic — pin the
 interface first (`Suggested.lean` does) so everything downstream of it elaborates now;
 Layer 6 needs Layers 1–2 (and feeds the recognition kit back into Layer 1's tail);
-Layer 7 needs 1 + 6; Layer 8 needs 5 + 6 (its per-label computations are independent of
-completeness and can land degree by degree); Layer 9's `Sₙ` theorem needs 1 + 5 only —
+Layer 7 needs 1 + 6; Layer 8 needs 4 + 5 + 6 (its per-label computations and collision-safe
+certificates are independent of classification completeness and can land degree by degree);
+Layer 9's `Sₙ` theorem needs 1 + 5 only —
 it can land before Layers 6–8 — and its general `Aₙ` gate is Layer 10. Deliver early, in
 this order: the Layer 5 interface statement, the Layer 6 degree-≤ 5 tables, and the
 certificate checker's shape — those three are what PR #47's Layer 9, ArtinRepresentations,
@@ -740,13 +752,18 @@ and NumberFieldArithmetic's display layer are waiting on.
   `CBirkbeck/CertifyingInvariantsNF` (extends `alainchmt/RingOfIntegersProject`;
   certifies ring of integers, discriminant, signature, class groups and units through
   per-field `Results…` files such as `K_discr' : NumberField.discr K = 3790297`; active,
-  last commit 2026-06-30) has **no Galois-group component yet** — our
+  exact inspected revision `59ae55dbe49840d26d267a86c3e5c8f4a866d169`, 2026-06-30)
+  has **no Galois-group component yet** — our
   `HasGaloisLabel`-certificates are its missing column, and the upstream ModularForms
   roadmap (TauCetiRoadmap PR #47, Layer 9) explicitly requests them as "Dedekind/Frobenius
   cycle-type certificates … and the discriminant square test", to be "bridged into
   LeanBridge". `CBirkbeck/LeanBridge` links LMFDB knowls to Lean declarations (`DEFINES`
   macro): the Layer 6/8 label predicates are the declarations the `gg.*` knowls should
-  point at. Coordinate the checker's input format with him before freezing Layer 8.
+  point at. The repository declares no licence in GitHub metadata, and no author contact was
+  made during this review pass: inspect mathematics and interface shape only; copy or adapt
+  no code/data without explicit permission. Ownership of its file format is not agreed.
+  Coordinate the checker's input format with him before freezing Layer 8; until then this
+  roadmap's certificate structures remain native, independently written specifications.
 - **Tau Ceti, already landed:** `TauCeti/NumberTheory/Multiquadratic/Galois/*` and
   `Multiquadratic/Frobenius.lean` (the merged Multiquadratic roadmap) prove the
   elementary-abelian instance of exactly our Layers 0 + 5 pattern — `signPattern` as the
@@ -754,8 +771,8 @@ and NumberFieldArithmetic's display layer are waiting on.
   `signPattern_frobenius`, `galoisGroupEquiv_frobenius` — consuming Mathlib's
   `IsArithFrobAt` just as Layer 5 will. Cite it as the worked `(ℤ/2)ⁿ` case; generalize,
   don't duplicate its bespoke lemmas.
-- **Siblings:** [NumberFieldArithmetic](../NumberFieldArithmetic/README.md) (in
-  preparation) supplies Layer 5's Dedekind theorem (interface pinned here and in
+- **Siblings:** [Number Field Arithmetic PR #9](https://github.com/roed-math/TauCetiRoadmap/pull/9)
+  supplies Layer 5's Dedekind theorem (interface pinned here and in
   `Suggested.lean`) and consumes Layer 0's dictionary, Layer 3's discriminant bridge, and
   the labels; ArtinRepresentations (planned) consumes the labels and the
   certificate layer; the [representation-theory family](../RepresentationTheory/README.md)
