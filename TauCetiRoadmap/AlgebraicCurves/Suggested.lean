@@ -48,10 +48,9 @@ algebraic function field of one variable over `k` if some `x : F` is transcenden
 `k` with `F` finite over `k(x)`. No generator is chosen: the comparison with Mathlib's
 chosen-generator `FunctionField Fq F` (an `abbrev` for `FiniteDimensional Fq⟮X⟯ F`) and
 with `Algebra.trdeg k F = 1` (for finitely generated `F`) are Layer-0 milestones. -/
-class IsFunctionField : Prop where
-  exists_transcendental_finiteDimensional :
-    ∃ x : F, Transcendental k x ∧
-      FiniteDimensional (IntermediateField.adjoin k {x}) F
+def IsFunctionField : Prop :=
+  ∃ x : F, Transcendental k x ∧
+    FiniteDimensional (IntermediateField.adjoin k {x}) F
 
 /-- **Layer 0, exactness of the constant field**: every element of `F` algebraic over
 `k` is a constant (Stichtenoth's standing "`k` is the full constant field", in force
@@ -199,13 +198,13 @@ example : IsFunctionField k (RatFunc k) :=
 place is a discrete valuation ring. (For a surjective `ℤᵐ⁰`-valuation this is direct;
 consume the pin's `Valuation.IsRankOneDiscrete` API and
 `valuationSubring_isDiscreteValuationRing`.) -/
-example [IsFunctionField k F] (P : Place k F) : IsDiscreteValuationRing P.integers :=
+example (hF : IsFunctionField k F) (P : Place k F) : IsDiscreteValuationRing P.integers :=
   sorry
 
 /-- **Layer 0, degrees are finite** (Stichtenoth Prop. 1.1.15): the residue field of a
 place is finite-dimensional over the constants — the Zariski-lemma-shaped statement the
 pin lacks. With it, `0 < P.degree`. -/
-example [IsFunctionField k F] (P : Place k F) :
+example (hF : IsFunctionField k F) (P : Place k F) :
     Module.Finite k P.ResidueField ∧ 0 < P.degree :=
   sorry
 
@@ -213,7 +212,7 @@ example [IsFunctionField k F] (P : Place k F) :
 many places are independent — any targets `x P` and orders `r P` are simultaneously
 approximable, `ord_P (f − x P) = r P`. Stated multiplicatively (junk-free: the value
 `exp (−r P)` is nonzero, forcing `f ≠ x P`). -/
-example [IsFunctionField k F] (S : Finset (Place k F)) (x : Place k F → F)
+example (hF : IsFunctionField k F) (S : Finset (Place k F)) (x : Place k F → F)
     (r : Place k F → ℤ) :
     ∃ f : F, ∀ P ∈ S, P.valuation (f - x P) = WithZero.exp (-(r P)) :=
   sorry
@@ -246,13 +245,13 @@ example (p : Polynomial k) (hp : Irreducible p) (hm : p.Monic) :
 /-- **Layer 3, zeros and poles are finite** (Stichtenoth Cor. 1.3.4): a nonzero
 function is integral at cofinitely many places with unit value — the statement that
 lets `div f` live in the `Finsupp` divisor group. -/
-example [IsFunctionField k F] (f : F) (hf : f ≠ 0) :
+example (hF : IsFunctionField k F) (f : F) (hf : f ≠ 0) :
     {P : Place k F | P.valuation f ≠ 1}.Finite :=
   sorry
 
 /-- **Layer 3, principal divisors exist**: the divisor `div f` of a nonzero function,
 with coefficients `ord_P f` (packaging the previous target as a `Finsupp`). -/
-example [IsFunctionField k F] (f : F) (hf : f ≠ 0) :
+example (hF : IsFunctionField k F) (f : F) (hf : f ≠ 0) :
     ∃ D : Divisor k F, ∀ P : Place k F, D P = P.ord f :=
   sorry
 
@@ -260,19 +259,19 @@ example [IsFunctionField k F] (f : F) (hf : f ≠ 0) :
 degree zero — `deg (f)₀ = deg (f)_∞ = [F : k(f)]`, so the degree map descends to the
 divisor class group. Absent from Mathlib for function fields (the number-field
 `ProductFormula` does not apply). -/
-example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) (D : Divisor k F)
+example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (D : Divisor k F)
     (hD : D.IsPrincipal) : Divisor.degree D = 0 :=
   sorry
 
 /-- **Layer 3, `L(0) = k`** (Stichtenoth Lemma 1.4.7, under exact constants): the only
 functions with no poles are the constants. The `ℝ ⊂ ℂ(x)` guard example below shows the
 hypothesis is load-bearing. -/
-example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) :
+example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) :
     riemannRochSpace (0 : Divisor k F) = LinearMap.range (Algebra.linearMap k F) :=
   sorry
 
 /-- **Layer 3, finite-dimensionality of `L(D)`** (Stichtenoth Prop. 1.4.9). -/
-example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) (D : Divisor k F) :
+example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (D : Divisor k F) :
     FiniteDimensional k (riemannRochSpace D) :=
   sorry
 
@@ -280,7 +279,7 @@ example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) (D : Divisor k F)
 always, with equality once `deg D` is large. (The inequality half is the definition of
 `genus` unwound; the content is the boundedness making `genus` well-defined, plus the
 eventual equality.) -/
-example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) :
+example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) :
     (∀ D : Divisor k F, Divisor.degree D + 1 - genus k F ≤ Divisor.dim D) ∧
       ∃ c : ℤ, ∀ D : Divisor k F, c ≤ Divisor.degree D →
         (Divisor.dim D : ℤ) = Divisor.degree D + 1 - genus k F :=
@@ -296,7 +295,7 @@ uniqueness of the RR data (any `(g₀, W₀)` satisfying the identity has `g₀ 
 canonical — Stichtenoth Prop. 1.6.1) is the milestone making this form honest, and the
 canonical class itself becomes nameable once `Ω_F` exists in `TauCeti/`. Hypotheses:
 exact constants only — the constant field is otherwise arbitrary. -/
-example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) :
+example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) :
     ∃ W : Divisor k F,
       Divisor.degree W = 2 * (genus k F : ℤ) - 2 ∧
         Divisor.dim W = genus k F ∧
@@ -307,7 +306,7 @@ example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) :
 
 /-- **Layer 5, the `deg ≥ 2g − 1` regime** (Stichtenoth Thm. 1.5.17): the sharp
 threshold for `ℓ(D) = deg D + 1 − g`. -/
-example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) (D : Divisor k F)
+example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (D : Divisor k F)
     (hD : 2 * (genus k F : ℤ) - 1 ≤ Divisor.degree D) :
     (Divisor.dim D : ℤ) = Divisor.degree D + 1 - genus k F :=
   sorry
@@ -316,7 +315,7 @@ example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) (D : Divisor k F)
 in the special range `0 ≤ deg D ≤ 2g − 2`. ⚠ Stichtenoth's proof assumes `k` infinite
 and completes the finite case only via constant-field extension (Thm. 3.6.3(d), Layer
 8) — the README pins how to sequence this. -/
-example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) (D : Divisor k F)
+example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (D : Divisor k F)
     (h0 : 0 ≤ Divisor.degree D) (h2g : Divisor.degree D ≤ 2 * (genus k F : ℤ) - 2) :
     2 * (Divisor.dim D : ℤ) ≤ 2 + Divisor.degree D :=
   sorry
@@ -346,7 +345,7 @@ interface** ("the space-of-sections dimensions for the divisors `n·[0]`"): on a
 function field with a rational place `[0]`, `ℓ(n·[0]) = n` for `n ≥ 1`. The relative
 (base-scheme) upgrade is JacobianChallenge Layer-C territory; see the README's
 Layer 12. -/
-example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) (hg : genus k F = 1)
+example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (hg : genus k F = 1)
     (P : Place k F) (hP : P.degree = 1) (n : ℕ) (hn : 1 ≤ n) :
     Divisor.dim (Finsupp.single P (n : ℤ)) = n :=
   sorry
@@ -356,7 +355,7 @@ with unit discriminant (`W.IsElliptic`), a function field generated by an affine
 solution of its equation has genus 1 — all characteristics (the general `a₁ … a₆`
 form). This is compatibility milestone (i) of Layer 10, stated against the pin's
 `WeierstrassCurve` data. -/
-example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F)
+example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F)
     (W : WeierstrassCurve k) [W.IsElliptic] (x y : F) (hx : Transcendental k x)
     (heq : y ^ 2 + algebraMap k F W.a₁ * x * y + algebraMap k F W.a₃ * y =
       x ^ 3 + algebraMap k F W.a₂ * x ^ 2 + algebraMap k F W.a₄ * x +
@@ -377,7 +376,7 @@ example (W : WeierstrassCurve k) [W.IsElliptic] :
 function field of `y² = x⁵ − 1` has genus 2 when `char k ∉ {2, 5}` (the hypotheses make
 `x⁵ − 1` separable and the cover tame) — the acceptance test for Layer 7's
 Riemann–Hurwitz with its explicit different. -/
-example [IsFunctionField k F] (hex : IsIntegrallyClosedIn k F) (x y : F)
+example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (x y : F)
     (hx : Transcendental k x) (heq : y ^ 2 = x ^ 5 - 1)
     (hgen : IntermediateField.adjoin k {x, y} = ⊤) (h2 : (2 : k) ≠ 0)
     (h5 : (5 : k) ≠ 0) :
