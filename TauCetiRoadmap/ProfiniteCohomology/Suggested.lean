@@ -152,13 +152,14 @@ example (K : Type*) [Field K] : TotallyDisconnectedSpace (Field.absoluteGaloisGr
   sorry
 
 open scoped Classical in
-/-- **Layer 9, the mod-2 Kummer cocycle.** For `a ∈ K^×` with chosen square root `r ∈ K̄`,
+/-- **Layer 9, the mod-2 Kummer cocycle.** Assume `2` is invertible in `K`. For
+`a ∈ K^×` with chosen square root `r ∈ K̄`,
 the sign cocycle `κ_a(g) = 0` if `g r = r`, else `1`, valued in `𝔽₂ = ZMod 2` with trivial
 action: it is continuous for the Krull topology (the stabilizer of `r` is open) and additive
 (the trivial-action 1-cocycle identity). Its class is the Kummer class
 `[a] ∈ H¹(G_K, 𝔽₂)`, the image of `a` under the connecting map of `1 → μ₂ → K̄^× → K̄^× → 1`,
 and `K^×/(K^×)² ≃ H¹(G_K, 𝔽₂)` in the Layer 9 Kummer isomorphism. -/
-example (K : Type*) [Field K] (a : Kˣ) (r : AlgebraicClosure K)
+example (K : Type*) [Field K] (h2 : IsUnit (2 : K)) (a : Kˣ) (r : AlgebraicClosure K)
     (hr : r ^ 2 = algebraMap K (AlgebraicClosure K) (a : K)) :
     Continuous (fun g : AlgebraicClosure K ≃ₐ[K] AlgebraicClosure K ↦
         if g r = r then (0 : ZMod 2) else 1) ∧
