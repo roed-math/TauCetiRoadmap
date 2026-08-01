@@ -21,7 +21,9 @@ does not exist at the pin are **not** stated here and live in `README.md` only: 
 lower/upper ramification filtration and Herbrand functions (Layer 3), the tame quotient and
 its Iwasawa presentation (Layer 4 — needs presented profinite groups), and everything
 cohomological (Layers 5–8: invariant map, class formations, reciprocity, duality, Euler
-characteristic — these consume the ProfiniteCohomology sibling roadmap). As those layers
+characteristic — these consume PR #1 Profinite Cohomology). Power classes and Layer 8 are
+split into prime-to-residue-characteristic and mixed-characteristic `p`-primary regimes;
+equal-characteristic `p`-primary finiteness/duality is explicitly out of scope. As those layers
 make their types expressible in `TauCeti/`, add their milestones here with `sorry`.
 -/
 
@@ -47,20 +49,25 @@ example : IsNonarchimedeanLocalField ℚ_[2] :=
   sorry
 
 /-- **Layer 0, the normalized valuation.** The valuation of a local field, written
-additively on units: a surjective `v : Kˣ →* Multiplicative ℤ` whose kernel is exactly the
-elements of canonical valuation `1` (the units of `𝒪[K]`). This is `WithZero.log` of
-Mathlib's canonical valuation transported along `valueGroupWithZeroIsoInt`; `v(π) = 1` for
-any uniformizer `π`. ⚠ Sign trap: Mathlib's multiplicative convention has
+additively but encoded as a homomorphism to `Multiplicative ℤ`: a surjective
+`v : Kˣ →* Multiplicative ℤ` whose kernel is exactly the elements of canonical valuation `1`
+(the units of `𝒪[K]`). This is `WithZero.log` of Mathlib's canonical valuation transported
+along `valueGroupWithZeroIsoInt`. For a uniformizer, the Lean-facing equation is
+`v π = Multiplicative.ofAdd 1`; by contrast `v x = 1` means additive value `0` and is reserved
+for the kernel condition. ⚠ Sign trap: Mathlib's multiplicative convention has
 `valuation K π = exp (−1) < 1` on uniformizers, so the additive normalization carries a
 minus sign — keep the translation in one named lemma. -/
 example :
     ∃ v : Kˣ →* Multiplicative ℤ, Function.Surjective v ∧
-      ∀ x : Kˣ, v x = 1 ↔ valuation K (x : K) = 1 :=
+      (∀ x : Kˣ, v x = 1 ↔ valuation K (x : K) = 1) ∧
+      ∀ (π : 𝒪[K]) (_hπ : Irreducible π) (hπ0 : (π : K) ≠ 0),
+        v (Units.mk0 (π : K) hπ0) = Multiplicative.ofAdd 1 :=
   sorry
 
 /-- **Layer 0, uniformizers generate the value group.** Any irreducible element of the
 (discrete valuation) ring `𝒪[K]` has valuation a generator: every nonzero value is an
-integer power of it. Together with the previous milestone this pins `v_K(π) = 1`. -/
+integer power of it. Together with the previous milestone this pins the Lean-facing equation
+`v_K^×(π) = Multiplicative.ofAdd 1`. -/
 example (π : 𝒪[K]) (hπ : Irreducible π) :
     ∀ γ : (ValueGroupWithZero K)ˣ,
       ∃ n : ℤ, (γ : ValueGroupWithZero K) = valuation K (π : K) ^ n :=
@@ -118,11 +125,22 @@ example (π : 𝒪[K]) (hπ : Irreducible π) (x : Kˣ) :
     ∃! p : ℤ × (𝒪[K])ˣ, (x : K) = (π : K) ^ p.1 * ((p.2 : 𝒪[K]) : K) :=
   sorry
 
-/-- **Layer 1, finiteness of `Kˣ/(Kˣ)ⁿ`.** For `n ≠ 0` the `n`-th-power classes of a local
-field form a finite group (the exact cardinality `n · #μ_n(K) / ‖n‖_K` is the sharper
-milestone, stated once `‖·‖_K` exists). -/
-example (n : ℕ) (hn : n ≠ 0) :
+/-- **Layer 1, prime-to-residue-characteristic power classes.** If `n` is a unit in the
+valuation ring (equivalently, the residue characteristic does not divide `n`), the
+`n`-th-power classes form a finite group in either characteristic. The sharper milestone is
+the exact cardinality formula with this hypothesis. -/
+example (n : ℕ) (_hn : IsUnit (n : 𝒪[K])) :
     Finite (Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range) :=
+  sorry
+
+/-- **Layer 1, mixed-characteristic power classes.** For a finite extension of `ℚ_p`, the
+power-class quotient is finite for every nonzero `n`, including `p`-primary `n`. This is a
+separate theorem using deep units; it must not be generalized to equal characteristic.
+The equal-characteristic `p`-primary counterexample and its Artin–Schreier–Witt replacement
+remain prose-only scope exclusions in the roadmap. -/
+example (p : ℕ) [Fact p.Prime] (F : Type*) [Field F] [Algebra ℚ_[p] F]
+    [Module.Finite ℚ_[p] F] (n : ℕ) (_hn : n ≠ 0) :
+    Finite (Fˣ ⧸ (powMonoidHom n : Fˣ →* Fˣ).range) :=
   sorry
 
 /-- **Layer 1, worked example: `ℚ_2ˣ/(ℚ_2ˣ)²` has order 8** (classes of `−1, 2, 5`
@@ -190,9 +208,9 @@ example :
 
 /-! ## Layers 7–8 acceptance shapes (pin-expressible worked examples)
 
-The reciprocity map, norm groups, duality, and the Euler characteristic are README-only
-(they consume the ProfiniteCohomology sibling). Two of their concrete `ℚ_2` consequences
-are already stateable and serve as end-to-end acceptance targets. -/
+The reciprocity map, norm groups, regime-correct duality, and the Euler characteristic are
+README-only (they consume PR #1). Two mixed-characteristic `ℚ_2` consequences are already
+stateable and serve as end-to-end acceptance targets. -/
 
 /-- **Layer 7 acceptance, the norm group of `ℚ_2(√5)` has index 2.** The nonzero values of
 the norm form `x² − 5y²` generate an index-`2` subgroup of `ℚ_2ˣ` — the finite-level
