@@ -36,7 +36,10 @@ statements are phrased through the norm equation `b = x² − a·y²`, which is 
 before any symbol is defined. See `README.md` for the convention table (Lam/Serre
 Hasse invariant `∏_{i<j}`, signed discriminant, value dictionaries) and for the
 coordination notes on the in-motion `HassePrinciple` and central-simple-algebra
-developments.
+developments. Layer 4's induced map `I²/I³ → Br(K)[2]` remains prose-only: the
+roadmap does not claim it injective, and the pinned Brauer-group API cannot yet
+express the required group-valued target honestly. Layer 5 similarly waits for or
+consumes the cited upstream API rather than introducing a private placeholder.
 -/
 
 namespace TauCetiRoadmap.QuadraticFormInvariants

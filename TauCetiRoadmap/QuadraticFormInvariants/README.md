@@ -27,12 +27,12 @@ Suggested homes, mirroring Mathlib's directory conventions:
 - `TauCeti/NumberTheory/Padics/QuadraticForm/` — the Hilbert symbol over `ℚ_p` and
   the local classification (next to Mathlib's `NumberTheory/Padics/`); statements
   over a general nonarchimedean local field move to the home the
-  [local fields roadmap](../LocalFields/README.md) (roadmap in preparation) fixes;
+  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) fixes;
 - `TauCeti/FieldTheory/QuadraticForm/` — the cohomological layers (Kummer cup
   bridge, Stiefel–Whitney classes, Evens–Kahn), next to the landed
   `TauCeti/FieldTheory/SquareClassGroup.lean` they consume, coordinated with the
-  home the [profinite cohomology roadmap](../ProfiniteCohomology/README.md)
-  (roadmap in preparation) fixes for `H^*(G_K, 𝔽₂)`.
+  home [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)
+  fixes for `H^*(G_K, 𝔽₂)`.
 
 **Scope exclusions** (choices, not omissions; separate future roadmaps are welcome):
 the characteristic-2 theory of quadratic and bilinear forms (Arf invariant,
@@ -228,13 +228,16 @@ own review rather than duplicating.
 
 - **Hasse–Minkowski / Hilbert symbol:**
   [`mariainesdff/HassePrinciple`](https://github.com/mariainesdff/HassePrinciple)
-  (N. Coppola, M. I. de Frutos-Fernández; Apache-2.0, active — pushed 2026-07-29)
+  (N. Coppola, M. I. de Frutos-Fernández; Apache-2.0; checked at
+  [`d2802ddce55e`](https://github.com/mariainesdff/HassePrinciple/commit/d2802ddce55ef34045f68c5bf39c0598e7d0e988),
+  2026-07-27)
   formalizes the Hasse–Minkowski theorem over `ℚ` following Serre: an integer-valued
   `hilbertSym` on a general field (Serre's solvability definition), the `p = 2`
   `epsilon`/`omega` residues, `p`-adic squares (`Padics/Squares.lean`), Serre's
   contiguous-orthogonal-bases chain (`QuadraticForm/Chain.lean`, stated with
   `[Invertible (2 : k)]`), and the Hasse–Minkowski invariant with the rank-by-rank
-  case analysis. **Coordinate before building Layer 6**: their target is the global
+  case analysis. **The uncontacted-status gate in §Provenance applies before Layer 6**:
+  their target is the global
   theorem over `ℚ` with `ForMathlib/` files headed upstream; ours is the
   general-field invariant theory, the local classification for *all* `p`-adic
   fields including dyadic ones, and the cohomological layers. Adopt their
@@ -247,21 +250,25 @@ own review rather than duplicating.
 - **Central simple algebras and the Brauer group:** in-tree scaffolding by
   Y. Xie and J. Zhang (above);
   [`Whysoserioushah/BrauerGroup`](https://github.com/Whysoserioushah/BrauerGroup)
-  stages the full program (Wedderburn, Skolem–Noether, double centralizer,
+  (Apache-2.0; checked at
+  [`283e0df7dc15`](https://github.com/Whysoserioushah/BrauerGroup/commit/283e0df7dc15cd8b469a73fbc763f74637c87147),
+  2026-07-16) stages the full program (Wedderburn, Skolem–Noether, double centralizer,
   splitting fields, the group structure, `Br(K) ≅ H²(Gal(K̄/K), K̄ˣ)`,
   `Br(ℝ)`, `Br(𝔽_q)`) with active upstreaming: open PRs
-  [#26377](https://github.com/leanprover-community/mathlib4/pull/26377) (tensor
-  product of a simple and a central simple algebra is simple — the Brauer
-  multiplication prerequisite; updated 2026-07-16) and
-  [#28970](https://github.com/leanprover-community/mathlib4/pull/28970) (reduced
-  norm and trace). Layer 5 is written to *refactor onto* this work as it lands;
+  [#26377](https://github.com/leanprover-community/mathlib4/pull/26377) (open at
+  `13cac7e3b9bb`, updated 2026-07-16; tensor product of a simple and a central simple
+  algebra is simple — the Brauer multiplication prerequisite) and
+  [#28970](https://github.com/leanprover-community/mathlib4/pull/28970) (open at
+  `5a2bcb298759`, last updated 2025-11-19; reduced norm and trace). Layer 5 is
+  prose-only where these APIs are missing and consumes them if they land;
   the [semisimple-algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)
   already scopes the general CSA theory (see "Provenance and coordination").
 - **Quaternion algebras as CSAs:** open PRs
-  [#41536](https://github.com/leanprover-community/mathlib4/pull/41536) (quaternion
-  directory split) and
+  [#41536](https://github.com/leanprover-community/mathlib4/pull/41536) (open at
+  `e95984de0341`, updated 2026-07-18; quaternion directory split) and
   [#41538](https://github.com/leanprover-community/mathlib4/pull/41538)
-  (Mathias-Stout, J. Springer; updated 2026-07-17): `ℍ[R,a,b,c]` over a field is
+  (Mathias-Stout, J. Springer; open at `86493005d20f`, updated 2026-07-17):
+  `ℍ[R,a,b,c]` over a field is
   central simple when `c·(b² + 4a) ≠ 0`, adding
   `Mathlib/Algebra/Quaternion/CentralSimple.lean`. Layer 2's
   "quaternion algebras are central simple" milestone must **consume this PR's
@@ -426,15 +433,19 @@ computation) is deliberate: it is what makes each equivalence reusable.
   `ℤ·ℍ_q`; well-definedness of the ring structure rests exactly on Layers 1–2
   (cancellation, tensor). Every form's Witt class is its anisotropic part
   (decomposition). The complete basic theory: `W` as a functor under field
-  embeddings; the dimension-mod-2 ring map `W(K) → ℤ/2`; torsion facts deferred.
+  embeddings; the dimension-mod-2 ring map `W(K) → ℤ/2`. General torsion theorems for
+  `W(K)` are explicit scope exclusions.
 - **The fundamental ideal.** `I(K) = ker(dim mod 2)`, generated by `⟨⟨a⟩⟩`;
   `I²` generated by `⟨⟨a,b⟩⟩`; the two classical isomorphisms that tie this
   roadmap together: `I/I² ≅ Kˣ/(Kˣ)²` via `d±` (this is where the *signed*
-  discriminant is forced), and the Hasse/Clifford story on `I²/I³`: `c = s` up to
-  the recorded `(−1,−1)`-powers is a homomorphism `I² → Quat(K) ⊆ Br(K)`
-  vanishing on `I³` (Lam V.3.4, the map Merkurjev proved injective — *stating*
-  `I²/I³ ↪ Br(K)[2]` is in scope as a conjecture-shaped milestone only after
-  Layer 5; Merkurjev's theorem itself is out of scope, scope-note it).
+  discriminant is forced), and the Hasse/Clifford story on `I²/I³`. Construct the
+  homomorphism `c : I² → Br(K)[2]` (`c = s` up to the recorded
+  `(−1,−1)`-powers), prove directly that it vanishes on `I³` (Lam V.3.4), and use
+  the quotient universal property to obtain the induced homomorphism
+  `c̄ : I²/I³ → Br(K)[2]`. **No injectivity, surjectivity, or classification claim
+  for `c̄` is a milestone of this roadmap.** Such a claim requires the deep
+  Merkurjev/norm-residue theorem, for which this roadmap has no supplier; that
+  theorem is an explicit scope exclusion, not a promised interface.
 - **Pfister forms, 1- and 2-fold theory.** `⟨⟨a⟩⟩`, `⟨⟨a,b⟩⟩` and their
   characteristic properties at this level: `⟨⟨a,b⟩⟩` is the norm form of
   `(a,b)`; `⟨⟨a,b⟩⟩` hyperbolic iff `(a,b)` splits (the four-fold criterion in
@@ -444,9 +455,13 @@ computation) is deliberate: it is what makes each equivalence reusable.
 ### Layer 5: the Brauer-class packaging (refactor-flagged)
 
 Everything here is stated against Mathlib's `CSA`/`IsBrauerEquivalent`/
-`BrauerGroup` vocabulary plus the in-flight group structure, and every milestone
-carries the flag *refactor onto Mathlib's CSA development as it lands* (PRs
-#26377, #28970, the `Whysoserioushah/BrauerGroup` pipeline). Take only what the
+`BrauerGroup` vocabulary. At the branch pin `BrauerGroup` is only a quotient, not
+a group, and the required multiplication and quaternion-CSA instances are still
+upstream work. Therefore the Brauer-valued statements in this layer remain
+**prose targets until their types land**; no placeholder group, junk-valued class,
+or private duplicate is authorized. Each milestone consumes the landed Mathlib
+API when available, with the exact gates recorded in §Provenance (PRs #26377,
+#28970, #41538, and the `Whysoserioushah/BrauerGroup` pipeline). Take only what the
 invariants need; the general theory (Wedderburn uniqueness, Skolem–Noether,
 centralizers, splitting fields, index) belongs to the
 [semisimple-algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)
@@ -461,15 +476,16 @@ and is consumed, not rebuilt.
 - The Hasse invariant restated with values in `Br(K)`, `s : {forms} → Br(K)`,
   and Lam V.3.19's `Ŵ(K) → BW(K)`-flavored packaging reduced to what we use:
   `(s, d)` as a complete invariant in dimension ≤ 3, and the `I²`-homomorphism
-  of Layer 4.
+  of Layer 4 together with its factorization `I²/I³ → Br(K)[2]`. This bullet does
+  not add injectivity of that factorization.
 
 ### Layer 6: forms over local fields
 
 Over `ℚ_p` first (that is where Mathlib's types are), stated so that the
 general-nonarchimedean-local versions are a hypothesis swap when the
-[local fields roadmap](../LocalFields/README.md) (roadmap in preparation) supplies
-the field API; the dyadic case is **never** deferred — it is the point.
-Coordinate with HassePrinciple throughout (see "in motion").
+[Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 0 supplies
+the field API; the dyadic case is **required** — it is the point. The
+HassePrinciple contact gate in §Provenance applies before code or statement-shape adaptation.
 
 - **Local square classes.** `#(ℚ_pˣ/(ℚ_pˣ)²) = 4` for odd `p`, `= 8` for `p = 2`,
   with explicit representatives (`{1, u, p, up}`; `{±1, ±5, ±2, ±10}`) — Serre II
@@ -519,10 +535,10 @@ Coordinate with HassePrinciple throughout (see "in motion").
 
 ### Layer 7: the Kummer cup bridge (first cohomological layer)
 
-Consumes the [profinite cohomology roadmap](../ProfiniteCohomology/README.md)
-(roadmap in preparation): continuous `H^*(G_K, μ₂)` with cup products and the
-Kummer isomorphism `H¹(G_K, μ₂) ≅ Kˣ/(Kˣ)²` are **their** milestones; this layer
-starts where those types exist.
+Consumes [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)
+Layer 7 for cup products and Layer 9 for Kummer: continuous `H^*(G_K, μ₂)` with cup products
+and the isomorphism `H¹(G_K, μ₂) ≅ Kˣ/(Kˣ)²` are **their** milestones; this layer starts
+where those types exist.
 
 - The square-class dictionary `(·) : Kˣ/(Kˣ)² ≅ H¹(G_K, μ₂)` in the concrete
   cocycle normalization the profinite roadmap pins (compatibility with
@@ -576,8 +592,7 @@ starts where those types exist.
   `Tr_*⟨a⟩` for `a ∈ Lˣ` are the objects Kahn's theorem evaluates.
 - **The Evens norm, consumed.** The multiplicative transfer
   `𝒩 : H^*(H, 𝔽₂) → H^*(G, 𝔽₂)` for `[G : H] = 2` is the
-  [profinite cohomology roadmap](../ProfiniteCohomology/README.md)'s construction
-  milestone (Evens 1963; they own the operation and its axioms — in particular
+  construction of PR #1 Layer 10 (Evens 1963; they own the operation and its axioms — in particular
   the degree-≤-2 expansion of `𝒩(1 + x)` in terms of corestriction and the
   degree-doubling term). This roadmap owns only its *application to forms*.
 - **The Evens–Kahn / Kahn relative Stiefel–Whitney formula** (Kahn, *Classes de
@@ -638,16 +653,23 @@ sign error.
 ## Ordering and parallelism
 
 Layers 0–6 are cohomology-free and can be built now, before or in parallel with
-the profinite-cohomology sibling; within them, Layer 0 is first (everything
+PR #1; within them, Layer 0 is first (everything
 diagonal rests on it), Layers 1 and 2 are independent of each other after
 Layer 0, Layer 3 needs both, Layer 4 needs 1–3, Layer 5 needs 2–3 plus the
 in-flight Mathlib CSA work it refactors onto, and Layer 6 needs 0–3 (its
-bimultiplicativity route (i) deliberately avoids Layer 5). Layer 7 blocks on the
-profinite-cohomology roadmap's cup-product and Kummer milestones; Layer 8 on
-Layer 7; Layer 9's transfer half is cohomology-free (it can proceed with
-Layers 1–3) while its Evens–Kahn half blocks on the sibling's Evens norm. The
-local-fields sibling is consumed only for the general-local-field restatement of
-Layer 6 and the duality bridge; nothing here blocks on it.
+bimultiplicativity route (i) deliberately avoids Layer 5). Layer 7 blocks on PR #1
+Layer 7 (cup products) and Layer 9 (Kummer); Layer 8 on Layer 7; Layer 9's transfer
+half is cohomology-free (it can proceed with Layers 1–3) while its Evens–Kahn half
+blocks on PR #1 Layer 10 (Evens norm). PR #2 Layer 0 supplies the general local-field
+vocabulary, Layer 1 the square-class finiteness interface in the valid regimes, and
+Layer 8B the mixed-characteristic mod-2 duality bridge; only the general-local-field
+restatement of Layer 6 and that bridge consume #2. This roadmap in turn supplies the
+local classification and Hilbert-symbol/quaternion dictionary consumed by
+[Integral Lattices PR #7](https://github.com/roed-math/TauCetiRoadmap/pull/7).
+
+Until sibling branches merge, the PR links above are canonical. The family-wide assigned
+root-list number for this roadmap is `18`; the integration pass must preserve it, import every
+roadmap exactly once, and check all sibling links after their directories are present.
 
 ## References
 
@@ -697,16 +719,50 @@ Layer 6 and the duality bridge; nothing here blocks on it.
 
 ## Provenance and coordination
 
+**Coordination snapshot (checked 2026-08-01).** This review made no external contact and does
+not claim an ownership agreement. Public repositories and PR metadata were inspected only.
+The following gates are required before implementation crosses project boundaries:
+
+- **Project / authors:** `mariainesdff/HassePrinciple` — Nirvana Coppola, María Inés de
+  Frutos-Fernández, and contributors. **Exact revision:**
+  [`d2802ddce55e`](https://github.com/mariainesdff/HassePrinciple/commit/d2802ddce55ef34045f68c5bf39c0598e7d0e988).
+  **Licence:** Apache-2.0. **Overlap:** chain equivalence, Hilbert symbol, `p`-adic squares,
+  Hasse–Minkowski invariants. **Contact / coordination status:** not contacted during this
+  review. **Agreed ownership:** none recorded. **Plan:** independently state the intrinsic
+  general-field and local-classification milestones; consume files only after they land in
+  Mathlib or after explicit coordination. **Refactor trigger:** matching `ForMathlib` work
+  lands upstream. **Gate:** before adapting code, proof organization, or project-specific
+  statement shapes, contact the maintainers and record the division of work.
+- **Project / authors:** Mathlib central-simple/Brauer work — Yunzhou Xie, Joël Zhang,
+  Mathias-Stout, J. Springer, and the contributors to PRs #26377, #28970, #41536, #41538.
+  **Exact revisions / PRs:** all four PRs were still open on 2026-08-01 at heads
+  `13cac7e3b9bb`, `5a2bcb298759`, `e95984de0341`, and `86493005d20f`, respectively.
+  **Licence:** Mathlib Apache-2.0. **Overlap:** Brauer multiplication, reduced norm/trace,
+  quaternion directory/API, and quaternion central simplicity. **Contact / coordination
+  status:** not contacted during this review. **Agreed ownership:** none recorded externally;
+  within this roadmap family the landed Semisimple Algebras roadmap owns general CSA/Brauer
+  theory. **Plan:** consume landed Mathlib declarations; keep unexpressible Layer-5 targets in
+  prose. **Refactor trigger:** each cited PR lands. **Gate:** no private duplicate group
+  structure or quaternion-CSA instance; a temporary compatibility wrapper may be proposed only
+  after author contact, must expose the upstream vocabulary, and must carry a deletion trigger.
+- **Project / authors:** `Whysoserioushah/BrauerGroup` and contributors. **Exact revision:**
+  [`283e0df7dc15`](https://github.com/Whysoserioushah/BrauerGroup/commit/283e0df7dc15cd8b469a73fbc763f74637c87147).
+  **Licence:** Apache-2.0. **Overlap:** the full Brauer-group program and its upstream staging.
+  **Contact / coordination status:** not contacted during this review. **Agreed ownership:**
+  none recorded. **Plan:** track and consume upstreamed Mathlib results, not migrate staging
+  code into Tau Ceti. **Refactor trigger:** a required group operation or class theorem lands
+  in Mathlib. **Gate:** no code adaptation or alternate API without recorded coordination.
+
 - **Sibling boundaries.** The
-  [profinite cohomology roadmap](../ProfiniteCohomology/README.md) (in
-  preparation) owns continuous `H^*`, cup products, the Kummer isomorphism, and
-  the Evens norm construction — Layers 7-9 consume them and state only the
-  quadratic-form content. The [local fields roadmap](../LocalFields/README.md)
-  (in preparation) owns local-field structure theory, unit filtrations, and mod-2
-  Tate duality; it states the single bridge milestone identifying its `n = 2`
-  duality pairing with the Layer-6 Hilbert pairing, which we cite and do not
-  restate. The [pro-p groups roadmap](../ProPGroups/README.md) (in preparation)
-  has no direct interface with this roadmap. The
+  [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)
+  owns continuous `H^*`, Layer-7 cup products, Layer-9 Kummer, and the Layer-10 Evens
+  norm — this roadmap's Layers 7–9 consume those precise milestones and state only the
+  quadratic-form content. [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)
+  owns local-field structure theory, unit filtrations, and the mixed-characteristic
+  mod-2 Tate-duality bridge in its Layer 8B; it states the single theorem identifying
+  that pairing with the Layer-6 Hilbert pairing, which we cite and do not restate.
+  [Pro-p Groups PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3) has no direct
+  interface with this roadmap. The
   [semisimple algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)
   (landed) owns general CSA/Skolem-Noether/Brauer-group theory (its Layers 4-6);
   our Layer 5 takes exactly the quaternion case and the 2-torsion packaging, and
@@ -720,9 +776,9 @@ Layer 6 and the duality bridge; nothing here blocks on it.
   Ceti already has".
 - **External coordination.** HassePrinciple (Coppola, de Frutos-Fernández) and
   the Mathlib CSA line (Xie, Zhang; Whysoserioushah's staging repo; Mathias-Stout
-  and J. Springer's quaternion PRs) are detailed in "What is already in motion" —
-  contact the authors before starting Layers 5-6, register a Tau Ceti intention
-  for each layer, and re-run the PR search at build time.
+  and J. Springer's quaternion PRs) are detailed in "What is already in motion".
+  Their current uncontacted status and the implementation gates are recorded above;
+  re-run the PR search and update the exact revisions at implementation time.
 - **`gq2-lean` provenance (secondary; improve rather than canonize).** The
   [`roed-math/gq2-lean`](https://github.com/roed-math/gq2-lean) project
   (Apache-2.0, same ownership as this roadmap) contains working single-purpose
