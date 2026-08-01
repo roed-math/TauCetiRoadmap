@@ -22,9 +22,9 @@ Demushkin material in `TauCeti/GroupTheory/ProP/Demushkin/`. The category-level 
 (limits, completion) stay phrased against Mathlib's `ProfiniteGrp`.
 
 This roadmap is one of four coordinated roadmaps (with
-[continuous cohomology of profinite groups](../ProfiniteCohomology/README.md),
-[local fields and local class field theory](../LocalFields/README.md), and
-[quadratic form invariants](../QuadraticFormInvariants/README.md), all in preparation)
+[Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1),
+[Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2), and
+[Quadratic Form Invariants PR #4](https://github.com/roed-math/TauCetiRoadmap/pull/4))
 whose combined target is the reusable foundation under the `G_{ℚ₂}` presentation project
 (`roed-math/gq2-lean`, <https://roed314.github.io/gq2/>); its axiom B3c — the identification
 `G_{ℚ₂}(2) ≅ D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩` with cyclotomic orientation — is the worked
@@ -72,7 +72,7 @@ it is a separate, gated, future roadmap.
   never a mixture.
 - **Topological generation and `d(G)`.** `IsTopologicallyFinitelyGenerated G :=
   ∃ s : Finset G, (Subgroup.closure ↑s).topologicalClosure = ⊤`. This exact shape is a
-  contract: the [LocalFields](../LocalFields/README.md) roadmap's finite-generation theorem
+  contract: [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s finite-generation theorem
   for `G_K` (its B1 layer) produces it, and the reconstruction theorem (Layer 8) consumes
   it. Define `d(G) : ℕ∞` as the infimum of the cardinalities of finite topological
   generating sets (`⊤` allowed, value `∞` when none exists); the identity
@@ -94,7 +94,7 @@ it is a separate, gated, future roadmap.
   elements, via the five-term sequence) is the Layer 5 presentation-independence theorem.
 - **Demushkin predicate.** A pro-`p` group `G` is **Demushkin** when (with `𝔽_p = ZMod p`
   trivial coefficients, cohomology from
-  [ProfiniteCohomology](../ProfiniteCohomology/README.md)):
+  [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)):
   (1) `dim_{𝔽_p} H¹(G, 𝔽_p) < ∞`, (2) `dim_{𝔽_p} H²(G, 𝔽_p) = 1`, (3) the cup product
   `H¹ × H¹ → H²` is a nondegenerate bilinear form. Exactly Labute's definition (p. 106).
   Finite generation is **derived** (clause 1 + Burnside basis), not assumed. Nondegeneracy
@@ -117,11 +117,12 @@ it is a separate, gated, future roadmap.
   `g · x = χ(g)x`, the maps `H¹(G, I/p^i I) → H¹(G, I/pI)` are surjective for all `i ≥ 1`
   (Labute Prop. 6 and Thm 4; equivalently, values of continuous crossed homomorphisms into
   `I(χ)` can be prescribed arbitrarily on a minimal generating set). Then
-  `Im χ ⊆ ℤ_pˣ` is a closed subgroup, an isomorphism invariant, and `q(G)` is the largest
-  `p`-power `q` with `Im χ ⊆ 1 + qℤ_p` (Labute, Corollary to Thm 4). For infinite `G`
+  `Im χ ⊆ ℤ_pˣ` is a closed subgroup and an isomorphism invariant. The invariant `q(G)` is
+  defined independently from the finite torsion subgroup of `G^{ab}`; it is **not** defined by
+  a largest-containment condition on `Im χ`. For infinite `G`
   (⟺ `n ≠ 1`), `cd_p G = 2` (Tate) and `χ` is exactly the action on the dualizing module
-  `I(G) ≅ ℚ_p/ℤ_p` — the `PD²` framing below. **`q = 2` versus `q = 2^f`:** when
-  `q ≠ 2` the pair `(n, q)` is a complete invariant and `Im χ = 1 + qℤ_p`; when `q = 2`
+  `I(G) ≅ ℚ_p/ℤ_p` — the `PD²` framing below. Labute's nonexceptional theorem gives
+  `Im χ = 1 + qℤ_p` when `q ≠ 2`, so `(n, q)` is then complete. When `q = 2`
   (only possible for `p = 2`) it is not, and the classification is by `(n, Im χ)`, where
   the possible images are read off the closed-subgroup trichotomy of
   `ℤ₂ˣ = {±1} × (1 + 4ℤ₂)`: the subgroups `U^(f) = 1 + 2^f ℤ₂` (`f ≥ 2`, or `f = ∞`
@@ -197,7 +198,7 @@ all-degrees `continuousCohomology` via the coinduced resolution but explicit `H�
 PRs #41545 (inflation maps, rmhi, 2026-07-11) and #41539 (functoriality refactor, rmhi,
 updated 2026-07-27); cup products exist only in FLT staging
 (`FLT/Mathlib/.../ContCohomology/CupProduct.lean`, E. Xie, FLT#1098, 2026-07-10). The
-[ProfiniteCohomology](../ProfiniteCohomology/README.md) roadmap owns the interface to this
+[Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1) owns the interface to this
 line of work; every cohomological statement below is written against *its* API, and
 refactors onto Mathlib's `ContCohomology` land there, not here. Also relevant on master:
 `ProfiniteGrp` additivization (#39973, T. Browning, 2026-06-19). Open PRs to watch:
@@ -229,7 +230,7 @@ one overlap (a brand-new AI-generated pro-`C` library) are in the coordination s
 The ordering is the dependency order. As each layer makes the next layer's *types*
 expressible in `TauCeti/`, state its milestones in `Suggested.lean` (with `sorry`).
 Layers 5–7, 9, and 11 have cohomological statements that consume the
-[ProfiniteCohomology](../ProfiniteCohomology/README.md) roadmap (H¹, H², cup products,
+[Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1) (H¹, H², cup products,
 five-term exact sequence, cd formalism); their non-cohomological substatements do not block
 on it.
 
@@ -302,7 +303,7 @@ on it.
 - **Functoriality.** The image of a `p`-Sylow subgroup under a continuous surjection is
   `p`-Sylow; the `p`-Sylow subgroup of an inverse limit is an inverse limit of `p`-Sylow
   subgroups. This is the clean citable target the
-  [LocalFields](../LocalFields/README.md) roadmap consumes for wild inertia (the `p`-Sylow
+  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) consumes for wild inertia (the `p`-Sylow
   of the inertia/ramification groups); keep its statement free of any Galois vocabulary.
 - **Worked instances** (`Suggested.lean`): the Galois group of any Galois extension has
   `p`-Sylow subgroups; every `p`-Sylow subgroup of `ℤ̂ = completion ℤ` is topologically
@@ -376,7 +377,7 @@ on it.
 
 ### Layer 5: presentations and the rank interpretations
 
-Cohomological statements here consume [ProfiniteCohomology](../ProfiniteCohomology/README.md)
+Cohomological statements here consume [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)
 (H¹, H² of profinite groups with `𝔽_p` and finite discrete coefficients, inflation,
 restriction, transgression, the five-term exact sequence of a closed normal subgroup).
 
@@ -411,7 +412,7 @@ restriction, transgression, the five-term exact sequence of a closed normal subg
 
 The general `cd_p` formalism (definition via vanishing of `H^n` on `p`-torsion discrete
 modules, dimension shifting, `cd` of closed subgroups, spectral-sequence generalities)
-belongs to [ProfiniteCohomology](../ProfiniteCohomology/README.md); this layer owns the
+belongs to [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1); this layer owns the
 pro-`p`-specific theorems, stated against that formalism.
 
 - **Free ⟹ `cd ≤ 1`.** `H²(F, M) = 0` for `F` free pro-`p` and `M` finite discrete
@@ -459,23 +460,26 @@ pro-`p`-specific theorems, stated against that formalism.
   `(x₁, x₂)`); for `p` odd no rank-1 Demushkin groups exist.
 - **The abelianization structure theorem.** For Demushkin `G`:
   `G^{ab} ≅ ℤ_p^{n-1} × ℤ_p/qℤ_p` (topological abelianization; Labute p. 106). Home of
-  `q(G)` per the pinned convention (`demushkinQ`: `0` for torsion-free, else the torsion
-  count). Worked instance: `D₀^{ab} ≅ ℤ₂² × ℤ/2` and `q(D₀) = 2` (`Suggested.lean`) —
+  `q(G)` per the pinned convention (`demushkinQ`: defined only with finite abelianization
+  torsion, `0` for torsion-free, else the torsion count). Worked instance:
+  `D₀^{ab} ≅ ℤ₂² × ℤ/2`, finiteness of its torsion subgroup, and `q(D₀) = 2`
+  (`Suggested.lean`) —
   a presentation-level computation, deliberately independent of the classification.
 - **The canonical character.** Labute Prop. 6: for `dim H¹ < ∞`, the prescription
   properties (1)–(3) for `I(χ)` are equivalent; free pro-`p` groups satisfy them for every
   `χ`. **Theorem (Serre/Labute Thm 4): a Demushkin group has a *unique* continuous
   `χ : G → ℤ_pˣ` with the prescription property.** Define `demushkinCharacter G := χ`;
-  prove `Im χ` is closed, is an isomorphism invariant (functoriality under continuous
-  isomorphisms — the orientation-transport lemma the acceptance instance needs), and
-  recovers `q(G)` (largest `q` with `Im χ ⊆ 1 + qℤ_p`).
+  prove `Im χ` is closed and is an isomorphism invariant (functoriality under continuous
+  isomorphisms — the orientation-transport lemma the acceptance instance needs). Prove
+  `Im χ = 1 + q(G)ℤ_p` only in the nonexceptional `q(G) ≠ 2` regime. For `q(G) = 2`, retain
+  `Im χ` as a separate classification invariant and do not recover `q` from containment.
 - **The image trichotomy at `p = 2`.** Classification of the closed subgroups of `ℤ₂ˣ`
   (`U^(f)`, `{±1} × U^(f)`, `U^[f]` — pinned above), with the procyclicity statement in
   `Suggested.lean`; for `p` odd, closed subgroups of `1 + pℤ_p` are exactly the `U^(f)`
   (`log` isomorphism). Self-contained `ℤ_pˣ`-theory; no cohomology.
 - **Poincaré-duality framing, boundary pinned.** The *general* notions — duality group at
   `p`, dualizing module, `PD^n` (NSW (3.4.4)–(3.4.6), (3.7.1)) — live in
-  [ProfiniteCohomology](../ProfiniteCohomology/README.md) (its duality layer), and this
+  [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1) (its duality layer), and this
   roadmap does not define them. This layer states and proves, against that interface, the
   Demushkin-specific results: an infinite Demushkin group has `cd_p = 2` (Tate; via the
   one-relator presentation and Layer 6) and is a `PD²` group at `p` with dualizing module
@@ -545,7 +549,7 @@ statements NSW III §9.
   diagonal — Prop. 3, the statement that ties Layers 5/7 to the tower); normal forms for
   nondegenerate (skew-)symmetric forms over `𝔽_p`, including ⚠ the characteristic-2
   non-alternating case (a self-contained bilinear-forms input; coordinate with
-  [QuadraticFormInvariants](../QuadraticFormInvariants/README.md) rather than duplicating);
+  [Quadratic Form Invariants PR #4](https://github.com/roed-math/TauCetiRoadmap/pull/4) rather than duplicating);
   conclusion: `r ≡ x₁^q(x₁,x₂)(x₃,x₄)⋯` or (n odd) `x₁^q(x₂,x₃)⋯ (mod F₃)`.
 - **The successive-approximation engine (Labute Prop. 5, Thm 3).** The span statements
   `gr_j(F) = Im δ_{j-1} (+ π^{j-1}ξ-tails for q = 2)` and the limit process: a Demushkin
@@ -614,8 +618,9 @@ The definite home of the infinite-rank theory (pinned in the conventions):
 
 ### Layer 11: the arithmetic summit — `G_K(p)` for `p`-adic fields
 
-Consumes [LocalFields](../LocalFields/README.md) (its local-duality and Euler-
-characteristic layers) and [ProfiniteCohomology](../ProfiniteCohomology/README.md). For
+Consumes [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) (its
+mixed-characteristic local-duality and Euler-characteristic layers) and
+[Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1). For
 `K/ℚ_p` finite of degree `d`, `G_K(p) := Gal(K(p)/K)` the Galois group of the maximal
 `p`-extension — intrinsically: the maximal pro-`p` quotient of the absolute Galois group,
 `maxProP` applied to `Gal(K^sep/K)` (Layer 3 makes this well-defined and functorial).
@@ -686,15 +691,30 @@ mis-normalized:
 Layers 0 → 1 → 2 → 3 → 4 are sequential (each consumes the previous). After Layer 4:
 Layer 5's presentation half and Layer 8 (tower + reconstruction, cohomology-free) can
 proceed in parallel with the cohomological work; Layer 5's rank interpretations and all of
-Layers 6–7 block on [ProfiniteCohomology](../ProfiniteCohomology/README.md) delivering H¹,
+Layers 6–7 block on [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1) delivering H¹,
 H², cup, and the five-term sequence for profinite groups; Layer 7's `ℤ_pˣ`-subgroup theory
 and abelianization invariants are unblocked now. Layer 9 needs 5–8; Layer 10 needs 6 and
 can run in parallel with 9; Layer 11 needs 7 and 9 plus
-[LocalFields](../LocalFields/README.md)' duality and Euler-characteristic layers — its
+[Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s mixed-characteristic
+duality and Euler-characteristic layers — its
 free case (Shafarevich) needs only the `H²`-vanishing input and can land before the
 classification. The reconstruction theorem (Layer 8) and the topological-finite-generation
 predicate (Layer 3) are the two contracts the LocalFields roadmap consumes; deliver them
 early.
+
+### Cross-roadmap milestone contracts
+
+Expanding the two-way Local Fields relationship by layer gives an acyclic schedule:
+
+| Supplier | Supplied milestones | Consumer |
+|---|---|---|
+| This PR, Layers 0–3 | quotient-form `IsProP`, profinite Sylow theory, maximal pro-`p` quotient, Frattini/Burnside basis theory, and the exact topological-finite-generation predicate | [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s finite-generation and wild-kernel arguments |
+| [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1), Layers 1, 4, 7, 8 | `H^1`, `H^2`, five-term exact sequence, cup products, and cohomological-dimension vocabulary | This PR's cohomological halves of Layers 5–7 and Layer 9 |
+| [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2), mixed-characteristic local-duality and Euler-characteristic layers | dimensions of `H^1(G_K, F_p)` and `H^2(G_K, F_p)`, nondegenerate Hilbert-symbol cup pairing, cyclotomic image, and Kummer compatibility | This PR's Layer 11 arithmetic summit |
+| [Quadratic Form Invariants PR #4](https://github.com/roed-math/TauCetiRoadmap/pull/4), characteristic-two bilinear-form layer | the nonalternating linear-algebra normal forms used in Labute's dyadic classification | This PR's Layer 9 `q = 2` span argument |
+
+Thus Local Fields consumes only foundational Layers 0–3 here, while this roadmap consumes Local
+Fields only at Layer 11; neither supplier waits on the result that it consumes.
 
 ## References
 
@@ -755,6 +775,48 @@ early.
   corollary for abstract groups.
 
 ## Provenance, coordination, and licensing
+
+The records below state only evidenced status as of 2026-08-01. Missing revision, licence, or
+contact information blocks code adaptation; it never stands for tacit permission.
+
+- **Project / authors:** `roed-math/gq2-lean` / roed-math contributors. **Exact revision or PR:**
+  `d0714a7c431b64e18c422fb16cb5e93d79e5be25`. **Licence:** Apache-2.0. **Overlap:** single-
+  instance implementations across Layers 0, 3–5, and 7–8. **Contact / coordination status:** same
+  repository owner; no separate author-contact outcome is asserted. **Agreed ownership:** the
+  intrinsic reusable API belongs here; marked `G_{Q_2}` adapters remain in `gq2`. **Plan:** adapt
+  with file-level credit and generalize, never copy project-local axioms or encodings as the
+  specification. **Refactor trigger:** each public Tau Ceti layer acquiring its target types.
+- **Project / authors:** `davidturturean/gq2-lean-turturean` / David Turturean. **Exact revision or
+  PR:** no immutable revision is pinned in this branch. **Licence:** GPL-3.0. **Overlap:** maximal
+  pro-2 quotient and an axiomatized Labute classification. **Contact / coordination status:** no
+  contact outcome is recorded. **Agreed ownership:** none required because no integration is
+  planned. **Plan:** statement/decomposition audit only; no code transfer to Apache-2.0 Tau Ceti.
+  **Refactor trigger:** none.
+- **Project / authors:** `n-yamaguchi-0729/ProCGroups` / repository contributors. **Exact revision
+  or PR:** no immutable revision is pinned in this branch. **Licence:** Apache-2.0 as reported by
+  the repository audit. **Overlap:** free pro-`C` groups, maximal quotients, completed group
+  algebras, Fox calculus, and Reidemeister–Schreier. **Contact / coordination status:** no contact
+  outcome is recorded. **Agreed ownership:** none recorded. **Plan:** no reuse or API adaptation
+  until a revision is pinned, the work is reviewed declaration-by-declaration, and coordination is
+  recorded; independent development with citation remains the current plan. **Refactor trigger:**
+  completion of that audit and coordination record.
+- **Project / authors:** Mathlib profinite-group line / Nailin Guan, Yuyang Zhao, Jujian Zhang,
+  Adam Topaz, Thomas Browning; continuous-cohomology line / Richard Hill, Andrew Yang, Edison Xie.
+  **Exact revision or PR:** #16648, #16992, #16993, #20740, #34893, #35540, #39973, #42200,
+  #41539, and #41545. **Licence:** Apache-2.0 (Mathlib). **Overlap:** foundational profinite
+  categories/completion/finiteness and cohomological interfaces. **Contact / coordination status:**
+  no direct contact outcome is recorded in this repository. **Agreed ownership:** no agreement is
+  recorded; Mathlib owns its existing categories and canonical cohomology carrier. **Plan:**
+  consume those APIs and contribute compatible general lemmas upstream; do not fork them.
+  **Refactor trigger:** each listed PR landing or changing public names.
+- **Project / authors:** Mathlib `p`-adic measures #41961 / David Loeffler, and `lean-iwasawa` /
+  Jz Pan. **Exact revision or PR:** Mathlib #41961; no immutable `lean-iwasawa` revision is pinned.
+  **Licence:** Mathlib is Apache-2.0; `lean-iwasawa` licence is not recorded here. **Overlap:**
+  completed group algebras used by the exceptional `q = 2` endgame. **Contact / coordination
+  status:** no contact outcome is recorded. **Agreed ownership:** none recorded. **Plan:** keep the
+  target theorem prose-level until a compatible upstream carrier and licence/contact record are
+  available; do not create a rival completed-group-algebra API. **Refactor trigger:** settlement of
+  #41961 and the Layer 9 carrier choice.
 
 **Migration source (primary).** `roed-math/gq2-lean` (Apache-2.0, same owner — no licensing
 obstacle) contains working single-instance implementations of much of Layers 0, 3–5, 7–8 at
@@ -820,7 +882,7 @@ Zhang (category, limits, Galois-profinite; Zulip PR-review threads #16648, #1699
 #35540, additivization #39973, `IsMulFG` #42200) — contact before upstreaming anything
 touching those files, and follow their Hom-wrapper category conventions. The continuous-
 cohomology line (R. Hill, A. Yang, E. Xie; open #41539/#41545) is coordinated through the
-[ProfiniteCohomology](../ProfiniteCohomology/README.md) roadmap. D. Loeffler's `p`-adic
+[Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1). D. Loeffler's `p`-adic
 measure PRs (#41961) and Jz Pan's `lean-iwasawa` (Iwasawa algebras over `ℤ_p`-extensions)
 border Layer 9's `ℤ₂[[Γ]]` needs. Register intentions per the repository's claims process
 before substantial pushes.

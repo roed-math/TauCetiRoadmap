@@ -154,12 +154,16 @@ abbrev topAbelianization (G : Type u) [Group G] [TopologicalSpace G] [IsTopologi
 open Classical in
 /-- **Labute's `q`-invariant**: `0` if the topological abelianization is torsion-free
 (Labute's `q = p^∞ = 0` convention), and otherwise the number of its torsion elements —
-which for a Demushkin group `G`, where `G^{ab} ≅ ℤ_p^{n-1} × ℤ/q`, is exactly `q`. Junk
-value for groups whose abelianization torsion is infinite. -/
+which for a Demushkin group `G`, where `G^{ab} ≅ ℤ_p^{n-1} × ℤ/q`, is exactly `q`.
+The finiteness witness is an explicit domain condition; this definition has no arbitrary value
+for groups with infinite abelianization torsion. In the final API it may instead be supplied by
+an `IsDemushkin` argument once that predicate is expressible at the toolchain pin. -/
 noncomputable def demushkinQ (G : Type u) [Group G] [TopologicalSpace G]
-    [IsTopologicalGroup G] : ℕ :=
-  if ∀ x : topAbelianization G, IsOfFinOrder x → x = 1 then 0
-  else Nat.card {x : topAbelianization G // IsOfFinOrder x}
+    [IsTopologicalGroup G]
+    (_hfinite : Finite {x : topAbelianization G // IsOfFinOrder x}) : ℕ := by
+  letI := _hfinite
+  exact if ∀ x : topAbelianization G, IsOfFinOrder x → x = 1 then 0
+    else Nat.card {x : topAbelianization G // IsOfFinOrder x}
 
 /-- `ℤ̂`, the profinite completion of `ℤ` (a stress-test object for Layers 0–2). -/
 noncomputable abbrev zHat : Type :=
@@ -388,9 +392,15 @@ is `ℤ₂³/⟨(2,4,0)⟩`. This is the computation behind `n = 3`, `q = 2`. -/
 example : Nonempty (topAbelianization demushkinD0 ≃ₜ* Multiplicative (ℤ_[2] × ℤ_[2] × ZMod 2)) :=
   sorry
 
+/-- **Layer 7, finiteness needed by the honest `q`-invariant API.** The torsion subgroup of
+`D₀^{ab} ≅ ℤ₂² × ℤ/2` is finite. -/
+example : Finite {x : topAbelianization demushkinD0 // IsOfFinOrder x} :=
+  sorry
+
 /-- **Layer 7, the `q`-invariant of `D₀`.** `q(D₀) = 2`: the torsion subgroup of
 `D₀^{ab} ≅ ℤ₂² × ℤ/2` has two elements. -/
-example : demushkinQ demushkinD0 = 2 :=
+example (hfinite : Finite {x : topAbelianization demushkinD0 // IsOfFinOrder x}) :
+    demushkinQ demushkinD0 hfinite = 2 :=
   sorry
 
 /-! ## Layer 8: the lower `p`-series and finite-quotient determinacy -/
