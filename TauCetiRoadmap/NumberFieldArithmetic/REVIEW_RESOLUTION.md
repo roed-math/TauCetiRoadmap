@@ -171,4 +171,3 @@ is unchanged.
 - Coordinate the `SplitsCompletely.lean` visibility change with that file's authors.
 - Obtain an explicit licence and permission, and agree a certification interface, before
   adapting anything from `CertifyingInvariantsNF`.
-</content>
