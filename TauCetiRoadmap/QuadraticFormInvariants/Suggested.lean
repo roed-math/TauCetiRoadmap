@@ -8,11 +8,11 @@ import Mathlib
 contributors and reviewers converge on names and signatures; discharging all of them
 finishes neither a layer nor the roadmap.
 
-The narrative roadmap (Layers 0-9, the convention table, the worked examples, and the
+The narrative roadmap (Layers 0–9, the convention table, the worked examples, and the
 references) is in `README.md`. Mathlib has the linear algebra of quadratic forms
 (diagonalization, `Anisotropic`, `Nondegenerate`, isometry equivalence) and quaternion
 algebras, but none of the arithmetic theory: no Witt decomposition or cancellation, no
-Witt ring, no Hasse invariant, no Hilbert symbol, no transfer, no Stiefel-Whitney
+Witt ring, no Hasse invariant, no Hilbert symbol, no transfer, no Stiefel–Whitney
 classes. We build that theory in `TauCeti/`.
 
 What this file pins is the set of design decisions most likely to fork two
@@ -29,11 +29,11 @@ Brauer-valued and continuous-cohomology signatures stay in prose in `README.md` 
 their consumed types exist. `BrauerGroup K` is only a quotient at the pin, so Layer 3's
 Hasse invariant is deliberately absent here and Layer 5's targets are named against the
 landed semisimple-algebras roadmap (its Layers 4 and 6) rather than sketched with a
-placeholder group; the cohomological Layers 7-9 wait on the profinite-cohomology
+placeholder group; the cohomological Layers 7–9 wait on the profinite-cohomology
 roadmap in the same way. Layer 4's induced map `I²/I³ → Br(K)[2]` is prose-only for the
 same reason, and the roadmap makes no injectivity claim for it.
 
-Layer-6 conventions follow Serre (*A Course in Arithmetic*, ch. III-IV) and O'Meara
+Layer-6 conventions follow Serre (*A Course in Arithmetic*, ch. III–IV) and O'Meara
 (§63). The symbol is *defined* by the norm equation `b = x² − a·y²`, which needs no
 classification of quaternion algebras and no local hypothesis at all; every theorem
 about it carries the local hypotheses, and at the pin those are available only for
@@ -149,7 +149,7 @@ example [Invertible (2 : K)] {n : ℕ} (w : Fin n → Kˣ) (a : Kˣ) :
 represents `c` exactly when `c` can be taken as its first coefficient, the second being
 forced by the discriminant. The second coefficient is written `a*b*c`, which is the
 square class of `a*b/c`; both spellings occur in the sources and their agreement is part
-of the milestone. This replaces the placeholder "binary forms represent `e` iff …". -/
+of the milestone. -/
 example [Invertible (2 : K)] (a b c : Kˣ) :
     (∃ x : Fin 2 → K, weightedSumSquares K ![(a : K), b] x = c) ↔
       (weightedSumSquares K ![(a : K), b]).Equivalent
@@ -203,7 +203,7 @@ example [Invertible (2 : K)] {V : Type v} [AddCommGroup V] [Module K V]
   sorry
 
 /-- **Layer 1, Witt cancellation** (Lam I.4.2): a common orthogonal summand cancels.
-Proved via hyperplane reflections (Lam I.4.5-4.7); Cartan-Dieudonné, stated in the
+Proved via hyperplane reflections (Lam I.4.5–4.7); Cartan–Dieudonné, stated in the
 README as "at most `n` reflections", lands in the same layer. -/
 example [Invertible (2 : K)] {U V₁ V₂ : Type v}
     [AddCommGroup U] [Module K U] [FiniteDimensional K U]
@@ -236,7 +236,7 @@ example [Invertible (2 : K)] (a b : Kˣ) :
   sorry
 
 /-- **Layer 2, the four-fold splitting criterion, the main theorem of the layer and
-`gq2` B11a's shape** (Lam III.2.7, Serre *CiA* III.1.1-1.2, Gille-Szamuely 1.1.9).
+`gq2` B11a's shape** (Lam III.2.7, Serre *CiA* III.1.1–1.2, Gille–Szamuely 1.1.9).
 For `a, b ∈ Kˣ`, TFAE: (1) `ℍ[K,a,b]` splits; (2) `b` is a norm of the quadratic
 algebra `K[√a]` (Mathlib's `QuadraticAlgebra K a 0`); (3) `b = x² − ay²` has a
 solution; (4) `⟨1, −a, −b⟩` is isotropic. When `a` is a square all four hold, so no
@@ -298,7 +298,7 @@ example (p : ℕ) [Fact p.Prime] (a b : ℚ_[p]ˣ) : hilbertSymbol a b = hilbert
   sorry
 
 /-- **Layer 6, bimultiplicativity, the hard dyadic-inclusive input** (Serre *CiA* III
-Thm 2; O'Meara 63:11-63:13 by the pinned quadratic-defect route). -/
+Thm 2; O'Meara 63:11–63:13 by the pinned quadratic-defect route). -/
 example (p : ℕ) [Fact p.Prime] (a b c : ℚ_[p]ˣ) :
     hilbertSymbol a (b * c) = hilbertSymbol a b * hilbertSymbol a c :=
   sorry
@@ -434,8 +434,8 @@ example {L : Type v} [Field L] [Algebra K L] [FiniteDimensional K L] [Invertible
 /-- **Layer 9, the transfer of `⟨1⟩` along the trace, diagonalized**: for the quadratic
 algebra `K[√d]`, the trace form is `⟨2, 2d⟩` on the basis `{1, √d}`. Prove through
 `TauCeti/FieldTheory/Trace`'s diagonalization API. The twisted forms `Tr_*⟨a⟩` are what
-Kahn's formula evaluates; the Evens-Kahn identity for `w(Tr_* q)` is stated once the
-profinite-cohomology roadmap's Stiefel-Whitney layer exists. -/
+Kahn's formula evaluates; the Evens–Kahn identity for `w(Tr_* q)` is stated once the
+profinite-cohomology roadmap's Stiefel–Whitney layer exists. -/
 example [Invertible (2 : K)] (d : Kˣ) :
     (LinearMap.BilinMap.toQuadraticMap
         (Algebra.traceForm K (QuadraticAlgebra K (d : K) 0))).Equivalent
