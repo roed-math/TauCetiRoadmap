@@ -33,26 +33,28 @@ profinite-group, or Galois-theoretic material, so all of this is new work there.
 
 1. Discrete modules over a topological group: the openness API, the closure properties actually
    used, continuous sections of profinite quotients (Layer 0).
-2. The explicit inhomogeneous complex in degrees `0, 1, 2` over an arbitrary topological group,
+2. Functoriality of Mathlib's continuous cohomology in compatible pairs, with restriction and
+   inflation, and the dictionary from the unbundled classes into its category (Layer 1).
+3. The explicit inhomogeneous complex in degrees `0, 1, 2` over an arbitrary topological group,
    with functoriality by compatible pairs and the three named instances (Layer 2).
-3. The comparison isomorphisms: explicit against canonical for profinite groups, and continuous
+4. The comparison isomorphisms: explicit against canonical for profinite groups, and continuous
    against Mathlib's discrete `groupCohomology` for discrete groups (Layer 3).
-4. The description of `Hⁱ(G, M)` as a colimit over finite quotients, in low degrees explicitly
+5. The description of `Hⁱ(G, M)` as a colimit over finite quotients, in low degrees explicitly
    and in all degrees canonically (Layers 4 and 10).
-5. Long exact sequences, inflation-restriction, and the five-term sequence with an explicit
+6. Long exact sequences, inflation-restriction, and the five-term sequence with an explicit
    transgression (Layer 5).
-6. Change of groups: restriction, corestriction, conjugation, transitivity, `cor ∘ res`, and the
+7. Change of groups: restriction, corestriction, conjugation, transitivity, `cor ∘ res`, and the
    Mackey double-coset formula (Layer 6), and their all-degree forms (Layer 10).
-7. Coinduced discrete modules over closed subgroups, Shapiro's lemma, acyclicity, and dimension
+8. Coinduced discrete modules over closed subgroups, Shapiro's lemma, acyclicity, and dimension
    shifting (Layers 7 and 10).
-8. Cup products in the six low-degree shapes with associativity, graded commutativity, and the
+9. Cup products in the six low-degree shapes with associativity, graded commutativity, and the
    restriction, inflation, projection and connecting-map compatibilities (Layer 8), together with
    the graded all-bidegree product (Layer 12).
-9. Cohomological dimension `cd_p`, `cd`, `scd_p` with their dévissage and closed-subgroup theory
-   (Layer 11).
-10. The Galois interface: profinite Hilbert 90 and the Kummer isomorphism with its explicit
+10. Cohomological dimension `cd_p`, `cd`, `scd_p` with their dévissage and closed-subgroup
+    theory (Layer 11).
+11. The Galois interface: profinite Hilbert 90 and the Kummer isomorphism with its explicit
     cocycle (Layer 9).
-11. The Evens norm on `𝔽₂`-cohomology for open subgroups, in both the explicit index-2 form and
+12. The Evens norm on `𝔽₂`-cohomology for open subgroups, in both the explicit index-2 form and
     the general monomial construction (Layer 13).
 
 ### Consumed
