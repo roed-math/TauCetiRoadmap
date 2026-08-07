@@ -152,13 +152,37 @@ milestone of the README depends on it.
   here defines the degree-1 and degree-2 operations that the Brauer comparison, the
   Stiefel-Whitney classes, and the Evens-Kahn identity consume.
 
-When either roadmap is accepted, the migration is mechanical, because both developments
-sit on the same Mathlib carriers: `IsNonarchimedeanLocalField` on one side, and
-`continuousCohomology` at the absolute Galois group on the other. Each local definition
-is then replaced by the accepted declaration of the same type, and the comparison
-theorem between the two is stated at that point. Until then this roadmap is
+**Sequencing.** The maintainer's decision is that the two roadmaps above are accepted
+first, and that Layer 6A and Layer 7A of this roadmap are then rewritten to consume
+their declarations rather than to define their own. Until that happens this roadmap is
 dependency-closed on Mathlib, the landed Tau Ceti files, and the accepted
-semisimple-algebras roadmap.
+semisimple-algebras roadmap, and it states the definitions it needs.
+
+The migration is close to a rename, because both developments sit on the same Mathlib
+carriers. The table records the current names on each side, at the branch heads
+inspected on 2026-08-07.
+
+| Defined here (Layer 6A, 7A) | Supplier declaration |
+|---|---|
+| `normalizedValuation` | Local Fields `normalizedValuation` |
+| `normalizedValuation_surjective` | Local Fields `normalizedValuation_surjective` |
+| `mem_integer_iff_zero_le` | Local Fields `normalizedValuation_eq_one_iff` |
+| `unitFiltration` | Local Fields `unitFiltration` |
+| `mem_unitFiltration_zero` | Local Fields `mem_unitFiltration_zero` |
+| `mem_unitFiltration_succ` | Local Fields `mem_unitFiltration_succ_valuation` |
+| `unitFiltration_antitone` | Local Fields `unitFiltration_antitone` |
+| `H1`, `H2` | Profinite Cohomology `H1`, `H2`, with `explicitH1IsoContinuousCohomology` and `explicitH2IsoContinuousCohomology` |
+| `cup11` | Profinite Cohomology `cup11` |
+| `kummerIso` | Profinite Cohomology `kummerIso` at `n = 2` |
+| `res1`, `res2` | Profinite Cohomology `res` |
+| `evensIndexTwo` | Profinite Cohomology's index-2 Evens class, from `evensGraphCochain` |
+
+The rows on the local-field side agree in name and in type already. The rows on the
+cohomological side need the comparison isomorphisms above, because that roadmap builds
+the low-degree groups explicitly and compares them with Mathlib's functor, while this
+roadmap uses the functor directly. Two milestones are not in either supplier and stay
+here: the coefficient bridge `mu2EquivZMod2`, and the index-two Evens laws in the
+conjugate form that Layer 9 uses.
 
 ## Licence note
 
