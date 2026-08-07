@@ -1,8 +1,8 @@
 # Roadmap: zeros of L-functions — growth, zero-free regions, counting, and the explicit formula
 
 The zeros of an L-function are what the LMFDB's L-function pages are mostly about, and they
-are the part of the analytic theory that Mathlib has least of. At the project pin
-(`9caeba1000`, 2026-06-03) the only zeros in the library are `riemannZetaZeros`, known to be
+are the part of the analytic theory that Mathlib has least of. In the Mathlib the
+repository currently builds, the only zeros in the library are `riemannZetaZeros`, known to be
 closed and discrete (`isDiscrete_riemannZetaZeros`, `IsCompact.inter_riemannZetaZeros_finite`),
 together with the classical trivial zeros and the `RiemannHypothesis` `Prop`. There is no
 zero counting, no zero-free region, no explicit formula, and no way to say that a computed
