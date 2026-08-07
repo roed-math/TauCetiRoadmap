@@ -926,10 +926,11 @@ I.1.7.
   1. `L ∩ E = K`;
   2. `L ∩ K(ζ_m) = K`;
   3. `L(ζ_m) = E(ζ_m)`, so that `LE ⊆ E(ζ_m)`, and `LE/E` lies in a cyclotomic extension of `E`;
-  4. `𝔭` splits completely in `E/K`. Since `m` is prime to `𝔭`, and `𝔭` is unramified in `L`, `𝔭` is
-     unramified in `L(ζ_m)/K` and so in `LE/K`. **Common error.** `E/K` is not cyclotomic, and
-     nothing in the argument makes it so. The cyclotomic extensions in the lemma are `K(ζ_m)/K` and
-     `E(ζ_m)/E`. The lattice:
+  4. `𝔭` splits completely in `E/K`.
+
+  Since `m` is prime to `𝔭`, and `𝔭` is unramified in `L`, `𝔭` is unramified in `L(ζ_m)/K` and so
+  in `LE/K`. **Common error.** `E/K` is not cyclotomic, and nothing in the argument makes it so.
+  The cyclotomic extensions in the lemma are `K(ζ_m)/K` and `E(ζ_m)/E`. The lattice:
 
   ```
       L(ζ_m) = E(ζ_m)
@@ -1489,12 +1490,11 @@ it. The worked examples are spread across the layers, and none waits until the e
   Layer 6; §6 global class fields for Layer 7; §7 the ideal-theoretic version for 7.5; §8 power
   residues, which is horizon material.
 - G. J. Janusz, *Algebraic Number Fields*, 2nd ed. (GSM 7). Ch. III, decomposition groups and the
-  Artin map. Ch. IV §1, moduli and ray classes, which is the statement form of Layers 0 and
-  1. Ch. V, class field theory: §1 cyclic cohomology; §§2–4 the norm-index computations; §5
-     reciprocity and the crossing argument, with Lemmas 5.3, 5.4 and 5.6 and Theorems 5.7 and 5.8
-     used by 6.3; §6 ideal groups, conductors and class fields; §§7–9 the existence theorem; §§10–11
-     consequences; §12 the Hilbert class field. Ch. VI §1, the conductor of `ℚ(√d)`; §3, the narrow
-     class group.
+  Artin map. Ch. IV §1, moduli and ray classes, which gives the statement form of Layers 0 and 1.
+  Ch. V, class field theory: §1 cyclic cohomology; §§2–4 the norm-index computations; §5 reciprocity
+  and the crossing argument, with Lemmas 5.3, 5.4 and 5.6 and Theorems 5.7 and 5.8 used by 6.3; §6
+  ideal groups, conductors and class fields; §§7–9 the existence theorem; §§10–11 consequences; §12
+  the Hilbert class field. Ch. VI §1, the conductor of `ℚ(√d)`; §3, the narrow class group.
 - S. Lang, *Algebraic Number Theory*, 2nd ed. (GTM 110). Ch. VII, ideles and adeles. Ch. IX,
   norm-index computations. Ch. X, the Artin symbol, reciprocity and the crossing argument, with
   Artin's lemma on p. 202. Ch. XI, the existence theorem.
