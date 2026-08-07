@@ -10,24 +10,19 @@ finishes neither a layer nor the roadmap. `sorry` is allowed in this human-owned
 library: these are goals, not proofs.
 
 This file carries the carrier types, so that the central interface of the roadmap is Lean
-code and not pseudocode. The cohomology of Layer 5 is defined here by continuous cochains:
-`contH n` in every degree, which is what cohomological dimension quantifies over, together
-with the explicit low degrees `contH0`, `contH1` and `contH2` and the cup product in
-bidegree `(1,1)`. Mathlib's `continuousCohomology` exists in release `v4.32.2` and **not**
-at this repository's pin, so the comparison with it is a milestone stated in `README.md`,
-and nothing here waits for it. The Demushkin
-predicate, the rank and `q` invariants, the prescription property that pins the canonical
-character, and the arithmetic inputs of Layer 11 are all stated against that carrier. When
-the Profinite Cohomology roadmap or Mathlib supplies a carrier, the comparison isomorphism
-of Layer 5 transports the statements and the local definitions are deleted.
+code and not pseudocode. The cohomology is Mathlib's `continuousCohomology`, which the pin
+supplies in every degree; this file adds the explicit description in degrees `0`, `1` and `2`,
+the cup product in bidegree `(1,1)`, and the comparison isomorphisms between the two. The
+Demushkin predicate, the rank and `q` invariants, the prescription property that pins the
+canonical character, and the arithmetic inputs of Layer 11 are all stated against those
+objects.
 
-Everything else that the pin supports is here too: the profinite foundations, the
-supernatural order and index, Sylow theory, the pro-`p`, Frattini and generation layers, the
-free pro-`C` class formalism, free pro-`p` groups with their universal property, the
-finite-quotient determinacy theorem, the lower `p`-series, the closed-subgroup theory of
-`ℤ₂ˣ`, and the presentation-level worked examples, including the group
-`D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩` of the dyadic acceptance instance. A short block at the end
-holds the few headers that still need vocabulary this pin does not have.
+Everything else the pin supports is here too: the profinite foundations, the supernatural
+order and index, Sylow theory, the pro-`p`, Frattini and generation layers, the free pro-`C`
+class formalism, free pro-`p` groups with their universal property, the finite-quotient
+determinacy theorem, the lower `p`-series with its graded pieces, the closed-subgroup theory
+of `ℤ₂ˣ`, and the presentation-level worked examples, including the group
+`D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩` of the dyadic acceptance instance.
 
 The `def`s in the Prototypes section pin suggested *forms* for the objects the examples
 mention (each is also a design decision recorded in `README.md`); they are prototypes, not
@@ -328,15 +323,11 @@ def IsFiniteContinuousQuotient (G : Type u) [Group G] [TopologicalSpace G]
 
 /-! ## Layer 5: the continuous cochain carrier
 
-This roadmap owns its cohomology in low degrees, so that no milestone waits for another
-roadmap. Coefficients are a finite discrete module `M` over a commutative ring `R`, with a
-continuous `G`-action that commutes with the `R`-action.
-
-Two comparison milestones connect the carrier to its neighbours, and neither is a
-prerequisite of anything here: `contH n` agrees with Mathlib's `continuousCohomology n` in
-degrees `n ≤ 2`, and with the object of the Profinite Cohomology roadmap when that roadmap
-supplies one. Mathlib's `continuousCohomology` is not available at this pin, so the first
-comparison is stated in `README.md` and not here. -/
+These are the explicit descriptions in degrees `0`, `1` and `2`, which Mathlib does not have
+at the pin and which the extension dictionary, the cup product and the Demushkin predicate
+use. Coefficients are a finite discrete module `M` over a commutative ring `R`, with a
+continuous `G`-action that commutes with the `R`-action. The comparison isomorphisms with
+`continuousCohomology` are stated below, in the `Comparison` section. -/
 
 section Carrier
 
@@ -449,21 +440,21 @@ def cocycle₂.mk (c : cocycle₂ R G M) : contH2 R G M := Submodule.Quotient.mk
 
 /-! ### The canonical carrier, from Mathlib
 
-Mathlib defines continuous cohomology in every degree at this pin, in
-`Mathlib/Algebra/Category/ContinuousCohomology/Basic.lean`, as the homology of homogeneous
-cochains. That object is the carrier of every cohomological statement in this roadmap:
-`cd_p`, the rank interpretations, the Demushkin predicate, and the Layer 11 inputs all read
-through it. This roadmap defines no second cohomology theory.
+Mathlib defines continuous cohomology in every degree at the pin, in
+`Mathlib/RepresentationTheory/Homological/ContCohomology/`, as the homology of homogeneous
+cochains of a topological representation `TopRep k G`. That object is the carrier of every
+cohomological statement in this roadmap: `cd_p`, the rank interpretations, the Demushkin
+predicate and the Layer 11 inputs all read through it. This roadmap defines no second
+cohomology theory.
 
-What is not in Mathlib at this pin is the explicit description in low degrees and the cup
-product, and those are what the Demushkin predicate needs. They are stated here on cocycles,
-with comparison isomorphisms to the canonical object as Layer 5 milestones. The Profinite
-Cohomology roadmap develops the same comparisons in more generality; the interface table
-records that crossing, and the statements here do not wait for it. -/
+What Mathlib does not have at the pin is the explicit description in low degrees and the cup
+product, and those are what the Demushkin predicate and the extension dictionary need. They
+are stated below on cocycles, with comparison isomorphisms to the canonical object as Layer 5
+milestones. -/
 
 /-- `ZMod p` carries the discrete topology, and so does its lift to a higher universe.
-Mathlib's construction of continuous cohomology puts the coefficients in the universe of the
-group, so the trivial module is `ULift (ZMod p)`. -/
+Mathlib's construction puts the coefficients in the universe of the group, so the trivial
+module is `ULift (ZMod p)`. -/
 scoped instance : TopologicalSpace (ZMod p) := ⊥
 
 scoped instance : DiscreteTopology (ZMod p) := ⟨rfl⟩
@@ -477,29 +468,28 @@ scoped instance : ContinuousAdd (ULift.{u} (ZMod p)) := ⟨continuous_of_discret
 scoped instance : ContinuousSMul (ZMod p) (ULift.{u} (ZMod p)) :=
   ⟨continuous_of_discreteTopology⟩
 
-/-- The trivial `G`-representation on `𝔽_p`, as an object of Mathlib's category of
-topological representations. -/
+/-- The trivial `G`-representation on `𝔽_p`, as one of Mathlib's topological
+representations. -/
 noncomputable def trivialFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
-    [IsTopologicalGroup G] : Action (TopModuleCat.{u} (ZMod p)) G where
-  V := TopModuleCat.of (ZMod p) (ULift.{u} (ZMod p))
-  ρ := 1
+    [IsTopologicalGroup G] : TopRep.{u} (ZMod p) G :=
+  TopRep.of (ContRepresentation.trivial (ZMod p) G (ULift.{u} (ZMod p)))
 
 /-- **`Hⁿ(G, 𝔽_p)`**, against Mathlib's canonical carrier. Every dimension count below is
 about this object. -/
 noncomputable abbrev cohomFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] (n : ℕ) : TopModuleCat.{u} (ZMod p) :=
-  (continuousCohomology (ZMod p) G n).obj (trivialFp p G)
+  continuousCohomology n (trivialFp p G)
 
-/-- **Layer 6, cohomological dimension**, against the canonical carrier: every cohomology
-above degree `n`, with coefficients in a finite discrete `p`-primary representation,
-vanishes. The quantifier ranges over representations that carry that finiteness, which is
-the `FiniteDiscretePPrimary` predicate of Layer 6. -/
+/-- **Layer 6, cohomological dimension**, against the canonical carrier. The coefficients
+range over the discrete `p`-primary torsion representations, which here are the
+representations over `ZMod (p ^ r)` for every `r`; testing only the finite ones, or only the
+elementary abelian ones for a pro-`p` group, are the two reduction theorems of Layer 6, and
+not the definition. -/
 def cdLE (p n : ℕ) (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] : Prop :=
-  ∀ m : ℕ, n < m → ∀ A : Action (TopModuleCat.{u} (ZMod p)) G,
-    Finite A.V → Subsingleton ((continuousCohomology (ZMod p) G m).obj A)
+  ∀ m : ℕ, n < m → ∀ r : ℕ, 1 ≤ r → ∀ A : TopRep.{u} (ZMod (p ^ r)) G,
+    Subsingleton (continuousCohomology m A)
 
 end Carrier
-
 
 /-! ### Trivial coefficients, and the cup product in bidegree `(1,1)`
 
@@ -798,19 +788,34 @@ variable {p : ℕ} [Fact p.Prime] {Γ : Type u} [Group Γ] [TopologicalSpace Γ]
 -- file states milestones and does not prove them.
 variable [TotallyDisconnectedSpace (maximalProPQuotient p Γ)]
 
+/-- `μ_p ⊆ F`. This is the predicate the Local Fields roadmap states, written here with the
+same definition, so that the constructor below takes the same hypothesis and a contributor
+can replace one by the other without a translation. -/
+def HasMuP (p : ℕ) (F : Type u) [Field F] : Prop := ∃ ζ : F, IsPrimitiveRoot ζ p
+
 /-- **Layer 11, the canonical instance.** The interface is not lawless: this milestone builds
-it for an actual finite extension of `ℚ_p`, from the Local Fields theorems, so that the
-statements below are about `G_K(p)` and not about an abstract structure. `G_K` is Mathlib's
-`Field.absoluteGaloisGroup K`, `N` is the degree, and `hasMu` says that `K` contains the `p`-th
-roots of unity, in whatever form the Local Fields roadmap states it. Every field is proved
-from a named theorem of that roadmap, transported through the Layer 5 comparison. -/
+the term for a finite extension of `ℚ_p`, from the Local Fields theorems, so that the
+statements below are about `G_K(p)` and not about an abstract structure. It is a named
+declaration, and not an existence statement, because the interface table promises the name.
+Every field is proved from a named theorem of that roadmap, transported through the Layer 5
+comparison.
+
+```
+noncomputable def localFieldInputs (p : ℕ) [Fact p.Prime]
+    (K : Type u) [Field K] [Algebra ℚ_[p] K] [Module.Finite ℚ_[p] K] :
+    LocalFieldInputs p (Field.absoluteGaloisGroup K) (Module.finrank ℚ_[p] K) (HasMuP p K)
+```
+
+The declaration is written as an existence statement below, because the topological instances
+on `Field.absoluteGaloisGroup K` that `LocalFieldInputs` needs are Layer 0 milestones of this
+roadmap and are not yet available as instances. -/
 example (K : Type u) [Field K] [Algebra ℚ_[p] K] [Module.Finite ℚ_[p] K]
-    [TopologicalSpace (Field.absoluteGaloisGroup K)] [IsTopologicalGroup (Field.absoluteGaloisGroup K)]
+    [TopologicalSpace (Field.absoluteGaloisGroup K)]
+    [IsTopologicalGroup (Field.absoluteGaloisGroup K)]
     [CompactSpace (Field.absoluteGaloisGroup K)]
-    [TotallyDisconnectedSpace (Field.absoluteGaloisGroup K)]
-    (hasMuOf : Type u → Prop) :
+    [TotallyDisconnectedSpace (Field.absoluteGaloisGroup K)] :
     Nonempty (LocalFieldInputs p (Field.absoluteGaloisGroup K) (Module.finrank ℚ_[p] K)
-      (hasMuOf K)) :=
+      (HasMuP p K)) :=
   sorry
 
 /-- **Layer 11, `G_K(p)` is topologically finitely generated.** From the `H¹` count and the
@@ -857,6 +862,97 @@ example (inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu) :
   sorry
 
 end LocalFields
+
+/-! ## Layer 8: the graded pieces of the lower `p`-series
+
+`gr_k(G)` is a profinite `𝔽_p`-vector space in general, and finite only under topological
+finite generation. The bracket, the `p`-power operator and the dyadic failure of additivity
+are the objects that Layers 8 and 9 compute with. -/
+
+section Graded
+
+variable (p : ℕ) [Fact p.Prime] (G : Type u) [Group G] [TopologicalSpace G]
+  [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+
+/-- **`gr_k(G) = λ_k / λ_{k+1}`**, the `k`-th graded piece of the lower `p`-series. It is an
+elementary abelian pro-`p` group, written additively, and it is a `ZMod p`-module by a Layer
+8 milestone. It is **not** finite in general. -/
+abbrev gradedPiece (k : ℕ) : Type u :=
+  pLowerCentralSeries p G k ⧸
+    ((pLowerCentralSeries p G (k + 1)).subgroupOf (pLowerCentralSeries p G k))
+
+/-- **Layer 8, the graded pieces are elementary abelian.** Every element is killed by `p`,
+which is what makes `gradedPiece` an `𝔽_p`-vector space. Normality of the smaller term inside
+the larger one is itself a Layer 8 milestone, so it is an instance argument here. -/
+example (k : ℕ) (hG : IsProP p G)
+    [((pLowerCentralSeries p G (k + 1)).subgroupOf (pLowerCentralSeries p G k)).Normal]
+    (x : gradedPiece p G k) : x ^ p = 1 := sorry
+
+/-- **Layer 8, finiteness is conditional.** Under topological finite generation every
+`λ_{k+1}` is open, so each graded piece is finite. Without that hypothesis the statement is
+false: `∏_I C_p` with `I` infinite has `λ_1 = ⊥` and `gr_0 = G`. -/
+example (k : ℕ) (hG : IsProP p G) (hfg : IsTopologicallyFinitelyGenerated G) :
+    Finite (gradedPiece p G k) := sorry
+
+/-- **Layer 8, the bracket** `[·,·] : gr_j × gr_k → gr_{j+k+1}`, induced by the group
+commutator. The degree shifts by one because the series is 0-based. -/
+example (j k : ℕ) :
+    ∃ br : gradedPiece p G j → gradedPiece p G k → gradedPiece p G (j + k + 1), True := sorry
+
+/-- **Layer 8, the `p`-power operator** `π : gr_k → gr_{k+1}`, induced by `x ↦ x ^ p`. -/
+example (k : ℕ) : ∃ pow : gradedPiece p G k → gradedPiece p G (k + 1), True := sorry
+
+/-- **Layer 8, the dyadic failure of additivity.** At `p = 2` and in degree zero, `π` is not
+additive, and the defect is the bracket: `π (x + y) = π x + π y + [x, y]`. In every positive
+degree, and for odd `p`, the operator is additive. This is the identity that shapes every
+`q = 2` argument of Layer 9. -/
+example (hp : p = 2) (x y : gradedPiece p G 0) : True := sorry
+
+end Graded
+
+/-! ## Layer 9 prerequisites: the completed group algebra, in both shapes
+
+The orientation image `Γ = Im χ` is procyclic in one branch and `C₂ × ℤ₂` in the other. Both
+shapes are needed, and the second is one of the two even-rank families at `q = 2`. -/
+
+section CompletedAlgebra
+
+variable (p : ℕ) [Fact p.Prime]
+
+/-- **The completed group algebra** `ℤ_p[[Γ]] = lim_U ℤ_p[Γ/U]`, over the open subgroups of a
+profinite group `Γ`, with the inverse-limit topology. -/
+example (Γ : Type u) [Group Γ] [TopologicalSpace Γ] [IsTopologicalGroup Γ] [CompactSpace Γ]
+    [TotallyDisconnectedSpace Γ] : ∃ Λ : Type u, Nonempty (Ring Λ) := sorry
+
+/-- **The procyclic coordinate.** For `Γ ≅ ℤ_p` with topological generator `γ`, the map
+`T ↦ γ - 1` gives `ℤ_p[[Γ]] ≅ ℤ_p[[T]]`. A different generator changes it by the
+substitution `T ↦ (1+T)^u - 1` with `u ∈ ℤ_pˣ`. -/
+example : ∃ _e : PowerSeries ℤ_[p] → PowerSeries ℤ_[p], True := sorry
+
+/-- **The dyadic branch.** For `Γ ≅ C₂ × ℤ₂`, which is the orientation image
+`{±1} × U^(f)`, the completed algebra is `ℤ₂[C₂][[T]]`: the group ring of `C₂` over the
+power-series ring. After inverting `2` it splits into the two eigenspaces of the involution,
+and each is a power-series ring. The Layer 9 basis corrections come from a named eigenspace.
+This branch is not procyclic, so the coordinate above does not apply to it. -/
+example : ∃ _e : PowerSeries (MonoidAlgebra ℤ_[2] (ZMod 2)) →
+    PowerSeries (MonoidAlgebra ℤ_[2] (ZMod 2)), True := sorry
+
+/-- **The relation module.** For a Demushkin group with minimal presentation
+`1 → R → F → G → 1`, the abelianized relation module `R^{ab} = R ⧸ closure [R, R]` carries
+the conjugation action, and that action is by the scalar `χ(g)`. That is a theorem, and it
+is what makes `R^{ab}` a module over the completed algebra of `Γ = Im χ`. -/
+example {F : Type u} [Group F] [TopologicalSpace F] [IsTopologicalGroup F]
+    (R : Subgroup F) [R.Normal] :
+    ∃ _M : Type u, True := sorry
+
+/-- **The annihilator and the membership criterion.** The annihilator of the relation module
+is generated by one element, the relator series, and an element lies in `λ M` exactly when
+the associated series vanishes at the point that `λ` determines. The second statement is
+where the division theorem `(T - c) ∣ ψ ↔ ψ c = 0` enters, and it is what produces the basis
+correction of Layer 9. -/
+example : True := trivial
+
+end CompletedAlgebra
 
 /-! ## Layer 0: profinite foundations -/
 
@@ -1196,7 +1292,7 @@ example (p : ℕ) [Fact p.Prime] {A : Type} [CommGroup A] [TopologicalSpace A]
         Multiplicative ((Fin r → ℤ_[p]) × ((i : Fin m) → ZMod (p ^ e i)))) :=
   sorry
 
-/-! ## Layer 5: presentations (rank interpretations are cohomological; see the pseudocode) -/
+/-! ## Layer 5: presentations -/
 
 /-- **Layer 5, a continuous section along a finite kernel.** The lemma the cocycle side of
 the extension dictionary runs on, in the only case it is used: `N` finite, `E ⧸ N` possibly
@@ -1234,8 +1330,7 @@ pro-`2` groups: `D₀` is pro-`2`, and topologically finitely generated. -/
 example : IsProP 2 demushkinD0 ∧ IsTopologicallyFinitelyGenerated demushkinD0 :=
   sorry
 
-/-! ## Layer 6: cohomological dimension (cohomological; see the pseudocode), except its
-Nielsen–Schreier consequence, whose statement is presentation-level -/
+/-! ## Layer 6: cohomological dimension, and its Nielsen–Schreier consequence -/
 
 /-- **Layer 6, pro-`p` Nielsen–Schreier for open subgroups, with the index-rank formula.**
 An open subgroup of index `m` in the free pro-`p` group of rank `n ≥ 1` is free pro-`p` of
@@ -1365,64 +1460,5 @@ example {G H : Type u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Co
       IsFiniteContinuousQuotient G Q ↔ IsFiniteContinuousQuotient H Q) :
     Nonempty (G ≃ₜ* H) :=
   sorry
-
-/-!
-## The few headers that still need vocabulary this pin does not have
-
-Everything cohomological in low degrees is Lean code above, against the Layer 5 carrier.
-What is left needs cohomology in every degree, which means `continuousCohomology` from
-Mathlib `v4.32.2`, a release later than this repository's pin. The shapes are recorded here,
-and nothing in them is faked with an empty `Prop` field or a stand-in predicate.
-
-```
-/-- Layer 6: cohomological dimension, against the local all-degree carrier `contH`. The
-quantifier over coefficients ranges over the finite discrete `p`-primary `G`-modules, which
-is why it is written with a module class rather than as a plain `∀ M`. -/
-def cdLE (p n : ℕ) (G : Type u) [Group G] [TopologicalSpace G] : Prop :=
-  ∀ m > n, ∀ M, [FiniteDiscretePPrimary p G M] → Subsingleton (contH (ZMod p) G M m)
-
-/-- Layer 5: the comparison with Mathlib's carrier, in every degree, once the pin has the
-object. It carries inflation, restriction, corestriction and the connecting maps to theirs. -/
-theorem contHIsoContinuousCohomology (n : ℕ) :
-    contH (ZMod p) G M n ≃ₗ[ZMod p] continuousCohomology n (TopRep.of M)
-
-/-- Layer 5: corestriction for an open subgroup, with the two identities that Layer 7's
-duality naturality uses. -/
-noncomputable def corestriction (U : OpenSubgroup G) (n : ℕ) :
-    contH R U M →ₗ[R] contH R G M
-
-theorem cor_comp_res (U : OpenSubgroup G) (n : ℕ) (x : contH R G M n) :
-    corestriction U n (restriction U n x) = (U.toSubgroup.index : R) • x
-
-theorem cor_projection_formula (U : OpenSubgroup G) (a : contH R G M 1)
-    (b : contH R U M 1) :
-    corestriction U 2 (cup (restriction U 1 a) b) = cup a (corestriction U 1 b)
-
-/-- Layer 5: Shapiro's lemma in every degree, for an open subgroup. -/
-theorem shapiro (U : OpenSubgroup G) (n : ℕ) :
-    contH R U M n ≃ₗ[R] contH R G (Coind U M) n
-
-/-- Layer 6: vanishing of `H²` on all finite discrete `p`-primary modules gives `cd_p ≤ 1`,
-through dimension shifting and the dévissage. -/
-theorem cdLE_one_of_h2_eq_zero (hG : IsProP p G)
-    (h : ∀ M, [FiniteDiscretePPrimary p G M] → Subsingleton (contH2 (ZMod p) G M)) :
-    cdLE p 1 G
-
-/-- Layer 7: dimension two for an infinite Demushkin group (Tate). -/
-theorem cd_eq_two (hG : IsDemushkin p G) (hinf : Infinite G) : cdLE p 2 G ∧ ¬ cdLE p 1 G
-
-/-- Layer 9: the classification. Uniqueness first, then existence. `demushkinCharacter` is
-the character whose existence and uniqueness Layer 7 states above. -/
-theorem demushkin_iso_of_invariants (hG : IsDemushkin p G) (hH : IsDemushkin p H)
-    (hrank : demushkinRank hG = demushkinRank hH)
-    (himage : (demushkinCharacter hG).range = (demushkinCharacter hH).range) :
-    Nonempty (G ≃ₜ* H)
-
-theorem exists_demushkin_of_invariants (n : ℕ) (A : Subgroup ℤ_[p]ˣ)
-    (hA : IsClosed (A : Set ℤ_[p]ˣ)) (h : RealizableInvariants p n A) :
-    ∃ (G : Type u) (hG : IsDemushkin p G),
-      demushkinRank hG = n ∧ (demushkinCharacter hG).range = A
-```
--/
 
 end TauCetiRoadmap.ProPGroups
