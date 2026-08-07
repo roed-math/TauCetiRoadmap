@@ -23,9 +23,9 @@ nonvanishing in meromorphic-order form), **Layer 8** (the density predicates and
 over a general base field), and **Layer 9** (Wiener–Ikehara, `ψ_K`, `θ_K`, `π_K`), with
 `sorry`.
 
-Three cross-roadmap interfaces are stated here as **compatibility interfaces**, and not left
-as prose: `RayClassCharacter` for Layer 5.1, `Grossencharacter` for Layer 6.1, and
-`FrobeniusInterface` for Layer 8.0. Each is a small structure carrying the operations the
+Four cross-roadmap interfaces are stated here as **compatibility interfaces**, and not left
+as prose: `IntegralLatticeInterface` for Layers 2.10 and 2.11, `RayClassCharacter` for
+Layer 5.1, `Grossencharacter` for Layer 6.1, and `FrobeniusInterface` for Layer 8.0. Each is a small structure carrying the operations the
 later milestones use. When the supplying roadmap's declaration exists, the replacement is
 mechanical: delete the structure here, make the name an abbreviation for theirs, and leave
 every statement below unchanged.
@@ -366,6 +366,35 @@ example {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (P : FEPairWithLe
     ∃ Q : FEPairWithLevel E, Q.level = 1 ∧
       (∀ x : ℝ, Q.f x = P.f (Real.sqrt P.level * x)) ∧
       (∀ x : ℝ, Q.g x = P.g (Real.sqrt P.level * x)) := sorry
+
+/-! ## Layer 2: what the integral lattices roadmap supplies -/
+
+/-- **Layers 2.10 and 2.11, the integral-lattice interface (compatibility interface).** The
+integral lattices roadmap, milestones 1B and 8D, owns the dual lattice of an integral bilinear
+form and its comparison with the analytic dual. Until those declarations exist, Layers 2.10 and
+2.11 are stated over this structure. The field names are the agreed names of the shared
+layer-DAG table in `README.md`.
+
+The crossing is carried in Lean on both sides. The integral lattices roadmap's `Suggested.lean`
+has `GaussianThetaInterface n`, with fields `dual`, `dual_dual`, `covolume_mul_covolume_dual`,
+and `theta_one_div`; Layers 2.1, 2.2, 2.3, and 2.8 are named so that one term of that structure
+comes from them. Neither roadmap waits for the other.
+
+The replacement is mechanical: delete this structure, take the two fields to be that roadmap's
+declarations of the same names, and leave Layers 2.10 and 2.11 unchanged. -/
+structure IntegralLatticeInterface (n : ℕ) where
+  /-- The dual lattice of an integral bilinear form, `IntegralLattice.dual`. -/
+  dual : Submodule ℤ (EuclideanSpace ℝ (Fin n)) → Submodule ℤ (EuclideanSpace ℝ (Fin n))
+  /-- The analytic dual of the realization agrees with the bilinear dual,
+  `IntegralLattice.analyticDual_eq_dual`. -/
+  analyticDual_eq_dual : ∀ Λ : Submodule ℤ (EuclideanSpace ℝ (Fin n)),
+    {w : EuclideanSpace ℝ (Fin n) | ∀ v ∈ Λ, ∃ k : ℤ, inner ℝ v w = (k : ℝ)} = (dual Λ : Set _)
+
+/-- **Layer 2.12, the covolume of a fractional ideal**, stated so that a reader can see which
+constant Layer 3.1 threads: `covolume (mixedEmbedding K '' I) = 2^{-r₂} √|d_K| 𝔑 I`. The
+lattice itself is Layer 2.10, whose vocabulary comes from the interface above. -/
+example (K : Type*) [Field K] [NumberField K] :
+    ∃ c : ℝ, c = 2 ^ (-(nrComplexPlaces K : ℝ)) * Real.sqrt |(discr K : ℝ)| := sorry
 
 /-! ## Layer 3: Dedekind zeta — continuation and functional equation
 

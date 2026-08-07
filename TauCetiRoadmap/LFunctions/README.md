@@ -186,9 +186,21 @@ consumer cites the name instead of restating the object.
 | L-functions Layer 2, items 10 to 13 | Integral Lattices 1B | the dual lattice of an integral bilinear form, and the vocabulary for it | `IntegralLattice.dual` |
 | L-functions Layer 2, items 10 to 13 | Integral Lattices 8D | the analytic dual of the realization of `L` equals `IntegralLattice.dual` | `IntegralLattice.analyticDual_eq_dual` |
 
-The agreed names belong to the supplier. Layer 2 of this roadmap uses `ZLattice.dual` and
-`ZLattice.gaussianTheta_one_div` for the objects it owns, and cites `IntegralLattice.dual` for
-the object the other roadmap owns.
+The agreed names belong to the supplier. Layer 2 of this roadmap owns the `ZLattice` names and
+cites the `IntegralLattice` ones.
+
+Both sides carry the crossing in Lean, so neither waits for the other:
+
+- the integral lattices roadmap's `Suggested.lean` has `GaussianThetaInterface n`, whose fields
+  are `dual`, `dual_dual`, `covolume_mul_covolume_dual`, and `theta_one_div`. Layers 2.1, 2.2,
+  2.3, and 2.8 are named so that one term of that structure comes from them;
+- this roadmap's `Suggested.lean` has `IntegralLatticeInterface`, whose fields are `dual` and
+  `analyticDual_eq_dual`. Layers 2.10 and 2.11 are stated over it.
+
+⚠ Two rows of the table need a decision by both roadmaps together, and neither side should
+change the table alone. `GaussianThetaInterface` has a field for biduality, which is Layer 2.2
+and has no row. It has no field for Poisson summation, which is Layer 2.6 and does have a row.
+Layer 2 names both, so either resolution costs nothing here.
 
 ## Standing hypotheses
 
@@ -760,7 +772,7 @@ Basic API:
 
 *Prerequisites:* Mathlib `ZLattice`, `Submodule.dualSubmodule`, `InnerProductSpace`.
 
-**2.2 Biduality.** `(Lᵛ)ᵛ = L`.
+**2.2 Biduality, `ZLattice.dual_dual`.** `(Lᵛ)ᵛ = L`.
 *Prerequisites:* Layer 2.1.
 
 **2.3 Covolumes, `ZLattice.covolume_mul_covolume_dual`.**
@@ -808,8 +820,9 @@ raw matrices.
 `QuadraticForm.PosDef`.
 
 **2.8 The Gaussian theta transformation, `ZLattice.gaussianTheta_one_div`.** Define
-`Θ_L(t) = ∑_{v ∈ L} exp(−π t ‖v‖²)` and prove
-`Θ_L(1/t) = t^{n/2} (covolume L)⁻¹ Θ_{Lᵛ}(t)` for `t > 0`. Prove also the multi-parameter
+`ZLattice.analyticTheta L t = ∑' v : L, Real.exp (−π t ‖v‖²)` and prove
+`Θ_L(1/t) = t^{n/2} (covolume L)⁻¹ Θ_{Lᵛ}(t)` for `t > 0`. The name of the function is fixed
+here too, because the integral lattices roadmap states its own targets in terms of it. Prove also the multi-parameter
 version, with one scale `t_v` per coordinate block. Layer 3.3 integrates that version.
 
 *Source:* Lang XIII §2, where the multi-parameter form reads
@@ -1798,7 +1811,7 @@ statements do not.
 - **No elliptic-curve card** (Layer 0.7). Check that no continuation predicate and no functional
   equation predicate is asserted for `WeierstrassCurve.LSeries`.
 
-## Ordering
+## Ordering and parallelism
 
 Inside the roadmap:
 
@@ -1839,7 +1852,11 @@ After that the roadmap has three parts that do not depend on each other:
 Layer 9 needs Layers 7 and 8. The zeros roadmap starts where Layer 9 ends, and needs Layers 3, 5,
 and 7 of this roadmap.
 
-Before writing Layer 5, agree the character interface with the global class field theory roadmap.
+The interface with the integral lattices roadmap is the shared table above, under
+*Dependencies*. Nothing crosses between the two roadmaps except through a row of it.
+
+Before writing Layer 5, agree the character interface with the global class field theory
+roadmap.
 Before Layer 8, contact the people working on Chebotarev in Lean. Before Layer 9, contact
 PrimeNumberTheoremAnd. [`PROVENANCE.md`](PROVENANCE.md) says who they are and what they have.
 
