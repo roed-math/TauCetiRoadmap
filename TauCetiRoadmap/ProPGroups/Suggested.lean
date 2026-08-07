@@ -59,13 +59,24 @@ def IsTopologicallyFinitelyGenerated (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] : Prop :=
   ∃ s : Finset G, (Subgroup.closure (s : Set G)).topologicalClosure = ⊤
 
+/-- A subset **converges to `1`**: every open normal subgroup omits only finitely many of its
+elements. Finite sets converge to `1`, and for a profinite group this is the condition under
+which a generating set has a well-behaved cardinality (Layer 3). -/
+def ConvergesToOne {G : Type u} [Group G] [TopologicalSpace G] (s : Set G) : Prop :=
+  ∀ U : OpenNormalSubgroup G, {x ∈ s | x ∉ U.toSubgroup}.Finite
+
 /-- **Topological generator rank, cardinal-valued**: the least cardinality of a subset
-generating a dense subgroup. This is the form all general rank theorems take (bases, rank
-invariance, monotonicity, the infinite-rank theory of Layer 10). The infimum is over a
-nonempty family, since `Set.univ` always generates. -/
+converging to `1` and generating a dense subgroup. This is the form all general rank theorems
+take (bases, rank invariance, monotonicity, the infinite-rank theory of Layer 10). Every
+profinite group has a generating set converging to `1` (RZ Prop. 2.6.2, a Layer 3 milestone),
+so the infimum is over a nonempty family.
+
+⚠ Dropping `ConvergesToOne` changes the invariant: a product of continuum many copies of
+`ℤ/p` has a countable dense subgroup but needs `2 ^ ℵ₀` generators converging to `1`. -/
 noncomputable def topologicalGeneratorRank (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] : Cardinal.{u} :=
-  ⨅ s : {s : Set G // (Subgroup.closure s).topologicalClosure = ⊤}, Cardinal.mk ↥s.1
+  ⨅ s : {s : Set G // ConvergesToOne s ∧ (Subgroup.closure s).topologicalClosure = ⊤},
+    Cardinal.mk ↥s.1
 
 /-- **Topological generator rank, natural-number accessor**, available exactly when the group
 is topologically finitely generated. Every numerical rank statement (finite presentations,
@@ -510,16 +521,26 @@ example {G : Type u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
   sorry
 
 /-- **Layer 3, Burnside basis theorem, generation form.** A subset generates a pro-`p` group
-topologically iff its image generates the Frattini quotient. This is the statement every
-later layer uses, and it needs no finiteness hypothesis and no vector-space structure. The
-`𝔽_p`-vector-space form (`topologicalGeneratorRank G = Module.rank (ZMod p) (G/Φ(G))`) is a
-corollary once the elementary-abelian Frattini quotient has been given its `ZMod p`-module
-structure, itself a Layer 3 target. -/
+topologically iff its image generates the Frattini quotient topologically. The closure on the
+quotient side is not decoration: at infinite rank the images of a generating set span only a
+dense subspace of `G/Φ(G)`. This is the statement every later layer uses, and it needs no
+finiteness hypothesis and no vector-space structure. The cardinal form, against the discrete
+dual `Hom_cont(G, 𝔽_p)`, is the companion statement; it is *not* an identity with
+`Module.rank (ZMod p) (G/Φ(G))`, which is strictly larger at infinite rank. -/
 example {p : ℕ} [Fact p.Prime] {G : Type u} [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G)
     (s : Set G) :
     (Subgroup.closure s).topologicalClosure = ⊤ ↔
-      Subgroup.closure ((QuotientGroup.mk' (proPFrattini p G)) '' s) = ⊤ :=
+      (Subgroup.closure ((QuotientGroup.mk' (proPFrattini p G)) '' s)).topologicalClosure
+        = ⊤ :=
+  sorry
+
+/-- **Layer 3, every profinite group has a generating set converging to `1`**
+(RZ Prop. 2.6.2). This is what makes `topologicalGeneratorRank` an infimum over a nonempty
+family, so it comes before any theorem that computes a rank. -/
+example {G : Type u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    [TotallyDisconnectedSpace G] :
+    ∃ s : Set G, ConvergesToOne s ∧ (Subgroup.closure s).topologicalClosure = ⊤ :=
   sorry
 
 /-- **Layer 3, Burnside basis theorem, numerical form.** For a topologically finitely
@@ -599,9 +620,11 @@ generators, which are dense-generating by construction). -/
 example {p : ℕ} {X : Type u} [Finite X] : IsTopologicallyFinitelyGenerated (freeProP p X) :=
   sorry
 
-/-- **Layer 4, the rank of a free pro-`p` group, as a cardinal.** No finiteness hypothesis;
-the natural-number form for `Fin n` is a corollary through the accessor. -/
-example {p : ℕ} [Fact p.Prime] {X : Type u} :
+/-- **Layer 4, the rank of a free pro-`p` group on a finite set.** The natural-number form
+for `Fin n` is a corollary through the accessor. Finiteness of `X` is a hypothesis, not a
+convenience: `freeProP p S` for infinite discrete `S` has rank `p ^ #S`, not `#S`, which is
+why the infinite-rank free objects are built on a profinite space in Layer 10. -/
+example {p : ℕ} [Fact p.Prime] {X : Type u} [Finite X] :
     topologicalGeneratorRank (freeProP p X) = Cardinal.mk X :=
   sorry
 
@@ -650,6 +673,17 @@ example (p : ℕ) [Fact p.Prime] {A : Type} [CommGroup A] [TopologicalSpace A]
   sorry
 
 /-! ## Layer 5: presentations (rank interpretations are cohomological; see the pseudocode) -/
+
+/-- **Layer 5, a continuous section along a finite kernel.** The lemma the cocycle side of
+the extension dictionary runs on, in the only case it is used: `N` finite, `E ⧸ N` possibly
+infinite. Proof: an open normal `U ≤ E` with `U ⊓ N = ⊥` maps isomorphically onto an open
+subgroup of `E ⧸ N`, and finitely many coset translates of that section give a section over a
+clopen partition. ⚠ The corresponding statement for an arbitrary surjection of profinite
+*spaces* is false, so nothing here appeals to one. -/
+example {E : Type u} [Group E] [TopologicalSpace E] [IsTopologicalGroup E] [CompactSpace E]
+    [TotallyDisconnectedSpace E] (N : Subgroup E) [N.Normal] (hN : Finite N) :
+    ∃ s : E ⧸ N → E, Continuous s ∧ (∀ x, (QuotientGroup.mk (s x) : E ⧸ N) = x) ∧ s 1 = 1 :=
+  sorry
 
 /-- **Layer 5, the map that proves `D₀` is nontrivial.** Not "map onto some finite
 `2`-group": the map is the one sending `A ↦ 1`, `S ↦` the generator of `ℤ/2`, `Y ↦ 1`. The
@@ -700,6 +734,15 @@ example (A : Subgroup ℤ_[2]ˣ) (hA : IsClosed (A : Set ℤ_[2]ˣ)) (hA1 : A �
       A = Subgroup.closure {(-1 : ℤ_[2]ˣ)} ∨
       (∃ (f : ℕ) (u : ℤ_[2]ˣ),
         2 ≤ f ∧ (u : ℤ_[2]) = -1 + 2 ^ f ∧ A = procyclicClosure u) :=
+  sorry
+
+/-- **Layer 7, the even part of `U^[f]`.** For `u = -1 + 2^f` with `f ≥ 2`, the square
+`u² = 1 - 2^{f+1}(1 - 2^{f-1})` has principal-unit depth exactly `f + 1`, so
+`U^[f] ∩ (1 + 4ℤ₂) = U^(f+1)` and hence `[ℤ₂ˣ : U^[f]] = 2^{f-1}`. Stated separately from
+the trichotomy because a shift of one in this exponent reparametrizes the whole `q = 2`
+classification; check it by hand at `f = 2, 3, 4`. -/
+example (f : ℕ) (hf : 2 ≤ f) (u : ℤ_[2]ˣ) (hu : (u : ℤ_[2]) = -1 + 2 ^ f) :
+    procyclicClosure u ⊓ unitsPrincipal 2 = unitsPrincipal (f + 1) :=
   sorry
 
 /-- **Layer 7, procyclicity.** The closed subgroups of `ℤ₂ˣ` not containing `-1`, namely
@@ -854,6 +897,14 @@ theorem exists_unique_demushkinCharacter (hG : IsDemushkin p G) :
 
 noncomputable def demushkinCharacter (hG : IsDemushkin p G) : G →* ℤ_[p]ˣ
 
+/-- Layer 7: a Demushkin group is topologically finitely generated (`h1_fin` plus the
+Burnside basis theorem), and `n(G)` is its rank as a natural number. Every numerical
+statement below is about this accessor; no declaration takes a bare `rank`. -/
+theorem IsDemushkin.topFG (hG : IsDemushkin p G) : IsTopologicallyFinitelyGenerated G
+
+noncomputable def demushkinRank (hG : IsDemushkin p G) : ℕ :=
+  topologicalGeneratorRankNat G hG.topFG
+
 /-- Layer 7: dimension two, the trace isomorphism, and the perfect pairing on the finite
 coefficient system of the canonical character: the concrete duality package that replaces
 any appeal to a general theory of duality groups. -/
@@ -867,19 +918,28 @@ theorem demushkinPairing_perfect (hG : IsDemushkin p G) (hinf : Infinite G) (i j
 
 /-- Layer 7: open subgroups, from that package plus the three-term Euler formula. -/
 theorem isDemushkin_of_open (hG : IsDemushkin p G) (hinf : Infinite G) (U : OpenSubgroup G) :
-    IsDemushkin p U ∧
-      (rank U : ℤ) - 2 = U.toSubgroup.index * ((rank G : ℤ) - 2) ∧
-      demushkinCharacter ‹IsDemushkin p U› = (demushkinCharacter hG).comp U.subtype
+    IsDemushkin p U
+
+theorem demushkinRank_of_open (hG : IsDemushkin p G) (hinf : Infinite G)
+    (U : OpenSubgroup G) :
+    (demushkinRank (isDemushkin_of_open hG hinf U) : ℤ) - 2
+      = U.toSubgroup.index * ((demushkinRank hG : ℤ) - 2)
+
+theorem demushkinCharacter_of_open (hG : IsDemushkin p G) (hinf : Infinite G)
+    (U : OpenSubgroup G) :
+    demushkinCharacter (isDemushkin_of_open hG hinf U)
+      = (demushkinCharacter hG).comp U.subtype
 
 /-- Layer 9: the classification. Uniqueness first, then existence. -/
 theorem demushkin_iso_of_invariants (hG : IsDemushkin p G) (hH : IsDemushkin p H)
-    (hrank : rank G = rank H)
+    (hrank : demushkinRank hG = demushkinRank hH)
     (himage : (demushkinCharacter hG).range = (demushkinCharacter hH).range) :
     Nonempty (G ≃ₜ* H)
 
 theorem exists_demushkin_of_invariants (n : ℕ) (A : Subgroup ℤ_[p]ˣ)
     (hA : IsClosed (A : Set ℤ_[p]ˣ)) (h : RealizableInvariants p n A) :
-    ∃ G, ∃ _ : IsDemushkin p G, rank G = n ∧ (demushkinCharacter ‹_›).range = A
+    ∃ (G : Type u) (hG : IsDemushkin p G),
+      demushkinRank hG = n ∧ (demushkinCharacter hG).range = A
 
 /-- Layer 11: the two inflation theorems and the arithmetic instances. -/
 theorem inflation_h1_bijective (K : Type u) [Field K] [IsLocalField K] ... :

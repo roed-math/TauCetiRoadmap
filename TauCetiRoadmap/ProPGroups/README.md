@@ -48,7 +48,7 @@ structure of the full absolute Galois group `G_K` rather than its maximal pro-`p
   categorical construction demands it (limits, the completion functor, diagrams); provide
   unbundled restatements of anything a non-categorical consumer needs.
 - **Pro-`p`, quotient form.** `IsProP p G := ∀ U : OpenNormalSubgroup G, IsPGroup p (G ⧸ U)`:
-  every continuous finite quotient is a `p`-group. This is the pinned *definition*; the
+  every continuous finite quotient is a `p`-group. This is the *definition*; the
   inverse-limit description (`G` pro-`p` ⟺ `G ≅ lim` of finite `p`-groups) is a Layer 3
   milestone, not the definition. Rationale: the quotient form is a bare `Prop` over the
   unbundled stack, is what every kernel-containment argument uses directly, and matches
@@ -57,10 +57,10 @@ structure of the full absolute Galois group `G_K` rather than its maximal pro-`p
   (Steinitz) numbers, `Supernatural := Nat.Primes → ℕ∞`, as a Layer 1 object, with the
   order of a profinite group and the index of a closed subgroup taking values there. This is
   the literature's vocabulary (Ribes–Zalesskii §2.3) and the only clean home for "index
-  prime to `p`" for closed (not open) subgroups. Load-bearing early theorems are *also*
-  stated per-open-subgroup with Mathlib's `Nat.card`-valued `Subgroup.index` (as in the
-  Sylow definition below), so that Layers 2–3 do not block on the Layer 1 calculus;
-  the supernatural statements are the pinned final forms.
+  prime to `p`" for closed (not open) subgroups. The early theorems that Layers 2–3 rely on
+  are *also* stated one open subgroup at a time, with Mathlib's `Nat.card`-valued
+  `Subgroup.index` (as in the Sylow definition below), so that those layers do not wait on
+  the Layer 1 calculus; the supernatural statements are the final forms.
 - **Commutator convention.** Classification normal forms follow Labute:
   `(x, y) = x⁻¹y⁻¹xy` (Labute 1967, p. 106; same as NSW III and Koch/RZ's `[g, h]`).
   Mathlib's `⁅x, y⁆ = xyx⁻¹y⁻¹` is the other convention; the two generate the same
@@ -73,25 +73,39 @@ structure of the full absolute Galois group `G_K` rather than its maximal pro-`p
   never a mixture.
 - **Topological generation and rank, two notions kept apart.**
   `IsTopologicallyFinitelyGenerated G := ∃ s : Finset G,
-  (Subgroup.closure ↑s).topologicalClosure = ⊤`. This exact shape is a contract:
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s finite-generation
-  theorem for `G_K` (its B1 layer) produces it, and the reconstruction theorem (Layer 8)
-  consumes it. Rank comes in two declarations, never one overloaded one:
-  `topologicalGeneratorRank G : Cardinal` is the least cardinality of a subset whose
-  generated subgroup is dense, and `topologicalGeneratorRankNat G h : ℕ` (with
-  `h : IsTopologicallyFinitelyGenerated G`) is its natural-number value, pinned by the
-  theorem `topologicalGeneratorRank G = topologicalGeneratorRankNat G h`. We write `d(G)`
-  in prose for whichever of the two the surrounding statement means, and every statement
-  below says which. General theorems about bases, rank invariance, and monotonicity are
-  cardinal statements; finite presentations, deficiency, Euler formulas, and everything
-  involving subtraction are natural-number statements carrying
-  `IsTopologicallyFinitelyGenerated` explicitly. The identity
-  `d(G) = dim_{𝔽_p} H¹(G, 𝔽_p)` for pro-`p` `G` is a Layer 5 **theorem** (via the Burnside
-  basis theorem), not the definition; it is proved first as an equality of cardinals
-  (`Cardinal` rank versus `Module.rank`) and then specialized to natural numbers under
-  finiteness. `ℕ∞` is used in this roadmap for supernatural exponents only, never for a
-  generator count.
-- **Frattini subgroup.** For a pro-`p` group, `Φ(G)` is pinned as the intersection of the
+  (Subgroup.closure ↑s).topologicalClosure = ⊤`. This exact shape is a contract: it is what
+  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s
+  finite-generation theorem for `G_K` produces and what the reconstruction theorem (Layer 8)
+  consumes. Rank comes in two declarations, never one overloaded one:
+  `topologicalGeneratorRank G : Cardinal` is the least cardinality of a subset **converging
+  to `1`** whose generated subgroup is dense, and `topologicalGeneratorRankNat G h : ℕ`
+  (with `h : IsTopologicallyFinitelyGenerated G`) is its natural-number value, pinned by the
+  theorem `topologicalGeneratorRank G = topologicalGeneratorRankNat G h`. Here `s` converges
+  to `1` when every open normal subgroup contains all but finitely many elements of `s`; a
+  finite set converges to `1` for free, so the two declarations agree in the finitely
+  generated case. We write `d(G)` in prose for whichever of the two the surrounding
+  statement means, and every statement below says which. General theorems about bases, rank
+  invariance, and monotonicity are cardinal statements; finite presentations, deficiency,
+  Euler formulas, and everything involving subtraction are natural-number statements
+  carrying `IsTopologicallyFinitelyGenerated` explicitly. `ℕ∞` is used in this roadmap for
+  supernatural exponents only, never for a generator count.
+  ⚠ **Convergence is part of the definition, not a technicality.** Without it the invariant
+  is a different one, and not one any theorem below can use: a product of continuum many
+  copies of `ℤ/p` is separable (Hewitt–Marczewski–Pondiczery), so a countable subset of it
+  generates a dense subgroup, while the group needs `2^{ℵ₀}` generators converging to `1`.
+  Every general rank theorem below is about the converging notion, which is also the one
+  Ribes–Zalesskii use.
+  For the same reason the Burnside identity at infinite rank is an identity with the
+  **discrete dual**: for pro-`p` `G`,
+  `topologicalGeneratorRank G = dim_{𝔽_p} Hom_cont(G, 𝔽_p) = dim_{𝔽_p} H¹(G, 𝔽_p)` as
+  cardinals (Layer 3 for the first equality, Layer 5 for the second). It is **not**
+  `Module.rank (ZMod p) (G/Φ(G))`: the Frattini quotient is a profinite `𝔽_p`-vector space
+  `𝔽_p^I`, whose algebraic dimension is `p^{|I|}` for infinite `I` (Erdős–Kaplansky), while
+  the invariant we want is `|I|`, the dimension of its discrete dual. Under
+  `IsTopologicallyFinitelyGenerated` the two coincide and the finite-dimensional form
+  `topologicalGeneratorRankNat G h = Module.finrank (ZMod p) (G/Φ(G))` is the one every
+  numerical statement uses.
+- **Frattini subgroup.** For a pro-`p` group, `Φ(G)` means the intersection of the
   open normal subgroups of index `p`; that it equals the intersection of the maximal open
   subgroups, and equals `closure (Gᵖ[G,G])`, are Layer 3 milestones. Mathlib's abstract
   `frattini G` (the intersection of *all* maximal subgroups, `Order.radical`) is a different
@@ -131,11 +145,10 @@ structure of the full absolute Galois group `G_K` rather than its maximal pro-`p
   graded-commutativity of the cup product in this bidegree, `cupRight` becomes a theorem and
   the field is dropped: one change, recorded here, not two coexisting conventions. Finite
   generation is **derived** (`h1_fin` plus the Burnside basis theorem), never assumed.
-  **Rank-1 and
-  degenerate conventions, pinned:** `n = 1` is allowed by the definition and `ℤ/2` (at
-  `p = 2`) is the unique finite Demushkin group and the unique rank-1 one (for `p` odd the
-  cup square on a 1-dimensional `H¹` is alternating, hence zero, so no rank-1 examples
-  exist); `ℤ_p` is **not** Demushkin (`H² = 0`; it is free pro-`p` of rank 1), and no
+  **Rank-1 and degenerate conventions:** `n = 1` is allowed by the definition, and `ℤ/2`
+  (at `p = 2`) is the unique finite Demushkin group and the unique rank-1 one (for `p` odd
+  the cup pairing on `H¹` is alternating, so on a one-dimensional space it vanishes and
+  cannot be nondegenerate); `ℤ_p` is **not** Demushkin (`H² = 0`; it is free pro-`p` of rank 1), and no
   theorem here adopts the occasional literature convention that smuggles it in. Labute's
   normal-form theorems require `n ≥ 2` (case `q ≠ 2`) or hold vacuously/separately at
   `n = 1`; each classification statement below carries the `n` hypothesis it actually needs.
@@ -143,10 +156,10 @@ structure of the full absolute Galois group `G_K` rather than its maximal pro-`p
   `G^{ab} := G ⧸ closure [G,G]` (the *topological* abelianization) satisfies
   `G^{ab} ≅ ℤ_p^{n-1} × ℤ_p/qℤ_p` with `q = q(G)` a power of `p` or `0`; **`q = 0` is
   Labute's `p^∞` convention for the torsion-free case** and is encoded as the literal `0`.
-  Both the decomposition and the finiteness and cyclicity of the torsion factor are theorems
-  of the finitely generated abelian pro-`p` structure theory built at the end of Layer 4;
-  `demushkinQ` is defined from that torsion subgroup, and never by a containment condition
-  on `Im χ`.
+  The structure theory of finitely generated abelian pro-`p` groups (end of Layer 4) gives
+  the decomposition `G^{ab} ≅ ℤ_p^r × T` with `T` finite; that `r = n - 1` and that `T` is
+  cyclic come from the one-relator presentation and are proved in Layer 7. `demushkinQ` is
+  defined from that torsion subgroup, and never by a containment condition on `Im χ`.
   The **canonical character** (Serre's invariant) is fixed by a prescription property.
   Write `I(χ)` for `ℤ_p` with `G` acting through `g · x = χ(g)x`, and `I(χ)/p^i` for the
   finite discrete quotient `ℤ/p^i` with the induced action. The finite discrete modules are
@@ -159,7 +172,7 @@ structure of the full absolute Galois group `G_K` rather than its maximal pro-`p
      `0 → I(χ)/p → I(χ)/p^{i} → I(χ)/p^{i-1} → 0` vanishes);
   3. for a minimal generating tuple `g₁, …, g_n` of `G` and every `(c₁, …, c_n) ∈ ℤ_p^n`
      there is a continuous crossed homomorphism `f : G → I(χ)` with `f(g_j) = c_j`.
-  Condition 3 is stated as a statement about the inverse system of finite quotients: for
+  Condition 3 is phrased through the inverse system of finite quotients: for
   every `i` there is a crossed homomorphism `G → I(χ)/p^i` with the prescribed values mod
   `p^i`, compatibly in `i`. A crossed-homomorphism object valued in `I(χ)` itself is used
   only after Layer 7 makes the inverse-limit topology and continuous-cocycle type targets in
@@ -197,13 +210,14 @@ structure of the full absolute Galois group `G_K` rather than its maximal pro-`p
   the profinite completion of the discrete free group is the "free pro-`p` group on the
   abstract set" (all maps classify) and differs from the converging-to-1 object; the
   finite-set core avoids the ambiguity, and Layer 10 states both and relates them.
-- **Naming.** `IsProP`, `IsTopologicallyFinitelyGenerated`, `topologicalGeneratorRank`,
-  `topologicalGeneratorRankNat`, `proPKernel`, `maximalProPQuotient`, `proPFrattini`,
-  `Supernatural`, `profiniteOrder`, `profiniteIndex`, `IsProPSylow`, `FiniteGroupClass`,
+- **Naming.** `IsProP`, `IsTopologicallyFinitelyGenerated`, `ConvergesToOne`,
+  `topologicalGeneratorRank`, `topologicalGeneratorRankNat`, `proPKernel`,
+  `maximalProPQuotient`, `proPFrattini`, `IsFiniteContinuousQuotient`, `Supernatural`,
+  `profiniteOrder`, `profiniteIndex`, `IsProPSylow`, `FiniteGroupClass`,
   `pLowerCentralSeries` (0-based, matching Mathlib's `lowerCentralSeries`; Labute's `F_i` is
   index `i - 1`), `freeProfiniteGroup`, `freeProC`, `freeProP`, `presentedProP`,
-  `topAbelianization`, `IsDemushkin`, `demushkinQ`, `demushkinCharacter`. `Suggested.lean`
-  pins the forms. The maximal pro-`p` quotient has exactly one name: `proPKernel p G` is the
+  `topAbelianization`, `IsDemushkin`, `demushkinRank`, `demushkinQ`, `demushkinCharacter`.
+  `Suggested.lean` fixes the forms. The maximal pro-`p` quotient has exactly one name: `proPKernel p G` is the
   subgroup and `maximalProPQuotient p G := G ⧸ proPKernel p G` the quotient. `G(p)` is
   informal prose for `maximalProPQuotient p G` and nothing else; there is no `maxProP`.
 
@@ -263,7 +277,7 @@ line of work; every cohomological statement below is written against *its* API, 
 refactors onto Mathlib's `ContCohomology` land there, not here. Also relevant on master:
 `ProfiniteGrp` additivization (#39973, T. Browning, 2026-06-19). Open PRs to watch:
 **#35603** (Frattini extras for finite `p`-groups including the elementary-abelian Frattini
-quotient, exactly the finite half of our Layer 3; coordinate and consume when it lands),
+quotient, the finite half of our Layer 3; coordinate with it and use it when it lands),
 **#42200** (`IsMulFG` unification, tb65536, the substrate a Mathlib-native
 "topologically f.g." would sit on), **#41961** (Iwasawa algebra of measures on profinite
 groups, D. Loeffler), adjacent to the completed group algebra `ℤ_p[[Γ]]` that Layer 9's
@@ -293,7 +307,7 @@ one overlap (a brand-new AI-generated pro-`C` library) are in the coordination s
 
 The ordering is the dependency order. As each layer makes the next layer's *types*
 expressible in `TauCeti/`, state its milestones in `Suggested.lean` (with `sorry`).
-Layers 5–7, 9, and 11 have cohomological statements that consume the
+Layers 5–7, 9, and 11 have cohomological statements stated against the
 [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1) (H¹, H², cup products,
 five-term exact sequence, cd formalism); their non-cohomological substatements do not block
 on it.
@@ -385,7 +399,7 @@ on it.
   of the inertia/ramification groups); keep its statement free of any Galois vocabulary.
 - **Worked instances** (`Suggested.lean`): the Galois group of any Galois extension has
   `p`-Sylow subgroups; every `p`-Sylow subgroup of `ℤ̂ = completion ℤ` is topologically
-  isomorphic to `ℤ_p`. The second consumes the `ℤ_p` identification chain of Layer 4, so it
+  isomorphic to `ℤ_p`. The second uses the `ℤ_p` identification chain of Layer 4, so it
   is stated here but proved there, where the universal properties it needs are available. It
   does **not** go through a product decomposition `ℤ̂ ≅ ∏_ℓ ℤ_ℓ`; that decomposition is not
   a target of this roadmap and no argument below assumes it.
@@ -406,12 +420,17 @@ on it.
   stated once, here, and every later layer cites them rather than restating them.
 - **Topological generation and rank.** `Subgroup.topologicalClosure`-based generation API;
   `IsTopologicallyFinitelyGenerated` (pinned shape above); generation passes along
-  continuous surjections. `topologicalGeneratorRank G : Cardinal`, with: monotonicity under
-  continuous surjections; invariance under topological isomorphism; finiteness of the
-  cardinal iff `IsTopologicallyFinitelyGenerated G`; and the accessor
-  `topologicalGeneratorRankNat G h : ℕ` with `(topologicalGeneratorRankNat G h : Cardinal) =
-  topologicalGeneratorRank G`, proof-irrelevant in `h`. Every numerical rank statement in
-  this roadmap is about the accessor.
+  continuous surjections. The convergence predicate (`s` converges to `1` when every open
+  normal subgroup omits only finitely many elements of `s`) with its basic API: finite sets
+  converge, subsets and continuous images of converging sets converge, and **every profinite
+  group has a generating set converging to `1`** (RZ Prop. 2.6.2), so that
+  `topologicalGeneratorRank G : Cardinal` is an infimum over a nonempty family. Then:
+  monotonicity of the rank under continuous surjections; invariance under topological
+  isomorphism; finiteness of the cardinal iff `IsTopologicallyFinitelyGenerated G`; and the
+  accessor `topologicalGeneratorRankNat G h : ℕ` with
+  `(topologicalGeneratorRankNat G h : Cardinal) = topologicalGeneratorRank G`,
+  proof-irrelevant in `h`. Every numerical rank statement in this roadmap is about the
+  accessor.
 - **Finitely many open subgroups of each index, and countability.** A topologically finitely
   generated profinite group has finitely many open subgroups of each index (finitely many
   continuous maps to each finite group). The consequences that later layers cite, all proved
@@ -440,17 +459,25 @@ on it.
   equals both the intersection of the maximal open subgroups and `closure (Gᵖ[G,G])`
   (`Suggested.lean`); the Frattini quotient `G/Φ(G)` is elementary abelian, an
   `𝔽_p`-vector space.
-- **Burnside basis theorem.** Elements generate `G` topologically iff their images span
-  `G/Φ(G)`; the index-`p` detection form (a closed subgroup contained in no open normal
-  subgroup of index `p` is everything) and the surjectivity criterion for continuous
-  homomorphisms (surjective onto every index-`p` quotient ⟹ surjective), both in
-  `Suggested.lean`. The rank identity is proved first as an equality of cardinals,
-  `topologicalGeneratorRank G = Module.rank (ZMod p) (G/Φ(G))`, with no finiteness
-  hypothesis; then `G` is topologically finitely generated ⟺ `G/Φ(G)` is finite
-  (`Suggested.lean`), and in that case
+- **Burnside basis theorem.** Elements generate `G` topologically iff their images generate
+  `G/Φ(G)` topologically (the closure on the quotient side is needed: at infinite rank the
+  images of a generating set span only a dense subspace of the Frattini quotient); the
+  index-`p` detection form (a closed subgroup contained in no open normal subgroup of index
+  `p` is everything) and the surjectivity criterion for continuous homomorphisms (surjective
+  onto every index-`p` quotient ⟹ surjective), both in `Suggested.lean`. The rank identity
+  is proved first as an equality of cardinals, with no finiteness hypothesis, and against the
+  **discrete dual**:
+  `topologicalGeneratorRank G = Module.rank (ZMod p) (Hom_cont(G/Φ(G), 𝔽_p))`, where
+  `Hom_cont(G/Φ(G), 𝔽_p) = Hom_cont(G, 𝔽_p)` is a discrete `𝔽_p`-vector space. (This is
+  where the converging-to-`1` condition earns its place: a continuous functional kills all
+  but finitely many members of a converging set, so restriction embeds the dual in the
+  finitely supported functions on that set, which bounds the dual's dimension by the set's
+  cardinality; the dual basis of a converging basis gives the other inequality.) Then `G` is
+  topologically finitely generated ⟺ `G/Φ(G)` is finite (`Suggested.lean`), and in that case
+  the dual has the same finite dimension as `G/Φ(G)` itself, so
   `topologicalGeneratorRankNat G h = Module.finrank (ZMod p) (G/Φ(G))`.
   ⚠ **Abstract versus topological generation:** all statements are about *topological*
-  generation; the Frattini quotient argument is exactly why the two agree numerically for
+  generation; the Frattini quotient argument is why the two agree numerically for
   pro-`p` groups, but never conflate the closures. Sanity example: `d = 2` for
   `ℤ/4 × ℤ/2` (`Suggested.lean`, via `Group.rank` on the finite instance).
 
@@ -466,16 +493,20 @@ on it.
   per-class constructions.
 - **Construction.** `freeProfiniteGroup X := profiniteCompletion (FreeGroup X)`;
   `freeProC C X := proCCompletion C (freeProfiniteGroup X)`; and
-  `freeProP p X := freeProC (finiteGroupClassP p) X`, so that the theorem
-  `freeProP p X ≅ maximalProPQuotient p (freeProfiniteGroup X)` is a definitional
-  unfolding rather than a coincidence to be reproved.
+  `freeProP p X := maximalProPQuotient p (freeProfiniteGroup X)`, the pro-`p` quotient
+  taken directly, since `proPKernel` and `proCKernel (finiteGroupClassP p)` are cut out by
+  different index sets and agree by a short theorem rather than by unfolding. That
+  theorem, `freeProC (finiteGroupClassP p) X ≅ freeProP p X`, is the first milestone below;
+  after it no statement has to choose between the two constructions.
 - **Universal property.** Maps `X → P` into a profinite `P` in the class `C` extend uniquely
   to continuous homomorphisms (`Suggested.lean` states the pro-`p` case); uniqueness of the
   free object up to unique isomorphism; functoriality in `X`.
-- **Basics.** `freeProP p X` is pro-`p`, topologically finitely generated for finite `X`
-  (`Suggested.lean`), of rank `|X|`: `topologicalGeneratorRank (freeProP p X) = #X`, as
-  cardinals, via the Frattini quotient `(ℤ/p)^{(X)}` (Layer 3), with the natural-number
-  form `topologicalGeneratorRankNat (freeProP p (Fin n)) h = n`. The generators are a basis:
+- **Basics.** `freeProP p X` is pro-`p`, and for finite `X` it is topologically finitely
+  generated (`Suggested.lean`) of rank `|X|`: `topologicalGeneratorRank (freeProP p X) = #X`
+  as cardinals, via the Frattini quotient `(ℤ/p)^X` (Layer 3), with the natural-number form
+  `topologicalGeneratorRankNat (freeProP p (Fin n)) h = n`. For infinite `X` the rank of
+  this object is **not** `#X`, which is why the free objects on infinite bases are Layer 10
+  and are built there on a profinite space rather than on a set. The generators are a basis:
   free groups are **residually `p`**, so `FreeGroup X → freeProP p X` is injective
   (`Suggested.lean`; the classical finite-`p`-quotient separation argument, e.g. via the
   finite Heisenberg/upper-triangular representations or the lower `p`-series of the discrete
@@ -498,9 +529,10 @@ on it.
 
 #### Finitely generated abelian pro-`p` groups
 
-Self-contained and stated without reference to Demushkin groups until the last item. Layer 7
-cannot define `q(G)` without it, and several Layer 9 module arguments use it. RZ §4.3 is the
-source of record.
+Self-contained, and stated without reference to Demushkin groups: nothing in this subsection
+mentions them, and the specialization to `G^{ab}` for a Demushkin `G` is Layer 7's. Layer 7
+cannot define `q(G)` without this material, and several Layer 9 module arguments use it.
+RZ §4.3 is the source of record.
 
 - **Exponentiation by `ℤ_p`.** For `A` abelian pro-`p`, the continuous action
   `ℤ_p × A → A`, `(λ, a) ↦ a^λ`, obtained as the inverse limit of exponentiation in the
@@ -521,11 +553,6 @@ source of record.
   closed always. Route: the structure theorem for finitely generated modules over the
   principal ideal domain `ℤ_p` (Mathlib has this), plus the statement that the algebraic
   and topological decompositions agree.
-- **Specialization.** For a Demushkin group `G` (stated here, used in Layer 7): the torsion
-  subgroup of `topAbelianization G` is finite and cyclic, of order a power of `p`, so that
-  `demushkinQ` is well defined by that order with `0` for the torsion-free case. This is a
-  theorem about `G^{ab} ≅ ℤ_p^{n-1} × ℤ_p/qℤ_p`, not a hypothesis smuggled into the
-  definition of the invariant.
 - **The pro-`p` completion of `ℤ`.** The universal-property proof that `freeProP p (Fin 1)`,
   `maximalProPQuotient p (profiniteCompletion ℤ)`, and `Multiplicative ℤ_[p]` agree is the
   rank-one item above; here it is restated as the `ℤ_p`-module fact that `ℤ_p` is the free
@@ -561,14 +588,30 @@ in this subsection is a target of this roadmap.
 
 - **The extension object.** For profinite `G` and a finite discrete abelian `p`-primary
   `G`-module `M`, an extension is a short exact sequence `1 → M → E → G → 1` of topological
-  groups in which `E` is profinite, `M → E` is a closed embedding onto an open normal
-  subgroup, `E → G` is a continuous surjection, and the conjugation action of `E` on `M`
-  induces the given `G`-action. Morphisms are continuous homomorphisms restricting to the
-  identity on `M` and covering the identity on `G`; every such morphism is an isomorphism.
+  groups in which `E` is profinite, `M → E` is an injection onto a **closed** normal
+  subgroup (a finite subgroup of a profinite group is automatically closed, and carries the
+  subspace topology, so this is a topological embedding), `E → G` is a continuous surjection
+  with that subgroup as kernel, and conjugation of `E` on `M` induces the given `G`-action.
+  ⚠ Do not ask for `M` to be **open** in `E`: `M` open would make `G ≅ E/M` finite, and the
+  groups this dictionary is used on (`G_K`, free pro-`p` groups) are infinite.
+  Morphisms are continuous homomorphisms restricting to the identity on `M` and covering the
+  identity on `G`; every such morphism is an isomorphism.
+- **Continuous sections along a finite kernel.** The lemma the cocycle construction needs,
+  stated and proved here in the only case used: if `E` is profinite and `N ≤ E` is a
+  **finite** normal subgroup, then `E ↠ E/N` admits a continuous set-theoretic section
+  sending `1` to `1`. Proof: `E` has an open normal subgroup `U` with `U ∩ N = 1`
+  (intersect the open normal subgroups separating the finitely many nontrivial elements of
+  `N` from `1`), so `U` maps isomorphically onto its image, which is open of finite index in
+  `E/N`; a section over that image transported by finitely many coset representatives is a
+  section over a finite clopen partition of `E/N`, hence continuous.
+  ⚠ Not every surjection of profinite **spaces** has a continuous section, so no statement
+  here appeals to one. (For profinite *groups* and an arbitrary closed kernel the section
+  does exist, RZ Prop. 2.2.2, but the finite-kernel case above is elementary and is all this
+  subsection uses.)
 - **Cocycles to extensions and back.** From a continuous normalized `2`-cocycle
   `c : G × G → M` build the extension on `M × G` with the twisted multiplication, and check
-  that the product topology makes it profinite. From a continuous set-theoretic section of
-  `E → G` (which exists: `E → G` is a surjection of profinite spaces) build a continuous
+  that the product topology makes it profinite. From a continuous normalized section of
+  `E → G`, which the previous item supplies since `M` is finite, build a continuous
   normalized cocycle. The two constructions are mutually inverse up to the equivalence
   relation.
 - **The bijection.** Equivalence classes of extensions correspond bijectively to
@@ -580,9 +623,16 @@ in this subsection is a target of this roadmap.
 - **Embedding problems with `p`-group kernel.** A finite embedding problem for `G` is a
   continuous surjection `π : G ↠ Q` onto a finite group together with a surjection
   `α : E ↠ Q` of finite groups; a solution is a continuous `β : G → E` with `α ∘ β = π`.
-  Reduce the case `ker α` a finite `p`-group to the central elementary-abelian case: a
-  finite `p`-group has a central series with elementary abelian factors, so a solution is
-  built in finitely many steps, each of which is an extension of the kind above.
+  Reduce the case `N := ker α` a finite `p`-group to the central elementary-abelian case
+  along the **lower `p`-central series of `N`**, `λ_0(N) = N` and
+  `λ_{k+1}(N) = λ_k(N)^p [λ_k(N), N]` (Layer 8 studies the same series on a profinite group;
+  on a finite group it needs nothing from there). Each `λ_k(N)` is characteristic in `N`,
+  hence normal in `E`; the factors `λ_k(N)/λ_{k+1}(N)` are elementary abelian and are
+  centralized by `N`, hence are `Q`-modules; and the series reaches `1` in finitely many
+  steps because `N` is a finite `p`-group. A solution is built in that many steps, each an
+  extension of the kind above. Characteristicity is what makes this work, which is why the
+  series is named rather than left as "some central series": an arbitrary central series of
+  `N` need not be stable under conjugation by `E`.
 - **`H²`-vanishing solves them.** If `H²(G, M) = 0` for every finite discrete elementary
   abelian `p`-primary `G`-module `M`, then every finite embedding problem for `G` with
   `p`-group kernel has a solution, by induction along that central series. If `π` is
@@ -591,7 +641,7 @@ in this subsection is a target of this roadmap.
 - **From finite solutions to projectivity.** Compatible solutions over the finite quotients
   assemble to a continuous lift against an arbitrary surjection of pro-`p` groups: apply the
   Layer 0 compactness lemma to the (nonempty, closed) sets of level-`k` solutions. This is
-  the projectivity statement in the pro-`p` category that Layer 6 consumes.
+  the projectivity statement in the pro-`p` category that Layer 6 uses.
 
 - **`H²` of a free pro-`p` group vanishes.** For `F` free pro-`p` of finite rank and every
   finite discrete `p`-primary `F`-module `M`, `H²(F, M) = 0`. Proof from the material just
@@ -601,8 +651,8 @@ in this subsection is a target of this roadmap.
   proved *here*, in Layer 5, because the relation-rank theorem below needs it; Layer 6
   repackages it as `cd_p F ≤ 1` and proves the converse.
 
-The inputs this subsection consumes from
-[Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1) are: its
+What this subsection takes from
+[Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1): its
 explicit cochain model for `H²` with finite discrete coefficients (its Layer 1), and the long
 exact and five-term sequences (its Layer 4). The `cd` reformulation in Layer 6 additionally
 uses its cohomological-dimension vocabulary (its Layer 8). Nothing else.
@@ -612,8 +662,9 @@ uses its cohomological-dimension vocabulary (its Layer 8). Nothing else.
 - **`H¹` interpretation.** `H¹(G, 𝔽_p) ≅ Hom_cont(G, 𝔽_p) ≅ (G/Φ(G))^∨`, so
   `dim_{𝔽_p} H¹(G, 𝔽_p) = topologicalGeneratorRankNat G h` for topologically finitely
   generated pro-`p` `G` (the Burnside basis theorem in cohomological clothes; Labute
-  §1.3, Serre CG I §4.2). The cardinal form, without finiteness, is the Layer 3 identity
-  together with `𝔽_p`-duality.
+  §1.3, Serre CG I §4.2). The cardinal form, without finiteness, *is* the Layer 3 identity:
+  that identity is already stated against the discrete dual `Hom_cont(G, 𝔽_p)`, and this
+  layer only has to identify that dual with `H¹(G, 𝔽_p)`.
 - **`H²` interpretation.** For a minimal presentation `1 → R → F → G → 1` of a
   topologically finitely generated pro-`p` group: transgression `H¹(R, 𝔽_p)^F → H²(G, 𝔽_p)` is an
   isomorphism (five-term sequence plus the `H²(F, 𝔽_p) = 0` theorem above);
@@ -632,7 +683,7 @@ uses its cohomological-dimension vocabulary (its Layer 8). Nothing else.
 - **The Golod–Shafarevich inequality.** For a nontrivial finite `p`-group,
   `4 r(G) > d(G)²` (NSW (3.9.7), RZ Thm. 7.8.5), stated in that cleared-denominator form
   over `ℕ`. It is the classical capstone of deficiency theory and the reason finite
-  `p`-groups need many relations; nothing downstream here consumes it, so it can land late
+  `p`-groups need many relations; nothing downstream here uses it, so it can land late
   within the layer.
 - **Sanity example.** `d((ℤ/p)ⁿ) = n`, `r((ℤ/p)ⁿ) = n(n+1)/2`: the
   elementary-abelian count that catches a wrong normalization of `H²`.
@@ -672,40 +723,55 @@ pro-`p`-specific theorems, stated against that formalism.
   `(finrank H⁰ : ℤ) - (finrank H¹ : ℤ)`, never about `Nat` subtraction, and no symbol `χ` is
   introduced. Finite-dimensionality is part of the theorem, derived from topological finite
   generation of `U` (Layer 3) plus the `H¹`-interpretation of Layer 5, not assumed. The
-  proof consumes exactly these PR #1 milestones: Shapiro's lemma for the open subgroup `U`
+  proof uses these PR #1 milestones and no others: Shapiro's lemma for the open subgroup `U`
   and the coinduced module `Coind_U^G 𝔽_p` (its Layer 6), the identification of
   `Coind_U^G 𝔽_p` with the `𝔽_p`-vector space on the finite coset space `G/U` as a
   `G`-module, and the long exact sequence in a short exact sequence of finite discrete
   coefficient modules (its Layer 4), together with additivity of `finrank` along a finite
-  exact sequence of finite-dimensional `𝔽_p`-vector spaces (Mathlib). The same theorem with
-  degrees `0, 1, 2` and `cd_p G ≤ 2` is stated in Layer 7, where the Demushkin rank formula
-  needs it.
+  exact sequence of finite-dimensional `𝔽_p`-vector spaces (Mathlib).
+- **The trivial-filtration theorem, and why the Euler formula needs it.** Shapiro and
+  additivity turn the left-hand side into the alternating sum for `G` with coefficients in
+  `𝔽_p[G/U]`, a module of dimension `[G : U]`; getting from there to `[G : U]` times the
+  alternating sum with coefficients in `𝔽_p` is a separate statement, and it is this one.
+  For pro-`p` `G`, a nonzero finite discrete `p`-primary `G`-module has nonzero invariants
+  (the action factors through a finite `p`-quotient, and a finite `p`-group acting on a
+  nonzero finite `p`-group fixes a nonzero element; Mathlib's
+  `IsPGroup.card_modEq_card_fixedPoints`). Iterating, every such `M` has a `G`-stable
+  filtration whose factors are
+  one-dimensional with trivial action; so any `ℤ`-valued function of the coefficients that
+  is additive along short exact sequences takes the value `dim_{𝔽_p} M` times its value at
+  `𝔽_p`. This is a pro-`p` statement, hence ours and not PR #1's, and both Euler formulas
+  use it: the two-term one above, and the degree-`0,1,2` version stated in Layer 7, where
+  the Demushkin rank formula needs it.
 - **Pro-`p` Nielsen–Schreier, open case.** An open subgroup `U` of index `m` in a free
   pro-`p` group `F` of finite rank `n ≥ 1` is free pro-`p` of rank `1 + m(n - 1)`
-  (`Suggested.lean`). **Route pinned: cohomological.** Freeness via `cd_p U ≤ cd_p F ≤ 1`
-  and Serre's theorem; the rank count by substituting `finrank H⁰ = 1` and
-  `finrank H¹ = rank` into the two-term Euler formula above, which gives
-  `1 - d(U) = m(1 - n)` in `ℤ` and hence `d(U) = 1 + m(n-1)` in `ℕ` (the rearrangement is
-  a separate small lemma, since it is where the natural-number statement is recovered).
-  Koch derives his Example 6.3 rank formula the same way from his §5.4. The literature's
-  alternative
-  is RZ Thm. 3.6.2: a direct Schreier-transversal argument through the pro-`C` completion
-  of the abstract Nielsen–Schreier theorem, for extension-closed varieties. We pin the
-  cohomological route because Layers 5–7 build its ingredients anyway and the closed-
-  subgroup case (Layer 10, RZ Cor. 7.7.5) is cohomological in any treatment; RZ 3.6.2 is
-  the cross-check citation, not the plan.
+  (`Suggested.lean`). **The route is cohomological.** Freeness via `cd_p U ≤ cd_p F ≤ 1`
+  and Serre's theorem; the rank count by substituting `finrank H⁰ = 1`,
+  `finrank H¹(F, 𝔽_p) = n` and `finrank H¹(U, 𝔽_p) = d(U)` into the two-term Euler formula
+  above, which gives `1 - d(U) = m(1 - n)` in `ℤ` and hence `d(U) = 1 + m(n-1)` in `ℕ` (the
+  rearrangement is a separate small lemma, since it is where the natural-number statement is
+  recovered). Koch derives his Example 6.3 rank formula the same way from his §5.4. The
+  literature's alternative is RZ Thm. 3.6.2, a direct Schreier-transversal argument through
+  the pro-`C` completion of the abstract Nielsen–Schreier theorem, for extension-closed
+  varieties. We pin the cohomological route because Layers 5–7 build its ingredients anyway,
+  and because the closed-subgroup case (Layer 10, RZ Cor. 7.7.5) is cohomological in any
+  treatment; RZ 3.6.2 is the cross-check citation, not the plan.
 - ⚠ **Closed subgroups are Layer 10.** Closed (non-open) subgroups of free pro-`p` groups
   are free pro-`p` of possibly infinite rank; the statement needs converging-to-1 bases.
   Do not state a truncated finite-rank version here.
 
 ### Layer 7: Demushkin groups, their invariants, and the orientation
 
-- **The predicate.** `IsDemushkin p G` with exactly the fields of the pseudocode pinned in
+- **The predicate.** `IsDemushkin p G` with the fields of the pseudocode given in
   the conventions: `IsProP p G`, finite-dimensionality of `H¹` over `ZMod p`,
   `finrank H² = 1`, and nondegeneracy of the cup pairing on each side. Derived immediately:
-  `G` is topologically finitely generated, `n(G) := topologicalGeneratorRankNat G =
-  finrank H¹(G, 𝔽_p)`, and `G` is a one-relator pro-`p` group with relator in `Fᵖ[F,F]`
-  (Layer 5). Also proved here: `IsDemushkin` is invariant under topological isomorphism.
+  `G` is topologically finitely generated (`h1_fin` plus the Burnside basis theorem), so its
+  rank is available as the natural number `n(G) := topologicalGeneratorRankNat G h` for the
+  witness `h` just derived, which the pseudocode packages as `demushkinRank`; that
+  `n(G) = finrank H¹(G, 𝔽_p)`; and that `G` is a one-relator pro-`p` group with relator in
+  `Fᵖ[F,F]` (Layer 5). Also proved here: `IsDemushkin` is invariant under topological
+  isomorphism. Every numerical statement below is about `demushkinRank`, never about an
+  unqualified rank.
 - **First examples and non-examples** (Labute p. 106, Serre CG I §4.5): `ℤ/2` is Demushkin
   at `p = 2` (the unique finite one; the cup square of the generator of `H¹(ℤ/2, 𝔽₂)` is
   the extension class of `ℤ/4`); free pro-`p` groups (in particular `1` and `ℤ_p`) are
@@ -733,21 +799,29 @@ pro-`p`-specific theorems, stated against that formalism.
   `V^(f) := {±1} × U^(f)`, the subgroup generated by `-1` together with `U^(f)`; and, for
   `2 ≤ f < ∞`, `U^[f] := closure ⟨-1 + 2^f⟩`, generated by that single unit. Then:
   - **Exhaustiveness and uniqueness.** Every nontrivial closed subgroup of `ℤ₂ˣ` is exactly
-    one of `U^(f)` (`2 ≤ f ≤ ∞`), `V^(f)` (`2 ≤ f ≤ ∞`, with `V^(∞) = {±1}`), and
-    `U^[f]` (`2 ≤ f < ∞`), and no two entries of that list coincide. Route:
-    `ℤ₂ˣ = {±1} × (1 + 4ℤ₂)` with `1 + 4ℤ₂ ≅ ℤ₂` through the logarithm, so the closed
-    subgroups of the second factor are the `1 + 2^fℤ₂`; the three families are the three ways a
-    closed subgroup can sit
-    over `{±1}`.
+    one of `U^(f)` (`2 ≤ f < ∞`), `V^(f)` (`2 ≤ f ≤ ∞`, with `V^(∞) = {±1}`), and
+    `U^[f]` (`2 ≤ f < ∞`), and no two entries of that list coincide. `U^(∞) = {1}` is the
+    trivial subgroup and so does not appear in this list, though it is a legitimate value of
+    the `f = ∞` convention elsewhere (it is the image of `χ` for a free pro-`2` group).
+    Route: `ℤ₂ˣ = {±1} × (1 + 4ℤ₂)` with `1 + 4ℤ₂ ≅ ℤ₂` through the logarithm, so the closed
+    subgroups of the second factor are the `1 + 2^fℤ₂`; the three families are the three ways
+    a closed subgroup can sit over `{±1}`. In `Suggested.lean` the families are indexed by
+    `f : ℕ` and the `f = ∞` members are written out separately (as `⊥` and
+    `Subgroup.closure {-1}`), since an `ℕ∞`-indexed definition would carry a junk value at
+    `∞`; the `f : ℕ∞` indexing here is prose for the same three families.
   - **Procyclicity.** `U^(f)` and `U^[f]` are procyclic; `V^(f)` with `f < ∞` is not (its
     Frattini quotient is `(ℤ/2)²`). Equivalently: a closed subgroup is procyclic iff it does
     not contain `-1` together with a nontrivial element of `1 + 4ℤ₂`, which is the form
     stated in `Suggested.lean`.
   - **Indices and intersections.** `profiniteIndex U^(f) ℤ₂ˣ = 2^{f-1}`,
     `profiniteIndex V^(f) ℤ₂ˣ = 2^{f-2}`, `profiniteIndex U^[f] ℤ₂ˣ = 2^{f-1}`, and
-    `U^[f] ∩ (1 + 4ℤ₂) = U^(2f-1)`. In Layer 8's notation, `(A : A²) = 2` for `U^(f)` and
-    for `U^[f]`, and `= 4` for `V^(f)` with `f < ∞`. These are the numbers Layer 9's
-    existence statement quotes.
+    `U^[f] ∩ (1 + 4ℤ₂) = U^(f+1)`: the generator `g = -1 + 2^f` has `g² = 1 - 2^{f+1}u`
+    with `u = 1 - 2^{f-1}` odd, so the even powers of `g` are exactly `U^(f+1)`, and that
+    intersection is what makes the index `2^{f-1}` come out. In Layer 8's notation,
+    `(A : A²) = 2` for `U^(f)` and for `U^[f]`, and `= 4` for `V^(f)` with `f < ∞`. These
+    are the numbers Layer 9's existence statement quotes; check them against `f = 2, 3, 4`
+    by squaring, since a shift of one in this exponent silently reparametrizes the whole
+    `q = 2` classification.
   - **Odd `p`.** For `p` odd, `ℤ_pˣ ≅ μ_{p-1} × (1 + pℤ_p)`, and the closed subgroups of
     `1 + pℤ_p` are exactly the `1 + p^fℤ_p`, through the `p`-adic logarithm **with its
     domain restricted to `1 + pℤ_p`** (to `1 + 4ℤ₂` when `p = 2`), where it is an
@@ -802,8 +876,9 @@ package is stated and proved here:
   spaces are finite-dimensional and, in `ℤ`,
   `Σ_{i=0}^{2} (-1)^i finrank H^i(U, 𝔽_p)
    = [G : U] · Σ_{i=0}^{2} (-1)^i finrank H^i(G, 𝔽_p)`.
-  Same proof shape and the same PR #1 inputs as the two-term case (Shapiro plus additivity
-  along the long exact sequence), one degree longer. Substituting
+  Same proof shape as the two-term case, one degree longer: the same PR #1 inputs (Shapiro
+  and the long exact sequence) together with Layer 6's trivial-filtration theorem, which is
+  what converts the `𝔽_p[G/U]` coefficients into the factor `[G : U]`. Substituting
   `finrank H⁰ = finrank H² = 1` for a Demushkin group turns it into the rank formula above.
 - **Recognition criteria (Andozhskii; Dummit–Labute).** For topologically finitely generated
   one-relator pro-`p` `G` with `n(G) > 1`, the following are equivalent (NSW (3.9.15)):
@@ -837,17 +912,26 @@ throughout. Where Labute's indexing differs from ours the translation is stated,
 - The **bracket** `[·,·] : gr_j × gr_k → gr_{j+k+1}` induced by the group commutator
   (degrees shift by one because our indexing is 0-based: `[λ_j, λ_k] ≤ λ_{j+k+1}`), and the
   **`p`-power operator** `π : gr_k → gr_{k+1}`, `π(x λ_{k+1}) = x^p λ_{k+2}`. Both are well
-  defined, `π` is `𝔽_p`-linear, and the bracket is `𝔽_p`-bilinear, alternating, and
-  satisfies the Jacobi identity; these are Labute Prop. 1–2 in our indexing.
-- **The dyadic failure, as an explicit identity.** For `p` odd, `π` is a derivation for the
-  bracket: `π[x, y] = [πx, y] + [x, πy]`, so `gr(G)` is a Lie algebra over `𝔽_p[π]`. For
-  `p = 2` this identity **fails**, and the exact failure is the theorem to state: for
-  `x ∈ λ_j`, `y ∈ λ_k`, in `gr_{j+k+2}(G)`,
-  `π[x, y] - [πx, y] - [x, πy] = [[x, y], y]` (the `binom 2 2`-term of the Hall–Petrescu
-  expansion at `p = 2`). Consequently `gr(F)` for `F` free pro-`2` is *not* an
-  `𝔽_2[π]`-Lie algebra, and the milestone is a proof of that identity together with an
-  explicit witness (a rank-2 example where the left side is nonzero) showing the failure is
-  not vacuous. Every `q = 2` argument downstream is shaped by this.
+  defined; the bracket is `𝔽_p`-bilinear, alternating, and satisfies the Jacobi identity,
+  and `π` commutes with scalars and is additive in every degree except degree zero at
+  `p = 2`, which is the next item. These are Labute Prop. 1–2 in our indexing.
+- **`π` against the bracket, and the dyadic failure.** For every `p`, the bracket is
+  `π`-bilinear away from degree zero: `π[x, y] = [πx, y] = [x, πy]` for `x ∈ λ_j`,
+  `y ∈ λ_k` with `j, k ≥ 1` (all three terms in `gr_{j+k+2}`). The group identities behind
+  it are `[x², y] = [x, y]²·[[x, y], x]` and `[x, y²] = [x, y]²·[[x, y], y]`, whose
+  correction terms have degrees `2j + k + 2` and `j + 2k + 2` and so vanish in `gr_{j+k+2}`
+  unless the corresponding argument has degree zero. For `p` odd, `π` is additive as well
+  (the Hall–Petrescu corrections carry coefficients `binom(p, i)` divisible by `p`) and the
+  degree-zero corrections likewise vanish, so `gr(G)` is a graded Lie algebra over `𝔽_p[π]`
+  with `π` of degree one. **For `p = 2` additivity fails in degree zero**, and the exact
+  failure is the theorem to state: for `x, y ∈ gr_0(G)`,
+  `π(x + y) = π(x) + π(y) + [x, y]` in `gr_1(G)` (the `binom(2, 2)` term of the
+  Hall–Petrescu expansion), together with the degree-zero bracket corrections
+  `[πx, y] = π[x, y] + [[x, y], x]` for `x ∈ gr_0` and its mirror image. So `gr(F)` for `F`
+  free pro-`2` is *not* an `𝔽_2[π]`-Lie algebra, and the milestone is a proof of these
+  identities with an explicit witness that the failure is not vacuous: in `F` free pro-`2`
+  of rank 2, `[x̄₁, x̄₂] ≠ 0` in `gr_1(F)`, so `π` is not additive on `gr_0(F)`. Every
+  `q = 2` argument downstream is shaped by this.
 - **Openness and cofinality** (`Suggested.lean`): in a topologically finitely generated
   pro-`p` group every `λ_k` is open (induction: open ⟹ topologically f.g. ⟹ finite
   Frattini-type quotient) and the series is a neighborhood basis of `1`, so
@@ -856,17 +940,27 @@ throughout. Where Labute's indexing differs from ours the translation is stated,
   satisfy `f(λ_k(G)) ≤ λ_k(H)`, with equality when `f` is a continuous surjection.
   (RZ Prop. 2.8.13 is the same statement for the iterated-Frattini series; prove it for
   both series, they interleave.)
-- **`δ_j`, the relator-tail maps.** Let `F = freeProP p (Fin n)` and let `r ∈ λ_1(F)` be a
-  relator. `R` denotes the closed normal subgroup generated by `r`, and
-  `R_j := R ∩ λ_j(F)`. For `j ≥ 1`,
-  `δ_j : gr_0(F)^{⊕ n} → gr_j(F)`, `δ_j(a_1, …, a_n) = Σ_i [ā_i, r̄_j]`, is the map that
-  records how the relator's degree-`j` component moves under a change of basis, where
-  `r̄_j ∈ gr_j(F)` is the image of `r` (zero if `r ∈ λ_{j+1}`). Its image
-  `Im δ_j ≤ gr_{j+1}(F)` is the subspace named in the span statements of Layer 9. For
-  `p = 2` the span statements involve, in addition, the subspaces `π^{j}·⟨ξ⟩` generated by
-  the iterated `p`-powers of a distinguished element `ξ ∈ gr_1(F)` (the class of the
-  quadratic part of the relator); "`ξ`-tail" means exactly that subspace, and it is named
-  `T_j := π^{j-1}(⟨ξ⟩)` from here on rather than described.
+- **`δ_j`, the basis-modification maps.** Let `F = freeProP p (Fin n)` with basis
+  `x_1, …, x_n` and let `r ∈ λ_1(F)` be a relator; `R` denotes the closed normal subgroup
+  generated by `r`, and `R_j := R ∩ λ_j(F)`. Modifying the basis by `x_i ↦ x_i w_i` with
+  `w_i ∈ λ_{j-1}(F)` (`j ≥ 1`) moves `r` inside its coset by an element of `λ_j(F)` whose
+  class in `gr_j(F)` depends only on the classes `w̄_i ∈ gr_{j-1}(F)`. That is the map
+  `δ_j : gr_{j-1}(F)^{⊕ n} → gr_j(F)`,
+  `δ_j(w̄_1, …, w̄_n) = Σ_i [w̄_i, ∂_i r̄] + Σ_i c_i π(w̄_i)`,
+  where `r̄ ∈ gr_1(F)` is the class of the relator, `∂_i r̄ ∈ gr_0(F)` is the coefficient
+  of `x_i` in its commutator part, and `c_i ∈ 𝔽_p` is the coefficient of `x_i^p` in its
+  `p`-power part. Both terms land in `gr_j(F)`: the bracket raises degree by
+  `0 + (j - 1) + 1` and `π` by one. Well-definedness and `𝔽_p`-linearity of `δ_j` are the
+  milestone (Labute Prop. 5 in our indexing), with the explicit formula at a relator in
+  normal form as its corollary; `Im δ_j ≤ gr_j(F)` is the subspace named in the span
+  statements of Layer 9.
+- **The tails `T_j`.** For `p = 2` the span statements involve one further subspace:
+  `T_j ≤ gr_j(F)` is spanned by the iterated `p`-powers `π^j(x̄_i) ∈ gr_j(F)` over the
+  slots `i` with `c_i = 0`, that is over the generators whose exponent in the `p`-power part
+  of the relator is not exactly `p` and which therefore contribute no `π`-term to `δ_j`
+  (for `r = x₁²x₂^{2^f}(x₂, x₃)⋯` with `f ≥ 2` those are `x₂, …, x_n`, since `π^f(w̄)` lands
+  in `gr_{j+f-1}`, above the degree in play). "Tail" means that subspace, and `T_j`
+  is written for it from here on rather than described.
 - **`(A : A²)` and the parameters of the normal forms.** `A ≤ ℤ_pˣ` always denotes a closed
   subgroup; `A²` is the closed subgroup of squares; `(A : A²)` is `profiniteIndex A² A`,
   which is finite (value 1, 2, or 4) for the closed subgroups of `ℤ₂ˣ`, proved from the
@@ -876,13 +970,16 @@ throughout. Where Labute's indexing differs from ours the translation is stated,
   `f = ∞`; `α ∈ 4ℤ₂` is a `2`-adic integer with `v₂(α) ≥ 2` (`α = 0` allowed, and
   `v₂(0) = ∞`); `N` denotes `n/2`, the number of commutator pairs in an even-rank form. Each
   classification statement below repeats the ranges it needs.
+
 #### Finite-quotient determinacy
 
-- **Occurring as a quotient.** `IsContinuousQuotient G Q` for a finite group `Q`:
-  `∃ f : G →* Q, Continuous f ∧ Function.Surjective f`. Proved here: it depends only on the
-  isomorphism class of `Q`, and only on the topological isomorphism class of `G`. Statements
-  quantify over `Q` bundled as a `FiniteGrp` (with the discrete topology), not over an
-  arbitrary type carrying an unspecified topology.
+- **Occurring as a quotient.** `IsFiniteContinuousQuotient G Q` for a finite group `Q`:
+  there is a surjection `f : G →* Q` with open kernel (`Suggested.lean`). Phrasing it through
+  the kernel rather than through a topology on `Q` is what lets statements quantify over `Q`
+  bundled as a `FiniteGrp` instead of over arbitrary types carrying an unspecified topology;
+  for a finite discrete `Q` the two conditions agree, and that agreement is a lemma here.
+  Also proved here: the predicate depends only on the isomorphism class of `Q`, and only on
+  the topological isomorphism class of `G`.
 - **Two epimorphisms.** If `G` is topologically finitely generated and `G`, `H` have the same
   continuous finite quotients, then there exist continuous surjections `G ↠ H` and `H ↠ G`.
   Route: for each open normal `N ≤ G` the set of continuous surjections `H ↠ G/N` is
@@ -964,11 +1061,15 @@ with respect to an ordered basis  `e` by `B_{ij} = b (e i) (e j)`, so that a cha
   finite-dimensional `V` these coincide, with the radical statement proved rather than
   assumed. Transport of a form along a linear equivalence, and the resulting notion of
   equivalence of forms.
-- **Alternating versus symmetric.** `IsAlternating b := ∀ x, b x x = 0`. Alternating implies
-  symmetric in every characteristic; for `p ≠ 2` the converse fails only for the symmetric
-  nonalternating forms, and for `p = 2` symmetric and alternating differ exactly by the
-  diagonal, since `x ↦ b x x` is then `𝔽_2`-semilinear (additive with
-  `b (cx) (cx) = c² b x x`).
+- **Alternating, skew-symmetric, symmetric.** `IsAlternating b := ∀ x, b x x = 0`.
+  Expanding `b (x + y) (x + y) = 0` shows that alternating implies **skew-symmetric**
+  (`b y x = - b x y`) in every characteristic; it does *not* imply symmetric, except when
+  `p = 2`, where skew-symmetric and symmetric are the same condition. For `p = 2` the two
+  conditions differ exactly by the diagonal, `x ↦ b x x` being `𝔽_2`-semilinear (additive,
+  with `b (cx) (cx) = c² b x x`) when `b` is symmetric. For `p` odd a form that is both
+  symmetric and alternating is zero, and the forms this roadmap meets at odd `p` are the
+  alternating ones: the cup pairing on `H¹(G, 𝔽_p)` is graded-commutative, so `a ∪ a = 0`
+  once `2` is invertible.
 - **Symplectic normal form.** A nondegenerate alternating form on `V` admits a basis in
   which the matrix is block diagonal with blocks `[[0, 1], [-1, 0]]`; consequently
   `dim V` is even. Stated for all `p`, including `p = 2`.
@@ -977,13 +1078,16 @@ with respect to an ordered basis  `e` by `B_{ij} = b (e i) (e j)`, so that a cha
   such forms exist in every dimension, odd and even, and any two of the same dimension are
   equivalent. Together with the previous item this is the complete classification of
   nondegenerate symmetric bilinear forms over `𝔽_2`.
-- **The exact change-of-basis theorem Layer 9 consumes.** Let `b` be nondegenerate and
-  symmetric on `V` of dimension `n`. Then there is a basis in which `B` is: the symplectic
-  block form, if `b` is alternating (`n` even); the identity, if `p = 2` and `b` is not
-  alternating (`n` arbitrary); and, for `p ≠ 2` with `b` symmetric nonalternating, the
-  diagonal form with the standard discriminant representative. The statement records which
-  case each Demushkin normal form falls into, so that the odd-dimensional `p = 2` case is
-  covered explicitly rather than by analogy.
+- **The change-of-basis theorem Layer 9 needs.** Let `b` be nondegenerate on `V` of
+  dimension `n`, and either alternating (any `p`) or symmetric with `p = 2`. Then there is a
+  basis in which `B` is: the symplectic block form, if `b` is alternating, and then `n` is
+  even; the identity, if `p = 2` and `b` is symmetric but not alternating, and then `n` is
+  arbitrary. Those are the only two cases the classification produces, and the statement
+  records which one each Demushkin normal form falls into, so that the odd-dimensional
+  `p = 2` case is covered explicitly rather than by analogy. Nondegenerate symmetric
+  nonalternating forms in odd characteristic (diagonalizable, classified by their
+  discriminant) are not part of this prerequisite: no cup form of a Demushkin group at odd
+  `p` is one, and nothing below needs them.
 - **From the cup matrix to the relator.** The translation used by Layer 9, stated as its own
   theorem: given a relator `r ∈ λ_1(F)` for `F = freeProP p (Fin n)`, the coefficients of
   `r̄ ∈ gr_1(F)` in the standard basis of `gr_1(F) ≅ Λ²(𝔽_p^n) ⊕ 𝔽_p^n` (commutator part
@@ -991,7 +1095,10 @@ with respect to an ordered basis  `e` by `B_{ij} = b (e i) (e j)`, so that a cha
   `(q choose 2) a_i` on it. A basis change `P` of `F` acts on those coefficients by
   `B ↦ PᵀBP`, so a normal form for `B` produces a relator congruent mod `λ_2(F)` to the
   corresponding normal-form word. This is the theorem that turns the linear algebra above
-  into the statement about relators.
+  into the statement about relators, and its two hypotheses are the two cases of that
+  linear algebra: `B` is alternating exactly when the diagonal entries `(q choose 2) a_i`
+  all vanish, which is automatic for `p` odd and holds at `p = 2` precisely when `q ≠ 2`;
+  the symmetric nonalternating case is therefore exactly `p = 2` with `q = 2`.
 
 #### The completed group algebra of a procyclic group
 
@@ -1043,13 +1150,13 @@ Source of record: Labute, *Classification of Demushkin groups* (Canad. J. Math. 
   `(q choose 2) a_i` on it (Prop. 3, the statement that connects Layers 5 and 7 to the
   tower). Feeding the matrix `(a_{ij})` through the normal-form theorem of the bilinear-forms
   prerequisite gives `r ≡ x₁^q(x₁,x₂)(x₃,x₄)⋯(x_{n-1},x_n)` mod `λ_2(F)` when the form is
-  alternating (`n` even), and `r ≡ x₁^q(x₂,x₃)(x₄,x₅)⋯` mod `λ_2(F)` in the `p = 2`
-  nonalternating case (`n` odd allowed).
+  alternating (`n` even), and `r ≡ x₁²(x₂,x₃)(x₄,x₅)⋯` mod `λ_2(F)` in the nonalternating
+  case, which by the prerequisite is exactly `p = 2` with `q = 2` (`n` odd allowed).
 - **The successive-approximation argument (Labute Prop. 5, Thm 3).** The span statements, in
-  the notation of Layer 8: for `q ≠ 2`, `gr_j(F) = Im δ_{j-1}` for every `j ≥ 2`; for
-  `q = 2`, `gr_j(F) = Im δ_{j-1} + T_{j-1}` with `T_{j-1} = π^{j-2}(⟨ξ⟩)` the `ξ`-tail
-  defined there. Each is an equality of `𝔽_p`-subspaces of a finite-dimensional space, with
-  `δ` and `ξ` as declared. The limit process is then the Layer 8 comparison schema with
+  the notation of Layer 8: for `q ≠ 2`, `gr_j(F) = Im δ_j` for every `j ≥ 2`; for `q = 2`,
+  `gr_j(F) = Im δ_j + T_j`, the tails being what the dyadic failure of additivity of `π`
+  leaves over. Each is an equality of `𝔽_p`-subspaces of a finite-dimensional space, with
+  `δ_j` and `T_j` as declared there. The limit process is then the Layer 8 comparison schema with
   `S k` the (finite, nonempty) set of level-`k` basis corrections carrying the given relator
   into normal form: a Demushkin group with `q(G) = q` has a basis in which
   `r = x₁^q(x₁,x₂)(x₃,x₄)⋯(x_{n-1},x_n)` if `q ≠ 2`;
@@ -1057,7 +1164,7 @@ Source of record: Labute, *Classification of Demushkin groups* (Canad. J. Math. 
   `r = x₁^{2+α}(x₁,x₂)x₃^{2^f}(x₃,x₄)⋯` with `2 ≤ f ≤ ∞`, `α ∈ 4ℤ₂` if `q = 2`, `n` even. Implement
   it through that schema rather than re-deriving a limit argument.
 - **Character values in normal form (Labute Thm 4 + Corollary).** Existence of `χ` by
-  explicit values on the normal-form basis, pinned exactly: case `q ≠ 2`:
+  explicit values on the normal-form basis, fixed here as: case `q ≠ 2`:
   `χ(x₂) = (1-q)^{-1}`, else `1`; case `q = 2, n` odd: `χ(x₁) = -1`,
   `χ(x₃) = (1-2^f)^{-1}`, else `1`; case `q = 2, n` even: `χ(x₂) = -(1+α)^{-1}`,
   `χ(x₄) = (1-2^f)^{-1}`, else `1`; and uniqueness by the forced-derivation computation.
@@ -1082,7 +1189,7 @@ Source of record: Labute, *Classification of Demushkin groups* (Canad. J. Math. 
 - **The classification theorems.** *Uniqueness:* two Demushkin groups with the same `n`
   and `Im χ` are isomorphic; sharpened to Labute Thm 2 (an automorphism of `F` carries any
   Demushkin relator to any other with the same invariants, which is the statement the
-  marked and normalized instances consume). *Existence* (Labute Remark 2, quoted exactly): `(n, A)`
+  marked and normalized instances need). *Existence* (Labute Remark 2, quoted verbatim): `(n, A)`
   with `A` a closed subgroup of `ℤ_pˣ` is realized provided (i) `n` even and
   `p^n > (A : A^p)`, or (ii) `n` odd `≥ 3` (so `p = 2`) and `A = {±1} × U^(f)`
   (`f ≥ 2` or `∞`), or (iii) `n = 1` and `A = {±1}`. The small-rank edge cases are part of
@@ -1099,7 +1206,7 @@ Source of record: Labute, *Classification of Demushkin groups* (Canad. J. Math. 
 
 ### Layer 10: free pro-`C` groups on profinite spaces
 
-The definite home of the infinite-rank theory (pinned in the conventions):
+The home of the infinite-rank theory, as the conventions promise:
 
 - **Construction and universal property.** `F_C(X, ∗)` on a pointed profinite space
   (basis converging to 1): continuous maps `X → P` sending `∗ ↦ 1` classify continuous
@@ -1107,16 +1214,21 @@ The definite home of the infinite-rank theory (pinned in the conventions):
   discrete `X`. For an infinite discrete set `S` the two candidate objects are
   `freeProC C S` (Layer 4's construction, the completion of the abstract free group, whose
   universal property quantifies over *all* maps `S → P`) and `F_C(S⁺, ∗)` on the one-point
-  compactification (whose universal property quantifies over maps converging to `1`); the
-  theorem relating them is that the inclusion `S → S⁺` induces a continuous surjection
-  `freeProC C S ↠ F_C(S⁺, ∗)` which is **not** injective for infinite `S`, together with the
-  description of its kernel as the closed normal subgroup generated by the classes that fail
-  the convergence condition. State both objects, state that map, and never write "the free
-  pro-`C` group on `S`" without saying which.
-- **Bases and rank.** Existence of converging-to-1 bases; invariance of
-  `topologicalGeneratorRank` as a cardinal, with no finiteness hypothesis; the Frattini
-  argument at infinite rank, in the cardinal form
-  `topologicalGeneratorRank G = Module.rank (ZMod p) (G/Φ(G))` proved in Layer 3.
+  compactification (whose universal property quantifies over maps converging to `1`). The
+  inclusion `S → S⁺` induces a continuous surjection `freeProC C S ↠ F_C(S⁺, ∗)`, and the
+  theorem to prove about it is that for infinite `S` it is **not** injective. The witness is
+  a rank computation rather than a description of the kernel by generators, which this
+  roadmap does not claim: at `C = ` finite `p`-groups the continuous characters of the
+  source are all the maps `S → 𝔽_p`, a product of dimension `p^{#S}` (Erdős–Kaplansky),
+  while those of the target are the finitely supported ones, of dimension `#S`, so the two
+  groups have different ranks in the sense of Layer 3. State both objects, state that map,
+  and never write "the free pro-`C` group on `S`" without saying which.
+- **Bases and rank.** Existence of converging-to-`1` bases, and their uniqueness of
+  cardinality; invariance of `topologicalGeneratorRank` under topological isomorphism, as a
+  cardinal and with no finiteness hypothesis; and the infinite-rank Frattini argument in the
+  form proved in Layer 3, `topologicalGeneratorRank G = dim_{𝔽_p} Hom_cont(G, 𝔽_p)`. The
+  rank of `F_C(X, ∗)` at `C = ` finite `p`-groups is the `𝔽_p`-dimension of the space of
+  continuous functions `X → 𝔽_p` vanishing at `∗`, which for `X = S⁺` is `#S`.
 - **Presentations at arbitrary rank.** Every pro-`p` group admits a presentation by a free
   pro-`p` group on a profinite space, and a minimal one. This is the general statement that
   Layer 5 deliberately does not make.
@@ -1155,15 +1267,22 @@ well defined and functorial.
      `χ_cyc(Art_K(u)) = u⁻¹` for `u ∈ 𝒪_Kˣ` (its Layer 7), from which the image
      `χ_cyc(G_K) = Gal(K(μ_{p^∞})/K)` and the identification of the finite quotients of the
      cyclotomic module are computed.
-  6. Topological finite generation of `G_K` (its Layer 9), which this roadmap's Layer 3
-     predicate consumes verbatim.
   Item 4's compatibility square is also what shows that the finite quotients `μ_{p^i}` of the
   cyclotomic module satisfy the prescription property of Layer 7, used in the orientation
-  theorem below. No statement here uses a Local Fields theorem not on this list.
+  theorem below. No statement here uses a Local Fields theorem not on this list. In
+  particular **finite generation is not an input**: it is proved below, and Local Fields
+  consumes it rather than supplying it.
 - **Inflation in degree one.** Let `N := ker(G_K ↠ G_K(p))`. Inflation
   `H¹(G_K(p), 𝔽_p) → H¹(G_K, 𝔽_p)` is an isomorphism, directly from the universal property
   of the maximal pro-`p` quotient: a continuous homomorphism `G_K → 𝔽_p` factors uniquely
   through `G_K(p)`.
+- **`G_K(p)` is topologically finitely generated.** Input 1 makes `H¹(G_K, 𝔽_p)`
+  finite-dimensional; the degree-one isomorphism transports that to `H¹(G_K(p), 𝔽_p)`, which
+  is the discrete dual of `G_K(p)/Φ(G_K(p))`, so that Frattini quotient is finite and
+  Layer 3's criterion makes the pro-`p` group `G_K(p)` topologically finitely generated,
+  with `d(G_K(p)) = dim_{𝔽_p} H¹(G_K, 𝔽_p)`. Nothing in the argument needs finite generation
+  of `G_K` itself, which is what keeps the two roadmaps in an acyclic order: Local Fields
+  Layers 0–8, then this layer, then Local Fields Layer 9.
 - **Injectivity in degree two.** `H¹(N, 𝔽_p)^{G_K(p)} = 0`: a nonzero invariant class would
   produce a `G_K`-stable open subgroup of `N` of index `p`, hence a `p`-extension of `K`
   strictly larger than `K(p)`, contradicting maximality (a Layer 3 argument, using the
@@ -1171,8 +1290,7 @@ well defined and functorial.
   `0 → H¹(G_K(p)) → H¹(G_K) → H¹(N)^{G_K(p)} → H²(G_K(p)) → H²(G_K)`
   gives that `H²(G_K(p), 𝔽_p) → H²(G_K, 𝔽_p)` is **injective**.
   ⚠ The five-term sequence gives injectivity and nothing more; surjectivity needs the case
-  split below. An earlier version of this roadmap claimed the isomorphism outright, which is
-  a gap, not a shortcut.
+  split below, and stating the isomorphism outright would leave a gap in its place.
 - **Surjectivity in degree two, by cases on `μ_p`.**
   - If `μ_p ⊄ K`, then `H²(G_K, 𝔽_p) = 0` by input 1, so injectivity forces
     `H²(G_K(p), 𝔽_p) = 0` and inflation is trivially an isomorphism.
@@ -1185,8 +1303,9 @@ well defined and functorial.
   This case split is the whole of the degree-two statement; state the two cases as separate
   named theorems and the isomorphism as their corollary.
 - **The free case (Shafarevich).** If `μ_p ⊄ K`: `G_K(p)` is free pro-`p` of rank `d + 1`
-  (`H²(G_K(p), 𝔽_p) = 0` from the duality input since `μ_p ⊄ K`; then Layer 6's Serre
-  theorem plus the `H¹` count). Also record the `K = ℚ_p, p ≠ 2` instance: free of rank 2.
+  (`H²(G_K(p), 𝔽_p) = 0` from input 1 and the degree-two case split above; then Layer 6's
+  Serre theorem, whose finite-generation hypothesis is the item above, plus the `H¹` count).
+  Also record the `K = ℚ_p, p ≠ 2` instance: free of rank 2.
 - **The Demushkin case.** If `μ_p ⊆ K`: `G_K(p)` is Demushkin with `n = d + 2` and
   `q = #(μ_{p^∞} ∩ K)` = the largest `p`-power `q` with `μ_q ⊆ K` (Labute §5;
   NSW VII §7.5). Each clause of `IsDemushkin` is verified through the degree-one and
@@ -1228,6 +1347,12 @@ mis-normalized:
 - `ℤ̂`-Sylow: every `p`-Sylow subgroup of the profinite completion of `ℤ` is `ℤ_p`
   (Layers 0–2, proved in Layer 4; `Suggested.lean`).
 - `d(ℤ/4 × ℤ/2) = 2` and `d((ℤ/p)ⁿ) = n`, `r((ℤ/p)ⁿ) = n(n+1)/2` (Layers 3, 5).
+- `d(∏_{i ∈ ℕ} ℤ/p) = ℵ₀`, while the algebraic dimension of that group as an `𝔽_p`-vector
+  space is `2^{ℵ₀}`: the check that the infinite-rank invariant is the dimension of the
+  discrete dual and not of the Frattini quotient itself (Layers 3, 10).
+- `U^[2] = closure ⟨3⟩` meets `1 + 4ℤ₂` in `U^(3) = 1 + 8ℤ₂` and has index 2 in `ℤ₂ˣ`: the
+  smallest case of the depth formula, checked by squaring (`3² = 9 = 1 + 8`), and the one
+  the `ℚ₂(√-2)` instance rests on (Layer 7; `Suggested.lean`).
 - `ℤ/2` is Demushkin (`n = 1`, `q = 2`, `Im χ = {±1}`); `ℤ_p` and all free pro-`p` groups
   are not; `ℤ_p²` is Demushkin with `q = 0` (Layer 7, the three rank-degenerate checks).
 - `D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩`: nontrivial, pro-`2`, `D₀^{ab} ≅ ℤ₂² × ℤ/2`, `q(D₀) = 2`
@@ -1272,9 +1397,10 @@ The constraints that actually bind:
 
 Everything cohomological in Layers 5–7, 9, and 11 consumes
 [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1); the
-non-cohomological substatements do not. The reconstruction theorem (Layer 8) and the
-topological-finite-generation predicate (Layer 3) are what the Local Fields roadmap consumes
-from here, so they are worth delivering early.
+non-cohomological substatements do not. The reconstruction theorem (Layer 8), the
+topological-finite-generation predicate and Burnside theory (Layer 3), and the inflation
+isomorphisms of Layer 11 are what the Local Fields roadmap consumes from here, so they are
+worth delivering early.
 
 ### Cross-roadmap milestone contracts
 
@@ -1283,14 +1409,17 @@ Expanding the two-way Local Fields relationship by layer gives an acyclic schedu
 | Supplier | Supplied milestones | Consumer |
 |---|---|---|
 | This PR, Layers 0–3 | quotient-form `IsProP`, profinite Sylow theory, maximal pro-`p` quotient, Frattini/Burnside basis theory, and the exact topological-finite-generation predicate | [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s Layers 1, 4, and 9 (finite generation, wild inertia) |
+| This PR, Layer 11 | topological finite generation of `G_K(p)`, and the `H¹`/`H²` inflation isomorphisms it is proved from | [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s Layer 9 |
 | This PR, Layers 0–2 | existence and conjugacy of pro-`p` Sylow subgroups, supernatural order and index | [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)'s Layer 8 Sylow equality `cd_p G = cd_p G_p` |
 | [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1), Layers 1, 4, 6, 7, 8 | explicit `H¹`/`H²` with finite discrete coefficients; long exact and five-term sequences; coinduction and Shapiro's lemma for open subgroups; cup products with inflation-compatibility; cohomological-dimension vocabulary and its pro-`p` dévissage | This PR's Layers 5–7, 9, and 11 |
-| [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2), Layers 5, 7, 8B | the six numbered inputs listed at the head of Layer 11 (Euler-characteristic dimension count, trace isomorphism, mixed-characteristic duality with the Hilbert-symbol identification, Kummer theory and its cup compatibility, the cyclotomic character with its normalization, and topological finite generation of `G_K`) | This PR's Layer 11 |
+| [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2), Layers 5, 7, 8B | the five numbered inputs listed at the head of Layer 11 (Euler-characteristic dimension count, trace isomorphism, mixed-characteristic duality with the Hilbert-symbol identification, Kummer theory and its cup compatibility, and the cyclotomic character with its normalization) | This PR's Layer 11 |
 
-Local Fields consumes only foundational Layers 0–3 here, while this roadmap consumes Local
-Fields only at Layer 11; the Profinite Cohomology exchange is likewise split by layer
-(its Layer 8 consumes our Layers 0–2; our Layers 5–11 consume its Layers 1–8). Neither
-supplier waits on a result that it supplies.
+Local Fields consumes our foundational Layers 0–3 and then our Layer 11, while this roadmap
+consumes Local Fields only at its Layers 5, 7 and 8B, so the order
+`Local Fields 0–8 → this roadmap's Layer 11 → Local Fields 9` is acyclic; both roadmaps
+state it. The Profinite Cohomology exchange is likewise split by layer (its Layer 8 consumes
+our Layers 0–2; our Layers 5–11 consume its Layers 1–8). Neither supplier waits on a result
+that it supplies.
 
 ⚠ **Not a supplier.**
 [Quadratic Form Invariants PR #4](https://github.com/roed-math/TauCetiRoadmap/pull/4) is a
