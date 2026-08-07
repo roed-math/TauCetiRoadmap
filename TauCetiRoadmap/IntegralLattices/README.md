@@ -57,8 +57,8 @@ Out of scope, with the owner of each subject:
 
 | Subject | Owner |
 | --- | --- |
-| square classes, Witt theory, Hasse invariants, the Hilbert symbol, classification of forms over a field | [Quadratic Form Invariants](https://github.com/roed-math/TauCetiRoadmap/pull/4) |
-| `O(Q)` and `SO(Q)` over a field, Cartan–Dieudonné, the spinor norm, `Pin` and `Spin`, local point groups, adelic points, strong approximation, the Tamagawa volume of `SO` | Orthogonal and Spin Groups |
+| square classes, Witt theory, Cartan–Dieudonné, Hasse invariants, the Hilbert symbol, classification of forms over a field | [Quadratic Form Invariants](https://github.com/roed-math/TauCetiRoadmap/pull/4) |
+| the spinor norm, the comparison of `Spin` with `SO`, local point groups, finite adelic point groups, strong approximation, the Tamagawa volume of `SO` | Orthogonal and Spin Groups |
 | structure theory of local fields | [Local Fields](https://github.com/roed-math/TauCetiRoadmap/pull/2) |
 | root systems, Weyl groups, `DynkinType`, the ADE classification | [Root Systems](../RepresentationTheory/RootSystems/README.md) |
 | Poisson summation and the Gaussian theta transformation for a lattice in a real vector space | [L-functions](https://github.com/roed-math/TauCetiRoadmap/pull/8) |
