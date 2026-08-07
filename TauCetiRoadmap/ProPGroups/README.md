@@ -1040,6 +1040,19 @@ would make the dévissage vacuous and would not agree with the standard `cd_p`.
   `cd_p U = cd_p G`.
   *Needs:* L5 Shapiro; L6 dévissage.
   *Source:* Serre, *Galois Cohomology* I §3.3.
+- **The Sylow equality.** Let `G` be profinite, and let `G_p` be a `p`-Sylow subgroup of `G`,
+  from Layer 2. Then `cd_p G = cd_p G_p`. The route has three steps. First, prove the colimit
+  description: the cohomology of a closed subgroup, with discrete coefficients, is the
+  filtered colimit of the cohomology of the open subgroups containing it. That description is
+  part of this milestone. Second, for open `U ⊇ G_p` the composite of corestriction after
+  restriction is multiplication by `[G : U]`, and the Sylow property makes those indices prime
+  to `p`. With the colimit, restriction to `G_p` is therefore injective on the cohomology of
+  every discrete `p`-primary module, which gives `cd_p G ≤ cd_p G_p`. Third, Shapiro's lemma
+  for the closed subgroup `G_p` gives `cd_p G_p ≤ cd_p G`. This is the one milestone here
+  about `cd_p` of a group that need not be pro-`p`.
+  *Needs:* L1 supernatural index; L2 Sylow existence and conjugacy; L5 change of groups and
+  closed-subgroup Shapiro.
+  *Source:* NSW (3.3.6); Serre, *Galois Cohomology* I §3.3.
 - **The two-term Euler formula.** Let `G` be a topologically finitely generated pro-`p`
   group with `cd_p G ≤ 1`, and let `U ≤ G` be open. Then the four spaces
   `H^i(G, 𝔽_p)` and `H^i(U, 𝔽_p)`, for `i = 0, 1`, are finite-dimensional, and in `ℤ`
@@ -1967,7 +1980,7 @@ of the table below, and a statement that is not a row is not an interface: neith
 consumes the other through prose. Each row gives the consuming layer, the supplying layer,
 the exact object or theorem, and the name it goes by. The name belongs to the supplier, which
 states the object once, and the consumer cites the name instead of restating the object. The
-Local Fields roadmap carries the same table.
+Local Fields and Pro-`p` Groups roadmaps carry the same table.
 
 | Consumer layer | Supplier layer | Exact object or theorem | Name |
 |---|---|---|---|
@@ -2017,10 +2030,13 @@ one:
 
 | Supplier | Supplied milestones | Consumer |
 |---|---|---|
-| This roadmap, Layers 0–2 | existence and conjugacy of pro-`p` Sylow subgroups; supernatural order and index | the Profinite Cohomology roadmap, Layer 11, for the Sylow equality `cd_p G = cd_p G_p` |
-| the Profinite Cohomology roadmap, Layers 2, 5, 6, 7, 8, 11 | explicit `H¹` and `H²` with finite discrete coefficients; long exact and five-term sequences; change of groups; coinduction and Shapiro's lemma for open subgroups; cup products with their compatibility with inflation; the vocabulary of cohomological dimension and its pro-`p` dévissage | this roadmap's Layers 5 to 7, 9 and 11 |
+| the Profinite Cohomology roadmap, Layers 1, 2, 3, 5, 6, 7, 8, 11 | explicit `H¹` and `H²` with finite discrete coefficients, and their comparison with the canonical carrier; long exact and five-term sequences; change of groups; coinduction and Shapiro's lemma for closed subgroups; cup products with their compatibility with inflation; the vocabulary of cohomological dimension and its pro-`p` dévissage | this roadmap's Layers 5 to 7, 9 and 11 |
 
-The second row is an interface, and not a dependency. The substrate is Mathlib's
+The Sylow equality `cd_p G = cd_p G_p` is a milestone of this roadmap's Layer 6, built on the
+Sylow theory of Layer 2. The Profinite Cohomology roadmap excludes it by name, so no row
+crosses in that direction.
+
+The row is an interface, and not a dependency. The substrate is Mathlib's
 `continuousCohomology`, which both roadmaps use, so no second carrier can arise. Layer 5
 adds the explicit low degrees `contH0`, `contH1` and `contH2`, the cup product, the
 comparison isomorphisms, and the exactness and change-of-group statements it needs; when the
