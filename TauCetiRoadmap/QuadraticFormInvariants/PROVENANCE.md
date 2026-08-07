@@ -40,9 +40,9 @@ local one.
   is central simple when `c·(b² + 4a) ≠ 0`, adding
   `Mathlib/Algebra/Quaternion/CentralSimple.lean`. All three were open on 2026-08-06, at
   heads `e95984de0341`, `40983fffa9aa`, and `86493005d20f`. Layer 5 states the same
-  theorem intrinsically and proves it. **Migration:** when #41538 lands, delete the local
-  proof, import `Mathlib/Algebra/Quaternion/CentralSimple.lean`, and keep the vocabulary
-  of the `BrauerData` fields unchanged, so that no consuming statement moves.
+  theorem intrinsically and proves it. **Migration:** when #41538 lands, delete the
+  local proof, import `Mathlib/Algebra/Quaternion/CentralSimple.lean`, and keep the
+  vocabulary of the `BrauerData` fields unchanged, so that no consuming statement moves.
 - **Brauer multiplication.** Pull request
   [#26377](https://github.com/leanprover-community/mathlib4/pull/26377) (open on
   2026-08-06 at `13cac7e3b9bb`) proves that the tensor product of a simple algebra and a
@@ -136,6 +136,29 @@ The `gq2` axioms B11a (`hilbertSymbol_normCriterion_finiteDyadic`) and B9
 final consumers. B11a follows from Layer 2's four-fold criterion and from Layer 7C's cup
 criterion specialized by Layer 6. B9 follows from Layer 9's degree-≤-2 expansion
 specialized to a finite dyadic base.
+
+## Neighbouring Tau Ceti roadmaps
+
+Two roadmaps in preparation cover, in greater generality, ground that this roadmap
+defines for itself in Layer 6A and Layer 7A. This section records the relation, and no
+milestone of the README depends on it.
+
+- A **local fields** roadmap covers the normalized valuation, the unit filtration, local
+  square classes, unramified extensions, and norm groups, for local fields in general.
+  Layer 6A here defines exactly the pieces that the quadratic defect, the Hilbert
+  symbol, and the local classification consume.
+- A **profinite cohomology** roadmap covers continuous cohomology in all degrees, with
+  cup products, Kummer theory, restriction, corestriction, and the Evens norm. Layer 7A
+  here defines the degree-1 and degree-2 operations that the Brauer comparison, the
+  Stiefel-Whitney classes, and the Evens-Kahn identity consume.
+
+When either roadmap is accepted, the migration is mechanical, because both developments
+sit on the same Mathlib carriers: `IsNonarchimedeanLocalField` on one side, and
+`continuousCohomology` at the absolute Galois group on the other. Each local definition
+is then replaced by the accepted declaration of the same type, and the comparison
+theorem between the two is stated at that point. Until then this roadmap is
+dependency-closed on Mathlib, the landed Tau Ceti files, and the accepted
+semisimple-algebras roadmap.
 
 ## Licence note
 
