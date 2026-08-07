@@ -74,18 +74,18 @@ This roadmap is part of the LMFDB-background family (2026-07-30) and serves the 
 Layer 3.** Layer 5 rests on that roadmap's polynomial-side Dedekind theorem: for monic
 `f : ℤ[X]` and a prime not dividing `disc f`, the factorization type of `f mod p` is the cycle
 type of an arithmetic Frobenius element acting on the roots. That is a real dependency, not a
-formality, and it is the only one: the statement is the *only* thing taken from there, and
-that roadmap's `Suggested.lean` carries it in the same shape, marked as the interface this one
-consumes. The shape is pinned again below and in `Suggested.lean` here, so that the layers
-above it are precise; the theorem itself belongs to the supplier and is cited by name once it
-exists. Frobenius *construction* (decomposition groups, `IsArithFrobAt`, ramification) is
-Number Field Arithmetic's throughout; we own only the polynomial-side packaging.
+formality, and it is the only thing taken from there; that roadmap's `Suggested.lean` carries
+it in the same shape, marked as the interface this one consumes. The shape is pinned again
+below and in `Suggested.lean` here, so that the layers above it are precise, and the theorem
+is cited by its declaration name. Frobenius *construction* (decomposition groups,
+`IsArithFrobAt`, ramification) is Number Field Arithmetic's throughout; we own only the
+polynomial-side packaging.
 
-**It supplies [Modular Forms](../ModularForms/README.md), Layer 9.** Its Layer 9 asks for
-exactly the interface built here: a Galois-group certificate checker
-rather than a search, using Dedekind/Frobenius cycle-type certificates and the discriminant
-square test, enough to decide the small-degree patterns it needs. Its weight-60 example needs
-one quintic certified as `S₅`; Layer 8 proves the general theorem that certificate rests on.
+**It supplies [Modular Forms](../ModularForms/README.md), Layer 9,** which asks for exactly
+the interface built here: a Galois-group certificate checker rather than a search, using
+Dedekind/Frobenius cycle-type certificates and the discriminant square test, enough to decide
+the small-degree patterns it needs. Its weight-60 example needs one quintic certified as `S₅`;
+Layer 8 proves the general theorem that certificate rests on.
 The planned Artin Representations roadmap and Number Field Arithmetic's display layer consume
 the label predicates.
 
