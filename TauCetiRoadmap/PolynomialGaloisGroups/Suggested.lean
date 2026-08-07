@@ -470,8 +470,7 @@ theorem blocksIntermediateFieldsOrderIso_apply (p : F[X]) (hp : Irreducible p)
     (hα : α ∈ p.rootSet p.SplittingField)
     (B : {B : Set (p.rootSet p.SplittingField) //
       (⟨α, hα⟩ : p.rootSet p.SplittingField) ∈ B ∧ IsBlock p.Gal B}) :
-    (OrderDual.ofDual (blocksIntermediateFieldsOrderIso p hp hsep hdeg α hα B) :
-        IntermediateField F p.SplittingField)
+    (OrderDual.ofDual (blocksIntermediateFieldsOrderIso p hp hsep hdeg α hα B)).val
       = IntermediateField.fixedField (MulAction.stabilizer p.Gal B.1) :=
   sorry
 
