@@ -20,7 +20,7 @@ material stated against `Polynomial.Gal`.
 
 ## Scope
 
-The roadmap is deliberately bounded, and the boundary is part of the specification.
+The scope is bounded, and the boundary is part of the specification.
 
 - **Complete classification of transitive subgroups of `Sₙ`: degrees `n ≤ 5` only.** For
   these degrees the roadmap proves that every transitive subgroup is conjugate to exactly one
@@ -108,8 +108,7 @@ the label predicates.
   over any perfect field, irreducible implies separable, so the `ℚ`-facing corollaries drop
   the hypothesis while the characteristic-`p` statements carry it. Inseparable polynomials
   have too few roots and a correspondingly small permutation image; nothing below is claimed
-  for them, and the worked examples include an inseparable non-example that keeps the
-  distinction visible.
+  for them, and the worked examples include an inseparable non-example.
 - **Roots are intrinsic; numberings are temporary.** The action lives on `p.rootSet E`, a
   subtype with no preferred ordering. Statements are made intrinsically wherever possible. A
   numbering `e : Fin n ≃ p.rootSet E` enters only where a comparison with a reference subgroup
@@ -120,9 +119,8 @@ the label predicates.
 - **The `nTj` labels, and their data model.** For `n ≤ 47` the LMFDB numbers the conjugacy
   classes of transitive subgroups of `Sₙ` as `nT1, nT2, …`, following the transitive-group
   databases (Butler–McKay for `n ≤ 11`, then Cannon–Holt, Holt–Royle, and Holt–Royle–Tracey).
-  The `T`-numbering is a database convention fixed by published tables, not intrinsic
-  mathematics, so it is pinned by explicit reference subgroups rather than derived. The data
-  model is:
+  The `T`-numbering is a database convention fixed by published tables rather than intrinsic
+  mathematics, so it is pinned by explicit reference subgroups. The data model is:
 
   - `numTransitiveGroups : ℕ → ℕ`, the number of classes in each degree, defined by the frozen
     table below and `0` outside its range;
@@ -144,8 +142,8 @@ the label predicates.
   composite `G → Equiv.Perm (Fin n) → ℤˣ` given by `Equiv.Perm.sign` is trivial; **primitive**
   is `MulAction.IsPreprimitive G (Fin n)` for the natural action; solvable is `IsSolvable G`;
   cycle-type data goes through `Equiv.Perm.cycleType`.
-- **The generator data is frozen, not reconstructed.** An implementation agent must not be
-  asked to recover Butler–McKay numbering from prose. The reference generators come from one
+- **The generator data is frozen.** An implementation agent must not be asked to recover
+  Butler–McKay numbering from prose. The reference generators come from one
   reproducible export, and the Lean data file carrying them records, in its header:
 
   - the retrieval date and the source, namely the LMFDB `gps_transitive` table (columns `n`,
@@ -170,11 +168,12 @@ the label predicates.
 - **Discriminant.** The polynomial discriminant is Mathlib's `Polynomial.discr`
   (`Mathlib/RingTheory/Polynomial/Resultant/Basic.lean`), the Sylvester-matrix resultant of
   `f` and `f'`, sign-normalized so that a real polynomial with all roots real has
-  `discr ≥ 0`. We adopt it as *the* discriminant and build the missing theory around it; the
-  root-product formula is that file's own TODO, so see the coordination section. The
-  discriminant test `disc ∈ (Fˣ)² ↔ Gal ≤ Aₙ` is **false in characteristic 2**: with
-  `−1 = 1` the product `∏_{i<j} (rᵢ − rⱼ)` is itself symmetric, so its square root is always
-  rational and the test detects nothing. Every statement of the test carries `ringChar F ≠ 2`.
+  `discr ≥ 0`. We adopt it as *the* discriminant and build the missing theory around it,
+  starting with the root-product formula, which that file's own TODO list also heads toward;
+  see the coordination section. The discriminant test `disc ∈ (Fˣ)² ↔ Gal ≤ Aₙ` is **false in
+  characteristic 2**: with `−1 = 1` the product `∏_{i<j} (rᵢ − rⱼ)` is itself symmetric, so its
+  square root is always rational and the test detects nothing. Every statement of the test
+  carries `ringChar F ≠ 2`.
 - **Resolvent, the name.** In Mathlib `resolvent` means the resolvent of spectral theory
   (`Mathlib/Algebra/Algebra/Spectrum/Basic.lean`), so the name is taken. Our objects are
   `galResolvent` (general orbit resolvents), `resolventCubic` (of a quartic), and
@@ -196,8 +195,8 @@ the label predicates.
   here. Everything this roadmap proves about quintics, including the sextic-resolvent
   criterion and the `5T1`/`5T2`/`5T3` table, is about `IsSolvable f.Gal`. No statement below
   asserts an equivalence involving `solvableByRad`.
-- **What certificate soundness does and does not say.** Galois-group computation appears here
-  as certificate checking, and three separate claims must not be run together:
+- **What certificate soundness claims.** Galois-group computation appears here as certificate
+  checking, and three separate claims must not be run together:
 
   1. **Soundness.** If `check cert = true` then the label follows. This is what the roadmap
      proves, and it is unconditional: no density theorem enters.
@@ -206,17 +205,17 @@ the label predicates.
      and a deterministic resolvent chain would need a different argument.
   3. **Termination and efficiency of a search.** Not addressed at all.
 
-  Only the first is grounded here, and the text says so wherever certificates appear.
-  Chebotarev belongs to the LFunctions roadmap.
+  Only the first is grounded here, and every statement below that mentions a certificate says
+  which of the three it is about. Chebotarev belongs to the LFunctions roadmap.
 
   Within soundness, lower and upper bounds on the group come from different evidence, and the
-  asymmetry is a design principle rather than an accident. Factorization types exhibit
-  elements, so they give lower bounds only; no finite set of factorization types can prove
-  `Gal ≤ H` for a proper subgroup `H`. Upper bounds come from the discriminant and from
-  resolvents, and a resolvent gives one only when specialization is known not to have
-  collided: the checked resolvent must have its full orbit degree and be separable, or the
-  certificate must supply a Tschirnhaus transform that is checked to have those properties.
-  A rational root or a list of factor degrees without that evidence proves no upper bound.
+  asymmetry is deliberate. Factorization types exhibit elements, so they give lower bounds
+  only; no finite set of factorization types can prove `Gal ≤ H` for a proper subgroup `H`.
+  Upper bounds come from the discriminant and from resolvents, and a resolvent gives one only
+  when specialization is known not to have collided: the checked resolvent must have its full
+  orbit degree and be separable, or the certificate must supply a Tschirnhaus transform that is
+  checked to have those properties. A rational root or a list of factor degrees without that
+  evidence proves no upper bound.
 - **Naming.** `fullCycleType`, `numTransitiveGroups`, `TransitiveGroupIndex`,
   `referenceSubgroup`, `TransitiveGroupLabel`, `HasGaloisLabel`, `galResolvent`,
   `ResolventSpec`, `resolventCubic`, `resolventSextic`, `GaloisCertificate` with its `check`
@@ -280,18 +279,20 @@ status remarks about open work were rechecked on 2026-08-06.
   `D ≀ᵣ Q = (Q → D) ⋊ Q`, with base indexed by `Q` itself, `toPerm` into
   `Equiv.Perm (Λ × Q)`, `IteratedWreathProduct`, and `Sylow.mulEquivIteratedWreathProduct`
   (Sylow `p`-subgroups of `S_{pⁿ}`). The **general** permutation wreath product, with base
-  indexed by a `Q`-set, which is what an imprimitive action embeds into, is absent; Layer 1
-  builds it, in coordination (below).
+  indexed by a `Q`-set, which is where an imprimitive action lands, is absent; Layer 1 builds
+  it, in coordination (below).
 - **O'Nan–Scott, first case:** `Mathlib/GroupTheory/Perm/MaximalSubgroups.lean` and
   `SpecificGroups/Alternating/MaximalSubgroups.lean` have `isCoatom_stabilizer` (setwise
   stabilizers of subsets are maximal), the *intransitive* case after Liebeck–Praeger–Saxl,
   with the *imprimitive* case named there as the next TODO, still open on master on
-  2026-08-06. That is the point our wreath-product layer has to coordinate with.
+  2026-08-06. Our wreath-product layer has to coordinate with that file.
 - **Discriminants and resultants:** `Mathlib/RingTheory/Polynomial/Resultant/Basic.lean` has
   `Polynomial.resultant` (Sylvester determinant, with `optParam` degree arguments) and
   `Polynomial.discr` (with `discr_C` and `discr_of_degree_eq_one/two/three`); the root-product
-  formula is the file's own TODO. `Mathlib/Algebra/CubicDiscriminant.lean` has `Cubic.discr`
-  with `Cubic.discr_eq_prod_three_roots` and the distinct-roots criterion.
+  formula is absent, and the resultant version it follows from,
+  `resultant (∏ a ∈ s, (X − C a)) f = ∏ a ∈ s, f.eval a`, is that file's own stated goal in its
+  TODO list (rechecked on master, 2026-08-06). `Mathlib/Algebra/CubicDiscriminant.lean` has
+  `Cubic.discr` with `Cubic.discr_eq_prod_three_roots` and the distinct-roots criterion.
   `Mathlib/RingTheory/Discriminant.lean` has `Algebra.discr`, the trace-form discriminant of a
   basis, with `discr_powerBasis_eq_prod''` (the `∏ (σᵢ x − σⱼ x)²` form) and
   `discr_powerBasis_eq_norm`, which is the number-field side that Layer 3 connects to.
@@ -324,14 +325,15 @@ status remarks about open work were rechecked on 2026-08-06.
 
 Everything label-shaped. At the pin, and on master rechecked 2026-08-06: no orbit-to-factor
 dictionary for the Galois action; no correspondence between blocks and intermediate fields; no
-discriminant root-product formula (a named TODO upstream), hence no `disc`-to-`Aₙ` test; no
-resolvent in the Galois sense, the identifier being taken by spectral theory; no Dedekind
-factorization-to-cycle-type theorem (Frobenius elements exist and `KummerDedekind` gives the
-shape bijection, but nobody composes them with `galActionHom`); no general wreath product,
-only `RegularWreathProduct`, with the imprimitive O'Nan–Scott case an upstream TODO; no Jordan
-prime-cycle theorem, an upstream `proof_wanted`; no classification of transitive subgroups of
-`Sₙ` for any `n ≥ 3`; no `nTj` labels, no parity or primitivity invariant layer, and no
-certificates; no realization of `Sₙ` over `ℚ` beyond the prime-degree criterion.
+discriminant root-product formula (upstream's resultant TODO heads that way), hence no
+`disc`-to-`Aₙ` test; no resolvent in the Galois sense, the identifier being taken by spectral
+theory; no Dedekind factorization-to-cycle-type theorem (Frobenius elements exist and
+`KummerDedekind` gives the shape bijection, but nobody composes them with `galActionHom`); no
+general wreath product, only `RegularWreathProduct`, with the imprimitive O'Nan–Scott case an
+upstream TODO; no Jordan prime-cycle theorem, an upstream `proof_wanted`; no classification of
+transitive subgroups of `Sₙ` for any `n ≥ 3`; no `nTj` labels, no parity or primitivity
+invariant layer, and no certificates; no realization of `Sₙ` over `ℚ` beyond the prime-degree
+criterion.
 Chambert-Loir's open pull requests (see coordination) head toward `PSL₂` simplicity and
 Dieudonné generation, not toward any of this. We found no Zulip thread claiming any of it; the
 searchable discussion trail for this area is his mathlib review threads rather than Zulip.
@@ -507,8 +509,8 @@ For irreducible separable `p` over `F` with a root `α` in `L = p.SplittingField
 
 ### Layer 3: the discriminant and the alternating group
 
-- **The root-product formula** (the upstream TODO; coordinate, see below): for monic `f` of
-  degree `n` splitting in `L` with roots `r : Fin n → L` listed with multiplicity,
+- **The root-product formula** (upstream is headed the same way; coordinate, see below): for
+  monic `f` of degree `n` splitting in `L` with roots `r : Fin n → L` listed with multiplicity,
   `algebraMap R L f.discr = ∏_{i < j} (r i − r j)²`. Consequences to state alongside it: the
   product formula for `discr (f*g)` with its `resultant f g` cross term; **base change**
   `(f.map φ).discr = φ f.discr` for a ring homomorphism `φ`, in the degree-preserving case,
@@ -536,9 +538,9 @@ For irreducible separable `p` over `F` with a root `α` in `L = p.SplittingField
 
 ### Layer 4: resolvents
 
-Resolvents are what turn a constraint on the subgroup into a statement about factorization.
-Two levels of data are kept apart throughout, and the separation is what makes the certificate
-layer sound.
+A resolvent converts a constraint on the subgroup into a statement about factorization. Two
+levels of data are kept apart throughout, and the certificate layer is sound only because of
+that separation.
 
 - **Static resolvent specifications.** A `ResolventSpec n` is library data, written and proved
   once: a subgroup `H ≤ Equiv.Perm (Fin n)`, an invariant `Φ : MvPolynomial (Fin n) ℤ`, and a
@@ -569,8 +571,8 @@ layer sound.
     happen to collide at the roots of this particular `f`. It holds under the separation
     hypothesis, and only then.
 
-  So a rational root proves the containment only in the presence of separation evidence. This
-  is the asymmetry the certificate layer is built around.
+  So a rational root proves the containment only in the presence of separation evidence. The
+  certificate layer is built around this asymmetry.
 - **Tschirnhaus transforms, scoped to what is used.** When the specialized resolvent is not
   separated, the classical remedy is to replace `f` by `f_T`, obtained by a polynomial
   substitution in a root, with the same splitting field and the same Galois image up to the
@@ -659,7 +661,7 @@ layer sound.
 - **What factorization types cannot do.** Cycle types certify lower bounds only, since they
   exhibit elements. No finite set of factorization types certifies `Gal ≤ H` for a proper `H`;
   upper bounds come from Layer 3 and Layer 4. The `D₅`-versus-`A₅` pair among the worked
-  examples below is the standard illustration, and it is recorded as such. The *statistics* of
+  examples below is the standard illustration. The *statistics* of
   cycle types are Chebotarev's, and belong to the LFunctions roadmap; correctness of the
   certificates here does not use them.
 - **Index divisors.** All statements are at `p ∤ discr f` only. Dedekind's example
@@ -706,9 +708,8 @@ share. In Lean these entries are `referenceSubgroup n j` for
 - **Order recognizes the label in low degree.** For `n = 5` a transitive subgroup has order in
   `{5, 10, 20, 60, 120}` and the order determines the label; for `n = 4` the order determines
   it except at order 4, where `IsCyclic` separates `4T1` from `4T2`; for `n = 3` the order
-  determines it. These theorems are what let a certificate terminate: a lower bound from
-  factorization types and an upper bound from a resolvent or the discriminant meet in an order
-  count.
+  determines it. A certificate terminates on these theorems: a lower bound from factorization
+  types and an upper bound from a resolvent or the discriminant meet in an order count.
 - **The label predicates.** `TransitiveGroupLabel j G` as pinned in the conventions;
   transitivity of each reference (so the predicate needs no transitivity clause); invariance
   under conjugation and renumbering; the partition theorem, that for `n ≤ 5` every transitive
@@ -716,24 +717,25 @@ share. In Lean these entries are `referenceSubgroup n j` for
   `HasGaloisLabel f j` for separable degree-`n` polynomials, together with its independence of
   the chosen relabeling.
 - **Solvability and the degree-5 labels.** An irreducible quintic has `IsSolvable f.Gal` if and
-  only if its label is `5T1`, `5T2` or `5T3`, which is what ties Layer 4's sextic-resolvent
-  criterion to this table. The statement is about the group; it is not an assertion about
+  only if its label is `5T1`, `5T2` or `5T3`, which ties Layer 4's sextic-resolvent criterion
+  to this table. The statement is about the group; it is not an assertion about
   solvability by radicals.
 
 ### Layer 7: degrees 6 to 11 as reference data
 
-The same treatment for every degree from 6 to 11, without a classification theorem. What is
-*stated* is the reference data; what is *proved* is the semantics of each named reference and
-the invariants it has; what is not claimed is that the list is exhaustive.
+The same treatment for every degree from 6 to 11, but without a classification theorem: the
+reference data is stated, the semantics and the invariants of each named reference are proved,
+and the list is not claimed to be exhaustive.
 
 - **Reference data.** For `6 ≤ n ≤ 11`, `numTransitiveGroups` takes the values
   `16, 7, 50, 34, 45, 8` (Butler–McKay 1983; OEIS A002106; matching the LMFDB), and
   `referenceSubgroup n j` is given by the generator lists from the frozen export described in
   the conventions. Nothing here reconstructs the numbering from prose.
 - **Invariants, by certificate rather than by enumeration.** Each invariant of an explicit
-  finite subgroup is decidable in principle, but "engineered to actually reduce" is not an
-  implementation contract, and enumerating `S₁₁` inside kernel reduction is not a plausible
-  target. Each invariant therefore has a named route:
+  finite subgroup is decidable in principle, but decidability is not an implementation plan:
+  enumerating `S₁₁` inside kernel reduction will not run, and a roadmap that says the
+  computation should be arranged to reduce has specified nothing. Each invariant therefore has
+  a named route:
 
   - *order*: an enumeration or closure certificate for the small groups; a structural order
     theorem for the large standard ones (`Aₙ`, `Sₙ`, and the named primitive groups);
@@ -757,7 +759,7 @@ the invariants it has; what is not claimed is that the list is exhaustive.
   claimed in these degrees, a certificate concludes `HasGaloisLabel f j` only by proving that
   the image is conjugate to `referenceSubgroup n j`. It may not conclude a label by ruling out
   the other listed references, since the list is not known here to be complete.
-- **Realizations, narrowed.** The roadmap does *not* claim a certified polynomial for every
+- **Realizations.** The roadmap does *not* claim a certified polynomial for every
   label in every degree up to 11: that claim needs a manifest of explicit polynomials, and
   without one it is not a specification. What is retained is the set of labels the worked
   examples and the Modular Forms certificate actually need. A per-label manifest is a natural
@@ -804,8 +806,8 @@ proof-valued field.
   Irreducibility over `ZMod p` is checked by a named algorithm, not by an unexplained kernel
   computation: Rabin's test, that a monic `g` of degree `d` is irreducible over `𝔽_p` exactly
   when `X^(p^d) ≡ X (mod g)` and `gcd(X^(p^(d/ℓ)) − X, g) = 1` for every prime `ℓ ∣ d`.
-  Its correctness is a target of this layer, and it is what the reflection theorem for the
-  factorization checks rests on.
+  Its correctness is a target of this layer, and the reflection theorem behind the
+  factorization checks rests on it.
 - **The group deduction, made explicit.** Cycle types alone give no upper bound and no lower
   bound on the order, so the step from the checked constraints to a label is its own object: a
   `GroupDeductionCertificate n j` witnesses a statement of the form
@@ -916,12 +918,12 @@ against the LMFDB field pages. Each one pins a specific layer.
   two-item certificate of this shape; the Modular Forms weight-60 instance supplies the
   coefficients and the two primes 83 and 17.
 - **Non-examples, which test that the definitions exclude what they should:** `x⁴` and
-  `(x² − 2)²` are not separable,
-  so no permutation claim is made about them, and in particular they do not satisfy the
-  full-symmetric-group predicate of Layer 9 even though a degree count alone might suggest
-  otherwise; `(x² − 2)(x² − 3)` is separable and reducible, with `Gal ≅ V₄` acting with two
-  orbits of size 2 (orbits and factors, Layer 0), and `TransitiveGroupLabel` correctly declines
-  to apply; `x⁵ + x + 1 = (x² + x + 1)(x³ − x² + 1)` is the reducible cousin of `x⁵ − x − 1`,
+  `(x² − 2)²` are not separable, so no permutation claim is made about them, and in particular
+  they do not satisfy the full-symmetric-group predicate of Layer 9 even though a degree count
+  alone might suggest otherwise; `(x² − 2)(x² − 3)` is separable and reducible, with
+  `Gal ≅ V₄` acting with two orbits of size 2 (orbits and factors, Layer 0), and
+  `TransitiveGroupLabel` correctly declines to apply;
+  `x⁵ + x + 1 = (x² + x + 1)(x³ − x² + 1)` is the reducible cousin of `x⁵ − x − 1`,
   kept as a regression test that no `5Tj` label is assigned to a reducible quintic.
 
 ## Ordering and parallelism
