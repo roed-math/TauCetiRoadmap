@@ -36,16 +36,19 @@ definite classes, the covolume identity, `|O(E₈)| = 696729600`), **Layer 3** (
 orthogonal splitting, the dyadic counterexample, the constraint from the product formula),
 **Layer 4** (the spinor norm of a product of reflections), **Layer 5** (the primitivity
 dictionary, the K3-lattice existence shape), **Layer 6** (indefinite even unimodular
-uniqueness) and **Layer 8** (theta convergence at both levels, the restriction of the
+uniqueness), **Layer 8** (theta convergence at both levels, the restriction of the
 holomorphic theta to the imaginary axis, and the transformation law through the
-interface). They elaborate against the Mathlib version this repository builds
+interface) and **Layer 9** (`StoredGenusCertificate`, the object a stored LMFDB lattice
+record asserts). They elaborate against the Mathlib version this repository builds
 against, and they are stated with `sorry`, which is allowed in this human-owned roadmap
 library.
 
 The statements whose types do not exist yet stay in `README.md` only. They are the
 Conway–Sloane genus symbols of Layer 3, the adelic double cosets of Layer 4, and the mass
 formula of Layer 7. Nothing here stands in for them, since a `Prop`-valued placeholder
-would assert nothing.
+would assert nothing. Layer 9 is different: genus membership and isometry are congruence of
+Gram matrices over `ℤ_p` and over `ℤ`, which are expressible now, so the certificate is
+written out rather than described.
 
 Conventions follow `README.md`: a lattice is a finite free ℤ-module with a symmetric
 `LinearMap.BilinForm ℤ L`; the Gram matrix is `LinearMap.BilinForm.toMatrix`; "norm" means
@@ -624,5 +627,109 @@ example {n : ℕ} (I : GaussianThetaInterface n) (Λ : AnalyticLattice n)
   sorry
 
 end Layer8
+
+section Layer9
+
+/-! ## Layer 9: what a stored LMFDB lattice record asserts -/
+
+/-- **Isometry of lattices, at the level of Gram matrices** (2C): integral congruence by a
+matrix invertible over `ℤ`. Over `ℤ` this is `det P = ±1`, so `IsUnit P.det` is the whole
+condition; positive definiteness is not needed for the definition. -/
+def GramIsometric {n : ℕ} (G H : Matrix (Fin n) (Fin n) ℤ) : Prop :=
+  ∃ P : Matrix (Fin n) (Fin n) ℤ, IsUnit P.det ∧ P.transpose * G * P = H
+
+/-- **Local isometry at `p`** (3A, 3F): congruence over `ℤ_p`. Writing it by base change of
+the Gram matrix is what keeps `p = 2` in scope, exactly as in the convention that localizes
+with `LinearMap.BilinForm.baseChange` rather than `QuadraticForm.baseChange`. -/
+def GramIsometricAt (p : ℕ) [Fact p.Prime] {n : ℕ} (G H : Matrix (Fin n) (Fin n) ℤ) : Prop :=
+  ∃ P : Matrix (Fin n) (Fin n) ℤ_[p], IsUnit P.det ∧
+    P.transpose * G.map (Int.cast : ℤ → ℤ_[p]) * P = H.map (Int.cast : ℤ → ℤ_[p])
+
+/-- **Layer 9A, the stored record as one object.** Each field is a statement an LMFDB
+lattice record asserts, and nothing here is a placeholder: every condition is spelled out
+in terms of the stored matrices, so no unintended model satisfies it. The label
+`dim.det.level.class_number.index` contributes the four fields named after its components;
+its fifth component is an insertion-order serial with no mathematical content and has no
+field.
+
+Genus membership is 3F written out: congruence over every `ℤ_p`, together with the real
+signature, which positive definiteness of both sides supplies. Completeness is the last
+field, and it is the statement that a mass certificate from 7H proves for a given genus; it
+is not part of the definition of the other fields. -/
+structure StoredGenusCertificate where
+  /-- The label component `dim`, and the size of the stored Gram matrix. -/
+  dim : ℕ
+  /-- The stored lattices have positive rank, which is what makes the minimum and the
+  kissing number of 2B defined. -/
+  dim_pos : 0 < dim
+  /-- The stored Gram matrix. -/
+  gram : Matrix (Fin dim) (Fin dim) ℤ
+  /-- It is symmetric, so it is the Gram matrix of a lattice form (0A, 0C). -/
+  gram_isSymm : gram.IsSymm
+  /-- It is positive definite, which is what makes 0A to 0E, 2B, 2C, 2G and 8B apply
+  (0E). -/
+  gram_posDef : (Matrix.toQuadraticForm' gram).PosDef
+  /-- The label component `det`, the Gram determinant of 0C. -/
+  det : ℤ
+  /-- and it is that determinant. -/
+  det_eq : det = gram.det
+  /-- The label component `level`, in the shape 0D fixes it: the least positive `N` for
+  which `N·G⁻¹` is integral with even diagonal. -/
+  level : ℕ
+  /-- and it is that least element. -/
+  level_isLeast :
+    IsLeast {N : ℕ | 0 < N ∧ ∃ M : Matrix (Fin dim) (Fin dim) ℤ, (∀ i, 2 ∣ M i i) ∧
+      M.map (Int.cast : ℤ → ℚ) = (N : ℚ) • (gram.map (Int.cast : ℤ → ℚ))⁻¹} level
+  /-- The stored minimum, `min L` of 2B: the least norm of a nonzero vector. -/
+  minimum : ℤ
+  /-- and it is that least element. -/
+  minimum_isLeast :
+    IsLeast {k : ℤ | ∃ x : Fin dim → ℤ, x ≠ 0 ∧ Matrix.toBilin' gram x x = k} minimum
+  /-- The stored kissing number, `#S_{min L}(L)` of 2B. -/
+  kissing : ℕ
+  /-- and it counts the minimal shell. -/
+  kissing_eq : kissing = Nat.card {x : Fin dim → ℤ // Matrix.toBilin' gram x x = minimum}
+  /-- The stored automorphism group order, `|O(L)|` of 2C, at the level of Gram
+  matrices. -/
+  autOrder : ℕ
+  /-- and it counts the integral congruences of `G` with itself. -/
+  autOrder_eq :
+    autOrder = Nat.card {P : Matrix (Fin dim) (Fin dim) ℤ // P.transpose * gram * P = gram}
+  /-- The stored theta coefficients, `r_L(k) = #S_k(L)` of 2B, which are the coefficients
+  of `Θ_L` in 8B. -/
+  theta : ℕ → ℕ
+  /-- and each one counts its shell. -/
+  theta_eq :
+    ∀ k : ℕ, theta k = Nat.card {x : Fin dim → ℤ // Matrix.toBilin' gram x x = (k : ℤ)}
+  /-- The stored genus representatives. -/
+  reps : List (Matrix (Fin dim) (Fin dim) ℤ)
+  /-- Each one is the Gram matrix of a positive definite lattice. -/
+  reps_posDef : ∀ H ∈ reps, H.IsSymm ∧ (Matrix.toQuadraticForm' H).PosDef
+  /-- Each one lies in `gen L`, by 3F: congruent to `G` over every `ℤ_p`. -/
+  reps_mem_genus : ∀ H ∈ reps, ∀ (p : ℕ) [Fact p.Prime], GramIsometricAt p gram H
+  /-- They are pairwise non-isometric, which is a decidable check for positive definite
+  lattices by 2G. -/
+  reps_pairwise : reps.Pairwise fun H H' => ¬ GramIsometric H H'
+  /-- They are complete: every positive definite lattice in the genus is isometric to a
+  listed one. This is the field a mass certificate from 7H discharges. -/
+  reps_complete : ∀ H : Matrix (Fin dim) (Fin dim) ℤ, H.IsSymm →
+    (Matrix.toQuadraticForm' H).PosDef →
+    (∀ (p : ℕ) [Fact p.Prime], GramIsometricAt p gram H) → ∃ H' ∈ reps, GramIsometric H' H
+  /-- The label component `class_number`, the invariant of 4A, finite by 2G. -/
+  classNumber : ℕ
+  /-- and it is the length of the list. -/
+  classNumber_eq : classNumber = reps.length
+
+/-- **Layer 9A, what the certificate buys.** Completeness and pairwise non-isometry say
+together that the stored list is a set of representatives on the nose: every positive
+definite lattice in the genus is isometric to exactly one entry. This is the statement the
+`class_number` column asserts, and it is why the two fields have to be separate. -/
+example (c : StoredGenusCertificate) (H : Matrix (Fin c.dim) (Fin c.dim) ℤ)
+    (hs : H.IsSymm) (hp : (Matrix.toQuadraticForm' H).PosDef)
+    (hgen : ∀ (p : ℕ) [Fact p.Prime], GramIsometricAt p c.gram H) :
+    ∃! H' : Matrix (Fin c.dim) (Fin c.dim) ℤ, H' ∈ c.reps ∧ GramIsometric H' H :=
+  sorry
+
+end Layer9
 
 end TauCetiRoadmap.IntegralLattices

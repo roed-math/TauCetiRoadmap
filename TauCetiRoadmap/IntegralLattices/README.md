@@ -280,7 +280,8 @@ both roadmaps use, marked with an asterisk, and the supplier owns the final choi
 | 4C | Orthogonal and Spin Groups | Layer 1 | `spinorNorm_reflection` | value of `spinorNorm` on `⟨reflection Q hv, reflection_mem Q hv⟩` |
 | 4C | Orthogonal and Spin Groups | Layer 2 | local point groups | `orthogonalGroup (Q.baseChange ℚ_[p])` with its topology |
 | 4B, 7B | Orthogonal and Spin Groups | Layer 3 | `orthogonalFiniteAdelicPoints`\* | restricted product of the local point groups relative to a compact open family |
-| 4D, 4F | Orthogonal and Spin Groups | 2C, 4E | `spin_strongApproximation`\*, `eichlerTransvection`\* | `Spin(V)(𝔸^S) = Spin(V)(ℚ)·U` of its 4E, and the Eichler transvections of its 2C |
+| 4D | Orthogonal and Spin Groups | 4E | `spin_strongApproximation`\* | `Spin(V)(𝔸^S) = Spin(V)(ℚ)·U` |
+| 4F | Orthogonal and Spin Groups | 2C | `eichlerTransvection`\* | `E_{u,w}(x) = x + B(x,u)w − B(x,w)u − Q(w)B(x,u)u`, additive in `w ∈ u^⊥/Ku` |
 | 7B, 7F, B7 | Orthogonal and Spin Groups | 5G, 5I | `specialOrthogonal_tamagawaVolume`\* | `vol(SO(V)(ℚ) \ SO(V)(𝔸)) = 2` of its 5I, with the compact-open volume comparison of its 5G |
 | 6C, 6G | Root Systems | Layer 5 | the ADE classification and `Nat.card P.weylGroup` | a root system of rank 8 with the `E₈` Cartan matrix is of type `E₈` |
 | 8D | L-functions | Layer 2 | `ZLattice.dual`\* | `AnalyticLattice n → AnalyticLattice n` |
@@ -577,9 +578,11 @@ rational equivalence together with the integral local data gives membership in o
 
 Rank 2 is the exception in four places: 2C and 4F for automorphism groups, 4E for class
 numbers, and 7G for the mass. Its theory is the arithmetic of quadratic orders, and it is
-not the theory the other ranks use. This layer builds it, and it needs Layers 0 and 1 only.
-Mathlib has `Zsqrtd` and Pell's equation, and it has no theory of non-maximal quadratic
-orders or of binary form classes, so B1 to B5 are built here.
+not the theory the other ranks use. This layer builds it, and its inputs are Layers 0 to 3
+only; in particular B8 proves the rank-2 passage from the proper mass to the full mass
+here, rather than waiting for 7A. Mathlib has `Zsqrtd` and Pell's equation, and it has no
+theory of non-maximal quadratic orders or of binary form classes, so B1 to B5 are built
+here.
 
 **B1. The order of a binary lattice.** Let `L` be nondegenerate of rank 2, with Gram matrix
 `!![A, B; B, C]` in a basis. Its norm form is `N_L(x, y) = A x² + 2B x y + C y²`, an integral
@@ -603,16 +606,44 @@ classes, the opposite form to the inverse class, and the principal form to the t
 class. It carries the genus of `L`, in the sense of 3F, to a coset of the subgroup of
 squares. Discriminants agree on both sides.
 
-**B4. Automorphisms and the Pell criterion.** For nondegenerate binary `L`,
-`SO(L) ≅ {u ∈ 𝒪(L)ˣ : N(u) = 1}` and `[O(L) : SO(L)] = 2`, so `|O(L)| = 2·#{u : N u = 1}`.
+**B4. Automorphisms, ambiguous classes, and the Pell criterion.** For nondegenerate binary
+`L`,
+
+    SO(L) ≅ {u ∈ 𝒪(L)ˣ : N(u) = 1}.
+
+The index `[O(L) : SO(L)]` is 1 or 2, and it is **not** always 2, so `|O(L)| = 2·#𝒪(L)ˣ` is
+not a general formula. Which of the two values it takes is decided by an involution.
+Conjugation `x + y√Δ ↦ x − y√Δ` of `K_Δ` carries an invertible `𝒪_Δ`-ideal `𝔞` to `𝔞̄`, with
+`𝔞𝔞̄ = N(𝔞)·𝒪_Δ`; since `N(𝔞)` is a positive integer, it induces inversion on the proper
+class group of B2, and under B2 it corresponds to `f = (a, b, c) ↦ f⁻ = (a, −b, c)`. The
+milestone proves
+
+    [O(L) : SO(L)] = 2  ⟺  f and f⁻ are properly equivalent  ⟺  [𝔞_f]² = 1,
+
+the class being taken in `Pic(𝒪_Δ)` for `Δ < 0` and in the narrow class group for `Δ > 0`.
+A class satisfying this is called ambiguous, and an improper automorphism is then obtained
+by composing the reflection `σ(x, y) = (x, −y)`, which carries `f` to `f⁻`, with any proper
+equivalence from `f⁻` back to `f`.
+
+The witness for the other case is `!![4, 1; 1, 6]`, of determinant 23, whose norm form is
+`4x² + 2xy + 6y² = 2·(2x² + xy + 3y²)`, so `Δ = −23`. Its minimum is 4 and the only vectors
+of that norm are `±e₁`, so an isometry sends `e₁` to `±e₁`, and preserving `β e₁ e₂` and
+the norm of `e₂` then forces `±I`, the integrality of the remaining coefficient being what
+rules out the other solution. Hence `O(L) = SO(L) = {±I}` has order 2, while `#𝒪ˣ = 2` and
+`2·#𝒪ˣ = 4`. The class of `(2, 1, 3)` has order 3 in `Pic(𝒪_{−23}) ≅ ℤ/3`, so it is not
+ambiguous, which is the same statement on the ideal side.
+
 Three cases follow:
 
-- `Δ < 0`: the unit group is finite, `#𝒪(L)ˣ = 6` for `Δ = −3`, `4` for `Δ = −4`, and `2`
-  otherwise, so `|O(L)| = 2·#𝒪(L)ˣ`;
+- `Δ < 0`: the norm is positive definite, so every unit has norm 1 and
+  `SO(L) ≅ 𝒪(L)ˣ`. The unit group is finite, with `#𝒪(L)ˣ = 6` for `Δ = −3`, `4` for
+  `Δ = −4`, and `2` otherwise. So `|SO(L)| = #𝒪(L)ˣ`, and `|O(L)|` is `#𝒪(L)ˣ` or
+  `2·#𝒪(L)ˣ` according to whether the class is ambiguous;
 - `Δ > 0` and `Δ` is not a square: the norm-one units are infinite, by Pell's equation, so
-  `O(L)` is infinite;
+  `O(L)` is infinite. This is the branch that 4F consumes;
 - `Δ > 0` and `Δ` is a square: `N_L` is isotropic over `ℚ`, the norm-one units are `{±1}`,
-  and `O(L)` is finite. The hyperbolic plane `U` has `Δ = 4` and `|O(U)| = 4`.
+  and `O(L)` is finite. The hyperbolic plane `U` has content 2, primitive part `xy`, so
+  `Δ = 1` and `𝒪 = ℤ × ℤ`; its class is ambiguous and `|O(U)| = 4 = 2·|SO(U)|`.
 
 **B5. Finiteness of the class group.** `Pic(𝒪_Δ)` and its narrow analogue are finite. The
 route is reduction of binary forms: for `Δ < 0` the reduced forms satisfy `|b| ≤ a ≤ c`, and
@@ -631,24 +662,43 @@ the finite covolume of the diagonal `T_L(ℚ)`. The normalization is compared wi
 sibling roadmap uses for `SO`, so that 7G and 7H speak of one measure.
 
 **B8. The mass of a positive definite binary genus.** Let `L` be positive definite of rank 2
-with order `𝒪 = 𝒪(L)`, so `Δ < 0`. Every class `M` in `gen L` has the same order
-`|O(M)| = 2·#𝒪ˣ`, by B4, and `gen L` has `h(gen L)` classes, which is finite by B5. Hence
+with order `𝒪 = 𝒪(L)`, so `Δ < 0`, and write `w = #𝒪ˣ`. The content and the determinant are
+genus invariants, so `Δ` and `w` are constant on `gen L`, and B4 gives `|SO(M)| = w` for
+every `M` in `gen L`. The proper classes in the genus are finite in number by B5 and form a
+coset of the squares by B3. Writing `h⁺(gen L)` for their number, the **proper** mass is
 
-    m(gen L) = h(gen L) / (2·#𝒪ˣ),    m⁺(gen L) = h⁺(gen L) / #𝒪ˣ.
+    m⁺(gen L) = h⁺(gen L) / w.
 
-For `A₂` this gives `Δ = −3`, `#𝒪ˣ = 6`, `h = 1` and `m = 1/12 = 1/|O(A₂)|`. The milestone
-also proves that this value agrees with the Conway–Sloane normalization of 7H in rank 2.
+The full mass is obtained from that by a splitting, and not by putting the full class number
+in place of `h⁺`. Two forms are improperly equivalent exactly when one is properly
+equivalent to the opposite of the other, so by B2 and B3 the full classes in the genus are
+the orbits of inversion on the proper classes; this is the rank-2 case of 7A, proved here
+from Layer B so that this layer does not wait for Layer 7. By B4 an ambiguous proper class
+is one full class with `|O(M)| = 2w`, and a pair of distinct inverse proper classes is one
+full class with `|O(M)| = w`. With `a` ambiguous classes and `(h⁺ − a)/2` pairs,
+
+    m(gen L) = a·(2w)⁻¹ + ((h⁺(gen L) − a)/2)·w⁻¹ = h⁺(gen L) / (2w),
+
+for every value of `a`, so `m⁺ = 2m` as 7A states in general. The full class number is
+`h(gen L) = (h⁺(gen L) + a)/2`, and it is `h⁺`, not `h`, that appears in the mass.
+
+For `A₂` this gives `Δ = −3`, `w = 6`, `h⁺ = 1` with the principal class ambiguous, so
+`h = 1`, `|O(A₂)| = 12` and `m = 1/12`. The genus of `!![4, 1; 1, 6]` separates the two
+class numbers and is a required check: `Δ = −23`, `w = 2`, `h⁺ = 3` and `a = 1`, so `h = 2`,
+the two classes are `!![2, 1; 1, 12]` with `|O| = 4` and `!![4, 1; 1, 6]` with `|O| = 2`,
+and `m = 1/4 + 1/2 = 3/4 = h⁺/(2w)`, whereas `h/(2w)` would give `1/2`. The milestone also
+proves that these values agree with the Conway–Sloane normalization of 7H in rank 2.
 
 | Milestone | Direct prerequisites |
 | --- | --- |
 | B1 | M `Matrix.det`, `Zsqrtd`; L 0A, 0C |
 | B2 | M `Ideal`, `Submodule`; L B1 |
 | B3 | L 3F, B2 |
-| B4 | M `Pell.Solution₁`, `Pell.exists_of_not_isSquare`; L 2C, B1, B2 |
+| B4 | M `Pell.Solution₁`, `Pell.exists_of_not_isSquare`; L 2C, B1, B2, B3 |
 | B5 | L B2 |
 | B6 | M `ℤ_[p]`, `ℚ_[p]`, `LinearMap.BilinForm.baseChange`; L 3A, B4 |
 | B7 | M `MeasureTheory.Measure.haar`; L B6; R Orthogonal and Spin Groups Layer 5 |
-| B8 | L 2C, 3F, B4, B5 |
+| B8 | L 2C, 3F, B2, B3, B4, B5 |
 
 ### Layer 4: classes, spinor genera, Eichler's theorem, and neighbors
 
@@ -717,10 +767,40 @@ isotropic vector, because an indefinite rational space need not have one: the fo
 `x² + y² − 3z²` is indefinite over `ℝ` and anisotropic over `ℚ`, since a primitive integral
 solution of `x² + y² = 3z²` forces `3 ∣ x` and `3 ∣ y`.
 
-- **Isotropic case.** Choose an isotropic `u ∈ L` and vectors `w ∈ L` with `β u w = 0`. The
-  Eichler transvections `E_{u,w}` of Orthogonal and Spin Groups Layer 4 preserve `L`, and
-  `w ↦ E_{u,w}` is injective on a subgroup of finite index in `u^⊥ ∩ L`, which is infinite
-  because the rank is at least 3. So `O(L)` is infinite.
+- **Isotropic case.** Choose a primitive isotropic `u ∈ L`, which exists because an
+  isotropic rational vector can be scaled to a primitive lattice vector. For `w ∈ u^⊥ ∩ L`
+  the Eichler transvection of Orthogonal and Spin Groups 2C is
+
+      E_{u,w}(x) = x + β(x, u)·w − β(x, w)·u − ½N_L(w)·β(x, u)·u,
+
+  the supplier's `Q(w)` being `½N_L(w)` in this roadmap's bilinear-first notation. The
+  supplier already states `w ↦ E_{u,w}` as a homomorphism on `u^⊥/ℚu`, and the integral
+  statement below is the specialization of that, not a strengthening of it: the parameter
+  is **not** `w` itself. Since `N_L(u) = 0` and `β(u, w) = 0`, the substitution
+  `w ↦ w + a·u` leaves every term unchanged, so `E_{u,w+au} = E_{u,w}` for every `a ∈ ℤ`,
+  and every nonzero multiple of `u` lies in the kernel; no finite-index subgroup of
+  `u^⊥ ∩ L` avoids those, so `w ↦ E_{u,w}` is injective on none of them. The parameter is
+  the class of `w` in
+
+      Λ_u = (u^⊥ ∩ L) / ℤu,
+
+  which is free of rank `rank L − 2`, because `u` is primitive in `L` and therefore
+  primitive in `u^⊥ ∩ L`. The milestone proves four statements:
+
+  - `E_{u,w}` depends only on the class of `w` in `Λ_u`, and the induced map
+    `Λ_u → O(V)` is a group homomorphism;
+  - it is injective: if `E_{u,w} = E_{u,w'}`, evaluate at an `x` with `β(x, u) ≠ 0`, which
+    exists because `β` is nondegenerate, to get `β(x, u)·(w − w') ∈ ℚu`; primitivity of `u`
+    gives `ℚu ∩ L = ℤu`, and dividing by the nonzero integer `β(x, u)` inside `ℚu` puts
+    `w − w'` in `ℤu`;
+  - the integrality condition is on `N_L(w)`, not on `w`: for `w` in the sublattice
+    `M_u = {w ∈ u^⊥ ∩ L : N_L(w) ∈ 2ℤ}`, which has index 1 or 2 because `N_L mod 2` is
+    additive, every coefficient above is an integer, so `E_{u,w}` and its inverse
+    `E_{u,−w}` preserve `L` and `E_{u,w} ∈ O(L)`;
+  - the image of `M_u` in `Λ_u` has rank `rank L − 2 ≥ 1`, so it is infinite.
+
+  Hence `O(L)` is infinite. In rank 2 the quotient `Λ_u` is trivial, which is the correct
+  reason this argument stops there and B4 takes over.
 - **Anisotropic case.** Choose a rational nondegenerate indefinite plane `W ⊆ V`, which
   exists because `t₊ > 0` and `t₋ > 0`. Put `M = L ∩ W` and `N = L ∩ W^⊥`. Then `M ⊕ N` has
   finite index in `L`, and `M` is an indefinite binary lattice whose norm form is
@@ -750,7 +830,7 @@ claimed, and no consumer may infer a complete list of classes from neighbor step
 | 4C | T `squareClass`; L 3C, 3D, 4B; R Orthogonal and Spin Groups Layers 1 and 2 |
 | 4D | L 4B, 4C; R Orthogonal and Spin Groups Layer 4 |
 | 4E | L 4C, 4D, B2, B5 |
-| 4F | L 2C, B4; R Orthogonal and Spin Groups Layer 4 |
+| 4F | L 0E, 2C, B4; R Orthogonal and Spin Groups Layer 2 |
 | 4G | M `Submodule.basisOfPid`; L 0C, 3F |
 
 ### Layer 5: discriminant forms and Nikulin's theory
@@ -852,13 +932,22 @@ embeddings of `S` into even lattices with invariants `(m₊, m₋, q)` correspon
   `δ = (q_S ⊕ (−q))|Γ_γ^⊥ / Γ_γ` and `Γ_γ ⊆ A_S ⊕ A_q` is the graph of `γ`;
 - an isometry `γ_K` from `q_K` to `−δ`.
 
-Two tuples `(H_S, H_q, γ; K, γ_K)` and
-`(H'_S, H'_q, γ'; K', γ'_K)` give isomorphic primitive embeddings exactly when `H_S = H'_S`
-and there are `ξ ∈ O(q)` and an isometry `ψ : K ≅ K'` with `γ' = ξ ∘ γ` and
-`ξ̄ ∘ γ_K = γ'_{K'} ∘ ψ̄`. Here `ξ̄ : δ ≅ δ'` is the isometry of the quotient forms induced
-by `ξ`, and `ψ̄ : q_K ≅ q_{K'}` is the isometry of discriminant forms induced by `ψ`, through
-the functoriality of 1D. The same tuples give isomorphic primitive sublattices under the
-weaker condition that `H_S` and `H'_S` are conjugate by an automorphism of `S`.
+Two tuples `(H_S, H_q, γ; K, γ_K)` and `(H'_S, H'_q, γ'; K', γ'_K)` give isomorphic
+primitive embeddings exactly when `H_S = H'_S` and there are `ξ ∈ O(q)` and an isometry
+`ψ : K ≅ K'` such that
+
+1. `ξ(H_q) = H'_q`, so that `ξ` restricts to an isometry `ξ|_{H_q} : q|H_q ≅ q|H'_q`;
+2. `γ' = ξ|_{H_q} ∘ γ`, an equation of isometries `q_S|H_S ≅ q|H'_q`, which is typed
+   because `H'_S = H_S` makes the two sides share a source;
+3. `ξ̄ ∘ γ_K = γ'_K ∘ ψ̄`, an equation of isometries `q_K ≅ −δ'`.
+
+The two induced maps in the third equation are named, and neither is assumed. Condition 1
+makes `id_{A_S} ⊕ ξ` an isometry of `q_S ⊕ (−q)` that carries the graph `Γ_γ` onto
+`Γ_{γ'}`, hence `Γ_γ^⊥` onto `Γ_{γ'}^⊥`, hence induces the isometry `ξ̄ : δ ≅ δ'` of the
+quotient forms, which is also an isometry `−δ ≅ −δ'`; and `ψ̄ : q_K ≅ q_{K'}` is the
+isometry of discriminant forms induced by `ψ` through the functoriality of 1D. The same
+tuples give isomorphic primitive sublattices under the weaker condition that `H_S` and
+`H'_S` are conjugate by an automorphism of `S`.
 The lattice `K` is the orthogonal complement of `S`. Corollary 1.15.2 states the genus-level
 version.
 
@@ -996,8 +1085,20 @@ This milestone asks for:
       α_p(L) = 2 ∏_{i=1}^{m} (1 − p^{−2i})                      if n = 2m + 1,
       α_p(L) = 2 (1 − ε p^{−m}) ∏_{i=1}^{m−1} (1 − p^{−2i})     if n = 2m,
 
-  where `ε = +1` when the determinant of `L_p` is a square and `ε = −1` otherwise, which is
-  the sign in the genus symbol of 3G;
+  where `ε = ±1` is the **type** of the reduction of `L_p`, which is the split/nonsplit
+  invariant of the orthogonal group and not the square class of the determinant. It is
+  fixed by the signed determinant:
+
+      ε = ((−1)^m · det L_p | p),
+
+  the Legendre symbol. The value comes from `α_p(L) = #O(L_p ⊗ 𝔽_p)/p^{n(n−1)/2}` together
+  with `#O^ε_{2m}(𝔽_p) = 2 p^{m(m−1)}(p^m − ε)∏_{i=1}^{m−1}(p^{2i} − 1)`, and `O^ε_{2m}` is
+  split exactly when `(−1)^m det` is a square. The genus symbol of 3G records the Legendre
+  symbol of the determinant itself, in the Conway–Sloane convention, so the translation
+  between the two carries the factor `(−1 | p)^m` and the milestone states it that way;
+- the mandatory test that separates the two conventions: the hyperbolic plane over `p = 3`
+  has `m = 1` and `det = −1`, a nonsquare mod 3, yet it is split, `#O_2^+(𝔽_3) = 4`, and
+  `α_3 = 4/3 = 2(1 − 3^{−1})`. Reading `ε` off the raw determinant would give `8/3`;
 - the reduction of `∏_p α_p(L)⁻¹` to a product of the standard Euler factors of those two
   displays, times the finitely many corrections at `p ∣ 2 det L`, and the convergence of
   that product;
@@ -1006,40 +1107,55 @@ This milestone asks for:
 
 The values at odd `p` are computed from the Jordan decomposition of 3C.
 
-- the normalized congruence counts mod `p^r`;
-- existence and stabilization of the limit;
-- invariance under a change of basis;
-- dependence only on the local isometry class;
-- the identification with the Haar volume of `K_p⁺(L)`;
-- the standard factor for `p ∤ 2 det L`;
-- the reduction of the product to Euler factors and finitely many corrections;
-- convergence of the product.
-
-The formula is proved from the Jordan decomposition of 3C.
-
 **7D. The local density at 2.** At `p = 2` the naive count does not stabilize, and the
-density is read off a smooth model. Cho's theorem is consumed in this form. Let `L` be a
-nondegenerate quadratic `ℤ_2`-lattice of rank `n`. Then there is a smooth affine group
-scheme `𝒢_L` over `ℤ_2`, of relative dimension `n(n−1)/2`, whose generic fiber is the
-orthogonal group of `L ⊗ ℚ_2` and whose `ℤ_2`-points are `O(L)`, and
+density is read off a smooth model. The theorem consumed is Cho, Theorem 5.2, and it is
+stated in the generality he proves and in his normalization, because the exponent below is
+generally nonzero and dropping it changes the answer by a power of 2.
 
-    α_2(L) = 2^{−n(n−1)/2} · #𝒢_L(𝔽_2).
+Let `R` be an unramified finite extension of `ℤ_2`, with fraction field `F` and residue
+field `κ` of cardinality `f`; Cho calls this ring `A`, which is the Gram matrix in 7C. Let
+`(L, q)` be a quadratic `R`-lattice of rank `n` with `⟨x, y⟩ = ½(q(x+y) − q(x) − q(y))`
+integral and `V = L ⊗_R F` nondegenerate; in this roadmap's vocabulary `⟨·,·⟩` is `β` and
+`q` is the norm form `N_L`, since `⟨x, x⟩ = q(x)`. Fix a Jordan splitting `L = ⊕_i L_i` as
+in 3B, where `L_i = 2^i M_i` is the `2^i`-modular constituent, of rank `n_i`. Following
+Cho, `L_i` is of **type I** when its norm ideal is all of `R` and of **type II** otherwise,
+which is the odd/even distinction of the 2-adic symbol in 3E; and `L_i` is **bound** when
+`L_{i−1}` or `L_{i+1}` is of type I, and **free** when neither is. Put
+
+    N_M = ∑_{L_i type I} (2n_i − 1) + ∑_{i<j} (j − i)·n_i·n_j + 2b,
+    N_Q = ∑_{L_i type I} 2n_i + ∑_{i<j} j·n_i·n_j + ∑_i d_i + b + c,
+    N   = N_Q − N_M = t + ∑_{i<j} i·n_i·n_j + ∑_i d_i − b + c,
+
+where `d_i = i·n_i(n_i + 1)/2`, `t` is the number of constituents of type I, `b` is the
+number of pairs of adjacent constituents `L_i`, `L_{i+1}` both of type I, which is
+Conway–Sloane's `n(I, I)`, and `c` is the sum of the dimensions of the nonempty
+constituents of type II, which is their `n(II)`. Let `𝒢_L` be the smooth affine group scheme
+over `R` with generic fiber `O(V, q)` and `𝒢_L(R) = O(L)`, let `𝒢̃_L` be its special fiber
+and `U_L` the unipotent radical of `𝒢̃_L`. Then Cho's local density of `(L, q)`, which he
+writes `β_L` and which is not the bilinear form `β` of Layer 0, is
+
+    β_L = [O(V, q) : SO(V, q)]⁻¹ · f^N · f^{−dim O(V,q)} · #𝒢̃_L(κ),      dim O(V,q) = n(n−1)/2,
+
+and `#𝒢̃_L(κ) = #U_L(κ)·#(𝒢̃_L/U_L)(κ)` with `#U_L(κ) = f^{dim U_L}`, the reductive quotient
+`𝒢̃_L/U_L` being `∏_i O(V̄_i, q̄_i)_red` times an elementary abelian 2-group whose rank is
+the `α + β` of Cho's Lemma 4.2, by his Theorem 4.12.
 
 This milestone asks for:
 
-- the construction of `𝒢_L` from the Jordan data of 3D, with the bound and free
-  constituents and the convention in rank 0;
-- the proof that `𝒢_L` is smooth;
-- the displayed formula;
+- the construction of `𝒢_L` from the Jordan data of 3D, with the type and bound/free
+  classification, and the convention in rank 0;
+- the proof that `𝒢_L` is smooth of relative dimension `n(n−1)/2`;
+- the exponents `N_M`, `N_Q` and `N`, and the displayed formula, over a general unramified
+  `R`, with `R = ℤ_2` and `f = 2` specialized only afterwards;
+- the factor `[O(V, q) : SO(V, q)]⁻¹`: the index is 2 for `n ≥ 1` in characteristic zero,
+  so the factor is `½`, and it is the reason `β_L` is a density for `SO` and not for `O`;
+- the comparison with the limit definition of 7C, which is where the roadmap's `α_2`
+  is fixed. The odd-prime case pins the expected constant: Gan–Yu give
+  `β_{L_p} = ½·p^{−n(n−1)/2}·#O(L_p ⊗ 𝔽_p)`, which is half the `α_p` of 7C, so the target
+  is `α_2(L) = 2·β_L = 2^{N − n(n−1)/2}·#𝒢̃_L(𝔽_2)`, and the milestone proves that equality
+  rather than assuming it;
 - the proof that the resulting factor is the Conway–Sloane dyadic factor, oddity and type
   included.
- The Conway–Sloane dyadic tables are data, and not a
-proof.
-
-- the theorem of Cho that is used, stated in full;
-- the smoothened model of the integral automorphism group that it needs;
-- the proof that Cho's normalization agrees with the Conway–Sloane factor;
-- bound and free constituents, and the convention in dimension 0.
 
 The Conway–Sloane dyadic tables are data, and not a proof.
 
@@ -1065,8 +1181,10 @@ the general derivation:
 - rank 0: `O(L) = SO(L) = 1` and the genus has one class, so `m⁺ = m = 1`;
 - rank 1: the genus of `⟨a⟩` with `a > 0` has one class, with `O(L) = {±1}` and `SO(L) = 1`,
   so `m = 1/2` and `m⁺ = 1`;
-- rank 2: B8 gives `m(gen L) = h(gen L)/(2·#𝒪(L)ˣ)` and `m⁺(gen L) = h⁺(gen L)/#𝒪(L)ˣ`,
-  through the norm-one torus of B6 and its measures in B7.
+- rank 2: B8 gives `m⁺(gen L) = h⁺(gen L)/#𝒪(L)ˣ` and `m(gen L) = h⁺(gen L)/(2·#𝒪(L)ˣ)`,
+  through the norm-one torus of B6 and its measures in B7. Both denominators count
+  **proper** classes; the full class number `h(gen L)` is not what divides here, because
+  `|O(M)|` is not constant on the genus.
 
 The derivation of 7B to 7F is stated for rank at least 3, and 7H packages all ranks with
 explicit branches.
@@ -1101,7 +1219,7 @@ equality `1/|O(E₈²)| + 1/|O(D₁₆⁺)| = m₁₆` and the finiteness of the
 | 7E | M `Real.Gamma`, sphere volumes; L 2D |
 | 7F | R Orthogonal and Spin Groups Layer 5 |
 | 7G | L 2C, 4A, 7A, B6, B7, B8 |
-| 7H | L 2C, 6C, 6G, 7B, 7C, 7D, 7E, 7F, 7G |
+| 7H | L 2C, 6C, 6D, 6G, 7B, 7C, 7D, 7E, 7F, 7G |
 | 7I | L 2G, 6D, 6G, 7H |
 
 ### Layer 8: theta series
@@ -1164,6 +1282,12 @@ representatives, and the numerical columns. The milestone defines one object,
 The last field is the completeness statement, and a mass certificate from 7H is one way to
 prove it for a given genus, not a prerequisite of the definition. The fifth label component
 has no mathematical content in this roadmap.
+
+`Suggested.lean` carries the structure, because every condition in it is expressible at the
+current Mathlib: isometry is integral congruence of Gram matrices, and genus membership is
+congruence over every `ℤ_p` together with positive definiteness on both sides, which is 3F
+written out. Nothing in the certificate waits for the genus symbols of 3E or the mass
+formula of Layer 7.
 
 | Milestone | Direct prerequisites |
 | --- | --- |
@@ -1273,17 +1397,20 @@ for the eight items listed. The layer that introduces the object owns them.
 
 - **Constructors.** From a binary Gram matrix through the primitive part of the norm form;
   from a discriminant `Δ ≡ 0` or `1 (mod 4)`.
-- **Examples.** `A₂` gives `Δ = −3` and `𝒪 = ℤ[ζ₃]`; `U` gives `Δ = 4` and the split
-  algebra; `⟨1,−2⟩` gives `Δ = 8` and `ℤ[√2]`.
+- **Examples.** `A₂` gives content 2, `Δ = −3` and `𝒪 = ℤ[ζ₃]`; `U` gives content 2,
+  `Δ = 1` and the split algebra `ℤ × ℤ`; `⟨1,−2⟩` gives content 1, `Δ = 8` and `ℤ[√2]`;
+  `!![4,1;1,6]` gives content 2 and `Δ = −23`.
 - **Morphisms.** Isometries of binary lattices induce isomorphisms of the associated
-  orders, and proper isometries act trivially on `Pic`.
+  orders, and proper isometries act trivially on `Pic`. An improper isometry acts by the
+  conjugation of B4, which is inversion on `Pic`.
 - **Functoriality.** Behavior under a twist `L(a)`, and under passage to a sublattice of
   finite index, which multiplies the content.
 - **Comparison lemmas.** `Δ(L) = disc f` with `disc N_L = −4 det L`; forms and proper ideal
   classes (B2); composition and multiplication (B3); `SO(L)` and the norm-one units (B4).
 - **Naturality.** The correspondence of B2 commutes with the maps induced by isometries.
 - **Edge cases.** Imprimitive norm forms, square discriminants where the algebra splits,
-  and the two orders with extra units, `Δ = −3` and `Δ = −4`.
+  the two orders with extra units, `Δ = −3` and `Δ = −4`, and non-ambiguous classes, where
+  `O(L) = SO(L)`.
 - **Downstream.** 2C, 4E, 4F, 7G.
 
 ### The mass (7A)
@@ -1294,8 +1421,8 @@ for the eight items listed. The layer that introduces the object owns them.
 - **Morphisms.** None: the mass is a rational number attached to a genus.
 - **Functoriality.** Behavior under a positive twist. There is no formula for a direct sum,
   and that non-statement is recorded.
-- **Comparison lemmas.** `m⁺ = 2m`; the local factors of 7C and 7D; the dictionary to
-  Siegel's `α_p` (7H).
+- **Comparison lemmas.** `m⁺ = 2m` for `rank L ≥ 1`, and `m⁺ = m = 1` in rank 0; the local
+  factors of 7C and 7D; the dictionary to Siegel's `α_p` (7H).
 - **Naturality.** The mass depends only on the genus.
 - **Edge cases.** Ranks 0, 1 and 2 (7G).
 - **Downstream.** 6D, 9A.
@@ -1333,7 +1460,12 @@ for the eight items listed. The layer that introduces the object owns them.
 | The local density at 2 (7D) | Cho, Compositio 151 (2015) | residue characteristic 2, with the smoothened model | "the Conway–Sloane dyadic table proves it". The table is stated there without proof. |
 | Classification in rank at most 9 (6C) | O'Meara 106:13 | rank at most 9, positive definite | "a positive definite unimodular lattice is determined by its rank and parity". Rank 16 has two even classes (6D). |
 | Automorphisms of an indefinite lattice (4F) | O'Meara §104; Cassels ch. 13 | rank at least 3, and a case split on isotropy over `ℚ` | "an indefinite rational space has an isotropic vector". `x² + y² − 3z²` is indefinite over `ℝ` and anisotropic over `ℚ`, so the transvection proof covers only one case. |
-| Automorphisms of a binary lattice (B4) | Pell's equation; Cassels ch. 13 | `Δ > 0` and `Δ` not a square | "an indefinite binary lattice has infinite `O(L)`". `U` has `Δ = 4`, a square, and `|O(U)| = 4`. |
+| Automorphisms of a binary lattice (B4) | Pell's equation; Cassels ch. 13 | `Δ > 0` and `Δ` not a square | "an indefinite binary lattice has infinite `O(L)`". `U` has `Δ = 1`, a square, and `|O(U)| = 4`. |
+| Improper binary automorphisms (B4) | Gauss; Cox §3 | the proper class of the primitive part is fixed by inversion | "`[O(L) : SO(L)] = 2` for every nondegenerate binary `L`". `!![4,1;1,6]` has `Δ = −23` and only `±e₁` of norm 4, so `O(L) = SO(L) = {±I}` has order 2, while `2·#𝒪ˣ = 4`. |
+| The rank-2 mass (B8) | Gauss; Conway–Sloane §2 | the count is of **proper** classes | "`m(gen L) = h(gen L)/(2·#𝒪ˣ)` with `h` the class number". The genus of `!![4,1;1,6]` has `h = 2`, `h⁺ = 3` and `w = 2`, and its mass is `1/4 + 1/2 = 3/4 = h⁺/(2w)`, not `1/2`. |
+| Eichler transvections (4F) | O'Meara §104; Cassels ch. 13 | `w` is taken modulo `ℤu`, and `N_L(w)` is even | "`w ↦ E_{u,w}` is injective on a finite-index subgroup of `u^⊥ ∩ L`". `E_{u,w+au} = E_{u,w}` for every `a`, and every finite-index subgroup contains a nonzero multiple of `u`. |
+| The odd local density type (7C) | Conway–Sloane §12; Gan–Yu Thm 7.3 | `ε` is the type of the reduction, `((−1)^m det | p)` | "`ε = +1` exactly when `det L_p` is a square". The hyperbolic plane over `p = 3` has `det = −1`, a nonsquare, and is split, with `α_3 = 4/3`. |
+| Cho's dyadic formula (7D) | Cho Thm 5.2 with Lemma 5.1 | the exponent `N = N_Q − N_M` and the index `[O : SO]` | "`α_2(L) = 2^{−n(n−1)/2}·#𝒢̃_L(𝔽_2)`". `N` is generally nonzero, and `β_L` carries `[O(V,q) : SO(V,q)]⁻¹`. |
 | Proper against full mass (7A) | Conway–Sloane §2 | `rank L ≥ 1` | "`m⁺ = 2m` always". In rank 0 both masses are 1, because `O(L) = SO(L) = 1`. |
 | Rank-16 completeness (7I) | Witt; Conway–Sloane §9 | the mass formula and both automorphism orders | "the two classes are known to exhaust the genus once they are constructed". 6D proves only that the two exist, lie in one genus, and differ. |
 | Theta convergence (8B) | Poisson summation; `ZLattice` summability | `L` is positive definite | "the theta series of a definite lattice converges". For a negative definite lattice the terms are unbounded. |
@@ -1349,8 +1481,13 @@ factor of 2, a wrong sign, or a vacuous definition.
 - `A₂`: even, `det = 3`, level 3, and `A_{A₂} ≅ ℤ/3` with `q = 2/3` in `ℚ/2ℤ`. Its 3-adic
   Jordan splitting has two rank-one constituents, of scales 1 and 3. Equality holds in
   Hermite's bound, and the class number is 1 (0G, 1D, 2E, 3B, 4A). Its order is `ℤ[ζ₃]`,
-  with `Δ = −3` and six units, so `|O(A₂)| = 12` and the mass of its genus is `1/12`
-  (B1, B4, B8).
+  with `Δ = −3` and six units, and its class is ambiguous, so `|SO(A₂)| = 6`,
+  `|O(A₂)| = 12` and the mass of its genus is `1/12` (B1, B4, B8).
+- `!![4,1;1,6]`: content 2, `Δ = −23`, and `O(L) = SO(L) = {±I}`, so it has no improper
+  automorphism. Its genus has three proper classes and two classes, `!![2,1;1,12]` with
+  `|O| = 4` and `!![4,1;1,6]` with `|O| = 2`, and mass `3/4`. The lattice `!![3,1;1,4]`, of
+  determinant 11 and `Δ = −44`, is the same phenomenon at the smallest determinant
+  (B4, B8).
 - The family `Aₙ`: `det(Aₙ) = n+1` and `A_{Aₙ} ≅ ℤ/(n+1)` (0G, 1C).
 - `E₈`: even, unimodular, positive definite, `min = 2`, 240 minimal vectors, signature
   `(8,0)`, `sign q_{E₈} = 0`, unique in rank 8, `|O(E₈)| = 696729600`, and mass
@@ -1401,7 +1538,14 @@ route uses no milestone of Layers 2, 4, 6, 7 or 8.
   - section 12 for the dictionary to Siegel's densities.
 - S. Cho, *Group schemes and local densities of quadratic lattices in residue characteristic
   2*, Compositio Math. 151 (2015) 793–827. The proof of the dyadic local density formula
-  used in 7D.
+  used in 7D: Definition 2.1 for the parity types; section 2.3 for bound and free
+  constituents; Theorem 4.12 with Remark 4.13 for the maximal reductive quotient of the
+  special fiber; Lemma 5.1 for `N_M` and `N_Q`; Theorem 5.2 for the density; Remark 5.3 for
+  the count `#𝒢̃_L(κ)` through the unipotent radical.
+- W. T. Gan, J.-K. Yu, *Group schemes and local densities*, Duke Math. J. 105 (2000)
+  497–524. The smooth-model formulation of the local density that Cho extends to `p = 2`;
+  its Theorem 7.3 is the odd-residue-characteristic value used in 7D to pin the constant
+  between Cho's normalization and the limit definition of 7C.
 - D. Allcock, I. Gal, A. Mark, *The Conway–Sloane calculus for 2-adic lattices*,
   arXiv:1511.04614. The proof of the symbol calculus and the corrected canonical form, used
   in 3E.
