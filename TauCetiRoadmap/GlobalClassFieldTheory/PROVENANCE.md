@@ -66,11 +66,15 @@ states the local input as an interface that this repository owns.
 - **Local Fields.** Checked 2026-08-07: head `a45463504ba5`. Plans nonarchimedean local reciprocity,
   local conductors, local Herbrand
   quotients and local Hilbert symbols. If it merges, its Layer 7 is the natural source for the
-  instance I.4, and the replacement is mechanical.
+  instance I.4. No definitional comparison of the two local packages has been made, so
+  adopting it is a checked rewrite of I.4, not a deletion.
 - **Number Field Arithmetic.** Checked 2026-08-07: head `9b63e874e391`. Plans the decomposition,
   inertia and Frobenius API, and the ideal-theoretic Artin map `artinHomAway S hur` on the same
-  `(FractionalIdeal (𝓞 K)⁰ K)ˣ` carrier as I.2, with the same signature. If it merges, delete I.2
-  and consume that declaration.
+  `(FractionalIdeal (𝓞 K)⁰ K)ˣ` carrier as I.2. Compared at that head: the carrier and the
+  unramifiedness hypothesis agree, and the abelian hypothesis is packaged differently. That
+  declaration takes `[IsGalois K L]` with a commutativity argument where I.2 takes
+  `[IsAbelianGalois K L]`, and the universe binders differ. If it merges, replace I.2 through
+  that short transport; deletion alone does not typecheck.
 - **Profinite Cohomology.** Checked 2026-08-07: head `ac180b5a3ab3`. Plans continuous cohomology of
   `G_K` with colimits over finite
   quotients. Milestone 11.2 states the small part of that theory which Layer 11 uses.

@@ -130,9 +130,11 @@ expressible in `TauCeti/`, state its milestones in `Suggested.lean` (with `sorry
   has `t = 2` but class number `1`), and the `t − 1` count needs the narrow class group
   and the narrow genus field (unramified at finite places only). Mathlib has neither;
   the narrow class group is defined in
-  [GlobalClassFieldTheory Layer 1](../GlobalClassFieldTheory/README.md), whose interface
-  milestone freezes the `Cl⁺ ↠ Cl` spelling this layer consumes as the prerequisite for
-  the real case.
+  [GlobalClassFieldTheory Layer 1](../GlobalClassFieldTheory/README.md), as
+  `RayClassGroup (narrowModulus K)` with the surjection
+  `RayClassGroup (narrowModulus K) →* ClassGroup (𝓞 K)`. That interface milestone freezes
+  the `Cl⁺ ↠ Cl` spelling this layer consumes as the prerequisite for the real case, and
+  the genus field this layer supplies to it is `K_gen`, per the contract table there.
 
 ### Scope exclusions and future directions
 
