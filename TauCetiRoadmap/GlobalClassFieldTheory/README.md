@@ -275,8 +275,8 @@ this repository, and it makes every later layer independent of any external deve
 
 Items 1 to 7 are used by Layer 6. Item 8 is used by Layer 7 and Layer 9. Item 9 is used by Layer 5.
 Items 10 and 11 are used by Layer 11.
-*Prerequisites:* M `Mathlib/RingTheory/Frobenius.lean`, M
-`Mathlib/RepresentationTheory/Homological/GroupCohomology/`.
+*Prerequisites:* M `Mathlib/RingTheory/Frobenius.lean`,
+M `Mathlib/RepresentationTheory/Homological/GroupCohomology/`.
 
 **I.2. The ideal-theoretic Artin map.** Let `L/K` be finite abelian. Let `S` be a finite set of
 primes of `𝓞 K` that contains every prime ramified in `L`. Define `artinHom S : J^S →* (L ≃ₐ[K] L)`
@@ -335,8 +335,8 @@ trivial modulus `((1), ∅)`, and the modulus with all real places that Layer 1 
 class group. Real places are the reason the formalism exists. A design in which `𝔪∞ = ∅` is the easy
 case produces the wide class group everywhere. Give the two components equal weight in the API, and
 test with `𝔪∞ ≠ ∅` from the first lemma.
-*Prerequisites:* M `Ideal`, M `InfinitePlace.IsReal`, M `UniqueFactorizationMonoid.factorization`, M
-`Associates.count`.
+*Prerequisites:* M `Ideal`, M `InfinitePlace.IsReal`, M `UniqueFactorizationMonoid.factorization`,
+M `Associates.count`.
 **Basic API.**
 - *Constructors:* from an ideal and a `Finset`; from an exponent function of finite support.
 - *Examples:* `((1), ∅)`; `((1), all real places)`; `((n), ∞)` over `ℚ`.
@@ -365,8 +365,8 @@ congruence-and-sign form. The archimedean case is Mathlib's
 element that meets the congruence conditions and is integral at every other place. The obstruction
 is the class group. Ask for that only in the `S`-idele form of Layer 5.
 *Source.* Artin–Whaples, as in Janusz IV, Theorem 1.1, p. 137, and Cassels–Fröhlich Ch. II §6.
-*Prerequisites:* M `InfinitePlace.denseRange_algebraMap_pi`, M `HeightOneSpectrum.valuation`, M
-`IsDedekindDomain.quotientEquivPiFactors`.
+*Prerequisites:* M `InfinitePlace.denseRange_algebraMap_pi`, M `HeightOneSpectrum.valuation`,
+M `IsDedekindDomain.quotientEquivPiFactors`.
 
 **0.3. Sign maps.** Define the total sign homomorphism `Kˣ →* Π_{w real} {±1}`. Its target is a
 group of order two at each place, so use `ℤˣ` or `Multiplicative (ZMod 2)`. Fix that choice once in
@@ -432,8 +432,8 @@ chinese remainder theorem and approximation in the Dedekind domain. Do not use g
 Mathlib has only `ClassGroup.mk0_surjective`, so this is a genuine target. Prove it at Dedekind
 generality, because both the surjectivity of `Cl_𝔫 ↠ Cl_𝔪` and the ideal-to-idele dictionary use it.
 *Source.* Janusz IV, Proposition 1.5, p. 140, for the ray class form.
-*Prerequisites:* M `ClassGroup.mk0_surjective`, M `IsDedekindDomain.quotientEquivPiOfProdEq`, M
-`HeightOneSpectrum.valuation_exists_uniformizer`.
+*Prerequisites:* M `ClassGroup.mk0_surjective`, M `IsDedekindDomain.quotientEquivPiOfProdEq`,
+M `HeightOneSpectrum.valuation_exists_uniformizer`.
 
 **1.4. The transition maps.** For `𝔪 ∣ 𝔫`, construct `Cl_𝔫 ↠ Cl_𝔪`. Prove surjectivity from 1.3.
 Prove that the maps compose in a tower `𝔪 ∣ 𝔫 ∣ 𝔩`.
@@ -500,15 +500,15 @@ the units topology, which comes from `x ↦ (x, x⁻¹)`, and handle the finite 
 `Topology/Algebra/RestrictedProduct/Units.lean`. Prove that `IdeleClassGroup (𝓞 K) K` is a locally
 compact Hausdorff group. **Common error.** The idele topology is not the subspace topology from
 `𝔸_K`. Mathlib's `Units` topology is already the correct one, so do not re-topologize.
-*Prerequisites:* L 2A.1, M `RestrictedProduct.instTopologicalSpaceUnits`, M
-`Mathlib/Topology/Algebra/IsOpenUnits.lean`, L 2A.3.
+*Prerequisites:* L 2A.1, M `RestrictedProduct.instTopologicalSpaceUnits`,
+M `Mathlib/Topology/Algebra/IsOpenUnits.lean`, L 2A.3.
 
 **2A.3. Discreteness and cocompactness.** Prove that `K` is discrete in `𝔸_K`, and that the quotient
 `𝔸_K/K` is compact. These are the additive local-global finiteness statements that the rest of the
 layer uses.
 *Source.* Cassels–Fröhlich Ch. II §§14–16; Weil, *Basic Number Theory*, Ch. IV.
-*Prerequisites:* M `NumberField.AdeleRing`, M `NumberField.canonicalEmbedding`, M
-`Mathlib/NumberTheory/NumberField/CanonicalEmbedding/`.
+*Prerequisites:* M `NumberField.AdeleRing`, M `NumberField.canonicalEmbedding`,
+M `Mathlib/NumberTheory/NumberField/CanonicalEmbedding/`.
 
 **2A.4. The idele norm and the norm-one subgroup.** Define `‖·‖ : IdeleGroup →* ℝ_{>0}` in the
 pinned normalization. Prove the product formula `‖x‖ = 1` for principal `x`, from `prod_abs_eq_one`.
@@ -522,14 +522,14 @@ Mathlib's independent proof. **Common error.** `C_K` itself is neither compact n
 is a choice-dependent splitting `C_K ≅ C_K^1 × ℝ_{>0}`, so `Nat.card` statements about `C_K` say
 nothing.
 *Source.* Cassels–Fröhlich Ch. II §16; Weil, *Basic Number Theory*, Ch. IV §4.
-*Prerequisites:* L 2A.3, L 2A.4, M `NumberField.classNumber`, M
-`NumberField.Units.DirichletTheorem`.
+*Prerequisites:* L 2A.3, L 2A.4, M `NumberField.classNumber`,
+M `NumberField.Units.DirichletTheorem`.
 
 **2A.6. The congruence subgroups.** Define `IdeleCongruenceSubgroup 𝔪`, written `U_𝔪`, with the
 carrier of the conventions table. Define `RaySubgroup 𝔪` as its image in `C_K`. Prove that both are
 open, and that both are antitone in `𝔪`.
-*Prerequisites:* L 0.1, L 2A.1, M `adicCompletionIntegers`, M
-`InfinitePlace.Completion.ringEquivRealOfIsReal`.
+*Prerequisites:* L 0.1, L 2A.1, M `adicCompletionIntegers`,
+M `InfinitePlace.Completion.ringEquivRealOfIsReal`.
 **Basic API.**
 - *Constructors:* membership from the component conditions.
 - *Examples:* `U_{((1),∅)}` is the everywhere-integral units; `U_{((1), all real places)}` adds
@@ -617,8 +617,8 @@ elementary, it is expressible at the pin, and Layers 5, 6, 7 and 11 use it. Stat
 `w.Completion` is `ℝ` when `w.IsReal` and `ℂ` when `w.IsComplex`. Fix once which of the two
 embeddings `ℂ → ℂ` is used at a complex place, and prove that the objects below do not depend on
 that choice.
-*Prerequisites:* M `InfinitePlace.Completion.ringEquivRealOfIsReal`, M
-`ringEquivComplexOfIsComplex`.
+*Prerequisites:* M `InfinitePlace.Completion.ringEquivRealOfIsReal`,
+M `ringEquivComplexOfIsComplex`.
 
 **2C.2. The local Galois group.** Prove that `Gal(ℂ/ℝ)` is cyclic of order two, generated by complex
 conjugation, and that `Gal(ℂ/ℂ)` is trivial. For `w ∣ v` infinite places of `L/K`, prove that the
@@ -640,8 +640,8 @@ reciprocity, in the shape of I.1.
 **2C.5. Cohomology.** Prove `H¹(Gal(ℂ/ℝ), ℂˣ) = 1` and `Ĥ⁰(Gal(ℂ/ℝ), ℂˣ) ≅ ℤ/2`, hence `h(Gal(ℂ/ℝ),
 ℂˣ) = 2 = [ℂ:ℝ]`. Layer 5 uses these as the archimedean factors of the global Herbrand computation,
 where they carry as much weight as the finite ones.
-*Prerequisites:* L 2C.4, M
-`Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`.
+*Prerequisites:* L 2C.4,
+M `Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`.
 
 **2C.6. Invariants.** Prove `inv_ℂ = 0` and `inv_ℝ : H²(Gal(ℂ/ℝ), ℂˣ) ≃ (1/2)ℤ/ℤ ⊆ ℚ/ℤ`, with the
 nontrivial class going to `1/2`. State the compatibility with the normalization of `inv_v` in
@@ -697,8 +697,7 @@ exists: show that the set of admissible moduli is closed under `gcd`, with 3.2 a
 and the sign components at the real places. State primitivity, and induction from a smaller modulus,
 in the shape of `DirichletCharacter.changeLevel`. **Common error.** A general quasicharacter has no
 ray conductor, because `‖·‖^s` is trivial on no `U_𝔪`. Keep 3.2 and 3.3 apart.
-*Prerequisites:* L
-3.2, L 2A.6, M `DirichletCharacter.changeLevel`.
+*Prerequisites:* L 3.2, L 2A.6, M `DirichletCharacter.changeLevel`.
 
 **3.4. Local components and the Dirichlet dictionary.** Define `χ_v` on local units at finite `v`,
 and `χ_w` at infinite `w`. Prove `χ = ∏_v χ_v` on ideles, as a finite product on each idele. For `K
@@ -728,8 +727,8 @@ reciprocity proof reduces to.
 generated by `[p]` under `galEquivZMod`. Deduce that `f` is the order of `p` in `(ℤ/n)ˣ`, and that
 `p` splits completely exactly when `p ≡ 1 (mod n)`. Spell "splits completely" with `Set.ncard` of
 `Ideal.primesOver`.
-*Prerequisites:* M `IsCyclotomicExtension.Rat.galEquivZMod`, M `galEquivZMod_stabilizer`, M
-`Ideal.primesOver`.
+*Prerequisites:* M `IsCyclotomicExtension.Rat.galEquivZMod`, M `galEquivZMod_stabilizer`,
+M `Ideal.primesOver`.
 
 **4.2. Ramification, in three statements.** State them in increasing generality, because the first
 is often quoted beyond its range.
@@ -742,8 +741,8 @@ is often quoted beyond its range.
    and the infinite place ramifies as well. For `n₀ ≤ 2` the field is `ℚ`. **Common error.**
    "Ramified exactly at the primes dividing `n`" is false. `ℚ(ζ₆) = ℚ(ζ₃)` is unramified at `2`.
  
-*Prerequisites:* M `Mathlib/NumberTheory/NumberField/Cyclotomic/Ideal.lean`, M
-`IsCyclotomicExtension`.
+*Prerequisites:* M `Mathlib/NumberTheory/NumberField/Cyclotomic/Ideal.lean`,
+M `IsCyclotomicExtension`.
 
 **4.3. Artin reciprocity for `(ℚ, ℚ(ζₙ))`.** Prove `Cl_{(n)∞}(ℚ) ≃* (ZMod n)ˣ` from 1.5 at `K = ℚ`,
 where the units `±1` are absorbed by the sign component. Compose with the Mathlib isomorphism `(ZMod
@@ -754,8 +753,7 @@ and it is the normalization anchor for Layer 6. The identification of the arithm
 separate target. **Common error.** The geometric convention sends `[p]` to `Frob_p⁻¹`. Both
 conventions compose with `galEquivZMod` to give an automorphism of `(ℤ/n)ˣ`, so a degree count does
 not detect the error. Fix the direction by the stabilizer computation of 4.1.
-*Prerequisites:* L
-1.5, L I.2, L 4.1, M `IsCyclotomicExtension.Rat.galEquivZMod`.
+*Prerequisites:* L 1.5, L I.2, L 4.1, M `IsCyclotomicExtension.Rat.galEquivZMod`.
 
 **4.4. Modulus against conductor.** Prove `ℚ_{(n)∞} = ℚ(ζₙ)` for every `n`, including nonminimal
 moduli. Prove that the conductor of `ℚ(ζₙ)/ℚ` is `(n₀)·∞` for `n₀ ≥ 3`, and the trivial modulus
@@ -789,8 +787,8 @@ Prove:
    H^i(G_w, L_wˣ)` for `i ≥ 1`. Do not hide any of this inside one displayed equality.
  
 *Source.* Neukirch ANT VI §1 and §3; Milne CFT VII §§2–4.
-*Prerequisites:* L 2B.4, L 2B.6, L 2A.5, M `Set.unit`, M `groupCohomology.coindIso` (Shapiro), L
-I.1.
+*Prerequisites:* L 2B.4, L 2B.6, L 2A.5, L I.1, M `Set.unit`,
+M `groupCohomology.coindIso` (Shapiro).
 
 **5.2. Herbrand quotients.** For cyclic `L/K`, prove in order:
 1. `h(G, I_{L,S}) = ∏_{v ∈ S} [L_w : K_v]`, from 5.1.9, from `h(G_w, L_wˣ) = [L_w:K_v]` at finite
@@ -811,9 +809,9 @@ I.1.
    the finiteness of both kernel and cokernel.
 *Source.* Neukirch ANT VI §3; Milne CFT VII §§2–5.
  
-*Prerequisites:* L 5.1, L 2C.5, M
-`Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`, M
-`NumberField.Units.DirichletTheorem`, L I.1.
+*Prerequisites:* L 5.1, L 2C.5,
+M `Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`,
+M `NumberField.Units.DirichletTheorem`, L I.1.
 
 **5.3. `kummer_le`.** For cyclic `L/K`, prove `[C_K : N C_L] ≤ [L:K]`. Use the algebraic route, in
 eight steps.
@@ -855,9 +853,9 @@ Then extend to arbitrary finite Galois `L/K` in two named steps.
    finite index dividing `[L:K]` in `C_K`, for every finite Galois `L/K`. **Common error.** Solvable
    induction alone does not reach a general finite group. Step 2 is a separate argument and must be
    stated.
-*Prerequisites:* L 5.2, L 5.3, M
-`Mathlib/RepresentationTheory/Homological/GroupCohomology/LongExactSequence.lean`, M
-`groupCohomology.Functoriality`, M `Sylow`.
+*Prerequisites:* L 5.2, L 5.3,
+M `Mathlib/RepresentationTheory/Homological/GroupCohomology/LongExactSequence.lean`,
+M `groupCohomology.Functoriality`, M `Sylow`.
 
 **5.5. The Hasse norm theorem.** For **cyclic** `L/K`, prove that `x ∈ Kˣ` is a norm from `Lˣ`
 exactly when it is a local norm at every place. Deduce it from `H¹(G, C_L) = 1` and the exact
@@ -970,8 +968,7 @@ Lemmas 5.3 and 5.4, pp. 192–193.
 E₁⋯E_s`. An automorphism trivial on every `E_j` is trivial on `L`, so 6.1.8 carries the cyclic case
 to `L`.
 *Source.* Janusz V, Theorem 5.8, p. 197; Lang ANT Ch. X §§1–3.
-*Prerequisites:* L 4.3, L
-5.2, L 5.3, L 6.1, L 6.2, L I.1, M `Nat.exists_prime_gt_modEq_one`.
+*Prerequisites:* L 4.3, L 5.2, L 5.3, L 6.1, L 6.2, L I.1, M `Nat.exists_prime_gt_modEq_one`.
 
 **6.4. The norm-residue isomorphism.** Prove that `θ_{L/K}` descends to `C_K ⧸ N_{L/K} C_L ≃*
 Gal(L/K)` for finite abelian `L/K`. The two groups have the same finite order by 5.2 and 5.3, and
@@ -1092,8 +1089,7 @@ and 2A.7, and give the identification as a `ContinuousMulEquiv`.
 `ℚ(ζₙ)`. One containment holds because 4.3 exhibits the norm group of `ℚ(ζₙ)` as containing
 `RaySubgroup ((n),∞)`. Equality follows from the degree count `#Cl_{(n)∞}(ℚ) = φ(n) = [ℚ(ζₙ) : ℚ]`.
 Deduce `Gal(ℚ^{ab}/ℚ) ≅ lim_n (ℤ/n)ˣ = Ẑˣ` as topological groups.
-*Prerequisites:* L 4.3, L 7.4, L
-7.6.
+*Prerequisites:* L 4.3, L 7.4, L 7.6.
 ### Layer 8: the Hilbert class field and the principal ideal theorem
 
 **8.1. The Hilbert class field.** Define `H := K_{((1),∅)}`. Prove `Gal(H/K) ≃* ClassGroup (𝓞 K)`.
@@ -1171,8 +1167,8 @@ abelian. For a nonabelian extension the correct statement uses Artin conductors 
 characters, which needs Artin `L`-functions and is not a target here. State the abelian scope in the
 statement.
 *Source.* Serre, *Corps Locaux*, Ch. VI §3, for the local formula; Neukirch ANT VII §11.
-*Prerequisites:* L 3.3, L 6.4, L 7.4, L I.1, M `differentIdeal`, M
-`Mathlib/NumberTheory/Cyclotomic/Discriminant.lean`.
+*Prerequisites:* L 3.3, L 6.4, L 7.4, L I.1, M `differentIdeal`,
+M `Mathlib/NumberTheory/Cyclotomic/Discriminant.lean`.
 
 ### Layer 10A: continuous and algebraic infinity types
 
@@ -1186,8 +1182,7 @@ exponent cannot carry a uniqueness statement, because only the parity is determi
 
 **10A.2. The infinity type of a Hecke character.** Define `χ_∞ = ∏_{w ∣ ∞} χ_w`, the restriction of
 `χ` to the archimedean part of the ideles, with each `χ_w` classified by 10A.1.
-*Prerequisites:* L
-3.4, L 10A.1.
+*Prerequisites:* L 3.4, L 10A.1.
 
 **10A.3. Algebraic characters.** Define: `χ` is algebraic when `χ_∞` is the restriction of an
 algebraic character of the torus. That is, there are integers `n_σ`, one for each embedding `σ : K →
@@ -1328,8 +1323,8 @@ table. Prove that Tate–Nakayama in degree `−2` re-derives the isomorphism of
 compatibility theorem: the two constructions agree. That compatibility is the content of "the
 cohomological route", given the route pinned above.
 *Source.* NSW Ch. VIII; Artin–Tate Ch. XIV.
-*Prerequisites:* L 5.4, L 6.4, L 2C.6, M
-`Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`,
+*Prerequisites:* L 5.4, L 6.4, L 2C.6,
+M `Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`,
 M `groupCohomology.Functoriality`.
 
 **11.2. Continuous cohomology of the absolute Galois group.** State the continuous cohomology of
@@ -1338,8 +1333,8 @@ that the colimit description agrees with the cochain description for a discrete 
 only place where profinite cohomology is used, and it is stated here so that Layer 11 has no
 external dependency.
 *Source.* NSW Ch. I §2; Serre, *Galois Cohomology*, Ch. I.
-*Prerequisites:* M `Mathlib/RepresentationTheory/Homological/GroupCohomology/`, M
-`Field.absoluteGaloisGroup`, M `Mathlib/Topology/Algebra/Category/ProfiniteGrp/`.
+*Prerequisites:* M `Mathlib/RepresentationTheory/Homological/GroupCohomology/`,
+M `Field.absoluteGaloisGroup`, M `Mathlib/Topology/Algebra/Category/ProfiniteGrp/`.
 
 **11.3. Sum of local invariants.** Prove the exact sequence `0 → H²(G_K, K̄ˣ) → ⊕_v H²(G_{K_v},
 K̄_vˣ) → ℚ/ℤ → 0` in invariant-map coordinates. The local invariants come from I.1.10 at the
