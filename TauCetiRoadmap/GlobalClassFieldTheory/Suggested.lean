@@ -509,7 +509,7 @@ unramified at `2`. The `(ζ − 1)` theorem holds for prime-power level only. At
 write `n = p^a m` with `p ∤ m` and use the `e` and `f` formulas of `Cyclotomic/Ideal.lean`. -/
 example (n : ℕ) (hn : 3 ≤ n) (hn4 : ¬ (n % 4 = 2)) (p : ℕ) [Fact p.Prime] :
     (∃ P ∈ Ideal.primesOver (Ideal.span {(p : ℤ)}) (𝓞 (CyclotomicField n ℚ)),
-        1 < Ideal.ramificationIdx P ℤ) ↔ p ∣ n :=
+        1 < Ideal.ramificationIdx (Ideal.span {(p : ℤ)}) P) ↔ p ∣ n :=
   sorry
 
 /-- **4.3, Artin reciprocity for `(ℚ, ℚ(ζₙ))`.** The ray class group of `(n)·∞` is isomorphic to
