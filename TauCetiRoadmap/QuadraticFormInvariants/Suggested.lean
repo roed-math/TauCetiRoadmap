@@ -18,20 +18,25 @@ classes. We build that theory in `TauCeti/`.
 What this file pins is the set of design decisions most likely to fork two
 implementations: the carrier for isometry classes (Layer 0), the exact chain-equivalence
 relation and the descent principle every diagonal invariant uses (Layer 0), the binary
-normal forms (Layer 0), the four-fold splitting criterion (Layer 2), the Hilbert symbol
-as a `{±1}`-valued function of the norm equation and the local Hasse invariant built
-from it (Layer 6), the realization constraints of the local classification (Layer 6),
-and the Scharlau transfer with the torsor theorem that makes "the" transfer honest
-(Layer 9). Statements elaborate against the pinned Mathlib and are stated with `sorry`
-(allowed in this human-owned roadmap library).
+normal forms (Layer 0), the four-fold splitting criterion (Layer 2), the fractional-ideal
+carrier of the quadratic defect (Layer 6A), the Hilbert symbol as a `{±1}`-valued
+function of the norm equation and the local Hasse invariant built from it (Layer 6), the
+realization constraints of the local classification (Layer 6), and the Scharlau transfer
+with the torsor theorem that makes "the" transfer honest (Layer 9). Statements elaborate
+against the pinned Mathlib and are stated with `sorry` (allowed in this human-owned
+roadmap library).
 
 Brauer-valued and continuous-cohomology signatures stay in prose in `README.md` until
-their consumed types exist. `BrauerGroup K` is only a quotient at the pin, so Layer 3's
-Hasse invariant is deliberately absent here and Layer 5's targets are named against the
-landed semisimple-algebras roadmap (its Layers 4 and 6) rather than sketched with a
-placeholder group; the cohomological Layers 7–9 wait on the profinite-cohomology
-roadmap in the same way. Layer 4's induced map `I²/I³ → Br(K)[2]` is prose-only for the
-same reason, and the roadmap makes no injectivity claim for it.
+their consumed types exist. `BrauerGroup K` is only a quotient at the pin, so Layer 5's
+Brauer-valued Hasse invariant is deliberately absent here and its targets are named
+against the landed semisimple-algebras roadmap (its Layers 4 and 6) rather than sketched
+with a placeholder group; the cohomological Layers 7–9 wait on the profinite-cohomology
+roadmap in the same way. Layer 5's induced map `I²/I³ → Br(K)[2]` is prose-only for the
+same reason, and the roadmap makes no injectivity claim for it. Those prose statements
+still carry their transport: `BrauerGroup K` is a `CommGroup` and continuous cohomology
+is additive, so Layer 7A's comparison is an
+`Additive (BrauerGroup K) ≃+ H²_cont (G_K) (Additive Kˢˣ)` and its two-torsion form is
+`ι : Additive ↥(Br₂ K) ≃+ H²_cont (G_K) (Additive μ₂)`.
 
 Layer-6 conventions follow Serre (*A Course in Arithmetic*, ch. III–IV) and O'Meara
 (§63). The symbol is *defined* by the norm equation `b = x² − a·y²`, which needs no
@@ -274,6 +279,44 @@ example [Invertible (2 : K)] {n : ℕ} (w w' : Fin n → Kˣ)
     IsSquare ((∏ i, w i) * ∏ i, w' i) :=
   sorry
 
+/-! ## Layer 6A: the quadratic defect
+
+The defect is what O'Meara's route to bimultiplicativity runs on, and the decision worth
+pinning is its carrier: for a general `a` the intersection `⋂_ξ (a − ξ²)·𝒪` is a
+*fractional* ideal, since `a − ξ²` has negative valuation for every `ξ` once `v(a) < 0`.
+`FractionalIdeal` has a `Lattice` but no infima of infinite families, so the definition
+below is the greatest-lower-bound property, and existence is a milestone rather than a
+definitional convenience. Stated for `ℚ_[p]`, whose ring of integers and fraction-ring
+instance are at the pin; over a general finite extension of `ℚ_p` the same statements
+read `FractionalIdeal (𝒪[K])⁰ K`, on Local Fields PR #2's Layer 0 package. -/
+
+/-- **Layer 6A, the quadratic defect**, as a predicate pinning `𝔡` to be the largest
+fractional ideal contained in every `(a − ξ²)·ℤ_[p]`. -/
+def IsQuadraticDefect (p : ℕ) [Fact p.Prime] (a : ℚ_[p]ˣ)
+    (𝔡 : FractionalIdeal (nonZeroDivisors ℤ_[p]) ℚ_[p]) : Prop :=
+  (∀ ξ : ℚ_[p], 𝔡 ≤ FractionalIdeal.spanSingleton _ ((a : ℚ_[p]) - ξ ^ 2)) ∧
+    ∀ 𝔢 : FractionalIdeal (nonZeroDivisors ℤ_[p]) ℚ_[p],
+      (∀ ξ : ℚ_[p], 𝔢 ≤ FractionalIdeal.spanSingleton _ ((a : ℚ_[p]) - ξ ^ 2)) → 𝔢 ≤ 𝔡
+
+/-- **Layer 6A, the defect exists.** Uniqueness is antisymmetry; existence is the
+content, and it comes from the ideals `(a − ξ²)·ℤ_[p]` being totally ordered, so that
+the family has an infimum, `𝔡(a) = 𝓂^{δ(a)}` with `δ(a) = sup_ξ v(a − ξ²)`, or `0`. -/
+example (p : ℕ) [Fact p.Prime] (a : ℚ_[p]ˣ) : ∃! 𝔡, IsQuadraticDefect p a 𝔡 :=
+  sorry
+
+/-- **Layer 6A, the defect measures squareness**: it vanishes exactly on squares. -/
+example (p : ℕ) [Fact p.Prime] (a : ℚ_[p]ˣ) : IsQuadraticDefect p a 0 ↔ IsSquare a :=
+  sorry
+
+/-- **Layer 6A, the defect scales by squares**, in the fractional-ideal sense, so the
+square class of `a` determines `𝔡(a)` up to squares of principal ideals (and `δ(a)`
+up to `2ℤ`, which is why the case analysis of 6A runs on the parity of `δ`). -/
+example (p : ℕ) [Fact p.Prime] (a c : ℚ_[p]ˣ)
+    (𝔡 : FractionalIdeal (nonZeroDivisors ℤ_[p]) ℚ_[p]) (h : IsQuadraticDefect p a 𝔡) :
+    IsQuadraticDefect p (a * c ^ 2)
+      (FractionalIdeal.spanSingleton _ ((c : ℚ_[p]) ^ 2) * 𝔡) :=
+  sorry
+
 /-! ## Layer 6: the Hilbert symbol, the local Hasse invariant, and the classification
 
 The symbol is defined from the norm equation, so its definition needs no classification
@@ -285,9 +328,9 @@ the roadmap's actual scope, waits on Local Fields PR #2's Layer 0 package. -/
 
 open Classical in
 /-- **Layer 6, the Hilbert symbol**, `+1` when `b` is a norm from `K(√a)` and `−1`
-otherwise. Total on `Kˣ × Kˣ`, so no junk-value convention is needed (the bridging lemma
-to `HassePrinciple`'s integer-valued `hilbertSym`, which is `0` on zero arguments, is
-part of the coordination). -/
+otherwise. Total on `Kˣ × Kˣ`, so no junk-value convention is needed (the comparison
+lemma to `HassePrinciple`'s integer-valued `hilbertSym`, which is `0` on zero arguments,
+is part of the coordination). -/
 noncomputable def hilbertSymbol (a b : Kˣ) : ℤˣ :=
   if ∃ x y : K, (b : K) = x ^ 2 - (a : K) * y ^ 2 then 1 else -1
 
@@ -314,8 +357,9 @@ example (p : ℕ) [Fact p.Prime] (a : ℚ_[p]ˣ) (ha : ¬ IsSquare a) :
 /-- **Layer 6, the local Hasse invariant** on a diagonal tuple, in the Lam/Serre
 convention `∏_{i<j}` (empty product in ranks `0` and `1`). Its codomain is `ℤˣ` and it
 is built from the Hilbert symbol alone, so it exists whether or not Layer 5's
-Brauer-valued invariant does; that the two agree under `Br(K)[2] ≃ ℤˣ` is a separate
-theorem consuming both. -/
+Brauer-valued invariant does. That the two agree is a separate theorem: elementarily
+under `ε : Q(K) ≃* ℤˣ` on the two-element group of quaternion classes, and on all of
+`Br(K)[2]` under Local Fields PR #2's Layer 5 invariant map read through Layer 7A. -/
 noncomputable def localHasse {n : ℕ} (w : Fin n → Kˣ) : ℤˣ :=
   ∏ ij ∈ Finset.univ.filter fun ij : Fin n × Fin n => ij.1 < ij.2,
     hilbertSymbol (w ij.1) (w ij.2)
@@ -338,6 +382,14 @@ two hypotheses below are exactly those two exclusions; `IsSquare (-d)` spells
 example (p : ℕ) [Fact p.Prime] (n : ℕ) (hn : 1 ≤ n) (d : ℚ_[p]ˣ) (s : ℤˣ)
     (h₁ : n = 1 → s = 1) (h₂ : n = 2 → IsSquare (-d) → s = 1) :
     ∃ w : Fin n → ℚ_[p]ˣ, IsSquare ((∏ i, w i) * d) ∧ localHasse w = s :=
+  sorry
+
+/-- **Layer 6, the realization exceptions are sharp.** No regular form over `ℚ_2` has
+`(n, d, s) = (1, [1], −1)` or `(2, [−1], −1)`, while the neighboring triple
+`(2, [1], −1)` is realized by `⟨−1,−1⟩`: its discriminant `(−1)·(−1)` is the trivial
+square class and its Hasse invariant is `(−1,−1)_{ℚ_2} = −1`, the same computation that
+makes Hamilton's quaternions a division algebra over `ℚ_2`. -/
+example : (∏ i, ![(-1 : ℚ_[2]ˣ), -1] i) = 1 ∧ localHasse ![(-1 : ℚ_[2]ˣ), -1] = -1 :=
   sorry
 
 /-- **Layer 6, the second realization exception is forced**: a binary form of
