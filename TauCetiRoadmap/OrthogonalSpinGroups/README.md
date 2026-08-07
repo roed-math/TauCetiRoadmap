@@ -51,8 +51,13 @@ developed. **The connected components of the real orthogonal groups**, their max
 their symmetric spaces are outside. **Automorphic representations, the Weil representation, and the
 Siegel–Weil formula as an identity between a theta integral and an Eisenstein series** are outside;
 the adelic Poisson-summation identity that drives Weil's induction in Layer 5E is in scope and is
-named there. **Hermitian and unitary groups, quadratic forms over division algebras,
-and orthogonal groups of forms over rings of integers of number fields** are outside.
+named there. **Hermitian and unitary groups as a subject** — their classification, their Witt
+theory and their invariants — **quadratic forms over division algebras, and orthogonal groups of
+forms over rings of integers of number fields** are outside. ⚠ The boundary is narrower than it
+sounds in one place, and the exception is deliberate rather than an oversight: in dimensions five
+and six `Spin_Q` **is** a symplectic or unitary group of an involution on the even Clifford algebra,
+so 1F names those groups and 5E computes their Tamagawa numbers. What is excluded is developing
+them for their own sake, not naming the group `Spin_Q` turns out to be.
 
 The general Tamagawa machinery of Layer 5A to 5E is **in** scope, and is written to be independent
 of quadratic forms so that it can be lifted into a roadmap of its own without rewriting.
@@ -797,20 +802,25 @@ double-coset set along 3B's canonical equivalence. Finiteness of the set is not 
 
 **3H. Reduction theory, as the input Layers 4 and 5 share.** Both later layers need one theorem
 about the size of the arithmetic subgroups, and it is stated here so that neither consumes the
-other. For `G` either `SO_Q` or `Spin_Q` with `dim V ≥ 3`, and `S` a finite set of places
-containing `∞`, with `G(ℤ_S)` the `S`-integral points for the `ℤ`-span of the chosen basis of 3E:
+other. For `G` either `SO_Q` or `Spin_Q`, and `S` a finite set of places containing `∞`, with
+`G(ℤ_S)` the `S`-integral points for the `ℤ`-span of the chosen basis of 3E:
 
-1. `G(ℤ_S)` is a **discrete** subgroup of `G_S = ∏_{v ∈ S} G(ℚ_v)`, and `G(ℚ)` is discrete in
+1. the **norm-one subgroup** `G(𝔸)¹`, cut out by `|χ(x)|_𝔸 = 1` for every rational character
+   `χ ∈ X(G) ⊗ ℚ`, together with the theorem that `G(𝔸)¹ = G(𝔸)` when `X(G) ⊗ ℚ = 0`, in
+   particular for `G` semisimple, which is every case except `SO_Q` in dimension two;
+2. `G(ℤ_S)` is a **discrete** subgroup of `G_S = ∏_{v ∈ S} G(ℚ_v)`, and `G(ℚ)` is discrete in
    `G(𝔸)`, which is 3E;
-2. the quotient `G_S / G(ℤ_S)` carries a **finite** invariant measure for a Haar measure on `G_S`,
-   and likewise `G(ℚ) \ G(𝔸)` for a Haar measure on `G(𝔸)`;
-3. the **density theorem**: if `G_S` is noncompact then `G(ℤ_S)` is Zariski dense in `G`, which
-   follows from 2 together with the `ℚ`-almost-simplicity supplied by 3A.
+3. the quotient `G_S / G(ℤ_S)` carries a **finite** invariant measure for a Haar measure on `G_S`,
+   and likewise `G(ℚ) \ G(𝔸)¹` for a Haar measure on `G(𝔸)¹`. ⚠ It is `G(𝔸)¹` and not `G(𝔸)`:
+   in dimension two `SO_Q` is a torus, `G(𝔸)/G(ℚ)` has infinite volume, and the finiteness that
+   does hold is the classical finiteness of the volume of the norm-one idele class group;
+4. the **density theorem**: if `G_S` is noncompact then `G(ℤ_S)` is Zariski dense in `G`, which
+   follows from 3 together with the `ℚ`-almost-simplicity supplied by 3A.
 
 This is Borel and Harish-Chandra's reduction theory, in the `S`-arithmetic form of
 Platonov–Rapinchuk Chapter 5. ⚠ It is stated for *some* Haar measure and is therefore independent
-of Layer 5's normalization: Layer 5D's finiteness of the Tamagawa volume is item 2 applied to the
-Tamagawa measure, and Layer 4C consumes items 2 and 3, so the two layers stay independent of each
+of Layer 5's normalization: Layer 5D's finiteness of the Tamagawa volume is item 3 applied to the
+Tamagawa measure, and Layer 4C consumes items 3 and 4, so the two layers stay independent of each
 other. ⚠ The boundary with the integral lattices roadmap is that nothing here is a statement about
 classes: no finiteness of a class number, no genus, no mass. Those are that roadmap's, and they
 consume this one.
@@ -894,8 +904,8 @@ them:
 4. **No proper subgroup of finite index**, which is 4A's corollary, available at every place
    outside `S ∪ S_c`.
 5. **One place at a time.** For `v ∉ S ∪ S_c`, `Spin(V)(ℤ_{S ∪ {v}})` is dense in
-   `Spin(V)(ℚ_v)`. This is where reduction theory enters: 3H item 2 makes the closure nondiscrete
-   with a finite-covolume quotient, 3H item 3 makes it Zariski dense, so it is **open**, because
+   `Spin(V)(ℚ_v)`. This is where reduction theory enters: 3H item 3 makes the closure nondiscrete
+   with a finite-covolume quotient, 3H item 4 makes it Zariski dense, so it is **open**, because
    the closure of a nondiscrete Zariski-dense subgroup of the `p`-adic point group of an
    almost-simple group is open; and then 4 turns an open subgroup of finite index into the whole
    group. The openness step is Cartan's theorem that a closed subgroup of a `p`-adic Lie group is
@@ -907,7 +917,7 @@ them:
 7. **Weak approximation for `Spin(V)`**, which is what removes `S_c` from `S`: `Spin(V)(ℚ)` is
    dense in `∏_{v ∈ T} Spin(V)(ℚ_v)` for every finite set `T` of places. `Spin_Q` is unirational
    over ℚ, so the closure of the rational points is open in the product and the quotient by it is
-   discrete; 3H item 2 makes that quotient of finite measure, hence finite; and 4 kills it, except
+   discrete; 3H item 3 makes that quotient of finite measure, hence finite; and 4 kills it, except
    at a place of `S_c`, where the local group is compact and is the reduced-norm-one group of a
    central simple algebra over `ℚ_v`, and the input is instead `SK₁ = 1` over a `p`-adic field.
 8. **Removing `S_c`.** `S_c` is finite and `∏_{v ∈ S_c} Spin(V)(ℚ_v)` is compact with a
@@ -918,7 +928,7 @@ them:
    is `Spin(V)(ℝ)`, which is connected because `Spin(V)` is simply connected and semisimple. The
    connected component of the closure of the `S`-integral points there is normalized by the
    rational points, which are dense by 7, so it is a normal connected subgroup and hence a
-   sub-product of the factors; 3H item 2 together with Cartan's theorem over ℝ forbids it from
+   sub-product of the factors; 3H item 3 together with Cartan's theorem over ℝ forbids it from
    being a proper one. ⚠ This is the only step that uses connectivity of the real point group, and
    it is why 4E states general-`S` density against arbitrary nonempty open sets while the
    `Spin(V)(ℚ) · U` reformulation carries `∞ ∈ S`.
@@ -1016,25 +1026,24 @@ genuinely different and both are stated**:
 ⚠ The split case also changes what the volume is taken of. `𝔾_m` has a nontrivial group of rational
 characters, so `T(𝔸)/T(ℚ)` has infinite volume and the Tamagawa number is the volume of
 `T(𝔸)¹/T(ℚ)`, where `T(𝔸)¹` is cut out by `|χ(x)|_𝔸 = 1` for every `χ ∈ X(T) ⊗ ℚ`. That
-subgroup, and the theorem that it is all of `G(𝔸)` when `G` has no nontrivial rational character,
-are milestones of 5C. Nothing in dimension at least three uses this subsection, since `Spin_Q` and
+subgroup is 3H item 1, and it is where the theorem that it is all of `G(𝔸)` for a semisimple `G`
+is stated. Nothing in dimension at least three uses this subsection, since `Spin_Q` and
 `SO_Q` are semisimple there and have no nontrivial rational characters.
 
 **5C. Adelic points, the product measure, and the norm-one subgroup.** Full adelic points of the
 group, consumed from Layer 3D; the product Haar measure; discreteness of the rational points,
 consumed from Layer 3E; the fundamental-domain and quotient-measure API against Mathlib's
-`QuotientMeasureEqMeasurePreimage` and `covolume`. Beside them the subgroup `G(𝔸)¹`, cut out by
-`|χ(x)|_𝔸 = 1` for every rational character `χ ∈ X(G) ⊗ ℚ`, with the theorem that `G(𝔸)¹ = G(𝔸)`
-when `X(G) ⊗ ℚ = 0`, in particular for `G` semisimple. ⚠ It is `G(𝔸)¹`, not `G(𝔸)`, that every
-volume statement below is taken in; the two coincide in dimension at least three, and 5B's split
-binary case is where they do not. ⚠ Three upstream constraints shape this subsection and are
+`QuotientMeasureEqMeasurePreimage` and `covolume`; and the norm-one subgroup `G(𝔸)¹` of 3H item 1.
+⚠ It is `G(𝔸)¹`, not `G(𝔸)`, that every volume statement below is taken in; the two coincide in
+dimension at least three, and 5B's split binary case is where they do not. ⚠ Three upstream
+constraints shape this subsection and are
 stated rather than discovered: `covolume` is `ℝ≥0∞`-valued and returns `0` when no fundamental
 domain exists; `haarMeasure_quotient` requires the subgroup countable and the quotient measure
 finite; and Mathlib has no `IsUnimodular` class, so unimodularity is carried as left-invariance
 together with right-invariance and proved for each group used.
 
 **5D. Finiteness, then the number.** Finiteness of the Tamagawa volume of `G(ℚ) \ G(𝔸)¹`, as its
-own milestone preceding any computation of it, which is 3H item 2 applied to the Tamagawa measure
+own milestone preceding any computation of it, which is 3H item 3 applied to the Tamagawa measure
 of 5A once that measure is shown to be a Haar measure; and the definition of the Tamagawa number.
 
 **5E. Central isogenies, and `τ(Spin_Q) = 1` by one named route.** Two things. First, the
