@@ -171,8 +171,12 @@ No outreach was performed. Every provenance entry says so.
 
 ## Validation
 
-Run in this branch, at the repository pin. These are **local** results: GitHub Actions has no
-run recorded for the reviewed head, so nothing here is a CI result.
+**On GitHub**, at head `d5e421e`: the `build` check passes and `resolve` passes (`gate` is
+skipped, as it is for every roadmap pull request). The pull request is mergeable. Rounds 1 and
+2 had no Actions run at all, so their recorded results were local only; this is the first head
+with a CI result.
+
+**Locally**, in this branch at the repository pin:
 
 - `lake build TauCetiRoadmap.GlobalClassFieldTheory.Suggested`: green, `sorry` warnings only.
 - `lake build`: green, 8534 jobs, `sorry` warnings only.
