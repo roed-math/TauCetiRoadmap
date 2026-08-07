@@ -772,9 +772,20 @@ throughout: none of the statements below typechecks without it.
   (Chevalley; Milne CFT VII §6, Lang ANT IX, Janusz V §§2–4), decomposed as:
   1. reduction from cyclic degree `n` to cyclic steps of prime degree `p`, by multiplicativity
      of the index in a tower;
-  2. base change to `K' = K(μ_p)`, whose degree over `K` divides `p − 1` and is prime to `p`,
-     with the index inequality transported by restriction and corestriction;
-  3. the descent lemma returning from `K'` to `K`, stated with its exact hypotheses;
+  2. base change to `K' = K(μ_p)`, whose degree `e := [K' : K]` divides `p − 1` and is
+     therefore prime to `p`; since `[L : K] = p` is prime to `e`, `L ∩ K' = K` and `L' := LK'`
+     is cyclic of degree `p` over `K'`;
+  3. the descent lemma returning from `K'` to `K`, which is the following statement. The
+     extension map `C_K → C_{K'}` carries `N_{L/K} C_L` into `N_{L'/K'} C_{L'}` and so induces
+     `res : C_K/N_{L/K} C_L → C_{K'}/N_{L'/K'} C_{L'}`; the idele-class norm `N_{K'/K}` carries
+     `N_{L'/K'} C_{L'}` into `N_{L/K} C_L` and induces `cor` back the other way; and
+     `cor ∘ res` is multiplication by `e`, since `N_{K'/K} ∘ (extension) = (·)^e` on `C_K`
+     (Layer 2B). These are restriction and corestriction on `Ĥ⁰` under the identification
+     `Gal(L'/K') ≃ Gal(L/K)` of item 2. Now `C_K/N_{L/K} C_L` has exponent dividing `p`,
+     because `N_{L/K}(ext x) = x^p` for `x ∈ C_K`, so multiplication by `e` is an
+     automorphism of it and `res` is injective. Hence
+     `[C_K : N_{L/K} C_L] ≤ [C_{K'} : N_{L'/K'} C_{L'}] ≤ p`, the second inequality being the
+     Kummer count of items 4 to 7 carried out over `K'`;
   4. Kummer classification once `μ_p ⊆ K`: `L = K(a^{1/p})` for some `a ∈ Kˣ`, in the
      vocabulary of `Mathlib/FieldTheory/KummerExtension.lean`;
   5. the choice of `S`, containing the infinite places, the places above `p`, the ramified
@@ -856,23 +867,68 @@ the infinite places.
      error anywhere upstream shows up here, which is its purpose. The base-change statement,
      that reciprocity for `K(ζ_n)/K` follows from the case over `ℚ`, is a separate named lemma
      using the norm compatibility of the local Artin maps.
-  2. General abelian `L/K`, by Artin's crossing argument. Spell out the diagram rather than
-     naming the argument:
-     - the **crossing lemma**: given `L/K` cyclic of degree `n` and a finite set `S` of places,
-       there is a cyclotomic extension `E/K` with `L ∩ E = K`, with `LE/E` contained in a
-       cyclotomic extension of `E`, and with the places of `S` splitting completely in `E/K`;
-     - restriction `Gal(LE/E) ≃ Gal(L/K)`, an isomorphism because `L ∩ E = K`;
-     - the transport lemma: `θ_{LE/E}(y)∣_L = θ_{L/K}(N_{E/K} y)` for `y ∈ I_E`, from the local
-       norm compatibility of the local Artin maps, which carries triviality on principal ideles
-       of `E` down to principal ideles of `K`;
-     - the induction: on the degree `n`, reducing a general finite abelian `L/K` to cyclic
-       steps, with the norm-index equalities of Layer 5 used to control the index at each step
-       and to know that the two sides have the same order;
-     - the places in `S`, chosen to contain the ramified ones, so that the local factors that
-       are not yet under control are trivial.
-     Follow Lang ANT Ch. X §§1–3 and Janusz Ch. V §5 for the exact form of the lemma and the
-     induction, and cite the section used for each step. No analytic input is permitted at any
-     step.
+  2. Cyclic `L/K`, by Artin's crossing argument, which is stated here in full rather than
+     named, since the auxiliary field is the step everyone gets wrong.
+     - **Artin's lemma** (Lang X §2, p. 202; Janusz V, Lemma 5.6, p. 194). Let `L/K` be cyclic
+       of degree `n`, let `𝔭` be a prime of `K` unramified in `L`, and let `S` be a finite set
+       of rational primes. There are an integer `m`, prime to every element of `S` and to `𝔭`,
+       and a finite extension `E/K` with
+       (i) `L ∩ E = K`;
+       (ii) `L ∩ K(ζ_m) = K`;
+       (iii) `L(ζ_m) = E(ζ_m)`, so that `LE ⊆ E(ζ_m)` and `LE/E` is contained in a cyclotomic
+       extension of `E`;
+       (iv) `𝔭` splits completely in `E/K`.
+       Since `m` is prime to `𝔭` and `𝔭` is unramified in `L`, it is unramified in `L(ζ_m)/K`
+       and so in `LE/K`. ⚠ `E/K` itself is **not** cyclotomic, and nothing in the argument
+       makes it so: the cyclotomic extensions in the lemma are `K(ζ_m)/K` and `E(ζ_m)/E`. The
+       lattice, which is what the proof is really about:
+
+       ```
+              L(ζ_m) = E(ζ_m)
+                    |
+                   L·E
+                  /   \
+                 L     E          K(ζ_m) between K and L(ζ_m)
+                  \   /
+                    K
+       ```
+
+       Construction, as targets: `Gal(L(ζ_m)/K) ≅ Gal(L/K) × Gal(K(ζ_m)/K)` by (ii); with `σ` a
+       generator of `Gal(L/K)` and `τ ∈ Gal(K(ζ_m)/K)` of order divisible by `n` and generating
+       a cyclic group meeting `⟨Frob_𝔭|K(ζ_m)⟩` trivially, take `E` to be the fixed field of
+       `H = ⟨σ × τ, Frob_𝔭|L × Frob_𝔭|K(ζ_m)⟩`. Then `H` contains the decomposition group of
+       `𝔭`, which is (iv); `H` restricts onto `Gal(L/K)`, which is (i); and
+       `H ∩ (Gal(L/K) × 1) = 1`, which is (iii). The numerical input is that for `a ≥ 2` and a
+       prime power `q^r` some prime has `a` of multiplicative order exactly `q^r` (Janusz V,
+       Lemma 5.3, p. 192), applied to `a = N𝔭` to produce a squarefree `m` with `n` dividing
+       the order of `a` mod `m` together with an independent `b` (Janusz V, Lemma 5.4, p. 193).
+       That argument is the cyclotomic-polynomial one behind Mathlib's
+       `Nat.exists_prime_gt_modEq_one`, and it is elementary: no theorem on primes in
+       arithmetic progressions is used, which is what keeps this layer independent of the
+       L-functions roadmap.
+     - **One prime at a time.** The one-prime form above is what this roadmap wants; do not
+       state a simultaneous version. The reciprocity proof applies it separately to each prime
+       in the factorization of the ideal whose symbol is being computed, choosing the `m_i`
+       pairwise coprime through the parameter `S`, and works in the compositum `F = E₁⋯E_r`.
+     - **Restriction.** `L ∩ E = K` makes `res : Gal(LE/E) → Gal(L/K)` an isomorphism, and the
+       same holds for `F` in place of `E`. This is the identification along which the symbol
+       computed upstairs is read downstairs.
+     - **Transport.** `θ_{LE/E}(y)∣_L = θ_{L/K}(N_{E/K} y)` for `y ∈ I_E`, from the norm
+       compatibility of the local Artin maps; in ideal language `(𝔅, LE/E)∣_L =
+       (N_{E/K} 𝔅, L/K)`. Because `𝔭` splits completely in `E`, a prime `𝔓 ∣ 𝔭` of `E` has
+       `N_{E/K} 𝔓 = 𝔭`, so the symbol of `𝔭` in `L/K` is the symbol of `𝔓` in `LE/E`, an
+       extension sitting inside a cyclotomic extension of `E`, where stage 1 already applies.
+     - **Where the norm index enters.** The crossing argument by itself gives one containment,
+       `ker θ_{L/K}|_{J^𝔪} ⊆ P_𝔪 · N_{L/K}(J_L^𝔪)`. Equality, which is the reciprocity law in
+       its kernel form, holds because both subgroups have index `[L:K]` in `J^𝔪`: that is the
+       norm-index equality of Layer 5, and it is a hypothesis of the cyclic reciprocity theorem
+       (Janusz V, Theorem 5.7, p. 195), not a corollary drawn afterwards.
+  3. General abelian `L/K`, from the cyclic case with no further induction on the degree.
+     Write `Gal(L/K) = C₁ × ⋯ × C_s`, put `E_j = L^{H_j}` with `H_j = ∏_{i ≠ j} C_i`, so each
+     `E_j/K` is cyclic and `L = E₁⋯E_s`. An automorphism trivial on every `E_j` is trivial on
+     `L`, so the restriction compatibility of the compilation map (item 8 above) carries the
+     cyclic case to `L` (Janusz V, Theorem 5.8, p. 197). No analytic input is permitted at any
+     step; Lang X §§1–3 is the parallel account.
 - **The norm-residue isomorphism.** With Layer 5: `θ_{L/K}` descends to
   `C_K ⧸ N_{L/K} C_L ≃* Gal(L/K)` for finite abelian `L/K`, the two groups having the same
   finite order by `herbrand_ge` and `kummer_le` and the map being surjective. Functoriality
@@ -907,21 +963,44 @@ operations inside `K̄`, and profinite identifications are `ContinuousMulEquiv`s
   `Gal(L/K)^{ab}`. It is not a weaker half of the abelian theorem; it needs norm limitation.
 - **The existence theorem.** Every open subgroup of finite index in `C_K` is `N(L/K)` for a
   unique finite abelian `L/K`. Decompose it:
-  1. reduction to subgroups containing some `RaySubgroup 𝔪`, by Layer 2A's open-subgroup lemma;
-  2. the cyclic prime-index case as the atom of the induction;
-  3. the Kummer construction when `μ_p ⊆ K`: realize the subgroup by an explicit
-     `K(a^{1/p})`-type extension built from `S`-units, reusing the Layer 5 counting;
-  4. the cyclotomic base change when `μ_p ⊄ K`, adjoining `μ_p` and controlling the degree,
-     which is prime to `p`;
-  5. the descent step returning the extension and its norm group to `K`, with the exact
-     hypotheses under which the norm group is preserved;
-  6. induction on the finite abelian quotient `C_K/U`, using compatibility of norm groups with
-     quotients;
+  1. the upward-closure lemma: a subgroup `V` of `C_K` containing a norm group `N(L/K)` is
+     itself a norm group, namely `V = N(M/K)` for `M` the fixed field of `θ_{L/K}(V)`, straight
+     from the norm-residue isomorphism and the Galois correspondence (Milne CFT VII 9.1). Every
+     later step therefore has only to produce *some* norm group inside the given `U`;
+  2. reduction to subgroups containing some `RaySubgroup 𝔪`, by Layer 2A's open-subgroup lemma;
+  3. the Kummer construction when `μ_p ⊆ K`: for `U` open with `C_K/U` finite of exponent `p`,
+     take `S ⊇ S_∞` finite containing the places above `p` and enough places that
+     `I_K = Kˣ · I_{K,S}`, and let `L = K(U(S)^{1/p})` be the Kummer extension of the `S`-units.
+     The two halves are `E ⊆ N_{L/K}(I_L)` for `E = ∏_{v ∈ S} (K_vˣ)^p × ∏_{v ∉ S} 𝒪_vˣ`, from
+     local reciprocity and unramifiedness outside `S`, and the index count
+     `[I_K : Kˣ·E] = p^{#S} = [I_K : Kˣ·N_{L/K}(I_L)]`, from the `S`-unit theorem and the
+     product formula, reusing the Layer 5 counting (Milne CFT VII 9.3);
+  4. the cyclotomic base change when `μ_p ⊄ K`: work over `K' = K(μ_p)`, whose degree over `K`
+     divides `p − 1` and is prime to `p`;
+  5. the descent step, stated as the theorem it is (Milne CFT VII 9.4): let `U ≤ C_K` be open
+     of finite index and `K'/K` finite, and suppose `U' := N_{K'/K}^{-1}(U) ≤ C_{K'}` is a norm
+     group, say `U' = N(M'/K')` for a finite abelian `M'/K'`. Let `M` be the largest
+     subextension of `M'/K` that is abelian over `K`. Then **norm limitation** gives
+     `N_{M/K} C_M = N_{M'/K} C_{M'} = N_{K'/K}(U') ⊆ U`, and item 1 promotes that to `U`
+     itself being a norm group. Three things earn their keep here: `M'/K` is in general neither
+     abelian nor Galois, so the descended field is `M` and not `M'`; the step needs the equality
+     of norm groups, not the containment `N_{M'/K}C_{M'} ⊆ N_{M/K}C_M` that comes free from
+     `M ⊆ M'`, which is exactly what norm limitation supplies and why that theorem is proved
+     before this one; and the ramification descends, since `M ⊆ M'` and `M'/K` is ramified only
+     at the places ramified in `K'/K`, which divide `p` or are infinite, together with the
+     places under the support of `𝔣(M'/K')`, which bounds `𝔣(M/K)`;
+  6. the induction, on the index `(C_K : U)`: pick a prime `p` dividing it, use item 5 with
+     `K' = K(μ_p)` to reduce to `μ_p ⊆ K`, choose `U₁ ⊇ U` of index exactly `p`, get from item 3
+     a cyclic `K'/K` of degree `p` with `N(K'/K) = U₁`, and observe that
+     `N_{K'/K} : C_{K'} → C_K/U` has image `U₁/U` and kernel `N_{K'/K}^{-1}(U)`, so that index
+     drops by a factor of `p` and item 5 closes the step (Milne CFT VII 9.5);
   7. compositum and intersection compatibility, so that the extensions built for the factors
      assemble;
   8. control of ramification and of the conductor of the extension produced;
   9. uniqueness, from the norm-residue isomorphism and the injectivity of `L ↦ N(L/K)`.
-  Neukirch ANT VI §6 is the reference for the route; pin the hypotheses of each step there.
+  Milne CFT VII §9 is the arrangement followed above; Neukirch ANT VI §6 and Janusz V §§7–9
+  are the parallel accounts, and Tate's article in Cassels–Fröhlich (p. 202) is the route that
+  avoids norm limitation, for anyone who wants the two theorems independent.
   Openness is **not** automatic from finite index: `D_K` is divisible and so lies in every
   finite-index subgroup, but `π₀(C_K) ≅ Gal(K^{ab}/K)` is not topologically finitely generated,
   so with choice it has dense subgroups of finite index, which pull back to non-open
@@ -1081,9 +1160,17 @@ closed. Build the theory here.
   theorem, to the congruence subgroup of 10B.6, so that `Gal(H_O/K) ≅ Pic O`; its ramification
   divides `𝔠`; and `H_{𝓞_K} = H`. Definitions for all `K`; the worked examples are imaginary
   quadratic, following Cox.
-- **The `x² + ny²` theorem.** Fix `n ≥ 1` and put `O_n = ℤ[√−n]`, an order in `K = ℚ(√−n)` of
-  discriminant `−4n`, maximal exactly when `−n ≢ 1 (mod 4)`. For a prime `p ∤ 2n`, the chain to
-  prove, each link a milestone:
+- **The `x² + ny²` theorem.** Fix `n ≥ 1` and write `n = f²d` with `d > 0` squarefree. Then
+  `K = ℚ(√−n) = ℚ(√−d)`, and `O_n = ℤ[√−n] = ℤ[f√−d]` is the order of discriminant
+  `disc(O_n) = −4n`. Field discriminant and conductor are computed from `d` alone:
+  `d_K = −d` and `𝔠(O_n) = 2f` when `d ≡ 3 (mod 4)`, and `d_K = −4d` and `𝔠(O_n) = f`
+  otherwise, in both cases from `disc(O_n) = 𝔠(O_n)² d_K`. So `O_n` is the maximal order
+  exactly when `f = 1` and `d ≢ 3 (mod 4)`; ⚠ the criterion "`−n ≢ 1 (mod 4)`" is the
+  squarefree case only, and it wrongly calls `ℤ[√−12]` maximal in `ℚ(√−3)`. Keep the order
+  discriminant `−4n` and the field discriminant `d_K` typographically apart. The conductor
+  divides `2n`, so the hypothesis `p ∤ 2n` below is exactly what makes `p` prime to the
+  conductor and unramified in `K`, which is what Layer 10B's extension-and-contraction
+  bijection needs. For a prime `p ∤ 2n`, the chain to prove, each link a milestone:
   1. `p = x² + ny²` for some integers `x, y`;
   2. iff there is a proper `O_n`-ideal of norm `p`, equivalently `p` is represented by the
      principal form of discriminant `−4n`;
@@ -1092,16 +1179,18 @@ closed. Build the theory here.
      amounts to `p` splitting in `K/ℚ` and the primes above it splitting completely in
      `H_{O_n}/K`; prove that equivalence rather than leaving the base field ambiguous.
   The last step is Layer 7's splitting law applied to the ring class field.
-- **Instances.** `n = 5`: `O_5 = ℤ[√−5] = 𝓞_K` is maximal, `h = 2`, `H = ℚ(√−5, i)`, and
-  `p = x² + 5y² ⟺ p ≡ 1, 9 (mod 20)` for `p ≠ 2, 5`. Both halves are wanted: the congruence
-  criterion, which is elementary and provable without class field theory, **and** the
-  class-field statement that the congruence describes complete splitting in `H`; only the second
-  tests this roadmap. `n = 14`: again `𝓞_K = ℤ[√−14]` is maximal (`disc = −56`), `h = 4`, and
+- **Instances.** `n = 5`: `f = 1` and `d = 5 ≡ 1 (mod 4)`, so `O_5 = ℤ[√−5] = 𝓞_K` is maximal
+  of discriminant `−20`; `h = 2`, `H = ℚ(√−5, i)`, and `p = x² + 5y² ⟺ p ≡ 1, 9 (mod 20)` for
+  `p ≠ 2, 5`. Both halves are wanted: the congruence criterion, which is elementary and
+  provable without class field theory, **and** the class-field statement that the congruence
+  describes complete splitting in `H`; only the second tests this roadmap. `n = 14`: `f = 1`
+  and `d = 14 ≡ 2 (mod 4)`, so `𝓞_K = ℤ[√−14]` is again maximal (`disc = −56`), `h = 4`, and
   the Hilbert class field is `H = ℚ(√−14, α)` with `α⁴ + 2α² − 7 = 0`, that is
   `α = √(2√2 − 1)`, of degree `8` over `ℚ`; `p = x² + 14y² ⟺ p` splits completely in `H`
   (checked against `p < 400`). `n = 27`: the genuinely nonmaximal instance, and the one that
-  tests Layer 10B, since `O = ℤ[√−27] = ℤ + 6𝓞_K` has discriminant `−108` and conductor `6` in
-  `𝓞_{ℚ(√−3)}`, with `Pic O ≅ ℤ/3` and ring class field `ℚ(√−3, ∛2)`; Gauss's criterion
+  tests Layer 10B. Here `27 = 3²·3`, so `f = 3` and `d = 3 ≡ 3 (mod 4)`, and the formula above
+  gives conductor `2f = 6`: `O = ℤ[√−27] = ℤ + 6𝓞_K` in `𝓞_{ℚ(√−3)}`, of discriminant `−108`,
+  with `Pic O ≅ ℤ/3` and ring class field `ℚ(√−3, ∛2)`; Gauss's criterion
   `p = x² + 27y² ⟺ p ≡ 1 (mod 3)` and `2` is a cubic residue modulo `p` is then the splitting
   law in that field (checked against `p < 600`).
 - **On the absence of congruence criteria.** That no congruence condition on `p` alone can
@@ -1181,12 +1270,20 @@ wrong normalization, a dropped real place, a unit-obstruction error).
 - **A norm index and the Hasse norm theorem** (Layer 5). `[C_ℚ : N C_{ℚ(√5)}] = 2`, and a
   rational is a norm from `ℚ(√5)` iff it is a local norm at every place.
 - **Failure of the norm principle for a biquadratic field** (Layers 5 and 11). For
-  `L = ℚ(√13, √17)`, the rational `25` is a local norm at every place, being a square, and is
-  **not** a norm from `L`; the knot group of `L/ℚ` has order `2`. The example is sharper than it
-  looks: `4` and `9` are global norms from `L`, so squareness is not the point, and `5` itself
+  `L = ℚ(√13, √17)`, the rational `25` is a local norm at every place and is **not** a norm
+  from `L`; the knot group of `L/ℚ` has order `2`. The local half needs its actual reason,
+  since a square is not a norm from an arbitrary degree-four local extension. Here every
+  decomposition group of `L/ℚ` is a proper, hence cyclic, subgroup of `(ℤ/2)²`: the two
+  ramified primes `13` and `17` are each a square modulo the other, so both have residue degree
+  `1`, the unramified decomposition groups are cyclic of order at most `2`, and both infinite
+  places split. Every local degree `[L_w : ℚ_v]` is therefore at most `2`, and for `a ∈ ℚˣ` the
+  norm of `a` from a local extension of degree at most `2` is `a` or `a²`, so **every** rational
+  square is a local norm everywhere in this extension. The example is sharper than it looks:
+  `4` and `9` are global norms from `L`, so squareness alone is not the point, and `5` itself
   is not even a local norm at `5`. Cassels–Fröhlich Exercise 5.3, p. 360, quoted in Milne CFT
-  VIII §3. The observation that one local condition follows from the others by the Hilbert
-  product formula belongs to Layer 11, not Layer 5, so state it there.
+  VIII §3. The same proper-decomposition-group condition is what makes the knot group `ℤ/2` in
+  Layer 5's Tate computation. The observation that one local condition follows from the others
+  by the Hilbert product formula belongs to Layer 11, not Layer 5, so state it there.
 - **The Hilbert class field of `ℚ(√−5)`** (Layers 8, 10C). `h = 2` and `H = ℚ(√−5, i)`, which is
   also the genus field, hence the multiquadratic interface instance. The acceptance statement is
   the class-field one: for `p ≠ 2, 5`, `p` splits completely in `H` iff `p = x² + 5y²` iff

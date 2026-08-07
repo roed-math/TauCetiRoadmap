@@ -17,14 +17,17 @@ theorem, no Hilbert class field, no Kronecker–Weber.
 
 Three kinds of item appear below.
 
-* **Data prototypes** (`Modulus`, the divisibility relation, the congruence predicates) are
-  real definitions, because the shape of the data is itself a decision the roadmap makes and a
-  contributor should not have to reinvent it.
-* **Structure prototypes** (the congruence subgroup of `Kˣ`, the ideal group prime to a
-  modulus, the ray class group) carry the exact carrier and leave the routine closure proofs
-  as `sorry`. The carrier is the design decision; the closure proofs are milestones of
-  Layers 0 and 1.
-* **Milestone statements** are `example`s ending in `sorry`.
+* **Data prototypes** (`Modulus`, the divisibility relation, the congruence predicates,
+  `unitsCongruenceSubgroup`, `RaySubgroup`) are real definitions, because the shape of the data
+  is itself a decision the roadmap makes and a contributor should not have to reinvent it.
+* **Structure prototypes** (the congruence and prime-to subgroups of `Kˣ`, the ideal group
+  prime to a modulus, the ray class group, the idele congruence subgroup `U_𝔪`) carry the exact
+  carrier and leave the routine closure proofs as `sorry`. The carrier is the design decision;
+  the closure proofs are milestones of Layers 0, 1 and 2A. Nothing here is an existential
+  subgroup whose carrier cannot be read off its type.
+* **Milestone statements** are `example`s ending in `sorry`, and each says exactly what its
+  docstring claims: where a docstring speaks of a kernel, an exactness, a carrier or a
+  uniqueness, the statement carries it.
 
 Per the honest-`sorry` rule, milestones whose *statements* need vocabulary that does not exist
 at the pin are not stated here and live in `README.md` only: the idele functoriality of
@@ -85,11 +88,17 @@ def IsCongrOne (𝔪 : Modulus K) (x : Kˣ) : Prop :=
           WithZero (Multiplicative ℤ))) ∧
     ∀ w ∈ 𝔪.infinitePart, 0 < InfinitePlace.embedding_of_isReal w.2 (x : K)
 
-/-- **Layer 0, the elements prime to the finite part.** "Prime to `𝔪₀`" is not a Lean type;
-this subgroup of `Kˣ`, equivalently the unit group of the localization of `𝓞 K` away from
-`𝔪₀`, is the exact domain of the reduction map to `(𝓞 K ⧸ 𝔪₀)ˣ × signs`. -/
-def IsPrimeTo (𝔪 : Modulus K) (x : Kˣ) : Prop :=
-  ∀ v : HeightOneSpectrum (𝓞 K), v.asIdeal ∣ 𝔪.finitePart → v.valuation K (x : K) = 1
+/-- **Layer 0, the elements prime to the finite part.** "Prime to `𝔪₀`" is not a Lean type, so
+it is this named subgroup of `Kˣ`, equivalently the unit group of the localization of `𝓞 K`
+away from `𝔪₀`. It is the exact domain of the reduction map to `(𝓞 K ⧸ 𝔪₀)ˣ × signs` below,
+and it has to be a subgroup rather than a predicate, because Layer 1's exact sequence quotients
+by it. -/
+def primeToSubgroup (𝔪 : Modulus K) : Subgroup Kˣ where
+  carrier := {x | ∀ v : HeightOneSpectrum (𝓞 K), v.asIdeal ∣ 𝔪.finitePart →
+    v.valuation K (x : K) = 1}
+  mul_mem' := by sorry
+  one_mem' := by sorry
+  inv_mem' := by sorry
 
 /-- **Layer 0, the congruence subgroup of `Kˣ`.** The carrier is pinned; that it is a subgroup
 is the milestone, and it is proved by the ultrametric inequality at the finite places and the
@@ -100,16 +109,49 @@ def congruenceSubgroup (𝔪 : Modulus K) : Subgroup Kˣ where
   one_mem' := by sorry
   inv_mem' := by sorry
 
-/-- **Layer 0, simultaneous approximation.** Finitely many congruence conditions at finite
-places and finitely many sign conditions at real places are met by a *single* global element.
-This does not follow from the chinese remainder theorem and the sign surjectivity separately,
-and Mathlib has no weak approximation theorem for inequivalent absolute values at the pin, so
-it is a genuine target: prove Artin–Whaples weak approximation for a finite set of places and
-read this off. Everything in Layers 0 and 1 rests on it. -/
+/-- **Layer 0, congruence implies prime to the modulus.** If `ord_v(x − 1) ≥ 1` then
+`ord_v(x) = 0`, so the containment is free; it is stated because the reduction map below is
+defined on `primeToSubgroup 𝔪` and its kernel is `congruenceSubgroup 𝔪`, which only typechecks
+against this. -/
+example (𝔪 : Modulus K) : congruenceSubgroup 𝔪 ≤ primeToSubgroup 𝔪 :=
+  sorry
+
+/-- **Layer 0, simultaneous approximation, in the reusable form.** Independent targets `a v` and
+independent depths `n v` at finitely many finite places, and independent signs at finitely many
+real places, are met by a *single* global element. This does not follow from the chinese
+remainder theorem and sign surjectivity separately, and Mathlib has no weak approximation
+theorem for inequivalent absolute values at the pin, so it is a genuine target: prove
+Artin–Whaples weak approximation for a finite set of places and read this off. Everything in
+Layers 0 and 1 rests on it. -/
+example (S : Finset (HeightOneSpectrum (𝓞 K))) (a : HeightOneSpectrum (𝓞 K) → K)
+    (n : HeightOneSpectrum (𝓞 K) → ℕ) (T : Finset {w : InfinitePlace K // w.IsReal})
+    (ε : {w : InfinitePlace K // w.IsReal} → ℤˣ) :
+    ∃ x : K,
+      (∀ v ∈ S, v.valuation K (x - a v) ≤
+        ((Multiplicative.ofAdd (-(n v : ℤ)) : Multiplicative ℤ) :
+          WithZero (Multiplicative ℤ))) ∧
+        ∀ w ∈ T, (0 < InfinitePlace.embedding_of_isReal w.2 x ↔ ε w = 1) :=
+  sorry
+
+/-- **Layer 0, the ray class corollary of approximation.** The special case Layers 0 and 1
+consume: one element congruent to a prescribed `a` modulo the modulus and of prescribed sign at
+every real place. It is a corollary of the theorem above and is stated separately because it,
+not the general statement, is what the moving lemma and the reduction map call. -/
 example (𝔪 : Modulus K) (a : Kˣ) (ε : {w : InfinitePlace K // w.IsReal} → ℤˣ) :
     ∃ x : Kˣ, IsCongrOne 𝔪 (x * a⁻¹) ∧
       ∀ w : {w : InfinitePlace K // w.IsReal},
         (0 < InfinitePlace.embedding_of_isReal w.2 (x : K) ↔ ε w = 1) :=
+  sorry
+
+/-- **Layer 0, the reduction map, with its domain and its kernel.** Defined on the prime-to
+subgroup, surjective by the approximation theorem, and with kernel exactly the congruence
+subgroup: that last identity is the computational form of Layer 1's exact sequence, so it is
+proved here rather than reproved there. The sign components are indexed by `𝔪∞` alone, since a
+map to the signs at *all* real places would not have the congruence subgroup as its kernel. -/
+example (𝔪 : Modulus K) :
+    ∃ f : primeToSubgroup 𝔪 →* (𝓞 K ⧸ 𝔪.finitePart)ˣ × (𝔪.infinitePart → ℤˣ),
+      Function.Surjective f ∧
+        ∀ x : primeToSubgroup 𝔪, f x = 1 ↔ (x : Kˣ) ∈ congruenceSubgroup 𝔪 :=
   sorry
 
 /-- **Layer 0, the sign map is a group homomorphism onto a product of two-element groups.**
@@ -152,6 +194,14 @@ def RayClassGroup (𝔪 : Modulus K) : Type u :=
 noncomputable instance (𝔪 : Modulus K) : CommGroup (RayClassGroup 𝔪) :=
   inferInstanceAs (CommGroup (idealsPrimeTo 𝔪 ⧸ ray 𝔪))
 
+/-- **Layer 1, the units congruent to `1` modulo the modulus**, `𝓞_{K,𝔪}ˣ`: the global units
+that lie in the congruence subgroup of `Kˣ`. It is a definition rather than a `sorry`, since
+the carrier is a pullback and nothing has to be proved to write it down; its index in `𝓞_Kˣ` is
+the unit obstruction, it is the left-hand term of the exact sequence below, and for the narrow
+modulus it is the group of totally positive units. -/
+def unitsCongruenceSubgroup (𝔪 : Modulus K) : Subgroup (𝓞 K)ˣ :=
+  (congruenceSubgroup 𝔪).comap (Units.map (algebraMap (𝓞 K) K).toMonoidHom)
+
 /-- **Layer 1, the moving lemma.** Every ideal class of a Dedekind domain contains an integral
 ideal prime to a fixed nonzero ideal. Absent from Mathlib (only `ClassGroup.mk0_surjective`
 exists); this is what both the surjectivity of `Cl_𝔫 ↠ Cl_𝔪` and the ideal-to-idele
@@ -163,29 +213,37 @@ example (R : Type u) [CommRing R] [IsDedekindDomain R] (𝔪 : Ideal R) (h𝔪 :
     ∃ I : (Ideal R)⁰, ClassGroup.mk0 I = C ∧ IsCoprime (I : Ideal R) 𝔪 :=
   sorry
 
-/-- **Layer 1, the ray class group is finite.** The cardinality formula
-`#Cl_𝔪 = h_K · #(𝓞 K ⧸ 𝔪₀)ˣ · 2^{#𝔪∞} / [𝓞_Kˣ : 𝓞_{K,𝔪}ˣ]` is the sharp form and is what the
-exact sequence gives; it is false at unrestricted Dedekind generality, so it is stated for
-number fields. -/
-example (𝔪 : Modulus K) : Finite (RayClassGroup 𝔪) :=
+/-- **Layer 1, the ray class group is finite, with its order.** The sharp form is the
+cardinality formula `#Cl_𝔪 = h_K · #(𝓞 K ⧸ 𝔪₀)ˣ · 2^{#𝔪∞} / [𝓞_Kˣ : 𝓞_{K,𝔪}ˣ]`, written below
+without division, and it is what the exact sequence gives. It is false at unrestricted Dedekind
+generality, so it is stated for number fields. -/
+example (𝔪 : Modulus K) :
+    Finite (RayClassGroup 𝔪) ∧
+      Nat.card (RayClassGroup 𝔪) * (unitsCongruenceSubgroup 𝔪).index =
+        NumberField.classNumber K * Nat.card (𝓞 K ⧸ 𝔪.finitePart)ˣ * 2 ^ 𝔪.infinitePart.card :=
   sorry
 
 /-- **Layer 1, the transition map.** In the pinned divisibility orientation the larger modulus
-maps *onto* the smaller, and the surjectivity is the moving lemma. Compatibility in a tower is
-part of the milestone. -/
+maps *onto* the smaller, and the surjectivity is the moving lemma. That the transition maps
+compose in a tower is equally part of the Layer 1 milestone; stating it needs the map named
+rather than existentially quantified, so it lives in `README.md` until the implementation
+names it. -/
 example (𝔪 𝔫 : Modulus K) (h : 𝔪 ∣ 𝔫) :
     ∃ f : RayClassGroup 𝔫 →* RayClassGroup 𝔪, Function.Surjective f :=
   sorry
 
 /-- **Layer 1, the ray class exact sequence, with the kernel the textbook display hides.**
-`1 → 𝓞_{K,𝔪}ˣ → 𝓞_Kˣ → (𝓞 K ⧸ 𝔪₀)ˣ × signs → Cl_𝔪 K → Cl K → 1`. The image form and the
-cardinality formula are derived from this, not the other way round. The statement is given
-here in the two pieces that are pin-expressible: exactness at the unit group, and surjectivity
-onto the class group with the stated kernel. ⚠ The sequence is the reason `Cl_𝔪` is *not*
-`(𝓞/𝔪₀)ˣ × signs × Cl`: global units glue the factors, and the size of the unit image is a
-genuinely global quantity. -/
+`1 → 𝓞_{K,𝔪}ˣ → 𝓞_Kˣ → (𝓞 K ⧸ 𝔪₀)ˣ × signs → Cl_𝔪 K → Cl K → 1`, stated as the three maps
+together with exactness at each of the three interior spots. The image form and the cardinality
+formula are derived from this, not the other way round. ⚠ The sequence is the reason `Cl_𝔪` is
+*not* `(𝓞/𝔪₀)ˣ × signs × Cl`: global units glue the factors, and the size of the unit image is
+a genuinely global quantity. -/
 example (𝔪 : Modulus K) :
-    ∃ f : RayClassGroup 𝔪 →* ClassGroup (𝓞 K), Function.Surjective f :=
+    ∃ (g : (𝓞 K)ˣ →* (𝓞 K ⧸ 𝔪.finitePart)ˣ × (𝔪.infinitePart → ℤˣ))
+      (h : ((𝓞 K ⧸ 𝔪.finitePart)ˣ × (𝔪.infinitePart → ℤˣ)) →* RayClassGroup 𝔪)
+      (f : RayClassGroup 𝔪 →* ClassGroup (𝓞 K)),
+      g.ker = unitsCongruenceSubgroup 𝔪 ∧ g.range = h.ker ∧ h.range = f.ker ∧
+        Function.Surjective f :=
   sorry
 
 open scoped Classical in
@@ -198,10 +256,17 @@ noncomputable def narrowModulus (K : Type u) [Field K] [NumberField K] : Modulus
   infinitePart := Finset.univ
 
 /-- **Layer 1, the narrow class group surjects onto the class group**, with kernel an
-elementary abelian 2-group of order `2^{r₁}/[𝓞_Kˣ : 𝓞_Kˣ⁺]`. This spelling, together with
-`Cl⁺` itself, is what the multiquadratic roadmap's Layer 3 names as a prerequisite: freeze it
-in coordination with any implementor working there. -/
-example : ∃ f : RayClassGroup (narrowModulus K) →* ClassGroup (𝓞 K), Function.Surjective f :=
+elementary abelian 2-group of order `2^{r₁}/[𝓞_Kˣ : 𝓞_Kˣ⁺]`. Both halves of that description
+are in the statement: the kernel has exponent two, and its order times the index of the totally
+positive units is `2^{r₁}`. The totally positive units are `unitsCongruenceSubgroup` of the
+narrow modulus, which is what that subgroup unfolds to when the finite part is trivial and
+every real place is in play. This spelling, together with `Cl⁺` itself, is what the
+multiquadratic roadmap's Layer 3 names as a prerequisite: freeze it in coordination with any
+implementor working there. -/
+example : ∃ f : RayClassGroup (narrowModulus K) →* ClassGroup (𝓞 K),
+    Function.Surjective f ∧ (∀ x ∈ f.ker, x ^ 2 = 1) ∧
+      Nat.card f.ker * (unitsCongruenceSubgroup (narrowModulus K)).index =
+        2 ^ NumberField.InfinitePlace.nrRealPlaces K :=
   sorry
 
 /-- **Layer 1 and Layer 4 over `ℚ`, and the character that does not exist.** The ray class
@@ -250,24 +315,64 @@ example :
             (S ⊔ (FiniteAdeleRing.unitEmbedding (𝓞 K) K).range)) ≃* ClassGroup (𝓞 K)) :=
   sorry
 
-/-- **Layer 2A, the congruence subgroup of the ideles and the ray class dictionary.** One
-subgroup, used everywhere: principal units of the right level at the finite places dividing
-`𝔪₀`, integral units at the other finite places, positivity at the real places of `𝔪∞`, and no
-condition at the remaining infinite places. ⚠ Never append a second unnamed group of infinite
-components: they are already in the definition. The dictionary
-`C_K ⧸ RaySubgroup 𝔪 ≃* Cl_𝔪 K` is the milestone, and its compatibility with the transition
-maps as `𝔪` grows is what Layer 7's inverse limit needs. -/
+/-- **Layer 2A, the idele class group**, in the pin's vocabulary. Adopt the names and shapes of
+mathlib PR #40735 the day they land; until then this quotient is what the statements below
+mean by `C_K`, and it is reducible so that every `Units` and `QuotientGroup` lemma applies
+without glue. -/
+abbrev IdeleClassGroup (K : Type u) [Field K] [NumberField K] :=
+  (AdeleRing (𝓞 K) K)ˣ ⧸ (Units.map (algebraMap K (AdeleRing (𝓞 K) K)).toMonoidHom).range
+
+/-- **Layer 2A, principal units of a given level at a finite place**, `x ∈ 1 + 𝔭_v^n`. Stated
+through the maximal ideal of `v.adicCompletionIntegers` rather than through `Valued.v`, per the
+local roadmap's rule that nothing new is stated against the deprecated `Valued` interface. -/
+def IsPrincipalUnitOfLevel (v : HeightOneSpectrum (𝓞 K)) (n : ℕ) (x : v.adicCompletion K) :
+    Prop :=
+  ∃ y : v.adicCompletionIntegers K, (y : v.adicCompletion K) = x - 1 ∧
+    y ∈ (IsLocalRing.maximalIdeal (v.adicCompletionIntegers K)) ^ n
+
+/-- **Layer 2A, the congruence subgroup of the ideles, `U_𝔪`.** One subgroup, used everywhere,
+and its carrier is written out here because the carrier is the design decision: principal units
+of level `ord_v 𝔪₀` at the finite places dividing `𝔪₀`, local integral units at the other
+finite places, positivity at the real places of `𝔪∞`, and **no condition at all** at the
+remaining infinite places. ⚠ Never append a second unnamed group of infinite components; they
+are already here. -/
+def IdeleCongruenceSubgroup (𝔪 : Modulus K) : Subgroup (AdeleRing (𝓞 K) K)ˣ where
+  carrier := {u |
+    (∀ v : HeightOneSpectrum (𝓞 K), v.asIdeal ∣ 𝔪.finitePart →
+        IsPrincipalUnitOfLevel v (𝔪.exponent v) ((u : AdeleRing (𝓞 K) K).2 v)) ∧
+      (∀ v : HeightOneSpectrum (𝓞 K), ¬ v.asIdeal ∣ 𝔪.finitePart →
+        (u : AdeleRing (𝓞 K) K).2 v ∈ v.adicCompletionIntegers K ∧
+          ((u⁻¹ : (AdeleRing (𝓞 K) K)ˣ) : AdeleRing (𝓞 K) K).2 v ∈
+            v.adicCompletionIntegers K) ∧
+      ∀ w : {w : InfinitePlace K // w.IsReal}, w ∈ 𝔪.infinitePart →
+        0 < InfinitePlace.Completion.ringEquivRealOfIsReal w.2
+          ((u : AdeleRing (𝓞 K) K).1 w.1)}
+  mul_mem' := by sorry
+  one_mem' := by sorry
+  inv_mem' := by sorry
+
+/-- **Layer 2A, the ray subgroup `RaySubgroup 𝔪 ≤ C_K`**, the image of `U_𝔪` in the idele class
+group. Naming it is the point: the dictionary, the conductor of a character, the existence
+theorem and the ray class fields all quantify over these subgroups, and an existential whose
+carrier cannot be recovered from its type is useless to every one of them. -/
+noncomputable def RaySubgroup (𝔪 : Modulus K) : Subgroup (IdeleClassGroup K) :=
+  (IdeleCongruenceSubgroup 𝔪).map (QuotientGroup.mk' _)
+
+/-- **Layer 2A, the ray class dictionary.** `U_𝔪` is open, and `C_K ⧸ RaySubgroup 𝔪 ≃* Cl_𝔪 K`
+through the map `x ↦ ∏_{v ∤ 𝔪₀} v^{ord_v(x_v)}`, with the kernel computed by the moving lemma
+and Layer 0's reduction map. Stated as the surjection together with its kernel rather than as
+an abstract isomorphism of the quotient, since the map itself is what Layers 3, 6 and 7 use. -/
 example (𝔪 : Modulus K) :
-    ∃ U : Subgroup (AdeleRing (𝓞 K) K)ˣ,
-      IsOpen (U : Set (AdeleRing (𝓞 K) K)ˣ) ∧
-        (∀ u : (AdeleRing (𝓞 K) K)ˣ, u ∈ U →
-          ∀ w : {w : InfinitePlace K // w.IsReal}, w ∈ 𝔪.infinitePart →
-            0 < InfinitePlace.Completion.ringEquivRealOfIsReal w.2
-              ((u : AdeleRing (𝓞 K) K).1 w.1)) ∧
-        Nonempty
-          (((AdeleRing (𝓞 K) K)ˣ ⧸
-            (U ⊔ (Units.map (algebraMap K (AdeleRing (𝓞 K) K)).toMonoidHom).range)) ≃*
-              RayClassGroup 𝔪) :=
+    IsOpen (IdeleCongruenceSubgroup 𝔪 : Set (AdeleRing (𝓞 K) K)ˣ) ∧
+      ∃ f : IdeleClassGroup K →* RayClassGroup 𝔪,
+        Function.Surjective f ∧ f.ker = RaySubgroup 𝔪 :=
+  sorry
+
+/-- **Layer 2A, compatibility with the transition maps.** In the pinned divisibility
+orientation the larger modulus gives the smaller subgroup, and the induced surjections
+`C_K ⧸ RaySubgroup 𝔫 ↠ C_K ⧸ RaySubgroup 𝔪` match the Layer 1 transition maps
+`Cl_𝔫 ↠ Cl_𝔪` under the dictionary. Layer 7's inverse limit is exactly this compatibility. -/
+example (𝔪 𝔫 : Modulus K) (h : 𝔪 ∣ 𝔫) : RaySubgroup 𝔫 ≤ RaySubgroup 𝔪 :=
   sorry
 
 /-! ## Layer 2B: ideles in a finite extension
@@ -338,14 +443,18 @@ keep the shapes aligned) has finite order if and only if its kernel is open. Wit
 open-subgroup lemma this becomes: the finite-order Hecke characters are exactly the ray class
 characters, and over `ℚ` exactly the Dirichlet characters. ⚠ The backward direction uses
 compactness of `π₀(C_K)` (Fujisaki, Layer 2A); it is not formal. -/
-example
-    (χ : ContinuousMonoidHom
-      ((AdeleRing (𝓞 K) K)ˣ ⧸
-        (Units.map (algebraMap K (AdeleRing (𝓞 K) K)).toMonoidHom).range) ℂˣ) :
+example (χ : ContinuousMonoidHom (IdeleClassGroup K) ℂˣ) :
     (∃ n : ℕ, 0 < n ∧ ∀ y, χ y ^ n = 1) ↔ IsOpen {y | χ y = 1} :=
   sorry
 
 open scoped Classical in
+/-- **The modulus `(n)·∞` of `ℚ`**, which Layers 3, 4, 7 and 9 all evaluate at. -/
+noncomputable def ratModulus (n : ℕ) (h : (Ideal.span {(n : 𝓞 ℚ)} : Ideal (𝓞 ℚ)) ≠ ⊥) :
+    Modulus ℚ where
+  finitePart := Ideal.span {(n : 𝓞 ℚ)}
+  finitePart_ne_bot := h
+  infinitePart := Finset.univ
+
 /-- **Layer 3 and Layer 4 over `ℚ`, the ray class group of `(n)·∞`.** `Cl_{(n)∞}(ℚ) ≃* (ℤ/n)ˣ`,
 which is what makes the dictionary between finite-order Hecke characters of `ℚ` with
 `U_{(n)∞} ⊆ ker χ` and `DirichletCharacter ℂ n` an equivalence. The dictionary must carry the
@@ -356,10 +465,7 @@ conductor exactly for odd characters. The smallest instance is `ZMod.χ₄`: fin
 ray conductor `(4)·∞`. Dropping the infinite place gives `Cl_{(n)}(ℚ) ≃* (ℤ/n)ˣ/{±1}`, the
 unit-obstruction contrast. -/
 example (n : ℕ) [NeZero n] (h : (Ideal.span {(n : 𝓞 ℚ)} : Ideal (𝓞 ℚ)) ≠ ⊥) :
-    Nonempty (RayClassGroup
-      { finitePart := Ideal.span {(n : 𝓞 ℚ)}
-        finitePart_ne_bot := h
-        infinitePart := Finset.univ } ≃* (ZMod n)ˣ) :=
+    Nonempty (RayClassGroup (ratModulus n h) ≃* (ZMod n)ˣ) :=
   sorry
 
 /-! ## Layer 4: the cyclotomic anchor -/
@@ -385,19 +491,24 @@ example (n : ℕ) (hn : 3 ≤ n) (hn4 : ¬ (n % 4 = 2)) (p : ℕ) [Fact p.Prime]
         1 < Ideal.ramificationIdx (Ideal.span {(p : ℤ)}) P) ↔ p ∣ n :=
   sorry
 
-/-- **Layer 4, the Frobenius at `p` is `[p]`, with the arithmetic orientation.** An
-automorphism `σ` of `ℚ(ζₙ)` is an arithmetic Frobenius at a prime `P` above `p ∤ n` (the
-congruence `σ x ≡ x^p mod P` on integers, which is the pin's `IsArithFrobAt` unfolded through
-`galRestrict`) iff `galEquivZMod σ = [p]`. ⚠ This is the milestone that pins the direction
-convention: the *geometric* convention would put `[p]⁻¹` on the right, and an error here is
-invisible to degree-counting tests, which is why this statement, not the splitting law, is the
-normalization anchor. It is **owned by the Number Field Arithmetic roadmap** (its Layer 2
-computations) and stated here only because Layer 4 is where it is consumed. -/
-example (n p : ℕ) [NeZero n] [Fact p.Prime] (hpn : p.Coprime n) (F : Type u) [Field F]
-    [NumberField F] [IsCyclotomicExtension {n} ℚ F]
-    (P : Ideal (𝓞 F)) [P.IsPrime] (hP : (p : 𝓞 F) ∈ P) (σ : Gal(F/ℚ)) :
-    (∀ x : 𝓞 F, galRestrict ℤ ℚ F (𝓞 F) σ x - x ^ p ∈ P) ↔
-      IsCyclotomicExtension.Rat.galEquivZMod n F σ = ZMod.unitOfCoprime p hpn :=
+/-- **Layer 4, Artin reciprocity for `(ℚ, ℚ(ζₙ))`, which is the part of the anchor this roadmap
+owns.** The ray class group of the modulus `(n)·∞` is isomorphic to `Gal(ℚ(ζₙ)/ℚ)` by a map
+sending the class of `(p)`, for `p` prime to `n`, to the automorphism that `galEquivZMod`
+carries to `[p]`. That this automorphism is the *arithmetic* Frobenius at `p`, meaning
+`σ x ≡ x^p mod P` on integers, is the Number Field Arithmetic roadmap's theorem: it is consumed
+here through the right-hand side below and deliberately not restated as a target, so that the
+`arithFrobAt`/`galEquivZMod` bridge has a single proof owner. ⚠ The orientation is what makes
+this the normalization anchor rather than the splitting law: the geometric convention would put
+`[p]⁻¹` on the right, and both conventions compose with `galEquivZMod` to give an automorphism
+of `(ℤ/n)ˣ`, so an error here survives degree-counting tests. -/
+example (n : ℕ) [NeZero n] (h : (Ideal.span {(n : 𝓞 ℚ)} : Ideal (𝓞 ℚ)) ≠ ⊥) (F : Type u)
+    [Field F] [NumberField F] [IsCyclotomicExtension {n} ℚ F] :
+    ∃ θ : RayClassGroup (ratModulus n h) ≃* Gal(F/ℚ),
+      ∀ (p : ℕ) (hp : p.Coprime n) (u : ℚˣ), (u : ℚ) = p →
+        ∀ hu : toPrincipalIdeal (𝓞 ℚ) ℚ u ∈ idealsPrimeTo (ratModulus n h),
+          IsCyclotomicExtension.Rat.galEquivZMod n F
+              (θ (QuotientGroup.mk ⟨toPrincipalIdeal (𝓞 ℚ) ℚ u, hu⟩))
+            = ZMod.unitOfCoprime p hp :=
   sorry
 
 /-! ## Layer 10A: continuous characters of the archimedean groups
@@ -408,21 +519,24 @@ algebraicity condition, and the two conductors of Layer 3 are `README.md`-only, 
 them needs the Layer 2A and Layer 3 objects. -/
 
 /-- **Layer 10A, the continuous characters of `ℝˣ`.** Every one is `x ↦ |x|^s` times a power of
-the sign, for a unique `s : ℂ` and a parity `ε ∈ {0, 1}`. -/
+the sign, for a **unique** exponent `s : ℂ` and parity. The parity is typed as `ZMod 2` and not
+as a natural number, because only its class modulo two is determined and a `ℕ`-valued statement
+cannot be a uniqueness statement at all. -/
 example (χ : ContinuousMonoidHom ℝˣ ℂˣ) :
-    ∃ (s : ℂ) (ε : ℕ), ∀ x : ℝˣ,
-      (χ x : ℂ) = (‖(x : ℝ)‖ : ℂ) ^ s * (if 0 < (x : ℝ) then 1 else (-1) ^ ε) :=
+    ∃! p : ℂ × ZMod 2, ∀ x : ℝˣ,
+      (χ x : ℂ) = (‖(x : ℝ)‖ : ℂ) ^ p.1 * (if 0 < (x : ℝ) then 1 else (-1) ^ p.2.val) :=
   sorry
 
 /-- **Layer 10A, the continuous characters of `ℂˣ`.** Every one is `z ↦ (z/|z|)^k · |z|^s` for a
-unique `k : ℤ` and `s : ℂ`, equivalently `z ↦ z^p z̄^q` with `p − q ∈ ℤ`, the translation being
-`k = p − q` and `s = p + q`. ⚠ At a complex place an algebraic infinity type therefore has
-*two* integer exponents and its radial exponent `s = p + q` need not vanish: "type `A₀` means
-all radial exponents are zero" is not the algebraicity condition, and it would exclude the
-algebraic norm twists. -/
+**unique** pair `(k, s) : ℤ × ℂ`, equivalently `z ↦ z^p z̄^q` with `p − q ∈ ℤ`, the translation
+being `k = p − q` and `s = p + q`. Uniqueness is proved by restricting to the unit circle,
+which pins `k`, and to `ℝ_{>0}`, which pins `s`. ⚠ At a complex place an algebraic infinity
+type therefore has *two* integer exponents and its radial exponent `s = p + q` need not vanish:
+"type `A₀` means all radial exponents are zero" is not the algebraicity condition, and it would
+exclude the algebraic norm twists. -/
 example (χ : ContinuousMonoidHom ℂˣ ℂˣ) :
-    ∃ (k : ℤ) (s : ℂ), ∀ z : ℂˣ,
-      (χ z : ℂ) = ((z : ℂ) / (‖(z : ℂ)‖ : ℂ)) ^ k * (‖(z : ℂ)‖ : ℂ) ^ s :=
+    ∃! p : ℤ × ℂ, ∀ z : ℂˣ,
+      (χ z : ℂ) = ((z : ℂ) / (‖(z : ℂ)‖ : ℂ)) ^ p.1 * (‖(z : ℂ)‖ : ℂ) ^ p.2 :=
   sorry
 
 /-! ## Layers 8 to 10: acceptance shapes (pin-expressible worked examples)
