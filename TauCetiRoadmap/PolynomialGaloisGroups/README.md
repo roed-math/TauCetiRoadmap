@@ -619,10 +619,10 @@ on that separation.
     is a sextic. Both facts are part of the `ResolventSpec` and are proved, not assumed. This
     is the exact invariant behind the classical resolvent sextic; the roadmap defines
     `resolventSextic` as the orbit resolvent of this specification, so the definition is
-    self-contained and needs no external table. Dummit's paper writes the same sextic as a
-    closed formula in the coefficients of `X⁵ + pX³ + qX² + rX + s`. That formula is a
-    computational shortcut for evaluating the resolvent, and this roadmap does not use it: the
-    orbit resolvent above is the definition, and every statement below is about it.
+    self-contained and needs no external table. Dummit's paper gives a closed coefficient
+    formula for the classical resolvent sextic of a depressed quintic. Evaluating
+    `resolventSextic` through such a formula is a computational matter; the roadmap does not
+    use one, and every statement below is about the orbit resolvent defined here.
   - *The criterion.* For an irreducible separable quintic, `IsSolvable f.Gal` holds if and only
     if the image is conjugate into `F₂₀`, which by Layer 6's degree-5 classification is the
     statement that the label is `5T1`, `5T2` or `5T3`. Combined with the factorization theorem
