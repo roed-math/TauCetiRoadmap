@@ -371,159 +371,352 @@ example (p : ℕ) [Fact p.Prime] (F : Type*) [Field F] [Algebra ℚ_[p] F]
 
 /-! ## Interface: objects owned by a sibling roadmap
 
-One declaration per row of the shared interface table of `README.md`, under the name that the
-table fixes. Four of them are real definitions in the shape the table pins. The rest are
-placeholders for data whose type is expressible now. Every statement below that crosses a
-roadmap boundary elaborates against these, so no interface is left in prose. Replacement is
-mechanical: delete the declaration, import the supplier's, and the statements are unchanged.
+One declaration per row of the two contract tables of `README.md`, under the name that the table
+fixes. The declarations of the Pro-`p` Groups roadmap are copied with their statements, so that
+replacement is a deletion plus an import: a local declaration with the same English description
+and a different Lean type is not an interface. Continuous cohomology is Mathlib's
+`continuousCohomology`, on the bundled topological representation `TopRep`, which carries the
+discrete topology and the continuous action that the coefficients must have.
 -/
 
 namespace Interface
 
-variable (p : ℕ) (G : Type*) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+open CategoryTheory
 
-/-- **Pro-`p` Groups Layer 3, `IsProP`,** in the quotient form: every open normal subgroup has
-index a power of `p`. Layer 1 uses it for `U(K,1)`, and Layer 4 for wild inertia. -/
-def IsProP : Prop :=
-  ∀ N : Subgroup G, N.Normal → IsOpen (N : Set G) → ∃ k : ℕ, N.index = p ^ k
+/-! ### Pro-`p` Groups roadmap, Layers 2, 3, 4, and 11 -/
 
-/-- **Pro-`p` Groups Layer 3, `IsTopologicallyFinitelyGenerated`,** in the pinned shape. -/
-def IsTopologicallyFinitelyGenerated : Prop :=
+variable (p : ℕ)
+
+/-- **Layer 3, `IsProP`**, in quotient form: every continuous finite quotient is a `p`-group. -/
+def IsProP (G : Type u) [Group G] [TopologicalSpace G] : Prop :=
+  ∀ U : OpenNormalSubgroup G, IsPGroup p (G ⧸ U.toSubgroup)
+
+/-- **Layer 3, `IsTopologicallyFinitelyGenerated`**, in the fixed shape. -/
+def IsTopologicallyFinitelyGenerated (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] : Prop :=
   ∃ s : Finset G, (Subgroup.closure (s : Set G)).topologicalClosure = ⊤
 
-/-- **Pro-`p` Groups Layer 3, `topologicalGeneratorRankNat`:** the least cardinality of a
-finite topologically generating set, and `0` when none exists. -/
-noncomputable def topologicalRank : ℕ :=
-  sInf {n : ℕ | ∃ s : Finset G, s.card = n ∧
-    (Subgroup.closure (s : Set G)).topologicalClosure = ⊤}
+/-- **Layer 3, `ConvergesToOne`**: every open normal subgroup omits only finitely many elements
+of the set. The cardinal rank is an infimum over sets with this property. -/
+def ConvergesToOne {G : Type u} [Group G] [TopologicalSpace G] (s : Set G) : Prop :=
+  ∀ U : OpenNormalSubgroup G, {x ∈ s | x ∉ U.toSubgroup}.Finite
 
-/-- **Pro-`p` Groups Layer 2, `IsProPSylow`:** a closed pro-`p` subgroup that is maximal among
-the closed pro-`p` subgroups. Layer 4 identifies the one inside `I_K` with `Gal(K̄/K^t)`. -/
-def IsProPSylow (P : Subgroup G) : Prop :=
+/-- **Layer 3, `topologicalGeneratorRank`**, cardinal-valued. ⚠ Dropping `ConvergesToOne`
+changes the invariant, so the two rank objects are kept apart. -/
+noncomputable def topologicalGeneratorRank (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] : Cardinal.{u} :=
+  ⨅ s : {s : Set G // ConvergesToOne s ∧ (Subgroup.closure s).topologicalClosure = ⊤},
+    Cardinal.mk ↥s.1
+
+/-- **Layer 3, `topologicalGeneratorRankNat`**: the natural-number accessor, available exactly
+when the group is topologically finitely generated. Every numerical statement, including the
+rank theorem of Layer 9, is about this declaration. ⚠ A total `ℕ`-valued rank would report `0`
+for a group with no finite generating set, which is why the proof is an argument here. -/
+noncomputable def topologicalGeneratorRankNat (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (_h : IsTopologicallyFinitelyGenerated G) : ℕ :=
+  sInf {n : ℕ | ∃ s : Finset G,
+    s.card = n ∧ (Subgroup.closure (s : Set G)).topologicalClosure = ⊤}
+
+/-- **Layer 3, `proPKernel`**: the intersection of the open normal subgroups with `p`-group
+quotient. -/
+def proPKernel (G : Type u) [Group G] [TopologicalSpace G] : Subgroup G :=
+  ⨅ U : {U : OpenNormalSubgroup G // IsPGroup p (G ⧸ U.toSubgroup)}, U.1.toSubgroup
+
+instance proPKernel_normal (G : Type u) [Group G] [TopologicalSpace G] :
+    (proPKernel p G).Normal :=
+  Subgroup.normal_iInf_normal fun U ↦ U.1.isNormal'
+
+/-- **Layer 3, `maximalProPQuotient`**, that is `G(p)`. -/
+abbrev maximalProPQuotient (G : Type u) [Group G] [TopologicalSpace G] : Type u :=
+  G ⧸ proPKernel p G
+
+/-- **Layer 11, `absoluteGaloisGroupProP`**, that is `G_F(p)`, as the maximal pro-`p` quotient
+of the absolute Galois group. Layer 9 cites this carrier, and does not re-form the quotient. -/
+abbrev absoluteGaloisGroupProP (F : Type u) [Field F] : Type u :=
+  maximalProPQuotient p (Field.absoluteGaloisGroup F)
+
+/-- **Layer 2, `IsProPSylow`**: a closed pro-`p` subgroup whose image in every continuous finite
+quotient has index prime to `p`. ⚠ Maximality among closed pro-`p` subgroups is equivalent, but
+that equivalence is a theorem of Sylow theory, and not the definition. -/
+def IsProPSylow {G : Type u} [Group G] [TopologicalSpace G] (P : Subgroup G) : Prop :=
   IsClosed (P : Set G) ∧ IsProP p P ∧
-    ∀ Q : Subgroup G, IsClosed (Q : Set G) → IsProP p Q → P ≤ Q → Q = P
+    ∀ U : OpenNormalSubgroup G, ¬ p ∣ (P.map (QuotientGroup.mk' U.toSubgroup)).index
 
-/-- **Pro-`p` Groups Layer 4, `freeProfiniteGroup`,** on a finite generating set. ⚠ This is
-the profinite object, and not the pro-`p` one of the same layer. -/
-def freeProfiniteGroup (_ι : Type) : ProfiniteGrp := sorry
+/-- **Layer 2, `exists_isProPSylow`**: a profinite group has a pro-`p` Sylow subgroup. -/
+theorem exists_isProPSylow (G : Type u) [Group G] [TopologicalSpace G] [CompactSpace G]
+    [TotallyDisconnectedSpace G] : ∃ P : Subgroup G, IsProPSylow p P := sorry
 
-/-- **Pro-`p` Groups Layer 4, `presentedProfiniteGroup`:** the quotient of the free profinite
-group by the closed normal closure of a set of relators. Layer 4 states
-`G_K^t = ⟨σ, τ ∣ στσ⁻¹τ^{−q}⟩` in this shape. -/
-def presentedProfiniteGroup (ι : Type) (_rels : Set (freeProfiniteGroup ι)) :
-    ProfiniteGrp := sorry
+/-- **Layer 2, `IsProP.exists_le_isProPSylow`**: every closed pro-`p` subgroup lies in one. -/
+theorem IsProP.exists_le_isProPSylow {G : Type u} [Group G] [TopologicalSpace G] [CompactSpace G]
+    [TotallyDisconnectedSpace G] {Q : Subgroup G} (_hQ : IsProP p Q)
+    (_hcl : IsClosed (Q : Set G)) : ∃ P : Subgroup G, IsProPSylow p P ∧ Q ≤ P := sorry
 
-/-- **Pro-`p` Groups Layer 11, `absoluteGaloisGroupProP`:** the maximal pro-`p` quotient
-`G_F(p)` of the absolute Galois group. Layer 9 consumes its rank in both cases. -/
-def absoluteGaloisGroupProP (F : Type*) [Field F] : ProfiniteGrp := sorry
+/-- **Layer 2, `IsProPSylow.eq_of_normal`**: a normal pro-`p` Sylow subgroup is the only one.
+Layer 4 uses this to identify wild inertia. -/
+theorem IsProPSylow.eq_of_normal {G : Type u} [Group G] [TopologicalSpace G] {P Q : Subgroup G}
+    (_hP : IsProPSylow p P) (_hQ : IsProPSylow p Q) (_hn : P.Normal) : P = Q := sorry
 
-/-- **The `G_F`-module `μ_n(F̄)`, written additively.** The carrier is real. The action is the
-restriction of the Galois action on `AlgebraicClosure F`; that instance is data here, and a
-theorem of Layer 5. -/
-abbrev muN (F : Type u) [Field F] (n : ℕ) : Type u :=
-  Additive ↥(rootsOfUnity n (AlgebraicClosure F))
+/-- **Layer 2, `IsProPSylow.map_of_surjective`**: the image under a continuous surjection is a
+pro-`p` Sylow subgroup. -/
+theorem IsProPSylow.map_of_surjective {G H : Type u} [Group G] [TopologicalSpace G] [Group H]
+    [TopologicalSpace H] (f : G →* H) (_hf : Continuous f) (_hs : Function.Surjective f)
+    {P : Subgroup G} (_hP : IsProPSylow p P) : IsProPSylow p (P.map f) := sorry
 
-noncomputable instance instMuNAction (F : Type u) [Field F] (n : ℕ) :
-    DistribMulAction (Field.absoluteGaloisGroup F) (muN F n) := sorry
+/-- **Layer 3, `topologicalGeneratorRank_le_of_surjective`**: the rank does not increase under a
+continuous surjection. Layer 9 uses it for `d(G_K) ≥ d(G_K(p))`. -/
+theorem topologicalGeneratorRank_le_of_surjective {G H : Type u} [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [Group H] [TopologicalSpace H] [IsTopologicalGroup H] (f : G →* H)
+    (_hf : Continuous f) (_hs : Function.Surjective f) :
+    topologicalGeneratorRank H ≤ topologicalGeneratorRank G := sorry
 
-/-- **Profinite Cohomology Layers 1 to 8, `H^i(G_F, M)`:** continuous cohomology of the
-absolute Galois group with coefficients in a discrete module. Mathlib `v4.32.2` has the
-continuous cochain complex in `ContCohomology`, but no cohomology object with the colimit
-description and the cup products that Layers 5 to 8 use. -/
-def contH (F : Type u) [Field F] (_i : ℕ) (M : Type v) [AddCommGroup M]
-    [DistribMulAction (Field.absoluteGaloisGroup F) M] : Type v := sorry
+/-- **Layer 3, `topologicalGeneratorRankNat_le_of_isOpen`**, the Schreier bound
+`d(U) ≤ 1 + [G : U](d(G) − 1)` for an open subgroup. Layer 9 uses it for the lower bound in the
+case `μ_p ⊄ K`. -/
+theorem topologicalGeneratorRankNat_le_of_isOpen {G : Type u} [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (U : Subgroup G) (_hU : IsOpen (U : Set G))
+    (hG : IsTopologicallyFinitelyGenerated G)
+    (hU' : IsTopologicallyFinitelyGenerated U) :
+    topologicalGeneratorRankNat U hU' ≤ 1 + U.index * (topologicalGeneratorRankNat G hG - 1) :=
+  sorry
 
-noncomputable instance instContHGroup (F : Type u) [Field F] (i : ℕ) (M : Type v)
-    [AddCommGroup M] [DistribMulAction (Field.absoluteGaloisGroup F) M] :
-    AddCommGroup (contH F i M) := sorry
+/-- **Layer 4, `freeProfiniteGroup`**, the free profinite group on a finite set. ⚠ This is the
+profinite object, and not the pro-`p` one of the same layer. -/
+def freeProfiniteGroup (_X : Type) : ProfiniteGrp := sorry
 
-/-- **The Tate dual `M' = Hom(M, μ_n)`,** with the conjugation action. The carrier is real; the
-action is data here, and a theorem of Layer 8. -/
-noncomputable instance instDualAction (F : Type u) [Field F] (n : ℕ) (M : Type u)
-    [AddCommGroup M] [DistribMulAction (Field.absoluteGaloisGroup F) M] :
-    DistribMulAction (Field.absoluteGaloisGroup F) (M →+ muN F n) := sorry
+/-- **Layer 4, `freeProfiniteGroup.of`**, the generators. -/
+def freeProfiniteGroup.of {X : Type} (_x : X) : freeProfiniteGroup X := sorry
 
-/-- **Profinite Cohomology Layer 8, the cup product** in the one degree that Layer 8C uses. -/
-def cup2 (F : Type u) [Field F] (_a _b : contH F 1 (muN F 2)) : ZMod 2 := sorry
+/-- **Layer 4, `freeProfiniteGroup.lift`**, the universal property. -/
+def freeProfiniteGroup.lift {X : Type} (G : ProfiniteGrp) (_f : X → G) :
+    freeProfiniteGroup X ⟶ G := sorry
 
-/-- **Quadratic Form Invariants Layer 2, the Hilbert symbol** with values in `{±1} ⊆ ℤˣ`.
-Layer 8C identifies the mod-2 duality pairing with it. -/
+/-- **Layer 4, `presentedProfiniteGroup`**: the quotient by the closed normal closure of a set
+of relators. Layer 4 states `G_K^t = ⟨σ, τ ∣ στσ⁻¹τ^{−q}⟩` in this shape. -/
+def presentedProfiniteGroup (X : Type) (_rels : Set (freeProfiniteGroup X)) : ProfiniteGrp :=
+  sorry
+
+/-- `μ_p ⊆ F`, the hypothesis that separates the two rank theorems of Layer 11. -/
+def HasMuP (p : ℕ) (F : Type u) [Field F] : Prop := ∃ ζ : F, IsPrimitiveRoot ζ p
+
+/-- **Layer 11**: `G_F(p)` is topologically finitely generated. Layer 9 consumes it. -/
+theorem isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP [Fact p.Prime]
+    (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F] :
+    IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p F) := sorry
+
+/-- **Layer 11, Demushkin**: `d(G_F(p)) = [F : ℚ_p] + 2` when `μ_p ⊆ F`. -/
+theorem topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu [Fact p.Prime]
+    (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F] (_hmu : HasMuP p F)
+    (h : IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p F)) :
+    topologicalGeneratorRankNat (absoluteGaloisGroupProP p F) h = Module.finrank ℚ_[p] F + 2 :=
+  sorry
+
+/-- **Layer 11, Shafarevich**: `d(G_F(p)) = [F : ℚ_p] + 1` when `μ_p ⊄ F`, where `G_F(p)` is then
+free pro-`p`. ⚠ This is a statement about `G_F(p)`, and never about `G_F`. -/
+theorem topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu [Fact p.Prime]
+    (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F] (_hmu : ¬ HasMuP p F)
+    (h : IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p F)) :
+    topologicalGeneratorRankNat (absoluteGaloisGroupProP p F) h = Module.finrank ℚ_[p] F + 1 :=
+  sorry
+
+/-! ### The cohomology carrier
+
+`GalRep n F` is the bundled coefficient object: a topological representation of `G_F` over
+`ZMod n`. Discreteness of the underlying module is a hypothesis where it is needed, and the
+continuity of the action is part of `TopRep`. Cohomology is Mathlib's `continuousCohomology`. -/
+
+/-- Coefficients for `G_F`, bundled: a topological `ZMod n`-representation. -/
+abbrev GalRep (n : ℕ) (F : Type u) [Field F] : Type (u + 1) :=
+  TopRep.{u, 0, u} (ZMod n) (Field.absoluteGaloisGroup F)
+
+/-- `Hⁱ(G_F, A)`, the continuous cohomology of Mathlib. The Profinite Cohomology roadmap
+supplies the comparison with its explicit cochain description, and this roadmap uses no other
+carrier. -/
+noncomputable abbrev H (n : ℕ) (F : Type u) [Field F] (i : ℕ) (A : GalRep n F) : Type _ :=
+  continuousCohomology i A
+
+/-- The `G_F`-module `μ_n(Fˢ)`, written additively, as a coefficient object. ⚠ The roots of
+unity are taken inside the **separable** closure. -/
+def muNRep (n : ℕ) (F : Type u) [Field F] : GalRep n F := sorry
+
+/-- The Tate dual `A' = Hom(A, μ_n)`, with the conjugation action. -/
+def tateDual {n : ℕ} {F : Type u} [Field F] (_A : GalRep n F) : GalRep n F := sorry
+
+/-- **Profinite Cohomology Layer 8**, the low-degree cup product, in the one shape Layers 8 and
+8C use: the coefficients are `μ_n` on both factors, and the target is `μ_n` through the
+multiplication `μ_n ⊗ μ_n → μ_n` of coefficient modules. Naming the coefficient pairing is what
+fixes the normalization of the local symbol below. -/
+def cupMu (n : ℕ) (F : Type u) [Field F] :
+    H n F 1 (muNRep n F) →+ H n F 1 (muNRep n F) →+ H n F 2 (muNRep n F) := sorry
+
+/-- **Layer 8B, `h2MuEquivZMod_mixed`**, the trace isomorphism, as a separate declaration from
+the cup product. -/
+def h2MuEquivZMod (n : ℕ) (F : Type u) [Field F] : H n F 2 (muNRep n F) ≃+ ZMod n := sorry
+
+/-- The local pairing, as the composite of the cup product with the trace isomorphism. Both
+factors are named above, so a reader can see which cup product and which invariant map fix the
+normalization. -/
+noncomputable def localPairing {n : ℕ} {F : Type u} [Field F]
+    (x y : H n F 1 (muNRep n F)) : ZMod n :=
+  h2MuEquivZMod n F (cupMu n F x y)
+
+/-- **Layer 8, duality**, as the actual map `x ↦ (y ↦ inv(x ⌣ y))`, and not as an abstract
+equivalence. Perfectness is the statement that this map is bijective. -/
+def dualityMap {n : ℕ} {F : Type u} [Field F] (A : GalRep n F) (i : ℕ) :
+    H n F i (tateDual A) →+ (H n F (2 - i) A →+ ZMod n) := sorry
+
+/-! ### Quadratic Form Invariants roadmap -/
+
+/-- **Its Layer 6**, the `{±1}`-valued Hilbert symbol over a local field. Its Layer 2 owns the
+norm criterion over an arbitrary field, which is what fixes the orientation. -/
 def hilbertSymbol (F : Type u) [Field F] (_a _b : Fˣ) : ℤˣ := sorry
+
+/-! ### Tate cohomology in all integer degrees
+
+Tate–Nakayama needs cup product with a class of `Ĥ²` acting on `Ĥ^r` for every integer `r`.
+No supplier layer provides that, and Mathlib `v4.32.2` has no Tate cup product, so Layer 6 of
+this roadmap owns it. This is its shape. -/
+
+/-- **Layer 6**, cup product with a distinguished class of `Ĥ²`, in every integer degree. This
+is the map that Tate–Nakayama inverts, and it is what no supplier layer provides. -/
+def tateCupSigma {G : Type} [Group G] [Fintype G] (M : Rep ℤ G)
+    (_σ : tateCohomology M 2) (r : ℤ) :
+    tateCohomology (Rep.trivial ℤ G ℤ) r →+ tateCohomology M (r + 2) := sorry
 
 end Interface
 
 /-! ## Cross-roadmap statements
 
-Each statement below is a row of the shared interface table, on the supplying side. They are
-stated against `Interface`, so that a change of supplier is a rename. -/
+Each statement below is a row of a contract table, on the supplying side. They carry the
+local-field hypotheses, because there is no local Artin map and no local duality over an
+arbitrary field. -/
 
-/-- **Layer 5, the Kummer class of a unit.** The image of `a` under
-`Kˣ → H¹(G_K, μ_n)`, whose kernel is `(Kˣ)ⁿ`. -/
-def kummerClass (F : Type u) [Field F] (n : ℕ) (_a : Fˣ) :
-    Interface.contH F 1 (Interface.muN F n) :=
+section Deliverables
+
+variable {n : ℕ}
+
+/-- **Layer 5, the Kummer class** of a unit: the image of `a` in `H¹(G_F, μ_n)`. -/
+def kummerClass (n : ℕ) (F : Type u) [Field F] (_a : Fˣ) : Interface.H n F 1 (Interface.muNRep n F) :=
   sorry
 
-/-- **Layer 5, `kummerEquiv`.** For `n` invertible in `𝒪[K]`, the Kummer map induces an
-isomorphism `Kˣ/(Kˣ)ⁿ ≅ H¹(G_K, μ_n)`. Layer 8C and Pro-`p` Groups Layer 11 consume it. -/
+/-- **Layer 5, `kummerEquiv`, regime 1.** For `n` invertible in `𝒪[K]`, the Kummer map is an
+isomorphism of **groups**, after the multiplicative quotient is written additively. A bare
+equivalence of types would not support the cup-product square below. -/
 example (n : ℕ) (_hn : n ≠ 0) (_hn' : IsUnit (n : ↥𝒪[K])) :
-    Nonempty ((Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range) ≃
-      Interface.contH K 1 (Interface.muN K n)) :=
+    Nonempty (Additive (Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range) ≃+
+      Interface.H n K 1 (Interface.muNRep n K)) :=
   sorry
 
-/-- **Layer 7, `artinMap`.** The reciprocity map into the topological abelianization of the
-absolute Galois group: continuous, with dense image, and with kernel the intersection of the
-norm groups. ⚠ It is not surjective, so it supports no `Nat.card` statement about its
-target. -/
-noncomputable def artinMap (F : Type u) [Field F] :
-    Fˣ →* Field.absoluteGaloisGroupAbelianization F :=
-  sorry
-
-/-- **Layer 7, `cyclotomicCharacter_artinMap_padic`.** The cyclotomic orientation at
-`K = ℚ_p`: `χ_cyc(σ) = u⁻¹` for any `σ` above `Art(u)`. ⚠ The general statement carries the
-field norm, as `N_{K/ℚ_p}(u)⁻¹`; this is its specialization at `K = ℚ_p`, and not its general
-form. -/
-example (p : ℕ) [Fact p.Prime] (u : ℤ_[p]ˣ) (σ : Field.absoluteGaloisGroup ℚ_[p])
-    (_hσ : (QuotientGroup.mk σ : Field.absoluteGaloisGroupAbelianization ℚ_[p]) =
-      artinMap ℚ_[p] (Units.map (algebraMap ℤ_[p] ℚ_[p]).toMonoidHom u)) :
-    cyclotomicCharacter (AlgebraicClosure ℚ_[p]) p σ.toRingEquiv = u⁻¹ :=
-  sorry
-
-/-- **Layer 8B, `h2MuEquivZMod_mixed`.** The trace isomorphism `H²(G_K, μ_n) ≃ ZMod n`, for
-**every** `n ≥ 1` in mixed characteristic. ⚠ The 8A statement of the same shape carries
-`IsUnit (n : 𝒪[K])` and says nothing at `n = p`. Pro-`p` Groups Layer 11 consumes this one. -/
+/-- **Layer 5, `kummerEquiv`, regime 2.** For `K/ℚ_p` finite the same isomorphism holds for
+every `n ≠ 0`, including `n = p`. Layer 11 of the Pro-`p` Groups roadmap consumes this case, and
+it does not follow from the regime-1 statement. -/
 example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
     (n : ℕ) (_hn : n ≠ 0) :
-    Nonempty (Interface.contH F 2 (Interface.muN F n) ≃+ ZMod n) :=
+    Nonempty (Additive (Fˣ ⧸ (powMonoidHom n : Fˣ →* Fˣ).range) ≃+
+      Interface.H n F 1 (Interface.muNRep n F)) :=
   sorry
 
-/-- **Layer 8B, `tateDualityPairing_perfect_mixed`.** Local duality in mixed characteristic:
-for a finite module `M` killed by `n`, cohomology of the Tate dual `M' = Hom(M, μ_n)` in
-degree `i` is the dual group of cohomology of `M` in degree `2 − i`, for `i = 0, 1, 2`. -/
-example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
-    (n : ℕ) (_hn : n ≠ 0) (M : Type u) [AddCommGroup M]
-    [DistribMulAction (Field.absoluteGaloisGroup F) M] (_hM : Finite M)
-    (i : ℕ) (_hi : i ≤ 2) :
-    Nonempty (Interface.contH F i (M →+ Interface.muN F n) ≃+
-      (Interface.contH F (2 - i) M →+ ZMod n)) :=
+/-- **Layer 5, `cup_kummerEquiv`, part one: bilinearity.** The cup product of Kummer classes is
+additive in each variable, which says that the local symbol is multiplicative in each argument. -/
+example (n : ℕ) (_hn : n ≠ 0) (_hn' : IsUnit (n : ↥𝒪[K])) (a a' b : Kˣ) :
+    Interface.localPairing (kummerClass n K (a * a')) (kummerClass n K b)
+      = Interface.localPairing (kummerClass n K a) (kummerClass n K b)
+        + Interface.localPairing (kummerClass n K a') (kummerClass n K b) :=
   sorry
 
-/-- **Layer 8B, `eulerCharacteristic_mixed`.** For finite `M`,
-`#H⁰ · #H² / #H¹ = ‖#M‖_K`. Written over `ℕ`, with `‖#M‖_K⁻¹ = p ^ (N · v_p(#M))` and
-`N = [K : ℚ_p]`, that is the equation below. Pro-`p` Groups Layer 11 consumes it. -/
-example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
-    (M : Type u) [AddCommGroup M] [DistribMulAction (Field.absoluteGaloisGroup F) M]
-    (_hM : Finite M) :
-    Nat.card (Interface.contH F 1 M)
-      = Nat.card (Interface.contH F 0 M) * Nat.card (Interface.contH F 2 M)
-        * p ^ (Module.finrank ℚ_[p] F * padicValNat p (Nat.card M)) :=
+/-- **Layer 5, `cup_kummerEquiv`, part two: the Steinberg relation.** The cup product vanishes on
+`(a, 1 − a)`. With bilinearity this fixes the normalization of the symbol, and it is the relation
+that the norm criterion of Layer 8C specializes at `n = 2`. -/
+example (n : ℕ) (_hn : n ≠ 0) (_hn' : IsUnit (n : ↥𝒪[K])) (a b : Kˣ)
+    (_hab : (a : K) + (b : K) = 1) :
+    Interface.localPairing (kummerClass n K a) (kummerClass n K b) = 0 :=
   sorry
 
-/-- **Layer 8C, `hilbertSymbol_eq_tateDuality_pairing`.** At `n = 2` the mod-2 duality pairing,
-read through the Kummer identification on each factor, is the classical Hilbert symbol. The
-statement carries the conversion between `ZMod 2` and `{±1} ⊆ ℤˣ`. -/
-example (F : Type u) [Field F] (_h : ringChar F ≠ 2) (a b : Fˣ) :
-    Interface.cup2 F (kummerClass F 2 a) (kummerClass F 2 b) = 0 ↔
+/-- **Layer 7, `artinMap`**, with the local-field hypotheses: there is no local Artin map over an
+arbitrary field. Continuous, with dense image, and with kernel the intersection of the norm
+groups. ⚠ It is not surjective, so it supports no `Nat.card` statement about its target. -/
+noncomputable def artinMap : Kˣ →* Field.absoluteGaloisGroupAbelianization K := sorry
+
+/-- **Layer 7, `cyclotomicCharacter_artinMap`**, the general form, with the field norm. For
+`K/ℚ_p` finite and `u` a unit, `χ_cyc(Art_K(u)) = N_{K/ℚ_p}(u)⁻¹`. ⚠ Without the norm the
+equation is ill-typed for `K ≠ ℚ_p`, so the `ℚ_p` corollary below does not replace it. -/
+example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
+    [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
+    (u : Fˣ) (_hu : valuation F (u : F) = 1) (σ : Field.absoluteGaloisGroup F)
+    (_hσ : (QuotientGroup.mk σ : Field.absoluteGaloisGroupAbelianization F) = artinMap F u) :
+    Units.map (algebraMap ℤ_[p] ℚ_[p]).toMonoidHom
+        (cyclotomicCharacter (AlgebraicClosure F) p σ.toRingEquiv)
+      = (Units.map (Algebra.norm ℚ_[p] : F →* ℚ_[p]) u)⁻¹ :=
+  sorry
+
+/-- **Layer 8B, `h2MuEquivZMod_mixed`.** The trace isomorphism for **every** `n ≥ 1` in mixed
+characteristic. ⚠ The 8A statement of the same shape carries `IsUnit (n : 𝒪[K])`, so it says
+nothing at `n = p`. -/
+example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
+    [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
+    (n : ℕ) (_hn : n ≠ 0) :
+    Nonempty (Interface.H n F 2 (Interface.muNRep n F) ≃+ ZMod n) :=
+  sorry
+
+/-- **Layer 8B, `h2FpEquivZMod_of_mu`.** The transport to `𝔽_p` coefficients under a choice of
+primitive `p`-th root of unity. The choice is an argument, and not a global convention. -/
+example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
+    [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
+    (ζ : F) (_hζ : IsPrimitiveRoot ζ p) (A : Interface.GalRep p F) :
+    Nonempty (Interface.H p F 2 A ≃+ ZMod p) :=
+  sorry
+
+/-- **Layer 8, finiteness.** Every cohomology group in degrees `0`, `1`, `2` of a finite discrete
+module is finite. The Euler-characteristic statement below depends on this, because `Nat.card` is
+`0` on an infinite type. -/
+example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
+    [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
+    (n : ℕ) (_hn : n ≠ 0) (A : Interface.GalRep n F) (_hA : Finite A) (i : ℕ) (_hi : i ≤ 2) :
+    Finite (Interface.H n F i A) :=
+  sorry
+
+/-- **Layer 8B, `tateDualityPairing_perfect_mixed`.** Perfectness in degrees `0`, `1`, `2`, as
+bijectivity of the actual map `x ↦ (y ↦ inv(x ⌣ y))`. The coefficients are killed by `n`,
+because they are a `ZMod n`-module, and they are finite and discrete. -/
+example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
+    [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
+    (n : ℕ) (_hn : n ≠ 0) (A : Interface.GalRep n F) (_hA : Finite A)
+    (_hdisc : DiscreteTopology A) (i : ℕ) (_hi : i ≤ 2) :
+    Function.Bijective (Interface.dualityMap A i) :=
+  sorry
+
+/-- **Layer 8B, `eulerCharacteristic_mixed`.** With finiteness available,
+`#H⁰ · #H² / #H¹ = ‖#M‖_K`, written over `ℕ` with `‖#M‖_K⁻¹ = p ^ (N · v_p(#M))`. -/
+example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
+    [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
+    (n : ℕ) (_hn : n ≠ 0) (A : Interface.GalRep n F) (_hA : Finite A)
+    (_h0 : Finite (Interface.H n F 0 A)) (_h1 : Finite (Interface.H n F 1 A))
+    (_h2 : Finite (Interface.H n F 2 A)) :
+    Nat.card (Interface.H n F 1 A)
+      = Nat.card (Interface.H n F 0 A) * Nat.card (Interface.H n F 2 A)
+        * p ^ (Module.finrank ℚ_[p] F * padicValNat p (Nat.card A)) :=
+  sorry
+
+/-- **Layer 8B, `eulerCharacteristic_finrank_fp`.** The `𝔽_p`-module corollary,
+`dim H¹ = dim H⁰ + dim H² + N · dim M`, with the `ZMod p`-module structures on the cohomology
+groups. Layer 11 of the Pro-`p` Groups roadmap consumes this form. -/
+example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
+    [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
+    (A : Interface.GalRep p F) (_hA : Finite A) :
+    Module.finrank (ZMod p) (Interface.H p F 1 A)
+      = Module.finrank (ZMod p) (Interface.H p F 0 A)
+        + Module.finrank (ZMod p) (Interface.H p F 2 A)
+        + Module.finrank ℚ_[p] F * Module.finrank (ZMod p) A :=
+  sorry
+
+/-- **Layer 8C, `hilbertSymbol_eq_tateDuality_pairing`**, with the local-field hypotheses. At
+`n = 2` the pairing `localPairing`, read through the Kummer identification on each factor, is the
+classical `{±1}`-valued Hilbert symbol. -/
+example (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
+    [IsNonarchimedeanLocalField F] (_h2 : IsUnit (2 : ↥𝒪[F])) (a b : Fˣ) :
+    Interface.localPairing (kummerClass 2 F a) (kummerClass 2 F b) = 0 ↔
       Interface.hilbertSymbol F a b = 1 :=
   sorry
+
+end Deliverables
 
 end TauCetiRoadmap.LocalFields

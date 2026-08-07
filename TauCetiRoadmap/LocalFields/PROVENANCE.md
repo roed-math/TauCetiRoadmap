@@ -206,3 +206,19 @@ valuation spectra and Huber and Tate rings, towards the Fargues–Fontaine curve
 touch the arithmetic of local fields: ramification, unit filtrations, and reciprocity are absent
 from it. If both are accepted, the work on the `ℚ_p` instance in Layer 0 should be checked
 against its Layer-0 examples, for duplication.
+
+## Keeping the shared interface table in step
+
+The subsection "Shared layer-DAG table: Local Fields ↔ Pro-`p` Groups" of
+[`README.md`](README.md) also exists in the Pro-`p` Groups roadmap. The two copies are kept
+identical, wording included, so an edit to one is an edit to the other. The names in the table
+are provisional: they belong to the supplier roadmap, and they may change while both roadmaps
+are under review. When a supplier declaration is accepted, the consumer replaces its local
+interface declaration by an import, which leaves every statement that uses the name unchanged.
+
+At the date of this file, the two roadmaps are the pull requests
+[#2](https://github.com/roed-math/TauCetiRoadmap/pull/2) and
+[#3](https://github.com/roed-math/TauCetiRoadmap/pull/3) of `roed-math/TauCetiRoadmap`. The
+Profinite Cohomology roadmap is [#1](https://github.com/roed-math/TauCetiRoadmap/pull/1), and the
+Quadratic Form Invariants roadmap is
+[#4](https://github.com/roed-math/TauCetiRoadmap/pull/4).

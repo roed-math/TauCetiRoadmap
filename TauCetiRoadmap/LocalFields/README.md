@@ -31,7 +31,8 @@ the `IsNonarchimedeanLocalField` class. Use one subdirectory per layer: `Basic/`
 `UnitFiltration/`, `Unramified/`, `Ramification/`, `TameQuotient/`, `Cohomology/`,
 `ClassFormation/`, `Reciprocity/`, `Duality/`, and `FiniteGeneration/`.
 
-One theorem proved along the way is not about number theory. The finite-group class formation and the Tate–Nakayama theorem
+One theorem proved along the way is not about number theory. The finite-group class formation and
+the Tate–Nakayama theorem
 of Layer 6 are about finite groups and their cohomology. Their home is
 `TauCeti/RepresentationTheory/Homological/GroupCohomology/ClassFormation/`.
 
@@ -53,10 +54,13 @@ A Mathlib pull request, a Mathlib branch, a repository outside Mathlib, and an u
 formalization are never prerequisites. They are recorded in [`PROVENANCE.md`](PROVENANCE.md),
 which is a dated survey and is not normative.
 
-A prerequisite of form 4 does not block the work. `Suggested.lean` carries a compatibility
-interface for each object that another roadmap owns, under the name that the shared interface
-table fixes. Work here starts against that interface. When the other roadmap supplies the object,
-the interface is deleted and the name resolves to theirs, which is a rename and not a rewrite.
+A prerequisite of form 4 does not block the work. `Suggested.lean` carries an interface
+declaration for each object that another roadmap owns, under the name that the contract tables
+fix. Each such declaration copies the supplier's statement, and not only its English description:
+a declaration with the same description and a different Lean type is not an interface, because
+replacing it would then change every statement that uses it. Work here starts against those
+declarations. When the other roadmap supplies the object, the declaration is deleted and the
+import takes its place.
 
 ## Standing hypotheses
 
@@ -121,15 +125,17 @@ carry the mixed-characteristic hypothesis for the same reason:
 | ramification filtration | lower numbering `G_i`, indexed by `i : ℤ`, total, with `G_i = ⊤` for `i ≤ −1`. `G_0` is the inertia group and `G_1` is the wild inertia group (Serre LF IV §1). The real index is `G_u := G_{⌈u⌉}` for `u : ℝ`. The Herbrand functions are `φ_{L/K}, ψ_{L/K} : ℝ → ℝ`, and the upper numbering is `G^u = G_{ψ(u)}`. The two filtrations use different index sets on purpose. A statement that relates `U(K, i)` to `G_j` writes the shift out | Layer 3 |
 | Herbrand values as unit depths | `ψ_{L/K}` carries `ℕ` into `ℕ`. The resulting `ψℕ_{L/K} : ℕ → ℕ` is the one conversion in use. A unit group is indexed by a natural number, or by a value of `ψℕ`, and never by `φ` or by a real number. `φ` keeps its real values, and occurs only inside the Herbrand calculus and inside a floor, as in `⌊φ_{L/K}(i)⌋` | Layer 3 |
 | Frobenius | the **arithmetic** Frobenius `x ↦ x^q` on residue fields is the distinguished generator. The unqualified word "Frobenius" always means the arithmetic one. The geometric Frobenius is its inverse, and its name always contains `geometric` | Layer 2 |
-| absolute Galois group | `Field.absoluteGaloisGroup K`, that is `Gal(AlgebraicClosure K / K)`, in every public statement, and in every characteristic. Restriction to the separable closure is a topological isomorphism. That is proved once, as a comparison theorem, and is used wherever a separable-closure model is more convenient inside a proof | Layer 4 |
+| absolute Galois group | `Field.absoluteGaloisGroup K`, that is `Gal(AlgebraicClosure K / K)`, in every public statement, and in every characteristic. Restriction to the separable closure is a topological isomorphism, proved once as a comparison theorem | Layer 4 |
+| coefficient field | every coefficient module is built inside the **separable** closure `Kˢ := SeparableClosure K`, and never inside `AlgebraicClosure K`. So the multiplicative module is `(Kˢ)ˣ`, and the roots of unity are `μ_n(Kˢ)`. ⚠ For an imperfect field of equal characteristic, the fixed field of `Field.absoluteGaloisGroup K` acting on the full algebraic closure is the perfect closure, and not `K`, so `H⁰` of the multiplicative module would be wrong. The group stays `Field.absoluteGaloisGroup K`, acting on `Kˢ` through the comparison isomorphism of Layer 4 | Layer 4 |
 | reciprocity normalization | `Art_K : Kˣ →* G_K^{ab}` sends **uniformizers to arithmetic Frobenius**. Equivalently `ν_K ∘ Art_K = ι ∘ v_K`, where `ν_K : G_K^{ab} →* Ẑ` is normalized by `ν_K(Frob) = 1`, and `ι : ℤ → Ẑ` is the completion map. This is the Neukirch and NSW convention. The geometric normalization `Art_K^{geo} = Art_K ∘ (·)⁻¹` is one definition plus one translation lemma, and never a second convention | Layer 7 |
 | unramified coordinate target | `ν_K` has target `Ẑ`, which is profinite, and **never** `ℤ`. A continuous homomorphism from the compact group `G_K^{ab}` to the discrete group `ℤ` is trivial. The `ℤ`-valued form of the normalization is therefore inconsistent, and not merely inconvenient | Layer 2 and Layer 7 |
 | conductor | `c(L/K) : ℕ` is the conductor exponent, and `𝔣(L/K) = 𝓂[K]^{c(L/K)}` is the conductor ideal. The letter `f` is reserved for the residue degree, and is never reused for a conductor | Layer 7 |
 | invariant map | `inv_{L/K} : H²(Gal(L/K), Lˣ) ≃ (1/[L:K])ℤ/ℤ` in the unramified case, normalized by evaluation at Frobenius: under `H²(Ẑ-quotient, ℤ) ≅ H¹(·, ℚ/ℤ) = Hom(·, ℚ/ℤ)`, the class maps to evaluation at the **arithmetic** Frobenius. For the fundamental class, `inv_K(u_{L/K}) = 1/[L:K]` | Layer 5 |
 | Herbrand quotient | `h(G, M) = #H²(G, M) / #H¹(G, M)` for finite cyclic `G`, equivalently `#Ĥ⁰/#Ĥ¹`. The two values used are `h(Gal(L/K), Lˣ) = [L:K]` and `h(Gal(L/K), 𝒪[L]ˣ) = 1` | Layer 5 |
 | tame relation | `σ τ σ⁻¹ = τ^q`, where `σ` is an **arithmetic** Frobenius lift and `τ` is a topological generator of the tame inertia `I_t ≅ Ẑ^{(p')}(1)`. The `(1)` records that the action of `G_K` on `I_t ≅ lim_{p∤m} μ_m` is the cyclotomic one, which is the same statement as the relation. The presentation with a geometric `σ`, that is `σ⁻¹ τ σ = τ^q`, is isomorphic to it under `σ ↦ σ⁻¹`, and is supplied as a translation lemma | Layer 4 |
+| cohomology carrier | continuous cohomology of `G_K` is `continuousCohomology n A` of Mathlib, for `A` the topological representation attached to a discrete module with continuous action. The Profinite Cohomology roadmap supplies the comparison with its explicit cochain description, and this roadmap states nothing against a private carrier. Finite-level statements use `groupCohomology` and `tateCohomology` of Mathlib | Layer 5 |
 | Tate dual | one dual for each `n`, and only when `char K ∤ n`. For a finite discrete `G_K`-module `M` killed by `n`, the étale dual is `Hom(M, μ_n)` with the conjugation action. This covers regime 1, and every `n` in regime 2. Compatibility along `μ_n ⊆ μ_{nm}` is a named milestone inside those regimes | Layer 8 |
-| class formation interface | at finite level, a distinguished class `σ ∈ H²(G, M)`, with vanishing of `H¹` on subgroups and a generation hypothesis on `H²`. The profinite-level formation `(G_K, K̄^{sep,×})`, with compatible invariant maps, is stated on top of the finite-level one, in the style of NSW II §1 | Layer 5 and Layer 6 |
+| class formation interface | at finite level, a distinguished class `σ ∈ H²(G, M)`, with vanishing of `H¹` on subgroups and a generation hypothesis on `H²`. The profinite-level formation `(G_K, (Kˢ)ˣ)`, with compatible invariant maps, is stated on top of the finite-level one, in the style of NSW II §1 | Layer 5 and Layer 6 |
 
 ## What Mathlib has (consume)
 
@@ -479,9 +485,23 @@ of the next layer expressible, add the milestones of that layer to `Suggested.le
   - *Prerequisites:*
     - `Layer 1: power classes, the primary statement`;
     - `Layer 0: the normalized valuation`.
-- **Dyadic instances.** Prove `#(ℚ_2ˣ/(ℚ_2ˣ)²) = 8`, and `U(K, 2e+1) ⊆ (Kˣ)²` in residue
-  characteristic `2`. Both are instances of the primary statement, and not separate theorems.
+- **The dyadic square-class count.** Prove `#(ℚ_2ˣ/(ℚ_2ˣ)²) = 8`. This is an instance of the
+  primary statement, and not a separate theorem.
   - *Prerequisites:* `Layer 1: power classes, the primary statement`.
+- **Deep units are squares, in mixed characteristic.** Let `K/ℚ_2` be finite, and let
+  `e = v_K(2)`. Then `U(K, 2e+1) ⊆ (Kˣ)²`. The threshold is sharp: at `K = ℚ_2`, `e = 1`, and
+  `U(K,3) = 1 + 8ℤ_2` consists of squares while `U(K,2)` does not. ⚠ This is **not** an instance
+  of the cardinality count, which decides how many square classes there are and not which
+  subgroup lies inside the squares. The proof is Hensel's lemma applied to `X² − u`, or the
+  deep-unit logarithm with the fact that multiplication by `2` carries the logarithmic lattice at
+  depth `2e+1` into the lattice at depth `e+1`. ⚠ The hypothesis is mixed characteristic. In
+  equal characteristic `2` the element `2` is zero, `e` is not defined, and the displayed
+  statement is a different assertion.
+  - *Prerequisites:*
+    - `Layer 1: deep units in mixed characteristic`;
+    - `Layer 1: the unit filtration as an object`;
+    - `Mathlib: Hensel's lemma in Mathlib/NumberTheory/Padics/Hensel.lean`.
+  - *Source:* Serre, *A Course in Arithmetic*, II §3, for `ℚ_2`; Neukirch ANT II §5 in general.
 
 ### Layer 2: unramified extensions and Frobenius
 
@@ -808,7 +828,7 @@ of the next layer expressible, add the milestones of that layer to `Suggested.le
     - the profinite structure;
     - the correspondence between closed subgroups and intermediate fields, specialized to the
       three named fields.
-- **Inertia.** Define `I_K = Gal(K̄/K^{ur})`, and prove that it is closed and normal. Prove the
+- **Inertia.** Define `I_K = Gal(Kˢ/K^{ur})`, and prove that it is closed and normal. Prove the
   exact sequence `1 → I_K → G_K → Ẑ → 1`, with the surjection of Layer 2, and construct the
   arithmetic Frobenius lifts.
   - *Prerequisites:*
@@ -820,13 +840,13 @@ of the next layer expressible, add the milestones of that layer to `Suggested.le
     - existence of a Frobenius lift and the description of the set of lifts as a coset of `I_K`;
     - functoriality in a finite extension of `K`;
     - the image of `I_K` in a finite quotient, which is `G_0` of Layer 3.
-- **Wild inertia.** Define `P_K = Gal(K̄/K^{t})`, where `K^{t} = ⋃_{p ∤ m} K^{ur}(π^{1/m})` is the
+- **Wild inertia.** Define `P_K = Gal(Kˢ/K^{t})`, where `K^{t} = ⋃_{p ∤ m} K^{ur}(π^{1/m})` is the
   maximal tamely ramified extension. Prove that `P_K` is the inverse limit of the finite-level
   `G_1`. Prove that it is a closed normal pro-`p` subgroup of `G_K`. Prove that it is the unique
   maximal such subgroup of `I_K`, that is, its pro-`p` Sylow subgroup. The Pro-`p` Groups roadmap
   supplies the theory of pro-`p` Sylow subgroups, under the names of the shared interface table.
   Do not restate that theory in the vocabulary of Galois theory. What is proved here is the
-  identification of that Sylow subgroup with `Gal(K̄/K^t)`.
+  identification of that Sylow subgroup with `Gal(Kˢ/K^t)`.
   - *Prerequisites:*
     - `Layer 3: tame and wild`;
     - `Layer 4: inertia`;
@@ -838,7 +858,7 @@ of the next layer expressible, add the milestones of that layer to `Suggested.le
     - the limit description;
     - the Sylow identification;
     - the image of `P_K` in a finite quotient, which is `G_1` of Layer 3.
-- **The tame character and the twist.** Prove `I_K/P_K ≅ lim_{p∤m} μ_m(K̄) = Ẑ^{(p')}(1)`, by
+- **The tame character and the twist.** Prove `I_K/P_K ≅ lim_{p∤m} μ_m(Kˢ) = Ẑ^{(p')}(1)`, by
   `σ ↦ (σ(π^{1/m})/π^{1/m})_m`. Prove independence of the choices, and `G_K`-equivariance:
   conjugation acts through the cyclotomic action on the right-hand side. ⚠ The notation
   `Ẑ^{(p')}(1)` is *defined* here, as the prime-to-`p` Tate module of `μ`. As a profinite group it
@@ -889,12 +909,12 @@ colimit description over finite Galois quotients, and not cup products. Those co
 Profinite Cohomology roadmap, under the names its layers fix.
 
 - **Hilbert 90, at both levels.** The finite level is `H1ofAutOnUnitsUnique` of Mathlib. Restate
-  it as `H¹(Gal(L/K), Lˣ) = 0` in the chosen cohomology API, and derive `H¹(G_K, K̄^{sep,×}) = 0`
+  it as `H¹(Gal(L/K), Lˣ) = 0` in the chosen cohomology API, and derive `H¹(G_K, (Kˢ)ˣ) = 0`
   from the colimit description.
   - *Prerequisites:*
     - `Mathlib: groupCohomology.H1ofAutOnUnitsUnique`;
-    - `Profinite Cohomology Layer 7: the colimit description H^i(G_K, M) = colim H^i(Gal(L/K),
-      M^{G_L})`.
+    - `Profinite Cohomology Layer 4: the finite-quotient colimit in degrees ≤ 2`, or
+      `Profinite Cohomology Layer 10: the same colimit in all degrees`.
 - **Kummer theory.** Let `char K ∤ n`. Prove `Kˣ/(Kˣ)ⁿ ≅ H¹(G_K, μ_n)`, through the Kummer cocycle
   `a ↦ (σ ↦ σ(a^{1/n})/a^{1/n})`, from the `n`-th power sequence and Hilbert 90. Keep the
   `μ_n`-twist. Trivialize it only under the extra hypothesis `μ_n ⊆ K`. With the cardinality
@@ -905,10 +925,13 @@ Profinite Cohomology roadmap, under the names its layers fix.
   - *Prerequisites:*
     - `Layer 5: Hilbert 90`;
     - `Layer 1: power classes, the primary statement`;
-    - `Profinite Cohomology Layer 9: Kummer theory for a profinite group`;
-    - `Profinite Cohomology Layer 8: cup products`.
+    - `Profinite Cohomology Layer 9: Hilbert 90 and Kummer theory for a profinite group`;
+    - `Profinite Cohomology Layer 8: low-degree cup products`.
   - *API:*
-    - the isomorphism, in both directions, and its naturality in `K`;
+    - the isomorphism, in both directions;
+    - the restriction square: for a finite separable `L/K` inside `Kˢ`, restriction on `H¹`
+      corresponds to the inclusion of power classes `Kˣ/(Kˣ)ⁿ → Lˣ/(Lˣ)ⁿ`;
+    - the corestriction square: corestriction corresponds to the field norm `N_{L/K}`;
     - the compatibility along `μ_n ⊆ μ_{nm}`;
     - the cup-product square `cup_kummerEquiv`;
     - the cardinality corollary;
@@ -970,33 +993,62 @@ Profinite Cohomology roadmap, under the names its layers fix.
     - `Layer 5: local Galois groups are solvable`;
     - `Layer 5: Hilbert 90`;
     - `Layer 5: the Herbrand quotient`;
-    - `Profinite Cohomology Layer 5: inflation and restriction`.
-- **`Br(K)` is unramified.** Prove that every class in `H²(G_K, K̄ˣ)` is inflated from the
-  unramified tower, and therefore `H²(G_K, K̄ˣ) ≅ ℚ/ℤ`. That isomorphism is the **invariant map**
+    - `Profinite Cohomology Layer 2: explicit restriction and inflation in degrees ≤ 2`.
+- **`Br(K)` is unramified.** Prove that every class in `H²(G_K, (Kˢ)ˣ)` is inflated from the
+  unramified tower, and therefore `H²(G_K, (Kˢ)ˣ) ≅ ℚ/ℤ`. That isomorphism is the **invariant map**
   `inv_K`. The proof combines the upper bound of the previous milestone with the unramified lower
   bound. Prove the functoriality statements `inv_{K'} ∘ res = [K':K] · inv_K` and
   `inv ∘ cores = inv`.
   - *Prerequisites:*
     - `Layer 5: unramified cohomology`;
     - `Layer 5: induction from the cyclic case`;
-    - `Profinite Cohomology Layer 5: restriction and corestriction`;
-    - `Profinite Cohomology Layer 7: the colimit description`.
+    - `Profinite Cohomology Layer 2: explicit restriction and inflation in degrees ≤ 2`;
+    - `Profinite Cohomology Layer 6: corestriction and Mackey in degrees ≤ 2`;
+    - `Profinite Cohomology Layer 4: the finite-quotient colimit in degrees ≤ 2`.
   - *API:*
     - the map `inv_K`, with injectivity and surjectivity;
-    - the two functoriality statements;
+    - the two functoriality squares, written out: `inv_L(res α) = [L:K] · inv_K(α)` for a finite
+      separable `L/K` inside `Kˢ`, and `inv_K(cor β) = inv_L(β)`;
     - the value on the class of a cyclic algebra;
     - the restriction to the `n`-torsion, which is Layer 8A;
     - the normalization lemma at an unramified class.
+  - ⚠ There is no canonical map between separately chosen separable closures, so every
+    compatibility above fixes one `Kˢ` and an embedding `L ↪ Kˢ`. "Natural in `K`" is not a
+    statement; a named square with its embedding is.
+- **The finite class-formation structure.** Define the interface before any instance of it, so
+  that Layer 5 needs nothing from Layer 6. For a finite group `G` and a `G`-module `M`, the
+  structure carries a distinguished class `σ ∈ H²(G, M)` and, for every subgroup `H ≤ G`, these
+  fields:
+  - `H¹(H, M) = 0`;
+  - `H²(H, M)` is cyclic of order `[G : H]`;
+  - the restriction of `σ` to `H` is the chosen generator of `H²(H, M)`;
+  - the restriction maps commute in a tower `H' ≤ H ≤ G`, and the corestriction maps multiply the
+    generator by the index.
+
+  The home of the structure is
+  `TauCeti/RepresentationTheory/Homological/GroupCohomology/ClassFormation/`, because it is about
+  finite groups. Nothing in it mentions a local field.
+  - *Prerequisites:*
+    - `Mathlib: groupCohomology`, `tateCohomology`;
+    - `Profinite Cohomology Layer 2: explicit restriction and inflation in degrees ≤ 2`;
+    - `Profinite Cohomology Layer 6: corestriction and Mackey in degrees ≤ 2`.
+  - *API:*
+    - the structure and its five fields;
+    - restriction of the structure to a subgroup;
+    - inflation to a quotient;
+    - uniqueness of the distinguished class given its invariant;
+    - the induced map on `Ĥ⁰`, which Layer 6 turns into reciprocity.
 - **Fundamental classes and the class formation.** Define `u_{L/K} ∈ H²(Gal(L/K), Lˣ)` as the
   class with `inv = 1/[L:K]`. The pair of statements `H¹ = 0` and `H²` cyclic of the correct
-  order, with compatible invariant maps, is the **class-formation structure** on `(G_K, K̄ˣ)`. At
-  a single finite level use the finite class-formation interface of Layer 6. State the
+  order, with compatible invariant maps, is the **class-formation structure** on `(G_K, (Kˢ)ˣ)`. At
+  a single finite level use the class-formation structure of the milestone above. State the
   profinite-level formation, that is all layers at once with invariant maps into `ℚ/ℤ`, on top of
-  the finite-level instances. Record for each later theorem which of the two it consumes.
+  the finite-level instances. Record for each later theorem which of the two it consumes. No part
+  of this construction uses Tate–Nakayama, which is Layer 6.
   - *Prerequisites:*
+    - `Layer 5: the finite class-formation structure`;
     - `Layer 5: Br(K) is unramified`;
-    - `Layer 5: Hilbert 90`;
-    - `Layer 6: Tate–Nakayama` (for the interface only, and not for any proof in this layer).
+    - `Layer 5: Hilbert 90`.
   - *API:*
     - the class `u_{L/K}` and its characterization;
     - compatibility in a tower, that is inflation and restriction of fundamental classes;
@@ -1013,22 +1065,32 @@ proof that takes a shortcut through a later layer is circular.
 
 The abstract theorem of this layer is about finite groups, and not about local fields. The
 Profinite Cohomology roadmap owns the cohomology objects: comparison maps, exact sequences,
-restriction, corestriction, Shapiro, and cup products. This roadmap owns the generic finite class
-formation and Tate–Nakayama, because local reciprocity is the theory that needs them. Their home
+restriction, corestriction, Shapiro, and cup products. This roadmap owns the Tate cup product in
+all integer bidegrees and Tate–Nakayama, because local reciprocity is the theory that needs them.
+The class-formation structure they use is defined in Layer 5. Their home
 is `TauCeti/RepresentationTheory/Homological/GroupCohomology/ClassFormation/`, where any other
 development with a class formation can use them. `TauCeti/NumberTheory/LocalField/` then
 constructs the local fundamental class, instantiates the generic structure, and specializes.
 
-- **The finite class formation.** Define the interface: a finite group `G`, a `G`-module `M`, a
-  distinguished class `σ ∈ H²(G, M)`, the vanishing of `H¹(H, M)` for every subgroup `H ≤ G`, and
-  the generation hypothesis on `H²(H, M)`.
-  - *Prerequisites:* `Mathlib: groupCohomology`, `tateCohomology`.
+- **The Tate cup product, in all integer bidegrees.** Tate–Nakayama needs cup product with a
+  class in `Ĥ²`, acting on `Ĥ^r` for **every** integer `r`, including negative `r`. No supplier
+  layer provides that: the low-degree cups of the Profinite Cohomology roadmap and its
+  all-bidegree ordinary cup product are both about ordinary cohomology in non-negative degrees,
+  and Mathlib `v4.32.2` has no Tate cup product. So it is a milestone here. Construct it from a
+  complete resolution, and prove compatibility with the periodicity isomorphism of a finite
+  cyclic group, with restriction, and with corestriction. An Ext or dimension-shifting
+  construction is an acceptable substitute, provided it is stated in all integer degrees and
+  compared with the `r = −2` norm-residue map.
+  - *Prerequisites:*
+    - `Mathlib: tateCohomology`, and the complete resolution behind it;
+    - `Profinite Cohomology Layer 8: low-degree cup products`, for the comparison in
+      non-negative degrees.
   - *API:*
-    - the structure;
-    - the instance for a finite Galois extension of local fields from Layer 5;
-    - restriction of the structure to a subgroup;
-    - inflation to a quotient;
-    - uniqueness of the distinguished class given its invariant.
+    - the pairing `Ĥ^r(G, A) × Ĥ^s(G, B) → Ĥ^{r+s}(G, A ⊗ B)`;
+    - associativity and graded commutativity;
+    - compatibility with restriction, corestriction, and inflation;
+    - agreement with the ordinary cup product in non-negative degrees;
+    - the specialization used below, cup product with a class of `Ĥ²`.
 - **Tate–Nakayama, in the fixed generality.** Let `G` be a finite group. Let `σ ∈ H²(G, M)` be a
   distinguished class that satisfies the class-formation hypotheses. Then cup product with `σ`
   induces isomorphisms `Ĥ^r(H, ℤ) ≅ Ĥ^{r+2}(H, M)`, for every subgroup `H ≤ G` and every `r`.
@@ -1036,9 +1098,9 @@ constructs the local fundamental class, instantiates the generic structure, and 
   Consume it here only at `r = −2`, which reads `G^{ab} = Ĥ^{−2}(G, ℤ) ≅ Ĥ⁰(G, M) = M^G/N_G M`.
   The all-degrees form is the form that Layer 8 and the Pro-`p` Groups roadmap cite.
   - *Prerequisites:*
-    - `Layer 6: the finite class formation`;
-    - `Mathlib: tateCohomology`;
-    - `Profinite Cohomology Layer 8: cup products`.
+    - `Layer 5: the finite class-formation structure`;
+    - `Layer 6: the Tate cup product, in all integer bidegrees`;
+    - `Mathlib: tateCohomology`.
   - *Source:* Artin–Tate, *Class Field Theory*, and Serre LF IX. The hypotheses are the two
     class-formation conditions on every subgroup. *False generalization:* the conclusion fails
     without the hypothesis on subgroups; vanishing of `H¹(G, M)` alone does not suffice.
@@ -1050,6 +1112,7 @@ constructs the local fundamental class, instantiates the generic structure, and 
   - *Prerequisites:*
     - `Layer 6: Tate–Nakayama`;
     - `Layer 5: fundamental classes and the class formation`;
+    - `Layer 5: the finite class-formation structure`;
     - `Layer 2: residue correspondence`.
   - *API:*
     - the isomorphism and its inverse;
@@ -1065,7 +1128,8 @@ constructs the local fundamental class, instantiates the generic structure, and 
   statement, so all of them are proved at finite level here.
   - *Prerequisites:*
     - `Layer 6: finite-level reciprocity`;
-    - `Profinite Cohomology Layer 5: restriction, corestriction, and the transfer`.
+    - `Profinite Cohomology Layer 6: corestriction and Mackey in degrees ≤ 2`, with the
+      transfer.
 
 ### Layer 7: the Artin map, norm groups, and the existence theorem
 
@@ -1079,7 +1143,8 @@ orientation has values in `ℤ_pˣ`, and says nothing in characteristic `p`.
 
 Steps 6, 7 and 9 assume that `K` is a finite extension of `ℚ_p`. The route to the existence
 theorem here is Kummer theory. Its `p`-primary half in equal characteristic would need the
-Artin–Schreier–Witt machinery that the scope boundary excludes. "General local field", "prime to the residue characteristic", and
+Artin–Schreier–Witt machinery that the scope boundary excludes. "General local field", "prime to
+the residue characteristic", and
 "finite extension of `ℚ_p`" are three different hypotheses in this layer. A milestone that
 exchanges one for another is a different theorem.
 
@@ -1201,7 +1266,16 @@ exchanges one for another is a different theorem.
 7. **Consequences of the full existence theorem, for `K/ℚ_p` finite.** The intersection of all
    norm groups is trivial, so `Art_K` is injective. The normic topology on `Kˣ` is the topology of
    all open subgroups of finite index. Only now, `Art_K` extends to an isomorphism
-   `(Kˣ)^∧ ≅ G_K^{ab}`, from the profinite completion of `Kˣ` in the ordinary sense. ⚠ Step 5
+   `(Kˣ)^∧ ≅ G_K^{ab}`. Two completions could be meant here, so the milestone names the one used:
+   - `(Kˣ)^{top}`, the completion of the topological group over its open subgroups of finite
+     index;
+   - `(Kˣ)^{abs}`, the profinite completion of the underlying abstract group, over all subgroups
+     of finite index, which is `ProfiniteGrp.profiniteCompletion` of Mathlib.
+
+   Prove that the two agree for `K/ℚ_p` finite. The bridge is that every subgroup of finite index
+   of `Kˣ` is open: the kernel of a finite quotient contains `(Kˣ)^n` for `n` the exponent of that
+   quotient, and `(Kˣ)^n` is open by the power-class theorem of Layer 1. With the bridge proved,
+   the isomorphism holds for either completion. ⚠ Step 5
    alone gives none of these, in either characteristic. Injectivity uses `⋂_n (Kˣ)^n = 1`, and at
    `K = 𝔽_q((t))` the intersection over `n` prime to `p` still contains `U(K,1)`, which is
    `n`-divisible for every such `n`, because it is pro-`p`. One statement here is valid in either
@@ -1264,7 +1338,7 @@ modules over every local field" occurs.
 #### 8A. Prime to the residue characteristic, in both characteristics
 
 - **`H²(G_K, μ_n) ≅ ℤ/n` under `IsUnit (n : 𝒪[K])`.** Derive it from `inv_K` and the Kummer
-  sequence on `K̄ˣ`, that is from `Br(K)[n]`. Compute the finite groups `H^i(G_K, μ_n)` for
+  sequence on `(Kˢ)ˣ`, that is from `Br(K)[n]`. Compute the finite groups `H^i(G_K, μ_n)` for
   `i = 0, 1, 2`, and prove vanishing above degree `2`, which records `cd_ℓ(G_K) = 2` for primes
   `ℓ ≠ p`. The name is `h2MuEquivZMod_unit`, and the unit hypothesis is part of it. ⚠ This
   statement says nothing at `n = p` in mixed characteristic, where `p` is not a unit in `𝒪[K]`.
@@ -1278,15 +1352,34 @@ modules over every local field" occurs.
     - the three finite groups and their orders;
     - the vanishing above degree `2`;
     - compatibility along `μ_n ⊆ μ_{nm}`;
-    - naturality in `K`.
+    - the restriction and corestriction squares, with the embedding `L ↪ Kˢ` in the statement.
 - **Duality.** Let `M` be a finite discrete `G_K`-module killed by such an `n`. Put
   `M' = Hom(M, μ_n)` with the conjugation action. The cup pairing `H^i(G_K, M') × H^{2−i}(G_K, M)
   → H²(G_K, μ_n) ≅ ℤ/n` is a perfect pairing of finite groups for `i = 0, 1, 2`. Compatibility
   along `μ_n ⊆ μ_{nm}` stays inside this regime.
+  The proof is a chain, and each step is a milestone of its own. Those facts that make the
+  pairing typeable do not make it perfect.
+  1. *Finite level.* Duality for a finite Galois `L/K` and a finite `Gal(L/K)`-module, from the
+     class-formation structure of Layer 5 and Tate–Nakayama.
+  2. *Compatibilities.* The finite-level pairing commutes with inflation, with restriction, and
+     with the invariant map.
+  3. *Reduction.* Every finite discrete `G_K`-module is split by a finite Galois extension, so it
+     comes from step 1 for that level.
+  4. *Devissage.* Shapiro and coinduction reduce an induced module to the base, and a filtration
+     reduces a general module to modules with trivial action.
+  5. *Passage to the limit.* The finite-level pairings are compatible in the colimit, and give the
+     pairing on continuous cohomology.
+  6. *Finiteness.* Each `H^i(G_K, M)` is finite for `i = 0, 1, 2`. Every later cardinality
+     statement depends on this one.
+  7. *Perfectness.* The induced map to the dual group is bijective in degrees `0`, `1`, and `2`.
+  8. *Change of exponent.* The pairings for `n` and for `nm` agree along `μ_n ⊆ μ_{nm}`.
   - *Prerequisites:*
     - `Layer 8A: H²(G_K, μ_n) ≅ ℤ/n`;
-    - `Profinite Cohomology Layer 8: cup products`;
-    - `Profinite Cohomology Layer 7: the colimit description`.
+    - `Layer 5: the finite class-formation structure`;
+    - `Layer 6: Tate–Nakayama`;
+    - `Profinite Cohomology Layer 8: low-degree cup products`;
+    - `Profinite Cohomology Layer 7: Shapiro in degrees ≤ 2`;
+    - `Profinite Cohomology Layer 4: the finite-quotient colimit in degrees ≤ 2`.
   - *API:*
     - the dual module and its functoriality;
     - the pairing in each of the three degrees;
@@ -1294,7 +1387,7 @@ modules over every local field" occurs.
     - the induced isomorphism `H^i(G_K, M') ≅ Hom(H^{2−i}(G_K, M), ℤ/n)`;
     - finiteness of each group;
     - compatibility across `n`;
-    - the behaviour under restriction to a finite extension.
+    - the restriction and corestriction squares for a finite separable `L/K` inside `Kˢ`.
   - *Source:* Milne ADT I.2.1 and I.2.3; NSW (7.2.6). The hypotheses are `M` finite and discrete,
     and `#M` invertible in `𝒪[K]`. *False generalization:* at `char K = p` and `M = ℤ/p` the
     pairing is not perfect, and `μ_p` is not the correct dual.
@@ -1320,7 +1413,7 @@ modules over every local field" occurs.
   - *Prerequisites:*
     - `Layer 8A: duality`;
     - `Layer 4: inertia`;
-    - `Profinite Cohomology Layer 5: inflation and restriction`.
+    - `Profinite Cohomology Layer 2: explicit restriction and inflation in degrees ≤ 2`.
   - *Source:* Milne ADT I.2.6; NSW (7.2.15). The hypotheses are that `M` is unramified and that
     `#M` is prime to the residue characteristic. *False generalization:* the common value
     `#H⁰(G_K, M)` for both subgroups, which the example above refutes.
@@ -1341,10 +1434,16 @@ rank, and is never a degree here.
   is available. Prove the same perfect pairings, the same finiteness, and compatibility across
   exponents. Perfectness in degrees `0`, `1`, and `2` is `tateDualityPairing_perfect_mixed`.
   Record `cd_p(G_K) = 2` as its own statement, and not as part of an unqualified `cd(G_K) = 2`.
+  ⚠ This is not a formal consequence of 8A. The `p`-primary case needs its own argument at
+  steps 1, 6, and 7 of the chain in 8A: the finite-level duality at `p`-power coefficients, the
+  finiteness of `H^i(G_K, M)` for `p`-primary `M`, which uses the finite index of `(Kˣ)^{p^k}`
+  from Layer 1, and perfectness. State those three steps again here, with `K/ℚ_p` finite.
   - *Prerequisites:*
-    - `Layer 8A: duality`;
+    - `Layer 8A: duality`, for the shape of the statement and for the prime-to-`p` part;
+    - `Layer 5: the finite class-formation structure`;
+    - `Layer 6: Tate–Nakayama`;
     - `Layer 1: power classes, the primary statement`;
-    - `Profinite Cohomology Layer 8: cup products`;
+    - `Profinite Cohomology Layer 8: low-degree cup products`;
     - `Profinite Cohomology Layer 11: cohomological dimension`.
   - *Source:* Milne ADT I.2.3; NSW (7.2.6). The hypothesis is `K/ℚ_p` finite. *False
     generalization:* the same statement in equal characteristic at `n = p`, which the scope
@@ -1362,7 +1461,8 @@ rank, and is never a degree here.
     - the isomorphism for every `n`;
     - compatibility along `μ_n ⊆ μ_{nm}`;
     - the transported form under `μ_p ⊆ K`, with the dependence on the chosen root of unity;
-    - naturality in `K`.
+    - the restriction and corestriction squares, which inherit the scaling laws of `inv`:
+      restriction multiplies by `[L:K]`, and corestriction is the identity on invariants.
 - **Euler characteristic.** For every finite `M`, `#H⁰(G_K,M) · #H²(G_K,M) / #H¹(G_K,M) = ‖#M‖_K`,
   in the normalized absolute value of Layer 0, as an equality in `ℚ≥0`. The name is
   `eulerCharacteristic_mixed`. State that form first. Then derive the corollary for an
@@ -1377,7 +1477,7 @@ rank, and is never a degree here.
 #### 8C. The mod-2 Hilbert symbol
 
 This is a deliverable of this roadmap, and the one statement on which this roadmap and the
-Quadratic Form Invariants roadmap must agree.
+Quadratic Form Invariants roadmap must agree. The ownership boundary is written out below.
 
 - At `n = 2` with `char K ≠ 2`, Kummer theory identifies `Kˣ/(Kˣ)² ≅ H¹(G_K, μ_2)` on both factors
   of the 8A pairing. The pairing `H¹(G_K, μ_2) × H¹(G_K, μ_2) → H²(G_K, μ_2) ≅ ℤ/2` **is the
@@ -1390,20 +1490,30 @@ Quadratic Form Invariants roadmap must agree.
   - *Prerequisites:*
     - `Layer 8A: duality`;
     - `Layer 5: Kummer theory` (`kummerEquiv` and `cup_kummerEquiv`);
-    - `Quadratic Form Invariants Layer 2: the Hilbert symbol with values in {±1}, and the
-      dictionary between {±1}, ZMod 2, and μ₂`.
+    - `Quadratic Form Invariants Layer 6: the {±1}-valued Hilbert symbol over a local field, and
+      the dictionary between {±1}, ZMod 2, and μ₂`;
+    - `Quadratic Form Invariants Layer 2: the norm criterion (a,b) = 1 ↔ a ∈ N(K(√b)ˣ) over an
+      arbitrary field, with its symmetry lemma`.
   - *API:*
     - the named theorem;
     - nondegeneracy of the symbol, as a corollary of duality here;
     - symmetry;
     - the value on the basis `{−1, 2, 5}` over `ℚ_2`, in the examples section.
-- The conversion of values is not restated here. The Quadratic Form Invariants roadmap, Layer 2,
-  defines the symbol with values in `{±1}`, and fixes the dictionary between `{±1}`, `ZMod 2`, and
-  `μ₂` in one place; its Layer 7 is the cohomological side. Cite those milestones, and do not
-  change codomain inside a displayed formula.
-- That same Layer 2 fixes the orientation of the norm criterion as `(a,b) = 1 ↔ a ∈ N(K(√b)ˣ)`,
-  with the symmetry lemma that makes the other orientation available. This roadmap uses
-  `(a,b)_K = 1 ↔ b ∈ N(K(√a)ˣ)` through that lemma.
+- **The ownership boundary with the Quadratic Form Invariants roadmap.** That roadmap owns two
+  things, at the layers it currently uses:
+  - its Layer 2 owns quaternion algebras and the four-fold splitting criterion over an arbitrary
+    field, including the norm criterion `(a,b) = 1 ↔ a ∈ N(K(√b)ˣ)` and the symmetry lemma;
+  - its Layer 6 owns the local toolkit: the quadratic defect, the `{±1}`-valued Hilbert symbol
+    over a local field, its computations, and the local classification.
+
+  This roadmap owns one statement: the comparison of that symbol with the Tate-duality pairing.
+  ⚠ The scopes do not yet coincide. Their Layer 6 is stated for nonarchimedean local fields of
+  characteristic zero, and 8C here holds whenever `2` is invertible, so it also covers
+  `𝔽_q((t))` with `q` odd. Until their scope widens, the comparison in equal characteristic
+  carries with it the `{±1}`-valued symbol defined here by the norm criterion of their Layer 2,
+  which is characteristic-free. Neither roadmap builds a second local-field toolkit, and neither
+  changes codomain inside a displayed formula: the dictionary between `{±1}`, `ZMod 2`, and `μ₂`
+  is theirs, in one place.
 
 ### Layer 9: topological finite generation of `G_K`
 
@@ -1551,15 +1661,13 @@ The worked examples are required in the layers to which they are assigned.
 
 ### Shared layer-DAG table: Local Fields ↔ Pro-`p` Groups
 
-This subsection is the interface record between the Local Fields roadmap
-([PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)) and the Pro-`p` Groups roadmap
-([PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3)). **It is maintained in both
-roadmaps, and the two copies are identical, wording included**; an edit to either is an edit
-to both. Every crossing between the two developments is a row here, and a statement that is
-not a row is not an interface: neither roadmap may consume the other through prose alone. The
-names are provisional and belong to the supplier, which states the object once; the consumer
-cites the name and never restates the object in its own words, which is what keeps the two
-sides from growing near-duplicate carriers and comparison maps between them.
+This subsection is the interface record between the Local Fields roadmap and the Pro-`p` Groups
+roadmap. Every crossing between the two developments is a row of the table. A statement that is
+not a row is not an interface: neither roadmap consumes the other through prose. Each name
+belongs to the supplier, which states the object once. The consumer cites that name, and does not
+restate the object in its own words. That is what stops the two sides from growing near-duplicate
+carriers, and comparison maps between them. The procedure for keeping the two copies of this
+table in step is in [`PROVENANCE.md`](PROVENANCE.md), which is not normative.
 
 | Consumer layer | Supplier layer | Exact object or theorem | Agreed provisional name |
 |---|---|---|---|
@@ -1603,6 +1711,26 @@ one:
   which is Layer 3's, and never the Local Fields theorem that produces an instance of it.
   Reading that edge the other way would close the cycle
   `Local Fields 9 → Pro-p Groups 8 → Pro-p Groups 9 → Pro-p Groups 11 → Local Fields 9`.
+
+### Contract table: Local Fields ← Profinite Cohomology
+
+Every use of profinite cohomology in Layers 5 to 9 is a row here, with the exact supplier layer.
+A layer number is never shorthand for several operations that different layers own.
+
+| Consumer milestone | Supplier layer | Object or theorem |
+|---|---|---|
+| Layer 5, Hilbert 90; Layer 8A, duality | Layer 4, in degrees `≤ 2`; Layer 10 in all degrees | the finite-quotient colimit `H^i(G_K, M) = colim H^i(Gal(L/K), M^{G_L})` |
+| every cohomological milestone of Layers 5 to 9 | Layer 3 | the explicit and canonical comparison, which fixes the carrier against `continuousCohomology` |
+| Layer 5, the class-formation structure; Layer 5, induction; Layer 8A, unramified subgroups | Layer 2 | explicit restriction and inflation in degrees `≤ 2` |
+| Layer 5, the class-formation structure; Layer 5, `Br(K)`; Layer 6, functoriality | Layer 6 | corestriction, Mackey, and the transfer in degrees `≤ 2` |
+| Layer 5, Kummer theory | Layer 9 | Hilbert 90 and Kummer theory for a profinite group |
+| Layer 5, Kummer theory; Layer 6, the Tate cup product; Layer 8A and 8B, duality; Layer 8C | Layer 8 | low-degree cup products |
+| Layer 8A, duality | Layer 7 | Shapiro in degrees `≤ 2` |
+| Layer 8A, `H²(G_K, μ_n) ≅ ℤ/n`; Layer 8B, duality | Layer 11 | cohomological dimension |
+
+⚠ Two operations are **not** supplied by that roadmap, and are milestones here: the Tate cup
+product in all integer bidegrees, in Layer 6, and every statement about the multiplicative module
+`(Kˢ)ˣ`, which is local arithmetic.
 
 ## Downstream consumers
 
@@ -1671,5 +1799,6 @@ for what may be carried over from it and under what conditions.
 [`PROVENANCE.md`](PROVENANCE.md) records the state of the surrounding ecosystem on a fixed date.
 It lists the Lean projects outside Mathlib that cover part of this ground. It lists the open
 Mathlib pull requests that touch the substrate, and the design decisions recorded on the Lean
-Zulip. It also records the conditions that apply to reuse of code from each project. That file is a dated survey.
+Zulip. It also records the conditions that apply to reuse of code from each project. That file is
+a dated survey.
 It is not normative, and nothing in it is a prerequisite of a milestone above.
