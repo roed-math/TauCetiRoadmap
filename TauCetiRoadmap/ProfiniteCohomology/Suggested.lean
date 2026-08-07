@@ -124,6 +124,22 @@ example {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Compa
       s (QuotientGroup.mk 1) = 1 :=
   sorry
 
+/-- **Layer 0, the internal hom with its conjugation action.** For discrete `M` and `N` the
+additive homomorphisms `M →+ N` carry `(g • φ) m = g • φ (g⁻¹ • m)`, and for **finite** `M` this
+is again a discrete `G`-module. Evaluation is then a `G`-equivariant biadditive pairing, which is
+the pairing the duality package of Layer 8 is an instance of. -/
+def homAction {G : Type*} [Group G] {M N : Type*} [AddCommGroup M] [AddCommGroup N]
+    [DistribMulAction G M] [DistribMulAction G N] (g : G) (φ : M →+ N) : M →+ N :=
+  (DistribSMul.toAddMonoidHom N g).comp (φ.comp (DistribSMul.toAddMonoidHom M g⁻¹))
+
+/-- **Layer 0, evaluation is equivariant.** The statement that makes the duality cup pairings of
+Layer 8 well typed, and the one the Local Fields roadmap names when it states local Tate duality.
+It is proved rather than assumed, because it is what fixes the sign of the conjugation action. -/
+example {G : Type*} [Group G] {M N : Type*} [AddCommGroup M] [AddCommGroup N]
+    [DistribMulAction G M] [DistribMulAction G N] (g : G) (φ : M →+ N) (m : M) :
+    homAction g φ (g • m) = g • φ m := by
+  simp [homAction, inv_smul_smul]
+
 /-! ### Layer 1: the canonical carrier and its functoriality -/
 
 open CategoryTheory in
@@ -623,6 +639,33 @@ example {E : Type*} [Group E] (π : E →* Multiplicative (ZMod 4))
     (hπ : Function.Surjective π) (hker : π.ker ≤ Subgroup.center E)
     (hcard : Nat.card π.ker = 2) (x : E) (hx : π x = Multiplicative.ofAdd 1) :
     (∀ a b : E, a * b = b * a) ∧ x ^ 4 ∈ π.ker ∧ (orderOf x = 8 ↔ x ^ 4 ≠ 1) :=
+  sorry
+
+/-! ### What the sibling roadmaps consume -/
+
+/-- **Layer 13, the restriction identity, at cochain level.** The first of the four identities the
+Quadratic Form Invariants roadmap consumes: on `U × U` the graph cochain is the cup of `α` with
+its conjugate, `res_U N^{Ev}(α) = α ⌣ (s · α)`. Stated on cochains here, since that is the form
+the proof produces and the form a reader can check against the definition above. -/
+example {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (U : OpenSubgroup G) (hU : U.toSubgroup.index = 2) (s : G) (hs : s ∉ U)
+    (α : U.toSubgroup →* Multiplicative (ZMod 2)) (γ η : G) (hγ : γ ∈ U) (hη : η ∈ U) :
+    evensGraphCochain U.toSubgroup s α (γ, η) =
+      evensExtend U.toSubgroup α γ * evensExtend U.toSubgroup α (s⁻¹ * η * s) :=
+  sorry
+
+set_option synthInstance.maxHeartbeats 40000 in
+/-- **Layer 9, the mod-2 Kummer class.** With `2` invertible in `K`, the class of `a` is the
+continuous homomorphism `G_K → 𝔽₂` that is trivial exactly on the automorphisms fixing a chosen
+square root. This is the object the Quadratic Form Invariants roadmap calls the Kummer class, and
+its square-class isomorphism `Kˣ ⧸ (Kˣ)² ≅ H¹(G_K, 𝔽₂)` is the Layer 9 milestone it consumes.
+Multiplicative notation, through `Additive`, is the pin's own idiom for coefficients that are
+units. -/
+example (K : Type*) [Field K] (h2 : IsUnit (2 : K)) (a : Kˣ) (r : (SeparableClosure K)ˣ)
+    (hr : (r : SeparableClosure K) ^ 2 = algebraMap K (SeparableClosure K) (a : K)) :
+    ∃ κ : (SeparableClosure K ≃ₐ[K] SeparableClosure K) → Multiplicative (ZMod 2),
+      (∀ g, κ g = 1 ↔ g • r = r) ∧ IsLocallyConstant κ ∧
+        ∀ g h, κ (g * h) = κ g * κ h :=
   sorry
 
 end TauCetiRoadmap.ProfiniteCohomology

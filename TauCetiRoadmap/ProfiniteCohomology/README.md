@@ -130,7 +130,9 @@ subgroups.
 
 ### What this roadmap supplies to its consumers
 
-These are theorem-level dependencies, not subject-area ones.
+These are theorem-level dependencies, not subject-area ones. Each one has a prototype in
+`Suggested.lean`: the equivariance of evaluation that the duality pairings rest on, the
+restriction identity of the index-2 Evens norm, and the mod-2 Kummer class.
 
 | Consumer | Milestones supplied here |
 |---|---|
