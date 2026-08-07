@@ -470,9 +470,9 @@ theorem blocksIntermediateFieldsOrderIso_apply (p : F[X]) (hp : Irreducible p)
     (hα : α ∈ p.rootSet p.SplittingField)
     (B : {B : Set (p.rootSet p.SplittingField) //
       (⟨α, hα⟩ : p.rootSet p.SplittingField) ∈ B ∧ IsBlock p.Gal B}) :
-    ((blocksIntermediateFieldsOrderIso p hp hsep hdeg α hα B :
-        (Set.Iic (IntermediateField.adjoin F {α}))ᵒᵈ) : IntermediateField F p.SplittingField)
-      = IntermediateField.fixedField (MulAction.stabilizer p.Gal (B : Set _)) :=
+    (OrderDual.ofDual (blocksIntermediateFieldsOrderIso p hp hsep hdeg α hα B) :
+        IntermediateField F p.SplittingField)
+      = IntermediateField.fixedField (MulAction.stabilizer p.Gal B.1) :=
   sorry
 
 /-- **Layer 2, 2-transitivity.** The root action of an irreducible separable `p` of degree
