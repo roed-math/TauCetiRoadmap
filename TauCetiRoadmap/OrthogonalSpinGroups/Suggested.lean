@@ -38,7 +38,7 @@ namespace TauCetiRoadmap.OrthogonalSpinGroups
 
 open QuadraticMap
 
-universe u v
+universe u v w
 
 /-! ## Layer 0: the orthogonal group, its determinant, and reflections -/
 
@@ -281,51 +281,58 @@ end Layer1
 
 /-! ## Layer 2: the local topology, and the transvections
 
-⚠ A finite-dimensional space over a local field carries no `TopologicalSpace` instance on its own.
-The topology is transported through a basis and then proved independent of the basis; that
-independence is the milestone, and it is what makes every later topological statement well posed.
+⚠ The topology is Mathlib's `moduleTopology`, not a private basis transport, and every statement
+below carries `IsModuleTopology` rather than an unconstrained `TopologicalSpace` instance. That is
+not bookkeeping: for an arbitrary topology the closedness of the isometry set and the openness of
+`ker θ` are both **false**, so omitting the hypothesis would not weaken these theorems, it would
+make them wrong.
 -/
 
 section Layer2
 
-variable {K : Type u} [Field K] [Invertible (2 : K)] [TopologicalSpace K]
+variable {K : Type u} [Field K] [Invertible (2 : K)] [TopologicalSpace K] [IsTopologicalRing K]
 variable {V : Type v} [AddCommGroup V] [Module K V]
+variable [TopologicalSpace (Module.End K V)] [IsModuleTopology K (Module.End K V)]
 
-/-- **Layer 2A**: the topology transported through a chosen basis. -/
-@[reducible] def moduleTopologyOfBasis {ι : Type v} [Fintype ι] (b : Module.Basis ι K V) :
-    TopologicalSpace V :=
+/-- **Layer 2B**: the isometry set is closed in `Module.End K V` for the module topology. Stated
+about `End` rather than about `V ≃ₗ[K] V`, since the latter is not a module and so has no module
+topology of its own; `pointGroupTopology` below is how it acquires one. -/
+theorem isClosed_isometrySet [FiniteDimensional K V] (Q : QuadraticForm K V) :
+    IsClosed {f : Module.End K V | ∀ x, Q (f x) = Q x} := by
   sorry
 
-/-- **Layer 2A**, the milestone: any two bases give the same topology, because every
-change-of-basis map and its inverse are continuous. Only after this is "the" topology on `V`, on
-`Module.End K V` and on `V ≃ₗ[K] V` a well-defined object. -/
-theorem moduleTopologyOfBasis_eq {ι ι' : Type v} [Fintype ι] [Fintype ι']
-    (b : Module.Basis ι K V) (b' : Module.Basis ι' K V) :
-    moduleTopologyOfBasis b = moduleTopologyOfBasis b' := by
+/-- **Layer 2B**: the topology on the point group, pinned as the one induced by `f ↦ (f, f⁻¹)`.
+Naming it makes every later statement say *which* topology it means, which is what the previous
+draft failed to do. -/
+@[reducible] def pointGroupTopology : TopologicalSpace (V ≃ₗ[K] V) :=
+  TopologicalSpace.induced
+    (fun f : V ≃ₗ[K] V => ((f : Module.End K V), (f.symm : Module.End K V))) inferInstance
+
+/-- **Layer 2B**: it makes `V ≃ₗ[K] V` a topological group. -/
+theorem isTopologicalGroup_pointGroupTopology :
+    @IsTopologicalGroup (V ≃ₗ[K] V) pointGroupTopology _ := by
   sorry
 
-/-! ⚠ From here on the topologies of 2A are carried as hypotheses rather than synthesized. That is
-not a workaround: Lean will not produce a `TopologicalSpace (V ≃ₗ[K] V)` from a topology on `V`,
-which is precisely why 2A has to construct the transported topology and prove it basis-independent
-before any of the statements below are even well posed. -/
-
-variable [TopologicalSpace V] [TopologicalSpace (V ≃ₗ[K] V)]
-
-/-- **Layer 2B**: the orthogonal group is closed, being cut out by polynomial equations. Local
-compactness then comes from closedness inside a finite-dimensional space over a locally compact
-field. -/
+/-- **Layer 2B**: and the orthogonal group is closed in it. -/
 theorem isClosed_orthogonalGroup [FiniteDimensional K V] (Q : QuadraticForm K V) :
-    IsClosed {f : V ≃ₗ[K] V | f ∈ orthogonalGroup Q} := by
+    @IsClosed (V ≃ₗ[K] V) pointGroupTopology {f | f ∈ orthogonalGroup Q} := by
   sorry
 
 /-- **⚠ Layer 2E**: discreteness of the square-class group makes a *continuous* map into it
-locally constant, but does not make an arbitrary map continuous. The real content is that the
-kernel is **open**, obtained by factoring through the continuous Clifford norm and the open
-quotient map. -/
+locally constant; it does not make an arbitrary map continuous. The content is that the kernel is
+**open**, obtained by factoring through the continuous Clifford norm and the open quotient map. -/
 theorem isOpen_ker_spinorNorm [FiniteDimensional K V] (Q : QuadraticForm K V)
     (hQ : Q.Nondegenerate) :
-    IsOpen {g : orthogonalGroup Q | g ∈ (spinorNorm Q hQ).ker} := by
+    @IsOpen (V ≃ₗ[K] V) pointGroupTopology
+      {f | ∃ h : f ∈ orthogonalGroup Q, (⟨f, h⟩ : orthogonalGroup Q) ∈ (spinorNorm Q hQ).ker} := by
   sorry
+
+end Layer2
+
+section Transvections
+
+variable {K : Type u} [Field K] [Invertible (2 : K)]
+variable {V : Type v} [AddCommGroup V] [Module K V]
 
 /-- **Layer 2C**: the Eichler transvection attached to an isotropic `u` and an orthogonal `w`. -/
 noncomputable def transvection (Q : QuadraticForm K V) {u w : V} (hu : Q u = 0)
@@ -338,18 +345,32 @@ theorem transvection_apply (Q : QuadraticForm K V) {u w : V} (hu : Q u = 0)
       = x + polar Q x u • w - polar Q x w • u - (Q w * polar Q x u) • u := by
   sorry
 
-/-- **Layer 2C**: additivity in `w`, which is what makes the transvections a one-parameter
-subgroup rather than a family of elements. -/
-theorem transvection_add (Q : QuadraticForm K V) {u w w' : V} (hu : Q u = 0)
-    (huw : polar Q u w = 0) (huw' : polar Q u w' = 0)
-    (hsum : polar Q u (w + w') = 0) :
-    transvection Q hu hsum = transvection Q hu huw * transvection Q hu huw' := by
+theorem transvection_mem (Q : QuadraticForm K V) {u w : V} (hu : Q u = 0)
+    (huw : polar Q u w = 0) : transvection Q hu huw ∈ orthogonalGroup Q := by
   sorry
 
-/-- **⚠ Layer 2C**: the canonical Clifford lift. Trivial spinor norm gives each transvection *a*
-lift, and a family of lifts is not a subgroup; the milestone is this explicit homomorphic lift,
-whose additivity in `w` and compatibility with `spinToSpecialOrthogonal` are what Layer 4
-generates with. -/
+/-- **Layer 2C**: the spinor norm of a transvection is trivial, which is why the transvections lie
+in the spinor kernel and lift to `Spin` at all. -/
+theorem spinorNorm_transvection [FiniteDimensional K V] (Q : QuadraticForm K V)
+    (hQ : Q.Nondegenerate) {u w : V} (hu : Q u = 0) (huw : polar Q u w = 0) :
+    spinorNorm Q hQ ⟨transvection Q hu huw, transvection_mem Q hu huw⟩ = 1 := by
+  sorry
+
+/-- **Layer 2C**: only the class of `w` modulo `K u` matters. -/
+theorem transvection_add_smul (Q : QuadraticForm K V) {u w : V} (hu : Q u = 0)
+    (huw : polar Q u w = 0) (c : K) (h' : polar Q u (w + c • u) = 0) :
+    transvection Q hu h' = transvection Q hu huw := by
+  sorry
+
+/-- **Layer 2C**: the conjugation law. -/
+theorem transvection_conj (Q : QuadraticForm K V) {u w : V} (hu : Q u = 0)
+    (huw : polar Q u w = 0) (g : orthogonalGroup Q) (hu' : Q (g.1 u) = 0)
+    (huw' : polar Q (g.1 u) (g.1 w) = 0) :
+    (g : V ≃ₗ[K] V) * transvection Q hu huw * (g : V ≃ₗ[K] V)⁻¹
+      = transvection Q hu' huw' := by
+  sorry
+
+/-- **Layer 2C**: the canonical Clifford lift of a single transvection. -/
 noncomputable def transvectionLift (Q : QuadraticForm K V) {u w : V} (hu : Q u = 0)
     (huw : polar Q u w = 0) : spinGroup Q :=
   sorry
@@ -360,17 +381,40 @@ theorem spinToSpecialOrthogonal_transvectionLift (Q : QuadraticForm K V) {u w : 
       = transvection Q hu huw := by
   sorry
 
-end Layer2
+/-- **Layer 2C**: additivity in `w`, which is what upgrades a family of lifts to a subgroup. -/
+theorem transvectionLift_add (Q : QuadraticForm K V) {u w w' : V} (hu : Q u = 0)
+    (huw : polar Q u w = 0) (huw' : polar Q u w' = 0) (hsum : polar Q u (w + w') = 0) :
+    transvectionLift Q hu hsum = transvectionLift Q hu huw * transvectionLift Q hu huw' := by
+  sorry
+
+/-- **⚠ Layer 2C, the milestone**: the lift bundled as a **homomorphism** out of `u^⊥ / K u`, not
+a family of individually chosen lifts. Layer 4 has no root subgroup to generate with until this
+exists, and `transvection_add_smul` together with `transvectionLift_add` is what makes it well
+defined. -/
+noncomputable def transvectionLiftHom (Q : QuadraticForm K V) {u : V} (hu : Q u = 0) :
+    (LinearMap.ker (polarBilin Q u) ⧸
+        Submodule.comap (LinearMap.ker (polarBilin Q u)).subtype (K ∙ u)) →+
+      Additive (spinGroup Q) :=
+  sorry
+
+/-- **Layer 2C**: and it agrees with the element-level lift. -/
+theorem transvectionLiftHom_apply (Q : QuadraticForm K V) {u w : V} (hu : Q u = 0)
+    (huw : polar Q u w = 0) :
+    Additive.toMul (transvectionLiftHom Q hu (Submodule.Quotient.mk ⟨w, by sorry⟩))
+      = transvectionLift Q hu huw := by
+  sorry
+
+end Transvections
 
 /-! ## Layer 3: restricted products, and adelic points
 
 The generic API first. ⚠ Mathlib's `RestrictedProduct` has `map` and `mapAlong` but **no**
 congruence: nothing produces an equivalence from componentwise data. The change-of-family
-comparison is therefore built here, and as a **named canonical** map with an evaluation formula,
-not as a bare existence statement, because the arithmetic needs to know which map it holds.
+comparison is built here as a **named canonical** map with an evaluation formula and a
+continuous inverse, not as a bare existence statement.
 -/
 
-section Layer3
+section RestrictedProducts
 
 open scoped RestrictedProduct
 
@@ -396,18 +440,24 @@ theorem isCompact_integralSubgroup (U : Π i, Subgroup (G i))
   sorry
 
 /-- **⚠ Layer 3B**: the canonical change-of-family equivalence, induced by the identity on
-coordinates. This is the lemma a consumer needs in order to substitute its own compact opens, and
-Mathlib supplies nothing from which it follows. -/
+coordinates. Mathlib supplies nothing from which this follows. -/
 def restrictedProductCongr (U U' : Π i, Subgroup (G i))
     (h : ∀ᶠ i in Filter.cofinite, U i = U' i) :
     (Πʳ i, [G i, (U i : Set (G i))]) ≃* (Πʳ i, [G i, (U' i : Set (G i))]) :=
   sorry
 
-/-- Its defining property: it is the identity on every coordinate. -/
 theorem restrictedProductCongr_apply (U U' : Π i, Subgroup (G i))
     (h : ∀ᶠ i in Filter.cofinite, U i = U' i)
     (x : Πʳ i, [G i, (U i : Set (G i))]) (i : ι) :
     (restrictedProductCongr U U' h x) i = x i := by
+  sorry
+
+/-- The inverse is the congruence for the reversed hypothesis, which is what makes the pair a
+homeomorphism rather than merely a bijection. -/
+theorem restrictedProductCongr_symm (U U' : Π i, Subgroup (G i))
+    (h : ∀ᶠ i in Filter.cofinite, U i = U' i)
+    (h' : ∀ᶠ i in Filter.cofinite, U' i = U i) :
+    (restrictedProductCongr U U' h).symm = restrictedProductCongr U' U h' := by
   sorry
 
 theorem continuous_restrictedProductCongr (U U' : Π i, Subgroup (G i))
@@ -415,112 +465,219 @@ theorem continuous_restrictedProductCongr (U U' : Π i, Subgroup (G i))
     Continuous (restrictedProductCongr U U' h) := by
   sorry
 
-/-- **⚠ Layer 3E**: the diagonal map, as a named definition rather than an existence statement.
-The hypothesis is a theorem, not a formality: a rational point lands in the chosen compact open at
-almost every place only because one can clear denominators. -/
-def diagonalEmbedding {Γ : Type u} [Group Γ] (φ : ∀ i, Γ →* G i) (U : Π i, Subgroup (G i))
+theorem continuous_restrictedProductCongr_symm (U U' : Π i, Subgroup (G i))
+    (h : ∀ᶠ i in Filter.cofinite, U i = U' i) :
+    Continuous (restrictedProductCongr U U' h).symm := by
+  sorry
+
+/-- Compatibility with the structure map, that is with `∏ U i` sitting inside the restricted
+product. -/
+theorem restrictedProductCongr_integralSubgroup (U U' : Π i, Subgroup (G i))
+    (h : ∀ᶠ i in Filter.cofinite, U i = U' i) (hUU' : ∀ i, U i = U' i) :
+    (integralSubgroup U).map (restrictedProductCongr U U' h).toMonoidHom
+      = integralSubgroup U' := by
+  sorry
+
+/-- **⚠ Layer 3E**: the diagonal map, as a named definition. The hypothesis is a theorem, not a
+formality: a rational point lands in the chosen compact open at almost every place only because
+one can clear denominators. -/
+def diagonalEmbedding {Γ : Type w} [Group Γ] (φ : ∀ i, Γ →* G i) (U : Π i, Subgroup (G i))
     (h : ∀ γ : Γ, ∀ᶠ i in Filter.cofinite, φ i γ ∈ U i) :
     Γ →* Πʳ i, [G i, (U i : Set (G i))] :=
   sorry
 
-theorem diagonalEmbedding_apply {Γ : Type u} [Group Γ] (φ : ∀ i, Γ →* G i)
+theorem diagonalEmbedding_apply {Γ : Type w} [Group Γ] (φ : ∀ i, Γ →* G i)
     (U : Π i, Subgroup (G i)) (h : ∀ γ : Γ, ∀ᶠ i in Filter.cofinite, φ i γ ∈ U i)
     (γ : Γ) (i : ι) : diagonalEmbedding φ U h γ i = φ i γ := by
   sorry
 
-theorem diagonalEmbedding_injective {Γ : Type u} [Group Γ] (φ : ∀ i, Γ →* G i)
+/-- Uniqueness: the evaluation formula characterizes it. -/
+theorem diagonalEmbedding_unique {Γ : Type w} [Group Γ] (φ : ∀ i, Γ →* G i)
+    (U : Π i, Subgroup (G i)) (h : ∀ γ : Γ, ∀ᶠ i in Filter.cofinite, φ i γ ∈ U i)
+    (ψ : Γ →* Πʳ i, [G i, (U i : Set (G i))]) (hψ : ∀ γ i, ψ γ i = φ i γ) :
+    ψ = diagonalEmbedding φ U h := by
+  sorry
+
+theorem diagonalEmbedding_injective {Γ : Type w} [Group Γ] (φ : ∀ i, Γ →* G i)
     (U : Π i, Subgroup (G i)) (h : ∀ γ : Γ, ∀ᶠ i in Filter.cofinite, φ i γ ∈ U i)
     (hφ : ∃ i, Function.Injective (φ i)) :
     Function.Injective (diagonalEmbedding φ U h) := by
   sorry
 
-end Layer3
+end RestrictedProducts
 
-/-! ## Layer 3D: the index types, pinned
+/-! ## Layer 3C to 3F: the specialized adelic objects
 
-⚠ The roadmap's `p` and `v` are informal. The Lean statements need one type for the finite places
-and one for all places, fixed once, so that `𝔸_f`, `𝔸^S` and `𝔸` are three different restricted
-products over three explicitly related index types rather than three uses of one notation.
+⚠ Everything below is built **from `Q`**. The previous draft stated adelic discreteness and strong
+approximation for an arbitrary group with arbitrary local groups and arbitrary homomorphisms;
+those statements are false, since `Q` did not appear in them. The objects here carry `Q` through
+base change, so the theorems say what the roadmap means.
+
+Finite places are indexed by `Nat.Primes`, and the full adelic group is written concretely over ℚ
+as the real point group times the finite adelic group, which avoids a dependent completion type
+and matches the README's Layer 3D.
 -/
-
-/-- The places of `ℚ`. -/
-inductive Place
-  | infinite : Place
-  | finite : Nat.Primes → Place
-  deriving DecidableEq
 
 section Adelic
 
-open scoped RestrictedProduct
+open scoped RestrictedProduct TensorProduct
 
-variable {G : Place → Type v} [Π v, Group (G v)] [Π v, TopologicalSpace (G v)]
-variable [∀ v, IsTopologicalGroup (G v)]
+instance factPrimeOfPrimes (p : Nat.Primes) : Fact (Nat.Prime (p : ℕ)) := ⟨p.2⟩
 
-/-- **Layer 3D**: points away from a finite set `S` of places. `𝔸_f` is the case `S = {∞}` and the
-full adelic group the case `S = ∅`, so the three objects are one construction at three values of
-`S`, which is why the away-`S` object is the one defined. -/
-abbrev awayPoints (S : Finset Place) (U : Π v, Subgroup (G v)) : Type _ :=
-  Πʳ v : {v : Place // v ∉ S}, [G v.1, (U v.1 : Set (G v.1))]
+variable {V : Type v} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
 
-/-- The diagonal map into the away-`S` points. -/
-def awayDiagonal {Γ : Type v} [Group Γ] (S : Finset Place) (φ : ∀ v, Γ →* G v)
-    (U : Π v, Subgroup (G v))
-    (h : ∀ γ : Γ, ∀ᶠ v in Filter.cofinite, φ v γ ∈ U v) :
-    Γ →* awayPoints (G := G) S U :=
+/-- The local quadratic space at a finite place. -/
+noncomputable abbrev localForm (Q : QuadraticForm ℚ V) (p : Nat.Primes) :
+    QuadraticForm ℚ_[(p : ℕ)] (ℚ_[(p : ℕ)] ⊗[ℚ] V) :=
+  Q.baseChange ℚ_[(p : ℕ)]
+
+/-- The local quadratic space at the real place. -/
+noncomputable abbrev realForm (Q : QuadraticForm ℚ V) : QuadraticForm ℝ (ℝ ⊗[ℚ] V) :=
+  Q.baseChange ℝ
+
+/-- **Layer 0B**, used here: base change of the orthogonal group along a field extension. -/
+noncomputable def orthogonalBaseChange (Q : QuadraticForm ℚ V) (p : Nat.Primes) :
+    orthogonalGroup Q →* orthogonalGroup (localForm Q p) :=
   sorry
 
-theorem awayDiagonal_apply {Γ : Type v} [Group Γ] (S : Finset Place) (φ : ∀ v, Γ →* G v)
-    (U : Π v, Subgroup (G v)) (h : ∀ γ : Γ, ∀ᶠ v in Filter.cofinite, φ v γ ∈ U v)
-    (γ : Γ) (v : {v : Place // v ∉ S}) :
-    awayDiagonal S φ U h γ v = φ v.1 γ := by
+noncomputable def orthogonalBaseChangeReal (Q : QuadraticForm ℚ V) :
+    orthogonalGroup Q →* orthogonalGroup (realForm Q) :=
   sorry
 
-/-- **⚠ Layer 3E**: the rational points are discrete in the **full** adelic group, that is at
-`S = ∅`, once the real place is included. They are **not** discrete at `S = {∞}`: the
-transvections `E_{u,tw}` with `t` a highly divisible integer accumulate at the identity there,
-which is exactly consistent with Layer 4, where that same image is dense. Every fundamental-domain
-and covolume statement of Layer 5 is made against the full adelic group for this reason. -/
-theorem discreteTopology_awayDiagonal_range {Γ : Type v} [Group Γ] (φ : ∀ v, Γ →* G v)
-    (U : Π v, Subgroup (G v)) (h : ∀ γ : Γ, ∀ᶠ v in Filter.cofinite, φ v γ ∈ U v)
-    (hopen : ∀ v, IsOpen (U v : Set (G v))) :
-    DiscreteTopology (awayDiagonal (G := G) (∅ : Finset Place) φ U h).range := by
+/-- **⚠ Layer 3C**: the compatible compact-open data. A single family `U p ≤ O(V_p)` does not
+determine the reference subgroups for `SO`, for `Spin`, or for the square-class codomain, so the
+parameter is a tuple carrying its compatibility hypotheses. -/
+structure CompatibleCompactOpens (Q : QuadraticForm ℚ V) where
+  /-- The compact open subgroup of the local orthogonal group. -/
+  orth : Π p : Nat.Primes, Subgroup (orthogonalGroup (localForm Q p))
+  /-- The compact open subgroup of the local spin group. -/
+  spin : Π p : Nat.Primes, Subgroup (spinGroup (localForm Q p))
+  /-- ⚠ The local topology is part of the data, because Layer 2B's `pointGroupTopology` is a
+  named definition and not an instance; a structure that spoke of open subgroups without saying
+  which topology would be meaningless. -/
+  top : Π p : Nat.Primes, TopologicalSpace (orthogonalGroup (localForm Q p))
+  /-- Openness, at every finite place. -/
+  isOpen_orth : ∀ p, @IsOpen _ (top p) (orth p : Set (orthogonalGroup (localForm Q p)))
+  /-- Compactness, at every finite place. -/
+  isCompact_orth : ∀ p, @IsCompact _ (top p) (orth p : Set (orthogonalGroup (localForm Q p)))
+  /-- ⚠ The `Spin` datum is supplied, not obtained as a preimage: a preimage of a compact set
+  under `Spin → SO` is compact only once properness is known. -/
+  spin_maps : ∀ p, ∀ g ∈ spin p,
+    (specialOrthogonalToOrthogonal (localForm Q p)) (spinToSpecialOrthogonal (localForm Q p) g)
+      ∈ orth p
+  /-- Every rational isometry is integral at almost every place, which is what makes the diagonal
+  embedding of 3E well defined. -/
+  eventually_mem : ∀ g : orthogonalGroup Q,
+    ∀ᶠ p in Filter.cofinite, orthogonalBaseChange Q p g ∈ orth p
+
+/-- The reference subgroup in the local square-class group, `θ_p(U_p^{SO})`. ⚠ Without it there is
+no such thing as "the restricted product of the local square-class groups". -/
+noncomputable def localSpinorNormImage (Q : QuadraticForm ℚ V) (hQ : Q.Nondegenerate)
+    (U : CompatibleCompactOpens Q) (p : Nat.Primes) :
+    Subgroup (SquareClass ℚ_[(p : ℕ)]) :=
   sorry
 
 end Adelic
 
-/-! ## Layer 4: strong approximation, in the form the lattice side consumes
+/-! ## Layers 3D to 4: the adelic point groups and strong approximation
 
-⚠ Only the `S = {∞}` corollary is pinned here. The general-`S` statement quantifies over
-`ℚ`-almost-simple factors of `Spin(V)`, which needs the affine group schemes of Layer 3A; it stays
-in prose in `README.md` until those exist, since a `Prop`-valued placeholder would assert nothing.
-The compact-open reformulation additionally requires `∞ ∈ S`, so that `𝔸^S` is totally
-disconnected; that hypothesis holds automatically in the corollary below.
+⚠ The finite adelic groups below need the local point groups to be topological groups, which is
+Layer 2B's `pointGroupTopology`. Pinning those instances is Layer 2's job; the statements here
+carry them as hypotheses so that no theorem is stated against an unnamed topology.
 -/
 
-section Layer4
+section StrongApproximation
 
-open scoped RestrictedProduct
+open scoped RestrictedProduct TensorProduct
 
 variable {V : Type v} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
-variable {G : Place → Type v} [Π v, Group (G v)] [Π v, TopologicalSpace (G v)]
-variable [∀ v, IsTopologicalGroup (G v)]
+variable (Q : QuadraticForm ℚ V)
+variable [Π p : Nat.Primes, TopologicalSpace (orthogonalGroup (localForm Q p))]
+variable [∀ p : Nat.Primes, IsTopologicalGroup (orthogonalGroup (localForm Q p))]
+
+/-- **Layer 3D**: the finite adelic orthogonal group, a genuine restricted product of the local
+point groups of `Q` relative to the chosen compact opens. -/
+abbrev finiteAdelicOrthogonal (U : CompatibleCompactOpens Q) : Type _ :=
+  Πʳ p : Nat.Primes,
+    [orthogonalGroup (localForm Q p), (U.orth p : Set (orthogonalGroup (localForm Q p)))]
+
+/-- **Layer 3E**: the diagonal embedding of the rational points, whose defining hypothesis is
+`CompatibleCompactOpens.eventually_mem`. -/
+noncomputable def adelicDiagonal (U : CompatibleCompactOpens Q) :
+    orthogonalGroup Q →* finiteAdelicOrthogonal Q U :=
+  diagonalEmbedding (fun p => orthogonalBaseChange Q p) (fun p => U.orth p) U.eventually_mem
+
+theorem adelicDiagonal_apply (U : CompatibleCompactOpens Q) (g : orthogonalGroup Q)
+    (p : Nat.Primes) : adelicDiagonal Q U g p = orthogonalBaseChange Q p g := by
+  sorry
+
+/-- **Layer 3D**: the full adelic group, written concretely over ℚ as the real point group times
+the finite adelic group. -/
+abbrev fullAdelicOrthogonal (U : CompatibleCompactOpens Q)
+    [TopologicalSpace (orthogonalGroup (realForm Q))] : Type _ :=
+  orthogonalGroup (realForm Q) × finiteAdelicOrthogonal Q U
+
+/-- **⚠ Layer 3E**: the rational points are discrete in the **full** adelic group. Stated for the
+actual orthogonal group of `Q`, not for an arbitrary abstract group: the previous generic form was
+false, since a nondiscrete local group with the identity diagonal is a counterexample. -/
+theorem discreteTopology_fullAdelicDiagonal (U : CompatibleCompactOpens Q)
+    [TopologicalSpace (orthogonalGroup (realForm Q))]
+    [IsTopologicalGroup (orthogonalGroup (realForm Q))] (hQ : Q.Nondegenerate) :
+    DiscreteTopology
+      (MonoidHom.range
+        ((orthogonalBaseChangeReal Q).prod (adelicDiagonal Q U))) := by
+  sorry
+
+/-- **⚠ Layer 3E**, the contrast, and the acceptance test for it: the rational points are **not**
+discrete in the finite adelic group, for an isotropic `Q` of dimension at least three. The
+transvections `E_{u,tw}` with `t` highly divisible accumulate at the identity, which is exactly
+consistent with Layer 4, where that same image is dense. -/
+theorem not_discreteTopology_finiteAdelicDiagonal (U : CompatibleCompactOpens Q)
+    (hQ : Q.Nondegenerate) (hdim : 3 ≤ Module.finrank ℚ V)
+    (hiso : ∃ v : V, v ≠ 0 ∧ Q v = 0) :
+    ¬ DiscreteTopology (MonoidHom.range (adelicDiagonal Q U)) := by
+  sorry
+
+/-- **Layer 3F**: the adelic spinor norm, valued in the restricted product of the local
+square-class groups **relative to the reference subgroups** `θ_p(U_p^{SO})` of 3C. -/
+noncomputable def adelicSpinorNorm (hQ : Q.Nondegenerate) (U : CompatibleCompactOpens Q) :
+    finiteAdelicOrthogonal Q U →*
+      Πʳ p : Nat.Primes, [SquareClass ℚ_[(p : ℕ)],
+        (localSpinorNormImage Q hQ U p : Set (SquareClass ℚ_[(p : ℕ)]))] :=
+  sorry
+
+/-- **Layer 3F**: the adelic spinor kernel, which is what Layer 4F's closure theorem is about. -/
+noncomputable def adelicSpinorKernel (hQ : Q.Nondegenerate) (U : CompatibleCompactOpens Q) :
+    Subgroup (finiteAdelicOrthogonal Q U) :=
+  (adelicSpinorNorm Q hQ U).ker
 
 /-- **Layer 4E**, the corollary the integral lattices roadmap consumes:
 `Spin(V)(𝔸_f) = Spin(V)(ℚ) · W` for every compact open `W`, when `V` is indefinite of dimension at
-least three. Indefiniteness is spelled through the signature of the real form; ⚠ note that
-`sigPos` and `sigNeg` live in the **root** namespace, not under `QuadraticForm`. -/
-theorem strongApproximation_finiteAdeles {Γ : Type v} [Group Γ]
-    (Q : QuadraticForm ℚ V) (hQ : Q.Nondegenerate) (hdim : 3 ≤ Module.finrank ℚ V)
-    (hindef : 0 < sigPos (Q.baseChange ℝ) ∧ 0 < sigNeg (Q.baseChange ℝ))
-    (φ : ∀ v, Γ →* G v) (U : Π v, Subgroup (G v))
-    (h : ∀ γ : Γ, ∀ᶠ v in Filter.cofinite, φ v γ ∈ U v)
-    (W : Subgroup (awayPoints (G := G) {Place.infinite} U))
-    (hW : IsOpen (W : Set (awayPoints (G := G) {Place.infinite} U)))
-    (hWc : IsCompact (W : Set (awayPoints (G := G) {Place.infinite} U))) :
-    ∀ x : awayPoints (G := G) {Place.infinite} U,
-      ∃ (γ : Γ) (w : W), x = awayDiagonal {Place.infinite} φ U h γ * (w : _) := by
+least three. ⚠ Stated with `Q` genuinely present, unlike the previous draft. Indefiniteness is
+spelled through the signature of the real form; note `sigPos` and `sigNeg` live in the **root**
+namespace, not under `QuadraticForm`. -/
+theorem strongApproximation_finiteAdeles (hQ : Q.Nondegenerate) (hdim : 3 ≤ Module.finrank ℚ V)
+    (hindef : 0 < sigPos (realForm Q) ∧ 0 < sigNeg (realForm Q))
+    (U : CompatibleCompactOpens Q)
+    (W : Subgroup (finiteAdelicOrthogonal Q U))
+    (hW : IsOpen (W : Set (finiteAdelicOrthogonal Q U)))
+    (hWc : IsCompact (W : Set (finiteAdelicOrthogonal Q U))) :
+    ∀ x ∈ adelicSpinorKernel Q hQ U,
+      ∃ (g : orthogonalGroup Q) (w : W), x = adelicDiagonal Q U g * (w : _) := by
   sorry
 
-end Layer4
+/-- **Layer 4F**: what the theorem gives in `SO`, exactly. The continuous image of a dense set is
+dense in the image, not in the ambient group, so the transported statement is about the adelic
+spinor kernel: the closure of the diagonal rational image is that subgroup, and the obstruction to
+strong approximation for `SO` is measured by the adelic spinor norm rather than being a blanket
+failure. -/
+theorem closure_adelicDiagonal_range (hQ : Q.Nondegenerate) (hdim : 3 ≤ Module.finrank ℚ V)
+    (hindef : 0 < sigPos (realForm Q) ∧ 0 < sigNeg (realForm Q))
+    (U : CompatibleCompactOpens Q) :
+    closure ((adelicDiagonal Q U).range : Set (finiteAdelicOrthogonal Q U))
+      = (adelicSpinorKernel Q hQ U : Set (finiteAdelicOrthogonal Q U)) := by
+  sorry
+
+end StrongApproximation
 
 end TauCetiRoadmap.OrthogonalSpinGroups

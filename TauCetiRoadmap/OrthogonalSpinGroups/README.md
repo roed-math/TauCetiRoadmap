@@ -183,6 +183,13 @@ the re-check notes are in [`PROVENANCE.md`](PROVENANCE.md).
   `Matrix.specialOrthogonalGroup`. ⚠ **Neither carries a topology instance, and neither is known
   compact**; only `SL n R` and `GL n R` have topology at the pin. Layer 2 therefore topologizes
   `O(Q)` through `Module.End K V`, not through a matrix group.
+- **The module topology:** `Mathlib/Topology/Algebra/Module/ModuleTopology.lean` has
+  `moduleTopology R A`, the finest topology making the module operations continuous, the class
+  `IsModuleTopology R A` recording that a supplied instance is that one, `eq_moduleTopology`,
+  `IsModuleTopology.iso` for transport along a continuous linear equivalence, and
+  `IsTopologicalSemiring.toIsModuleTopology`. This is the canonical topology Layer 2 uses, so no
+  private basis-transport construction is introduced. `Mathlib/Analysis/Normed/Module/FiniteDimension.lean`
+  has `LinearMap.continuous_of_finiteDimensional`, the archimedean half of the continuity input.
 - **Restricted products:** `Mathlib/Topology/Algebra/RestrictedProduct/` (three files) has
   `RestrictedProduct` as a subtype of the dependent product cut out by an `∀ᶠ` condition relative
   to an arbitrary filter, with `structureMap`, `inclusion`, algebra instances up to `CommRing`
@@ -301,6 +308,8 @@ Each row is a theorem or interface consumed by name, not a whole roadmap.
 | the decomposition of a semisimple group into `K`-almost-simple factors | Reductive Groups, Layer 7 | Layers 3A, 4D |
 | finite-dimensionality of `CliffordAlgebra Q`, that is `dim = 2^n` | Spin Representations, Layer 0 | Layer 2A |
 | the multiplicative square-class avatar `Kˣ ⧸ Subgroup.square Kˣ` and its additive comparison | Quadratic Form Invariants, Layer 0 | Layers 1D, 2F, 3F |
+| the Hasse principle over ℚ: locally isometric forms of equal dimension are isometric | Quadratic Form Invariants, Layer 6 | Layer 5H (`Ш¹(ℚ, SO_Q) = 1`) |
+| strong approximation for the additive group `𝔸` relative to ℚ | Global Class Field Theory, Layer 0 | Layer 4B |
 
 ## What is missing (build here)
 
@@ -526,16 +535,28 @@ compact open; Layer 1: `U(K, 2e+1) ⊆ (Kˣ)²`. Internal: 0B, 0C, 0D, 1A, 1C, 1
 `K` is `ℝ` or `ℚ_p` throughout, and each statement is proved uniformly in the local field where
 the proof is uniform, so that a later development over a general local field can reuse it.
 
-**2A. ⚠ The topology is constructed, not assumed.** A finite-dimensional vector space over a local
-field carries no `TopologicalSpace` instance on its own, and the phrase "the topology from
-`Module.End K V ≅ K^{n²}`" names a transport along a chosen basis rather than a canonical object.
-The design, fixed here and used everywhere below: transport the product topology through a basis;
-prove that two basis-induced topologies coincide, because every change-of-basis map and its
-inverse are continuous; conclude that the resulting topology on `V`, on `Module.End K V`, on
-`V ≃ₗ[K] V` and on `CliffordAlgebra Q` is independent of the basis, and is Hausdorff. The Clifford
-case additionally needs finite-dimensionality of `CliffordAlgebra Q`, which is the
-Poincaré–Birkhoff–Witt statement `dim = 2^n`, recorded in the dependency table as an input rather
-than assumed.
+**2A. The topology is Mathlib's `moduleTopology`, and the milestone is that it applies.** A
+finite-dimensional space over a local field carries no `TopologicalSpace` instance on its own, and
+"the topology from `Module.End K V ≅ K^{n²}`" names a transport along a chosen basis rather than a
+canonical object. Mathlib already has the canonical one:
+`moduleTopology K V`, the finest topology making the module operations continuous, with the class
+`IsModuleTopology K V` recording that a supplied instance is that one, and `eq_moduleTopology`
+converting between them. That is the vocabulary used here, and no private basis-transport
+construction is introduced.
+
+The milestones are consequently about *applying* it rather than building it: that for `K` a local
+field and `V` finite-dimensional the module topology is the basis transport, so `IsModuleTopology`
+holds for the product topology through any basis and basis-independence is a corollary rather than
+a separate theorem; that `Module.End K V`, `V ≃ₗ[K] V` and `CliffordAlgebra Q` carry it, the last
+needing finite-dimensionality of the Clifford algebra, that is the Poincaré–Birkhoff–Witt
+statement `dim = 2^n`, recorded in the dependency table as an input; that it is Hausdorff and
+locally compact in this setting; and that every linear map between finite-dimensional spaces is
+continuous for it, which is what makes base change and change of basis continuous.
+
+⚠ Every topological statement in Layers 2 and 3 carries `IsModuleTopology` as a hypothesis rather
+than an arbitrary `TopologicalSpace` instance. This is not bookkeeping: for an unconstrained
+topology the closedness of `O(Q)` in 2B and the openness of `ker θ` in 2E are both **false**, so a
+statement that omits the hypothesis is not a weaker theorem but a wrong one.
 
 **2B. Point groups as topological groups.** `O(Q)(K)` is a topological group in the topology of 2A
 and is **closed** in `Module.End K V`, being cut out by polynomial equations; `SO(Q)(K)` is closed
@@ -653,7 +674,9 @@ Then the restriction and projection maps between the three, and the identificati
 away-`{∞}` object with the finite adelic object. The componentwise maps
 `Spin(V)(𝔸_•) → SO(V)(𝔸_•) → O(V)(𝔸_•)` follow from 3B's functoriality.
 
-**3E. ⚠ Diagonal points: discrete in the full adeles, dense in the finite adeles.** The diagonal
+**3E. ⚠ Diagonal points: discrete in the full adeles, not generally discrete in the finite
+adeles.** Density in the finite adeles is not a Layer 3 statement at all: it holds for `Spin`
+under Layer 4's hypotheses and is proved there. The diagonal
 map is well defined only once one knows that a given rational isometry lies in `U_p` for all but
 finitely many `p`, which is a theorem. Both forms are milestones: the **relative** one, for a
 tuple satisfying "every element of `O(V)(ℚ)` lies in `U_p^O` for almost all `p`" as an explicit
@@ -705,10 +728,15 @@ not use this layer.
 
 **4A. The generation theorem.** The step "generated by transvection subgroups, hence reduce to
 additive approximation" hides the main local input, so it is stated: the subgroup of `Spin(V)(K)`
-generated by the canonical transvection lifts of 2C, over a local or global field `K`, is the
-elementary subgroup; the theorem identifying it with the whole group, or with a subgroup of
-controlled finite index, for `V` isotropic of dimension at least three; and the Kneser–Tits input
-that supplies it, cited by name. Without this, Layer 4 has no reduction.
+generated by the canonical transvection lifts of 2C is the **elementary subgroup** `E(V)(K)`, and
+the target is the equality `E(V)(K) = Spin(V)(K)`, not a finite-index approximation to it, in each
+of the two cases the induction meets: `K` a local field of characteristic zero with `V` isotropic
+of dimension at least three, and `K = ℚ` with `V` isotropic of dimension at least three. That
+equality is the Kneser–Tits property for the simply connected isotropic group `Spin(V)`, which
+holds because `Spin(V)` is `K`-isotropic of `K`-rank at least one and simply connected; the input
+is Platonov–Rapinchuk §7.2, and the anisotropic case never arises here because 4C reduces to the
+isotropic one before applying it. Stating a finite-index variant instead would leave an
+implementer with two targets and no criterion for choosing.
 
 **4B. The isotropic case.** For `V` containing a hyperbolic plane, the subgroup of `Spin(V)(𝔸^S)`
 generated by the adelic points of the transvection subgroups is dense, reducing approximation to
@@ -717,10 +745,27 @@ source rather than gestured at.
 
 **4C. The general case, by one fixed route.** The route of record is Kneser's dimension induction
 in the form presented in Platonov–Rapinchuk, Chapter 7: reduce a general `V` of dimension at least
-three to the isotropic case of 4B by splitting off a hyperbolic plane after enlarging the set of
-places, and control the anisotropic kernel through the finiteness of the class number. Its lemmas
-are listed as sub-items. No alternative route is offered, because an implementer must not have to
-choose a proof architecture.
+three to the isotropic case of 4B. No alternative route is offered, because an implementer must not
+have to choose a proof architecture. The intermediate statements, in the order the induction uses
+them:
+
+1. **Local isotropy at almost all places.** For `V` of dimension at least three over ℚ, `V ⊗ ℚ_p`
+   is isotropic for all but finitely many `p`, and for every `p` once `dim V ≥ 5`, by the local
+   classification consumed from the quadratic form invariants roadmap.
+2. **Enlarging `S`.** If the conclusion holds for `S'` with `S ⊆ S'` and the difference consists of
+   places at which the group is compact, it holds for `S`; this is what lets the induction work at
+   a convenient set of places and descend.
+3. **Splitting a hyperbolic plane.** For `V` isotropic, `V ≅ H ⊥ V₀` with `H` hyperbolic and
+   `dim V₀ = dim V − 2`, and the transvection subgroups attached to the isotropic vectors of `H`
+   are the ones 4A generates with.
+4. **The rank-one base case.** `dim V = 3` with `V` isotropic, where `Spin(V) ≅ SL₂` over ℚ by 1F,
+   and strong approximation for `SL₂` is the classical statement.
+5. **The induction step.** Approximating in `Spin(H ⊥ V₀)` from approximation in the transvection
+   subgroups together with the case of `V₀`, using 4A's generation theorem at each place of `S`.
+6. **Descent to the anisotropic case.** For `V` anisotropic over ℚ of dimension at least three,
+   `V` is isotropic over ℚ_p for some `p`, and the conclusion transfers by 2 and 5. Note that
+   `dim V ≥ 5` forces local isotropy everywhere, so only dimensions three and four need this step,
+   which is where 1F's split and nonsplit branches enter.
 
 **4D. The factor condition.** The hypothesis is stated with `ℚ`-almost-simple **normal** factors,
 supplied by 3A item 7, and the theorem that the decomposition used in the statement is that one.
@@ -782,10 +827,17 @@ that choice, because rescaling by `c ∈ ℚˣ` changes the local factors by `|c
 formula `∏_v |c|_v = 1` kills it. That argument, and not an appeal to uniqueness, is what makes
 the Tamagawa measure canonical, and it is stated here in that form.
 
-**5B. Convergence.** The convergence factors needed when the naive product of local volumes
-diverges, the convergence theorem in the cases used, and the statement that no convergence factors
-are needed for a semisimple group. The low-rank tori that appear in dimension two are covered here
-with their factors, since they are the case where this cannot be skipped.
+**5B. Convergence, with the factors named.** For a **semisimple** group the product of local
+volumes converges with no convergence factors, and that statement is the milestone for `Spin_Q`
+and `SO_Q` in dimension at least three. For a **torus**, which is what dimension two produces, it
+does not, and the factors are the local Artin `L`-factors of the character module: for
+`T = R¹_{E/ℚ}𝔾_m`, the norm-one torus of a quadratic étale algebra `E`, the character module is
+`ℤ` with the nontrivial Galois action, its Artin `L`-function is the Dirichlet `L`-function
+`L(s, χ_E)` of the quadratic character attached to `E`, and the convergence factors are
+`λ_p = L_p(1, χ_E)`. The theorem to state is that `∏_p λ_p⁻¹ · vol(T(ℚ_p), U_p)` converges and
+that the resulting measure is independent of the choice of factors up to the global compensating
+constant `L(1, χ_E)`, which is finite and nonzero because `χ_E` is a nontrivial quadratic
+character. Nothing in dimension at least three uses this subsection.
 
 **5C. Adelic points and the product measure.** Full adelic points of the group, consumed from
 Layer 3D; the product Haar measure; discreteness of the rational points, consumed from Layer 3E;
@@ -799,11 +851,25 @@ left-invariance together with right-invariance and proved for each group used.
 **5D. Finiteness, then the number.** Finiteness of the Tamagawa volume, as its own milestone
 preceding any computation of it, and the definition of the Tamagawa number.
 
-**5E. Central isogenies and `τ(G) = 1`.** The comparison of Tamagawa measures under a central
-isogeny, with the kernel and cokernel contributions at each place and globally, in the form
-Ono's relative theory gives; and the theorem `τ(G) = 1` for a connected simply connected
-semisimple group, with a fixed proof route and its prerequisites listed. This is the deepest
-statement the roadmap depends on, and it is stated as a target here rather than assumed.
+**5E. Central isogenies, and `τ(Spin_Q) = 1` by one named route.** Two things. First, the
+comparison of Tamagawa measures under a central isogeny, in the form Ono's relative theory gives,
+with the local and global contributions of the kernel identified; this is the general statement 5H
+instantiates. Second, `τ(G) = 1` for `G` connected, simply connected and semisimple, which for
+`G = Spin_Q` is the deepest input the roadmap has. The route of record is Weil's, in *Adeles and
+Algebraic Groups*, and its steps are:
+
+1. `τ(SL_n) = 1`, by explicit reduction theory and the Iwasawa decomposition.
+2. `τ(SL₁(D)) = 1` for `D` a central division algebra, from 1 by Ono's isogeny method, `SL₁(D)`
+   being an inner form of `SL_n`.
+3. `τ(Spin_Q) = 1` for `dim V ≤ 6`, from 1F: in each of those dimensions `Spin_Q` is one of the
+   groups in 1 and 2, a product of two of them, or a restriction of scalars of one along the
+   discriminant algebra, and Ono's method transports the value across each.
+4. `τ(Spin_Q) = 1` in general, by Weil's induction on the Witt index.
+
+⚠ Step 4 is where the analytic input of Weil's argument sits, and it is worth being explicit that
+this does **not** make the roadmap circular with the integral lattices roadmap. That roadmap
+derives the Smith–Minkowski–Siegel mass formula *from* the volume theorem and proves no analytic
+identity of its own; the implication runs one way, and nothing here consumes the mass formula.
 
 **5F. The orthogonal specialization.** The gauge forms on `O_Q`, `SO_Q` and `Spin_Q` from 3A, the
 resulting local and global measures, and their invariance under isometry of quadratic spaces.
@@ -813,19 +879,44 @@ in the canonical normalization, stated for an arbitrary compact open subgroup ra
 lattice, since the integral lattices roadmap's Layer 7C identifies its local densities with
 canonical Haar volumes of stabilizers and needs a form it can quote.
 
-**5H. The isogeny computation for `Spin_Q → SO_Q`.** Consuming 5E: the central kernel `μ₂`
-contributes its own factor; the local connecting maps are identified with the local spinor norms
-of 2F, and the global one with the adelic spinor norm of 3F; the resulting global-to-local
-square-class exact sequence is stated, with Hilbert reciprocity `∏_v (a,b)_v = 1` consumed from the
-global class field theory roadmap as the input that makes it exact; and every kernel and cokernel
-cardinality in the computation is evaluated.
+**5H. The isogeny computation, displayed.** The identity being instantiated is Ono's, for a
+connected semisimple group:
 
-**5I. The theorem, by dimension.** `τ(SO_Q) = 2` for `dim V ≥ 3`, derived from `τ(Spin_Q) = 1` by
-5H. The remaining dimensions are stated separately rather than folded into a phrase: dimension `0`
-and dimension `1`, where the value is `1`, which is the guard the integral lattices roadmap's
-Conway–Sloane normalization records in its own low-rank branch; and dimension `2`, where `SO_Q` is
-a torus, the computation is the one in 5B with its convergence factors, and the value depends on
-whether the discriminant algebra is split. The two roadmaps state the same exceptions.
+    τ(G) = |Pic(G)| / |Ш¹(ℚ, G)|.
+
+For `G = SO_Q` with `dim V ≥ 3` the two terms are computed separately, and each is a milestone:
+
+- `Pic(SO_Q) ≅ ℤ/2`, of order **2**, because `Spin_Q → SO_Q` is a central isogeny with kernel `μ₂`
+  and `Spin_Q` is simply connected, so the Picard group is the character group of the kernel.
+- `Ш¹(ℚ, SO_Q) = 1`, of order **1**. ⚠ This is not a formality: it is exactly the Hasse principle
+  for quadratic forms, that two forms of the same dimension over ℚ which are isometric over every
+  `ℚ_v` are isometric over ℚ, since `H¹(k, SO_Q)` classifies forms of the same dimension and
+  discriminant. It is consumed from the quadratic form invariants roadmap and not reproved.
+
+Beside those, the local and global square-class bookkeeping the comparison runs on, displayed
+rather than described: the exact sequence of pointed sets
+
+    1 → μ₂(ℚ) → Spin_Q(ℚ) → SO_Q(ℚ) --θ--> ℚˣ/(ℚˣ)² → H¹(ℚ, Spin_Q)
+
+together with its local analogue at every place, the compatibility of the two under the
+restriction maps of 2H, and the theorem that the image of `∏_v` on square classes is cut out by
+Hilbert reciprocity `∏_v (a,b)_v = 1`, consumed from the global class field theory roadmap. The
+connecting map `θ` in that sequence is the spinor norm of Layer 1D, which is what ties this layer
+to the rest of the roadmap.
+
+**5I. The theorem, by dimension, with every value stated.** From 5E and 5H:
+
+- `dim V ≥ 3`: `τ(SO_Q) = 2`.
+- `dim V = 2`: `SO_Q` is the norm-one torus `R¹_{E/ℚ}𝔾_m` of the discriminant quadratic étale
+  algebra `E` of 1F, and the value is **2** when `E` is a field and **1** when `E ≅ ℚ × ℚ` is
+  split, in which case `SO_Q ≅ 𝔾_m`. The computation is Ono's formula again, with the convergence
+  factors of 5B; `Spin_Q` is a torus here too, so 5E does not apply and this case is proved
+  directly.
+- `dim V = 1`: `SO_Q` is trivial and `τ(SO_Q) = 1`.
+- `dim V = 0`: `SO_Q` is trivial and `τ(SO_Q) = 1`.
+
+The dimension `0` and `1` values are the guard the integral lattices roadmap's Conway–Sloane
+normalization records in its own low-rank branch, and the two documents state the same exceptions.
 
 ## Required basic API
 
@@ -855,9 +946,12 @@ convention drift.
 - The two reflection spellings agree: `B x v / Q v = 2 · B x v / B v v` for `Q v ≠ 0`, and
   `τ_v v = -v` computed from either. The mixed form `2 · B x v / Q v` gives `-3v`, and that is the
   error the convention table warns against (Layer 0D).
-- `Q = x²` in dimension 1: `O(Q) = {±1}`, `SO(Q)` trivial, `-1` is the reflection in any `v ≠ 0`,
-  and `θ(-1) = [Q v]`, which is **not** `[1]` in general. Together with the Clifford-norm
-  comparison this is the acceptance check that the square class detects `-1` (Layers 0, 1).
+- Dimension one, `Q x = a x²` for `a ∈ Kˣ`: `O(Q) = {±1}`, `SO(Q)` is trivial, `-1` is the
+  reflection in any `v ≠ 0`, and `θ(-1) = [a]`, which is nontrivial exactly when `a` is not a
+  square. ⚠ The scalar has to be carried: for `Q x = x²` one gets `Q v = v²` and `θ(-1) = [1]`,
+  so that instance is the degenerate one and tests nothing. With `a` a nonsquare this is the
+  acceptance check that the square class detects `-1` and hence that the `reverse` and `star`
+  norms of 1A really do differ on `O(Q)` (Layers 0, 1).
 - The hyperbolic plane over any `K`: `SO(H) ≅ Kˣ` through the diagonal torus and `θ` on that torus
   is the square class of the parameter, so `θ : SO(H)(K) → Kˣ/(Kˣ)²` is **surjective**; the image
   of `Spin(H)(K) → SO(H)(K)` is the square-parameter subgroup, which is `ker θ`, so
