@@ -83,33 +83,33 @@ instantiate.
   `log Γ` on a sector (Layer 1). This is ordinary complex analysis of the Gamma function and
   is useful well outside this roadmap.
 - **The analytic conductor** `q(s)` (Layer 2), with the comparison lemmas relating it to
-  degree, arithmetic conductor, and spectral parameters. The modular forms roadmap pins the
-  same Iwaniec–Kowalski (5.7) definition for its own analytic conductor; the two must agree,
-  and the agreement is a milestone of Layer 2.
+  degree, arithmetic conductor, and spectral parameters. This roadmap owns the general
+  definition; the modular forms roadmap displays the same Iwaniec–Kowalski (5.7) quantity for
+  a newform without naming it, and Layer 2.4 proves the specialization that matches it.
 - **The order predicate, the Weierstrass elementary factor `E₁`, and Hadamard factorization
   at order at most one** (Layer 5), stated for a general entire function rather than only
   for `Λ`.
 - **The rectangle as a contour** (Layer 7.1–7.3): the positively oriented boundary of a
   closed rectangle as a closed piecewise-`C¹` curve, its winding numbers, its null-homology,
   the resulting argument principle, and the continuous argument lift along a nonvanishing
-  image curve. These are generic complex analysis rather than L-function mathematics. They
-  live here because the contour integration roadmap builds no rectangle construction; if that
-  roadmap adds one, this layer consumes it and deletes its own.
+  image curve. These are generic complex analysis rather than L-function mathematics, and this
+  roadmap owns them: the contour integration roadmap builds the residue calculus for a general
+  cycle, and the rectangle interface on top of it is built and exported here.
 
 ## Dependencies
 
 | Dependency | Material consumed here | First consuming layer | Kind |
 |---|---|---:|---|
-| [L-functions roadmap](../LFunctions/README.md) Layer 0 | the L-function data record, its polar divisor, and the Dirichlet-agreement, continuation, and functional-equation predicates | 0 | hard |
-| L-functions roadmap Layer 0 | the arithmetic/analytic normalization translation, which is what makes "critical line" well defined | 0 | hard |
-| L-functions roadmap Layer 1 | the Euler product of `ζ_K`, its nonvanishing on `Re s > 1`, and `abscissaOfAbsConv (idealCoeff K) = 1`, which is where the lower bound Jensen's formula needs comes from | 4 | hard |
+| [L-functions roadmap](../LFunctions/README.md) Layer 0 | `AnalyticLFunctionData` with its `polarOrder`, `degree`, `gammaFactor`, `dualCompleted`, and the predicates `HasDirichletAgreement`, `HasMeromorphicContinuation`, `HasFunctionalEquation`, `HasAverageCoefficientBound` | 0 | hard |
+| L-functions roadmap Layer 0 | `ArithmeticLFunctionData` and `NormalizationTranslation` with its `gammaR_eq`, `gammaC_eq`, `completed_eq`, which is what makes "critical line" well defined | 0 | hard |
+| L-functions roadmap Layer 1 | `idealCoeff`, `idealCoeffOfWeight`, `HasEulerProduct`, the nonvanishing on `Re s > 1`, and `LSeries.abscissaOfAbsConv (idealCoeff K) = 1`, which is where the lower bound Jensen's formula needs comes from | 4 | hard |
 | L-functions roadmap Layer 3 | the completed Dedekind zeta function, its exact poles at `0` and `1`, its functional equation, and the Mellin representation Layer 3.4 turns into finite order | 3 | hard |
 | L-functions roadmap Layer 4 | the completed factorizations `ζ_K = ζ · L(χ_d)` for quadratic `K` and `ζ_{ℚ(ζₙ)} = ∏ L(χ)`, with the normalization lemma turning an equality of functions into additivity of divisors | 6 | hard |
 | L-functions roadmap Layer 5 | completed Hecke L-functions of primitive finite-order ray-class characters, entire, with `‖W(χ)‖ = 1`, and their Mellin representation | 3 | hard |
 | L-functions roadmap Layer 7 | nonvanishing on `Re s = 1` in meromorphic-order form (its 7.5), and the `3-4-1` positivity argument this layer makes quantitative (its 7.4) | 6 | hard |
 | L-functions roadmap Layer 7 | the ideal von Mangoldt coefficients and `−ζ'_K/ζ_K` as their Dirichlet series (its 7.6) | 8 | hard |
-| [Contour integration roadmap](../ContourIntegration/README.md) Layers 0–3 | `windingNumber` for a closed piecewise-`C¹` curve with its integrality and homotopy invariance off the curve (its 0–1), `residue` and the argument principle (its 2), and the homology form of Cauchy's theorem, under which the residue theorem holds for a cycle that is not a circle (its 3) | 7 | hard |
-| [Modular forms roadmap](../ModularForms/README.md) Layer 7 | the analytic conductor `𝔮(f,s)` of a newform, pinned as Iwaniec–Kowalski (5.7) | 2 | agreement only |
+| [Contour integration roadmap](../ContourIntegration/README.md) Layers 0–4 | `windingNumber`, `residue`, `HasCauchyPV`, `IsPwC1ImmersionOn`, `IsNullHomologous`, `ConditionAprime`, `ConditionB`, `windingNumber_circle`, `argumentPrinciple_local`, and above all the general null-homologous-cycle theorem `hungerbuhlerWasem_residueTheorem` (its Layer 4), which is the first exact statement there that applies to a rectangle: its `argumentPrinciple` and `classicalResidueTheorem_circle` are circle-only | 7 | hard |
+| [Modular forms roadmap](../ModularForms/README.md) Layer 7 | the newform analytic conductor `𝔮(f,s)`, a displayed Iwaniec–Kowalski (5.7) formula there with no declaration; this roadmap owns the general `analyticConductorAt` and 2.4 proves the newform specialization | 2 | convention only |
 | Mathlib `Analysis/Complex/JensenFormula.lean` | `MeromorphicOn.circleAverage_log_norm`, `AnalyticOnNhd.sum_divisor_le` | 4 | existing |
 | Mathlib `Analysis/Meromorphic/Divisor.lean`, `Topology/LocallyFinsupp.lean` | `MeromorphicOn.divisor`, its restriction and positive part, and local finiteness of the support | 4 | existing |
 | Mathlib `Analysis/Complex/PhragmenLindelof.lean` | `vertical_strip` and the three-lines theorem | 3 | existing |
@@ -283,20 +283,47 @@ the entire function whose zeros the later layers count.
    `s(s−1)Λ_K(s)`, not `s(s−1)Λ_K(s)/2`.
 3. `IsFiniteOrder d`: `∃ A, OrderLE (entireCompletion d) A`. ⚠ `IsFiniteOrder → OrderLE _ 1`
    is not free; it is proved per family in Layer 3.4 and the predicate does not assume it.
-4. `HasVerticalStripGrowth`: for all `σ₁ σ₂ : ℝ` with `σ₁ < σ₂` there are `C > 0` and `A ≥ 0`
-   with `‖Λ(σ + it)‖ ≤ C (1 + |t|)^A` for `σ ∈ [σ₁, σ₂]` and `1 ≤ |t|`. The layer's main
-   theorem: this follows from `IsFiniteOrder` together with the functional equation and the
-   Dirichlet-series bound on `Re s > 1`, by Phragmén–Lindelöf. That implication is what lets
-   later layers hypothesize only finite order.
+4. `HasVerticalStripGrowth`: for all `σ₁ σ₂ : ℝ` with `σ₁ < σ₂` there are `C > 0`, `A ≥ 0`,
+   and a height threshold `T₀ ≥ 0` with `‖Λ(σ + it)‖ ≤ C (1 + |t|)^A` for `σ ∈ [σ₁, σ₂]` and
+   `T₀ ≤ |t|`. ⚠ The threshold is existentially quantified and is not `1`. The data record
+   permits an arbitrary finite polar divisor, so a record may have a pole at height `T ≥ 1`,
+   and no bound on a strip through that pole can hold: the shifted product
+   `s ↦ Λ_ζ(s − iT) Λ_ζ(s + iT)` satisfies every predicate of the model and has poles at
+   `1 ± iT`, so a fixed threshold of `1` would make this predicate false for it. The layer's
+   main theorem: the predicate follows from `IsFiniteOrder` together with the functional
+   equation and the Dirichlet-series bound on `Re s > 1`, by Phragmén–Lindelöf, with `T₀`
+   any bound for the imaginary parts of the polar support. Prove the companion statement for
+   `entireCompletion d`, where the poles are cleared and every `T₀` works, and for the two
+   families prove the concrete threshold `T₀ = 2` from the fact that their polar supports lie
+   on the real axis. Later layers hypothesize the predicate and carry its threshold.
 5. The relation to the average coefficient bound: a record with the average Ramanujan bound
-   has `L(s)` bounded on `Re s ≥ 1 + δ`, hence `Λ` of at most polynomial growth there. State
-   this so that the vertical-strip bound has a starting edge.
+   has its Dirichlet series bounded on `Re s ≥ 1 + δ`, hence `Λ` of at most polynomial growth
+   there. State this so that the vertical-strip bound has a starting edge.
+6. **The continued uncompleted L-function.** ⚠ The record carries the coefficients and a total
+   representative of the *completed* continuation, and nothing else: `LSeries d.coeff s` is a
+   junk value off the half-plane of convergence, so no statement about `L` at `1/2 + it` or on
+   the left of the critical strip may be phrased through it. Build
+   `continuedL d : ℂ → ℂ` as `Λ(s) / (conductor^{s/2} * γ(s))`, with:
+   - meromorphy on `ℂ`, from the continuation predicate and the meromorphy of the reciprocal
+     gamma factor, whose divisor is Layer 1.5's;
+   - `continuedL d s = LSeries d.coeff s` for `1 < Re s`, which is the Dirichlet-agreement
+     predicate and is the *only* place the series representation may be used;
+   - the global identity `Λ s = conductor^{s/2} * γ(s) * continuedL d s` as an equality of
+     meromorphic germs, including at the poles of `γ`, where the zeros of `continuedL`
+     compensate;
+   - the translated functional equation, relating `continuedL d s` and `continuedL d (1 − s)`
+     through the root number and the gamma quotient;
+   - the effect of the normalization translation, from Layer 2.3;
+   - agreement with the L-functions roadmap's own continued objects at the Dedekind zeta and
+     Hecke instances, so that `continuedL` of the ζ_K record is `dedekindZeta K` extended.
+   Every unqualified `L(s)` in later layers means `continuedL d s`.
 
 Acceptance: the predicates elaborate over the L-functions roadmap's record and have the API
 of 1; `entireCompletion` satisfies the divisor identity and the nonvanishing of 2 for a record
-with an exact polar divisor; and the implication of 4 is proved. ⚠ No acceptance criterion
-here names the Dedekind zeta instance: finite order for the two families is Layer 3.4, and a
-layer's acceptance may not depend on a later one.
+with an exact polar divisor; `continuedL` satisfies the identity and the agreement of 6; and
+the implication of 4 is proved. ⚠ No acceptance criterion here names the Dedekind zeta
+instance: finite order for the two families is Layer 3.4, and a layer's acceptance may not
+depend on a later one.
 
 ### Layer 1: Stirling asymptotics for the gamma factors
 
@@ -357,12 +384,26 @@ Mangoldt formula for `ζ` runs on.
    weight `w`, `analyticConductorAt (analytic) s = analyticConductorAt (arithmetic) (s + w/2)`
    for every `s`, and `arithmeticConductor` is the same on both sides. State it as this
    equality rather than as a statement that "`q` is invariant and the parameters shift".
-4. **Agreement with the modular forms roadmap.** For the newform instance of weight `k` and
-   level `N`, `analyticConductorAt d s = 𝔮(f, s + (k−1)/2)` and
-   `centralAnalyticConductor d = 𝔮(f, k/2)`, where `𝔮` is that roadmap's Iwaniec–Kowalski
-   (5.7) quantity `N · (|s_an + (k−1)/2| + 3) · (|s_an + (k+1)/2| + 3)`. Since the analytic
-   record has `gammaC = {(k−1)/2}` and `gammaR = ∅`, unfolding both sides reduces this to the
-   translation of 3; prove it rather than assert it.
+   ⚠ It holds for one sign convention only, the supplier's `gammaR_eq` and `gammaC_eq`: the
+   analytic shifts are the arithmetic ones **plus** `w/2`, which is what
+   `Λ_an(s) = N^{−w/4} Λ_ar(s + w/2)` forces. Under `μ_an = μ_ar − w/2` the displayed equality
+   is false. Two instance tests are part of this milestone, and neither is optional: at
+   `w = 0` every field reduces to `rfl` and the two conductors agree literally; and at a
+   weight-`k` newform, arithmetic `gammaC = {0}` becomes analytic `gammaC = {(k−1)/2}`, the
+   central points `k/2` and `1/2` correspond, and 4 becomes an identity. A wrong sign is
+   invisible until the second test.
+4. **The newform specialization, which is where the modular forms roadmap meets this one.**
+   This roadmap owns the general `analyticConductorAt` of a record. The modular forms roadmap
+   fixes the newform quantity `𝔮(f, s) = N · (|s_an + (k−1)/2| + 3) · (|s_an + (k+1)/2| + 3)`
+   as a displayed formula in its Layer 7 and names no declaration for it, so the milestone
+   here is the specialization, stated so that it *becomes* the agreement the moment that side
+   names its quantity: for the newform record of weight `k` and level `N`, which has
+   `gammaR = ∅` and `gammaC = {(k−1)/2}`,
+   `analyticConductorAt d s = N * (‖s + (k−1)/2‖ + 3) * (‖s + (k+1)/2‖ + 3)` by unfolding, and
+   `centralAnalyticConductor d` is that expression at `s = 1/2`, corresponding to `𝔮(f, k/2)`
+   through the translation of 3. ⚠ Prove the displayed unfolding. "The two roadmaps use the
+   same convention" is not a theorem, and cannot become one until the other side has a name
+   for its quantity.
 5. The instances: `arithmeticConductor` is `|d_K|` for the Dedekind zeta record and
    `|d_K| * 𝔑(𝔣)` for a Hecke L-function of primitive conductor `𝔣`. ⚠ These are equalities
    of *arithmetic* conductors; the analytic conductor at a point is that quantity times the
@@ -370,16 +411,20 @@ Mangoldt formula for `ζ` runs on.
 
 ### Layer 3: convexity in vertical strips
 
-1. The Phragmén–Lindelöf input, packaged for the model class: if `Λ` is holomorphic on a
-   closed strip minus finitely many poles, of finite order there, and bounded by
-   `C(1 + |t|)^{a}` on the left edge and `C(1 + |t|)^{b}` on the right edge, then it is
-   bounded by `C'(1 + |t|)^{ℓ(σ)}` on the strip, `ℓ` the linear interpolation. Consume
-   `Complex.PhragmenLindelof.vertical_strip`; the work is checking its growth hypothesis
-   (`isBigO_sub_exp_rpow`) from `IsFiniteOrder` and clearing poles through Layer 0.2.
-2. **The convexity bound for the model class**, for the *uncompleted* `L`, obtained from 1
-   applied to the completed `Λ` and then dividing by the gamma factor through Layer 1.5:
-   for every `ε > 0` there is `C` with
-   `‖L(1/2 + it)‖ ≤ C * analyticConductorAt d (1/2 + it) ^ (1/4 + ε)`
+1. The Phragmén–Lindelöf input, packaged for the model class, and stated for a function with
+   **no poles in the strip**: if `g` is holomorphic on a closed strip, of finite order there,
+   and bounded by `C(1 + |t|)^{a}` on the left edge and `C(1 + |t|)^{b}` on the right edge,
+   then it is bounded by `C'(1 + |t|)^{ℓ(σ)}` on the strip, `ℓ` the linear interpolation.
+   Consume `Complex.PhragmenLindelof.vertical_strip`; the work is checking its growth
+   hypothesis (`isBigO_sub_exp_rpow`) from `IsFiniteOrder`. ⚠ Apply it to
+   `entireCompletion d`, never to `Λ` itself on a strip meeting the polar support: no bound
+   holds at a pole, and dividing the conclusion by the clearing polynomial afterwards is what
+   produces a statement about `Λ` away from that support.
+2. **The convexity bound for the model class**, for `continuedL d` of Layer 0.6 — not for
+   `LSeries d.coeff`, which is a junk value at `1/2 + it` — obtained from 1 applied to the
+   entire completion and then divided by the clearing polynomial, the conductor factor, and
+   the gamma factor through Layer 1.5: for every `ε > 0` there is `C` with
+   `‖continuedL d (1/2 + it)‖ ≤ C * analyticConductorAt d (1/2 + it) ^ (1/4 + ε)`
    for every record satisfying continuation, the functional equation, finite order, and the
    average coefficient bound. ⚠ Pin the uniformity: `C` depends on `ε`, on the degree, on a
    bound for the spectral parameters, and on the constant in the average coefficient bound,
@@ -461,22 +506,31 @@ dependency graph); 7–8 are the family-specific local count that needs the Eule
    upper bound `M = O(q(iT)^B)` against a lower bound carrying that exponential would give
    `log(M/‖Λ₀ c‖) = O(T)`, which is useless. The milestone is therefore the ratio bound
    itself, and the exponential factors are cancelled inside it, never estimated apart:
-   - basepoint `c = σ₀ + iT` with `σ₀ = 2`, where the Dirichlet series converges absolutely
-     and `|L(σ₀ + iT)| ≥ ζ_K(σ₀)^{-1} > 0`, since each Euler factor satisfies
+   - basepoint `c = σ₀ + iT` with `σ₀ = 2`, where the Dirichlet series converges absolutely,
+     so `continuedL d (σ₀ + iT) = LSeries d.coeff (σ₀ + iT)` by Layer 0.6 and
+     `|continuedL d (σ₀ + iT)| ≥ ζ_K(σ₀)^{-1} > 0`, since each Euler factor satisfies
      `|1 − χ(𝔭) 𝔑𝔭^{-s}| ≤ 1 + 𝔑𝔭^{-σ₀}` and `∏_𝔭 (1 + 𝔑𝔭^{-σ₀}) ≤ ζ_K(σ₀)`. This is the
      nonvanishing input Jensen's formula needs and the reason this item consumes the
-     L-functions roadmap's Layer 1;
+     L-functions roadmap's Layer 1. ⚠ The Euler product is used **only here**, on
+     `Re s = 2 > 1`; nothing below applies Dirichlet agreement off that half-plane;
    - radii `r = 3` and `R = 4`, so that `closedBall (1/2 + iT) 1 ⊆ closedBall c 3` and the
      sphere `sphere c 4` lies in the strip `Re s ∈ [−2, 6]` and in the height range
      `|Im s − T| ≤ 4`;
    - the ratio bound `sup_{z ∈ sphere c 4} ‖Λ₀ z‖ / ‖Λ₀ c‖ ≤ analyticConductorAt d (iT) ^ B`
-     for an explicit `B` and all `T ≥ T₀`, proved by writing both sides through
-     `Λ₀ = (clearing polynomial) · |disc|^{s/2} · γ · L`: the two gamma factors are compared
-     by Layer 1.5 on the same height range, where `|Im z| = T + O(1)` makes their exponential
-     parts agree to within a bounded factor and leaves a power of `T`; `L` is bounded above by
-     `HasVerticalStripGrowth` and below by the Euler product above; and the polynomial and
-     conductor factors are elementary. Bounded `T ≤ T₀` is a separate finite statement.
-   - conclude by 5. Both radii, the basepoint, and the exponent `B` are part of the statement.
+     for an explicit `B` and all `T ≥ T₀`. Both sides are written through
+     `Λ₀ = (clearing polynomial) · conductor^{s/2} · γ · continuedL d` of Layer 0.6, which is
+     an identity of meromorphic germs on all of `ℂ` and so is legitimate on the whole sphere;
+     the two gamma factors are compared by Layer 1.5 on the same height range, where
+     `|Im z| = T + O(1)` makes their exponential parts agree to within a bounded factor and
+     leaves a power of `T`. ⚠ The exponential decay cancels only when the numerator keeps it,
+     so `continuedL` is bounded on the sphere in three regions, each by a named route and
+     none by the Dirichlet series: `Re z ≥ 1 + δ` by absolute convergence;
+     `Re z ≤ −δ` by the functional equation of Layer 0.6, which reflects it to the first
+     region for the dual record; and the middle strip by Layer 3.1 applied to the entire
+     completion, which interpolates between those two edges. Bounded `T ≤ T₀` is a separate
+     finite statement;
+   - conclude by 5. Both radii, the basepoint, the exponent `B`, and the three-region split
+     are part of the statement.
 8. **The counting bounds that need no contour integral.** From 6 and 7:
    `N(T + 1) − N(T) = O(log (analyticConductorAt d (iT)))` for `T ≥ 2`, and
    `N(T) = O(T log (analyticConductorAt d (iT)))`. These are the strongest counting statements
@@ -615,27 +669,44 @@ von Mangoldt coefficients, and the `3-4-1` inequality, none of which the model c
 ⚠ This is where the count becomes exact, and an exact count is not a Jensen bound: Layer 4
 gives inequalities, and equality needs the argument principle. Mathlib has none of the contour
 machinery, and this roadmap does not build it. The
-[contour integration roadmap](../ContourIntegration/README.md) does: its Layers 0–1 build
-`windingNumber` for a closed piecewise-`C¹` curve, its Layer 2 `residue` and the argument
-principle `(2πi)⁻¹ ∮_C f'/f = ∑_z ord_z f` (pinned there on a circle), and its Layer 3 the
-homology form of Cauchy's theorem, under which the residue theorem holds for a cycle that is
-not a circle. Consume those. Items 1–3 below are the rectangle interface that roadmap does
-not construct, and are stated generically for that reason.
+[contour integration roadmap](../ContourIntegration/README.md) does, and the theorem consumed
+here is its Layer 4 summit, not its Layer 2: its pinned `argumentPrinciple` and
+`classicalResidueTheorem_circle` are stated for a **circle**, and the general null-homologous
+cycle is exactly what `hungerbuhlerWasem_residueTheorem` provides. Items 1–3 build the
+rectangle interface that roadmap does not construct, and are stated generically for that
+reason.
 
 1. **The rectangle as a contour.** The positively oriented boundary of
-   `Icc σ₁ σ₂ ×ℂ Icc t₁ t₂` as an explicit closed piecewise-`C¹` curve on `[0, 4]`, with:
-   `windingNumber` equal to `1` about each interior point and `0` about each point of the
-   complement of the closed rectangle (integrality and homotopy invariance off the curve, that
-   roadmap's Layer 0); and `IsNullHomologous` in every open set containing the closed
-   rectangle. These are exactly the hypotheses its residue theorem takes.
+   `Icc σ₁ σ₂ ×ℂ Icc t₁ t₂` as an explicit `γ : ℝ → ℂ` on `[0, 4]`, with the exact structure
+   that roadmap's theorems hypothesize: `IsPwC1ImmersionOn γ 0 4` (each edge is `C¹` with
+   nonvanishing derivative, the corners being the piece boundaries), `γ 0 = γ 4`,
+   `windingNumber γ 0 4` equal to `1` about each interior point and `0` about each point
+   outside the closed rectangle, and `IsNullHomologous γ 0 4 U` for every open `U` containing
+   the closed rectangle.
 2. **The argument principle on a rectangle.** For `f` meromorphic on an open `U` containing
    the closed rectangle `R` and regular on `∂R` (`meromorphicOrderAt f z = 0` there),
-   `(2πi)⁻¹ ∮_{∂R} logDeriv f = divisorCount f U R`, the signed count. The work is 1 plus the
-   compatibility lemma identifying that roadmap's `∑_z ord_z f` with the finsum of
-   `MeromorphicOn.divisor`: both are read off `meromorphicOrderAt`, and proving they agree is
-   what keeps the library from carrying two counts. ⚠ The signed count is what a contour
-   integral computes; the passage to `zeroCount` is the no-poles hypothesis of Layer 4.1, and
-   for `Λ` on a rectangle meeting `0` or `1` it is `entireCompletion` that must be integrated.
+   `(2πi)⁻¹ ∮_{∂R} logDeriv f = divisorCount f U R`, the signed count. It is
+   `hungerbuhlerWasem_residueTheorem` applied to `logDeriv f` with `S` the zeros and poles of
+   `f` in `R`, and the work is discharging its hypotheses, each of which is a named
+   sub-milestone:
+   - `S` is finite and disjoint from the image of `γ`, from Layer 4.1's finiteness and the
+     boundary regularity, so `hγa` and the `DifferentiableOn` hypothesis hold;
+   - `ConditionAprime γ 0 4 (logDeriv f) S` and `ConditionB γ 0 4 (logDeriv f)` are vacuous
+     when no singularity lies on the curve, which is a lemma about those two predicates and
+     not an assumption;
+   - `HasCauchyPV γ 0 4 (logDeriv f) v` implies the ordinary contour integral equals `v` when
+     the integrand is continuous on the image of `γ`, so the principal value in that roadmap's
+     conclusion may be replaced by the interval integral here;
+   - `residue (logDeriv f) z = meromorphicOrderAt f z` at each `z ∈ S`, which is the local
+     content of the argument principle and is that roadmap's `argumentPrinciple_local` read
+     through `residue`;
+   - the weighted sum `∑ s ∈ S, windingNumber γ 0 4 s * residue (logDeriv f) s` equals
+     `divisorCount f U R`, by 1 (the winding numbers are `1` inside and `0` outside) and the
+     identification of `meromorphicOrderAt` with `MeromorphicOn.divisor`, which is what keeps
+     the library from carrying two counts.
+   ⚠ The signed count is what a contour integral computes; the passage to `zeroCount` is the
+   no-poles hypothesis of Layer 4.1, and for `Λ` on a rectangle meeting `0` or `1` it is
+   `entireCompletion` that must be integrated.
 3. **The argument-variation form and `S(T)`.** For `f` regular and nonvanishing on `∂R`, the
    image curve `f ∘ ∂R` misses `0`, so `Complex.exists_continuousOn_eqOn_exp_comp` on an open
    interval containing `[0, 4]` gives a continuous `θ : ℝ → ℝ` with
@@ -678,8 +749,9 @@ not construct, and are stated generically for that reason.
 7. **The corollaries, as a finite list of four.** For fixed `K`: `N(T)/(T log T) → n/(2π)` as
    `T → ∞`; `Λ` has infinitely many zeros; the averaged unit-height count
    `T⁻¹ ∫_0^T (N(t + 1) − N(t)) dt / log T → n/(2π)`; and the specialization of 6 to `K = ℚ`
-   recovering 4. ⚠ The third is stated as an average on purpose: `(N(T+1) − N(T))/log T` does
-   not converge, since zeros cluster, and no milestone asserts that it does. ⚠ Nothing here
+   recovering 4. ⚠ The third is stated as an average on purpose. The error term in 6 is the
+   same order as the main term of the unit-height difference, so 6 does not prove a pointwise
+   asymptotic for `N(T+1) − N(T)`, and no pointwise asymptotic is a milestone here. ⚠ Nothing here
    bounds an individual gap between consecutive ordinates, and differencing 6 does not: its
    error is `O(log q(iT))`, the same size as the main term of the difference. The unit-height
    *bound* `N(T+1) − N(T) = O(log q(iT))` is Layer 4.8's and needs no contour integral.
@@ -779,8 +851,17 @@ complex places of `K`, so `γ_K(s) = Gammaℝ(s)^{r₁} Gammaℂ(s)^{r₂}` and
      of their residue sum changes accordingly;
    - `log (|d_K| * 𝔑𝔣)` in place of `log |d_K|` in 4, and `logDeriv γ_χ` in place of
      `logDeriv γ_K` in the archimedean term.
-   The prime ideal theorem of 5 has no analogue here: `ψ_K(x, χ) = O(x exp(−c √log x))`, with
-   no main term, and with the same exceptional-zero disjunction for real `χ`.
+   The analogue of 5 is two theorems, not one, and the exceptional term appears in the first
+   exactly as it does for `ζ_K`: for fixed `K` and fixed `χ` there is `c > 0` with
+   - under `IsExceptionalZero χ β` (possible only for real `χ`, by Layer 6.4),
+     `ψ_K(x, χ) = −x^β/β + O(x * Real.exp (−c * Real.sqrt (Real.log x)))`;
+   - under `¬∃ β, IsExceptionalZero χ β`,
+     `ψ_K(x, χ) = O(x * Real.exp (−c * Real.sqrt (Real.log x)))`.
+   There is no `x` main term in either, since `L(χ, ·)` is entire. ⚠ Both constants depend on
+   `K` and on `χ`, and neither statement is uniform in the conductor: an exceptional zero may
+   sit arbitrarily close to `1`, and absorbing `x^β/β` into the error would need a lower bound
+   for `1 − β` that only Siegel's theorem gives, which is out of scope. Nothing here may be
+   read as the conductor-uniform disjunction.
 
 ### Layer 9: certified zeros
 
@@ -835,10 +916,12 @@ hypotheses is out of scope, and every milestone is about the shape of the statem
    `completedRiemannZeta` is exactly a nontrivial zero of `riemannZeta`; the trivial zeros are
    not points of positive divisor, because there `Gammaℝ` has a pole and the completion is
    regular; and `0` and `1` are poles, so they are points of negative divisor.
-6. **The boundary convention.** A zero on `∂B` is not counted by `HasZerosInRects`, which is
-   why regularity and nonvanishing on the boundary is a hypothesis rather than a conclusion.
-   Prove that if `meromorphicOrderAt f z ≠ 0` for some `z ∈ ∂R` then no certificate for `R`
-   exists, so the hypothesis cannot be dropped.
+6. **The boundary convention.** ⚠ `zeroCount` is taken over a *closed* rectangle, so a zero
+   on `∂R` or on some `∂B` would be counted; the predicate does not discard it. What the
+   predicate does instead is forbid it, through `regular_frontier` and
+   `regular_frontier_box`, which is why boundary regularity is a hypothesis rather than a
+   conclusion. Prove that if `meromorphicOrderAt f z ≠ 0` for some `z ∈ ∂R` then no
+   certificate for `R` exists, so the hypothesis cannot be dropped.
 
 ## Worked examples (acceptance criteria)
 
@@ -923,6 +1006,32 @@ there rather than in Layer 6: Layer 4B's local counts and Layer 5.7's corollarie
 it, and both come earlier than the zero-free regions. Layers 7 and 8 are where the contour
 integration roadmap's residue calculus is needed, and everything before them is stated and
 proved without it.
+
+## Sources for the hard milestones
+
+Layers 0 to 5 are stated from first principles and cite Mathlib declarations by name. Layers 6
+to 8 make choices a source has to settle: which family, which normalization, which endpoint
+convention, and what every constant may depend on. Each row below fixes those, and says so
+where the milestone is a combination or a strengthening of what one source proves, because
+that is where a formalizer would otherwise guess.
+
+| Milestone | Source and its hypotheses | Translation and constants |
+|---|---|---|
+| 6.2, the region for `ζ_K` | Kadiri, *Explicit zero-free regions for Dedekind zeta functions*, main theorem: a region of the shape `σ ≥ 1 − 1/(R log(\|d_K\| …))` free of zeros but for at most one, real and simple, with an explicit numerical `R`, for `ζ_K` in the classical normalization. | The shape is kept and the numerics dropped: `c` is existential and depends only on `[K:ℚ]`, and the region is written through `analyticConductorAt` rather than through `\|d_K\|` and `\|t\|` separately, the two being interchangeable by 2.2. The "at most one, real and simple" clause is taken as stated; no milestone here proves an explicit constant. |
+| 6.3, the exceptional zero | The same source for existence and uniqueness; Davenport §14 for the `K = ℚ` analogue and the Landau–Page structure of the argument. | Stated as a predicate plus uniqueness, never as a total function. ⚠ Identifying `β` with the zero of a quadratic character's L-function is a Stark-type theorem that neither source proves in this generality, and it is out of scope. |
+| 6.4, the region for Hecke L-functions | Lang, *Algebraic Number Theory*, ch. XV for the analytic input; the `3-4-1` route of Davenport §14 carried to a ray-class character. | The real and non-real cases are split explicitly: only a real `χ` may have an exceptional zero. Constants depend on `[K:ℚ]` alone, as in 6.2. |
+| 7.4, Riemann–von Mangoldt for `ζ` | Titchmarsh (rev. Heath-Brown), ch. 9, which proves `N(T) = (T/2π) log(T/2π) − T/2π + 7/8 + S(T) + O(1/T)` with `S(T) = O(log T)`, counting `0 < γ ≤ T` and assuming `T` is not the ordinate of a zero. | The count is the same under the half-open convention of 4.9, and `(T/2π) log(T/2πe)` is that main term rearranged. The extension to every `T` in 7.5 is the roadmap's own, stated precisely because the source assumes `T` is not an ordinate. |
+| 7.6, the conductor-uniform form | Iwaniec–Kowalski ch. 5, zero counting for a general L-function of the axiomatic class, in the analytic normalization used there. | The implied constant must depend on the degree only; a version whose constant may depend on `\|d_K\|` is weaker and does not discharge the milestone. |
+| 8.1, truncated Perron | Davenport §17, for `c > 0`, `x > 0`, `T ≥ 1`, error `x^c/(T\|log x\|)`, `x ≠ 1`. | Kept as stated, with the `x = 1` value given exactly at finite `T` as `π⁻¹ arctan(T/c)` rather than as its limit, which is this roadmap's correction to the usual informal phrasing. |
+| 8.2, the contour shift | Davenport §17 for `−ζ'/ζ`, carried to `ζ_K` by the same residue bookkeeping. | The trivial-zero residues are computed here from the gamma-factor pole orders of 1.5 rather than quoted, and at `K = ℚ` the closed form must reproduce the source's. |
+| 8.3, the truncated `ψ_K` formula | Lang ch. XVII for the number-field explicit formula; Davenport §17 for the `K = ℚ` case that pins the constants. | Stated for `2 ≤ T ≤ x` with the implied constant depending on `K` only, and with `x` excluded at a prime-power norm rather than given half weight. ⚠ Uniformity in `K` is not claimed. |
+| 8.4, the Weil form | Lang ch. XVII, and Iwaniec–Kowalski ch. 5 for the pairing form; both use a test-function class wider than the one fixed here. | The class is narrowed to smooth compactly supported `φ` on `(0, ∞)`, which lies inside every source's class, so this is a special case needing no extra hypothesis. Every term is written out here rather than cited. |
+| 8.5 and 8.6, the prime sums | Lang ch. XV and XVII, Davenport §§18–19, for the `exp(−c√log x)` shape. | Split into the two exceptional-zero branches, with constants depending on `K`, and on `χ` in 8.6, and with no claim of conductor-uniformity: absorbing `x^β/β` into the error would need Siegel's theorem. |
+
+⚠ These rows fix the mathematical content, the hypotheses, and the dependence of every
+constant. They cite chapters and named statements rather than theorem numbers: pinning the
+numbering against physical copies is recorded as an open item in `PROVENANCE.md`, and a wrong
+number would be worse than a right chapter.
 
 ## References
 

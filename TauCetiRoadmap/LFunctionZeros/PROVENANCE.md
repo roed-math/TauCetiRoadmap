@@ -20,15 +20,19 @@ Each row is an obligation across roadmap boundaries, not a target.
   1.4 (the Euler product, nonvanishing on `Re s > 1`, and the abscissa of absolute
   convergence), which Layer 4.7 here uses for the lower bound Jensen's formula needs, and for
   its Layer 4 completed factorizations, which two worked examples here use.
-- **The contour integration roadmap builds no rectangle contour.** Its Layers 0–3 supply
-  `windingNumber`, `residue`, the argument principle (pinned on a circle in its
-  `Suggested.lean`), and the homology form of Cauchy's theorem. The positively oriented
-  boundary of a rectangle, its winding numbers, its null-homology, and the continuous
-  argument lift along a nonvanishing image curve are none of these, and Layer 7.1–7.3 here
-  owns them, listed under *Interfaces supplied to other roadmaps* so that no second
-  construction appears. If that roadmap adds a rectangle interface, this one consumes it and
-  deletes its own; that swap is a deletion plus an import, which is why the statements here
-  are phrased in its vocabulary.
+- **The contour integration roadmap builds no rectangle contour, and its exact general-cycle
+  theorem is its Layer 4.** Its pinned `argumentPrinciple` and `classicalResidueTheorem_circle`
+  are circle-only; its README defers the general null-homologous cycle to "Layer 3+", and the
+  first exact statement covering one is `hungerbuhlerWasem_residueTheorem`. Layer 7.2 here
+  therefore consumes that theorem, not the circle ones, and `Suggested.lean` imports
+  `TauCetiRoadmap.ContourIntegration.Suggested` so the contract is machine-checked. ⚠ That
+  import is the first cross-roadmap import in the repository; if the project would rather keep
+  the `Suggested.lean` files independent, the alternative is for the contour roadmap to add a
+  named general-cycle residue theorem and for this roadmap to cite it by name without
+  importing. The rectangle boundary, its winding numbers, its null-homology, and the continuous
+  argument lift are owned here and exported under *Interfaces supplied to other roadmaps*; a
+  future consolidation into the contour roadmap would be a deletion plus an import here, which
+  is why the statements are phrased in its vocabulary.
 - **The modular forms roadmap's analytic conductor.** Both roadmaps pin Iwaniec–Kowalski
   (5.7), and Layer 2.4 here proves the agreement rather than assuming it. The two
   conventions differ in presentation, not in value: that roadmap writes the newform quantity
@@ -37,6 +41,26 @@ Each row is an obligation across roadmap boundaries, not a target.
   Layer 2.3. ⚠ The paired-shift form is load-bearing here: writing a `Gammaℂ(s + ν)` factor
   as `(|s + ν| + 3)^2` instead of `(|s + ν| + 3)(|s + ν + 1| + 3)` would make the two agree
   only up to a bounded ratio, and Layer 2.4 would be false as stated.
+
+- **The supplier's normalization signs were corrected while this roadmap was being written.**
+  An earlier head of the L-functions roadmap displayed `gammaR = arithmetic.gammaR.map (· − w/2)`
+  in its README while its Lean prototype had `+ w/2`. Its current head has `+ w/2` in both,
+  which is the convention Layer 2.3 here needs and states: with the opposite sign the conductor
+  translation and the modular-forms agreement are both false. If that roadmap's signs move
+  again, Layer 2.3 and its two instance tests are the first things to re-check.
+- **Theorem numbering in the printed sources is not pinned.** The *Sources for the hard
+  milestones* table in the README fixes, for each hard milestone, the source, its hypotheses,
+  the translation into this roadmap's normalization, and the dependence of every constant, but
+  cites chapters and named statements rather than theorem numbers. Someone with physical
+  copies of Iwaniec–Kowalski, Davenport, Titchmarsh, Lang, and Kadiri should replace the
+  chapter references by exact numbers; until then a wrong number is the worse failure mode.
+- **The L-functions roadmap is not yet merged.** Every declaration name this roadmap cites
+  from it (`AnalyticLFunctionData`, `NormalizationTranslation`, `idealCoeff`, and the rest) is
+  pinned against that roadmap's prototype rather than against an accepted file, and
+  `Suggested.lean` here cannot import it. When it lands, the dependency rows become exact
+  imports and the generic `entireCompletion`, `continuedL`, `IsFiniteOrder`, and
+  `analyticConductorAt` signatures should be restated over the accepted record rather than at
+  the ζ instance.
 
 ## What is in motion elsewhere
 

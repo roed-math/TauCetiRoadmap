@@ -1,4 +1,5 @@
 import Mathlib
+import TauCetiRoadmap.ContourIntegration.Suggested
 
 /-!
 # Zeros of L-functions: target signatures
@@ -47,13 +48,18 @@ def OrderLE (f : ℂ → ℂ) (A : ℝ) : Prop :=
   ∀ A' : ℝ, A < A' → f =O[cobounded ℂ] fun s ↦ Real.exp (‖s‖ ^ A')
 
 /-- **Layer 0, growth in vertical strips**: polynomial growth in `|Im s|`, uniformly on each
-closed vertical strip. This is the hypothesis every counting and convexity statement wants;
-Layer 0's main theorem derives it from finite order plus the functional equation. The
-constants are constrained (`0 < C`, `0 ≤ A`) so that the predicate cannot be satisfied
-vacuously, and the strip is nondegenerate. -/
+closed vertical strip and above an existentially quantified height. This is the hypothesis
+every counting and convexity statement wants; Layer 0's main theorem derives it from finite
+order plus the functional equation. The constants are constrained (`0 < C`, `0 ≤ A`) so that
+the predicate cannot be satisfied vacuously, and the strip is nondegenerate.
+⚠ The height threshold `T₀` is quantified, not fixed at `1`. The data record permits an
+arbitrary finite polar divisor, so a record may have poles off the real axis: the shifted
+product `s ↦ completedRiemannZeta (s - T * I) * completedRiemannZeta (s + T * I)` satisfies
+the model's predicates and has poles at `1 ± iT`, and no bound on a strip through them can
+hold. With a fixed `1 ≤ |Im s|` this predicate would be false for that record. -/
 def HasVerticalStripGrowth (f : ℂ → ℂ) : Prop :=
-  ∀ σ₁ σ₂ : ℝ, σ₁ < σ₂ → ∃ C A : ℝ, 0 < C ∧ 0 ≤ A ∧ ∀ s : ℂ, σ₁ ≤ s.re → s.re ≤ σ₂ →
-    1 ≤ |s.im| → ‖f s‖ ≤ C * (1 + |s.im|) ^ A
+  ∀ σ₁ σ₂ : ℝ, σ₁ < σ₂ → ∃ C A T₀ : ℝ, 0 < C ∧ 0 ≤ A ∧ 0 ≤ T₀ ∧
+    ∀ s : ℂ, σ₁ ≤ s.re → s.re ≤ σ₂ → T₀ ≤ |s.im| → ‖f s‖ ≤ C * (1 + |s.im|) ^ A
 
 /-- **Layer 0, the completed zeta function grows polynomially in vertical strips.** The pin
 proves neither this nor the finite order it follows from. Stated for the meromorphic `Λ`
@@ -73,6 +79,18 @@ example :
     ∃ g : ℂ → ℂ, Differentiable ℂ g ∧
       (∀ s : ℂ, s ≠ 0 → s ≠ 1 → g s = s * (s - 1) * completedRiemannZeta s) ∧
       g 0 ≠ 0 ∧ g 1 ≠ 0 ∧ OrderLE g 1 := sorry
+
+/-- **Layer 0.6, the continued uncompleted L-function.** ⚠ The data record carries the
+coefficients and a total representative of the *completed* continuation, and `LSeries` is a
+junk value off its half-plane of convergence, so no statement about `L` at `1/2 + it` may be
+phrased through the series. The milestone is the meromorphic object that agrees with the
+series where the series is meaningful and satisfies the completed identity everywhere; at the
+ζ instance it is `riemannZeta`, and this example pins the shape the general construction must
+have over the L-functions roadmap's record. -/
+example :
+    ∃ L : ℂ → ℂ, MeromorphicOn L Set.univ ∧
+      (∀ s : ℂ, 1 < s.re → L s = LSeries (fun _ ↦ 1) s) ∧
+      (∀ s : ℂ, s ≠ 0 → s ≠ 1 → completedRiemannZeta s = Gammaℝ s * L s) := sorry
 
 /-! ## Layer 1: Stirling asymptotics for the gamma factors -/
 
@@ -279,6 +297,49 @@ example :
 `riemannZeta_ne_zero_of_one_le_re` recovered from the region. -/
 example (ρ : ℂ) (hρ : 0 < MeromorphicOn.divisor completedRiemannZeta Set.univ ρ) :
     ρ.re < 1 := sorry
+
+/-! ## Layer 7: the rectangle contour, against the contour integration roadmap
+
+⚠ The theorem consumed here is that roadmap's **Layer 4** summit
+`hungerbuhlerWasem_residueTheorem`, not its Layer 2: its pinned `argumentPrinciple` and
+`classicalResidueTheorem_circle` are stated for a circle, and a rectangle is not one. The
+declarations below are stated against its exact types, so the contract is machine-checked
+rather than promised in prose. -/
+
+open TauCetiRoadmap.ContourIntegration
+
+/-- **Layer 7.1, the rectangle boundary as a contour**: the positively oriented boundary of a
+closed rectangle, parametrized on `[0, 4]` with one edge per unit interval. -/
+noncomputable def rectBoundary (B : Rect) : ℝ → ℂ := sorry
+
+/-- **Layer 7.1, the curve structure the supplier's theorem hypothesizes**: a closed
+piecewise-`C¹` immersion, the corners being the piece boundaries. -/
+example (B : Rect) (hB : B.Valid) :
+    IsPwC1ImmersionOn (rectBoundary B) 0 4 ∧ rectBoundary B 0 = rectBoundary B 4 := sorry
+
+/-- **Layer 7.1, the winding numbers**: `1` inside, `0` outside. -/
+example (B : Rect) (hB : B.Valid) (z : ℂ) (hz : z ∈ interior B.toSet) :
+    windingNumber (rectBoundary B) 0 4 z = 1 := sorry
+
+/-- **Layer 7.1, null-homology**, the hypothesis `hungerbuhlerWasem_residueTheorem` takes. -/
+example (B : Rect) (hB : B.Valid) (U : Set ℂ) (hU : B.toSet ⊆ U) :
+    IsNullHomologous (rectBoundary B) 0 4 U := sorry
+
+/-- **Layer 7.2, the local bridge**: the residue of the logarithmic derivative is the order.
+This is what turns the supplier's weighted residue sum into a divisor count. -/
+example (f : ℂ → ℂ) (z : ℂ) (n : ℤ) (hf : MeromorphicAt f z)
+    (hn : meromorphicOrderAt f z = (n : WithTop ℤ)) :
+    residue (logDeriv f) z = (n : ℂ) := sorry
+
+/-- **Layer 7.2, the argument principle on a rectangle**, as the specialization of
+`hungerbuhlerWasem_residueTheorem` to `logDeriv f` on `rectBoundary B`. Its conclusion is a
+Cauchy principal value; a separate milestone identifies that with the ordinary contour
+integral, since the integrand is continuous on the boundary under `hbdry`. -/
+example (f : ℂ → ℂ) (U : Set ℂ) (B : Rect) (hU : IsOpen U) (hB : B.Valid)
+    (hBU : B.toSet ⊆ U) (hf : MeromorphicOn f U)
+    (hbdry : ∀ z ∈ frontier B.toSet, meromorphicOrderAt f z = 0) :
+    HasCauchyPV (rectBoundary B) 0 4 (logDeriv f)
+      (2 * (Real.pi : ℂ) * Complex.I * (divisorCount f U B.toSet : ℂ)) := sorry
 
 /-! ## Layer 7: the Riemann–von Mangoldt formula -/
 
