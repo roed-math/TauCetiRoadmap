@@ -21,10 +21,13 @@ body:
         - GeometricTopology
         - HeegaardFloer
         - JacobianChallenge
+        - ModularForms
         - Multiquadratic
         - OneParameterSemigroups
+        - OptimalTransport
         - OrthogonalL2Bases
         - PDE
+        - QuadraticFormInvariants
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers
