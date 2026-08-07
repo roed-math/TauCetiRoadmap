@@ -896,21 +896,22 @@ punctured germ and nothing else. See the two conventions-table rows.
    set** and with the supplier's actual hypotheses rather than with a divisor. For an open
    `U`, a nondegenerate closed rectangle `R ⊆ U`, a finite `S ⊆ U` disjoint from `∂R`, and `f`
    with
-   - `AnalyticOnNhd ℂ f (U \ S)`, which is what gives the supplier's
-     `hf : DifferentiableOn ℂ (logDeriv f) (U \ S)` once the boundary nonvanishing below is in
-     hand;
+   - `AnalyticOnNhd ℂ f (U \ S)`;
    - `MeromorphicAt f s` for each `s ∈ S`;
+   - `S` contains every point of `U` at which `meromorphicOrderAt f z ≠ 0`;
    - `AnalyticAt ℂ f z` and `f z ≠ 0` for every `z ∈ ∂R`,
 
-   the conclusion `(2πi)⁻¹ ∮_{∂R} logDeriv f = ∑ s ∈ S, ord_s f`. It is
+   the conclusion `(2πi)⁻¹ ∮_{∂R} logDeriv f = ∑ s ∈ S, ord_s f`. ⚠ The first and third
+   hypotheses are what give the supplier's `DifferentiableOn ℂ (logDeriv f) (U \ S)`, and
+   neither alone does: analyticity makes `deriv f` exist, and the third makes every point of
+   `U \ S` a point of order `0` — which for an *analytic* function is exactly `f z ≠ 0`, so the
+   quotient is defined. That last step is where the two hypotheses have to meet, and it is why
+   `MeromorphicOn` plus a divisor is not a substitute for either. It is
    `hungerbuhlerWasem_residueTheorem` applied to `logDeriv f`, and the work is discharging its
    hypotheses, each of which is a named sub-milestone:
    - `IsPwC1ImmersionOn`, `γ 0 = γ 4`, `hγa : γ 0 ∉ S`, `hγU`, and `IsNullHomologous`, all
      from 1 and the boundary disjointness;
-   - `DifferentiableOn ℂ (logDeriv f) (U \ S)`, from `AnalyticOnNhd ℂ f (U \ S)` together with
-     the nonvanishing of `f` off its zero set — so the zeros of `f` in `U` must themselves lie
-     in `S`, which is a hypothesis of the shape "`S` contains every point of `U` at which
-     `meromorphicOrderAt f z ≠ 0`" and is where finiteness of `S` comes from;
+   - `DifferentiableOn ℂ (logDeriv f) (U \ S)`, by the argument above;
    - `ConditionAprime γ 0 4 (logDeriv f) S` and `ConditionB γ 0 4 (logDeriv f)` are vacuous
      when no singularity lies on the curve, which is a lemma about those two predicates and
      not an assumption;
@@ -918,7 +919,11 @@ punctured germ and nothing else. See the two conventions-table rows.
      content of the argument principle and is that roadmap's `argumentPrinciple_local` read
      through `residue`;
    - the weighted sum `∑ s ∈ S, windingNumber γ 0 4 s * residue (logDeriv f) s` equals
-     `∑ s ∈ S ∩ R, ord_s f`, by 1 (the winding numbers are `1` inside and `0` outside).
+     `∑ s ∈ S ∩ R, ord_s f`, by 1 (the winding numbers are `1` inside and `0` outside). ⚠ State
+     the conclusion with the supplier's generalized weights and collapse them by a separate
+     named lemma; a conclusion written directly as a sum over `S ∩ R` hides the step where a
+     singularity on `∂R` would have a fractional weight, and boundary disjointness is what
+     rules that out.
    ⚠ The signed count is what a contour integral computes; the passage to `zeroCount` is the
    no-poles hypothesis of Layer 4.1, and for `Λ` on a rectangle meeting `0` or `1` it is
    `entireCompletion` that must be integrated.
