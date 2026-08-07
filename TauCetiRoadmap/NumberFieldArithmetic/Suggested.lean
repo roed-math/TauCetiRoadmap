@@ -547,8 +547,8 @@ not a statement until both localizations are named. `Aₚ` is the localization o
 `algebraMap A B` (`Algebra.algebraMapSubmonoid`), and the equation is one of ideals of `Aₚ` along
 the ideal map of `algebraMap A Aₚ`. The canonical instance is `Aₚ = Localization.AtPrime p` and
 `Bₚ = Localization (Algebra.algebraMapSubmonoid B p.primeCompl)`, with the algebra structure
-`localizationAlgebra p.primeCompl B`; stating it for an arbitrary `IsLocalization` pair is what
-lets Layer 5.9 consume it at a completion. -/
+`localizationAlgebra p.primeCompl B`; the statement is for an arbitrary `IsLocalization` pair so
+that a caller holding its own localization needs no transport along an isomorphism. -/
 example {A B : Type*} [CommRing A] [IsDedekindDomain A] [CommRing B] [IsDedekindDomain B]
     [Algebra A B] [Module.Finite A B] [Module.IsTorsionFree A B]
     (p : Ideal A) [p.IsPrime]
@@ -1165,13 +1165,14 @@ example (w : NumberField.InfinitePlace K) (B : ℝ) (v : (𝓞 K)ˣ)
     minpoly ℤ (v : 𝓞 K) ∈ unitCandidates K w B :=
   sorry
 
-/-- **Layer 7.4, the field test.** The general elimination tool: by Layer 3.3 the minimal
+/-- **Layer 7.4, the field test**, in the form the elimination uses. By Layer 3.3 the minimal
 polynomial of an integral generator has discriminant `index² · discr K`, so a candidate whose
-discriminant is not `discr K` times a square is not a minimal polynomial in `K`. ⚠ Together with
-the root test this is what closes the certificate. Root isolation on its own leaves candidates
-standing; §`Worked_3_1_23_1` exhibits two of them. -/
-example (θ : IntegralPrimitiveElement K) :
-    ∃ m : ℕ, (minpoly ℤ θ.1).discr = (m : ℤ) ^ 2 * NumberField.discr K :=
+discriminant is not `discr K` times a square is not the minimal polynomial of any integral
+generator of `K`. ⚠ Together with the root test this is what closes the certificate. Root
+isolation on its own leaves candidates standing; §`Worked_3_1_23_1` exhibits two of them. -/
+example (g : ℤ[X]) (hg : ∀ m : ℕ, g.discr ≠ (m : ℤ) ^ 2 * NumberField.discr K)
+    (θ : IntegralPrimitiveElement K) :
+    minpoly ℤ θ.1 ≠ g :=
   sorry
 
 /-- **Layer 7.4, the regulator of a certified generator.** Once the closure statement above

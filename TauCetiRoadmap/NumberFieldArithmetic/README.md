@@ -152,7 +152,8 @@ must display it.
 ⚠ Separability of the fraction-field extension does not give separability of a residue extension.
 Over an imperfect residue field a finite separable `L/K` can have an inseparable residue
 extension, and then `P` divides the different however small `e` is. That is Mathlib's
-`dvd_differentIdeal_of_not_isSeparable`. So Layer 6.4 carries `[Algebra.IsSeparable (A ⧸ p) (B ⧸ P)]`
+`dvd_differentIdeal_of_not_isSeparable`. So Layer 6.4 carries
+`[Algebra.IsSeparable (A ⧸ p) (B ⧸ P)]`
 as well, and §Pinned conventions makes residue separability part of the definition of tame and of
 wild. Layer 6.4 gives the example that forces it. The number-field corollaries may omit the
 hypothesis, because a finite residue field is perfect.
@@ -330,8 +331,8 @@ library is strong. Its purpose is that no gap claimed below is a guess.
   multiplicative support; and `Module.Finite K_v L_w` under `LiesOver`, ⚠ which takes an
   arbitrary compatible algebra structure as input and so is not yet a statement about the
   canonical extension. `adicCompletion` and `adicCompletionIntegers` themselves;
-  `adicCompletionIntegers` is a `ValuationSubring`, so `IsFractionRing (adicCompletionIntegers) (adicCompletion)`
-  and `IsIntegrallyClosed (adicCompletionIntegers)` are instances. ⚠ Nothing relates the completed
+  `adicCompletionIntegers` is a `ValuationSubring`, so `IsFractionRing` of its own completion and
+  `IsIntegrallyClosed` are instances for it. ⚠ Nothing relates the completed
   integer rings of `L_w` and of `K_v`: there is no algebra structure, no integral-closure
   statement and no module finiteness between them, and that is Layer 5.7.
   `NumberField.AdeleRing` over a general Dedekind base pair, `ringEquiv_mixedSpace`, weak
@@ -650,7 +651,8 @@ Milestones, in order:
    ```
 
    an equality of homomorphisms on `idealsAway S'`, where `hur` and `hur'` are the two unramified
-   hypotheses and `hur'` is what `hur` gives on the smaller set of primes;
+   hypotheses. `hur'` follows from `hur`, because there are fewer primes outside `S'` than
+   outside `S`;
 6. functoriality in `L`, as an equation. Let `M` be an intermediate field of `L/K`. Since `L/K` is
    abelian, `M/K` is Galois and abelian, and every prime outside `S` that is unramified in `L` is
    unramified in `M`. Then
@@ -1018,9 +1020,9 @@ Everything here is under the AKLB setup, with
   ⚠ "The localization of `B`" is not a statement. Two localizations of `B` are in play at a prime
   of `A`, at `p.primeCompl` and at the primes of `B` over `p`, and the equation is about the
   first. Prove the milestone for an arbitrary pair satisfying `IsLocalization p.primeCompl A_p`
-  and `IsLocalization (Algebra.algebraMapSubmonoid B p.primeCompl) B_p`, with the two named
-  rings as the canonical instance, so that Layer 5's completed local rings can consume it as
-  well. The pin collects the instances for a localized ring extension in
+  and `IsLocalization (Algebra.algebraMapSubmonoid B p.primeCompl) B_p`, with the two named rings
+  as the canonical instance, so that a caller with its own localization does not have to transport
+  along an isomorphism. The pin collects the instances for a localized ring extension in
   `Mathlib/RingTheory/DedekindDomain/Instances.lean`.
 
   ⚠ There is no unqualified base-change equation here, and none is asked for. An arbitrary base
@@ -1374,14 +1376,15 @@ residue generator and adjoin a uniformizer.
 Two companion statements about that generator belong to this milestone, because Layer 6.3 uses
 them and not the displayed one.
 
-- `x` is integral over `v.adicCompletionIntegers K`, so that `minpoly (v.adicCompletionIntegers K) x`
-  is the minimal polynomial of an integral element. This is immediate from the integral-closure
+- `x` is integral over `v.adicCompletionIntegers K`, so that its minimal polynomial over that
+  ring is the minimal polynomial of an integral element. This is immediate from the integral-closure
   package of Layer 5.7, by `IsIntegralClosure.isIntegral`, and it is recorded rather than
   re-proved.
 - The field-level form
 
   ```text
-  Algebra.adjoin (v.adicCompletion K) {algebraMap (w.adicCompletionIntegers L) (w.adicCompletion L) x} = ⊤,
+  Algebra.adjoin (v.adicCompletion K)
+    {algebraMap (w.adicCompletionIntegers L) (w.adicCompletion L) x} = ⊤,
   ```
 
   which is what `conductor_mul_differentIdeal` takes as its hypothesis. ⚠ The displayed
@@ -1705,41 +1708,42 @@ For `K` with `NumberField.Units.rank K = 1` and `u : (𝓞 K)ˣ`, build four sta
    of candidates. The certificate is the finite list **together with an elimination of every
    candidate on it**, and this milestone is all three steps.
 
-   a. *The candidate set.* For an infinite place `w` and a bound `B` there, build
+   - **The candidate set.** For an infinite place `w` and a bound `B` there, build
 
-      ```text
-      unitCandidates K w B : Finset ℤ[X]
-      ```
+     ```text
+     unitCandidates K w B : Finset ℤ[X]
+     ```
 
-      the monic integer polynomials that can be the minimal polynomial of a unit `v` with
-      `1 < w v < B`. The coefficients are bounded because every conjugate of `v` is bounded: the
-      conjugates satisfy `∏_w (w v)^{mult w} = 1`, so bounding `w v` above bounds the remaining
-      conjugates below and above. Concretely:
+     the monic integer polynomials that can be the minimal polynomial of a unit `v` with
+     `1 < w v < B`. The coefficients are bounded because every conjugate of `v` is bounded: the
+     conjugates satisfy `∏_w (w v)^{mult w} = 1`, so bounding `w v` above bounds the remaining
+     conjugates below and above. Concretely:
 
-      - degree 2 with two real places: `v` has minimal polynomial `X² − mX ± 1` with
-        `m = v + v′`, and `1 < v < B` with `v v′ = ±1` bounds `m`;
-      - degree 3 with signature `(1,1)`: `v` has minimal polynomial `X³ − aX² + bX − c` with
-        `c = ±1`, `|v′| = (w v)^{−1/2}` at the complex place, and hence
-        `|a| ≤ B + 2` and `|b| ≤ 2B + 1`.
+     - degree 2 with two real places: `v` has minimal polynomial `X² − mX ± 1` with
+       `m = v + v′`, and `1 < v < B` with `v v′ = ±1` bounds `m`;
+     - degree 3 with signature `(1,1)`: `v` has minimal polynomial `X³ − aX² + bX − c` with
+       `c = ±1`, `|v′| = (w v)^{−1/2}` at the complex place, and hence
+       `|a| ≤ B + 2` and `|b| ≤ 2B + 1`.
 
-   b. *Completeness.* Prove that the minimal polynomial of every competing unit is in the set:
-      if `v : (𝓞 K)ˣ` and `1 < w v < B` then `minpoly ℤ v ∈ unitCandidates K B`. Note what this
-      needs: `v` generates `K` over `ℚ`, so that the minimal polynomial has the expected degree.
-      For a field of prime degree that is Layer 7.1's argument, since a unit with `w v ≠ 1` is not
-      rational.
+   - **Completeness.** Prove that the minimal polynomial of every competing unit is in the set:
+     if `v : (𝓞 K)ˣ` and `1 < w v < B` then `minpoly ℤ v ∈ unitCandidates K w B`. Note what this
+     needs: `v` generates `K` over `ℚ`, so that the minimal polynomial has the expected degree.
+     For a field of prime degree that is Layer 7.1's argument, since a unit with `w v ≠ 1` is not
+     rational.
 
-   c. *Elimination.* Prove that no candidate is the minimal polynomial of a unit of `K` that lies
-      strictly between `1` and `u`. This has two halves, and only the first is about the interval:
+   - **Elimination.** Prove that no candidate is the minimal polynomial of a unit of `K` that
+     lies strictly between `1` and `u`. This has two halves, and only the first is about the
+     interval:
 
-      - the **root test**: a candidate that is the minimal polynomial of such a `v` has a real
-        root in the open interval `(1, B)`, by exact root isolation, which is a decidable check
-        on integer polynomials;
-      - the **field test**: every candidate that survives the root test is eliminated as a
-        minimal polynomial **in `K`**. Layer 3.3 is the general tool. If `g = minpoly ℤ v` for an
-        integral generator `v` of `K`, then `Polynomial.discr g = index(v)² · discr K`, so a
-        candidate whose discriminant is not `discr K` times a square is not a minimal polynomial
-        in `K`. Reducibility eliminates a candidate outright, since a minimal polynomial is
-        irreducible.
+     - the **root test**: a candidate that is the minimal polynomial of such a `v` has a real
+       root in the open interval `(1, B)`, by exact root isolation, which is a decidable check
+       on integer polynomials;
+     - the **field test**: every candidate that survives the root test is eliminated as a
+       minimal polynomial **in `K`**. Layer 3.3 is the general tool. If `g = minpoly ℤ v` for an
+       integral generator `v` of `K`, then `Polynomial.discr g = index(v)² · discr K`, so a
+       candidate whose discriminant is not `discr K` times a square is not a minimal polynomial
+       in `K`. Reducibility eliminates a candidate outright, since a minimal polynomial is
+       irreducible.
 
    ⚠ The root test alone is not an elimination, and a milestone that stops there has a gap. The
    candidate set contains polynomials other than `minpoly ℤ u` that do have roots in `(1, w u)`.
@@ -1980,7 +1984,7 @@ list is where the certificate begins.
 
 ⚠ Discarding the candidates with no root in `(1, w u)` does not finish it. Exactly `14` of the
 `98` have a real root in that interval, and `minpoly ℤ u = X³ − X − 1` is not one of them, since
-its root there is the endpoint `u` itself. Twelve of the `14` are reducible, each with `1` or
+its only real root is the endpoint `u` itself. Twelve of the `14` are reducible, each with `1` or
 `−1` as a root, and a minimal polynomial is irreducible. The two that remain are genuine
 candidates that the interval test does not touch:
 
@@ -2002,7 +2006,7 @@ disc(minpoly ℤ v) = index(v)² · discr K = index(v)² · (−23) < 0.
 Both surviving candidates have positive discriminant, so neither is a minimal polynomial in `K`.
 No unit lies strictly between `1` and `u`, and the certificate is complete.
 
-The same computation states the whole elimination in one decidable check: of the `98` candidates,
+The same enumeration gives the whole elimination as one decidable check: of the `98` candidates,
 `16` have discriminant `−23`, none has discriminant `−23m²` for any `m ≥ 2`, and none of those
 `16` has a root in `(1, w u)`.
 
