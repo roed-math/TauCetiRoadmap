@@ -1703,8 +1703,10 @@ which is the definition of the symbol and needs no object from another roadmap.
   dictionary. ⚠ Quaternion algebras, the splitting criterion over an arbitrary field, the
   quadratic defect, and the classification of forms over a local field are the theory of
   quadratic forms, and this roadmap builds none of them. What it builds is one symbol, from the
-  norm criterion, and the dictionary `ZMod 2 ≃ {±1}` of Mathlib. Any development that owns the
-  theory of quadratic forms should take this symbol, and not define a second one.
+  norm criterion, and the dictionary `ZMod 2 ≃ {±1}` of Mathlib. The theory of quadratic forms
+  states the same norm-criterion symbol over an arbitrary field, so the two definitions agree
+  literally over a nonarchimedean local field. The identification with the cohomological
+  pairing is this milestone's, and no development restates it.
   - *Prerequisites:*
     - `Layer 8C: the mod-2 pairing is the norm criterion`;
     - `Mathlib: ZMod 2` and `Units.val`, for the dictionary.
@@ -1867,7 +1869,7 @@ of the table below, and a statement that is not a row is not an interface: neith
 consumes the other through prose. Each row gives the consuming layer, the supplying layer,
 the exact object or theorem, and the name it goes by. The name belongs to the supplier, which
 states the object once, and the consumer cites the name instead of restating the object. The
-Local Fields roadmap carries the same table.
+Local Fields and Pro-`p` Groups roadmaps carry the same table.
 
 | Consumer layer | Supplier layer | Exact object or theorem | Name |
 |---|---|---|---|

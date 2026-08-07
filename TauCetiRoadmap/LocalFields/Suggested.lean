@@ -422,10 +422,10 @@ instance proPKernel_normal (G : Type u) [Group G] [TopologicalSpace G] :
 abbrev maximalProPQuotient (G : Type u) [Group G] [TopologicalSpace G] : Type u :=
   G ⧸ proPKernel p G
 
-/-- `G_F(p)`, the maximal pro-`p` quotient of the absolute Galois group. Layer 9 cites this
+/-- `G_K(p)`, the maximal pro-`p` quotient of the absolute Galois group. Layer 9 cites this
 carrier, and does not re-form the quotient. -/
-abbrev absoluteGaloisGroupProP (F : Type u) [Field F] : Type u :=
-  maximalProPQuotient p (Field.absoluteGaloisGroup F)
+abbrev absoluteGaloisGroupProP (K : Type u) [Field K] : Type u :=
+  maximalProPQuotient p (Field.absoluteGaloisGroup K)
 
 /-- A closed pro-`p` subgroup whose image in every continuous finite quotient has index prime to
 `p`. ⚠ Maximality among closed pro-`p` subgroups is equivalent, but that equivalence is a
