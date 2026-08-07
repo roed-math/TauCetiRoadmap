@@ -60,7 +60,7 @@ Each row is an obligation across roadmap boundaries, not a target.
   which is the convention Layer 2.3 here needs and states: with the opposite sign the conductor
   translation and the modular-forms agreement are both false. If that roadmap's signs move
   again, Layer 2.3 and its two instance tests are the first things to re-check.
-- **Theorem numbering in the printed sources, now pinned except for one source.** The
+- **Theorem numbering in the printed sources, now pinned.** The
   *Sources for the hard milestones* table in the README fixes, for each hard milestone, the
   exact source location, its hypotheses, the translation into this roadmap's normalization,
   the dependence of every constant, and — where no single source proves the displayed theorem
@@ -74,27 +74,35 @@ Each row is an obligation across roadmap boundaries, not a target.
   Explicit Formula for `ψ(x,χ)`*, so the `exp(−c√log x)` shape is §18 and §20 rather than
   §§18–19; and Kadiri's Theorem 1.1 is two statements, "no zeros" for `|Im s| ≥ 1` and "at most
   one, real and simple" for `|Im s| ≤ 1`, which the earlier row conflated into one.
-  **Still open:** Iwaniec–Kowalski's within-chapter theorem numbers. The chapter-5 section
-  numbering is exact (§5.1 to §5.14 and §5.A, with §5.3 the zero-counting section), but no
-  accessible copy of the body was found, so the two rows citing it cite the section. Neither
-  row's proof route depends on the number. Someone with a physical copy should finish this one
-  item.
+  ⚠ **Iwaniec–Kowalski is deliberately not the source of any milestone.** Its chapter-5
+  section numbering is exact (§5.1 to §5.14 and §5.A, with §5.3 the zero-counting section) and
+  equation (5.7), the analytic conductor, is verified; but no accessible copy of the body was
+  found, so no within-chapter theorem number could be checked. Rather than cite a section and
+  call it a source, Layer 7.6 is now classified as derived in this roadmap, with its
+  decomposition written out in the source table, and Iwaniec–Kowalski appears in the references
+  as reading. The only thing taken from it is the convention (5.7), which is a definition and
+  is checked. Nothing here is waiting on a physical copy.
 - **The L-functions roadmap is not yet merged, and that is the last blocker.** Every
   declaration name this roadmap cites from it (`AnalyticLFunctionData`,
   `HasMeromorphicContinuation` and its `regular_away` field, `NormalizationTranslation`,
   `idealCoeff`, `idealVonMangoldt`, `riemannZetaData`, and the rest) is pinned against that
   roadmap's prototype rather than against an accepted file, and `Suggested.lean` here cannot
-  import it. The dependency table now names each crossing exactly and marks *unnamed* every
-  crossing that roadmap states as an anonymous `example`; those marks are the list of names
-  owed there, and they are as much a blocker as the merge, since an anonymous example is not a
-  declaration contract. When it lands, the following are added to `Suggested.lean` and are the
-  exact remaining Lean work:
+  import it. ⚠ The *naming* half of that blocker is now closed: every crossing that roadmap
+  previously stated as an anonymous `example` has been given a stable declaration name there —
+  `dedekindZetaC` and `completedDedekindZeta` with their characterizations,
+  `abscissaOfAbsConv_idealCoeff`, `eq_of_meromorphic_of_eqOn_halfPlane`,
+  `dedekindZetaC_quadratic`, `dedekindZetaC_cyclotomic`, the Hecke family
+  (`heckeLFunctionC`, `completedHeckeLFunction`, `heckeRootNumber` and their theorems),
+  `three_four_one_nonneg`, `idealVonMangoldt_nonneg`, the three nonvanishing statements, and
+  `LSeries_idealVonMangoldt_eq` — so the dependency table ends every row in a declaration name.
+  What remains is the merge itself. When it lands, the following are added to `Suggested.lean`
+  and are the exact remaining Lean work:
   - generic `entireCompletion` over the record, replacing the ζ-only existential;
   - generic `invGammaFactor` and the regularized `continuedL`, with the order formula, the
     analyticity clause, and the ζ value test;
-  - `dualData`, and the functional equation of `continuedL` against it — ⚠ that record is an
-    object the L-functions roadmap should own, since it names `dualCompleted` but no dual
-    record; it is built here so that nothing waits, and it is a candidate to move there;
+  - the functional equation of `continuedL` against the supplier's `AnalyticLFunctionData.dual`
+    — ⚠ that record is now **owned there**, with `dual_gammaFactor`, `dual_dual`, `dual_degree`
+    and the three predicate-transport theorems, and is consumed here rather than rebuilt;
   - `IsFiniteOrder`, record-level `analyticConductorAt`, and the normalization transport of
     both the conductor and `continuedL` (Layer 2.3);
   - the Dedekind and Hecke instance bridges of Layer 1.6, which are the two comparison

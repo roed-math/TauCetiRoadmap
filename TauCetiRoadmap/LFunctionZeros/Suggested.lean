@@ -178,8 +178,8 @@ satisfies every other clause above and fails this one. -/
 example : completedRiemannZeta 0 / Gammaℝ 0 ≠ riemannZeta 0 := sorry
 
 /-- **Layer 1.6, the functional equation is against the *dual* record.** ⚠ Over the
-L-functions roadmap's record this relates `continuedL d` to `continuedL (dualData d)`, where
-`dualData` conjugates the coefficients, the shifts, and the root number; it is a self-relation
+L-functions roadmap's record this relates `continuedL d` to `continuedL d.dual`, where that
+roadmap's `dual` conjugates the coefficients, the shifts, and the root number; it is a self-relation
 only for a self-dual record, and a non-real finite-order Hecke character is the test that
 catches the difference. The ζ record is self-dual, so at the pin the statement collapses to
 the pin's own `riemannZeta_one_sub`, and this example records the shape rather than the test:
@@ -240,21 +240,36 @@ it. The two edges below are polynomial in the analytic conductor with no exponen
 and the only division at the end is by the polynomial clearing the poles. -/
 
 /-- **Layer 3.3, the pole-cleared strip bound**, at the ζ instance, where the clearing
-polynomial is `s - 1` and the arithmetic conductor is `1`. The exponent is the linear
-interpolation between `0` at `Re s = 1 + δ` (absolute convergence) and `1/2 + δ` at
-`Re s = -δ` (the functional equation against the dual, with the two gamma exponentials
-cancelling inside the quotient). ⚠ The factor `1 + |s.im|` is the clearing polynomial's own
-growth and is not slack; dropping it makes the statement false on the right edge, where
-`‖(s - 1) ζ(s)‖ ≍ |t|`. -/
+polynomial is `s - 1` and the arithmetic conductor is `1`.
+
+⚠ The bound is stated for the **removable analytic extension** `g` of
+`fun s ↦ (s - 1) * riemannZeta s`, and not for that product. This is the same defect Layer 0.2
+avoids above: the product takes the value `(1 - 1) * riemannZeta 1 = 0` at `s = 1`, since
+`riemannZeta 1` is a junk value, whereas `g 1` is the residue `1`. The product is therefore not
+continuous at `1`, let alone holomorphic, so `Complex.PhragmenLindelof.vertical_strip` does not
+apply to it; and an inequality written for the product would typecheck while bounding nothing
+there, because `0` satisfies every upper bound. The clause `g 1 = 1` is the test that the
+extension was taken, exactly as `continuedL riemannZetaData 0 = -1/2` is in Layer 1.6.
+
+The exponent is the linear interpolation between `0` at `Re s = 1 + δ` (absolute convergence)
+and `1/2 + δ` at `Re s = -δ` (the functional equation against the dual, with the two gamma
+exponentials cancelling inside the quotient). ⚠ The factor `1 + |s.im|` is the clearing
+polynomial's own growth and is not slack; dropping it makes the statement false on the right
+edge, where `‖(s - 1) ζ(s)‖ ≍ |t|`. -/
 example (δ : ℝ) (hδ : 0 < δ) (hδ' : δ < 1 / 2) :
-    ∃ C : ℝ, 0 < C ∧ ∀ s : ℂ, -δ ≤ s.re → s.re ≤ 1 + δ →
-      ‖(s - 1) * riemannZeta s‖ ≤
-        C * (1 + |s.im|) *
-          (|s.im| + 3) ^ ((1 / 2 + δ) * (1 + δ - s.re) / (1 + 2 * δ)) := sorry
+    ∃ g : ℂ → ℂ, Differentiable ℂ g ∧
+      (∀ s : ℂ, s ≠ 1 → g s = (s - 1) * riemannZeta s) ∧
+      g 1 = 1 ∧
+      ∃ C : ℝ, 0 < C ∧ ∀ s : ℂ, -δ ≤ s.re → s.re ≤ 1 + δ →
+        ‖g s‖ ≤
+          C * (1 + |s.im|) *
+            (|s.im| + 3) ^ ((1 / 2 + δ) * (1 + δ - s.re) / (1 + 2 * δ)) := sorry
 
 /-- **Layer 3.3, the central-line convexity bound**, the corollary at `σ = 1/2` where the
 interpolated exponent `(1/2 + δ)(1/2 + δ)/(1 + 2δ)` is exactly `1/4 + δ/2`. The clearing
-polynomial is divided out here because its only root, `s = 1`, is off the critical line.
+polynomial is divided out here because its only root, `s = 1`, is off the critical line — which
+is also why the statement may be written for `riemannZeta` directly: on that line the analytic
+extension `g` above agrees with `(s - 1) * riemannZeta s` on the nose.
 ⚠ Subconvexity is out of scope: no milestone improves `1/4`. -/
 example (ε : ℝ) (hε : 0 < ε) :
     ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ,
@@ -503,6 +518,28 @@ theorem intervalIntegral_of_hasCauchyPV {γ : ℝ → ℂ} {a b : ℝ} {g : ℂ 
     (h : HasCauchyPV γ a b g v) :
     ∫ t in a..b, deriv γ t • g (γ t) = v := sorry
 
+/-- **Layer 7.2a, localization, step 1**: a relatively compact open neighbourhood of the
+rectangle inside the ambient set. ⚠ This is what lets the argument principle be applied where
+the singular set is genuinely finite, without assuming it is finite globally. -/
+theorem exists_isOpen_closure_compact_between {U : Set ℂ} {B : Rect}
+    (hU : IsOpen U) (hBU : B.toSet ⊆ U) :
+    ∃ V : Set ℂ, IsOpen V ∧ B.toSet ⊆ V ∧ IsCompact (closure V) ∧ closure V ⊆ U := sorry
+
+/-- **Layer 7.2a, localization, step 2**: on a compact subset of the domain of meromorphy the
+divisor support is finite. This replaces the global finiteness hypothesis, which is **false**
+for every completed L-function: those have infinitely many zeros. -/
+theorem finite_orderSupport_of_isCompact {f : ℂ → ℂ} {U K : Set ℂ}
+    (hU : IsOpen U) (hf : MeromorphicOn f U) (hK : IsCompact K) (hKU : K ⊆ U) :
+    {z ∈ K | meromorphicOrderAt f z ≠ 0}.Finite := sorry
+
+/-- **Layer 7.2a, localization, step 3**: the order at a point is a germ condition, so it does
+not see the ambient set, and the divisor over a smaller open set agrees with the global one
+there. This is what carries a theorem proved on `V` back to a statement about `divisor f U`. -/
+theorem divisorCount_restrict {f : ℂ → ℂ} {U V : Set ℂ} {B : Rect}
+    (hU : IsOpen U) (hV : IsOpen V) (hVU : V ⊆ U) (hf : MeromorphicOn f U)
+    (hBV : B.toSet ⊆ V) :
+    divisorCount f V B.toSet = divisorCount f U B.toSet := sorry
+
 /-- **Layer 7.2a, the canonical-representative bridge**, which is what connects the argument
 principle to the divisor language every other layer uses.
 
@@ -518,10 +555,24 @@ theorem intervalIntegral_logDeriv_eq_divisorCount {f : ℂ → ℂ} {U : Set ℂ
     (hU : IsOpen U) (hB : B.Nondegenerate) (hBU : B.toSet ⊆ U)
     (hf : MeromorphicOn f U)
     (hcanon : ∀ z ∈ U, 0 ≤ meromorphicOrderAt f z → AnalyticAt ℂ f z)
-    (hfin : {z ∈ U | meromorphicOrderAt f z ≠ 0}.Finite)
     (hbdry : ∀ z ∈ frontier B.toSet, meromorphicOrderAt f z = 0) :
     ∫ t in (0:ℝ)..4, deriv (rectBoundary B) t • logDeriv f (rectBoundary B t) =
       2 * (Real.pi : ℂ) * Complex.I * (divisorCount f U B.toSet : ℂ) := sorry
+
+/-- **The acceptance test for the localization, and the reason no global finiteness hypothesis
+appears above.** The ambient set is all of `ℂ` and `completedRiemannZeta` has infinitely many
+zeros in it, so a version of the theorem carrying
+`{z ∈ U | meromorphicOrderAt f z ≠ 0}.Finite` says nothing about the function this layer exists
+for. The theorem above applies to it, because `hasCauchyPV_rectBoundary_logDeriv` is invoked on
+a relatively compact `V ⊇ B.toSet` where the singular set really is finite, and
+`divisorCount_restrict` carries the answer back to `Set.univ`. -/
+example (B : Rect) (hB : B.Nondegenerate)
+    (hbdry : ∀ z ∈ frontier B.toSet, meromorphicOrderAt completedRiemannZeta z = 0) :
+    ¬ {z : ℂ | meromorphicOrderAt completedRiemannZeta z ≠ 0}.Finite ∧
+      ∫ t in (0:ℝ)..4, deriv (rectBoundary B) t •
+          logDeriv completedRiemannZeta (rectBoundary B t) =
+        2 * (Real.pi : ℂ) * Complex.I *
+          (divisorCount completedRiemannZeta Set.univ B.toSet : ℂ) := sorry
 
 /-- **The countermodel that makes `hcanon` and the pointwise boundary hypotheses necessary.**
 Take `f` equal to `1` except at one point, where it is `0`. Every germ condition holds — `f` is
