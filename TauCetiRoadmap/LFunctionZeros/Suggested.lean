@@ -80,11 +80,14 @@ example :
 `Complex.exists_continuousOn_eqOn_exp_comp` on the sector, which is open and simply connected
 and carries no zero or pole of `Γ`, followed by the upgrade from continuity to holomorphy
 (`exp` is a local biholomorphism). ⚠ `Complex.log ∘ Gamma` is **not** a branch: nonvanishing
-of `Γ` does not make the principal logarithm of its image continuous. -/
+of `Γ` does not make the principal logarithm of its image continuous. ⚠ The normalization
+`L 2 = 0` is part of the statement, and is consistent because `Γ 2 = 1`: without it the branch
+is determined only up to `2πi k`, which moves the constant term of Stirling's formula. -/
 example (δ : ℝ) (hδ : 0 < δ) (hδ' : δ < Real.pi) :
     ∃ L : ℂ → ℂ,
       DifferentiableOn ℂ L {s : ℂ | |s.arg| < Real.pi - δ ∧ 1 < ‖s‖} ∧
-      Set.EqOn (Complex.exp ∘ L) Gamma {s : ℂ | |s.arg| < Real.pi - δ ∧ 1 < ‖s‖} := sorry
+      Set.EqOn (Complex.exp ∘ L) Gamma {s : ℂ | |s.arg| < Real.pi - δ ∧ 1 < ‖s‖} ∧
+      L 2 = 0 := sorry
 
 /-- **Layer 1.3, the Stirling estimate on a vertical line**, in the additive `log ‖·‖` form the
 later layers compose over products, uniformly for `σ` in a compact interval and along
@@ -116,26 +119,31 @@ the pair of shifts `ν, ν + 1` that `Gammaℝ_mul_Gammaℝ_add_one` splits it i
 `(‖s + ν‖ + 3) ^ 2`: only the paired form is an equality with the modular forms roadmap's
 `𝔮(f, s)`, whose newform value `N · (|s + (k−1)/2| + 3) · (|s + (k+1)/2| + 3)` is this
 definition at `gammaC = {(k−1)/2}`. -/
-noncomputable def analyticConductorAt (N : ℕ) (gammaR gammaC : Multiset ℂ) (s : ℂ) : ℝ :=
-  (N : ℝ) * (gammaR.map fun μ ↦ ‖s + μ‖ + 3).prod
+noncomputable def analyticConductorAt (N : ℕ+) (gammaR gammaC : Multiset ℂ) (s : ℂ) : ℝ :=
+  ((N : ℕ) : ℝ) * (gammaR.map fun μ ↦ ‖s + μ‖ + 3).prod
     * (gammaC.map fun ν ↦ (‖s + ν‖ + 3) * (‖s + ν + 1‖ + 3)).prod
 
 /-- **Layer 2, the central analytic conductor**: the value at the central point of the
 analytic normalization. The modular forms roadmap's `𝔮(f) = 𝔮(f, k/2)` is this quantity after
 the normalization translation, which is why the central point is `1/2` here and `k/2` there. -/
-noncomputable def centralAnalyticConductor (N : ℕ) (gammaR gammaC : Multiset ℂ) : ℝ :=
+noncomputable def centralAnalyticConductor (N : ℕ+) (gammaR gammaC : Multiset ℂ) : ℝ :=
   analyticConductorAt N gammaR gammaC (1 / 2)
 
 /-- **Layer 2.2, the two-sided comparison on a strip.** ⚠ This replaces monotonicity in
 `|Im s|`, which is false for a complex shift: `‖s + μ‖ + 3` decreases as `Im s` approaches
-`-Im μ`. The constants depend on the strip, the degree, and a bound on the shifts, and not on
-`N`, which is what makes the bound usable uniformly in the conductor. -/
-example (a b : ℝ) (N : ℕ) (gammaR gammaC : Multiset ℂ) :
-    ∃ C₁ C₂ : ℝ, 0 < C₁ ∧ 0 < C₂ ∧ ∀ σ ∈ Set.Icc a b, ∀ t : ℝ,
-      C₁ * N * (|t| + 3) ^ (gammaR.card + 2 * gammaC.card) ≤
-          analyticConductorAt N gammaR gammaC (σ + t * I) ∧
-        analyticConductorAt N gammaR gammaC (σ + t * I) ≤
-          C₂ * N * (|t| + 3) ^ (gammaR.card + 2 * gammaC.card) := sorry
+`-Im μ`. ⚠ The quantifier order is the statement: `C₁` and `C₂` are chosen before the
+conductor and before the spectral parameters, and depend only on the strip, the degree, and
+the bound `B` on the shifts. Quantifying them after `N` would allow them to depend on the
+conductor, which is exactly the uniformity the milestone is about. -/
+example (a b B : ℝ) (dR dC : ℕ) :
+    ∃ C₁ C₂ : ℝ, 0 < C₁ ∧ 0 < C₂ ∧
+      ∀ (N : ℕ+) (gammaR gammaC : Multiset ℂ), gammaR.card = dR → gammaC.card = dC →
+        (∀ μ ∈ gammaR, ‖μ‖ ≤ B) → (∀ ν ∈ gammaC, ‖ν‖ ≤ B) →
+        ∀ σ ∈ Set.Icc a b, ∀ t : ℝ,
+          C₁ * ((N : ℕ) : ℝ) * (|t| + 3) ^ (dR + 2 * dC) ≤
+              analyticConductorAt N gammaR gammaC (σ + t * I) ∧
+            analyticConductorAt N gammaR gammaC (σ + t * I) ≤
+              C₂ * ((N : ℕ) : ℝ) * (|t| + 3) ^ (dR + 2 * dC) := sorry
 
 /-- **Layer 2, the conductor grows like `q · |t|^{degree}`.** Stated for the Riemann zeta
 data (`N = 1`, one real gamma factor at shift `0`), where it is a bound on `|t| + 3`. -/
@@ -163,7 +171,10 @@ noncomputable def zeroCount (f : ℂ → ℂ) (U R : Set ℂ) : ℕ :=
 
 /-- **The closed rectangle** `[σ₁, σ₂] × [t₁, t₂]`, as a four-real bundle over the exact set
 expression the conventions table pins. Closed rectangles with regular boundary carry contour
-integrals and certificates. -/
+integrals and certificates. The ordering of the endpoints is `Rect.Valid` rather than a
+structure field, so that the definitions below stay total: `Set.Icc` of a reversed pair is
+empty, so an invalid rectangle has empty region and count `0`, and validity is carried
+explicitly by every statement that needs it. -/
 structure Rect where
   /-- Left edge. -/
   σ₁ : ℝ
@@ -177,6 +188,10 @@ structure Rect where
 /-- The underlying set of a closed rectangle. -/
 def Rect.toSet (B : Rect) : Set ℂ := Set.Icc B.σ₁ B.σ₂ ×ℂ Set.Icc B.t₁ B.t₂
 
+/-- The endpoints of a rectangle are in order. Required wherever the geometry matters: the
+boundary of an invalid rectangle is not the four edges, and its interior is empty. -/
+def Rect.Valid (B : Rect) : Prop := B.σ₁ ≤ B.σ₂ ∧ B.t₁ ≤ B.t₂
+
 /-- The half-open rectangle `[σ₁, σ₂] × (t₁, t₂]`, which is what exact partitions and `N(T)`
 use: a zero on a shared horizontal edge is counted once rather than twice. -/
 def Rect.toSetHalfOpen (B : Rect) : Set ℂ := Set.Icc B.σ₁ B.σ₂ ×ℂ Set.Ioc B.t₁ B.t₂
@@ -184,8 +199,17 @@ def Rect.toSetHalfOpen (B : Rect) : Set ℂ := Set.Icc B.σ₁ B.σ₂ ×ℂ Set
 /-- **Layer 4.3, exact additivity, on half-open rectangles.** ⚠ The closed statement is false:
 two closed rectangles sharing an edge both contain a zero on that edge, so a subdivision
 double-counts it. The closed version needs the hypothesis that the shared boundary is regular
-and zero-free. -/
-example (f : ℂ → ℂ) (U : Set ℂ) (σ₁ σ₂ t₁ t₂ t₃ : ℝ) (h₁ : t₁ ≤ t₂) (h₂ : t₂ ≤ t₃) :
+and zero-free. ⚠ Finiteness is a hypothesis, not a consequence: `∑ᶠ` returns `0` on an
+infinite support, and a function meromorphic on `U` can have infinitely many zeros in a
+bounded rectangle when that rectangle is not relatively compact in `U`, so the three finsums
+would all be junk and the equation would say nothing. The clean sufficient hypothesis is the
+one displayed here — meromorphy on `U`, the closed rectangle contained in `U`, and finite
+divisor support on it — and the corresponding statement for a vertical subdivision needs a
+half-open real interval as well, or the zero-free-shared-edge hypothesis. -/
+example (f : ℂ → ℂ) (U : Set ℂ) (σ₁ σ₂ t₁ t₂ t₃ : ℝ) (h₁ : t₁ ≤ t₂) (h₂ : t₂ ≤ t₃)
+    (hf : MeromorphicOn f U) (hU : Rect.toSet ⟨σ₁, σ₂, t₁, t₃⟩ ⊆ U)
+    (hfin : (Function.support fun ρ ↦ MeromorphicOn.divisor f U ρ) ∩
+      Rect.toSet ⟨σ₁, σ₂, t₁, t₃⟩ |>.Finite) :
     zeroCount f U (Rect.toSetHalfOpen ⟨σ₁, σ₂, t₁, t₃⟩) =
       zeroCount f U (Rect.toSetHalfOpen ⟨σ₁, σ₂, t₁, t₂⟩) +
         zeroCount f U (Rect.toSetHalfOpen ⟨σ₁, σ₂, t₂, t₃⟩) := sorry
@@ -282,6 +306,12 @@ excludes one nor is implied by regularity. And disjointness is of *interiors*, s
 rectangles are the normal case and their shared edge is zero-free by the boundary hypothesis. -/
 structure HasZerosInRects (f : ℂ → ℂ) (U : Set ℂ) (R : Rect) (boxes : List Rect)
     (mult : List ℕ) : Prop where
+  /-- The ambient set is open. -/
+  isOpen : IsOpen U
+  /-- The region has its endpoints in order. -/
+  valid_region : R.Valid
+  /-- Each listed rectangle has its endpoints in order. -/
+  valid_boxes : ∀ B ∈ boxes, B.Valid
   /-- `f` is meromorphic on the ambient open set. -/
   meromorphic : MeromorphicOn f U
   /-- The region lies in the ambient set. -/
