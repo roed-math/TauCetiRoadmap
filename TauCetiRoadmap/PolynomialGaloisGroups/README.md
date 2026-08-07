@@ -539,8 +539,8 @@ For irreducible separable `p` over `F` with a root `α` in `L = p.SplittingField
 ### Layer 4: resolvents
 
 A resolvent converts a constraint on the subgroup into a statement about factorization. Two
-levels of data are kept apart throughout, and the certificate layer is sound only because of
-that separation.
+levels of data are kept apart throughout, and the soundness of the certificate layer depends
+on that separation.
 
 - **Static resolvent specifications.** A `ResolventSpec n` is library data, written and proved
   once: a subgroup `H ≤ Equiv.Perm (Fin n)`, an invariant `Φ : MvPolynomial (Fin n) ℤ`, and a
