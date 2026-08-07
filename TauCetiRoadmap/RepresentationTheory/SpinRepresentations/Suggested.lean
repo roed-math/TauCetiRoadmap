@@ -36,11 +36,6 @@ and the CAR worked instance `traceQuadraticForm`, `glCliffordHom`, `car_isotypic
 
 namespace TauCetiRoadmap.RepresentationTheory.SpinRepresentations
 
--- Mathlib makes `LieRing.ofAssociativeRing` a local instance rather than a global one, so a
--- file that brackets elements of an associative ring, or of `Module.End`, has to opt in the
--- same way Mathlib's own files do.
-attribute [local instance 100] LieRing.ofAssociativeRing
-
 open CliffordAlgebra
 open scoped Classical DirectSum Quaternion TensorProduct
 
