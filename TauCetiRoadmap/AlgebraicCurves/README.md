@@ -1,6 +1,6 @@
 # Roadmap: algebraic curves — function fields, divisors, and Riemann–Roch
 
-Mathlib at the pin (`9caeba1000`, 2026-06-03) has a rich valuation-theoretic and
+Mathlib has a rich valuation-theoretic and
 Dedekind-domain substrate — `IsDedekindDomain.HeightOneSpectrum` with `ℤᵐ⁰`-valued adic
 valuations, the factorization calculus `FractionalIdeal.count` (an unlabelled isomorphism
 `(FractionalIdeal R⁰ K)ˣ ≅ (HeightOneSpectrum R →₀ ℤ)`), `ClassGroup`, the different ideal
@@ -166,8 +166,8 @@ arbitrary field with the honest hypotheses above.
 
 ## What Mathlib already has (consume)
 
-Verified against the pin `9caeba1000` (2026-06-03). "master:" flags post-pin material, to
-be consumed on a toolchain bump rather than rebuilt.
+Verified against the Mathlib the repository currently builds. "master:" flags newer
+material, to be consumed when the repository's Mathlib reaches it rather than rebuilt.
 
 - **The chosen-generator function-field predicate**,
   `Mathlib/NumberTheory/FunctionField.lean`: `FunctionField Fq F` (an `abbrev` for
