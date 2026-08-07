@@ -102,6 +102,13 @@ instance proPKernel_normal (G : Type u) [Group G] [TopologicalSpace G] :
 abbrev maximalProPQuotient (G : Type u) [Group G] [TopologicalSpace G] : Type u :=
   G ⧸ proPKernel p G
 
+/-- **`G_K(p)`**, the Galois group of the maximal `p`-extension of `K`, as the maximal
+pro-`p` quotient of the absolute Galois group. This is the carrier the shared layer-DAG table
+fixes for Layer 11: the LocalFields roadmap's Layer 9 cites this name rather than re-forming
+the quotient, so that the two roadmaps' rank statements are about one object. -/
+abbrev absoluteGaloisGroupProP (K : Type u) [Field K] : Type u :=
+  maximalProPQuotient p (Field.absoluteGaloisGroup K)
+
 /-- **`p`-Sylow subgroup of a profinite group**: a closed pro-`p` subgroup whose image in
 every continuous finite quotient has index prime to `p` (equivalently: whose supernatural
 index is prime to `p`, Layer 1). -/
@@ -243,6 +250,16 @@ noncomputable abbrev freeProP (X : Type u) : Type u :=
 /-- The generators of the free pro-`p` group. -/
 noncomputable def freeProP.of {X : Type u} (x : X) : freeProP p X :=
   QuotientGroup.mk (freeProfiniteGroup.of x)
+
+/-- The profinite group **presented** by generators `X` and relators `rels`: the free
+profinite group modulo the *closed* normal closure of the relators. This is the object the
+LocalFields roadmap's Layer 4 states the Iwasawa presentation
+`G_K^t = ⟨σ, τ ∣ στσ⁻¹τ^(−q)⟩` against, and it is a row of the shared layer-DAG table; ⚠ it
+is not `presentedProP` below, whose pro-`p` quotient forgets the prime-to-`p` tame inertia
+that presentation is about. -/
+noncomputable abbrev presentedProfiniteGroup (X : Type u)
+    (rels : Set (freeProfiniteGroup X)) : Type u :=
+  freeProfiniteGroup X ⧸ (Subgroup.normalClosure rels).topologicalClosure
 
 /-- The pro-`p` group **presented** by generators `X` and relators `rels`: the free pro-`p`
 group modulo the *closed* normal closure of the relators (closedness is what keeps the
@@ -941,15 +958,30 @@ theorem exists_demushkin_of_invariants (n : ℕ) (A : Subgroup ℤ_[p]ˣ)
     ∃ (G : Type u) (hG : IsDemushkin p G),
       demushkinRank hG = n ∧ (demushkinCharacter hG).range = A
 
-/-- Layer 11: the two inflation theorems and the arithmetic instances. -/
+/-- Layer 11: the carrier, the two inflation theorems, the rank in both cases, and the
+arithmetic instances. The carrier `absoluteGaloisGroupProP` is a real definition above, and
+is the name the shared layer-DAG table fixes for `G_K(p)`; the LocalFields roadmap's Layer 9
+cites it rather than re-forming the quotient, and `N` below is the degree `[K : ℚ_p]`, never
+a rank. -/
 theorem inflation_h1_bijective (K : Type u) [Field K] [IsLocalField K] ... :
-    Function.Bijective (inf : H 1 (maximalProPQuotient p (G K)) 𝔽ₚ → H 1 (G K) 𝔽ₚ)
+    Function.Bijective (inf : H 1 (absoluteGaloisGroupProP p K) 𝔽ₚ → H 1 (G K) 𝔽ₚ)
 
 theorem inflation_h2_bijective_of_not_mu (hmu : ¬ HasEnoughRootsOfUnity K p) : ...
 theorem inflation_h2_bijective_of_mu (hmu : HasEnoughRootsOfUnity K p) : ...
 
+theorem isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP :
+    IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p K)
+
+theorem topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu
+    (hmu : ¬ HasEnoughRootsOfUnity K p) :
+    topologicalGeneratorRankNat (absoluteGaloisGroupProP p K) ‹_› = N + 1
+
+theorem topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu
+    (hmu : HasEnoughRootsOfUnity K p) :
+    topologicalGeneratorRankNat (absoluteGaloisGroupProP p K) ‹_› = N + 2
+
 theorem demushkinCharacter_eq_cyclotomic (hmu : HasEnoughRootsOfUnity K p) :
-    demushkinCharacter ‹IsDemushkin p (maximalProPQuotient p (G K))› = χ_cyc.descend
+    demushkinCharacter ‹IsDemushkin p (absoluteGaloisGroupProP p K)› = χ_cyc.descend
 ```
 -/
 

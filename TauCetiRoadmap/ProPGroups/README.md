@@ -28,7 +28,12 @@ This roadmap is one of four coordinated roadmaps (with
 whose combined target is the reusable foundation under the `G_{ℚ₂}` presentation project
 (`roed-math/gq2-lean`, <https://roed314.github.io/gq2/>); its axiom B3c, the identification
 `G_{ℚ₂}(2) ≅ D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩` with cyclotomic orientation, is the worked
-acceptance instance of Layers 7–11. The roadmap itself is intrinsic mathematics: the theory
+acceptance instance of Layers 7–11. The Local Fields relationship runs in both directions, at
+different layers: Layers 2, 3 and 4 here are consumed near the start of that roadmap, its
+Layers 5, 7 and 8 are consumed by Layer 11 here, and its Layer 9 consumes Layer 11. Every one
+of those crossings is a row of the shared layer-DAG table under "Ordering and parallelism"
+below, together with the name both roadmaps use for it; that table is maintained identically in
+the two roadmaps, and nothing passes between them except through a row of it.
 below is stated and built for its own sake, and `gq2` appears only as a migration source
 (provenance section) and as acceptance criteria. Two things this roadmap does **not** cover:
 the Galois action on the étale `π₁` of the thrice-punctured line (`gq2`'s B8), and the
@@ -73,10 +78,14 @@ structure of the full absolute Galois group `G_K` rather than its maximal pro-`p
   never a mixture.
 - **Topological generation and rank, two notions kept apart.**
   `IsTopologicallyFinitelyGenerated G := ∃ s : Finset G,
-  (Subgroup.closure ↑s).topologicalClosure = ⊤`. This exact shape is a contract: it is what
+  (Subgroup.closure ↑s).topologicalClosure = ⊤`. This exact shape is a contract, and it is
+  the *predicate* that is shared: it is the form in which
   [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s
-  finite-generation theorem for `G_K` produces and what the reconstruction theorem (Layer 8)
-  consumes. Rank comes in two declarations, never one overloaded one:
+  finite-generation theorem for `G_K` delivers its conclusion, and the form the reconstruction
+  theorem (Layer 8) takes as a hypothesis. ⚠ Layer 8 consumes the predicate, never that
+  theorem: reading the dependency the other way would make the two roadmaps circular (see the
+  shared layer-DAG table under "Ordering and parallelism"). Rank comes in two declarations,
+  never one overloaded one:
   `topologicalGeneratorRank G : Cardinal` is the least cardinality of a subset **converging
   to `1`** whose generated subgroup is dense, and `topologicalGeneratorRankNat G h : ℕ`
   (with `h : IsTopologicallyFinitelyGenerated G`) is its natural-number value, pinned by the
@@ -395,10 +404,12 @@ on it.
   a `p`-Sylow subgroup; a pro-`p` subgroup of index prime to `p` is maximal pro-`p`, and
   conversely a maximal closed pro-`p` subgroup is `p`-Sylow.
 - **Functoriality.** The image of a `p`-Sylow subgroup under a continuous surjection is
-  `p`-Sylow; the `p`-Sylow subgroup of an inverse limit is an inverse limit of `p`-Sylow
-  subgroups. This is the clean citable target the
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) consumes for wild inertia (the `p`-Sylow
-  of the inertia/ramification groups); keep its statement free of any Galois vocabulary.
+  `p`-Sylow (`IsProPSylow.map_of_surjective`); the `p`-Sylow subgroup of an inverse limit is an
+  inverse limit of `p`-Sylow subgroups. Together with `IsProPSylow`, `exists_isProPSylow`,
+  `IsProP.exists_le_isProPSylow` and `IsProPSylow.eq_of_normal` above, these are the citable
+  targets [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)
+  consumes for wild inertia (the `p`-Sylow of the inertia/ramification groups); keep every one
+  of their statements free of Galois vocabulary.
 - **Worked instances** (`Suggested.lean`): the Galois group of any Galois extension has
   `p`-Sylow subgroups; every `p`-Sylow subgroup of `ℤ̂ = completion ℤ` is topologically
   isomorphic to `ℤ_p`. The second uses the `ℤ_p` identification chain of Layer 4, so it
@@ -427,8 +438,10 @@ on it.
   converge, subsets and continuous images of converging sets converge, and **every profinite
   group has a generating set converging to `1`** (RZ Prop. 2.6.2), so that
   `topologicalGeneratorRank G : Cardinal` is an infimum over a nonempty family. Then:
-  monotonicity of the rank under continuous surjections; invariance under topological
-  isomorphism; finiteness of the cardinal iff `IsTopologicallyFinitelyGenerated G`; and the
+  monotonicity of the rank under continuous surjections
+  (`topologicalGeneratorRank_le_of_surjective`, a row of the shared layer-DAG table);
+  invariance under topological isomorphism; finiteness of the cardinal iff
+  `IsTopologicallyFinitelyGenerated G`; and the
   accessor `topologicalGeneratorRankNat G h : ℕ` with
   `(topologicalGeneratorRankNat G h : Cardinal) = topologicalGeneratorRank G`,
   proof-irrelevant in `h`. Every numerical rank statement in this roadmap is about the
@@ -445,7 +458,9 @@ on it.
   stated in Layer 0, which is the version to prefer wherever it suffices. Companion bound:
   an open subgroup `U` of a topologically finitely generated profinite group is topologically
   finitely generated, with `d(U) ≤ 1 + [G : U](d(G) - 1)` in natural numbers (the Schreier
-  bound; RZ Cor. 3.6.3), with equality in the free case (Layer 6).
+  bound, `topologicalGeneratorRankNat_le_of_isOpen`; RZ Cor. 3.6.3), with equality in the free
+  case (Layer 6). That bound is a row of the shared layer-DAG table: the Local Fields roadmap's
+  Layer 9 runs its lower bound through it.
 - **Hopf property.** A continuous surjective endomorphism of a topologically finitely
   generated profinite group is an isomorphism (`Suggested.lean`). This is the last step of
   every two-sided comparison in Layer 8.
@@ -462,8 +477,10 @@ on it.
   (`Suggested.lean`); the Frattini quotient `G/Φ(G)` is elementary abelian, an
   `𝔽_p`-vector space.
 - **Burnside basis theorem.** Elements generate `G` topologically iff their images generate
-  `G/Φ(G)` topologically (the closure on the quotient side is needed: at infinite rank the
-  images of a generating set span only a dense subspace of the Frattini quotient); the
+  `G/Φ(G)` topologically (`topologicallyGenerates_iff_frattiniQuotient`; the closure on the
+  quotient side is needed: at infinite rank the images of a generating set span only a dense
+  subspace of the Frattini quotient). This generation form, not the numerical one below, is
+  what the Local Fields roadmap's Layer 9 cites for its tame frame. Also here: the
   index-`p` detection form (a closed subgroup contained in no open normal subgroup of index
   `p` is everything) and the surjectivity criterion for continuous homomorphisms (surjective
   onto every index-`p` quotient ⟹ surjective), both in `Suggested.lean`. The rank identity
@@ -502,7 +519,17 @@ on it.
   after it no statement has to choose between the two constructions.
 - **Universal property.** Maps `X → P` into a profinite `P` in the class `C` extend uniquely
   to continuous homomorphisms (`Suggested.lean` states the pro-`p` case); uniqueness of the
-  free object up to unique isomorphism; functoriality in `X`.
+  free object up to unique isomorphism; functoriality in `X`. The ambient case is stated in its
+  own right and named `freeProfiniteGroup.lift`, not left implicit in the pro-`C` one: it is
+  what [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 4 consumes.
+- **Presented profinite groups.** `presentedProfiniteGroup X rels`, the free profinite group on
+  `X` modulo the *closed* normal closure of `rels`, with its universal property (continuous
+  homomorphisms out of it are the ones killing every relator) and its finite-generation
+  corollary; `presentedProP` is its pro-`p` analogue, and the theorem relating the two is
+  stated here rather than assumed. The profinite one is the object
+  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 4 states the
+  Iwasawa presentation `G_K^t = ⟨σ, τ ∣ στσ⁻¹τ^{−q}⟩` against; ⚠ it is not `presentedProP`, whose
+  pro-`p` quotient would lose the prime-to-`p` tame inertia that presentation is about.
 - **Basics.** `freeProP p X` is pro-`p`, and for finite `X` it is topologically finitely
   generated (`Suggested.lean`) of rank `|X|`: `topologicalGeneratorRank (freeProP p X) = #X`
   as cardinals, via the Frattini quotient `(ℤ/p)^X` (Layer 3), with the natural-number form
@@ -1245,50 +1272,77 @@ The home of the infinite-rank theory, as the conventions promise:
 
 Consumes [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) and
 [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1). For
-`K/ℚ_p` finite of degree `d`, `G_K(p) := Gal(K(p)/K)` is the Galois group of the maximal
+`K/ℚ_p` finite of degree `N`, `G_K(p) := Gal(K(p)/K)` is the Galois group of the maximal
 `p`-extension; intrinsically, `maximalProPQuotient p (Gal(K^sep/K))`, which Layer 3 makes
-well defined and functorial.
+well defined and functorial. That carrier is named once, here, as
+`absoluteGaloisGroupProP p K := maximalProPQuotient p (Field.absoluteGaloisGroup K)`, and
+Local Fields Layer 9 cites the name rather than re-forming the quotient for itself.
 
-- **Inputs, listed as theorem-level contracts.** From
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2), all in its
-  Layer 8B (mixed-characteristic `p`-primary lane) except where noted:
-  1. `dim_{𝔽_p} H⁰(G_K, 𝔽_p) = 1`, `dim_{𝔽_p} H²(G_K, 𝔽_p) = dim_{𝔽_p} H⁰(G_K, μ_p)`, and
-     `dim_{𝔽_p} H¹(G_K, 𝔽_p) = 1 + dim H²(G_K, 𝔽_p) + d`: the `𝔽_p`-module corollary of its
-     mixed-characteristic Euler-characteristic theorem. In particular
-     `dim H²(G_K, 𝔽_p) = 1` if `μ_p ⊆ K` and `= 0` otherwise.
-  2. The trace isomorphism `H²(G_K, μ_p) ≅ 𝔽_p` from the invariant map (its Layer 5/8A), and
-     its transport to `H²(G_K, 𝔽_p)` under a choice of `p`-th root of unity when `μ_p ⊆ K`.
-  3. Perfectness of the local Tate duality pairing at `n = p` in mixed characteristic, and
-     its identification with the Hilbert-symbol pairing at `p = 2`
-     (`hilbertSymbol_eq_tateDuality_pairing`, the named meeting point of its Layer 8B).
-  4. Kummer theory `Kˣ/(Kˣ)^p ≅ H¹(G_K, μ_p)` (its Layer 5) and the compatibility square
-     relating Kummer classes to the cup product, which is what identifies the cup pairing on
-     `H¹(G_K, 𝔽_p)` with the symbol pairing on square (resp. `p`-th power) classes.
-  5. The cyclotomic character `χ_cyc : G_K → ℤ_pˣ` with the normalization
-     `χ_cyc(Art_K(u)) = u⁻¹` for `u ∈ 𝒪_Kˣ` (its Layer 7), from which the image
+⚠ Two letters, held apart throughout this layer and the Local Fields roadmap alike: `N` is the
+degree `[K : ℚ_p]`, and `d` is the topological rank `topologicalGeneratorRankNat` of Layer 3.
+They occur in the same sentences below, so neither is ever written for the other. The kernel of
+`G_K ↠ G_K(p)` is written `R`.
+
+- **Inputs, listed as theorem-level contracts.** Every one is a row of the shared layer-DAG
+  table under "Ordering and parallelism" below and is cited by the name that table fixes. No
+  statement in this layer uses a Local Fields theorem outside this list, and none restates one
+  in its own words.
+  1. The mixed-characteristic Euler characteristic of Local Fields Layer 8B and its
+     `𝔽_p`-module corollary (`eulerCharacteristic_mixed`, `eulerCharacteristic_finrank_fp`):
+     `dim_{𝔽_p} H⁰(G_K, 𝔽_p) = 1` and
+     `dim_{𝔽_p} H¹(G_K, 𝔽_p) = 1 + dim H²(G_K, 𝔽_p) + N`. Duality in degree `0` (input 3)
+     supplies `dim_{𝔽_p} H²(G_K, 𝔽_p) = dim_{𝔽_p} H⁰(G_K, μ_p)`, whence
+     `dim H²(G_K, 𝔽_p) = 1` if `μ_p ⊆ K` and `= 0` otherwise. ⚠ That last equality is a
+     duality statement and not an Euler one; it is listed here because the case split below
+     reads off both at once.
+  2. The trace isomorphism `H²(G_K, μ_p) ≃ ZMod p`, and its transport to `H²(G_K, 𝔽_p)` under
+     a choice of `p`-th root of unity when `μ_p ⊆ K` (`h2MuEquivZMod_mixed`,
+     `h2FpEquivZMod_of_mu`). ⚠ This is Local Fields Layer **8B**, not 8A: the 8A statement of
+     the same shape carries `IsUnit (n : 𝒪[K])` and so says nothing at `n = p` in mixed
+     characteristic. Citing 8A here would be citing a theorem that does not apply.
+  3. Perfectness of the local Tate duality pairing at `n = p` in mixed characteristic
+     (`tateDualityPairing_perfect_mixed`, its Layer 8B), and the identification of that
+     pairing with the Hilbert-symbol pairing at `p = 2`
+     (`hilbertSymbol_eq_tateDuality_pairing`, its Layer 8C).
+  4. Kummer theory `Kˣ/(Kˣ)^p ≃ H¹(G_K, μ_p)` (`kummerEquiv`, its Layer 5) and the
+     compatibility square relating Kummer classes to the cup product (`cup_kummerEquiv`),
+     which is what identifies the cup pairing on `H¹(G_K, 𝔽_p)` with the symbol pairing on
+     square (resp. `p`-th power) classes.
+  5. The Artin map (`artinMap`) and the cyclotomic character `χ_cyc : G_K → ℤ_pˣ` with the
+     normalization
+
+     ```text
+     χ_cyc(Art_K(u)) = N_{K/ℚ_p}(u)⁻¹  in ℤ_pˣ, for u ∈ 𝒪[K]ˣ
+     ```
+
+     (`cyclotomicCharacter_artinMap`, its Layer 7), from which the image
      `χ_cyc(G_K) = Gal(K(μ_{p^∞})/K)` and the identification of the finite quotients of the
-     cyclotomic module are computed.
+     cyclotomic module are computed. ⚠ The field norm is part of the statement. The norm-free
+     form `χ_cyc(Art_K(u)) = u⁻¹` is the `K = ℚ_p` corollary
+     (`cyclotomicCharacter_artinMap_padic`) and is ill-typed for `K ≠ ℚ_p`; an `𝒪[K]ˣ`-valued
+     character with that value would be a Lubin–Tate character, which neither roadmap builds.
+     Nothing below may cite the corollary in place of the theorem.
   Item 4's compatibility square is also what shows that the finite quotients `μ_{p^i}` of the
   cyclotomic module satisfy the prescription property of Layer 7, used in the orientation
-  theorem below. No statement here uses a Local Fields theorem not on this list. In
-  particular **finite generation is not an input**: it is proved below, and Local Fields
-  consumes it rather than supplying it.
-- **Inflation in degree one.** Let `N := ker(G_K ↠ G_K(p))`. Inflation
+  theorem below. In particular **finite generation is not an input**: it is proved below, and
+  Local Fields consumes it rather than supplying it.
+- **Inflation in degree one.** Let `R := ker(G_K ↠ G_K(p))`. Inflation
   `H¹(G_K(p), 𝔽_p) → H¹(G_K, 𝔽_p)` is an isomorphism, directly from the universal property
   of the maximal pro-`p` quotient: a continuous homomorphism `G_K → 𝔽_p` factors uniquely
   through `G_K(p)`.
-- **`G_K(p)` is topologically finitely generated.** Input 1 makes `H¹(G_K, 𝔽_p)`
+- **`G_K(p)` is topologically finitely generated**
+  (`isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP`). Input 1 makes `H¹(G_K, 𝔽_p)`
   finite-dimensional; the degree-one isomorphism transports that to `H¹(G_K(p), 𝔽_p)`, which
   is the discrete dual of `G_K(p)/Φ(G_K(p))`, so that Frattini quotient is finite and
   Layer 3's criterion makes the pro-`p` group `G_K(p)` topologically finitely generated,
   with `d(G_K(p)) = dim_{𝔽_p} H¹(G_K, 𝔽_p)`. Nothing in the argument needs finite generation
   of `G_K` itself, which is what keeps the two roadmaps in an acyclic order: Local Fields
   Layers 0–8, then this layer, then Local Fields Layer 9.
-- **Injectivity in degree two.** `H¹(N, 𝔽_p)^{G_K(p)} = 0`: a nonzero invariant class would
-  produce a `G_K`-stable open subgroup of `N` of index `p`, hence a `p`-extension of `K`
+- **Injectivity in degree two.** `H¹(R, 𝔽_p)^{G_K(p)} = 0`: a nonzero invariant class would
+  produce a `G_K`-stable open subgroup of `R` of index `p`, hence a `p`-extension of `K`
   strictly larger than `K(p)`, contradicting maximality (a Layer 3 argument, using the
   Frattini/Burnside criterion). With the degree-one isomorphism, the five-term sequence
-  `0 → H¹(G_K(p)) → H¹(G_K) → H¹(N)^{G_K(p)} → H²(G_K(p)) → H²(G_K)`
+  `0 → H¹(G_K(p)) → H¹(G_K) → H¹(R)^{G_K(p)} → H²(G_K(p)) → H²(G_K)`
   gives that `H²(G_K(p), 𝔽_p) → H²(G_K, 𝔽_p)` is **injective**.
   ⚠ The five-term sequence gives injectivity and nothing more; surjectivity needs the case
   split below, and stating the isomorphism outright would leave a gap in its place.
@@ -1298,45 +1352,50 @@ well defined and functorial.
   - If `μ_p ⊆ K`, then `dim H²(G_K, 𝔽_p) = 1` by input 1 and the cup pairing on
     `H¹(G_K, 𝔽_p)` is nondegenerate by input 3, so there are classes `a, b ∈ H¹(G_K, 𝔽_p)`
     with `a ∪ b ≠ 0`. Lift them through the degree-one inflation isomorphism to
-    `ã, b̃ ∈ H¹(G_K(p), 𝔽_p)`. Inflation commutes with cup products (PR #1, Layer 7), so
+    `ã, b̃ ∈ H¹(G_K(p), 𝔽_p)`. Inflation commutes with cup products (PR #1, Layer 8), so
     `inf(ã ∪ b̃) = a ∪ b ≠ 0`; hence inflation on `H²` hits a nonzero class of a
     one-dimensional space and is **surjective**. With injectivity, it is an isomorphism.
   This case split is the whole of the degree-two statement; state the two cases as separate
   named theorems and the isomorphism as their corollary.
-- **The free case (Shafarevich).** If `μ_p ⊄ K`: `G_K(p)` is free pro-`p` of rank `d + 1`
+- **The free case (Shafarevich).** If `μ_p ⊄ K`: `G_K(p)` is free pro-`p` of rank `N + 1`
   (`H²(G_K(p), 𝔽_p) = 0` from input 1 and the degree-two case split above; then Layer 6's
   Serre theorem, whose finite-generation hypothesis is the item above, plus the `H¹` count).
-  Also record the `K = ℚ_p, p ≠ 2` instance: free of rank 2.
-- **The Demushkin case.** If `μ_p ⊆ K`: `G_K(p)` is Demushkin with `n = d + 2` and
+  The rank statement is
+  `topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu : d(G_K(p)) = N + 1`, which is
+  what Local Fields Layer 9 consumes for its lower bound. Also record the `K = ℚ_p, p ≠ 2`
+  instance: free of rank 2.
+- **The Demushkin case.** If `μ_p ⊆ K`: `G_K(p)` is Demushkin with `n = N + 2` and
   `q = #(μ_{p^∞} ∩ K)` = the largest `p`-power `q` with `μ_q ⊆ K` (Labute §5;
   NSW VII §7.5). Each clause of `IsDemushkin` is verified through the degree-one and
-  degree-two inflation isomorphisms above: `dim H¹ = d + 2` and `dim H² = 1` from input 1,
+  degree-two inflation isomorphisms above: `dim H¹ = N + 2` and `dim H² = 1` from input 1,
   nondegeneracy of the cup pairing from input 3 plus compatibility of inflation with cup
-  products. **The orientation is cyclotomic:** the canonical character of Layer 7 is the
-  descent to `G_K(p)` of the cyclotomic character. Route (Labute §5): the character
-  `χ_cyc` is trivial on `N` (its values lie in a pro-`p` group, so it factors through
-  `G_K(p)`), the Kummer compatibility of input 4 shows that the finite quotients
-  `I(χ_cyc)/p^i = μ_{p^i}` satisfy the prescription property of Layer 7, and the uniqueness
-  half of Labute Thm 4 then forces `demushkinCharacter (G_K(p)) = χ_cyc`. This is the
-  mathematical content of `gq2`'s "dualizing = cyclotomic" clause, and it is a theorem of
+  products. The rank statement is
+  `topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu : d(G_K(p)) = N + 2`, the
+  companion Local Fields Layer 9 consumes. **The orientation is cyclotomic:** the canonical
+  character of Layer 7 is the descent to `G_K(p)` of the cyclotomic character. Route
+  (Labute §5): the character `χ_cyc` is trivial on `R` (its values lie in a pro-`p` group, so
+  it factors through `G_K(p)`), the Kummer compatibility of input 4 shows that the finite
+  quotients `I(χ_cyc)/p^i = μ_{p^i}` satisfy the prescription property of Layer 7, and the
+  uniqueness half of Labute Thm 4 then forces `demushkinCharacter (G_K(p)) = χ_cyc`. This is
+  the mathematical content of `gq2`'s "dualizing = cyclotomic" clause, and it is a theorem of
   this layer.
 - **Explicit presentations** (now corollaries of Layer 9 + the invariants):
-  `q ≠ 2`: `G_K(p) = ⟨x₁, …, x_{d+2} ∣ x₁^q(x₁,x₂)(x₃,x₄)⋯(x_{d+1},x_{d+2})⟩` (Demushkin's
-  theorem = Labute Thm 7); `q = 2`, `d` odd: `⟨x₁, …, x_{d+2} ∣ x₁²x₂⁴(x₂,x₃)(x₄,x₅)⋯⟩`
-  with `Im χ = ℤ₂ˣ` (Serre's theorem = Labute Thm 8; `d` odd forces
-  `K ∩ ℚ₂(μ_{2^∞}) = ℚ₂`, so `f = 2`); `q = 2`, `d` even: the two Layer 9 families per
+  `q ≠ 2`: `G_K(p) = ⟨x₁, …, x_{N+2} ∣ x₁^q(x₁,x₂)(x₃,x₄)⋯(x_{N+1},x_{N+2})⟩` (Demushkin's
+  theorem = Labute Thm 7); `q = 2`, `N` odd: `⟨x₁, …, x_{N+2} ∣ x₁²x₂⁴(x₂,x₃)(x₄,x₅)⋯⟩`
+  with `Im χ = ℤ₂ˣ` (Serre's theorem = Labute Thm 8; `N` odd forces
+  `K ∩ ℚ₂(μ_{2^∞}) = ℚ₂`, so `f = 2`); `q = 2`, `N` even: the two Layer 9 families per
   `Im χ` (Labute Thm 9).
 - **Acceptance instances, stated intrinsically.**
-  - `K = ℚ₂` (`d = 1`, `q = 2`): `G_{ℚ₂}(2) ≅ D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩`, rank 3,
+  - `K = ℚ₂` (`N = 1`, `q = 2`): `G_{ℚ₂}(2) ≅ D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩`, rank 3,
     `q = 2`, `Im χ = ℤ₂ˣ`, `χ` cyclotomic with (Thm 4 case-2 values, `f = 2`)
     `(χ(A), χ(S), χ(Y)) = (-1, 1, (1-2²)^{-1} = (-3)^{-1})` on the normal-form basis.
     This, and not any marked refinement, is the roadmap's form of the statement; the
     marked-generator normalization stays in `gq2` (provenance section).
-  - `K = ℚ₂(√-2)` (`d = 2`, `q = 2`, `Im χ = U^[2] = closure ⟨3⟩`, of index 2 in `ℤ₂ˣ`):
+  - `K = ℚ₂(√-2)` (`N = 2`, `q = 2`, `Im χ = U^[2] = closure ⟨3⟩`, of index 2 in `ℤ₂ˣ`):
     `G_K(2) = ⟨x, y, z, w ∣ x⁶(x,y)(z,w)⟩`: Labute's closing example, the dyadic-
     exceptional family made concrete, and the acceptance test that the `U^[f]` branch is
     right.
-  - `K ⊇ μ_p`, `p` odd, e.g. `K = ℚ_p(μ_p)`: `d = p - 1`, `q = p`, normal form
+  - `K ⊇ μ_p`, `p` odd, e.g. `K = ℚ_p(μ_p)`: `N = p - 1`, `q = p`, normal form
     `x₁^p(x₁,x₂)(x₃,x₄)⋯(x_p, x_{p+1})`, the `q = p^f ≠ 2` canonical form in a small
     case.
 
@@ -1398,29 +1457,80 @@ The constraints that actually bind:
 
 Everything cohomological in Layers 5–7, 9, and 11 consumes
 [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1); the
-non-cohomological substatements do not. The reconstruction theorem (Layer 8), the
-topological-finite-generation predicate and Burnside theory (Layer 3), and the inflation
-isomorphisms of Layer 11 are what the Local Fields roadmap consumes from here, so they are
-worth delivering early.
+non-cohomological substatements do not. What the Local Fields roadmap consumes from here is
+profinite Sylow theory (Layer 2), the pro-`p` predicate together with Frattini, Burnside, rank
+and the Schreier bound (Layer 3), the free and presented profinite objects (Layer 4), and the
+rank of `G_K(p)` that the inflation isomorphisms give (Layer 11); the first three are early and
+worth delivering early, since that roadmap needs them from its Layer 1 onward. ⚠ The
+reconstruction theorem (Layer 8) is **not** on that list: it takes
+`IsTopologicallyFinitelyGenerated` as a hypothesis and consumes no Local Fields theorem at all.
 
-### Cross-roadmap milestone contracts
+### Shared layer-DAG table: Local Fields ↔ Pro-`p` Groups
 
-Expanding the two-way Local Fields relationship by layer gives an acyclic schedule:
+This subsection is the interface record between the Local Fields roadmap
+([PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)) and the Pro-`p` Groups roadmap
+([PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3)). **It is maintained in both
+roadmaps, and the two copies are identical, wording included**; an edit to either is an edit
+to both. Every crossing between the two developments is a row here, and a statement that is
+not a row is not an interface: neither roadmap may consume the other through prose alone. The
+names are provisional and belong to the supplier, which states the object once; the consumer
+cites the name and never restates the object in its own words, which is what keeps the two
+sides from growing near-duplicate carriers and comparison maps between them.
+
+| Consumer layer | Supplier layer | Exact object or theorem | Agreed provisional name |
+|---|---|---|---|
+| Local Fields Layer 1, structure of `Kˣ` | Pro-`p` Groups Layer 3 | the quotient-form pro-`p` predicate, applied to `U(K,1) = lim_i U(K,1)/U(K,i)` | `IsProP` |
+| Local Fields Layer 4, wild inertia | Pro-`p` Groups Layer 2 | pro-`p` Sylow subgroups of a profinite group: the predicate, existence, the containment of every closed pro-`p` subgroup in one, uniqueness of a normal one, and the image under a continuous surjection. All five are free of Galois vocabulary; identifying the Sylow subgroup of `I_K` with `Gal(K̄/K^t)` is the Local Fields side | `IsProPSylow`, `exists_isProPSylow`, `IsProP.exists_le_isProPSylow`, `IsProPSylow.eq_of_normal`, `IsProPSylow.map_of_surjective` |
+| Local Fields Layer 4, Iwasawa presentation | Pro-`p` Groups Layer 4 | the free **profinite** group on a finite set, its generators and its universal property, together with the quotient by the closed normal closure of a set of relators. This is the shape in which `G_K^t = ⟨σ, τ ∣ στσ⁻¹τ^{−q}⟩` is stated, and it is a profinite object, not the pro-`p` `presentedProP` of the same layer | `freeProfiniteGroup`, `freeProfiniteGroup.of`, `freeProfiniteGroup.lift`, `presentedProfiniteGroup` |
+| Local Fields Layer 9, rank of `G_K` | Pro-`p` Groups Layer 3 | topological finite generation, in exactly the pinned shape `∃ s : Finset G, (Subgroup.closure ↑s).topologicalClosure = ⊤` | `IsTopologicallyFinitelyGenerated` |
+| Local Fields Layer 9, rank of `G_K` | Pro-`p` Groups Layer 3 | the topological rank in its cardinal and natural-number forms, its monotonicity under continuous surjections, the Schreier bound `d(U) ≤ 1 + [G : U](d(G) − 1)` for open `U`, and the Burnside generation criterion for pro-`p` groups (a subset generates topologically iff its image generates the Frattini quotient) | `topologicalGeneratorRank`, `topologicalGeneratorRankNat`, `topologicalGeneratorRank_le_of_surjective`, `topologicalGeneratorRankNat_le_of_isOpen`, `topologicallyGenerates_iff_frattiniQuotient` |
+| Local Fields Layer 9, rank of `G_K` | Pro-`p` Groups Layer 11 | `G_K(p)` as a carrier, its topological finite generation, and its rank in both cases: `N + 1` when `μ_p ⊄ K` (free, Shafarevich) and `N + 2` when `μ_p ⊆ K` (Demushkin) | `absoluteGaloisGroupProP`, `isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP`, `topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu`, `topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu` |
+| Pro-`p` Groups Layer 11, input 1 | Local Fields Layer 8B | the mixed-characteristic Euler characteristic `#H⁰ · #H² / #H¹ = ‖#M‖_K` and its `𝔽_p`-module corollary `dim H¹ = dim H⁰ + dim H² + N · dim M` | `eulerCharacteristic_mixed`, `eulerCharacteristic_finrank_fp` |
+| Pro-`p` Groups Layer 11, input 2 | Local Fields Layer 8B | the trace isomorphism `H²(G_K, μ_n) ≃ ZMod n` for **every** `n ≥ 1` in mixed characteristic, which is the value object of the 8B pairing, together with its transport to `H²(G_K, 𝔽_p)` along a choice of `p`-th root of unity when `μ_p ⊆ K`. ⚠ The 8A statement of the same shape carries `IsUnit (n : 𝒪[K])` and therefore says nothing at `n = p`; citing 8A for this input is the mistake to avoid | `h2MuEquivZMod_mixed`, `h2FpEquivZMod_of_mu` |
+| Pro-`p` Groups Layer 11, input 3 | Local Fields Layer 8B | perfectness of the local Tate duality pairing at `n = p` in mixed characteristic, in degrees `0`, `1`, `2` | `tateDualityPairing_perfect_mixed` |
+| Pro-`p` Groups Layer 11, input 3 | Local Fields Layer 8C | the identification of that pairing at `p = 2` with the classical Hilbert symbol | `hilbertSymbol_eq_tateDuality_pairing` |
+| Pro-`p` Groups Layer 11, input 4 | Local Fields Layer 5 | Kummer theory `Kˣ/(Kˣ)ⁿ ≃ H¹(G_K, μ_n)`, and the square relating Kummer classes to the cup product | `kummerEquiv`, `cup_kummerEquiv` |
+| Pro-`p` Groups Layer 11, input 5 | Local Fields Layer 7 | the Artin map, and the cyclotomic orientation `χ_cyc(Art_K(u)) = N_{K/ℚ_p}(u)⁻¹` for `u ∈ 𝒪[K]ˣ`, with its `K = ℚ_p` corollary `χ_cyc(Art_{ℚ_p}(u)) = u⁻¹`. ⚠ The field norm is part of the statement, not decoration: without it the equation is ill-typed for `K ≠ ℚ_p`, and the `𝒪[K]ˣ`-valued character with value `u⁻¹` is a Lubin–Tate character that neither roadmap builds | `artinMap`, `cyclotomicCharacter_artinMap`, `cyclotomicCharacter_artinMap_padic` |
+
+Throughout the table `N = [K : ℚ_p]` and `p` is the residue characteristic; `K` is a finite
+extension of `ℚ_p` in every row that mentions either.
+
+Reading the table by layer gives the schedule
+
+```text
+Pro-p Groups 0-4  →  Local Fields 0-8  →  Pro-p Groups 11  →  Local Fields 9,
+```
+
+which is acyclic. Pro-`p` Groups Layers 5–10 have no Local Fields edge in either direction, so
+they are unconstrained relative to this order, and Local Fields Layers 0–3 wait only on the
+early pro-`p` foundations. Both roadmaps carry this sentence.
+
+Two conventions hold across the table, because getting either one wrong is what turns an
+acyclic schedule into a circular one or grows a second carrier for an object that already has
+one:
+
+- ⚠ **`N` is the degree `[K : ℚ_p]`; `d` is a topological rank and never a degree.** The two
+  occur in the same sentences (`d(G_K) = N + 2`, and `d(G_K(p))` is `N + 1` or `N + 2`), so
+  neither roadmap writes `d` for the degree, in prose or in a displayed formula.
+- ⚠ **Topological finite generation of `G_K` is not an input to Pro-`p` Groups.** Layer 11
+  proves finite generation of `G_K(p)` from the `H¹` count alone, and Local Fields Layer 9
+  consumes that result. Pro-`p` Groups Layer 8's reconstruction theorem takes
+  `IsTopologicallyFinitelyGenerated` as a *hypothesis*: what it consumes is the predicate,
+  which is Layer 3's, and never the Local Fields theorem that produces an instance of it.
+  Reading that edge the other way would close the cycle
+  `Local Fields 9 → Pro-p Groups 8 → Pro-p Groups 9 → Pro-p Groups 11 → Local Fields 9`.
+
+### Other cross-roadmap contracts
 
 | Supplier | Supplied milestones | Consumer |
 |---|---|---|
-| This PR, Layers 0–3 | quotient-form `IsProP`, profinite Sylow theory, maximal pro-`p` quotient, Frattini/Burnside basis theory, and the exact topological-finite-generation predicate | [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s Layers 1, 4, and 9 (finite generation, wild inertia) |
-| This PR, Layer 11 | topological finite generation of `G_K(p)`, and the `H¹`/`H²` inflation isomorphisms it is proved from | [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s Layer 9 |
-| This PR, Layers 0–2 | existence and conjugacy of pro-`p` Sylow subgroups, supernatural order and index | [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)'s Layer 8 Sylow equality `cd_p G = cd_p G_p` |
-| [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1), Layers 1, 4, 6, 7, 8 | explicit `H¹`/`H²` with finite discrete coefficients; long exact and five-term sequences; coinduction and Shapiro's lemma for open subgroups; cup products with inflation-compatibility; cohomological-dimension vocabulary and its pro-`p` dévissage | This PR's Layers 5–7, 9, and 11 |
-| [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2), Layers 5, 7, 8B | the five numbered inputs listed at the head of Layer 11 (Euler-characteristic dimension count, trace isomorphism, mixed-characteristic duality with the Hilbert-symbol identification, Kummer theory and its cup compatibility, and the cyclotomic character with its normalization) | This PR's Layer 11 |
+| This PR, Layers 0–2 | existence and conjugacy of pro-`p` Sylow subgroups, supernatural order and index | [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)'s Layer 11 Sylow equality `cd_p G = cd_p G_p` |
+| [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1), Layers 2, 5, 6, 7, 8, 11 | explicit `H¹`/`H²` with finite discrete coefficients; long exact and five-term sequences; change of groups; coinduction and Shapiro's lemma for open subgroups; cup products with inflation-compatibility; cohomological-dimension vocabulary and its pro-`p` dévissage | This PR's Layers 5–7, 9, and 11 |
 
-Local Fields consumes our foundational Layers 0–3 and then our Layer 11, while this roadmap
-consumes Local Fields only at its Layers 5, 7 and 8B, so the order
-`Local Fields 0–8 → this roadmap's Layer 11 → Local Fields 9` is acyclic; both roadmaps
-state it. The Profinite Cohomology exchange is likewise split by layer (its Layer 8 consumes
-our Layers 0–2; our Layers 5–11 consume its Layers 1–8). Neither supplier waits on a result
-that it supplies.
+The Profinite Cohomology exchange is split by layer in the same way as the Local Fields one:
+its Layer 11 consumes our Layers 0–2, while our Layers 5–11 consume its Layers 2–8 and 11.
+Neither supplier waits on a result that it supplies. Cite that roadmap's layers by title as
+well as by number, since its numbering moved once while both branches were open.
 
 ⚠ **Not a supplier.**
 [Quadratic Form Invariants PR #4](https://github.com/roed-math/TauCetiRoadmap/pull/4) is a
