@@ -10,8 +10,12 @@ finishes neither a layer nor the roadmap. `sorry` is allowed in this human-owned
 library: these are goals, not proofs.
 
 This file carries the carrier types, so that the central interface of the roadmap is Lean
-code and not pseudocode. The cohomology of Layer 5 is defined here by continuous cochains,
-in degrees `0`, `1` and `2`, with its cup product in bidegree `(1,1)`. The Demushkin
+code and not pseudocode. The cohomology of Layer 5 is defined here by continuous cochains:
+`contH n` in every degree, which is what cohomological dimension quantifies over, together
+with the explicit low degrees `contH0`, `contH1` and `contH2` and the cup product in
+bidegree `(1,1)`. Mathlib's `continuousCohomology` exists in release `v4.32.2` and **not**
+at this repository's pin, so the comparison with it is a milestone stated in `README.md`,
+and nothing here waits for it. The Demushkin
 predicate, the rank and `q` invariants, the prescription property that pins the canonical
 character, and the arithmetic inputs of Layer 11 are all stated against that carrier. When
 the Profinite Cohomology roadmap or Mathlib supplies a carrier, the comparison isomorphism
@@ -443,6 +447,53 @@ abbrev contH2 : Type _ :=
 /-- The class of a continuous `2`-cocycle. -/
 def cocycle₂.mk (c : cocycle₂ R G M) : contH2 R G M := Submodule.Quotient.mk c
 
+/-! ### The complex in every degree
+
+Layer 6 needs cohomological dimension, which quantifies over every degree, so the carrier is
+defined in every degree and the explicit low degrees are compared with it. Mathlib's
+`continuousCohomology` is not available at this pin, so the comparison with Mathlib is stated
+in `README.md` and its Lean form waits for a pin that has the object. -/
+
+/-- Continuous `n`-cochains: the locally constant maps `Gⁿ → M`. -/
+abbrev contCochain (n : ℕ) : Type _ := LocallyConstant (Fin n → G) M
+
+/-- The inhomogeneous differential, as a function. -/
+noncomputable def contDiffFun (n : ℕ) (f : contCochain G M n) : (Fin (n + 1) → G) → M :=
+  fun g => g 0 • f (fun i => g i.succ)
+    + (Finset.univ : Finset (Fin n)).sum
+        (fun i => (-1 : ℤ) ^ ((i : ℕ) + 1) • f (Fin.contractNth i.castSucc (· * ·) g))
+    + (-1 : ℤ) ^ (n + 1) • f (fun i => g i.castSucc)
+
+/-- The inhomogeneous differential on continuous cochains. That the value is locally
+constant is a Layer 5 milestone, as is `d ∘ d = 0`. -/
+noncomputable def contDiff (n : ℕ) (f : contCochain G M n) : contCochain G M (n + 1) :=
+  ⟨contDiffFun G M n f, sorry⟩
+
+/-- The differential, as an `R`-linear map. -/
+noncomputable def contDiffHom (n : ℕ) : contCochain G M n →ₗ[R] contCochain G M (n + 1) where
+  toFun := contDiff G M n
+  map_add' := sorry
+  map_smul' := sorry
+
+/-- **`Hⁿ`** of `G` with coefficients in `M`, in every degree. The quotient is by the
+intersection of the coboundaries with the cocycles, so the definition does not wait for
+`d ∘ d = 0`. -/
+noncomputable abbrev contH : ℕ → Type _
+  | 0 => LinearMap.ker (contDiffHom R G M 0)
+  | (n + 1) =>
+    (LinearMap.ker (contDiffHom R G M (n + 1))) ⧸
+      ((LinearMap.range (contDiffHom R G M n)).comap
+        (LinearMap.ker (contDiffHom R G M (n + 1))).subtype)
+
+/-- **Layer 5, the low degrees agree with the general object.** Three milestones, one per
+degree. Every statement that mixes the explicit form with the general one goes through
+them, and Layer 6 reads the low degrees of `cd_p` this way. -/
+example : Nonempty (contH0 R G M ≃ₗ[R] contH R G M 0) := sorry
+
+example : Nonempty (contH1 R G M ≃ₗ[R] contH R G M 1) := sorry
+
+example : Nonempty (contH2 R G M ≃ₗ[R] contH R G M 2) := sorry
+
 end Carrier
 
 /-! ### Trivial coefficients, and the cup product in bidegree `(1,1)`
@@ -492,6 +543,24 @@ def cupCocycle (a b : cocycle₁ A G (TrivMod G A)) : cocycle₂ A G (TrivMod G 
     simp only [trivMod_smul, LocallyConstant.coe_mk] at *
     rw [ha, hb]
     ring⟩
+
+/-- **Layer 5, the cup product descends to cohomology.** The milestone that makes
+`contH1 × contH1 → contH2` a map of modules; the nondegeneracy statements above are phrased
+on cocycles so that they do not wait for it. -/
+example : ∃ cup : contH1 A G (TrivMod G A) →ₗ[A] contH1 A G (TrivMod G A) →ₗ[A]
+      contH2 A G (TrivMod G A),
+    ∀ a b : cocycle₁ A G (TrivMod G A),
+      cup (cocycle₁.mk A G (TrivMod G A) a) (cocycle₁.mk A G (TrivMod G A) b)
+        = cocycle₂.mk A G (TrivMod G A) (cupCocycle A G a b) :=
+  sorry
+
+/-- **Layer 5, graded commutativity in bidegree `(1,1)`.** With it, right nondegeneracy of a
+cup pairing follows from left nondegeneracy, so the second field of `IsDemushkin` and of
+`LocalFieldInputs` becomes a theorem and is dropped. -/
+example (a b : cocycle₁ A G (TrivMod G A)) :
+    cocycle₂.mk A G (TrivMod G A) (cupCocycle A G a b)
+      = - cocycle₂.mk A G (TrivMod G A) (cupCocycle A G b a) :=
+  sorry
 
 end Trivial
 
@@ -633,33 +702,63 @@ as a hypothesis. Nothing waits for another roadmap: the Local Fields roadmap sup
 instance of this structure, and the shared table names the object behind each field. -/
 
 /-- **The arithmetic inputs of Layer 11.** `N` is the degree `[K : ℚ_p]`, and `hasMu` says
-that `μ_p ⊆ K`. The fields are the parts of inputs 1, 3, 4 and 5 that Layer 11 uses. -/
+that `μ_p ⊆ K`. The fields are the parts of inputs 1 to 6 that Layer 11 uses. Finiteness is
+a separate field from each dimension count, because `Module.finrank` is `0` for an
+infinite-dimensional space as well, and the free case needs actual vanishing. -/
 structure LocalFieldInputs (p : ℕ) [Fact p.Prime] (Γ : Type u) [Group Γ] [TopologicalSpace Γ]
     [IsTopologicalGroup Γ] [CompactSpace Γ] [TotallyDisconnectedSpace Γ] (N : ℕ)
     (hasMu : Prop) where
+  /-- Input 1: `H⁰(G_K, 𝔽_p)` is finite-dimensional. -/
+  h0_finite : Module.Finite (ZMod p) (contH0 (ZMod p) Γ (TrivMod Γ (ZMod p)))
+  /-- Input 1: `H¹(G_K, 𝔽_p)` is finite-dimensional. -/
+  h1_finite : Module.Finite (ZMod p) (contH1 (ZMod p) Γ (TrivMod Γ (ZMod p)))
+  /-- Input 1: `H²(G_K, 𝔽_p)` is finite-dimensional. -/
+  h2_finite : Module.Finite (ZMod p) (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p)))
   /-- Input 1: `dim H⁰(G_K, 𝔽_p) = 1`. -/
   h0_rank : Module.finrank (ZMod p) (contH0 (ZMod p) Γ (TrivMod Γ (ZMod p))) = 1
   /-- Input 1: `dim H²(G_K, 𝔽_p) = 1` when `μ_p ⊆ K`. -/
   h2_rank_of_mu : hasMu → Module.finrank (ZMod p) (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p))) = 1
-  /-- Input 1: `H²(G_K, 𝔽_p) = 0` when `μ_p ⊄ K`. -/
-  h2_rank_of_not_mu :
-    ¬ hasMu → Module.finrank (ZMod p) (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p))) = 0
+  /-- Input 1: `H²(G_K, 𝔽_p)` **vanishes** when `μ_p ⊄ K`. This is the statement the free
+  case uses; a `finrank = 0` field would not give it. -/
+  h2_eq_zero_of_not_mu :
+    ¬ hasMu → Subsingleton (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p)))
   /-- Input 1: the Euler-characteristic count `dim H¹ = 1 + dim H² + N`. -/
   h1_rank : Module.finrank (ZMod p) (contH1 (ZMod p) Γ (TrivMod Γ (ZMod p)))
     = 1 + Module.finrank (ZMod p) (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p))) + N
-  /-- Input 3: the cup pairing on `H¹(G_K, 𝔽_p)` is nondegenerate when `μ_p ⊆ K`. This is
-  local Tate duality at `n = p`, transported along inputs 2 and 4. -/
-  cup_nondegenerate : hasMu → ∀ a : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
+  /-- Input 3: the cup pairing on `H¹(G_K, 𝔽_p)` is nondegenerate on the left when
+  `μ_p ⊆ K`. This is local Tate duality at `n = p`, transported along inputs 2 and 4. -/
+  cup_nondegenerate_left : hasMu → ∀ a : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
     cocycle₁.mk (ZMod p) Γ (TrivMod Γ (ZMod p)) a ≠ 0 →
     ∃ b : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
+      cocycle₂.mk (ZMod p) Γ (TrivMod Γ (ZMod p)) (cupCocycle (ZMod p) Γ a b) ≠ 0
+  /-- Input 3: and on the right. This field is dropped once the graded commutativity of
+  Layer 5 is available, because it then follows from the left-hand statement. -/
+  cup_nondegenerate_right : hasMu → ∀ b : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
+    cocycle₁.mk (ZMod p) Γ (TrivMod Γ (ZMod p)) b ≠ 0 →
+    ∃ a : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
       cocycle₂.mk (ZMod p) Γ (TrivMod Γ (ZMod p)) (cupCocycle (ZMod p) Γ a b) ≠ 0
   /-- Input 5: the cyclotomic character. -/
   cyclotomic : Γ →* ℤ_[p]ˣ
   /-- Input 5: it is continuous. -/
   cyclotomic_continuous : Continuous cyclotomic
-  /-- Input 4: its finite quotients satisfy the prescription property of Layer 7, which is
-  what the Kummer compatibility square gives. -/
+  /-- Input 5: its image is pro-`p` when `μ_p ⊆ K`. This is what makes the character factor
+  through `G_K(p)`: the pro-`p` kernel then lies in its kernel. Nothing else in this list
+  forces that factorization. -/
+  cyclotomic_proP_image : hasMu → IsProP p cyclotomic.range
+  /-- Input 5: the image, as a closed subgroup of `ℤ_pˣ`. Layer 9 selects a normal form from
+  it, so it is data and not an existence statement. -/
+  cyclotomicRange : Subgroup ℤ_[p]ˣ
+  /-- Input 5: it really is the image. -/
+  cyclotomicRange_eq : cyclotomicRange = cyclotomic.range
+  /-- Input 4: the finite quotients of the cyclotomic module satisfy the prescription
+  property of Layer 7, which is what the Kummer compatibility square gives. -/
   cyclotomic_prescription : hasMu → HasPrescriptionProperty cyclotomic
+  /-- Input 6: the largest `p`-power `q` with `μ_q ⊆ K`, as data. -/
+  qInvariant : ℕ
+  /-- Input 6: `q` is the order of the torsion of the abelianization of `G_K(p)`, which is
+  what makes it the `q` of the Demushkin classification. -/
+  qInvariant_eq :
+    qInvariant = Nat.card {x : topAbelianization (maximalProPQuotient p Γ) // IsOfFinOrder x}
 
 section LocalFields
 
@@ -685,11 +784,24 @@ example (_inp : LocalFieldInputs p Γ N hasMu) (_h : ¬ hasMu) :
     Nonempty (maximalProPQuotient p Γ ≃ₜ* freeProP p (Fin (N + 1))) :=
   sorry
 
-/-- **Layer 11, the Demushkin case.** If `μ_p ⊆ K` then `G_K(p)` is Demushkin of rank
-`N + 2`. -/
+/-- **Layer 11, the Demushkin case: the construction.** If `μ_p ⊆ K` then `G_K(p)` is
+Demushkin. This is the theorem of the layer; the rank, `q`, the orientation and the
+presentation are its consequences. -/
+example (_inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu) :
+    IsDemushkin p (maximalProPQuotient p Γ) :=
+  sorry
+
+/-- **Layer 11, the rank in the Demushkin case.** `n(G_K(p)) = N + 2`. -/
 example (_inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu)
     (hD : IsDemushkin p (maximalProPQuotient p Γ)) :
     demushkinRank hD = N + 2 :=
+  sorry
+
+/-- **Layer 11, the `q`-invariant.** `q(G_K(p))` is the input `qInvariant`, that is the
+largest `p`-power `q` with `μ_q ⊆ K`. -/
+example (inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu)
+    (hD : IsDemushkin p (maximalProPQuotient p Γ)) :
+    demushkinQ hD = inp.qInvariant :=
   sorry
 
 /-- **Layer 11, the orientation is cyclotomic.** The cyclotomic character is trivial on the
@@ -1221,12 +1333,38 @@ Mathlib `v4.32.2`, a release later than this repository's pin. The shapes are re
 and nothing in them is faked with an empty `Prop` field or a stand-in predicate.
 
 ```
-/-- Layer 6: cohomological dimension, against Mathlib's all-degree object. -/
+/-- Layer 6: cohomological dimension, against the local all-degree carrier `contH`. The
+quantifier over coefficients ranges over the finite discrete `p`-primary `G`-modules, which
+is why it is written with a module class rather than as a plain `∀ M`. -/
 def cdLE (p n : ℕ) (G : Type u) [Group G] [TopologicalSpace G] : Prop :=
-  ∀ m > n, ∀ A : TopRep (ZMod p) G, IsFiniteDiscrete A → continuousCohomology m A = 0
+  ∀ m > n, ∀ M, [FiniteDiscretePPrimary p G M] → Subsingleton (contH (ZMod p) G M m)
 
-/-- Layer 5: the comparison with Mathlib's carrier, in degrees at most two. -/
-theorem contH_eq_continuousCohomology (n : ℕ) (hn : n ≤ 2) : ...
+/-- Layer 5: the comparison with Mathlib's carrier, in every degree, once the pin has the
+object. It carries inflation, restriction, corestriction and the connecting maps to theirs. -/
+theorem contHIsoContinuousCohomology (n : ℕ) :
+    contH (ZMod p) G M n ≃ₗ[ZMod p] continuousCohomology n (TopRep.of M)
+
+/-- Layer 5: corestriction for an open subgroup, with the two identities that Layer 7's
+duality naturality uses. -/
+noncomputable def corestriction (U : OpenSubgroup G) (n : ℕ) :
+    contH R U M →ₗ[R] contH R G M
+
+theorem cor_comp_res (U : OpenSubgroup G) (n : ℕ) (x : contH R G M n) :
+    corestriction U n (restriction U n x) = (U.toSubgroup.index : R) • x
+
+theorem cor_projection_formula (U : OpenSubgroup G) (a : contH R G M 1)
+    (b : contH R U M 1) :
+    corestriction U 2 (cup (restriction U 1 a) b) = cup a (corestriction U 1 b)
+
+/-- Layer 5: Shapiro's lemma in every degree, for an open subgroup. -/
+theorem shapiro (U : OpenSubgroup G) (n : ℕ) :
+    contH R U M n ≃ₗ[R] contH R G (Coind U M) n
+
+/-- Layer 6: vanishing of `H²` on all finite discrete `p`-primary modules gives `cd_p ≤ 1`,
+through dimension shifting and the dévissage. -/
+theorem cdLE_one_of_h2_eq_zero (hG : IsProP p G)
+    (h : ∀ M, [FiniteDiscretePPrimary p G M] → Subsingleton (contH2 (ZMod p) G M)) :
+    cdLE p 1 G
 
 /-- Layer 7: dimension two for an infinite Demushkin group (Tate). -/
 theorem cd_eq_two (hG : IsDemushkin p G) (hinf : Infinite G) : cdLE p 2 G ∧ ¬ cdLE p 1 G

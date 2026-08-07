@@ -59,9 +59,13 @@ morphisms, functoriality, comparison lemmas, naturality, edge cases, and downstr
 interfaces. Each hard theorem carries its source, the hypotheses that the source really
 uses, and a nearby false statement when one exists.
 
-The Mathlib pin is `v4.32.2`, the most recent Mathlib release, with the matching toolchain
-`leanprover/lean4:v4.32.2`. Every claim about Mathlib below was checked against that
-release.
+Two Mathlib versions matter here, and they are different. The repository pins Mathlib at
+`9caeba1000`, and `Suggested.lean` elaborates against that pin. Every claim below about what
+Mathlib contains was also checked against the current release, `v4.32.2`; where the two
+differ, the text says so. The one difference that matters is
+`RepresentationTheory/Homological/ContCohomology/`, which exists in `v4.32.2` and not at the
+repository pin. No milestone depends on that difference: the cohomology below is built
+here.
 
 ## Standing hypotheses and conventions
 
@@ -395,8 +399,14 @@ the next layer expressible, state its milestones in `Suggested.lean` with `sorry
   in the supernatural lattice. This is the description that the literature uses.
   *Needs:* L1 `Supernatural`, L0 closed-subgroup theory, M `Subgroup.index`.
   *Source:* Ribes–Zalesskii §2.3.
-  ⚠ The theorem is false without closedness: for a dense proper subgroup the right-hand side
-  is `1` and the left-hand side is not.
+  Both sides depend only on the closure of `H`, so two further statements come first:
+  `profiniteIndex H G = profiniteIndex (closure H) G`, and
+  `profiniteIndex H G = 1 ↔ closure H = ⊤`. For closed `H` the second is
+  `profiniteIndex H G = 1 ↔ H = ⊤`.
+  ⚠ Closedness is a hypothesis of Lagrange and of every statement that treats `H` as a
+  profinite group in its own right. It is not needed for the two statements just above, and
+  a dense proper subgroup is not a counterexample to them: its image in every finite
+  quotient is everything, so both sides are `1`.
 - **Index API.** All of the following, which later layers use:
   - invariance under a topological isomorphism of the pair;
   - `profiniteIndex H G = 1` if and only if `H = ⊤`, for closed `H`;
@@ -627,7 +637,9 @@ the next layer expressible, state its milestones in `Suggested.lean` with `sorry
 
   API checklist for `FiniteGroupClass`:
   - Constructors: `finiteGroupClassP p`; the class of all finite groups; the class of finite
-    nilpotent groups; the class of finite solvable groups.
+    solvable groups. ⚠ The class of finite nilpotent groups is **not** an example: it is not
+    closed under extensions, because `1 → C₃ → S₃ → C₂ → 1` has nilpotent kernel and
+    quotient while `S₃` is not nilpotent.
   - Examples: finite `p`-groups, where `proCCompletion` is `maximalProPQuotient`.
   - Morphisms: none between classes is needed; inclusion of classes is a predicate on `mem`.
   - Functoriality: `proCKernel C` is preserved by continuous homomorphisms, and
@@ -744,70 +756,100 @@ several Layer 9 module arguments use it. Ribes–Zalesskii §4.3 is the source o
 
 #### The continuous cochain carrier
 
-This roadmap owns its cohomology in low degrees, so that no milestone waits for another
-roadmap. The carrier is defined by continuous cochains, and `Suggested.lean` has the Lean
-form. Coefficients are a finite discrete module `M` over a commutative ring `R`, with a
-continuous `G`-action that commutes with the `R`-action; the two cases used below are
-`M = 𝔽_p` with trivial action and `M = I(χ)/p^i`.
+**The ownership boundary.** This roadmap owns its continuous cohomology, in every degree, so
+that no milestone waits for another roadmap. The carrier is the complex of continuous
+cochains, and `Suggested.lean` has the Lean form. Coefficients are a finite discrete module
+`M` over a commutative ring `R`, with a continuous `G`-action that commutes with the
+`R`-action; the two cases used below are `M = 𝔽_p` with trivial action and `M = I(χ)/p^i`.
+The Profinite Cohomology roadmap builds the same theory in more generality, and the
+comparison milestones below are what let a consumer read this roadmap through it. Those
+comparisons are milestones, and not prerequisites: nothing here waits for them.
 
-- **Cochains, cocycles, coboundaries, and the three groups.** Cochains in degree `n` are the
-  locally constant maps `G^n → M`, which form an `R`-module. The differential is the
-  inhomogeneous one. Then
-  - `contH0 G M` is the submodule of invariants;
-  - `contH1 G M` is continuous crossed homomorphisms modulo principal ones;
-  - `contH2 G M` is continuous `2`-cocycles modulo coboundaries.
-
-  All three are `R`-modules.
+- **The complex, and `contH n`.** Cochains in degree `n` are the locally constant maps
+  `G^n → M`, which form an `R`-module. The differential is the inhomogeneous one,
+  `(d f)(g_0, …, g_n) = g_0 • f(g_1, …, g_n)
+    + Σ_{i<n} (-1)^{i+1} f(g_0, …, g_i g_{i+1}, …, g_n) + (-1)^{n+1} f(g_0, …, g_{n-1})`.
+  Milestones: `d ∘ d = 0`; the cohomology `contH n G M` in every degree, as an `R`-module;
+  and functoriality of the complex in `M` and in `G`.
   *Needs:* M `LocallyConstant` with its `Module` instance; M `IsLocallyConstant.iff_continuous`;
-  L0 profinite foundations.
+  M `Fin.contractNth`; L0 profinite foundations.
+- **The explicit low degrees.** `contH0 G M` is the submodule of invariants; `contH1 G M` is
+  continuous crossed homomorphisms modulo principal ones; `contH2 G M` is continuous
+  `2`-cocycles modulo coboundaries. Each is an `R`-module, each is defined explicitly, and
+  each is compared with the general object: `contH0 G M ≅ contH 0 G M`,
+  `contH1 G M ≅ contH 1 G M` and `contH2 G M ≅ contH 2 G M`. The explicit forms are what the
+  Demushkin predicate and the extension dictionary use.
+  *Needs:* L5 the complex.
 - **The cup product in bidegree `(1,1)`.** For coefficients in a commutative ring `A` with
   trivial action, the map on cocycles is `(a, b) ↦ ((g, h) ↦ a g · b h)`. It is bilinear,
-  and it takes values in `2`-cocycles. Milestone: it descends to a bilinear map
-  `contH1 × contH1 → contH2`. Statements that need only nondegeneracy are phrased on
-  cocycles, so that they do not wait for the descent; `Suggested.lean` shows the form.
-  *Needs:* L5 carrier.
+  and it takes values in `2`-cocycles. Two milestones: it descends to a bilinear map
+  `contH1 × contH1 → contH2`; and it is graded-commutative in this bidegree, that is
+  `a ∪ b = - b ∪ a`. Graded commutativity is what turns right nondegeneracy of a cup pairing
+  into a consequence of left nondegeneracy, so Layer 7 and Layer 11 both cite it.
+  Statements that need only nondegeneracy are phrased on cocycles, so that they do not wait
+  for the descent; `Suggested.lean` shows the form.
+  *Needs:* L5 the explicit low degrees.
   *Source:* NSW I §1.4.
-- **Basic API and the change-of-group maps.** Inflation along a quotient map, restriction to
-  a closed subgroup, and the connecting map of a short exact sequence of finite discrete
-  coefficient modules, in degrees `0`, `1` and `2`. Functoriality of all three in the
-  coefficients.
-  *Needs:* L5 carrier.
+- **Change of groups.** Inflation along a quotient map, restriction to a closed subgroup, and
+  **corestriction** for an open subgroup, in every degree, with `cor ∘ res = [G : U]` and the
+  projection formula `cor (res a ∪ b) = a ∪ cor b`. The connecting map of a short exact
+  sequence of finite discrete coefficient modules, in every degree. Functoriality of all of
+  them in the coefficients.
+  *Needs:* L5 the complex; L3 finitely many open subgroups of each index.
+  *Source:* NSW I §1.5.
+- **The exact sequences, in every degree.** The long exact sequence of a short exact sequence
+  of finite discrete coefficient modules, in every degree; and the five-term exact sequence
+  `0 → contH1 (G/N) M^N → contH1 G M → (contH1 N M)^{G/N} → contH2 (G/N) M^N → contH2 G M`
+  for a closed normal subgroup `N`. The five-term sequence needs a continuous set-theoretic
+  section of `G ↠ G/N`, which exists for every continuous surjection of profinite groups
+  (Ribes–Zalesskii Prop. 2.2.2); that section theorem is a milestone of this layer, and it
+  is stronger than the finite-kernel case proved for the extension dictionary below.
+  *Needs:* L5 the complex and the change-of-group maps; L0 profinite foundations.
+  *Source:* NSW I §1.6, and I (1.6.7) for the five-term sequence.
+- **Shapiro's lemma, in every degree.** For `U ≤ G` open and `M` a finite discrete
+  `U`-module, `contH n U M ≅ contH n G (Coind_U^G M)` for every `n`, with
+  `Coind_U^G 𝔽_p ≅ 𝔽_p[G/U]` as a `G`-module. With it, dimension shifting: the embedding of
+  `M` in `Coind_1^G M` gives `contH (n+1) G M ≅ contH n G (Coind_1^G M / M)`, which is what
+  turns a statement in one degree into a statement in every higher degree.
+  *Needs:* L5 the complex; L3 finitely many open subgroups.
+  *Source:* NSW I (1.6.4) for Shapiro, I §1.3 for dimension shifting.
+- **Vanishing in one degree gives vanishing above it.** If `contH 2 G M = 0` for every finite
+  discrete `p`-primary `G`-module `M`, and `G` is pro-`p`, then `contH n G M = 0` for every
+  `n ≥ 2` and every such `M`. Route: dimension shifting, plus the dévissage of Layer 6. This
+  is the theorem that turns the Layer 5 vanishing theorem for free pro-`p` groups into
+  `cd_p ≤ 1`, and it is the reason the two layers are not interchangeable.
+  *Needs:* L5 Shapiro and dimension shifting; L6 dévissage.
+  *Source:* Serre, *Galois Cohomology* I §3.1; Ribes–Zalesskii 7.7.4.
+- **Comparison with Mathlib and with the sibling roadmap.** For `G` profinite and `M` finite
+  discrete, `contH n G M` is isomorphic to `continuousCohomology n A` for the corresponding
+  `A : TopRep (ZMod m) G`, and the isomorphism carries inflation, restriction,
+  corestriction and the connecting maps to theirs. The same statement for the object of the
+  Profinite Cohomology roadmap, together with the identification of the two cup products.
+  Mathlib's object exists in release `v4.32.2` and not at the repository pin, so this
+  milestone is stated here and its Lean form waits for a pin that has the object; nothing
+  else waits for it.
+  *Needs:* L5 the complex; M `continuousCohomology` and M `TopRep`, in `v4.32.2`.
 
-  API checklist for the carrier `contH0`, `contH1`, `contH2`:
+  API checklist for the carrier `contH n`, `contH0`, `contH1`, `contH2`:
   - Constructors: a cocycle gives a class; a group homomorphism gives a class in `contH1`
     for trivial coefficients; an extension gives a class in `contH2` (below).
   - Examples: `contH1 G 𝔽_p ≅ Hom_cont(G, 𝔽_p)` for trivial coefficients; `contH2 (ℤ/2) 𝔽₂`
     is one-dimensional, generated by the class of `ℤ/4`; `contH2 F M = 0` for free pro-`p`
     `F`.
-  - Morphisms: inflation, restriction, the connecting map, and the maps induced by a map of
-    coefficient modules.
+  - Morphisms: inflation, restriction, corestriction, the connecting map, and the maps
+    induced by a map of coefficient modules.
   - Functoriality: contravariant in the group along continuous homomorphisms, covariant in
     the coefficients.
-  - Comparison lemmas: agreement with Mathlib's `continuousCohomology n` in degrees `n ≤ 2`;
-    agreement with the object of the Profinite Cohomology roadmap when it exists; agreement
-    with Mathlib's discrete `groupCohomology` for a finite discrete group.
-  - Naturality: inflation and restriction commute with the connecting map and with the cup
-    product.
-  - Edge cases: the trivial group, where `contH1` and `contH2` vanish; a finite group, where
-    the carrier is the discrete one; coefficients with a nontrivial action, where `contH0`
-    is not all of `M`.
+  - Comparison lemmas: the low degrees against `contH n`; Mathlib's `continuousCohomology n`
+    where it is available; the object of the Profinite Cohomology roadmap; Mathlib's
+    discrete `groupCohomology` for a finite discrete group.
+  - Naturality: inflation, restriction and corestriction commute with the connecting map and
+    with the cup product; `cor ∘ res = [G : U]`.
+  - Edge cases: the trivial group, where `contH n` vanishes for `n ≥ 1`; a finite group,
+    where the carrier is the discrete one; coefficients with a nontrivial action, where
+    `contH0` is not all of `M`.
   - Downstream interfaces: the Demushkin predicate of Layer 7, the rank interpretations
-    below, and the Layer 11 inputs.
-- **Comparison with Mathlib.** For `G` profinite and `M` finite discrete, `contH n G M` is
-  isomorphic to `continuousCohomology n A` for the corresponding `A : TopRep (ZMod m) G`,
-  for `n ≤ 2`. This is a milestone, and not a prerequisite of anything below.
-  *Needs:* L5 carrier; M `continuousCohomology`, M `TopRep`.
-- **The exact sequences.** The long exact sequence in degrees `0` to `2` of a short exact
-  sequence of finite discrete coefficient modules, and the five-term exact sequence
-  `0 → contH1 (G/N) M^N → contH1 G M → (contH1 N M)^{G/N} → contH2 (G/N) M^N → contH2 G M`
-  for a closed normal subgroup `N`. Both are milestones of this layer.
-  *Needs:* L5 carrier and change-of-group maps.
-  *Source:* NSW I §1.6 (the long exact sequence) and I (1.6.7) (the five-term sequence).
-- **Shapiro's lemma for an open subgroup.** For `U ≤ G` open and `M` a finite discrete
-  `U`-module, `contH n U M ≅ contH n G (Coind_U^G M)` for `n ≤ 2`, with
-  `Coind_U^G 𝔽_p ≅ 𝔽_p[G/U]` as a `G`-module.
-  *Needs:* L5 carrier; L3 finitely many open subgroups.
-  *Source:* NSW I (1.6.4).
+    below, cohomological dimension in Layer 6, and the Layer 11 inputs.
 
 #### Presentations
 
@@ -956,26 +998,30 @@ continuous `G`-action that commutes with the `R`-action; the two cases used belo
 
 ### Layer 6: cohomological dimension of pro-`p` groups
 
-`cd_p G ≤ n` means that `continuousCohomology m A` vanishes for every `m > n` and every
-finite discrete `p`-primary `G`-module `A`. Mathlib supplies `continuousCohomology` in every
-degree, so this layer states `cd_p` against it, and uses the Layer 5 carrier in degrees
-`≤ 2` through the comparison isomorphism.
+`cd_p G ≤ n` means that `contH m G M` vanishes for every `m > n` and every finite discrete
+`p`-primary `G`-module `M`, where `contH m` is the all-degree carrier of Layer 5. The
+definition is against the local carrier, and not against Mathlib's `continuousCohomology`,
+because the latter does not exist at the repository pin. Layer 5 states the comparison with
+it, and a consumer that has it may read this layer through that comparison.
 
 - **Dévissage.** For a pro-`p` group, vanishing on the finite discrete elementary abelian
   `p`-primary modules in one degree gives vanishing on all finite discrete `p`-primary
   modules in that degree. Route: the trivial-filtration theorem below, and the long exact
-  sequence.
-  *Needs:* L6 trivial filtration; L5 long exact sequence; M `continuousCohomology`.
+  sequence in that degree.
+  *Needs:* L6 trivial filtration; L5 all-degree long exact sequence.
   *Source:* Serre, *Galois Cohomology* I §3.
 - **The trivial-filtration theorem.** For pro-`p` `G`, a nonzero finite discrete `p`-primary
   `G`-module has nonzero invariants: the action factors through a finite `p`-quotient, and a
   finite `p`-group acting on a nonzero finite `p`-group fixes a nonzero element. Iterating,
   every such `M` has a `G`-stable filtration whose factors are one-dimensional with trivial
   action. Hence a `ℤ`-valued function of the coefficients that is additive along short exact
-  sequences takes the value `dim_{𝔽_p} M` times its value at `𝔽_p`.
+  sequences takes the value `length M` times its value at `𝔽_p`, where
+  `length M = padicValNat p (Nat.card M)` is the composition length.
   *Needs:* M `IsPGroup.card_modEq_card_fixedPoints`; L3 `IsProP` API.
-  This statement is what converts `𝔽_p[G/U]` coefficients into the factor `[G : U]` in both
-  Euler formulas below.
+  ⚠ Do not write `dim_{𝔽_p} M` here. A finite `p`-primary module is not an `𝔽_p`-vector
+  space in general, and `ℤ/p²` is the smallest counterexample. The two agree exactly when
+  `M` is killed by `p`. That is the case the Euler formulas use, since they take
+  `M = 𝔽_p[G/U]`, where `length = dim_{𝔽_p} = [G : U]`.
 - **Free implies `cd ≤ 1`.** Layer 5's theorem `contH2 F M = 0`, for `F` free pro-`p` of
   finite rank and `M` finite discrete `p`-primary, restated as `cd_p F ≤ 1` through
   dévissage.
@@ -1257,9 +1303,18 @@ differs, the translation is stated once.
   where `r̄ ∈ gr_1(F)` is the class of the relator, `∂_i r̄ ∈ gr_0(F)` is the coefficient of
   `x_i` in the commutator part of `r̄`, and `c_i ∈ 𝔽_p` is the coefficient of `x_i^p` in the
   `p`-power part. Both terms land in `gr_j(F)`: the bracket raises the degree by
-  `0 + (j - 1) + 1`, and `π` raises it by one. The milestone is well-definedness and
-  `𝔽_p`-linearity of `δ_j`, with the explicit formula at a relator in normal form as a
-  corollary. The image `Im δ_j ≤ gr_j(F)` is the subspace in the span statements of Layer 9.
+  `0 + (j - 1) + 1`, and `π` raises it by one. The image `Im δ_j ≤ gr_j(F)` is the subspace
+  in the span statements of Layer 9. Linearity holds in the degrees the span statements use,
+  and fails in one case:
+  - for `j ≥ 2` the map `δ_j` is `𝔽_p`-linear, because `π` is additive above degree zero;
+  - for `j = 1` at `p = 2` with some `c_i ≠ 0`, which is the case of the `q = 2` relators,
+    the inputs lie in `gr_0(F)`, where `π(x + y) = π(x) + π(y) + [x, y]`, so `δ_1` is
+    quadratic and not additive. Its polarization is
+    `δ_1(v + w) - δ_1(v) - δ_1(w) = Σ_i c_i [v_i, w_i]`, and every statement that uses
+    `δ_1` at `p = 2` is stated against that corrected map.
+
+  The milestones are well-definedness of `δ_j`, linearity for `j ≥ 2`, the polarization
+  identity at `j = 1`, and the explicit formula at a relator in normal form.
   *Needs:* L8 the graded object; L4 free objects.
   *Source:* Labute Prop. 5, in our indexing.
   API checklist for `pLowerCentralSeries` and `gr`:
@@ -1313,11 +1368,23 @@ differs, the translation is stated once.
   *Needs:* L0 open subgroups; M `FiniteGrp`.
 - **Two epimorphisms.** If `G` is topologically finitely generated, and `G` and `H` have the
   same continuous finite quotients, then there are continuous surjections `G ↠ H` and
-  `H ↠ G`. Route: for each open normal `N ≤ G` the set of continuous surjections `H ↠ G/N`
-  is nonempty by hypothesis and finite; restriction makes these a surjective inverse system;
-  the Layer 0 compactness lemma gives the limit. Record where each finite-generation
-  hypothesis is used, because the next item removes one of them.
-  *Needs:* L0 compactness lemma; L3 finite generation.
+  `H ↠ G`. The route has five steps:
+  1. `H` is topologically finitely generated, because each of its finite quotients is a
+     finite quotient of `G` and so needs at most `d(G)` generators;
+  2. for each open normal `N ≤ G` the set `E(N)` of continuous surjections `H ↠ G/N` is
+     nonempty, by hypothesis, and finite, by step 1;
+  3. for `N' ≤ N` let `E(N', N) ⊆ E(N)` be the image of `E(N')` under composition with
+     `G/N' ↠ G/N`; these decrease as `N'` decreases, and each is nonempty and finite, so
+     they stabilize at a nonempty set `E∞(N)`;
+  4. the `E∞(N)` form an inverse system whose bonding maps **are** surjective, by
+     construction, and each is a nonempty finite set;
+  5. the Layer 0 compactness lemma gives a compatible family, hence the surjection `H ↠ G`;
+     the other direction is symmetric once step 1 is available.
+
+  *Needs:* L0 compactness lemma; L3 finite generation and the Burnside rank bound.
+  ⚠ The raw bonding maps on `E(N)` are **not** surjective, so step 3 is not decoration.
+  Counterexample: `H = C₄ × C₂` surjects onto `C₂` by the second projection, and that
+  surjection does not factor through `C₄ ↠ C₂`, although `H` does surject onto `C₄`.
 - **The isomorphism theorem, sharp form.** If `G` is topologically finitely generated, and
   `G` and `H` have the same continuous finite quotients, then `G ≅ H` as topological groups,
   with **no finite-generation hypothesis on `H`**. The route has three steps:
@@ -1485,16 +1552,39 @@ package is owned here.
   Weierstrass preparation theorem is not a target.
   *Needs:* L9 evaluation.
   *Source:* Labute §4.
-- **The module statements used in Labute Thms 5 and 6.** For a finitely generated
-  `Λ`-module `M` that arises as above, and `λ ∈ Λ`:
-  - the annihilator `Ann_Λ(M)` is a closed ideal;
-  - if `λ` acts injectively on `M`, then `M/λM` computes the obstruction that Labute names;
-  - the divisibility criterion transfers to the statement that a given element of `M` lies
-    in `λM`.
+- **The relation module, named.** Let `G` be Demushkin with minimal presentation
+  `1 → R → F → G → 1`, let `χ = demushkinCharacter G`, and let `Γ = Im χ`, which is
+  procyclic when `q ≠ 2` or when the `U^[f]` branch occurs. The object that Labute's
+  Thms 5 and 6 work with is the **abelianized relation module**
+  `R^{ab} := R ⧸ closure [R, R]`, with the `G`-action by conjugation, which is a compact
+  `ℤ_p[[G]]`-module. Milestones:
+  - `R^{ab}` is a compact `ℤ_p[[G]]`-module, and it is topologically cyclic, generated by
+    the class of the relator, which is what the one-relator presentation gives;
+  - the action of `G` on `R^{ab}` factors through `χ`, so `R^{ab}` is a
+    `Λ = completedGroupAlgebra p Γ`-module, and this is the precise sense in which the
+    orientation controls the relation module;
+  - `R^{ab}` is separated and complete, and it is the inverse limit of the finite
+    `ℤ_p[G/λ_k(G)]`-modules `R^{ab}/λ_k`, with surjective transition maps.
 
-  State these with the exact finiteness and topological hypotheses. They are the only
-  module-theoretic facts that the classification uses.
-  *Needs:* L9 modules and division.
+  *Needs:* L5 presentations; L7 canonical character; L9 the algebra and its modules; L4
+  abelian pro-`p` structure theory.
+  *Source:* Labute §1.5 and §4.
+- **The two module criteria that the classification uses.** With `M := R^{ab}` as above, a
+  chosen topological generator `γ` of `Γ`, and `T = γ - 1` the power-series coordinate:
+  - **Annihilator.** `Ann_Λ(M)` is a closed ideal of `Λ`, and under the isomorphism
+    `Λ ≅ ℤ_p[[T]]` it is generated by one element `ψ_r ∈ ℤ_p[[T]]`, the *relator series*,
+    which is read off the normal form of `r`. Two relators with the same invariants have
+    associated series, that is `ψ_r = u ψ_{r'}` with `u ∈ Λˣ`.
+  - **Membership.** For `λ ∈ Λ` and `m ∈ M`, `m ∈ λM` if and only if the image of `m` in
+    `M/λM` is zero, and, through the coordinate above, that vanishing is the vanishing of a
+    power series at the point `c` with `v_p(c) ≥ 1` determined by `λ`. This is where the
+    division criterion `(T - c) ∣ ψ ⟺ ψ(c) = 0` enters, and it is the step that produces the
+    basis correction of Layer 9: the correction exists exactly when the membership holds.
+
+  Both statements carry the hypotheses that `M` is a finitely generated compact
+  `Λ`-module, that it is separated and complete, and that the transition maps of its
+  defining system are surjective. `Suggested.lean` has the signatures.
+  *Needs:* L9 the relation module, L9 power-series coordinates, L9 evaluation, L9 division.
   *Source:* Labute Thms 5 and 6.
 
 ### Layer 9: the classification of Demushkin groups
@@ -1545,7 +1635,9 @@ Layer 8.
   division criterion. Two even-rank families, with `N = n/2` and `(A : A²)` as declared in
   Layer 8:
   - `r = x₁^{2+2^f}(x₁,x₂)(x₃,x₄)⋯` realizes `Im χ = U^[f]`, where `(A : A²) = 2`, for
-    `N ≥ 1` and `2 ≤ f ≤ ∞`;
+    `N ≥ 1` and `2 ≤ f < ∞`. ⚠ The endpoint `f = ∞` is a separate statement, because
+    `U^[f] = closure ⟨-1 + 2^f⟩` is defined only for finite `f`. At `f = ∞` the relator is
+    `x₁²(x₁,x₂)(x₃,x₄)⋯` and the image is `{±1} = V^(∞)`;
   - `r = x₁²(x₁,x₂)x₃^{2^f}(x₃,x₄)⋯` realizes `Im χ = {±1} × U^(f)`, where `(A : A²) = 4`,
     for `N ≥ 2` and `2 ≤ f < ∞`, and `f = ∞` is excluded.
 
@@ -1562,11 +1654,18 @@ Layer 8.
   - *Uniqueness:* two Demushkin groups with the same `n` and the same `Im χ` are isomorphic.
     Labute Thm 2 sharpens this: an automorphism of `F` carries any Demushkin relator to any
     other with the same invariants, which is the statement that the marked instances use.
-  - *Existence:* the pair `(n, A)`, with `A` a closed subgroup of `ℤ_pˣ`, is realized in
-    exactly three situations:
+  - *Existence:* let `A` be a closed subgroup of `ℤ_pˣ` that is **pro-`p`**. Then `(n, A)`
+    is realized in exactly three situations:
     1. `n` is even and `p^n > (A : A^p)`;
     2. `n` is odd and `n ≥ 3`, so `p = 2`, and `A = {±1} × U^(f)` with `f ≥ 2` or `f = ∞`;
     3. `n = 1` and `A = {±1}`.
+
+    ⚠ The hypothesis that `A` is pro-`p` is part of the statement, because `A` is the image
+    of a pro-`p` group under a continuous homomorphism. Without it the numerical condition
+    admits impossible pairs: at `p = 3` and `n = 2`, the subgroup `A = ℤ₃ˣ` has
+    `(A : A³) = 3 < 9`, and it contains `{±1}`, so it is not pro-`3`. For odd `p` the
+    condition is `A ≤ 1 + pℤ_p`. For `p = 2` every closed subgroup of `ℤ₂ˣ` is pro-`2`, so
+    the three families of Layer 7 are all admissible.
 
   The small-rank cases are part of the statement. For the odd case cite Serre's Thm 3.2 only
   for `n ≥ 3`, because its printed `n ≥ 1` degenerates at `n = 1`; handle `n = 1` through
@@ -1597,11 +1696,14 @@ This layer is the home of the infinite-rank theory.
     over maps that converge to `1`.
 
   The inclusion `S → S⁺` induces a continuous surjection `freeProC C S ↠ F_C(S⁺, ∗)`. The
-  theorem to prove is that this map is **not** injective for infinite `S`. The witness is a
-  computation of ranks, and not a description of the kernel by generators, which this
-  roadmap does not claim. At `C = ` finite `p`-groups, the continuous characters of the
-  source are all maps `S → 𝔽_p`, a product of dimension `p^{#S}` by the Erdős–Kaplansky
-  theorem, while those of the target are the finitely supported maps, of dimension `#S`.
+  theorem to prove is that **at `C = finiteGroupClassP p`** this map is not injective for
+  infinite `S`. The witness is a computation of ranks, and not a description of the kernel by
+  generators, which this roadmap does not claim: the continuous characters of the source are
+  all maps `S → 𝔽_p`, a product of dimension `p^{#S}` by the Erdős–Kaplansky theorem, while
+  those of the target are the finitely supported maps, of dimension `#S`.
+  ⚠ The statement is false for an arbitrary class. If `C` contains only the trivial group,
+  both objects are trivial and the map is injective. Do not state it for `FiniteGroupClass`
+  when the proof is specific to pro-`p`.
   Never write "the free pro-`C` group on `S`" without saying which object is meant.
   *Needs:* L4 free objects and `FiniteGroupClass`; L3 rank.
   *Source:* Ribes–Zalesskii §3.3.
@@ -1637,32 +1739,44 @@ makes well defined and functorial, and `Suggested.lean` names it
 `absoluteGaloisGroupProP`. Throughout this layer `N` is the degree `[K : ℚ_p]`, and `d` is
 never used for a degree.
 
-- **The arithmetic inputs, as a local interface.** The five facts below are about `G_K` and
-  its cohomology, and they are proved in the Local Fields roadmap. This roadmap does not
-  wait for them. `Suggested.lean` bundles them as the fields of one structure,
-  `LocalFieldInputs p K`, stated against the Layer 5 carrier, and every theorem of this
-  layer takes that structure as a hypothesis. The Local Fields roadmap supplies an instance;
-  the shared table below names the object for each field.
-  1. `dim_{𝔽_p} contH0 G_K 𝔽_p = 1`, `dim_{𝔽_p} contH2 G_K 𝔽_p = dim_{𝔽_p} contH0 G_K μ_p`,
-     and `dim_{𝔽_p} contH1 G_K 𝔽_p = 1 + dim contH2 G_K 𝔽_p + N`. In particular
-     `dim contH2 G_K 𝔽_p` is `1` if `μ_p ⊆ K`, and `0` otherwise.
+- **The arithmetic inputs, as a local interface.** The facts below are theorems about `G_K`
+  that the Local Fields roadmap proves. This roadmap does not wait for them.
+  `Suggested.lean` bundles them as the fields of one structure, `LocalFieldInputs p Γ N hasMu`,
+  stated against the Layer 5 carrier, and every theorem of this layer takes that structure as
+  a hypothesis. The Local Fields roadmap supplies an instance, and the shared table names the
+  object behind each field.
+  1. Finiteness and the Euler-characteristic count: `contH0 G_K 𝔽_p`, `contH1 G_K 𝔽_p` and
+     `contH2 G_K 𝔽_p` are finite-dimensional; `dim contH0 = 1`; `contH2 G_K 𝔽_p = 0` when
+     `μ_p ⊄ K` and `dim contH2 = 1` when `μ_p ⊆ K`; and
+     `dim contH1 = 1 + dim contH2 + N`.
+     ⚠ Finite-dimensionality is a separate field from the dimension count. `Module.finrank`
+     is `0` for an infinite-dimensional space as well, so `finrank contH2 = 0` does not say
+     that `contH2` vanishes, and the free case needs the vanishing.
   2. The trace isomorphism `contH2 G_K μ_p ≅ 𝔽_p`, and its transport to `contH2 G_K 𝔽_p`
      under a choice of `p`-th root of unity when `μ_p ⊆ K`.
-  3. Perfectness of the local Tate duality pairing at `n = p` in mixed characteristic, and
-     its identification at `p = 2` with the Hilbert symbol.
+  3. Nondegeneracy of the cup pairing on `contH1 G_K 𝔽_p` when `μ_p ⊆ K`, **on both sides**.
+     This is local Tate duality at `n = p`, transported along inputs 2 and 4. Right
+     nondegeneracy is a field, and not a consequence, until the graded commutativity of
+     Layer 5 is available; when it is, the field is dropped, exactly as for `IsDemushkin`.
   4. Kummer theory `Kˣ/(Kˣ)^p ≅ contH1 G_K μ_p`, together with the square that relates
-     Kummer classes to the cup product. This is what identifies the cup pairing on
-     `contH1 G_K 𝔽_p` with the symbol pairing on `p`-th power classes.
-  5. The cyclotomic character `χ_cyc : G_K → ℤ_pˣ` with the normalization
-     `χ_cyc(Art_K(u)) = N_{K/ℚ_p}(u)⁻¹` for `u ∈ 𝒪_Kˣ`, from which the image
-     `χ_cyc(G_K) = Gal(K(μ_{p^∞})/K)` and the finite quotients of the cyclotomic module are
-     computed.
+     Kummer classes to the cup product. This is what identifies the cup pairing with the
+     symbol pairing on `p`-th power classes, and it is what shows that the finite quotients
+     `μ_{p^i}` satisfy the prescription property of Layer 7.
+  5. The cyclotomic character `χ_cyc : G_K → ℤ_pˣ`, continuous, with the normalization
+     `χ_cyc(Art_K(u)) = N_{K/ℚ_p}(u)⁻¹` for `u ∈ 𝒪_Kˣ`; **its image is pro-`p`** when
+     `μ_p ⊆ K`, equivalently `χ_cyc ≡ 1 mod p` for odd `p`; and its image is the closed
+     subgroup `Gal(K(μ_{p^∞})/K) ≤ ℤ_pˣ`, given as a field of the structure.
+     ⚠ The pro-`p` image is what makes `χ_cyc` factor through `G_K(p)`, and nothing else in
+     the list forces that factorization: a prime-to-`p` quotient of `Γ` can carry a
+     nontrivial character whose twisted `H¹` vanishes, which makes the prescription property
+     vacuous there.
+  6. The invariant `q = #(μ_{p^∞} ∩ K)`, the largest `p`-power `q` with `μ_q ⊆ K`, as a
+     field, together with the statement that the torsion of the abelianization of `G_K(p)`
+     has that order. Layer 9 selects a normal form from `q` and from the image in input 5, so
+     both are needed before the presentations can be stated.
 
-  Input 4 also shows that the finite quotients `μ_{p^i}` satisfy the prescription property
-  of Layer 7, which the orientation theorem uses. No statement of this layer uses a fact
-  about `K` that is not on this list.
-  *Needs:* L5 carrier; M `IsLocalField` and the `p`-adic API; and, for an instance,
-  LF-5, LF-7, LF-8B and LF-8C.
+  No statement of this layer uses a fact about `K` that is not on this list.
+  *Needs:* L5 carrier; and, for an instance, LF-5, LF-7, LF-8B and LF-8C.
 - **Inflation in degree one.** Let `R := ker(G_K ↠ G_K(p))`. Inflation
   `contH1 G_K(p) 𝔽_p → contH1 G_K 𝔽_p` is an isomorphism, directly from the universal
   property of the maximal pro-`p` quotient: a continuous homomorphism `G_K → 𝔽_p` factors
@@ -1704,14 +1818,17 @@ never used for a degree.
   *Needs:* L6 Serre's theorem; L11 the case split; L11 finite generation.
   *Source:* Shafarevich 1947.
 - **The Demushkin case.** If `μ_p ⊆ K`, then `G_K(p)` is Demushkin with `n = N + 2` and
-  `q = #(μ_{p^∞} ∩ K)`, the largest `p`-power `q` with `μ_q ⊆ K`. Each clause of
+  `q = #(μ_{p^∞} ∩ K)`, which is input 6. The construction of the `IsDemushkin` term is the
+  statement to prove, and `Suggested.lean` prototypes it as
+  `isDemushkin_maximalProPQuotient_of_mu`; the rank, `q`, the orientation and the
+  presentation are its consequences. Each clause of
   `IsDemushkin` is verified through the two inflation isomorphisms. The dimensions
   `dim contH1 = N + 2` and `dim contH2 = 1` come from input 1. Nondegeneracy of the cup
   pairing comes from input 3, with the compatibility of inflation and cup products.
   **The orientation is cyclotomic:** the canonical character of Layer 7 is the descent of
   the cyclotomic character to `G_K(p)`. The route has three steps:
-  1. `χ_cyc` is trivial on `R`, because its values lie in a pro-`p` group, so it factors
-     through `G_K(p)`;
+  1. `χ_cyc` is trivial on `R`, because its image is pro-`p` by input 5, so the kernel of
+     `G_K ↠ G_K(p)` lies in its kernel and it factors through `G_K(p)`;
   2. input 4 shows that the finite quotients `I(χ_cyc)/p^i = μ_{p^i}` satisfy the
      prescription property of Layer 7;
   3. the uniqueness half of Labute Thm 4 forces `demushkinCharacter (G_K(p)) = χ_cyc`.
@@ -1796,19 +1913,16 @@ The dependencies that bind are these:
 - Layer 10 needs Layer 6, and is independent of Layer 9.
 - Layer 11 needs Layers 7 and 9 for the Demushkin case. Its free case needs only Layers 5
   and 6 and the vanishing of `contH2 G_K 𝔽_p`.
-### Shared layer-DAG table: Local Fields ↔ Pro-`p` Groups
+### Interface table: Local Fields and Pro-`p` Groups
 
-This subsection is the interface record between the Local Fields roadmap
-([PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)) and the Pro-`p` Groups roadmap
-([PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3)). **It is maintained in both
-roadmaps, and the two copies are identical, wording included**; an edit to either is an edit
-to both. Every crossing between the two developments is a row here, and a statement that is
-not a row is not an interface: neither roadmap may consume the other through prose alone. The
-names are provisional and belong to the supplier, which states the object once; the consumer
-cites the name and never restates the object in its own words, which is what keeps the two
-sides from growing near-duplicate carriers and comparison maps between them.
+The two roadmaps have edges in both directions, at different layers. Every crossing is a row
+of the table below, and a statement that is not a row is not an interface: neither roadmap
+consumes the other through prose. Each row gives the consuming layer, the supplying layer,
+the exact object or theorem, and the name it goes by. The name belongs to the supplier, which
+states the object once, and the consumer cites the name instead of restating the object. The
+Local Fields roadmap carries the same table.
 
-| Consumer layer | Supplier layer | Exact object or theorem | Agreed provisional name |
+| Consumer layer | Supplier layer | Exact object or theorem | Name |
 |---|---|---|---|
 | Local Fields Layer 1, structure of `Kˣ` | Pro-`p` Groups Layer 3 | the quotient-form pro-`p` predicate, applied to `U(K,1) = lim_i U(K,1)/U(K,i)` | `IsProP` |
 | Local Fields Layer 4, wild inertia | Pro-`p` Groups Layer 2 | pro-`p` Sylow subgroups of a profinite group: the predicate, existence, the containment of every closed pro-`p` subgroup in one, uniqueness of a normal one, and the image under a continuous surjection. All five are free of Galois vocabulary; identifying the Sylow subgroup of `I_K` with `Gal(K̄/K^t)` is the Local Fields side | `IsProPSylow`, `exists_isProPSylow`, `IsProP.exists_le_isProPSylow`, `IsProPSylow.eq_of_normal`, `IsProPSylow.map_of_surjective` |
@@ -1833,8 +1947,8 @@ Pro-p Groups 0-4  →  Local Fields 0-8  →  Pro-p Groups 11  →  Local Fields
 ```
 
 which is acyclic. Pro-`p` Groups Layers 5–10 have no Local Fields edge in either direction, so
-they are unconstrained relative to this order, and Local Fields Layers 0–3 wait only on the
-early pro-`p` foundations. Both roadmaps carry this sentence.
+they are unconstrained relative to this order, and Local Fields Layers 0–3 use only the
+early pro-`p` foundations.
 
 Two conventions hold across the table, because getting either one wrong is what turns an
 acyclic schedule into a circular one or grows a second carrier for an object that already has
@@ -1863,9 +1977,8 @@ The second row is an interface, and not a dependency. Layer 5 defines the low-de
 sequences, Shapiro's lemma and the dévissage as its own milestones. So every milestone here
 rests on Mathlib or on an earlier milestone of this roadmap. When the Profinite Cohomology
 roadmap supplies its objects, the comparison isomorphism of Layer 5 transports every
-statement, and the local definitions are deleted. Layer 11 works the same way: the five
-arithmetic inputs are the fields of a local structure, and the Local Fields roadmap supplies
-an instance.
+statement. Layer 11 works the same way: the arithmetic inputs are the fields of a local
+structure, and the Local Fields roadmap supplies an instance.
 
 ⚠ **Not a supplier.** The Quadratic Form Invariants roadmap is about quadratic forms over
 fields in which `2` is invertible, and it excludes characteristic-two quadratic and bilinear

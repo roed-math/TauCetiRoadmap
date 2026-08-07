@@ -104,3 +104,16 @@ Andrew Yang and Edison Xie, and the Profinite Cohomology roadmap coordinates wit
 D. Loeffler's `p`-adic measure work and Jz Pan's `lean-iwasawa` border the completed group
 algebra of Layer 9. Register intentions through this repository's claims process before
 substantial work.
+
+## Keeping the interface table in step
+
+The interface table under "Ordering and parallelism" also appears in the Local Fields
+roadmap. The two copies are kept identical by hand, and the names in them are provisional
+until each supplier lands its declaration. Compare the two blocks whenever either roadmap
+changes: extract the block from each file, from the heading to the sentence before the next
+heading, and compare the two hashes.
+
+The same applies to the local carriers. When the Profinite Cohomology roadmap or Mathlib
+supplies a carrier and the comparison isomorphism of Layer 5 is proved, the local
+definitions in `Suggested.lean` become redundant, and a contributor rewrites the consumers
+along the isomorphism and removes them.
