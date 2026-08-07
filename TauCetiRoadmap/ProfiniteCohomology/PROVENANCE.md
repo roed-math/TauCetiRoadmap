@@ -177,3 +177,11 @@ under review. Recorded 2026-08-07.
   built from the exported table's declarations in that roadmap, or a transport is stated there;
   either way the obligation is on the consumer, and the roadmap does not assert that it is already
   discharged.
+
+- **Where the roadmap's design conditions came from.** The comparison-to-the-inhomogeneous-complex
+  condition that Layer 3 discharges is Joël Riou's, stated in the February 2025 Zulip design thread
+  linked in Appendix A. Cohomological dimension was asked for in the August 2025 `#maths > C1
+  fields?` thread and nothing upstream defined it at the audit date. Mathlib's `ContCohomology`
+  module documentation lists, as TODOs, coincidence with `groupCohomology` for discrete groups, the
+  `n`-ary cochain description for locally compact groups, and long exact sequences; those are
+  Layers 3, 3 and 5 here, so coordinate rather than duplicate.

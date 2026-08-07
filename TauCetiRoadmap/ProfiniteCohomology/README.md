@@ -473,8 +473,7 @@ unbundled classes of §3.
 `TopModuleCat`, `ContinuousMonoidHom`. This roadmap: Layer 0.
 
 The pin supplies the carrier and nothing else. This layer supplies the rest of the interface every
-canonical-facing statement below uses, in the shape Mathlib master uses, so that a later pin bump
-is a transport and not a redesign.
+canonical-facing statement below uses.
 
 - **The carrier, named once.** `TopRep R G` as an abbreviation for `Action (TopModuleCat R) G`,
   and `Hⁿ_cont(G, X) = (continuousCohomology R G n).obj X` as the canonical object of every
@@ -485,8 +484,7 @@ is a transport and not a redesign.
   `quotientToInvariants`, `infl`, `coeffMap`.
 - **Smooth discrete objects.** `TopRep R G` is wider than the discrete `G`-modules of §3, and
   deliberately so: an object carries one continuous operator per group element, and nothing there
-  forces the action to be continuous in the group variable. The pin's module documentation says
-  exactly this, and Mathlib master keeps the same design. An object of `TopRep ℤ G` whose module
+  forces the action to be continuous in the group variable. An object of `TopRep ℤ G` whose module
   happens to be discrete can therefore have non-open point stabilizers, so there is no dictionary
   between all of `TopRep ℤ G` and the discrete `G`-modules. Define
   ```
@@ -605,10 +603,9 @@ nothing beyond the inner case.
 This roadmap: Layers 1 and 2.
 
 Without this layer the explicit complex would be a second theory rather than a second description
-of the canonical one, so it is what keeps the roadmap from forking the canonical API. It also
-answers the condition the community set: when the canonical design was settled on Zulip in
-February 2025, Joël Riou asked for a comparison map to Amelia Livingston's inhomogeneous complex
-that is a quasi-isomorphism in the discrete case.
+of the canonical one, so it is what keeps the roadmap from forking the canonical API. The
+condition it has to meet is that the comparison map to the inhomogeneous complex is a
+quasi-isomorphism in the discrete case.
 
 - **Continuous against discrete.** For `G` with the discrete topology (finite `G` being the case
   Layer 4 uses) and any discrete `G`-module `M`: `Hⁱ_explicit(G, M) ≅ groupCohomology` in degrees
@@ -750,8 +747,7 @@ section, and Layer 2.
   well-definedness, exactness at the eight nodes from `H⁰(G, A)` to `H²(G, B)`, and naturality both
   in morphisms of short exact sequences and in compatible pairs, so that restriction and inflation
   commute with `δ`. Mirror the pin's `δ₀_apply`/`δ₁_apply` interface so that the discrete and
-  continuous theories are used identically. The all-degree sequence is a Layer 10 milestone, and it
-  is on Mathlib's own TODO list for `ContCohomology`, so coordinate rather than duplicate.
+  continuous theories are used identically. The all-degree sequence is a Layer 10 milestone.
 - **Inflation-restriction.** The exact sequence `0 → H¹(G ⧸ N, M^N) → H¹(G, M) → H¹(N, M)` for
   closed normal `N`, by a direct cochain argument, with the pin's discrete `H1InfRes_exact` as the
   model. Valid for an arbitrary topological group with discrete coefficients.
