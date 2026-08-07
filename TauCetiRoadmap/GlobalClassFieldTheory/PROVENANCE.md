@@ -105,3 +105,20 @@ formula), R. Brasca (`ClassGroup.extendedHom`), D. Angdinata (`S`-integers).
 - Checked 2026-07-30 and again 2026-08-07: the Zulip archive has no thread on ray class groups,
   Hecke characters, or global reciprocity in Lean. Announce the intention before starting
   Layers 0 and 6.
+
+## Directions beyond this roadmap
+
+This section is not normative, and it is not work to attempt now. It records where the material
+of `README.md` leads, so that a later roadmap can pick a direction without rereading the layers.
+
+- Poitou–Tate duality and the full cohomology of number fields, on top of Layer 11.
+- Explicit reciprocity laws and power-residue symbols.
+- The Grunwald–Wang phenomenon. The claim "an element that is an `n`-th power locally everywhere
+  is a global `n`-th power" fails when `8 ∣ n`. The standard example is `16`: it is an `8`-th
+  power in `ℝ` and in `ℚ_p` for every **odd** `p`, and it is not an `8`-th power in `ℚ`. It is
+  also not an `8`-th power in `ℚ₂`, because `v₂(16) = 4` is not divisible by `8`, so the failure
+  is at `2` alone. Source: Milne, *Class Field Theory*, Ch. VIII, Example 1.2(i) and
+  Exercise 1.3.
+- Tate's thesis and the analytic theory.
+- The function-field and geometric theory.
+- Explicit class field theory beyond complex multiplication.

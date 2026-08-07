@@ -38,17 +38,32 @@ Every milestone below lists its direct prerequisites. Each prerequisite has one 
 No other class is allowed. No milestone here depends on a branch, on an open pull request, on a
 future pin, on an external repository, or on a roadmap that is not merged.
 
-Global class field theory needs local class field theory. This roadmap does not build local class
-field theory, and it also does not wait for it. Layer I states the exact local input as an
-interface: a class in `Suggested.lean` with the operations and the laws that Layers 5, 6, 7 and 11
-use. Milestones cite that interface, and the interface is a milestone of this roadmap. Producing an
-instance of the interface for the completions of a number field is milestone I.4. An implementor
-discharges I.4 either from a Tau Ceti local class field theory, if one exists at that time, or from
-the literature cited at I.4. Replacing a local instance by a library one is a mechanical edit:
-delete the instance, import the other, and keep every consumer unchanged.
+Global class field theory needs local class field theory, and Tate cohomology in every integer
+degree. Neither is in Mathlib at the pin, so this roadmap builds both. Layer T builds Tate
+cohomology. Layer I states the local package in milestone I.1 and constructs it in milestone I.4,
+with the submilestones and the sources listed there. Every later milestone cites those, and
+nothing here is conditional on material outside this repository.
 
-Other roadmaps plan some of the same material. Those relations are alignments, not prerequisites,
-and they are recorded in `PROVENANCE.md`, which is not normative.
+Other roadmaps plan some of the same material. Those relations are alignments and not
+prerequisites. `PROVENANCE.md` records them, and it is not normative.
+
+## The contract with the Multiquadratic roadmap
+
+Multiquadratic is a merged roadmap, and the exchange with it runs in both directions. The layer
+graph is acyclic: 1.8 supplies the narrow class group; Multiquadratic Layer 3 uses it and builds
+the genus field; 8.2 uses that genus field. Nothing here uses 8.2.
+
+| consumer | supplier | exact declaration | type |
+|---|---|---|---|
+| Multiquadratic Layer 3, real case | this roadmap, 1.8 | the narrow class group `Cl⁺ K` | `RayClassGroup (narrowModulus K)` |
+| Multiquadratic Layer 3, real case | this roadmap, 1.8 | the surjection `Cl⁺ ↠ Cl` | `RayClassGroup (narrowModulus K) →* ClassGroup (𝓞 K)`, surjective |
+| Multiquadratic Layer 3, real case | this roadmap, 1.8 | the kernel description | `∀ x ∈ ker, x ^ 2 = 1`, with `Nat.card ker * (unitsCongruenceSubgroup (narrowModulus K)).index = 2 ^ nrRealPlaces K` |
+| this roadmap, 8.2 | Multiquadratic Layer 3 | the genus field `K_gen` of a quadratic `K/ℚ`, with `Gal(K_gen/K) ≅ Cl(K)/Cl(K)²` | an `IntermediateField ℚ K̄` with that isomorphism |
+
+Milestone 8.2 proves one comparison theorem against that supplier: `K_gen` is the maximal
+subfield of the Hilbert class field `H` that is abelian over `ℚ`, and the narrow genus field is
+the corresponding subfield of `H⁺`. `Suggested.lean` prototypes the three supplied declarations.
+Use the same names on both sides.
 
 ## Standing hypotheses
 
@@ -197,9 +212,8 @@ them.
   with explicit `H⁰`, `H¹`, `H²`; `Hilbert90.lean`; `FiniteCyclic.lean` with the periodicity that
   the Herbrand quotient uses; `Shapiro.lean` for the coinduced computation;
   `LongExactSequence.lean`; `Functoriality.lean`.
-  The pin has no Tate cohomology, so Layers 2C, 5 and 11 state `Ĥ⁰(G, M)` as the norm quotient
-  `M^G / N_G M`, and `Ĥ^{-3}` through homology. Write those statements so that a later pin with a
-  Tate cohomology API replaces the spelling and no consumer moves.
+  The pin has no Tate cohomology, and no cup product on it. Layer T builds both, and Layers 2C,
+  5, 6, 9 and 11 use Layer T and not a hand-made norm quotient.
 - **Group-theoretic transfer.** `Mathlib/GroupTheory/Transfer.lean`: `MonoidHom.transfer` and the
   Burnside machinery, which Layer 8 uses.
 - **Assorted.** The chinese remainder theorem for Dedekind domains
@@ -249,90 +263,193 @@ The order below is the dependency order. Layers I, 0, 1, 2A, 2B, 2C, 3, 4 and 5 
 roadmap only. Layer 6 is where the local interface of Layer I becomes essential. Add each milestone
 to `Suggested.lean` with `sorry` as soon as its types are expressible.
 
-### Layer I: the local interface and the ideal-theoretic Artin map
+### Layer T: Tate cohomology of finite groups
 
-This layer fixes what the global theory takes from the local theory. It is small, it is stated in
-this repository, and it makes every later layer independent of any external development.
-`Suggested.lean` carries the Lean form of each item in this layer.
+Layers 5, 6, 9 and 11, and the local input of Layer I, use Tate cohomology in every integer
+degree. The pin has ordinary group cohomology in low degrees, group homology, Shapiro's lemma,
+the long exact sequence and periodicity for cyclic groups. It has no Tate cohomology, so this
+layer builds it. The material is general, and it is written so that it could sit beside
+`Mathlib/RepresentationTheory/Homological/`.
 
-**I.1. The nonarchimedean local reciprocity interface.** Define a class whose instance for a field
-`F` and a finite abelian extension `E/F` of nonarchimedean local fields carries:
+**T.1. Tate cohomology in all degrees.** For a finite group `G` and a `G`-module `M`, define
+`Ĥ^n(G, M)` for every `n : ℤ`, through a complete resolution or through the splice of the
+standard resolution with its dual. Prove the two low-degree descriptions:
+`Ĥ⁰(G, M) = M^G / N_G M` and `Ĥ^{-1}(G, M) = ker N_G / I_G M`.
+*Source.* Cassels–Fröhlich Ch. IV §6; Serre, *Local Fields*, Ch. VIII §1; NSW Ch. I §2.
+*Prerequisites:* M `Mathlib/RepresentationTheory/Homological/GroupCohomology/`,
+M `Mathlib/RepresentationTheory/Homological/GroupHomology/`.
+**Basic API.**
+- *Constructors:* the class of a cocycle; the class of `m ∈ M^G` in degree zero.
+- *Examples:* `Ĥ^n(G, ℤ)`; `Ĥ⁰(Gal(ℂ/ℝ), ℂˣ) ≅ ℤ/2`; a free module, where every group vanishes.
+- *Morphisms:* the connecting maps of the long exact sequence.
+- *Functoriality:* T.3.
+- *Comparison lemmas:* T.2 against ordinary cohomology and homology.
+- *Naturality:* the long exact sequence is natural in the short exact sequence of modules.
+- *Edge cases:* the trivial group; an induced module, where every group vanishes.
+- *Downstream interface:* T.4 to T.6, I.4, 5.2, 5.4, 5.5 and 11.1.
 
-1. a homomorphism `Art_{E/F} : Fˣ →* Gal(E/F)`;
+**T.2. Comparison with ordinary cohomology and homology.** Prove `Ĥ^n(G, M) ≅ H^n(G, M)` for
+`n ≥ 1`, and `Ĥ^{-n-1}(G, M) ≅ H_n(G, M)` for `n ≥ 1`. State the case that 5.5 uses:
+`Ĥ^{-3}(G, ℤ) ≅ H₂(G, ℤ)`, the Schur multiplier.
+*Source.* Cassels–Fröhlich Ch. IV §6; NSW Ch. I §2.
+*Prerequisites:* L T.1.
+
+**T.3. Functoriality.** Define restriction, corestriction and inflation on Tate cohomology, and
+prove: `cor ∘ res = [G : H]`; inflation is defined for `n ≥ 1` on ordinary cohomology and its
+compatibility with the Tate groups; the `p`-primary component injects into that of a Sylow
+`p`-subgroup. The last statement is what 5.4 uses.
+*Source.* Cassels–Fröhlich Ch. IV §6; Serre, *Local Fields*, Ch. VIII §2.
+*Prerequisites:* L T.1, M `Sylow`.
+
+**T.4. Periodicity and the Herbrand quotient.** For cyclic `G`, prove `Ĥ^n ≅ Ĥ^{n+2}`. Define
+the Herbrand quotient `h(G, M) = #Ĥ⁰ / #Ĥ¹` when both are finite. Prove multiplicativity in
+short exact sequences, vanishing on finite modules, and invariance under an equivariant map with
+finite kernel and finite cokernel.
+*Source.* Serre, *Local Fields*, Ch. VIII §4; Cassels–Fröhlich Ch. IV §8.
+*Prerequisites:* L T.1, M
+`Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`.
+
+**T.5. Cup products.** Define the cup product on Tate cohomology in the degrees that T.6 uses,
+with associativity, graded commutativity, and compatibility with restriction and corestriction.
+*Source.* Cassels–Fröhlich Ch. IV §7; NSW Ch. I §4.
+*Prerequisites:* L T.1.
+
+**T.6. Class formations and Tate–Nakayama.** Define a finite class formation: a distinguished
+class `u ∈ Ĥ²(G, M)` with `Ĥ¹(H, M) = 0` and `Ĥ²(H, M)` cyclic of order `#H`, generated by the
+restriction of `u`, for every subgroup `H`. Prove Tate–Nakayama: cup product with `u` is an
+isomorphism `Ĥ^n(G, ℤ) → Ĥ^{n+2}(G, M)` for every `n`. State the degree `−2` case, which gives
+`G^{ab} ≅ Ĥ⁰(G, M) = M^G / N_G M`.
+*Source.* Cassels–Fröhlich Ch. IV §9; Serre, *Local Fields*, Ch. IX §8; NSW Ch. I §7.
+*Prerequisites:* L T.1, L T.3, L T.5.
+
+### Layer I: the local input and the ideal-theoretic Artin map
+
+This layer fixes what the global theory takes from the local theory, and constructs it. Layer I
+is stated and built in this repository, so that no later layer depends on material outside it.
+`Suggested.lean` carries the Lean form of every item.
+
+**I.1. The local class field theory package.** Define one class whose fields quantify over every
+nonarchimedean local field `F` and every finite abelian Galois extension `E/F`. One term of the
+class therefore carries the whole local theory, and a consumer cannot pick two unrelated pieces
+of data. The fields are:
+
+1. a **continuous** homomorphism `Art_{E/F} : Fˣ →* Gal(E/F)`, under the hypotheses
+   `[Module.Finite F E]` and `[IsAbelianGalois F E]`;
 2. surjectivity of `Art_{E/F}`;
-3. the kernel: `ker Art_{E/F} = N_{E/F}(Eˣ)`;
-4. the normalization: if `E/F` is unramified and `π` is a uniformizer of `F`, then `Art_{E/F}(π)` is
-   the arithmetic Frobenius;
-5. triviality on units in the unramified case: `Art_{E/F}(𝒪_Fˣ) = 1`;
-6. functoriality in `E`, so that `Art_{E'/F}` restricts to `Art_{E/F}` for `F ⊆ E ⊆ E'`;
-7. norm compatibility in `F`: `Art_{E/F'}(y)∣_E = Art_{E/F}(N_{F'/F} y)` for a finite extension
-   `F'/F` inside `E`;
-8. the conductor `𝔣(E/F)`, the least `n` with `1 + 𝔭^n ⊆ N_{E/F}(Eˣ)`, with `n = 0` exactly for
-   unramified `E/F`;
-9. the Herbrand quotient `h(Gal(E/F), Eˣ) = [E : F]` for cyclic `E/F`;
-10. the invariant map `inv_{E/F} : H²(Gal(E/F), Eˣ) ≃ (1/[E:F])ℤ/ℤ`, compatible with inflation;
-11. the Hilbert symbol `(·,·)_F : Fˣ × Fˣ → μ_n`, bimultiplicative and nondegenerate.
+3. the kernel: `Art_{E/F} x = 1` exactly when `x` is a norm from `Eˣ`;
+4. restriction in the upper field: for `F ⊆ E ⊆ E'`, the value of `Art_{E'/F}` restricted to `E`
+   is the value of `Art_{E/F}`;
+5. norm compatibility in the base: for `F ⊆ F' ⊆ E`,
+   `Art_{E/F'}(y) = Art_{E/F}(N_{F'/F} y)` on `E`;
+6. the arithmetic normalization: for unramified `E/F` and a uniformizer `π` of `F`, `Art(π)`
+   acts on the integers of `E` as the `q`-power map modulo the maximal ideal, with `q` the
+   residue cardinality of `F`;
+7. the conductor exponent `𝔣(E/F) : ℕ`, together with **both** halves of its defining property:
+   the principal units of that level are norms, and no smaller level has that property;
+8. the local norm index `#(Fˣ / N_{E/F} Eˣ) = [E : F]`, which is `#Ĥ⁰(Gal(E/F), Eˣ) = [E:F]`;
+9. the invariant map `inv_{E/F} : H²(Gal(E/F), Eˣ) →+ ℚ/ℤ`, injective, with image the
+   `[E:F]`-torsion, so that it is an additive equivalence onto that subgroup;
+10. compatibility of `inv` with inflation, which is what glues the local invariants into `ℚ/ℤ`;
+11. the quadratic Hilbert symbol in characteristic zero, `(·,·)_F : Fˣ × Fˣ → {±1}`, with the
+    conic characterization. Layer 11 consumes the quadratic symbol only, so the package carries
+    that one and not an `n`-th symbol with roots-of-unity hypotheses.
 
-Items 1 to 7 are used by Layer 6. Item 8 is used by Layer 7 and Layer 9. Item 9 is used by Layer 5.
-Items 10 and 11 are used by Layer 11.
-*Prerequisites:* M `Mathlib/RingTheory/Frobenius.lean`,
-M `Mathlib/RepresentationTheory/Homological/GroupCohomology/`.
+Define separately, as ordinary definitions and not as fields: the principal units of level `n`,
+and the conductor exponent of a continuous character of `Fˣ`, which is the least level inside
+the kernel. I.6 uses the second one.
+Item 6 is used by Layer 6. Items 4 and 5 are used by 6.1 and 6.3. Item 7 is used by 6.5, 7.4
+and 9.2. Item 8 is used by 5.2. Items 9 and 10 are used by 11.3. Item 11 is used by 11.4.
+The package is stated in one universe, because Mathlib's group cohomology puts the coefficient
+ring and the group in a single universe.
+*Source.* Serre, *Corps Locaux*, Ch. XI to XIV; Neukirch ANT Ch. V; Cassels–Fröhlich Ch. VI.
+*Prerequisites:* M `Mathlib/NumberTheory/LocalField/Basic.lean`, M `ValuativeRel`,
+M `Mathlib/RepresentationTheory/Homological/GroupCohomology/LowDegree.lean`, L T.1.
 
-**I.2. The ideal-theoretic Artin map.** Let `L/K` be finite abelian. Let
-`S : Finset (HeightOneSpectrum (𝓞 K))`, and let `hur` say that every prime outside `S` is
-unramified in `L`. Define `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)` on the fractional ideals with
-valuation zero at every prime of `S`. It sends a prime `𝔭 ∉ S` to its arithmetic Frobenius. Prove:
+**I.2. The ideal-theoretic Artin map.** Let `L/K` be finite abelian, let
+`S : Finset (HeightOneSpectrum (𝓞 K))`, and let `hur` say that every prime `Q` of `𝓞 L` above a
+prime outside `S` is unramified. That hypothesis is about primes of the upper field: a condition
+on `v.asIdeal` alone says nothing about `L/K`. Define
+`artinHomAway S hur : J^S →* (L ≃ₐ[K] L)` on the fractional ideals with valuation zero at every
+prime of `S`. Prove:
 
-1. the value at a prime is Mathlib's `arithFrobAt`, so the abelian collapse of the Frobenius
-   conjugacy class is used and not reproved;
-2. multiplicativity, hence the map on all of `J^S`;
+1. the characteristic property: the value at a prime `𝔭 ∉ S` is the arithmetic Frobenius, in the
+   sense of Mathlib's `IsArithFrobAt` for a prime `Q` of `𝓞 L` above `𝔭`;
+2. uniqueness: a multiplicative map with those values is `artinHomAway`, because the primes
+   outside `S` generate `J^S`;
 3. the restriction formula: for `K ⊆ L ⊆ M` with `M/K` abelian, `artinHomAway` for `M/K`
    restricted to `L` is `artinHomAway` for `L/K`;
 4. the tower formula for `K ⊆ K' ⊆ L` with `L/K` abelian, relating `artinHomAway` over `K'` to
    `artinHomAway` over `K` through the ideal norm;
-5. the behaviour under `S ⊆ S'`, with compatible maps.
+5. compatibility as `S` grows: for `S ⊆ S'` the carriers are nested and the maps agree.
 
 `S` is a parameter of the construction, and not the ramified set. Layers 6 to 8 use one
-instance: `S = support 𝔪₀`, the primes dividing the finite part of the modulus. There `hur` holds
-because the conductor of `L/K` divides `𝔪`, so every prime outside the support of `𝔪₀` is
-unramified in `L`. The carrier is then already `J^{𝔪₀}`, and no further restriction is needed.
-The name and the signature are those of the Number Field Arithmetic roadmap. If that roadmap
-lands first, delete I.2 and use its declaration unchanged.
-
-*Prerequisites:* M `arithFrobAt`, M `IsArithFrobAt`, M `FractionalIdeal`, M `Ideal.ramificationIdx`.
+instance, `S = support 𝔪₀`. There `hur` holds because the conductor of `L/K` divides `𝔪`, so
+every prime outside the support of `𝔪₀` is unramified in `L`. The carrier is then `J^{𝔪₀}`, and
+no further restriction is needed.
+*Source.* Janusz III §3; Neukirch ANT VI §7.
+*Prerequisites:* M `arithFrobAt`, M `IsArithFrobAt`, M `FractionalIdeal`,
+M `FractionalIdeal.count`, M `Algebra.IsUnramifiedAt`, M `Ideal.LiesOver`.
 **Basic API.**
-- *Constructors:* from a prime, from an integral ideal, from a fractional ideal.
-- *Examples:* the trivial extension, a quadratic extension where the value is the Legendre symbol.
+- *Constructors:* the map from `S` and the unramifiedness hypothesis; the value at a prime.
+- *Examples:* `S = ∅`, allowed only for `L/K` unramified everywhere; `S = support 𝔪₀`; `L = K`,
+  where the map is trivial; a quadratic extension, where the value is the Legendre symbol.
 - *Morphisms:* `J^S →* Gal(L/K)`.
 - *Functoriality:* items 3, 4 and 5.
-- *Comparison lemmas:* the value on a principal prime, and the composite with the map to the ideal
+- *Comparison lemmas:* the value on a principal prime; the composite with the map to the ideal
   class group.
 - *Naturality:* the square that relates `artinHomAway` for `L/K` and for `M/K`.
-- *Edge cases:* `S = ∅`, allowed only for `L/K` unramified everywhere; `S` larger than the
-  ramified set; `L = K`, where the map is trivial.
-- *Downstream interface:* Layers 6, 7, 8 and 10C use only `artinHomAway` and items 2 to 4.
+- *Edge cases:* a prime of `S` that is unramified; `S` larger than the ramified set.
+- *Downstream interface:* Layers 6, 7, 8 and 10C use `artinHomAway` and items 1 to 4.
 
 **I.3. The completion dictionary at a finite place.** For `v : HeightOneSpectrum (𝓞 K)`, the
 completion `v.adicCompletion K` is a nonarchimedean local field. Its residue cardinality is
-`Ideal.absNorm v.asIdeal`. Its normalized valuation restricts to `HeightOneSpectrum.valuation` on
-`K`. The absolute value `FinitePlace.mk v` is `q_v^{-v(·)}`. Phrase every unit condition through
-`adicCompletionIntegers` or through the `ValuativeRel` API. Do not state new lemmas against the
-deprecated `Valued` interface.
-*Prerequisites:* M `HeightOneSpectrum.adicCompletion`, M `adicCompletionIntegers`, M `FinitePlace`,
-M `Ideal.absNorm`.
+`Ideal.absNorm v.asIdeal`. Its normalized valuation restricts to `HeightOneSpectrum.valuation`
+on `K`. The absolute value `FinitePlace.mk v` is `q_v^{-v(·)}`. This statement is where every use
+of I.1 enters.
+Phrase every unit condition through `adicCompletionIntegers` or through the `ValuativeRel` API.
+Do not state new lemmas against the deprecated `Valued` interface.
+*Prerequisites:* M `HeightOneSpectrum.adicCompletion`, M `adicCompletionIntegers`,
+M `FinitePlace`, M `Ideal.absNorm`, M `IsNonarchimedeanLocalField`.
 
-**I.4. An instance of the interface for the completions.** Produce an instance of I.1 for
-`v.adicCompletion K` and its finite abelian extensions. This is local class field theory, and this
-roadmap does not develop it. An implementor discharges I.4 in one of two ways. If a Tau Ceti local
-class field theory exists, import it and build the instance from its declarations; that is a
-mechanical edit. If none exists, prove the instance from Serre, *Corps Locaux*, Ch. XIII and XIV, or
-from Neukirch ANT Ch. V.
-*Prerequisites:* L I.1, L I.3.
+**I.4. Construction of the package.** Construct the term of I.1. This is local class field
+theory, and it is a deliverable of this roadmap. The route is the cohomological one, in seven
+submilestones.
+1. The unramified tower: `Gal(F^{ur}/F) ≅ Ẑ` with the arithmetic Frobenius as the distinguished
+   generator, and the description of the unramified norm groups.
+2. The unit filtration `U^{(0)} ⊇ U^{(1)} ⊇ ⋯` with `U^{(0)}/U^{(1)} ≅ 𝓀ˣ` and
+   `U^{(n)}/U^{(n+1)} ≅ 𝓀⁺` for `n ≥ 1`, and completeness of `Fˣ` in that filtration.
+3. Vanishing: `Ĥ^i(Gal(E/F), U_E) = 0` for every `i` and every unramified `E/F`, from 2 and the
+   normal basis theorem.
+4. The invariant map: `Ĥ²(Gal(E/F), Eˣ) ≅ (1/[E:F])ℤ/ℤ`, first for unramified `E/F` through the
+   valuation and 3, then in general by inflation, giving fields 9 and 10 of I.1.
+5. The local class formation: `Ĥ¹(Gal(E/F), Eˣ) = 0`, which is Hilbert 90, and
+   `#Ĥ²(Gal(E/F), Eˣ) = [E : F]`, giving field 8.
+6. Tate–Nakayama in degree `−2`, from T.6, which produces the reciprocity isomorphism and
+   fields 1, 2 and 3; then the normalization 6 by computing on the unramified tower.
+7. The conductor and the symbols: field 7 from the unit filtration and the norm groups; field 11
+   from the Artin map and Kummer theory.
+*Source.* Serre, *Corps Locaux*, Ch. XI to XIV. Cassels–Fröhlich Ch. VI, Serre, "Local class
+field theory". Neukirch ANT Ch. V for the Frobenius-lift arrangement. Lubin–Tate theory is the
+explicit alternative for 6, and it also gives the explicit reciprocity map.
+*Prerequisites:* L I.1, L I.3, L T.1, L T.3, L T.4, L T.6,
+M `groupCohomology.H1ofAutOnUnitsUnique`.
 
-**I.5. The archimedean part of the interface.** The class of I.1 is nonarchimedean. Layer 2C gives
-the real and complex statements in the same shape. Layer 6 uses the two families together, so keep
-the names parallel: `Art_ℝ`, `Art_ℂ`, `inv_ℝ`, `inv_ℂ`.
-*Prerequisites:* L I.1, L 2C.1, L 2C.3.
+**I.5. The cyclotomic orientation over `ℚ_p`.** For `p` a prime, `m` prime to `p`, and
+`E = ℚ_p(μ_m)`, prove `χ_cyc(Art_{E/ℚ_p}(u)) = u⁻¹` for `u` a unit of `ℤ_p`, where `χ_cyc` is the
+cyclotomic character `Gal(E/ℚ_p) ≅ (ZMod m)ˣ`. Stage 1 of 6.3 consumes this clause, and it is
+the statement that fixes the direction of the global map.
+**Common error.** The clause is a normalization, not a formality. With the geometric convention
+the right-hand side is `u`, and every degree count is unchanged, so a wrong choice here is
+invisible until the global reciprocity law fails.
+*Source.* Serre, *Corps Locaux*, Ch. XIV §7; Neukirch ANT V §2.
+*Prerequisites:* L I.1, L I.4, M `IsCyclotomicExtension.autEquivPow`.
+
+**I.6. The local conductor–discriminant formula.** For finite abelian `E/F`, prove
+`v_F(𝔡_{E/F}) = ∑_χ a(χ)`, where `χ` ranges over the characters of `Gal(E/F)`, and `a(χ)` is the
+conductor exponent of the character `χ ∘ Art_{E/F}` of `Fˣ`. Milestone 9.2 globalizes this.
+*Source.* Serre, *Corps Locaux*, Ch. VI §2, Proposition 6, and Ch. VI §3.
+*Prerequisites:* L I.1, L I.4, M `differentIdeal`.
+
 ### Layer 0: moduli, approximation, and multiplicative congruences
 
 **0.1. The modulus.** Build the structure of the conventions table: a nonzero ideal together with a
@@ -505,15 +622,18 @@ ideles, and `IdeleClassGroup R K` as the quotient. Keep both as reducible abbrev
 - *Edge cases:* `K = ℚ`; the trivial modulus; a place where the local component is a unit.
 - *Downstream interface:* Layers 3, 5, 6, 7 and 11 use `C_K`, its topology, and 2A.6.
 
-**2A.2. The topology.** Prove that `IdeleGroup (𝓞 K) K` is a locally compact topological group. Use
-the units topology, which comes from `x ↦ (x, x⁻¹)`, and handle the finite part with
-`Topology/Algebra/RestrictedProduct/Units.lean`. Prove that `IdeleClassGroup (𝓞 K) K` is a locally
-compact Hausdorff group. **Common error.** The idele topology is not the subspace topology from
-`𝔸_K`. Mathlib's `Units` topology is already the correct one, so do not re-topologize.
+**2A.2. The topology of the idele group.** Prove that `IdeleGroup (𝓞 K) K` is a locally compact
+topological group. Use the units topology, which comes from `x ↦ (x, x⁻¹)`, and handle the finite
+part with `Topology/Algebra/RestrictedProduct/Units.lean`. The idele class group is treated in
+2A.3, because its Hausdorffness needs the principal ideles to be closed.
+**Common error.** The idele topology is not the subspace topology from `𝔸_K`. Mathlib's `Units`
+topology is already the correct one, so do not re-topologize.
 *Prerequisites:* L 2A.1, M `RestrictedProduct.instTopologicalSpaceUnits`,
-M `Mathlib/Topology/Algebra/IsOpenUnits.lean`, L 2A.3.
+M `Mathlib/Topology/Algebra/IsOpenUnits.lean`.
 
-**2A.3. Discreteness and cocompactness.** Prove that `K` is discrete in `𝔸_K`, and that the quotient
+**2A.3. Discreteness, cocompactness, and the class group topology.** Prove that `Kˣ` is closed and
+discrete in `IdeleGroup (𝓞 K) K`, so that `IdeleClassGroup (𝓞 K) K` is a locally compact Hausdorff
+group. Prove that `K` is discrete in `𝔸_K`, and that the quotient
 `𝔸_K/K` is compact. These are the additive local-global finiteness statements that the rest of the
 layer uses.
 *Source.* Cassels–Fröhlich Ch. II §§14–16; Weil, *Basic Number Theory*, Ch. IV.
@@ -650,12 +770,12 @@ reciprocity, in the shape of I.1.
 **2C.5. Cohomology.** Prove `H¹(Gal(ℂ/ℝ), ℂˣ) = 1` and `Ĥ⁰(Gal(ℂ/ℝ), ℂˣ) ≅ ℤ/2`, hence `h(Gal(ℂ/ℝ),
 ℂˣ) = 2 = [ℂ:ℝ]`. Layer 5 uses these as the archimedean factors of the global Herbrand computation,
 where they carry as much weight as the finite ones.
-*Prerequisites:* L 2C.4,
-M `Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`.
+*Prerequisites:* L T.1, L T.4, L 2C.4, M
+`Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`.
 
 **2C.6. Invariants.** Prove `inv_ℂ = 0` and `inv_ℝ : H²(Gal(ℂ/ℝ), ℂˣ) ≃ (1/2)ℤ/ℤ ⊆ ℚ/ℤ`, with the
 nontrivial class going to `1/2`. State the compatibility with the normalization of `inv_v` in
-I.1.10, because Layer 11 adds the finite and infinite invariants together.
+I.1 item 9, because Layer 11 adds the finite and infinite invariants together.
 *Prerequisites:* L 2C.5, L I.1.
 
 **2C.7. Ramification and conductors at infinity.** For finite abelian `L/K` and a real place `w` of
@@ -665,7 +785,7 @@ is all of `ℝˣ`; `w ∉ 𝔣(L/K)∞`. This is the real-place clause of 6.5 an
 
 **2C.8. Hilbert symbols.** Prove `(a, b)_ℂ = 1` for all `a, b ∈ ℂˣ`. Prove `(a, b)_ℝ = −1` exactly
 when `a < 0` and `b < 0`. Prove bimultiplicativity and nondegeneracy in the real case. Use the same
-symbol vocabulary as I.1.11, because Layer 11 takes a product over all places.
+symbol vocabulary as I.1 item 11, because Layer 11 takes a product over all places.
 *Prerequisites:* L 2C.1, L I.1.
 ### Layer 3: Hecke characters and the finite-order dictionary
 
@@ -767,11 +887,13 @@ conventions compose with `galEquivZMod` to give an automorphism of `(ℤ/n)ˣ`, 
 not detect the error. Fix the direction by the stabilizer computation of 4.1.
 *Prerequisites:* L 1.5, L I.2, L 4.1, M `IsCyclotomicExtension.Rat.galEquivZMod`.
 
-**4.4. Modulus against conductor.** Prove `ℚ_{(n)∞} = ℚ(ζₙ)` for every `n`, including nonminimal
-moduli. Prove that the conductor of `ℚ(ζₙ)/ℚ` is `(n₀)·∞` for `n₀ ≥ 3`, and the trivial modulus
-otherwise. Keep the two apart in every statement: a ray class field belongs to a modulus, and a
-conductor is the least modulus that works.
-*Prerequisites:* L 4.2, L 4.3, L 7.5.
+**4.4. The conductor of `ℚ(ζₙ)/ℚ`.** Prove that the conductor is `(n₀)·∞` for `n₀ ≥ 3`, and the
+trivial modulus otherwise. Prove it here, from the ramification statements of 4.2 and the real
+place, and not from the existence theorem.
+**Common error.** A ray class field belongs to a modulus, and a conductor is the least modulus that
+works. The identity `ℚ_{(n)∞} = ℚ(ζₙ)` holds for every `n`, including every nonminimal modulus;
+that identity is 7.7 and belongs to Layer 7, because it uses the existence theorem.
+*Prerequisites:* L 4.2, L 4.3.
 
 ### Layer 5: the norm-index machinery
 
@@ -804,7 +926,7 @@ M `groupCohomology.coindIso` (Shapiro).
 
 **5.2. Herbrand quotients.** For cyclic `L/K`, prove in order:
 1. `h(G, I_{L,S}) = ∏_{v ∈ S} [L_w : K_v]`, from 5.1.9, from `h(G_w, L_wˣ) = [L_w:K_v]` at finite
-   places (I.1.9), and from the archimedean factors of 2C.5;
+   places (I.1 item 8), and from the archimedean factors of 2C.5;
 2. the logarithmic `S`-unit lattice: the map `𝓞_{L,S}ˣ → ⊕_{w ∈ S_L} ℝ`, `u ↦ (log ‖u‖_w)_w`, has
    finite kernel `μ(L)` and image a lattice of rank `#S_L − 1` in the trace-zero hyperplane;
 3. the `ℝ[G]`-module comparison `ℝ ⊗ 𝓞_{L,S}ˣ ≅ ℝ[S_L] / ℝ`, where `ℝ[S_L]` is the permutation
@@ -823,9 +945,9 @@ finite cohomology. It is not defined for an infinite group, and item 4 fails wit
 of both kernel and cokernel.
 *Source.* Neukirch ANT VI §3; Milne CFT VII §§2–5.
 
-*Prerequisites:* L 5.1, L 2C.5,
-M `Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`,
-M `NumberField.Units.DirichletTheorem`, L I.1.
+*Prerequisites:* L T.4, L 5.1, L 2C.5, M
+`Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`, M
+`NumberField.Units.DirichletTheorem`, L I.1.
 
 **5.3. `kummer_le`.** For cyclic `L/K`, prove `[C_K : N C_L] ≤ [L:K]`. Use the algebraic route, in
 eight steps.
@@ -869,21 +991,22 @@ Then extend to arbitrary finite Galois `L/K` in two named steps.
 
 **Common error.** Solvable induction alone does not reach a general finite group. Step 2 is a
 separate argument and must be stated.
-*Prerequisites:* L 5.2, L 5.3,
-M `Mathlib/RepresentationTheory/Homological/GroupCohomology/LongExactSequence.lean`,
-M `groupCohomology.Functoriality`, M `Sylow`.
+*Prerequisites:* L T.3, L 5.2, L 5.3, M
+`Mathlib/RepresentationTheory/Homological/GroupCohomology/LongExactSequence.lean`, M
+`groupCohomology.Functoriality`, M `Sylow`.
 
 **5.5. The Hasse norm theorem.** For **cyclic** `L/K`, prove that `x ∈ Kˣ` is a norm from `Lˣ`
 exactly when it is a local norm at every place. Deduce it from `H¹(G, C_L) = 1` and the exact
 sequence `1 → Lˣ → I_L → C_L → 1`. State the cyclic hypothesis in the statement, not in a comment.
 **False generalization, with a counterexample.** The theorem fails for noncyclic extensions. Define
 the knot group `Kn(L/K) := (Kˣ ∩ N_{L/K} I_L) / N_{L/K} Lˣ`, which is trivial exactly when the norm
-principle holds. State Tate's description of it through `Ĥ^{-3}(G, ℤ) ≅ H₂(G, ℤ)` and the local
-groups `Ĥ^{-3}(G_v, ℤ)`. For `G ≅ (ℤ/2)²` with every decomposition group proper, hence cyclic, every
+principle holds. State Tate's description of it through `Ĥ^{-3}(G, ℤ) ≅ H₂(G, ℤ)`, which is T.2,
+and the local groups `Ĥ^{-3}(G_v, ℤ)`. For `G ≅ (ℤ/2)²` with every decomposition group proper, hence
+cyclic, every
 local group vanishes and the knot group is `ℤ/2`. The instance to prove is `L = ℚ(√13, √17)` and the
 rational `25`; see the worked examples.
 *Source.* Milne CFT VIII §3; Cassels–Fröhlich Exercise 5.3, p. 360.
-*Prerequisites:* L 5.4, L 2B.4, L 2B.7.
+*Prerequisites:* L 5.4, L 2B.4, L 2B.7, L T.2.
 ### Layer 6: the global Artin map and the reciprocity law
 
 From here on the interface of Layer I is essential, together with Layer 2C at the infinite places.
@@ -921,10 +1044,10 @@ cyclic `M/K`. **Common error.** Do not import a Chebotarev-style density argumen
 Kˣ`. The route has three stages.
 
 *Stage 1, cyclotomic extensions of `ℚ`.* Compute directly, with 4.3 and the cyclotomic orientation
-clause `χ_cyc(Art(u)) = u⁻¹` of I.1, together with the archimedean factor of 2C.3. A sign error
+clause `χ_cyc(Art(u)) = u⁻¹` of I.5, together with the archimedean factor of 2C.3. A sign error
 anywhere upstream appears here, which is the purpose of the stage. Prove the base change statement
-separately: reciprocity for `K(ζ_n)/K` follows from the case over `ℚ`, by the norm compatibility
-I.1.7.
+separately: reciprocity for `K(ζ_n)/K` follows from the case over `ℚ`, by the norm
+compatibility I.1 item 5.
 
 *Stage 2, cyclic `L/K`, by Artin's crossing argument.* State the lemma in full.
 
@@ -956,21 +1079,30 @@ I.1.7.
   `⟨Frob_𝔭|K(ζ_m)⟩` trivially. Take `E` to be the fixed field of `H = ⟨σ × τ, Frob_𝔭|L ×
   Frob_𝔭|K(ζ_m)⟩`. Then `H` contains the decomposition group of `𝔭`, which gives item 4. `H`
   restricts onto `Gal(L/K)`, which gives item 1. `H ∩ (Gal(L/K) × 1) = 1`, which gives item 3. The
-  numerical input: for `a ≥ 2` and a prime power `q^r`, some prime has `a` of multiplicative order
-  exactly `q^r`. Apply it to `a = N𝔭` to get a squarefree `m` with `n` dividing the order of `a`
-  modulo `m`, together with an independent `b`. That argument is the cyclotomic-polynomial argument
-  behind Mathlib's `Nat.exists_prime_gt_modEq_one`, and it is elementary. No theorem on primes in
-  arithmetic progressions is used, which is what keeps this layer independent of any analytic
-  development.
-*Source.* Lang ANT Ch. X §2, p. 202; Janusz V, Lemma 5.6, p. 194; the numerical lemmas are Janusz V,
-Lemmas 5.3 and 5.4, pp. 192–193.
+  numerical input, in two lemmas with their exact hypotheses.
+  - For integers `a ≥ 2` and `r ≥ 2`, and a prime `q`, some prime `p` has `a` of multiplicative
+    order exactly `q^r`. **Common error.** The hypothesis `r ≥ 2` is needed. For `r = 1` the
+    statement fails: a prime at which `3` has order two would divide `3² − 1 = 8` and not
+    `3 − 1 = 2`, and no such prime exists. Prove the `r ≥ 2` form, and add `a = 3`, `q = 2`,
+    `r = 1` as a test that the hypothesis is used.
+  - Let `n = q₁^{r₁}⋯q_s^{r_s}` and let `a ≥ 2`. There are infinitely many squarefree
+    `m = p₁⋯p_s p'₁⋯p'_s` such that `n` divides the order of `a` modulo `m`. There is also a `b`
+    whose order modulo `m` is divisible by `n` and which is independent of `a` modulo `m`. The
+    least prime divisor of `m` can be taken arbitrarily large, which is how the `m_i` are made
+    pairwise coprime and prime to `S`.
+  Apply the second lemma to `a = N𝔭`. Both proofs are elementary, in the style of Mathlib's
+  `Nat.exists_prime_gt_modEq_one`. No theorem on primes in arithmetic progressions is used, which
+  is what keeps this layer independent of any analytic development.
+*Source.* Lang ANT Ch. X §2, p. 202; Janusz V, Lemma 5.6, p. 194. The numerical lemmas are
+Janusz V, Lemma 5.3, p. 192, which assumes `a ≥ 2` and `r ≥ 2`, and Janusz V, Lemma 5.4, p. 193.
 - **One prime at a time.** Use the one-prime form. Do not state a simultaneous version. The proof
   applies the lemma separately to each prime in the factorization of the ideal whose symbol is
   computed. It chooses the `m_i` pairwise coprime, through the parameter `S`. It then works in
   the compositum `F = E₁⋯E_r`.
 - **Restriction.** `L ∩ E = K` makes `res : Gal(LE/E) → Gal(L/K)` an isomorphism, and the same holds
   for `F` in place of `E`. The symbol computed over `E` is read over `K` along that isomorphism.
-- **Transport.** `θ_{LE/E}(y)∣_L = θ_{L/K}(N_{E/K} y)` for `y ∈ I_E`, from I.1.7. In ideal language,
+- **Transport.** `θ_{LE/E}(y)∣_L = θ_{L/K}(N_{E/K} y)` for `y ∈ I_E`, from I.1 item 5. In ideal
+  language,
   `(𝔅, LE/E)∣_L = (N_{E/K} 𝔅, L/K)`. Because `𝔭` splits completely in `E`, a prime `𝔓 ∣ 𝔭` of `E`
   has `N_{E/K} 𝔓 = 𝔭`. So the symbol of `𝔭` in `L/K` is the symbol of `𝔓` in `LE/E`, and `LE/E` lies
   in a cyclotomic extension of `E`, where Stage 1 applies.
@@ -997,7 +1129,8 @@ needs norm limitation, so it is 7.2.
 **6.5. Ramification and the conductor.** For finite abelian `L/K` and `v` a finite place or a real
 place, prove that the following are equivalent: `v` is unramified in `L`; the local component of
 `N_{L/K} C_L` contains the full local unit group at `v`, meaning all of `ℝˣ` at a real place; `v ∤
-𝔣(L/K)`. Prove the local assembly `𝔣(L/K) = ∏_v 𝔣_v`, with the finite local conductors from I.1.8
+𝔣(L/K)`. Prove the local assembly `𝔣(L/K) = ∏_v 𝔣_v`, with the finite local conductors from I.1 item
+7
 and the real ones from 2C.7. Higher-ramification refinements are local and are not targets here;
 only the assembly is global.
 *Prerequisites:* L 6.4, L I.1, L 2C.7.
@@ -1037,12 +1170,24 @@ for a unique finite abelian `L/K`. Decompose the proof.
    Galois correspondence. Every later step therefore has only to produce some norm group inside the
    given `U`.
 2. Reduce to subgroups that contain some `RaySubgroup 𝔪`, by 2A.8.
-3. The Kummer construction when `μ_p ⊆ K`: let `U` be open with `C_K/U` finite of exponent `p`. Take
-   `S ⊇ S_∞` finite, containing the places above `p` and enough places that `I_K = Kˣ · I_{K,S}`.
-   Let `L = K(U(S)^{1/p})` be the Kummer extension of the `S`-units. Prove `E ⊆ N_{L/K}(I_L)` for `E
-   = ∏_{v ∈ S} (K_vˣ)^p × ∏_{v ∉ S} 𝒪_vˣ`, from local reciprocity and from unramifiedness outside
-   `S`. Prove the index count `[I_K : Kˣ·E] = p^{#S} = [I_K : Kˣ·N_{L/K}(I_L)]`, from the `S`-unit
-   theorem and the product formula.
+3. The Kummer construction when `μ_p ⊆ K`. Take `S ⊇ S_∞` finite, containing the places above `p`
+   and enough places that `I_K = Kˣ · I_{K,S}`. Write `𝓞_{K,S}ˣ` for the `S`-units, which is
+   Mathlib's `Set.unit` for the finite places of `S`. Put
+   `L := K((𝓞_{K,S}ˣ)^{1/p})`, the extension generated by the `p`-th roots of every `S`-unit, and
+   `E := ∏_{v ∈ S} (K_vˣ)^p × ∏_{v ∉ S} 𝒪_vˣ ≤ I_K`. The construction does not depend on the
+   subgroup that the theorem must realize; item 1 does the selection, in substep 5 below. Prove:
+   1. `L/K` is abelian of exponent `p`, and `[L : K] = (𝓞_{K,S}ˣ · (Kˣ)^p : (Kˣ)^p) = p^{#S}` by
+      Kummer theory and the `S`-unit theorem, where `#S = #S_L` is the number of places in `S`;
+   2. `E ⊆ N_{L/K}(I_L)`, from local reciprocity at the places of `S`, where the local extension
+      has exponent `p` so that `p`-th powers are norms, and from unramifiedness outside `S`, where
+      the local units are norms;
+   3. `[I_K : Kˣ·E] = p^{#S}`, from the `S`-unit theorem and the product formula;
+   4. hence `[I_K : Kˣ·E] = [I_K : Kˣ·N_{L/K}(I_L)]` and `Kˣ·E = Kˣ·N_{L/K}(I_L)`, so the norm
+      group of `L/K` is exactly the image of `E` in `C_K`;
+   5. the selection: let `V ≤ C_K` be open with `C_K/V` finite of exponent `p`, and let `Ṽ ≤ I_K`
+      be its preimage. Then `Ṽ ⊇ (I_K)^p`, and `Ṽ` contains `𝒪_vˣ` for every `v` outside a finite
+      set, so after enlarging `S` we get `Ṽ ⊇ E`. Therefore `N(L/K) ⊆ V`, and item 1 makes `V` a
+      norm group.
 4. The cyclotomic base change when `μ_p ⊄ K`: work over `K_cyc := K(μ_p)`, whose degree over `K`
    divides `p − 1` and is prime to `p`.
 5. The descent step: let `U ≤ C_K` be open of finite index and `F/K` finite, and suppose that
@@ -1073,7 +1218,8 @@ for a unique finite abelian `L/K`. Decompose the proof.
    subgroups of `C_K` that are not open. The openness hypothesis does real work.
 *Source.* Milne CFT VII §9, items 9.1 to 9.5; Neukirch ANT VI §6; Janusz V §§7–9. Tate's article in
 Cassels–Fröhlich, p. 202, gives the route that avoids norm limitation.
-*Prerequisites:* L 6.4, L 7.1, L 7.2, L 2A.8, L 5.1, M `Mathlib/FieldTheory/KummerExtension.lean`.
+*Prerequisites:* L 6.4, L 7.1, L 7.2, L 2A.8, L 5.1, L 5.3, L I.1, M `Set.unit`,
+M `Mathlib/FieldTheory/KummerExtension.lean`.
 
 **7.4. Ray class fields.** Define `K_𝔪` as the abelian extension inside `K̄` with `N(K_𝔪/K) =
 RaySubgroup 𝔪`. It exists by 7.3 and is unique by 7.1. Prove `Gal(K_𝔪/K) ≃* Cl_𝔪 K`, by composing
@@ -1142,7 +1288,8 @@ with no condition at the infinite places. Prove the genus-field compatibility: f
 the genus field is the maximal subfield of `H`, respectively of `H⁺`, that is abelian over `ℚ`, and
 `Gal(H/K) ↠ Gal(K_gen/K)` realizes `Cl ↠ Cl/Cl²`. State it in the vocabulary of the merged
 Multiquadratic roadmap, which is merged.
-*Prerequisites:* L 8.1, L 1.8, T Multiquadratic Layer 3, for the genus-field vocabulary.
+*Prerequisites:* L 8.1, L 1.8, T Multiquadratic Layer 3, namely the genus field `K_gen` and
+`Gal(K_gen/K) ≅ Cl(K)/Cl(K)²`, as named in the contract table.
 
 **8.3. Capitulation and the principal ideal theorem.** The extension map is Mathlib's
 `ClassGroup.extendedHom`. Prove `ClassGroup.extendedHom (𝓞 K) (𝓞 H) = 1`, that is, every ideal of
@@ -1182,7 +1329,7 @@ Galois group `S₃`.
 𝔣₀(χ)`. Here `χ` ranges over the characters of `Gal(L/K)`. The term `𝔣₀(χ)` is the finite part of
 the conductor of the ray class character `χ ∘ θ_{L/K}`, through 3.3. Route: localize, using that the
 different is the product of the local differents, then apply the local conductor–discriminant
-formula from I.1.8. Prove the globalization of the different as part of this milestone, from
+formula I.6. Prove the globalization of the different as part of this milestone, from
 `differentIdeal` and its multiplicativity in towers. Worked instance: over `ℚ` the formula
 reproduces Mathlib's values for `disc(ℚ(ζₙ))`. **False generalization.** The formula as stated is
 abelian. For a nonabelian extension the correct statement uses Artin conductors of the irreducible
@@ -1346,9 +1493,9 @@ table. Prove that Tate–Nakayama in degree `−2` re-derives the isomorphism of
 compatibility theorem: the two constructions agree. That compatibility is the content of "the
 cohomological route", given the route pinned above.
 *Source.* NSW Ch. VIII; Artin–Tate Ch. XIV.
-*Prerequisites:* L 5.4, L 6.4, L 2C.6,
-M `Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`,
-M `groupCohomology.Functoriality`.
+*Prerequisites:* L T.6, L 5.4, L 6.4, L 2C.6, M
+`Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`, M
+`groupCohomology.Functoriality`.
 
 **11.2. Continuous cohomology of the absolute Galois group.** State the continuous cohomology of
 `Gal(K̄/K)` with coefficients in a discrete module, as the colimit over the finite quotients. Prove
@@ -1360,14 +1507,15 @@ external dependency.
 M `Field.absoluteGaloisGroup`, M `Mathlib/Topology/Algebra/Category/ProfiniteGrp/`.
 
 **11.3. Sum of local invariants.** Prove the exact sequence `0 → H²(G_K, K̄ˣ) → ⊕_v H²(G_{K_v},
-K̄_vˣ) → ℚ/ℤ → 0` in invariant-map coordinates. The local invariants come from I.1.10 at the
+K̄_vˣ) → ℚ/ℤ → 0` in invariant-map coordinates. The local invariants come from I.1 item 9 at the
 finite places, and from 2C.6 at the infinite places. Prove the reciprocity statement `∑_v inv_v(α) =
 0` for
 a global class.
 *Prerequisites:* L 11.1, L 11.2, L I.1, L 2C.6.
 
 **11.4. Hilbert reciprocity.** Prove `∏_v (a, b)_v = 1` for `a, b ∈ Kˣ`, with the local symbols from
-I.1.11 at the finite places and from 2C.8 at the real places. Derive quadratic reciprocity over `ℚ`
+I.1 item 11 at the finite places and from 2C.8 at the real places. Derive quadratic reciprocity over
+`ℚ`
 as the worked example, and compare with Mathlib's `legendreSym` reciprocity.
 *Prerequisites:* L 11.3, L I.1, L 2C.8, M `legendreSym`.
 
@@ -1377,15 +1525,6 @@ simple algebras, division algebras and a Brauer-group API is out of scope. This 
 zero", and no algebras. Cohomological dimension and `H³` of number fields are also out of scope, and
 belong to a Poitou–Tate development.
 
-### Long horizon
-
-This section is a roadmap for a future roadmap, and not work to attempt now. Poitou–Tate duality and
-the full cohomology of number fields on top of Layer 11. Explicit reciprocity laws and power-residue
-symbols. The Grunwald–Wang phenomenon, whose classical trap is that "an element that is an `n`-th
-power locally everywhere is a global `n`-th power" is false when `8 ∣ n`; the standard
-counterexample is `16`, which is an 8th power in `ℚ_p` for every `p` and not in `ℚ`. Tate's thesis
-and the analytic theory. The function-field and geometric theory. Explicit class field theory beyond
-complex multiplication.
 ## Worked examples
 
 Discharge these alongside the layers. Each one catches a specific failure: a vacuous object, a wrong
@@ -1459,38 +1598,42 @@ maximal.
 
 ## Ordering and parallelism
 
+The table is generated from the direct prerequisites of the milestones, and the milestone numbers
+are a topological order of that graph.
+
 Four lanes can run at once from the start.
 
 - Lane A: Layers 0 and 1, moduli, approximation and ray classes.
 - Lane B: Layer 2A, ideles.
 - Lane C: Layer 2C, the archimedean package, which is small and is a good first contribution,
   together with Layer 4, the cyclotomic anchor.
-- Lane D: Layer I, the interface, whose statement does not wait for its instance.
+- Lane D: Layer T, Tate cohomology, which is general-purpose and uses Mathlib alone.
 
 Layer 8's Furtwängler theorem is free-standing group theory and can be developed at any time.
 
 | stage | content | prerequisites |
 |---|---|---|
-| I | the local interface, the ideal-theoretic Artin map, the completion dictionary | Mathlib |
+| T | Tate cohomology in all degrees, functoriality, periodicity, cup products, Tate–Nakayama | Mathlib |
+| I | the local package and its construction, the ideal-theoretic Artin map, the completion dictionary, the cyclotomic orientation, the local conductor–discriminant | Mathlib, T |
 | 0 | moduli, approximation, congruence subgroups of `Kˣ` | Mathlib |
 | 1 | ray and narrow class groups, moving lemma, exact sequence, finiteness | 0 |
-| 2A | ideles, topology, discreteness, norm-one compactness, `U_𝔪`, `D_K` | Mathlib |
+| 2A | ideles, topology, discreteness, norm-one compactness, `U_𝔪`, `D_K` | Mathlib, 1 |
 | 2B | base change, Galois action, extension maps, idele norms, `C_L^G ≃ C_K` | 2A, I |
-| 2C | archimedean reciprocity, norm index, invariants, Hilbert symbols | Mathlib |
+| 2C | archimedean reciprocity, norm index, invariants, Hilbert symbols | Mathlib, T, I |
 | 3 | Hecke characters, the two conductors, the Dirichlet dictionary | 1, 2A, 2C |
-| 4 | the cyclotomic anchor | 1, I |
-| 5 | `S`-ideles, Herbrand computations, `kummer_le`, class field axiom, Hasse norm | 2B, 2C, I |
-| 6 | the compiled global Artin map and the reciprocity law | 4, 5, 2C, I |
-| 7 | norm limitation, existence theorem, ray class fields, profinite Artin map | 6 |
+| 4 | the cyclotomic anchor and the cyclotomic conductor | 1, I |
+| 5 | `S`-ideles, Herbrand computations, `kummer_le`, class field axiom, Hasse norm | T, I, 2B, 2C |
+| 6 | the compiled global Artin map and the reciprocity law | I, 2C, 4, 5 |
+| 7 | norm limitation, existence theorem, ray class fields, profinite Artin map | 5, 6 |
 | 8 | Hilbert and narrow Hilbert class fields, principal ideal theorem | 7, transfer theory |
-| 9 | Kronecker–Weber, abelian conductor–discriminant | 3, 6, 7 |
-| 10A | continuous and algebraic infinity types | 3 |
+| 9 | Kronecker–Weber, abelian conductor–discriminant | I, 3, 6, 7 |
+| 10A | continuous and algebraic infinity types | 3, 7 |
 | 10B | orders, conductors, Picard groups | 1 |
 | 10C | ring class fields, `x² + ny²` | 7, 10B |
-| 11 | class formation, the `H²` sequence, Hilbert reciprocity | 5, 6, 7, 2C, I |
+| 11 | class formation, the `H²` sequence, Hilbert reciprocity | T, I, 2C, 5, 6, 7 |
 
-Layer 6 is where the interface instance I.4 must exist. Everything before Layer 6 is independent of
-it. The worked examples are spread across the layers, and none waits until the end.
+Layer 6 is where the local package I.4 must exist. Everything before Layer 6 needs the statement
+I.1 only. The worked examples are spread across the layers, and none waits until the end.
 
 ## References
 
