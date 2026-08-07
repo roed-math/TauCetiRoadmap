@@ -57,11 +57,10 @@ profinite-group, or Galois-theoretic material, so all of this is new work there.
 
 ### Consumed
 
-Named theorem by theorem, or file by file, in §4 (Mathlib) and Appendix A (work in flight
-upstream). They are: Mathlib's discrete `groupCohomology` package including `LowDegree`,
-`Functoriality`, `LongExactSequence`, `Shapiro` and `Hilbert90`; Mathlib's
-`OpenSubgroup`/`OpenNormalSubgroup`, `ProfiniteGrp` and `ClopenNhdofOne` material; Mathlib's
-Krull topology, infinite Galois correspondence and separable-closure API; and Mathlib's
+Named theorem by theorem, or file by file, in §4. They are: Mathlib's discrete `groupCohomology`
+package including `LowDegree`, `Functoriality`, `LongExactSequence`, `Shapiro` and `Hilbert90`;
+Mathlib's `OpenSubgroup`/`OpenNormalSubgroup`, `ProfiniteGrp` and `ClopenNhdofOne` material;
+Mathlib's Krull topology, infinite Galois correspondence and separable-closure API; and Mathlib's
 `continuousCohomology` carrier, which the pin has.
 
 ### Supplied to other roadmaps
@@ -82,8 +81,8 @@ This list is definitive, not a list of things that might come later.
 - Evens norms for coefficients other than `𝔽₂` with trivial action, and the even-degree
   restriction that general coefficients force.
 - Profinite Sylow theory and the resulting equality `cd_p G = cd_p G_p`. That belongs to the
-  [Pro-p Groups roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/3), which owns the
-  existence and conjugacy of pro-`p` Sylow subgroups and supernatural indices.
+  the Pro-p Groups roadmap, which owns the existence and conjugacy of pro-`p` Sylow subgroups
+  and supernatural indices.
 - Projective representations, factor sets, and Schur multipliers as representation theory. This
   roadmap supplies `H²` and nothing about its representation-theoretic applications.
 
@@ -131,16 +130,14 @@ subgroups.
 
 ### What this roadmap supplies to its consumers
 
-These are theorem-level dependencies, not subject-area ones. The links are the review-time
-locations of sibling roadmaps still under review; once they merge, replace each link by a relative
-path.
+These are theorem-level dependencies, not subject-area ones.
 
 | Consumer | Milestones supplied here |
 |---|---|
-| [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) | Layer 3's explicit/canonical and finite-level comparisons; Layer 5's long exact and five-term sequences; Layer 6's restriction and corestriction; Layer 8's evaluation cup pairings; Layer 9's Kummer isomorphism when the coefficient order is invertible in the field; Layer 10's all-degree package and Layer 11's `cd_p` vocabulary |
-| [Pro-p Groups PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3) | Layers 2 and 5: `H¹`, `H²` and the five-term sequence for generator and relation ranks; Layer 8's cup products; Layer 10's all-degree package; Layer 11's `cd_p` definitions, monotonicity for closed subgroups, and the prime-to-`p` open-subgroup equality |
-| [Quadratic Form Invariants PR #4](https://github.com/roed-math/TauCetiRoadmap/pull/4) | Layer 8's mod-2 cup products; Layer 9's Kummer isomorphism with `2` invertible; Layer 13's index-2 Evens norm and its four characterizing identities |
-| [Global Class Field Theory PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) | Layers 3 to 8: comparison, exactness, change of groups, Shapiro, and cup products, for its profinite and global duality material. Its finite class-formation core is independent of this roadmap |
+| Local Fields | Layer 3's explicit/canonical and finite-level comparisons; Layer 5's long exact and five-term sequences; Layer 6's restriction and corestriction; Layer 8's evaluation cup pairings; Layer 9's Kummer isomorphism when the coefficient order is invertible in the field; Layer 10's all-degree package and Layer 11's `cd_p` vocabulary |
+| Pro-p Groups | Layers 2 and 5: `H¹`, `H²` and the five-term sequence for generator and relation ranks; Layer 8's cup products; Layer 10's all-degree package; Layer 11's `cd_p` definitions, monotonicity for closed subgroups, and the prime-to-`p` open-subgroup equality |
+| Quadratic Form Invariants | Layer 8's mod-2 cup products; Layer 9's Kummer isomorphism with `2` invertible; Layer 13's index-2 Evens norm and its four characterizing identities |
+| Global Class Field Theory | Layers 3 to 8: comparison, exactness, change of groups, Shapiro, and cup products, for its profinite and global duality material. Its finite class-formation core is independent of this roadmap |
 
 Nothing here depends on an unmerged sibling roadmap. The dependency graph between roadmaps is
 acyclic at roadmap granularity: Pro-p Groups consumes this roadmap, and this roadmap consumes
@@ -242,8 +239,8 @@ nothing from Pro-p Groups.
   The factor `t u •` is forced, not decoration. The identity `t u * ℓᵗ_u(γ) = γ * t (γ⁻¹ • u)` is
   what turns the `U`-cocycle law for `f` into the `G`-cocycle law for `cor f`, and without the
   action factor the sums are not cocycles. The factor is invisible only when `G` acts trivially on
-  the coefficients, which is why the `ZMod 2` formulas in `roed-math/gq2-lean` omit it; Layer 6
-  generalizes those formulas rather than transcribing them.
+  the coefficients. A trivial-action formula that omits it is correct for trivial coefficients
+  and wrong in general, so Layer 6 proves the general statement rather than transcribing one.
 
   The public `cor` is the specialization `t = Quotient.out`. Independence of the transversal is a
   **theorem**, proved by exhibiting the difference of the two cochains as a coboundary, and it can
@@ -381,6 +378,10 @@ unmerged roadmap are all excluded, and no milestone below depends on one.
 
 ### Layer 0: discrete modules and continuous sections
 
+**Prerequisites.** Mathlib: `continuousSMul_iff_stabilizer_isOpen`, `stabilizer_isOpen`,
+`exist_openNormalSubgroup_sub_open_nhds_of_one`, `OpenSubgroup`, `OpenNormalSubgroup`,
+`ProfiniteGrp.closedSubgroup_eq_sInf_open`. Nothing else: this layer opens the roadmap.
+
 The coefficient theory and the two topological inputs the later layers lift through, stated in the
 unbundled classes of §3.
 
@@ -399,7 +400,7 @@ unbundled classes of §3.
   Layers 2 to 13 needs either. For **finite** `M` and discrete `N`, the internal hom `M →+ N` with
   the conjugation action `(g • φ) m = g • φ (g⁻¹ • m)` is again a discrete `G`-module, and
   evaluation `(M →+ N) →+ M →+ N` is a `G`-equivariant pairing. Layer 8's duality package and
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) consume that pairing,
+  the Local Fields roadmap consume that pairing,
   and only finite products of it. The precise
   consumer contract is Local Fields' prime-to-residue-characteristic and mixed-characteristic
   duality layers; no equal-characteristic residue-primary duality theorem is assumed here.
@@ -465,6 +466,10 @@ that Mathlib already proves, cite it; this layer adds only what the pin is missi
 
 ### Layer 2: the explicit low-degree complex and its functoriality
 
+**Prerequisites.** Mathlib: `groupCohomology.d₀₁`, `d₁₂`, `d₂₃`, `cocycles₁`, `cocycles₂`,
+`IsCocycle₁`, `IsCocycle₂`, `groupCohomology.cochainsMap`, `ContinuousMap`,
+`ContinuousMonoidHom`. This roadmap: Layer 0.
+
 - **The complex.** `C¹, C², Z¹, Z², B¹, B²`, `H⁰, H¹, H²` as fixed in §3, with `d ∘ d = 0`, the
   membership lemmas in the exact `IsCocycle₁/₂` shapes, the evaluation lemmas (`Z¹` vanishes at
   `1`, the inverse formula, the degree-2 normalizations), and the trivial-action
@@ -486,6 +491,10 @@ that Mathlib already proves, cite it; this layer adds only what the pin is missi
   compatible-pair form and derive the degree-1 case, rather than proving the two separately.
 
 ### Layer 3: the comparison isomorphisms
+
+**Prerequisites.** Mathlib: `groupCohomology`, `mem_cocycles₁_iff`, `mem_cocycles₂_iff`,
+`Rep.ofDistribMulAction`, `ContinuousMap.curry`, `ContinuousMap.uncurry`, `Homeomorph.curry`.
+This roadmap: Layers 1 and 2.
 
 Without this layer the explicit complex would be a second theory rather than a second description
 of the canonical one, so it is what keeps the roadmap from forking the canonical API. It also
@@ -535,6 +544,9 @@ that is a quasi-isomorphism in the discrete case.
 
 ### Layer 4: the finite-quotient colimit description
 
+**Prerequisites.** Mathlib: `OpenNormalSubgroup`, `ProfiniteGrp.toFiniteQuotientFunctor`,
+`Rep.quotientToInvariants`, `groupCohomology.map`, `AddCommGrp`. This roadmap: Layers 2 and 3.
+
 For profinite `G` and discrete `M`; the theorem most computations use (NSW (1.2.5),
 Ribes-Zalesskii Cor. 6.5.6(a), Koch Thm. 3.16; Serre, *Local Fields* X §3 takes it as the
 *definition*, so the three textbooks present the three descriptions Layers 2 to 4 relate).
@@ -577,6 +589,10 @@ Ribes-Zalesskii Cor. 6.5.6(a), Koch Thm. 3.16; Serre, *Local Fields* X §3 takes
 
 ### Layer 5: exact sequences
 
+**Prerequisites.** Mathlib: `groupCohomology.δ`, `δ₀_apply`, `δ₁_apply`,
+`mapShortComplex₁_exact`, `H1InfRes`, `H1InfRes_exact`. This roadmap: Layer 0 for the continuous
+section, and Layer 2.
+
 - **Exactness of cochains.** For a short exact sequence `0 → A → B → C → 0` of discrete
   `G`-modules and any topological group `G`, the cochain sequences
   `0 → Cⁿ(G, A) → Cⁿ(G, B) → Cⁿ(G, C) → 0` are exact: a continuous cochain into discrete `C` is
@@ -614,10 +630,13 @@ Ribes-Zalesskii Cor. 6.5.6(a), Koch Thm. 3.16; Serre, *Local Fields* X §3 takes
   (§1).
 
   The presentation theory of
-  [Pro-p Groups PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3) is built from this
+  the Pro-p Groups roadmap is built from this
   sequence; its `𝔽₂` instance, with `N` a Frattini-type kernel, is the case that roadmap consumes.
 
 ### Layer 6: change of groups
+
+**Prerequisites.** Mathlib: `Subgroup.index`, `Subgroup.FiniteIndex`, `OpenSubgroup`,
+`QuotientGroup.mk`, `Quotient.out`. This roadmap: Layer 2.
 
 For open `U ≤ G`, with `[U.FiniteIndex]` carried explicitly where `G` is not compact; everything
 through the transversal formulas of §3.
@@ -648,21 +667,24 @@ through the transversal formulas of §3.
   with `(g)_*` the conjugation isomorphism of Layer 2. State the exact double-coset indexing and
   the intersection subgroups; prove it first in degrees `0, 1, 2` on the explicit model, and prove
   independence of the double-coset representatives. Add the finite-group specialization as an
-  acceptance check, and check it is compatible with the finite-level normalization of
-  `kbuzzard/ClassFieldTheory`. Mackey is part of the basic change-of-groups API and is built here
-  whether or not a current consumer asks for it.
+  acceptance check. Mackey is part of the basic change-of-groups API and is built here whether or
+  not a current consumer asks for it.
 - **Conjugation, again.** Layer 2 constructs the conjugation maps; this layer states their
   interaction with restriction and corestriction, which the Mackey formula needs.
-- **Conventions.** Match `kbuzzard/ClassFieldTheory`'s discrete `cores_res` normalization
-  (`index • id`, same direction) so the finite-level specializations are interchangeable; if their
-  corestriction reaches Mathlib first, Layer 3's comparison must transport ours onto theirs.
+- **Conventions.** The normalization is `cor ∘ res = index • id`, in that order and with that
+  direction, which is NSW's and is also the one the finite-level literature uses, so a
+  finite-level statement can be read against this one without translation.
   ⚠ Naming collision: at the pin, Mathlib's `GroupHomology/Functoriality.lean` already uses
   "corestriction" for the covariant functoriality of *homology* along a group homomorphism. Ours
-  is the classical cohomological transfer (NSW I §5). Keep the name `cores`/`corestriction`, which
-  is NSW's and ClassFieldTheory's usage, say in the docstring which of the two is meant, and never
-  abbreviate it to "transfer", since Layer 13's norm is the *multiplicative* transfer.
+  is the classical cohomological transfer (NSW I §5). Keep the name `cores` or `corestriction`,
+  which is NSW's usage, say in the docstring which of the two is meant, and never abbreviate it
+  to "transfer", since Layer 13's norm is the *multiplicative* transfer.
 
 ### Layer 7: coinduced modules and Shapiro's lemma
+
+**Prerequisites.** Mathlib: `Representation.coind`, `Rep.indCoindIso`,
+`groupCohomology.coindIso`, `IsLocallyConstant`. This roadmap: Layers 0, 2 and 6. Other roadmaps:
+`RepresentationTheory/InductionRestriction`, for the algebraic finite-index theory it owns.
 
 For profinite `G` and a **closed** subgroup `H ≤ G`, on discrete `H`-modules `A`. The generality is
 decided up front: closed, not merely open, since the trivial subgroup is the acyclicity case.
@@ -699,6 +721,9 @@ decided up front: closed, not merely open, since the trivial subgroup is the acy
   runs its induction on, is a Layer 10 milestone.
 
 ### Layer 8: cup products in low degrees
+
+**Prerequisites.** Mathlib: `groupCohomology.IsCocycle₁`, `IsCocycle₂`, `AddMonoidHom`.
+This roadmap: Layers 2, 5 and 6.
 
 On the explicit model, relative to an equivariant pairing as fixed in §3. Discreteness of `M` and
 `N` makes every cochain-level continuity automatic.
@@ -762,7 +787,7 @@ On the explicit model, relative to an equivariant pairing as fixed in §3. Discr
 - **The duality pairings.** For finite discrete `M`, the evaluation pairing of Layer 0 composed
   with the cups gives `Hⁱ(G, Hom(M, N)) × H²⁻ⁱ(G, M) → H²(G, N)` for `i = 0, 1, 2`. These are
   instances of the six-shape API above, and they are what
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) uses as the underlying
+  the Local Fields roadmap uses as the underlying
   pairing of local Tate duality.
 - **Transport to the canonical cup.** Identification of the six explicit shapes with Layer 12's
   graded cup under Layer 3, with the same profiniteness hypotheses. This layer supplies
@@ -770,6 +795,13 @@ On the explicit model, relative to an equivariant pairing as fixed in §3. Discr
   bidegrees, so the transport lemma is what makes the two agree where both are defined.
 
 ### Layer 9: the Galois interface: Hilbert 90 and Kummer theory
+
+**Prerequisites.** Mathlib: `SeparableClosure`, `separableClosure.isGalois`,
+`SeparableClosure.isSepClosed`, `separableClosure.isPurelyInseparable`,
+`instSubsingletonAlgHomOfIsPurelyInseparable`, `AlgEquiv.restrictNormalHom_surjective`,
+`Field.absoluteGaloisGroup`, `InfiniteGalois.isOpen_and_normal_iff_finite_and_isGalois`,
+`InfiniteGalois.normalAutEquivQuotient`, `rootsOfUnity`, `powMonoidHom`,
+`groupCohomology.H1ofAutOnUnitsUnique`, `krullTopology`. This roadmap: Layers 3, 4, 5 and 8.
 
 `K` a field, `Kˢ = SeparableClosure K`, and `G_K` its Galois group with the Krull topology. This
 layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
@@ -826,8 +858,8 @@ layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
 
   Both squares include the finiteness and separability hypotheses and the chosen embedding
   explicitly. These are the compatibilities that
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) and
-  [Quadratic Form Invariants PR #4](https://github.com/roed-math/TauCetiRoadmap/pull/4) consume.
+  the Local Fields roadmap and
+  the Quadratic Form Invariants roadmap consume.
 - **The mod-2 specialization.** Under `h2 : IsUnit (2 : K)`, with `μ₂ = {±1} ⊆ K` carrying the
   trivial action and `𝔽₂ = ZMod 2` written additively: the Kummer class `[a] ∈ H¹(G_K, 𝔽₂)` with
   cocycle `g ↦ 0` if `g √a = √a` and `1` otherwise, the square-class isomorphism
@@ -837,6 +869,8 @@ layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
   fields of odd characteristic remain in scope for `n = 2`.
 
 ### Layer 10: continuous cohomology in all degrees
+
+**Prerequisites.** Mathlib: `continuousCohomology`. This roadmap: Layers 1, 3, 4, 6 and 7.
 
 Everything above except Layer 3's comparison is stated in degrees `0, 1, 2`, because that is where
 explicit cochains are usable. Cohomological dimension, dévissage, the general torsion statements
@@ -867,10 +901,13 @@ against the canonical object of Layer 1 throughout.
   profinite `G` and `i ≥ 1`: a class of `Hⁱ(G, M)` annihilated by restriction to an open `U` is
   annihilated by `(G : U)`; every element of `Hⁱ(G, M)` is torsion; and `Hⁱ(G, M) = 0` when `M` is a
   `ℚ`-vector space. The `p`-primary refinement for pro-`p` groups belongs to
-  [Pro-p Groups PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3); state here the general
+  the Pro-p Groups roadmap; state here the general
   torsion statement and the finite-level annihilation the orders of the `G ⧸ U` provide.
 
 ### Layer 11: cohomological dimension
+
+**Prerequisites.** Mathlib: `ENat`, `AddCommMonoid.primaryComponent`,
+`CategoryTheory.Simple`, `IsSimpleModule`. This roadmap: Layer 10.
 
 For profinite `G` and a prime `p`; NSW III §3 is the source of record. Nothing upstream defines
 `cd`: there is no Mathlib declaration and no PR, and the
@@ -917,7 +954,7 @@ of August 2025 asked for it and left it open. This layer rests on Layer 10.
   independence of `U` as part of the milestone, and include all finiteness hypotheses in the
   reduction theorem. For `G` pro-`p` the single module `𝔽_p` suffices (NSW (3.3.2) final clause;
   Koch Def. 5.1 takes that as the definition); that refinement lives in
-  [Pro-p Groups PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3), built on this layer.
+  the Pro-p Groups roadmap, built on this layer.
 - **Subgroups.** Three theorems:
   1. `cd_p H ≤ cd_p G` for closed `H ≤ G`, by coinduction and Shapiro for the cofinal open case
      and then the limit argument (NSW (3.3.5), Ribes-Zalesskii Thm. 7.3.1);
@@ -928,13 +965,16 @@ of August 2025 asked for it and left it open. This layer rests on Layer 10.
   `p`-primary `M`; `cd_p Ẑ = 1` for every `p` (the worked example in §6); and `H²(Ẑ, M) = 0` for
   finite `M`.
   ⚠ Do not attempt values of `cd_p G_K` for local fields here. That is
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s `cd(G_K) = 2`, which
+  the Local Fields roadmap's `cd(G_K) = 2`, which
   rests on this layer plus their duality. The `p`-Sylow equality `cd_p G = cd_p G_p` (NSW (3.3.6))
-  belongs to [Pro-p Groups PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3) together with
+  belongs to the Pro-p Groups roadmap together with
   the profinite Sylow theory it consumes; this layer supplies the definitions, the monotonicity,
   the prime-to-`p` equality, and Layer 10's all-degree tools that the Sylow argument uses.
 
 ### Layer 12: the graded cup product in all degrees
+
+**Prerequisites.** Mathlib: `continuousCohomology`, `CochainComplex`. This roadmap:
+Layers 1 and 8.
 
 Layer 8's cups are the low-degree calculational interface; the Evens norm multiplies degrees and
 so needs the product in every bidegree. Everything here is stated against Layer 1's carrier.
@@ -954,6 +994,9 @@ so needs the product in every bidegree. Everything here is stated against Layer 
 - Agreement with Layer 8's six explicit shapes under Layer 3's comparison.
 
 ### Layer 13: the Evens norm
+
+**Prerequisites.** Mathlib: `RegularWreathProduct`, `Equiv.Perm`, `ZMod`, `OpenSubgroup`.
+This roadmap: Layers 6, 8 and 12.
 
 The multiplicative transfer on `𝔽₂`-cohomology for an open subgroup `U ≤ G` of finite index, in
 the shape the Evens-Kahn formula uses. Trivial `𝔽₂`-action throughout. The explicit half needs
@@ -979,7 +1022,7 @@ Layer 12.
   4. compatibility with inflation.
 
   These four are all that
-  [Quadratic Form Invariants PR #4](https://github.com/roed-math/TauCetiRoadmap/pull/4)'s
+  the Quadratic Form Invariants roadmap's
   Evens-Kahn layer needs from here, and its total-Stiefel-Whitney expansion
   `w(Tr ⟨a⟩) = w(Tr ⟨1⟩) · (1 + cor[a] + N^{Ev}[a])` in degrees `≤ 2` is the application. This
   roadmap owns the cohomological operation; that one owns its application to transferred quadratic
@@ -1034,10 +1077,10 @@ general construction is the hardest single piece of work in this roadmap.
 
 ##### What the sibling roadmap consumes
 
-[Quadratic Form Invariants PR #4](https://github.com/roed-math/TauCetiRoadmap/pull/4) uses only
+the Quadratic Form Invariants roadmap uses only
 the four characterizing identities of the explicit index-2 form, in degrees `1` and `2`. The ten
-milestones of the general construction are this roadmap's own completion of the theory, and
-nothing there waits on them.
+milestones of the general construction are this roadmap's own completion of the theory, and that
+roadmap needs none of them.
 
 ---
 
@@ -1086,7 +1129,7 @@ a reversed transition map, a sign slip, a degenerate pairing, an impossible grou
   coefficients, the three evaluation cup pairings
   `Hⁱ(G, Hom(M, μ)) × H²⁻ⁱ(G, M) → H²(G, μ)`, `i = 0, 1, 2`, exist with their biadditivity and
   naturality, as instances of the six-shape API. This is the shape
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) needs in order to state
+  the Local Fields roadmap needs in order to state
   local Tate duality at all; proving perfectness is theirs.
 
 ---
@@ -1182,151 +1225,9 @@ Item numbers are verified against the editions cited.
 
 ---
 
-## Appendix A: upstream status
+## Appendices
 
-Appendices A and B were audited on 2026-08-06; every status and revision below is as of that date,
-which is not repeated. They record live status, which changes. The specification above does not
-depend on it, and no statement in Layers 0 to 13 is written against a declaration name that exists
-only in an open pull request.
-
-- **Mathlib master**, `Mathlib/RepresentationTheory/Homological/ContCohomology/`. Continuous
-  cohomology was redefined and moved by PR
-  [#41144](https://github.com/leanprover-community/mathlib4/pull/41144) (merged 2026-07-02; Richard
-  Hill, Andrew Yang, Edison Xie), from the pin's
-  `Mathlib/Algebra/Category/ContinuousCohomology/Basic.lean`
-  (`continuousCohomology (n) : Action (TopModuleCat R) G ⥤ TopModuleCat R`, upstreamed from
-  `rmhi/ctsToDiscrete`), whose names master deleted. The current form is built on `TopRep k G`
-  through an iterated coinduction resolution: `Basic.lean` (`TopRep.homogeneousCochains`,
-  `continuousCohomology n`), `Functoriality.lean` (`ContinuousCohomology.cochainsMap φ f`,
-  `cocyclesMap`, `map`, for `φ : H →ₜ* G` and `f : res φ X ⟶ Y`; PR
-  [#41309](https://github.com/leanprover-community/mathlib4/pull/41309), merged 2026-07-03), and
-  `LowDegree.lean` (`zeroIso : H⁰ ≅ invariants`, still the only computed degree). Its module
-  documentation states the design reason for the homogeneous model, that `C(Gⁿ, M)` would restrict
-  the theory to locally compact groups, and its TODO list names three of this roadmap's layers:
-  coincidence with `groupCohomology` for discrete groups, the `n`-ary cochain description for
-  locally compact groups, and long exact sequences. Anything written against the pin's deleted
-  names must be treated as frozen and renamed at the bump; prefer explicit-model statements, which
-  are stable, and keep canonical-facing statements in comparison files.
-- **Open Mathlib PRs**, both by Richard Hill (`rmhi`), both still open:
-  [#41539](https://github.com/leanprover-community/mathlib4/pull/41539), "refactor functoriality",
-  which splits `map` through a `continuousCohomologyFunctor` and a restriction natural
-  transformation `resNatTrans` (last updated 2026-07-27), and
-  [#41545](https://github.com/leanprover-community/mathlib4/pull/41545), "add inflation maps in
-  continuous cohomology", `Hⁿ(G⧸N, π^N) → Hⁿ(G, π)` as a natural transformation, stacked on #41539
-  (last updated 2026-07-11). Layer 1 builds its restriction and inflation in the shape these
-  describe, so that Mathlib's versions can replace them by deletion; no milestone depends on
-  either pull request.
-- **FLT staging**, `ImperialCollegeLondon/FLT`, `FLT/Mathlib/RepresentationTheory/`:
-  `Homological/ContCohomology/CupProduct.lean` (Edison Xie, PR
-  [FLT#1098](https://github.com/ImperialCollegeLondon/FLT/pull/1098), merged 2026-07-10) gives cup
-  products on the canonical model in full bidegree, built through the coinduction resolution from
-  an intertwining pairing with a joint-continuity hypothesis, with the Leibniz rule `cup_d_comm`,
-  descent to cocycles and cohomology (`ContinuousCohomology.cup`), and a kernel-mod-coboundary
-  presentation `cohomologyIsoQuot` in its companion `Basic.lean`. It has no graded commutativity,
-  no associativity, no restriction, corestriction or Shapiro, and no inhomogeneous description.
-  Layer 12 completes it rather than competing with it, and Layer 8 proves the low-degree explicit
-  cups match it.
-- **rmhi/ctsToDiscrete** (Richard Hill). The continuous-to-discrete comparison: for a **discrete**
-  group `G`, natural isomorphisms `continuousCohomology ⋙ forget ≅ recursiveGroupCohomology` and
-  `recursiveGroupCohomology ≅ groupCohomology.functor` (`ForgetfulFunctors.lean`,
-  `RecursiveToMathlib.lean`), with its own `resNatTrans` and `inflNatTrans`. Two caveats, both
-  verified: it is stated against a private copy of `continuousCohomology`, not the Mathlib module
-  its own upstreaming created, and five `sorry`s remain, three in the leaf `ResolutionMachine.lean`
-  and two inside `kerHomogeneousCochainsZeroEquiv`, on which its `H⁰` isomorphism depends. Layer
-  3's finite and discrete comparison should consume this work rebased onto the Mathlib API;
-  coordinate with the author rather than reproving it silently.
-- **kbuzzard/ClassFieldTheory**: entirely finite-group, discrete-module cohomology over Mathlib's
-  `groupCohomology`. Restriction (`rest`, with `δ`-naturality), **corestriction** (`coresNatTrans`,
-  `cores_res : rest ≫ cores = index • id`, and the Sylow-injectivity corollaries; Buzzard, Aaron
-  Liu, Yunzhou Xie), inflation, inflation-restriction (whose exactness still carries four
-  `sorry`s), Tate cohomology (since upstreamed: master has
-  `Mathlib/RepresentationTheory/Homological/TateCohomology/`), and Herbrand quotients. No cup
-  products and no profinite or continuous material. Layer 6's finite-level corestriction facts
-  should be convention-compatible with `cores_res`, so that a reader who knows one normalization
-  can read the other without translating.
-- **Tau Ceti code repository**: no cohomology and no profinite groups, so all of this is new work
-  there; the directory convention there mirrors Mathlib's tree, which the suggested home
-  follows.
-- **Zulip.** The design thread is
-  [#mathlib4 > recursive definition of Continuous Cohomology](https://leanprover-community.github.io/archive/stream/287929-mathlib4/topic/recursive.20definition.20of.20Continuous.20Cohomology.html)
-  (February 2025; Hill, Buzzard, Riou, Commelin): Hill proposes the iterated-coinduction
-  homogeneous model that Mathlib later adopted, over the continuous inhomogeneous alternative
-  (which breaks without joint continuity and, under coinduction, without local compactness) and
-  over Buzzard's colimit-over-finite-quotients suggestion (Hill: the right answer only for
-  profinite `G` with discrete `M`, which is this roadmap's Layer 4). **The acceptance condition
-  Joël Riou set there is Layer 3**: he is "very much ok" with the design provided the
-  formalization includes a comparison map to Amelia Livingston's complex that is a
-  quasi-isomorphism in the discrete case. A follow-up
-  thread,
-  [#mathlib4 > Understanding ContCohomology and TopRep](https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/Understanding.20ContCohomology.20and.20TopRep/with/611890095),
-  cited from PR #41539, carries the live functoriality-typing discussion; the public archive mirror
-  ends 2026-02-28, so it must be read logged in. Also relevant:
-  [#maths > C1 fields?](https://leanprover-community.github.io/archive/stream/116395-maths/topic/C1.20fields.3F.html)
-  (August 2025) asks for cohomological dimension (`cd ≤ 1` for C₁ fields) and confirms that nothing
-  upstream defines it;
-  [#mathlib4 > Universes restriction in Rep](https://leanprover-community.github.io/archive/stream/287929-mathlib4/topic/Universes.20restriction.20in.20Rep.html)
-  (January 2026) records that `Rep` forces `k` and `G` into one universe (Mathlib #33608), a live
-  constraint on every statement here that meets `Rep`; and Mathlib #31613 (non-abelian `H⁰` and
-  `H¹`, open) is neighboring discrete work. Zulip has no thread on cup products in group or
-  continuous cohomology, none on the cohomological transfer, and no condensed-against-discrete
-  decision thread for profinite Galois groups: the canonical-object decision was made in the
-  February 2025 thread, and the remaining gaps are open.
-
-## Appendix B: provenance and coordination
-
-These records state evidenced status as of the audit date at the head of Appendix A. "Not
-recorded" means that adaptation of source code is blocked until the revision, license and
-coordination fields are filled in; it does not mean permission is assumed. Consuming a public API,
-and independently implementing a mathematically specified theorem, are not adaptation and are not
-blocked by any of this; copying or translating source code is.
-
-| Project | Authors | Revision or PR | License | Overlap | Plan |
-|---|---|---|---|---|---|
-| Mathlib `ContCohomology` | Richard Hill, Andrew Yang, Edison Xie | #41144, #41309 merged; #41539, #41545 open | Apache-2.0 | canonical carrier, functoriality, restriction, inflation | consume the merged API, build the gaps here, do not fork |
-| FLT continuous cup product | Edison Xie | FLT #1098, merge commit `4a42f80d452a387960b458275478723dac893aae` | Apache-2.0 | the all-bidegree canonical cup | consume it, and build Layer 12's completion here, coordinating with the author |
-| `rmhi/ctsToDiscrete` | Richard Hill | `fb09713296926c981226d87d6635c9215c40454e` (2026-07-10) | **no LICENSE file at that revision** | continuous-to-discrete comparison | statement-shape audit only; no code transfer unless the author supplies licensing terms |
-| `kbuzzard/ClassFieldTheory` | Kevin Buzzard, Aaron Liu, Edison Xie | `ccc3323c6750abca25b49b35106f54eb3a398509` (2026-07-31) | Apache-2.0 | finite-group restriction, corestriction, exact sequences | align normalization, coordinate before touching the same objects |
-| `roed-math/gq2-lean` | roed-math contributors | `d0714a7c431b64e18c422fb16cb5e93d79e5be25` | Apache-2.0 | explicit low-degree cohomology, cups, corestriction, Kummer, index-2 Evens | adapt with file-level credit, generalize, and prove the comparison to the canonical model |
-| `davidturturean/gq2-lean-turturean` | David Turturean | `e868b9e3b97b2e4891860155b00ac2aa78b25868` | GPL-3.0-or-later | independent low-degree continuous Galois cohomology | mathematical cross-check of statements only; **license incompatible with Apache-2.0, no code transfer** |
-
-No contact outcome with any upstream author is recorded in this repository, and no ownership
-agreement is recorded. The roadmap assigns the canonical carrier to Mathlib and claims only the
-explicit calculational model, the comparison theorems, and the material of Layers 4 to 13.
-
-**Authors to coordinate with** before integrating existing material, per the root README's
-coordination rule: Richard Hill (`rmhi`; Mathlib `ContCohomology`, PRs #41539 and #41545,
-`ctsToDiscrete`), Edison (Yunzhou) Xie (`Whysoserioushah`; Mathlib `ContCohomology`, FLT cup
-products, ClassFieldTheory), Andrew Yang (Mathlib `ContCohomology`), Amelia Livingston (the
-discrete `groupCohomology` API whose conventions this roadmap follows), Kevin Buzzard and Aaron Liu
-(ClassFieldTheory corestriction), and Joël Riou (whose quasi-isomorphism acceptance condition Layer
-3 discharges). One person, Xie, currently spans three of the four upstream sites: he is easy to
-coordinate with, but the coordination stops if he becomes unavailable. Register a Tau Ceti
-intention and post the
-layer plan on Zulip before Layer 3 or Layer 8 work starts, since those are the two places where
-these theorems and in-flight upstream code touch the same objects. On the demand side, FLT's
-planning documents name continuous cohomology and the Galois cohomology of local fields (blueprint
-`ch_bestiary` §§13.4-13.9) among its blocking definitions, so this roadmap together with
-[Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) supplies what they
-need.
-
-**Migration provenance.** The specifications above are the definition of done; the sources here
-are evidence of feasibility and a source of material to adapt. [roed-math/gq2-lean](https://github.com/roed-math/gq2-lean)
-contains sorry-free, axiom-free implementations of much of the explicit model, specialized in
-places to its own paper's needs: `GQ2/Cohomology.lean` (Layer 2: the complex, compatible pairs,
-restriction, inflation and coefficient maps, with conventions already identical to the pin's
-`IsCocycle₁/₂`); `GQ2/DiscreteModule.lean` (Layer 0's openness API); `GQ2/CupProduct.lean` and
-`GQ2/CupSymmetry.lean` (Layer 8: the `(1,1)`, `(0,2)` and `(2,0)` cups and characteristic-2
-symmetry); `GQ2/Corestriction.lean` and `GQ2/CorestrictionCohomology.lean` (Layer 6: the
-`Quotient.out` transversal calculus, `cor¹`, `cor²`, and `δ`-compatibility); `GQ2/EvensKahn.lean`
-(Layer 13: the index-2 graph cocycle and its expansion rules); `GQ2/Kummer.lean` and
-`GQ2/LocalKummer.lean` (Layer 9: the mod-2 Kummer cocycle and class map); `GQ2/Transgression.lean`
-(Layer 5: a cochain-level transgression); `GQ2/Shapiro/` (Layer 7, specialized to index 2).
-
-Migration is not transcription. Every one of those files is written for `ZMod 2` coefficients with
-trivial action, index-2 subgroups, `n = 2`, or open subgroups where this roadmap needs closed ones.
-The corestriction formulas in particular are correct there **because** the action is trivial, and
-the general formulas of §3 differ from them by the factor `t u •`; the Kummer material is written
-inside `AlgebraicClosure`, and this roadmap uses the separable closure. Migration means proving the
-general statement, with the existing file as evidence that the low-degree bookkeeping is
-manageable, then re-grounding on the canonical comparison. Credit the source in ported files. Its
-`docs/cts-cohomology-gap.md` is the earlier gap analysis that Appendix A updates.
+The dated record of what exists outside this roadmap, upstream and in neighboring repositories,
+together with the licence and coordination table for the sources it draws on, is in
+[`PROVENANCE.md`](PROVENANCE.md). That file is **not** normative: it is a snapshot, it goes out of
+date, and no milestone above depends on anything recorded there.
