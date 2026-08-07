@@ -1412,10 +1412,9 @@ cyclic, subgroup of `(ℤ/2)²`: the ramified primes `13` and `17` are each a sq
 so both have residue degree `1`; the unramified decomposition groups are cyclic of order at most
 `2`; and both infinite places split. Every local degree `[L_w : ℚ_v]` is therefore at most `2`. For
 `a ∈ ℚˣ` the norm from a local extension of degree at most `2` is `a` or `a²`. Every rational
-square is therefore a local norm everywhere in this extension. The example is sharper than it looks.
-`4` and
-`9` are global norms from `L`, so being a square is not the point, and `5` itself is not even a
-local norm at `5`.
+square is therefore a local norm everywhere in this extension. The example is sharper than it looks:
+`4` and `9` are global norms from `L`, so being a square is not the point, and `5` itself is not
+even a local norm at `5`.
 *Source.* Cassels–Fröhlich Exercise 5.3, p. 360, quoted in Milne CFT VIII §3.
 
 **W7. The Hilbert class field of `ℚ(√−5)`** (Layers 8, 10C). `h = 2` and `H = ℚ(√−5, i)`, which is
