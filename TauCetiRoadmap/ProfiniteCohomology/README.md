@@ -376,6 +376,24 @@ of this roadmap; or a named layer of another merged roadmap. Nothing else may ap
 particular a branch, an open pull request, a future toolchain pin, an outside repository and an
 unmerged roadmap are all excluded, and no milestone below depends on one.
 
+Two further conventions apply throughout, and a milestone that does not meet them is not finished.
+
+**Every new object carries its basic API.** Introducing an object is not a contribution until it
+is usable, so each one is accompanied by: its constructors; at least one worked example computed
+by hand; its morphisms, with whatever algebraic structure they carry; its functoriality in every
+argument; the lemmas comparing it with the neighboring description of the same thing; the
+naturality squares of every map into and out of it; the degenerate cases, computed rather than
+excluded; and the interfaces its consumers name. Layers below record this as an **API** line,
+which lists what those eight headings mean for that particular object; the headings themselves are
+not repeated.
+
+**Every hard theorem carries its source and its hypotheses.** For each theorem that is not
+routine, record the exact citation (author, work, numbered item), the hypotheses actually needed
+rather than the hypotheses convenient to carry, and, where one exists, a nearby statement that is
+false, with the counterexample that kills it. The false neighbor is the part that saves time: it
+is what stops a contributor from proving a more general statement that is not true. Layers below
+record this as a **Source** line.
+
 ### Layer 0: discrete modules and continuous sections
 
 **Prerequisites.** Mathlib: `continuousSMul_iff_stabilizer_isOpen`, `stabilizer_isOpen`,
@@ -452,8 +470,8 @@ version later is a rename and a deletion.
   `map` is additive in `f`. The pin proves the corresponding facts for `invariants` and for the
   cochain functors; these are the same statements one level up.
 
-**Basic API for the carrier.** Constructors: `TopRep.of` from an unbundled continuous
-representation, and the discrete case through the dictionary above. Examples: the trivial
+**API** for the carrier. Constructors: `TopRep.of` from an unbundled continuous
+representation, and the discrete case through the dictionary above. Worked example: the trivial
 representation, `ℤ` and `ZMod n` with trivial action, `(Kˢ)ˣ` for Layer 9. Morphisms: the
 intertwining maps, with their additive and `R`-linear structure. Functoriality: `map` above, in
 both arguments. Comparison lemmas: Layer 3. Naturality: of `map` in `X` and in `Y`, and of the
@@ -463,6 +481,23 @@ against this layer and against nothing else.
 
 ⚠ Do not restate the carrier. If a milestone below needs a property of `continuousCohomology`
 that Mathlib already proves, cite it; this layer adds only what the pin is missing.
+
+**API** for `M^U`. Constructors: `Invariants U M` as an additive subgroup of `M`, its `G`-action
+for normal `U`, and the descent of that action to `G ⧸ U`. Worked example: for `M = ZMod n` with
+the trivial action every `M^U` is `M`, and `((Kˢ)ˣ)^{G_K} = Kˣ` in Layer 9. Morphisms: the
+inclusions `M^U ↪ M^V` for `V ≤ U` and `M^U ↪ M`, both additive and both equivariant in the sense
+Layer 4 needs. Functoriality: in `M` along equivariant continuous maps, and in `U` along
+inclusions. Comparison: with Mathlib's `Rep.quotientToInvariants` under Layer 1's dictionary.
+Naturality: of both inclusions in `M`. Edge cases: `U = ⊥` gives `M`, `U = G` gives `M^G`, and
+`M = 0` gives `0`. Consumers: Layer 4's finite-quotient system, Layer 5's inflation, Layer 11's
+dévissage.
+
+**Source** for the continuous section. Ribes-Zalesskii, *Profinite Groups*, Prop. 2.2.2. The
+hypotheses are that `G` is profinite and `H` is closed, and neither is decoration: the projection
+`ℝ → ℝ ⧸ ℤ` onto the circle has no continuous section at all, so the theorem is about profinite
+groups and not about topological groups. The false neighbor to avoid is the same statement with a
+*homomorphic* section, which already fails for `ℤ_p → ℤ ⧸ p`, since a homomorphism from a finite
+group to a torsion-free group is trivial.
 
 ### Layer 2: the explicit low-degree complex and its functoriality
 
@@ -489,6 +524,23 @@ that Mathlib already proves, cite it; this layer adds only what the pin is missi
   not well defined, and Layer 5's five-term sequence needs that action.
   ⚠ The degree-2 homotopy has many terms and is easy to get wrong. Write it once for the
   compatible-pair form and derive the degree-1 case, rather than proving the two separately.
+
+**API** for the explicit complex. Constructors: `C¹`, `C²` as subgroups of the function spaces,
+`Z¹`, `Z²` as their intersections with the kernels, `B¹`, `B²` as the images of the differentials,
+and `H⁰`, `H¹`, `H²` as fixed in §3. Worked examples: `H¹(ℤ_p, ℤ/pᵏ) ≅ ℤ/pᵏ` and `H¹(ℤ_p, ℤ) = 0`,
+both in `Suggested.lean`, and both true only because of continuity. Morphisms: the compatible-pair
+pullback, with its additive structure. Functoriality: in the group and in the coefficients
+separately, with the composition laws, and the three named instances. Comparison: Layer 3.
+Naturality: of `d⁰`, `d¹`, `d²` and of the quotient maps `Z¹ ↠ H¹`, `Z² ↠ H²`, in compatible
+pairs. Edge cases: the trivial group, where `H⁰ = M` and `H¹ = H² = 0`; the trivial action, where
+`B¹ = ⊥` and `H¹` is the continuous homomorphisms; and `M = 0`. Consumers: every later layer
+except 1.
+
+**Source** for the triviality of inner automorphisms. Milne, *Arithmetic Duality Theorems*,
+Prop. 0.15. The hypothesis is that the automorphism is inner in `G` itself; the false neighbor is
+that an automorphism of `G` acting trivially on `Hⁱ` must be inner, which is not so, and the
+statement one actually wants downstream is the induced `G ⧸ N`-action on `Hⁱ(N, M)`, which needs
+nothing beyond the inner case.
 
 ### Layer 3: the comparison isomorphisms
 
@@ -542,6 +594,15 @@ that is a quasi-isomorphism in the discrete case.
   the explicit cups of Layer 8 to Layer 12's graded cup. Each operation gets exactly one
   transport lemma, carrying the same profiniteness hypotheses as the comparison itself.
 
+**Source** for the inhomogeneous-against-canonical comparison. The chain-level correspondence is
+classical and is displayed above; what has to be watched is the hypothesis. `ContinuousMap.curry`
+needs nothing, `ContinuousMap.uncurry` needs `[LocallyCompactSpace Y]`, and `Homeomorph.curry`
+needs local compactness of both factors, so the comparison is stated for profinite `G`, which is
+compact Hausdorff. The false neighbor is the same comparison for an arbitrary topological group:
+the canonical model is defined there, the inhomogeneous one is defined there, and the map between
+them is not an isomorphism, which is the reason Mathlib's own module documentation lists the
+`n`-ary description as a TODO restricted to locally compact groups.
+
 ### Layer 4: the finite-quotient colimit description
 
 **Prerequisites.** Mathlib: `OpenNormalSubgroup`, `ProfiniteGrp.toFiniteQuotientFunctor`,
@@ -586,6 +647,24 @@ Ribes-Zalesskii Cor. 6.5.6(a), Koch Thm. 3.16; Serre, *Local Fields* X §3 takes
   groups, which Layer 10's torsion corollary uses.
 - **All degrees.** The same theorem against the canonical object, in every degree, is a Layer 10
   milestone and is stated there.
+
+**API** for the finite-quotient system. Constructors: the six milestones above, together with the
+colimit cocone. Worked example: `Hⁱ(Ẑ, -)` in §6, where the tower is the system over `nẐ` and the
+colimit is visible. Morphisms: the transition maps, and the comparison maps to `Hⁱ(G, M)`.
+Functoriality: the two laws above in `U`, and functoriality of the whole system in `M`.
+Comparison: with `ProfiniteGrp.toFiniteQuotientFunctor`, whose arrows go the other way, and in all
+degrees with Layer 10. Naturality: of the comparison map in `M` and in `U`. Edge cases: `U = G`,
+where the system is `Hⁱ(1, M^G)`; finite `G`, where the system is eventually constant; and finite
+`M`, where the tower stabilizes levelwise. Consumers: Layer 9's Hilbert 90, Layer 10's all-degree
+colimit, Layer 11's dévissage.
+
+**Source** for the colimit theorem. NSW (1.2.5); Ribes-Zalesskii Cor. 6.5.6(a); Koch Thm. 3.16;
+Serre, *Local Fields* X §3 takes it as the definition. The hypotheses are that `G` is profinite
+and `M` is discrete. Discreteness is essential and compactness is essential in degree `2`
+separately from total disconnectedness: the descent of both variables at once is uniform local
+constancy on `G × G`. The false neighbor is the same statement for a totally disconnected group
+that is not compact, where a continuous 2-cocycle need not be constant on a single
+`gU × hU`.
 
 ### Layer 5: exact sequences
 
@@ -632,6 +711,21 @@ section, and Layer 2.
   The presentation theory of
   the Pro-p Groups roadmap is built from this
   sequence; its `𝔽₂` instance, with `N` a Frattini-type kernel, is the case that roadmap consumes.
+
+**Source** for the exactness of the cochain sequences. NSW (1.3.2) for the long exact sequence.
+The hypothesis that cannot be relaxed is that the coefficients are **discrete**: a continuous
+cochain into a discrete `C` is locally constant, so composing with any set-theoretic section of
+`B → C` is still continuous. The false neighbor is the same statement for general topological
+coefficient modules, where no such section exists and there is no long exact sequence; do not
+state this layer beyond discrete coefficients.
+
+**Source** for the five-term sequence. NSW (1.6.7); Ribes-Zalesskii Cor. 7.2.5(a); Koch Thm. 3.14
+gives the degree-`n` form under vanishing below `n`, which Layer 11's dévissage uses. The
+hypotheses are `G` profinite and `N` closed normal. Profiniteness is genuine here and not a
+convenience: the transgression is defined by lifting through a continuous section of `G → G ⧸ N`,
+which Layer 0 supplies and which does not exist in general. The false neighbor is the five-term
+sequence for an arbitrary topological group; the three-term inflation-restriction sequence keeps
+that wider generality and the five-term one does not.
 
 ### Layer 6: change of groups
 
@@ -680,6 +774,23 @@ through the transversal formulas of §3.
   which is NSW's usage, say in the docstring which of the two is meant, and never abbreviate it
   to "transfer", since Layer 13's norm is the *multiplicative* transfer.
 
+**API** for corestriction. Constructors: `cor⁰_t`, `cor¹_t`, `cor²_t` for a variable transversal,
+and the public `cor` at `t = Quotient.out`. Worked example: `cor ∘ res` on `H¹(Ẑ, ℤ/m)` for the
+open subgroup `nẐ`, computed on explicit cocycles, once with the trivial action and once with a
+nontrivial one so that the factor `t u •` is tested. Morphisms: each `cor` is additive.
+Functoriality: naturality in coefficient maps, transitivity in the subgroup, and compatibility
+with connecting maps. Comparison: independence of the transversal, stated as an explicit
+coboundary identity; and agreement with Layer 10's all-degree corestriction. Naturality: of `cor`
+in `M`. Edge cases: `U = G`, where `cor` is the identity; index `1`; and the trivial action, where
+the representative factor disappears. Consumers: Layer 8's projection formula, Layer 9's norm
+compatibility, Layer 13's identity 2.
+
+**Source** for `cor ∘ res`. NSW (1.5.7); Serre, *Local Fields* VII §7 Prop. 6; Koch Thm. 3.10. The
+hypothesis is that `U` is open, or of finite index if `G` is not compact. The statement is
+`cor ∘ res = (G : U) • id` **on cohomology**; the false neighbor is the same identity on cochains,
+which is false in degrees `1` and `2`, where the two sides differ by the explicit coboundary
+recorded in §3. Never state it as a cochain identity in positive degrees.
+
 ### Layer 7: coinduced modules and Shapiro's lemma
 
 **Prerequisites.** Mathlib: `Representation.coind`, `Rep.indCoindIso`,
@@ -719,6 +830,23 @@ decided up front: closed, not merely open, since the trivial subgroup is the acy
   acyclic module `M ↪ Coind_1^G M`; hence dimension shifting `Hⁱ⁺¹(G, M) ≅ Hⁱ(G, Coind_1^G M ⧸ M)`
   in the range where both sides are defined. The statement in all positive degrees, which Layer 11
   runs its induction on, is a Layer 10 milestone.
+
+**API** for `Coind_H^G A`. Constructors: the locally constant `H`-equivariant maps `G → A` with
+the right-translation action. Worked example: `Coind_1^G A`, the locally constant maps `G → A`,
+which is the acyclic module of the dimension-shifting argument. Morphisms: functoriality in `A`,
+and the counit `Coind_H^G A → A` given by evaluation at `1`. Functoriality: exactness in `A`.
+Comparison: with `Ind_H^G A` for open `H`, and with the algebraic coinduction of
+`RepresentationTheory/InductionRestriction` for open `H`. Naturality: of the Shapiro isomorphism
+in `A`, and its compatibility with restriction and, for open intermediate subgroups,
+corestriction. Edge cases: `H = G`, where `Coind` is the identity; `H = 1`, which is the
+acyclicity case; and `A = 0`. Consumers: Layer 10's dimension shifting, Layer 11's dévissage.
+
+**Source** for Shapiro's lemma. NSW (1.6.4), with the p. 61 footnote, since NSW writes `Ind` for
+what is here the coinduced functor; Ribes-Zalesskii Thm. 6.10.5, which uses `Coind` by that name;
+Koch Thm. 3.9. The hypotheses are `G` profinite and `H` closed; openness is not needed, and the
+trivial subgroup is the case the acyclicity argument runs on. The false neighbor is
+`Ind_H^G A ≅ Coind_H^G A` for closed `H`: that isomorphism needs a finite transversal and fails
+for a closed subgroup of infinite index, so only the coinduced form is asserted there.
 
 ### Layer 8: cup products in low degrees
 
@@ -794,6 +922,23 @@ On the explicit model, relative to an equivariant pairing as fixed in §3. Discr
   commutativity and associativity in the low-degree range and Layer 12 supplies them in all
   bidegrees, so the transport lemma is what makes the two agree where both are defined.
 
+**API** for the cup products. Constructors: the six cochain formulas of §3, one per shape. Worked
+example: the `(1,1)` square on `C₂` with `𝔽₂` coefficients is the nontrivial class of
+`H²(C₂, 𝔽₂)`, and its Galois form `[-1] ⌣ [-1] ≠ 0` in `H²(G_ℝ, 𝔽₂)`; both are in
+`Suggested.lean`. Morphisms: biadditivity in each argument, by construction. Functoriality:
+naturality in the pairing `μ`, and the restriction, inflation and projection compatibilities.
+Comparison: with Layer 12's graded cup, under Layer 3. Naturality: the connecting-map identities,
+stated as typed diagrams with their coefficient sequences as inputs. Edge cases: `(0,0)`, where
+the cup is the pairing itself; a degenerate pairing, where every cup vanishes, which is what the
+`C₂` example rules out. Consumers: Layer 9's mod-2 pairing, Layer 13's identity 1, and the duality
+pairings the Local Fields roadmap consumes.
+
+**Source** for graded commutativity. NSW (1.4.4); Brown, *Cohomology of Groups*, V (3.6). The
+identity `a ⌣_μ b = (-1)^{pq} (b ⌣_{μᵒᵖ} a)` holds **on cohomology classes**. The false neighbor
+is the same identity on cochains: it is true for `(0,q)` against `(q,0)`, because a degree-0 class
+is invariant, and false for `(1,1)`, where the two cochains differ by the coboundary of an
+explicit 1-cochain. State the `(0,q)` case at cochain level and the `(1,1)` case on classes.
+
 ### Layer 9: the Galois interface: Hilbert 90 and Kummer theory
 
 **Prerequisites.** Mathlib: `SeparableClosure`, `separableClosure.isGalois`,
@@ -868,6 +1013,24 @@ layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
   ⚠ Do not assume `CharZero`. The hypothesis is `IsUnit (n : K)` with `[NeZero n]`, so finite
   fields of odd characteristic remain in scope for `n = 2`.
 
+**API** for `μₙ` and the power classes. Constructors: `μₙ` as the `n`-torsion subgroup of `(Kˢ)ˣ`,
+`(Kˣ)ⁿ` as the range of `powMonoidHom n`, and `Kˣ ⧸ (Kˣ)ⁿ`. Worked example: `n = 2` over `ℚ`, where
+`H¹(G_ℚ, 𝔽₂) ≅ ℚˣ ⧸ (ℚˣ)²` and `[a]` is the explicit square-root cocycle. Morphisms: the Kummer
+map `Kˣ → H¹(G_K, μₙ)` and the isomorphism it induces. Functoriality: the two commuting squares in
+the field, for a finite separable `L/K` with a chosen embedding, one for restriction and one for
+the norm. Comparison: with Mathlib's `autEquivRootsOfUnity` at the finite level. Naturality: of the
+connecting map in the short exact sequence. Edge cases: `n = 1`; `μₙ ⊆ K`, where the action is
+trivial and the isomorphism is with `Hom_cont(G_K, μₙ)`; and `K` separably closed, where both sides
+vanish. Consumers: the Local Fields and Quadratic Form Invariants roadmaps.
+
+**Source** for the Kummer isomorphism. NSW (6.2.1) and the display after it, with (6.2.2) for the
+pairing form. The hypotheses are `[NeZero n]` and `IsUnit (n : K)`. Two false neighbors, both
+easy to write by accident. First, the same statement over the algebraic closure: for imperfect
+`K` the fixed field of `Aut(K̄/K)` is the purely inseparable closure, so the invariants of `(K̄)ˣ`
+are not `Kˣ` and the left-hand term is wrong; this is why the layer uses `SeparableClosure K`
+throughout. Second, `CharZero K` in place of `IsUnit (n : K)`, which needlessly excludes the finite
+fields of odd characteristic that the `n = 2` applications run on.
+
 ### Layer 10: continuous cohomology in all degrees
 
 **Prerequisites.** Mathlib: `continuousCohomology`. This roadmap: Layers 1, 3, 4, 6 and 7.
@@ -903,6 +1066,20 @@ against the canonical object of Layer 1 throughout.
   `ℚ`-vector space. The `p`-primary refinement for pro-`p` groups belongs to
   the Pro-p Groups roadmap; state here the general
   torsion statement and the finite-level annihilation the orders of the `G ⧸ U` provide.
+
+**API** for the all-degree package. Constructors: Layer 1's carrier, with the operations of this
+layer. Worked example: `Hⁱ(Ẑ, -)` in every degree, which is where the torsion corollary is first
+visible. Morphisms: restriction, inflation, coefficient maps, conjugation and corestriction, in
+every degree. Functoriality: the composition laws for each, and the long exact sequence.
+Comparison: agreement in degrees `0, 1, 2` with Layers 2, 4, 6 and 7, one lemma per operation.
+Naturality: of the connecting maps and of the colimit isomorphism. Edge cases: `n = 0`, which is
+Layer 1's `continuousCohomologyZeroIso`; the trivial group; and `M` a `ℚ`-vector space, where
+every positive degree vanishes. Consumers: Layer 11 in full, and Layer 12 for the graded product.
+
+**Source** for the torsion statement. NSW (1.6.1); Brown III (10.1) is the discrete model. The
+hypotheses are `G` profinite and `i ≥ 1`. The false neighbor is the same statement in degree `0`,
+where `H⁰(G, M) = M^G` is not torsion in general, and the `p`-primary refinement for pro-`p`
+groups, which is the Pro-p Groups roadmap's and not this one's.
 
 ### Layer 11: cohomological dimension
 
@@ -971,6 +1148,22 @@ of August 2025 asked for it and left it open. This layer rests on Layer 10.
   the profinite Sylow theory it consumes; this layer supplies the definitions, the monotonicity,
   the prime-to-`p` equality, and Layer 10's all-degree tools that the Sylow argument uses.
 
+**API** for cohomological dimension. Constructors: the two predicates and the three invariants
+above, through `leastENatBound`. Worked example: `cd_p Ẑ = 1` for every `p`, with `H²(Ẑ, M) = 0`
+for finite `M`, in §6. Morphisms: none; these are order-valued invariants, and the content is in
+the inequalities. Functoriality: monotonicity in the closed subgroup, and equality for an open
+subgroup of index prime to `p`. Comparison: the equivalence of `CohomologicalDimensionLE` with the
+`p`-primary-component interface. Naturality: not applicable. Edge cases: `cd_p G = 0`, computed;
+`cd_p G = ⊤`, where `⊤ + 1 = ⊤` and the inequality still has to hold; and `p` not dividing the
+order of any `G ⧸ U`. Consumers: the Pro-p Groups and Local Fields roadmaps.
+
+**Source** for dévissage. NSW (3.3.2); Koch Def. 5.1 takes the pro-`p` case as the definition. The
+reduction is to **finite** discrete `p`-primary modules and then to the finite simple ones, and
+the finiteness is what the argument needs; the false neighbor is the reduction to arbitrary
+discrete `p`-primary modules, which is not a reduction at all, since that is the definition. The
+inequality `cd_p G ≤ scd_p G ≤ cd_p G + 1` is NSW (3.3.3); its false neighbor is equality, which
+fails.
+
 ### Layer 12: the graded cup product in all degrees
 
 **Prerequisites.** Mathlib: `continuousCohomology`, `CochainComplex`. This roadmap:
@@ -992,6 +1185,14 @@ so needs the product in every bidegree. Everything here is stated against Layer 
 - Compatibility of the all-bidegree cup with restriction, inflation, and Layer 10's all-degree
   corestriction (the projection formula in all bidegrees).
 - Agreement with Layer 8's six explicit shapes under Layer 3's comparison.
+
+**API** for the graded product. Constructors: the cup in each bidegree, and the unit. Worked
+example: `H^•(C₂, 𝔽₂) = 𝔽₂[x]` with `x` in degree `1`, which the Layer 8 `C₂` computation is the
+first case of. Morphisms: biadditivity in each argument. Functoriality: restriction, inflation and
+the projection formula in all bidegrees. Comparison: agreement with Layer 8's six shapes under
+Layer 3. Naturality: in the pairing, and in the coefficient short exact sequences. Edge cases:
+bidegree `(0,0)`; the characteristic-2 specialization, where all signs are `1`. Consumers:
+Layer 13, which needs the degree multiplication `q ↦ l * q` to be typeable.
 
 ### Layer 13: the Evens norm
 
@@ -1082,6 +1283,24 @@ the four characterizing identities of the explicit index-2 form, in degrees `1` 
 milestones of the general construction are this roadmap's own completion of the theory, and that
 roadmap needs none of them.
 
+**API** for the Evens norm. Constructors: the explicit index-2 graph cocycle `ν_α`, and the
+general `N_U^G` through the monomial homomorphism. Worked example: `G = C₄ ⊇ U = C₂` with `α ≠ 0`,
+where `N^{Ev}(α) ≠ 0` in `H²(C₄, 𝔽₂)` and the extension it classifies is `C₈`; both halves are in
+`Suggested.lean`. Morphisms: none, since `N_U^G` is a plain function and not additive; its failure
+of additivity is identity 2. Functoriality: transitivity in the subgroup, the restriction and
+double-coset formula, and compatibility with inflation. Comparison: the specialization of the
+general construction to index 2 and degree 1 agrees with the explicit graph cocycle, which is
+milestone 10. Naturality: multiplicativity `N(x ⌣ y) = N x ⌣ N y`. Edge cases: index 1, where
+`N` is the identity; `α = 0`; and degree 0. Consumers: the Quadratic Form Invariants roadmap,
+which uses the four identities of the explicit form and nothing else.
+
+**Source** for the expansion. Evens, Trans. AMS 108 (1963), Thm. 1 (p. 63), with §§2-5 for the
+construction and §6 Props. 1-4 for transitivity, double cosets and multiplicativity; Kozlowski,
+Proc. AMS 91 (1984), Lemma 2.4 for the index-2 expansion in low degrees. The hypothesis in Evens'
+Thm. 1 is that `χ` has **even** degree, the parity coming from signs over a general commutative
+`G`-ring. The false neighbor is that expansion in odd degree over a general ring. Over `𝔽₂` with
+trivial action there are no signs, the construction gives a norm in every degree, and that
+all-degree mod-2 form is the one built here.
 ---
 
 ## 6. Worked examples (acceptance criteria)
