@@ -50,7 +50,10 @@ around it, and none of them is a prerequisite of any milestone.
   and no Poisson-summation row, because that roadmap does not consume Poisson summation;
   milestone 2.6 stays a target of this roadmap with no row. The carrier of the crossing is
   that roadmap's bundled analytic lattice. The two copies of the block are byte-identical
-  again as of this edit.
+  again as of this edit. The same settlement fixes the theta division: this roadmap owns
+  the real-parameter Gaussian theta, its transformation, and Poisson summation; the
+  holomorphic theta on the upper half-plane and its modular transformation law are that
+  roadmap's Layer 8. Neither roadmap states the other's half.
 
 ## What is in motion elsewhere
 
