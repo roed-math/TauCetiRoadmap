@@ -41,11 +41,11 @@ rather than a rewrite. Nothing here is held back for upstream, and nothing here 
   Supplies `orthogonalGroup`, `specialOrthogonalGroup`, `ιRangeEquiv`, `pinToOrthogonal`,
   `spinToSpecialOrthogonal`, the double-cover kernel, the Clifford structure theorem over an
   algebraically closed field, and the low-rank exceptional isomorphisms over an algebraically
-  closed field. **Owed there:** an edit recording that the general-field spinor-norm image theorem
-  is `OrthogonalSpinGroups`', so that the two documents do not both claim it. Its Layer 2 currently
-  says the general-field result should be stated as the spinor-norm exact sequence, while its
-  standing conventions say "if at all"; either way the ownership sentence belongs there and the
-  theorem belongs here.
+  closed field. Its Layer 2 and its standing conventions used to say that the general-field result
+  should be stated as the spinor-norm exact sequence "if at all", which left the theorem claimed in
+  two places; both now record that the general-field spinor norm and the image of `Spin → SO` are
+  `OrthogonalSpinGroups`'. That edit is in this pull request, and it is the only change it makes to
+  an accepted roadmap.
 - **Quadratic Form Invariants.** Supplies reflections, Cartan–Dieudonné, Witt theory, orthogonal
   bases, the square-class calculus with its multiplicative avatar, and the local classification.
   Its reflection formula and this roadmap's agree exactly.
@@ -57,12 +57,11 @@ rather than a rewrite. Nothing here is held back for upstream, and nothing here 
   Layer 3A specializes. **Owed there, if its accepted text does not already expose them:** the
   point-functor, semisimplicity, simple-connectedness and central-isogeny interfaces Layer 3A names.
   Where it does not, Layer 3A owns the specialized versions for `O_Q`, `SO_Q` and `Spin_Q`.
-- **Integral Lattices.** The consumer. **Owed there:** its dependency table should gain a row for
-  Layer 0C, the identification of the automorphism group of a symmetric bilinear form with that of
-  its quadratic form, which is what places its bilinear-first `O(L)` inside the quadratic-form
-  group `O(V_p)` its `K_p(L)` is defined in; and its consume bullet should attribute `O(Q)`,
-  `SO(Q)` and the `Spin → SO` map to Spin Representations and Cartan–Dieudonné to Quadratic Form
-  Invariants, rather than to this roadmap.
+- **Integral Lattices.** The consumer, and nothing is owed there. Its contract table carries the
+  two Layer 0C rows, `orthogonalGroup Q ≃* O(Q.polarBilin)` and `O(β) →* O(β.baseChange S)`, which
+  are what place its bilinear-first `O(L)` inside the quadratic-form group `O(V_p)` its `K_p(L)` is
+  defined in, and its consume table attributes `O(Q)`, `SO(Q)` and the `Spin → SO` map to Spin
+  Representations and Cartan–Dieudonné to Quadratic Form Invariants.
 
 ## Merge order
 
