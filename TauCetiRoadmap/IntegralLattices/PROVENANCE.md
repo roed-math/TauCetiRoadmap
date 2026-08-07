@@ -104,6 +104,14 @@ outside the roadmap and is recorded here.
   value follows from the order in which records were added. Milestone 9A gives it no
   mathematical meaning.
 
+## The theta division with the L-functions roadmap
+
+Settled 2026-08-07, jointly with that roadmap. The L-functions roadmap owns the
+real-parameter Gaussian theta and its transformation, with Poisson summation; those cross
+through the shared layer-DAG table. This roadmap owns the holomorphic theta on the upper
+half-plane, its agreement with the real-parameter theta on the imaginary axis, and its
+modular transformation law, in Layer 8. Neither roadmap states the other's half.
+
 ## Consumers
 
 The LMFDB lattice section and the K3 surface pipeline motivated the layer boundaries. They
