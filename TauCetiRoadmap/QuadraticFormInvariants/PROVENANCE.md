@@ -171,6 +171,7 @@ inspected on 2026-08-07.
 | `mem_unitFiltration_zero` | Local Fields `mem_unitFiltration_zero` |
 | `mem_unitFiltration_succ` | Local Fields `mem_unitFiltration_succ_valuation` |
 | `unitFiltration_antitone` | Local Fields `unitFiltration_antitone` |
+| `hilbertSymbol` (Layer 6C) | the same norm-criterion symbol; Local Fields Layer 8C owns the identification with the Tate-duality pairing, `hilbertSymbol_eq_tateDuality_pairing`, and this roadmap does not restate it |
 | `H1`, `H2` | Profinite Cohomology `H1`, `H2`, with `explicitH1IsoContinuousCohomology` and `explicitH2IsoContinuousCohomology` |
 | `cup11` | Profinite Cohomology `cup11` |
 | `kummerIso` | Profinite Cohomology `kummerIso` at `n = 2` |
