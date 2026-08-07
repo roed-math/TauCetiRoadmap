@@ -34,7 +34,7 @@ The scope is bounded, and the boundary is part of the specification.
 - **One general inverse-Galois theorem:** `Sₙ` is a Galois group over `ℚ` for every `n`, by
   the three-prime construction, whose prerequisites are all named in Layer 9.
 
-Outside this roadmap, and not deferred milestones of it:
+Outside this roadmap, and not milestones of it:
 
 - Hilbert irreducibility, thin sets, and specialization from `ℚ(t)` to `ℚ`. A separate
   roadmap could take these on; none exists yet, and nothing here depends on one.
@@ -69,21 +69,20 @@ and any future O'Nan–Scott work.
 This roadmap is part of the LMFDB-background family (2026-07-30) and serves the LMFDB section
 `galois_groups` directly.
 
-**It consumes [Number Field Arithmetic PR #9](https://github.com/roed-math/TauCetiRoadmap/pull/9).**
-Layer 5 rests on that roadmap's Layer-3 polynomial-side Dedekind theorem: for monic
-`f : ℤ[X]` and a prime not dividing `disc f`, the factorization type of `f mod p` is the
-cycle type of an arithmetic Frobenius element acting on the roots. That is a real dependency,
-not a formality. This roadmap pins the statement's shape below and in `Suggested.lean` so the
-interface can be discussed now, but a `sorry` in `Suggested.lean` records an intention and
-does not discharge a dependency: **PR #10 should merge after PR #9**, at which point the
-citation here is replaced by the supplier's final declaration name. PR #9's `Suggested.lean`
-already carries this statement, marked as the interface this roadmap consumes, so the two
-sides agree today on everything except the name. Frobenius *construction* (decomposition
-groups, `IsArithFrobAt`, ramification) is Number Field Arithmetic's throughout; we own only
-the polynomial-side packaging.
+**It consumes the
+[Number Field Arithmetic roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/9),
+Layer 3.** Layer 5 rests on that roadmap's polynomial-side Dedekind theorem: for monic
+`f : ℤ[X]` and a prime not dividing `disc f`, the factorization type of `f mod p` is the cycle
+type of an arithmetic Frobenius element acting on the roots. That is a real dependency, not a
+formality, and it is the only one: the statement is the *only* thing taken from there, and
+that roadmap's `Suggested.lean` carries it in the same shape, marked as the interface this one
+consumes. The shape is pinned again below and in `Suggested.lean` here, so that the layers
+above it are precise; the theorem itself belongs to the supplier and is cited by name once it
+exists. Frobenius *construction* (decomposition groups, `IsArithFrobAt`, ramification) is
+Number Field Arithmetic's throughout; we own only the polynomial-side packaging.
 
-**It supplies [Modular Forms](../ModularForms/README.md), Layer 9.** That roadmap is merged,
-and its Layer 9 asks for exactly the interface built here: a Galois-group certificate checker
+**It supplies [Modular Forms](../ModularForms/README.md), Layer 9.** Its Layer 9 asks for
+exactly the interface built here: a Galois-group certificate checker
 rather than a search, using Dedekind/Frobenius cycle-type certificates and the discriminant
 square test, enough to decide the small-degree patterns it needs. Its weight-60 example needs
 one quintic certified as `S₅`; Layer 8 proves the general theorem that certificate rests on.
@@ -434,10 +433,11 @@ fields. Consume the Chambert-Loir library wholesale; build:
   wreath product with the restricted permutation wreath product along the image `Q'` of the
   regular representation of `Q`. Order formulas, for `ι` and `D` finite:
   `Nat.card ((ι → D) ⋊ Q) = Nat.card D ^ Nat.card ι * Nat.card Q`, and in particular
-  `Nat.card (WreathProduct D ι) = Nat.card D ^ Nat.card ι * (Nat.card ι)!`. **Coordinate
-  before building:** the `RegularWreathProduct` authors and Chambert-Loir's imprimitive
-  O'Nan–Scott TODO both border this file, and which of the variants should be primary is a
-  question for Zulip first.
+  `Nat.card (WreathProduct D ι) = Nat.card D ^ Nat.card ι * (Nat.card ι)!`. Two Mathlib files
+  border this one, `RegularWreathProduct.lean` and the imprimitive O'Nan–Scott case that
+  `Perm/MaximalSubgroups.lean` names as its next target; take the naming and the choice of
+  which variant is primary from them, so that a Mathlib version would replace this one by
+  deletion rather than by a rewrite.
 - **Imprimitivity gives a wreath embedding.** For a transitive action with a block `B` of size
   `l`, `1 < l < n`: the block system `{g • B}` has `m = n/l` members; the induced map
   `G →* Equiv.Perm (block system)` has kernel embedding into `∏ Perm(block)`; and `G` embeds
@@ -445,9 +445,9 @@ fields. Consume the Chambert-Loir library wholesale; build:
   `α ≃ (block system) × B`. This is the imprimitivity structure theorem, Dixon–Mortimer 2.6A.
 - **Jordan's prime-cycle theorem** (Wielandt 13.9): a primitive subgroup of `Sₙ` containing a
   `p`-cycle with `p` prime and `p + 3 ≤ n` contains `Aₙ`. Mathlib's `Jordan.lean` states it
-  verbatim as `proof_wanted alternatingGroup_le_of_isPreprimitive_of_isCycle_mem`. Offer the
-  proof upstream, since it discharges that `proof_wanted`, and consume it from here either
-  way.
+  verbatim as `proof_wanted alternatingGroup_le_of_isPreprimitive_of_isCycle_mem`. Prove it
+  here, in that statement's shape and under that name, so that the two agree if Mathlib ever
+  fills its own in.
 - **The recognition lemmas.** Each is a small named theorem, and together they settle every
   degree-`≤ 5` certificate and the `Sₙ` realization of Layer 9:
 
@@ -509,8 +509,9 @@ For irreducible separable `p` over `F` with a root `α` in `L = p.SplittingField
 
 ### Layer 3: the discriminant and the alternating group
 
-- **The root-product formula** (upstream is headed the same way; coordinate, see below): for
-  monic `f` of degree `n` splitting in `L` with roots `r : Fin n → L` listed with multiplicity,
+- **The root-product formula**, stated in the shape Mathlib's resultant TODO takes (see the
+  coordination section): for monic `f` of degree `n` splitting in `L` with roots
+  `r : Fin n → L` listed with multiplicity,
   `algebraMap R L f.discr = ∏_{i < j} (r i − r j)²`. Consequences to state alongside it: the
   product formula for `discr (f*g)` with its `resultant f g` cross term; **base change**
   `(f.map φ).discr = φ f.discr` for a ring homomorphism `φ`, in the degree-preserving case,
@@ -618,13 +619,10 @@ on that separation.
     is a sextic. Both facts are part of the `ResolventSpec` and are proved, not assumed. This
     is the exact invariant behind the classical resolvent sextic; the roadmap defines
     `resolventSextic` as the orbit resolvent of this specification, so the definition is
-    self-contained and needs no external table.
-  - *The closed coefficient formula, optional.* Dummit's paper gives `resolventSextic` for
-    `X⁵ + pX³ + qX² + rX + s` by an explicit formula in `p, q, r, s`. Transcribing it is a
-    convenience for computation, not a prerequisite: it enters the roadmap only as a lemma
-    stating that the transcribed expression equals the orbit resolvent above, to be proved when
-    the formula is transcribed. Nothing else depends on it, so the roadmap is not blocked on
-    access to the paper.
+    self-contained and needs no external table. Dummit's paper writes the same sextic as a
+    closed formula in the coefficients of `X⁵ + pX³ + qX² + rX + s`. That formula is a
+    computational shortcut for evaluating the resolvent, and this roadmap does not use it: the
+    orbit resolvent above is the definition, and every statement below is about it.
   - *The criterion.* For an irreducible separable quintic, `IsSolvable f.Gal` holds if and only
     if the image is conjugate into `F₂₀`, which by Layer 6's degree-5 classification is the
     statement that the label is `5T1`, `5T2` or `5T3`. Combined with the factorization theorem
@@ -759,13 +757,13 @@ and the list is not claimed to be exhaustive.
   claimed in these degrees, a certificate concludes `HasGaloisLabel f j` only by proving that
   the image is conjugate to `referenceSubgroup n j`. It may not conclude a label by ruling out
   the other listed references, since the list is not known here to be complete.
-- **Realizations.** The roadmap does *not* claim a certified polynomial for every
-  label in every degree up to 11: that claim needs a manifest of explicit polynomials, and
-  without one it is not a specification. What is retained is the set of labels the worked
-  examples and the Modular Forms certificate actually need. A per-label manifest is a natural
-  later addition, and the sources for it are the Klüners–Malle database and the LMFDB number-
-  field tables; it would have to record, per label, one monic integral polynomial and its
-  source identifier, under the same freezing discipline as the generator export.
+- **Realizations.** The roadmap does *not* claim a certified polynomial for every label in
+  every degree up to 11: that claim needs a manifest of explicit polynomials, and without one
+  it is not a specification. In scope are the labels the worked examples and the Modular Forms
+  certificate need, with their polynomials written out. A full per-label manifest is outside
+  this roadmap; a roadmap that wanted it would freeze one monic integral polynomial and a
+  source identifier per label from the Klüners–Malle database or the LMFDB number-field
+  tables, under the same discipline as the generator export.
 - **Siblings and subfields.** The LMFDB's "siblings" (other transitive actions of the same
   abstract group) and its "resolvents and subfields" column are, mathematically, actions on
   block systems (Layer 1) and on coset spaces of the reference subgroups. This roadmap proves
@@ -929,11 +927,11 @@ against the LMFDB field pages. Each one pins a specific layer.
 ## Ordering and parallelism
 
 Layer 1, which is pure group theory, and Layers 0 and 2, the polynomial dictionary, can start
-at once and independently of each other. Layer 3 needs Layer 0 and the resultant API, and the
-root-product formula should be coordinated upstream early, being Mathlib's own TODO. Layer 4
-needs Layers 0 to 3 and the symmetric-functions API. Layer 5's polynomial-side lemmas need
-Layer 3 for base change of the discriminant, and its main statement is consumed from Number
-Field Arithmetic, so that dependency should be settled before Layer 5 is scheduled. Layer 6
+at once and independently of each other. Layer 3 needs Layer 0 and the resultant API, and its
+root-product formula is worth doing early, in the shape Mathlib's own resultant TODO takes.
+Layer 4 needs Layers 0 to 3 and the symmetric-functions API. Layer 5's polynomial-side lemmas
+need Layer 3 for base change of the discriminant, and its main statement comes from Number
+Field Arithmetic. Layer 6
 needs Layers 1 and 2, and feeds its order-recognition lemmas back into Layer 1. Layer 7 needs
 Layers 1 and 6 and can land one degree at a time. Layer 8 needs Layers 3 to 7. Layer 9 needs
 only Layers 1 and 5, so it can land before Layers 6 to 8.
@@ -984,8 +982,8 @@ pass* are historical or contextual citations, not the grounding of any target.
 - D. S. Dummit, *Solving solvable quintics*, Math. Comp. 57 (1991) 387–401. The explicit
   coefficient formula for the resolvent sextic. *Not inspected for this pass*, and nothing
   depends on it: Layer 4 defines `resolventSextic` as the orbit resolvent of an invariant given
-  in full, and the closed formula enters only as an optional lemma to be added if and when the
-  formula is transcribed.
+  in full, and the closed formula is a way of evaluating that resolvent, not part of its
+  definition.
 - H. Cohen, *A Course in Computational Algebraic Number Theory*, GTM 138, Springer, 1993, §6.3.
   Resolvent algorithms and the decision trees in degrees up to 7. *Not inspected for this
   pass*; context for Layer 4, whose quartic and quintic statements are written out above.
@@ -996,8 +994,8 @@ pass* are historical or contextual citations, not the grounding of any target.
   Comput. 30 (2000) 653–674. The numerical and the modern algorithmic alternatives; context
   for why the resolvents here are exact and why the interface is a checker.
 - Klüners–Malle, number-field database, <https://galoisdb.math.upb.de/>. The source a per-label
-  polynomial manifest would be frozen from, should Layer 7's realization claim later be
-  widened.
+  polynomial manifest would be frozen from. Such a manifest is outside this roadmap, as Layer 7
+  records.
 - E. R. Berlekamp, *An analog of the discriminant over fields of characteristic two*, J. Algebra
   38 (1976) 315–317. Cited only to name what the characteristic-2 exclusion excludes.
 
@@ -1014,12 +1012,12 @@ pass* are historical or contextual citations, not the grounding of any target.
   Dieudonné and transvection series #33692, #33560, #33485, #33402. Two of our targets are his
   files' own TODOs, the Jordan prime-cycle theorem in `Jordan.lean` and the imprimitive
   O'Nan–Scott case in `Perm/MaximalSubgroups.lean`, both still open on master on 2026-08-06,
-  and the general wreath product borders `RegularWreathProduct.lean`. For those three, propose
-  upstream on Zulip first, since mathlib is the right home, and consume from Tau Ceti either
-  way. Follow his vocabulary (`IsPreprimitive`, `IsBlock`) throughout regardless. We found no
-  Zulip thread claiming any of them as of 2026-08-06; the discussion trail in this area is his
-  pull-request review threads. Where an upstream API is still open, this roadmap states what it
-  needs and does not predict where the upstream design will land.
+  and the general wreath product borders `RegularWreathProduct.lean`. All three are built here,
+  named and shaped as those files name and shape them, so that a Mathlib version would replace
+  ours by deletion and an import. Follow his vocabulary (`IsPreprimitive`, `IsBlock`)
+  throughout. We found no Zulip thread claiming any of them as of 2026-08-06; the discussion
+  trail in this area is his pull-request review threads. Where an upstream API is still open,
+  this roadmap states what it needs and does not predict where the upstream design will land.
 - **C. Birkbeck's certification line** is the downstream consumer of Layer 8.
   `CBirkbeck/CertifyingInvariantsNF`, which extends `alainchmt/RingOfIntegersProject`,
   certifies rings of integers, discriminants, signatures, class groups and units through
@@ -1027,11 +1025,10 @@ pass* are historical or contextual citations, not the grounding of any target.
   `59ae55dbe49840d26d267a86c3e5c8f4a866d169` (2026-06-30). `CBirkbeck/LeanBridge` links LMFDB
   knowls to Lean declarations through its `DEFINES` macro, and the Layer 6 and 7 label
   predicates are the declarations the `gg.*` knowls should point at. The repository declares no
-  licence in its GitHub metadata, and no author contact was made during this review pass:
-  inspect the mathematics and the interface shape only, and copy or adapt no code or data
-  without explicit permission. Ownership of its file format is not settled, so coordinate the
-  checker's input format before freezing Layer 8; until then the certificate structures here
-  are native and independently written.
+  licence in its GitHub metadata, and no author has been contacted about reuse: inspect the
+  mathematics and the interface shape only, and copy or adapt no code or data without explicit
+  permission. The certificate structures of Layer 8 are accordingly native and independently
+  written, and nothing here depends on that repository's file format.
 - **Tau Ceti, already landed.** `TauCeti/NumberTheory/Multiquadratic/Galois/*` and
   `Multiquadratic/Frobenius.lean`, from the merged Multiquadratic roadmap, prove the
   elementary-abelian instance of exactly the Layer 0 and Layer 5 pattern: `signPattern` as an
@@ -1039,9 +1036,10 @@ pass* are historical or contextual citations, not the grounding of any target.
   `signPattern_frobenius` and `galoisGroupEquiv_frobenius`, consuming Mathlib's `IsArithFrobAt`
   just as Layer 5 will. Cite it as the worked `(ℤ/2)ⁿ` case, and generalize rather than
   duplicate its bespoke lemmas.
-- **Siblings.** [Number Field Arithmetic PR #9](https://github.com/roed-math/TauCetiRoadmap/pull/9)
+- **Siblings.** The
+  [Number Field Arithmetic roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/9)
   supplies Layer 5's Dedekind theorem and consumes Layer 0's dictionary, Layer 3's discriminant
-  comparison, and the labels; this roadmap should merge after it.
+  comparison, and the labels. That is the one place the two meet, in each direction.
   [Modular Forms](../ModularForms/README.md), Layer 9 consumes the Layer 8 checker. The planned
   Artin Representations roadmap will consume the labels and the certificates. The
   [representation-theory family](../RepresentationTheory/README.md) owns abstract-group data

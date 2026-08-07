@@ -27,8 +27,8 @@ Two statements below are worth reading carefully before copying their shape else
   proposition can still encode the wrong mathematics, and this is the example to remember.
 * The Layer 5 Frobenius statement is a **contract with Number Field Arithmetic**, not a
   target of this roadmap. It is marked at the statement. Pinning its shape here lets the
-  downstream layers elaborate today; it does not discharge the dependency, and this roadmap
-  should merge after that one.
+  downstream layers elaborate against it; the theorem belongs to the supplier, and a `sorry`
+  here does not stand in for it.
 -/
 
 namespace TauCetiRoadmap.PolynomialGaloisGroups
@@ -474,7 +474,7 @@ example {G : Type u} [Group G] {X : Type v} [Finite X] [MulAction G X]
 /-- **Layer 1, Jordan's prime-cycle theorem** (Wielandt 13.9), stated in Mathlib's own
 vocabulary: this is verbatim the `proof_wanted
 alternatingGroup_le_of_isPreprimitive_of_isCycle_mem` of
-`Mathlib/GroupTheory/GroupAction/Jordan.lean`, so offer it upstream first. -/
+`Mathlib/GroupTheory/GroupAction/Jordan.lean`, name and statement alike. -/
 example {α : Type u} [Fintype α] [DecidableEq α] {G : Subgroup (Equiv.Perm α)}
     (hG : IsPreprimitive G α) {p : ℕ} (hp : p.Prime) (hp' : p + 3 ≤ Nat.card α)
     {g : Equiv.Perm α} (hgc : g.IsCycle) (hgp : g.support.card = p) (hg : g ∈ G) :
@@ -589,14 +589,13 @@ section Frobenius
 attribute [local instance] Polynomial.Gal.splits_ℚ_ℂ
 
 open scoped Classical in
-/-- **Layer 5, THE CONSUMED INTERFACE.** Dedekind's theorem, supplied by
-[Number Field Arithmetic PR #9](https://github.com/roed-math/TauCetiRoadmap/pull/9), Layer 3.
-This `sorry` is a **contract with that roadmap, not a target of this one**: for monic
+/-- **Layer 5, THE CONSUMED INTERFACE.** Dedekind's theorem, supplied by the
+[Number Field Arithmetic roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/9),
+Layer 3. This `sorry` is a **contract with that roadmap, not a target of this one**: for monic
 `f : ℤ[X]` and a prime `p ∤ disc f`, some element of the Galois group realizes the
 factorization type of `f mod p` as its fixed-point-completed cycle type on the roots. Pinning
-the shape here lets the layers below elaborate today; it does not discharge the dependency,
-and this roadmap should merge after PR #9, at which point the statement is replaced by a
-reference to the supplier's declaration. -/
+the shape here lets the layers below elaborate against it; the theorem belongs to the
+supplier, and this statement is replaced by a reference to its declaration. -/
 example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr) :
     ∃ σ : (f.map (Int.castRingHom ℚ)).Gal,
       fullCycleType (Polynomial.Gal.galActionHom (f.map (Int.castRingHom ℚ)) ℂ σ) =
