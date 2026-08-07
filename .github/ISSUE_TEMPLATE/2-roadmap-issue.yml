@@ -21,8 +21,11 @@ body:
         - GeometricTopology
         - HeegaardFloer
         - JacobianChallenge
+        - LFunctions
+        - ModularForms
         - Multiquadratic
         - OneParameterSemigroups
+        - OptimalTransport
         - OrthogonalL2Bases
         - PDE
         - ReductiveGroups
