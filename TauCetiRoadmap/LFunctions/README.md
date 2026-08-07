@@ -1,7 +1,7 @@
 # Roadmap: L-functions — axiomatics, Dedekind zeta, Hecke L-functions, and density theorems
 
-Mathlib has a large L-series library. The project pin is `9caeba1000` (2026-06-03), and
-`Mathlib/NumberTheory/LSeries/` there is 21 files and about 6900 lines. The authors are
+Mathlib has a large L-series library: `Mathlib/NumberTheory/LSeries/` is 21 files and
+about 6900 lines. The authors are
 David Loeffler and Michael Stoll, with Xavier Roblot, Chris Birkbeck, and Huanyu Zheng; the
 design paper is Loeffler–Stoll, *Formalizing zeta and L-functions in Lean*, arXiv:2503.00959.
 That library contains:
@@ -126,9 +126,9 @@ rebuild it.
 Every milestone below states its direct prerequisites. Each prerequisite is in exactly one of
 four categories:
 
-- **Mathlib** — a named declaration that exists in Mathlib. The pin is `9caeba1000`. Where a
-  declaration exists only on master, the milestone says so and builds it here in the master
-  shape.
+- **Mathlib** — a named declaration that exists in the Mathlib the repository currently
+  builds. Where a declaration exists only on Mathlib master, the milestone says so and
+  builds it here in the master shape.
 - **Tau Ceti** — a named declaration that already exists in Tau Ceti.
 - **Layer n.m** — an earlier milestone of this roadmap.
 - **Roadmap X, Layer k** — a named layer of another roadmap.
@@ -284,8 +284,9 @@ of scope.
 
 ## What Mathlib has
 
-Verified file by file against the pin `9caeba1000` (2026-06-03). Names are exact, and the
-unusual spellings are Mathlib's. Statements about Mathlib master are dated 2026-08-07.
+Verified file by file against the Mathlib the repository currently builds. Names are
+exact, and the unusual spellings are Mathlib's. Statements about Mathlib master carry
+their check dates in `PROVENANCE.md`.
 
 **L-series core.**
 
