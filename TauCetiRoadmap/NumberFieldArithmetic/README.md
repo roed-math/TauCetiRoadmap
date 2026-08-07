@@ -875,7 +875,7 @@ See §Worked examples.
 For monic `f : ℤ[X]` and a prime `p ∤ f.discr`, produce `σ : (f.map ℚ).Gal` whose root action has
 full cycle type, with fixed points restored, equal to the factor-degree multiset of `f mod p`.
 
-A polynomial Galois groups roadmap uses this interface on **reducible** `f`, to derive the
+A polynomial Galois groups roadmap can use this interface on **reducible** `f`, to derive the
 classical mod-`p` irreducibility criterion. The reduction to the irreducible case is five named
 lemmas, not an afterthought:
 
