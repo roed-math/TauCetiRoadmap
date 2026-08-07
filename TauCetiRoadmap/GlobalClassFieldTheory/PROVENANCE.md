@@ -63,13 +63,16 @@ None of these is a prerequisite. Where one lands, adopt its names and delete the
 These are alignments. The roadmap has no mandatory dependency on any of them, because Layer I
 states the local input as an interface that this repository owns.
 
-- **Local Fields.** Plans nonarchimedean local reciprocity, local conductors, local Herbrand
+- **Local Fields.** Checked 2026-08-07: head `a45463504ba5`. Plans nonarchimedean local reciprocity,
+  local conductors, local Herbrand
   quotients and local Hilbert symbols. If it merges, its Layer 7 is the natural source for the
   instance I.4, and the replacement is mechanical.
-- **Number Field Arithmetic.** Plans the decomposition, inertia and Frobenius API, and an
-  ideal-theoretic Artin map `artinHomUnramified` on the same `(FractionalIdeal (𝓞 K)⁰ K)ˣ`
-  carrier as I.2. If it merges, delete I.2 and consume that declaration.
-- **Profinite Cohomology.** Plans continuous cohomology of `G_K` with colimits over finite
+- **Number Field Arithmetic.** Checked 2026-08-07: head `9b63e874e391`. Plans the decomposition,
+  inertia and Frobenius API, and the ideal-theoretic Artin map `artinHomAway S hur` on the same
+  `(FractionalIdeal (𝓞 K)⁰ K)ˣ` carrier as I.2, with the same signature. If it merges, delete I.2
+  and consume that declaration.
+- **Profinite Cohomology.** Checked 2026-08-07: head `ac180b5a3ab3`. Plans continuous cohomology of
+  `G_K` with colimits over finite
   quotients. Milestone 11.2 states the small part of that theory which Layer 11 uses.
 - **L-functions.** Consumes the Hecke characters of Layer 3 and owns everything analytic,
   including Chebotarev and density. This roadmap is density-free so that the dependency runs in

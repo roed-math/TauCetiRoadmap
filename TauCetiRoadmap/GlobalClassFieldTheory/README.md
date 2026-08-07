@@ -106,7 +106,7 @@ must carry their true hypotheses.
 | nonarchimedean local normalizations | The normalized valuation of a uniformizer is `v(π) = 1`. The residue cardinality is `q_v`. The distinguished generator is the **arithmetic Frobenius** `x ↦ x^{q_v}`. The local Artin map sends a uniformizer to the arithmetic Frobenius: `Art_{K_v}(π) = Frob_v`. These are fields of the Layer I interface, not assumptions about another repository | Layer I |
 | archimedean local normalizations | These are built in Layer 2C, because the interface of Layer I is nonarchimedean. `Art_ℂ : ℂˣ → Gal(ℂ/ℂ)` is trivial. `Art_ℝ : ℝˣ → Gal(ℂ/ℝ)` sends a positive element to `1` and a negative element to complex conjugation, so `ker Art_ℝ = ℝ_{>0} = N_{ℂ/ℝ}(ℂˣ)`. The invariants are `inv_ℂ = 0`, and the nontrivial class at a real place has invariant `1/2`. The Hilbert symbols are `(a,b)_ℂ = 1` always, and `(a,b)_ℝ = −1` exactly when both `a < 0` and `b < 0` | Layer 2C |
 | Artin map, direction and normalization | At finite level, `θ_{L/K} : C_K ⧸ N_{L/K} C_L ≃* Gal(L/K)` for finite abelian `L/K`. It is **defined** as the compilation of local maps, `θ((x_v)_v) = ∏_v Art_{K_v}(x_v)∣_L`. Normalization: let `v` be unramified in `L`, and let `x` be the class of an idele that is a uniformizer at `v` and a unit elsewhere; then `θ(x) = Frob_v`, arithmetic. At profinite level, `Art_K : C_K →* Gal(K^{ab}/K)` is continuous and **surjective**, with kernel the identity component `D_K`. **Common error.** The local map is injective and not surjective; the global map is surjective and not injective. Do not port a local statement without changing it | Layers 6 and 7; Neukirch ANT VI §5 |
-| ideal-theoretic Artin map | For finite abelian `L/K` and a finite set `S` of primes of `𝓞 K` containing every prime that ramifies in `L`, `J^S` is the subgroup of `(FractionalIdeal (𝓞 K)⁰ K)ˣ` of fractional ideals whose support avoids `S`. The map `artinHom S : J^S →* (L ≃ₐ[K] L)` sends a prime outside `S` to its arithmetic Frobenius. It is milestone I.2 of this roadmap. For `𝔪₀` divisible by every prime of `S`, `J^{𝔪₀} ≤ J^S`, and the map used in Layers 6 to 8 is the restriction | Layer I; Layers 6 to 8 |
+| ideal-theoretic Artin map | Let `L/K` be finite abelian, let `S : Finset (HeightOneSpectrum (𝓞 K))`, and let `hur` say that every prime outside `S` is unramified in `L`. Then `J^S` is the subgroup of `(FractionalIdeal (𝓞 K)⁰ K)ˣ` of fractional ideals with valuation zero at every prime of `S`, and `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)` sends a prime outside `S` to its arithmetic Frobenius. It is milestone I.2, in the name and the signature of the Number Field Arithmetic roadmap. Layers 6 to 8 use the single instance `S = support 𝔪₀`, where `hur` follows from `𝔣(L/K) ∣ 𝔪`, and the carrier is `J^{𝔪₀}` already | Layer I; Layers 6 to 8 |
 | Hecke character | A Hecke character is a continuous homomorphism `χ : IdeleClassGroup (𝓞 K) K →* ℂˣ`, that is a `ContinuousMonoidHom`. Three properties are equivalent: `χ` has finite order; `ker χ` is open; `χ` factors through a ray class group `Cl_𝔪 K`. Each equivalence is a named theorem. "Ray class character" names the composite notion and is never an independent definition. Unitary characters and the decomposition `χ = χ_u · ‖·‖^s` are Layer 3. Algebraic characters and infinity types are Layer 10A | Layer 3 |
 | conductor of a character | There are two notions, and neither covers the other. The **finite conductor ideal** of a continuous quasicharacter is assembled from the depths at which its nonarchimedean local components become trivial on principal units. The **ray conductor modulus** is defined for a character that is trivial on the connected component of the archimedean part, in particular for every finite-order character. It is the smallest `𝔪` with `U_𝔪 ⊆ ker χ`, and its infinite part records the real places where the local sign component is nontrivial. **Common error.** A general quasicharacter has no ray conductor, because `‖·‖^s` is trivial on no `U_𝔪`. Over `ℚ`, `DirichletCharacter.conductor` is the finite part, and the parity fixes the infinite part | Layer 3 |
 | conductor of an abelian extension | For finite abelian `L/K`, the conductor `𝔣(L/K)` is the smallest modulus `𝔣` with `U_𝔣 ⊆ Kˣ · N_{L/K}(I_L)`. It has a second description: assemble the local conductors of the Layer I interface together with the ramified real places. Both descriptions are stated, and their agreement is a theorem | Layer 7 |
@@ -278,19 +278,26 @@ Items 10 and 11 are used by Layer 11.
 *Prerequisites:* M `Mathlib/RingTheory/Frobenius.lean`,
 M `Mathlib/RepresentationTheory/Homological/GroupCohomology/`.
 
-**I.2. The ideal-theoretic Artin map.** Let `L/K` be finite abelian. Let `S` be a finite set of
-primes of `𝓞 K` that contains every prime ramified in `L`. Define `artinHom S : J^S →* (L ≃ₐ[K] L)`
-on the fractional ideals with support disjoint from `S`. It sends a prime `𝔭 ∉ S` to its arithmetic
-Frobenius. Prove:
+**I.2. The ideal-theoretic Artin map.** Let `L/K` be finite abelian. Let
+`S : Finset (HeightOneSpectrum (𝓞 K))`, and let `hur` say that every prime outside `S` is
+unramified in `L`. Define `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)` on the fractional ideals with
+valuation zero at every prime of `S`. It sends a prime `𝔭 ∉ S` to its arithmetic Frobenius. Prove:
 
 1. the value at a prime is Mathlib's `arithFrobAt`, so the abelian collapse of the Frobenius
    conjugacy class is used and not reproved;
 2. multiplicativity, hence the map on all of `J^S`;
-3. the restriction formula: for `K ⊆ L ⊆ M` with `M/K` abelian, `artinHom` for `M/K` restricted to
-   `L` is `artinHom` for `L/K`;
-4. the tower formula for `K ⊆ K' ⊆ L` with `L/K` abelian, relating `artinHom` over `K'` to
-   `artinHom` over `K` through the ideal norm;
-5. the monotonicity `J^{S'} ≤ J^S` for `S ⊆ S'`, with compatible maps.
+3. the restriction formula: for `K ⊆ L ⊆ M` with `M/K` abelian, `artinHomAway` for `M/K`
+   restricted to `L` is `artinHomAway` for `L/K`;
+4. the tower formula for `K ⊆ K' ⊆ L` with `L/K` abelian, relating `artinHomAway` over `K'` to
+   `artinHomAway` over `K` through the ideal norm;
+5. the behaviour under `S ⊆ S'`, with compatible maps.
+
+`S` is a parameter of the construction, and not the ramified set. Layers 6 to 8 use one
+instance: `S = support 𝔪₀`, the primes dividing the finite part of the modulus. There `hur` holds
+because the conductor of `L/K` divides `𝔪`, so every prime outside the support of `𝔪₀` is
+unramified in `L`. The carrier is then already `J^{𝔪₀}`, and no further restriction is needed.
+The name and the signature are those of the Number Field Arithmetic roadmap. If that roadmap
+lands first, delete I.2 and use its declaration unchanged.
 
 *Prerequisites:* M `arithFrobAt`, M `IsArithFrobAt`, M `FractionalIdeal`, M `Ideal.ramificationIdx`.
 **Basic API.**
@@ -300,9 +307,10 @@ Frobenius. Prove:
 - *Functoriality:* items 3, 4 and 5.
 - *Comparison lemmas:* the value on a principal prime, and the composite with the map to the ideal
   class group.
-- *Naturality:* the square that relates `artinHom` for `L/K` and for `M/K`.
-- *Edge cases:* `S` larger than the ramified set, and `L = K`.
-- *Downstream interface:* Layers 6, 7, 8 and 10C use only `artinHom` and items 2 to 4.
+- *Naturality:* the square that relates `artinHomAway` for `L/K` and for `M/K`.
+- *Edge cases:* `S = ∅`, allowed only for `L/K` unramified everywhere; `S` larger than the
+  ramified set; `L = K`, where the map is trivial.
+- *Downstream interface:* Layers 6, 7, 8 and 10C use only `artinHomAway` and items 2 to 4.
 
 **I.3. The completion dictionary at a finite place.** For `v : HeightOneSpectrum (𝓞 K)`, the
 completion `v.adicCompletion K` is a nonarchimedean local field. Its residue cardinality is
@@ -351,20 +359,22 @@ M `Associates.count`.
 
 **0.2. Simultaneous approximation.** State: let `v₁, …, v_r` be finite places, `a_i ∈ K` targets,
 `n_i` exponents, and let `ε_w ∈ {±1}` be a sign at each of finitely many real places `w`. Then there
-is one `x ∈ Kˣ` with `ord_{v_i}(x − a_i) ≥ n_i` for every `i` and `sign_w(x) = ε_w` for every chosen
-`w`. Two facts make this a target and not a citation. Mathlib has no weak approximation theorem for
-inequivalent absolute values at the pin. The finite conditions and the infinite conditions must hold
-for a single element, which the chinese remainder theorem and sign surjectivity do not give
-separately. Route: first prove Artin–Whaples weak approximation. Its form is: the image of `K` is
-dense in
-`∏_{v ∈ S} K_v`, for a finite set `S` of pairwise inequivalent places. Then read off the
+is one `x ∈ Kˣ` with `ord_{v_i}(x − a_i) ≥ n_i` for every `i`, and `sign_w(x) = ε_w` for every
+chosen `w`.
+The conclusion is about `Kˣ` and not about `K`. A statement about `K` that reads "`x` is positive
+at `w` exactly when `ε_w = 1`" is satisfied by `x = 0` whenever every `ε_w` is `-1`.
+Two facts make this a target and not a citation. Mathlib has no weak approximation theorem for
+inequivalent absolute values at the pin. The finite conditions and the infinite conditions must
+hold for a single element, which the chinese remainder theorem and sign surjectivity do not give
+separately.
+Route: first prove Artin–Whaples weak approximation, in the form "the image of `K` is dense in
+`∏_{v ∈ S} K_v` for a finite set `S` of pairwise inequivalent places". Then read off the
 congruence-and-sign form. The archimedean case is Mathlib's
 `InfinitePlace.denseRange_algebraMap_pi`, and it is the model for the general proof.
-*Source.* Artin–Whaples, as in Cassels–Fröhlich Ch. II §6; Lang ANT Ch. II §1.
+*Source.* Artin–Whaples, as in Janusz IV, Theorem 1.1, p. 137, and Cassels–Fröhlich Ch. II §6.
 *False generalization.* Strong approximation is a different statement. It is false to ask for one
 element that meets the congruence conditions and is integral at every other place. The obstruction
 is the class group. Ask for that only in the `S`-idele form of Layer 5.
-*Source.* Artin–Whaples, as in Janusz IV, Theorem 1.1, p. 137, and Cassels–Fröhlich Ch. II §6.
 *Prerequisites:* M `InfinitePlace.denseRange_algebraMap_pi`, M `HeightOneSpectrum.valuation`,
 M `IsDedekindDomain.quotientEquivPiFactors`.
 
@@ -821,17 +831,18 @@ M `NumberField.Units.DirichletTheorem`, L I.1.
 eight steps.
 1. Reduce from cyclic degree `n` to cyclic steps of prime degree `p`, by multiplicativity of the
    index in a tower.
-2. Base change to `K' = K(μ_p)`. Its degree `e := [K' : K]` divides `p − 1`, so `e` is prime to `p`.
-   Then `L ∩ K' = K`, and `L' := LK'` is cyclic of degree `p` over `K'`.
-3. Descend from `K'` to `K`, as follows. The extension map `C_K → C_{K'}` carries `N_{L/K} C_L` into
-   `N_{L'/K'} C_{L'}`, so it induces `res : C_K/N_{L/K} C_L → C_{K'}/N_{L'/K'} C_{L'}`. The idele
-   class norm `N_{K'/K}` carries `N_{L'/K'} C_{L'}` into `N_{L/K} C_L`, so it induces `cor` in the
-   other direction. Then `cor ∘ res` is multiplication by `e`, because `N_{K'/K} ∘ (extension) =
-   (·)^e` by 2B.5. Under the identification `Gal(L'/K') ≃ Gal(L/K)` these two maps are restriction
-   and corestriction on `Ĥ⁰`. The group `C_K/N_{L/K} C_L` has exponent dividing `p`, because
-   `N_{L/K}(ext x) = x^p`. Multiplication by `e` is therefore an automorphism of it, and `res` is
-   injective. Hence `[C_K : N_{L/K} C_L] ≤ [C_{K'} : N_{L'/K'} C_{L'}]`, and steps 4 to 7 bound the
-   right side by `p`.
+2. Base change to `K_cyc := K(μ_p)`. Its degree `e := [K_cyc : K]` divides `p − 1`, so `e` is prime
+   to `p`. Then `L ∩ K_cyc = K`, and `L_cyc := L·K_cyc` is cyclic of degree `p` over `K_cyc`.
+3. Descend from `K_cyc` to `K`, as follows. The extension map `C_K → C_{K_cyc}` carries `N_{L/K}
+   C_L` into `N_{L_cyc/K_cyc} C_{L_cyc}`, so it induces `res : C_K/N_{L/K} C_L →
+   C_{K_cyc}/N_{L_cyc/K_cyc} C_{L_cyc}`. The idele class norm `N_{K_cyc/K}` carries `N_{L_cyc/K_cyc}
+   C_{L_cyc}` into `N_{L/K} C_L`, so it induces `cor` in the other direction. Then `cor ∘ res` is
+   multiplication by `e`, because `N_{K_cyc/K} ∘ (extension) = (·)^e` by 2B.5. Under the
+   identification `Gal(L_cyc/K_cyc) ≃ Gal(L/K)` these two maps are restriction and corestriction on
+   `Ĥ⁰`. The group `C_K/N_{L/K} C_L` has exponent dividing `p`, because `N_{L/K}(ext x) = x^p`.
+   Multiplication by `e` is therefore an automorphism of it, and `res` is injective. Hence `[C_K :
+   N_{L/K} C_L] ≤ [C_{K_cyc} : N_{L_cyc/K_cyc} C_{L_cyc}]`, and steps 4 to 7 bound the right side by
+   `p`.
 4. Classify with Kummer theory once `μ_p ⊆ K`: `L = K(a^{1/p})` for some `a ∈ Kˣ`, in the vocabulary
    of `Mathlib/FieldTheory/KummerExtension.lean`.
 5. Choose `S` to contain the infinite places, the places above `p`, the ramified places, and enough
@@ -1032,22 +1043,27 @@ for a unique finite abelian `L/K`. Decompose the proof.
    = ∏_{v ∈ S} (K_vˣ)^p × ∏_{v ∉ S} 𝒪_vˣ`, from local reciprocity and from unramifiedness outside
    `S`. Prove the index count `[I_K : Kˣ·E] = p^{#S} = [I_K : Kˣ·N_{L/K}(I_L)]`, from the `S`-unit
    theorem and the product formula.
-4. The cyclotomic base change when `μ_p ⊄ K`: work over `K' = K(μ_p)`, whose degree over `K` divides
-   `p − 1` and is prime to `p`.
-5. The descent step: let `U ≤ C_K` be open of finite index and `K'/K` finite, and suppose that `U'
-   := N_{K'/K}^{-1}(U) ≤ C_{K'}` is a norm group, say `U' = N(M'/K')` for a finite abelian `M'/K'`.
+4. The cyclotomic base change when `μ_p ⊄ K`: work over `K_cyc := K(μ_p)`, whose degree over `K`
+   divides `p − 1` and is prime to `p`.
+5. The descent step: let `U ≤ C_K` be open of finite index and `F/K` finite, and suppose that
+   `U' := N_{F/K}^{-1}(U) ≤ C_F` is a norm group, say `U' = N(M'/F)` for a finite abelian `M'/F`.
    Let `M` be the largest subextension of `M'/K` that is abelian over `K`. Then norm limitation
-   gives `N_{M/K} C_M = N_{M'/K} C_{M'} = N_{K'/K}(U') ⊆ U`, and item 1 makes `U` itself a norm
+   gives `N_{M/K} C_M = N_{M'/K} C_{M'} = N_{F/K}(U') ⊆ U`, and item 1 makes `U` itself a norm
    group. Three points matter. `M'/K` is in general neither abelian nor Galois, so the descended
    field is `M` and not `M'`. The step needs the equality of norm groups, which is 7.2; the
    containment `N_{M'/K}C_{M'} ⊆ N_{M/K}C_M` is free from `M ⊆ M'` and is not enough. The
    ramification descends. `M ⊆ M'`, and `M'/K` is ramified only at two kinds of place: the
-   places ramified in `K'/K`, which divide `p` or are infinite; and the places under the support
-   of `𝔣(M'/K')`. That bounds `𝔣(M/K)`.
-6. The induction, on the index `(C_K : U)`: take a prime `p` dividing it; use item 5 with `K' =
-   K(μ_p)` to reduce to `μ_p ⊆ K`; choose `U₁ ⊇ U` of index exactly `p`; get from item 3 a cyclic
-   `K'/K` of degree `p` with `N(K'/K) = U₁`; then `N_{K'/K} : C_{K'} → C_K/U` has image `U₁/U` and
-   kernel `N_{K'/K}^{-1}(U)`, so the index drops by a factor of `p`, and item 5 closes the step.
+   places ramified in `F/K`; and the places under the support of `𝔣(M'/F)`. That bounds `𝔣(M/K)`.
+   For `F = K_cyc` the first kind divides `p` or is infinite.
+6. The induction, on the index `(C_K : U)`. Take a prime `p` dividing it. Apply item 5 with
+   `F = K_cyc`, which reduces the problem to a base field that contains `μ_p`; rename that base
+   `K` for the rest of the step. Choose `U ≤ U₁ ≤ C_K` with `[C_K : U₁] = p`. Item 3 gives a
+   cyclic extension `K₁/K` of degree `p` with `N(K₁/K) = U₁`. Put `U' := N_{K₁/K}^{-1}(U) ≤ C_{K₁}`.
+   The map `N_{K₁/K} : C_{K₁} → C_K/U` has image `U₁/U`, which has index `p`, and kernel `U'`, so
+   `(C_{K₁} : U') = (C_K : U)/p`. Apply the induction hypothesis over `K₁`, then item 5 with
+   `F = K₁` to recover `U` as a norm group over `K`. **Common error.** `K_cyc` and `K₁` are
+   different fields. The first has degree dividing `p − 1` over `K`, and the second has degree
+   `p`.
 7. Compositum and intersection compatibility, so that the extensions built for the factors assemble.
 8. Control of the ramification and of the conductor of the extension produced.
 9. Uniqueness, from 6.4 and the injectivity in 7.1. **False generalization, with the reason.**
@@ -1078,9 +1094,10 @@ the surjections `Cl_𝔫 ↠ Cl_𝔪` of 1.4.
 - *Downstream interface:* Layers 8, 9 and 10C.
 
 **7.5. The ideal-theoretic dictionary.** Let `L/K` be finite abelian of conductor dividing `𝔪`.
-Restrict `artinHom` of I.2 along `J^{𝔪₀} ≤ J^S`. Prove that the restriction is surjective onto
-`Gal(L/K)`, with kernel `P_𝔪 · N_{L/K}(J_L^𝔪)`. Prove that it agrees with the idelic map under 2A.7.
-This is Takagi's classification in ideal terms, and quadratic genus theory uses this form.
+Take `artinHomAway (support 𝔪₀) hur` of I.2, where `hur` holds because `𝔣(L/K) ∣ 𝔪`. Prove that
+this map is surjective onto `Gal(L/K)`, with kernel `P_𝔪 · N_{L/K}(J_L^𝔪)`. Prove that it agrees
+with the idelic map under 2A.7. This is Takagi's classification in ideal terms, and quadratic genus
+theory uses this form.
 *Prerequisites:* L I.2, L 6.4, L 2A.7, L 7.4.
 
 **7.6. The profinite Artin map.** Prove `K^{ab} = ⨆_𝔪 K_𝔪` inside `K̄`. Prove `Gal(K^{ab}/K) ≃ lim_𝔪
@@ -1404,7 +1421,8 @@ of `L/ℚ` has order `2`. The local half needs its true reason. A square is not 
 arbitrary degree-four local extension. Here every decomposition group of `L/ℚ` is a proper, hence
 cyclic, subgroup of `(ℤ/2)²`: the ramified primes `13` and `17` are each a square modulo the other,
 so both have residue degree `1`; the unramified decomposition groups are cyclic of order at most
-`2`; and both infinite places split. Every local degree `[L_w : ℚ_v]` is therefore at most `2`. For
+`2`; and the unique real place of `ℚ` splits completely into four real places of `L`, because `L`
+is totally real. Every local degree `[L_w : ℚ_v]` is therefore at most `2`. For
 `a ∈ ℚˣ` the norm from a local extension of degree at most `2` is `a` or `a²`. Every rational
 square is therefore a local norm everywhere in this extension. The example is sharper than it looks:
 `4` and `9` are global norms from `L`, so being a square is not the point, and `5` itself is not

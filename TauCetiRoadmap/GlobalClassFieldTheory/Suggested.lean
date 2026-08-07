@@ -86,9 +86,9 @@ example (F E E' : Type u)
     ∀ (x : Fˣ) (y : E), algebraMap E E' ((A.art x) y) = (A'.art x) (algebraMap E E' y) :=
   sorry
 
-/-- **I.2, the ideals with support away from a finite set of primes.** The carrier of the
-ideal-theoretic Artin map. It is `J^S` of the conventions table, and `J^{𝔪₀}` of Layer 1 is the
-special case where `S` is the set of primes dividing the modulus. -/
+/-- **I.2, the ideals with support away from a finite set of primes.** The carrier of
+`artinHomAway`. It is `J^S` of the conventions table, and `J^{𝔪₀}` of Layer 1 is the case
+`S = support 𝔪₀`. -/
 def idealsAway {K : Type u} [Field K] [NumberField K] (S : Finset (HeightOneSpectrum (𝓞 K))) :
     Subgroup (FractionalIdeal (𝓞 K)⁰ K)ˣ where
   carrier := {I | ∀ v ∈ S, FractionalIdeal.count K v (I : FractionalIdeal (𝓞 K)⁰ K) = 0}
@@ -96,11 +96,16 @@ def idealsAway {K : Type u} [Field K] [NumberField K] (S : Finset (HeightOneSpec
   one_mem' := by sorry
   inv_mem' := by sorry
 
-/-- **I.2, the ideal-theoretic Artin map.** For finite abelian `L/K` and a finite set `S` of
-primes that contains every ramified prime, a multiplicative map on `J^S` whose value at a prime
-outside `S` is the arithmetic Frobenius. The Frobenius itself is Mathlib's `arithFrobAt`, so
-this milestone adds multiplicativity and the functoriality of the README, and not a second
-Frobenius. -/
+/-- **I.2, the ideal-theoretic Artin map `artinHomAway`.** For finite abelian `L/K` and a finite
+set `S` of primes that contains every ramified prime, a multiplicative map on `J^S` whose value
+at a prime outside `S` is the arithmetic Frobenius. The Frobenius itself is Mathlib's
+`arithFrobAt`, so this milestone adds multiplicativity and the functoriality of the README, and
+not a second Frobenius.
+
+`S` is a parameter. Layers 6 to 8 use `S = support 𝔪₀`, where the hypothesis below follows from
+`𝔣(L/K) ∣ 𝔪`, and the carrier is then `J^{𝔪₀}` with no further restriction. The name and the
+signature are those of the Number Field Arithmetic roadmap, so that a landed declaration
+replaces this one without changing any consumer. -/
 example (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L] [Algebra K L]
     [IsAbelianGalois K L] (S : Finset (HeightOneSpectrum (𝓞 K)))
     (hS : ∀ v : HeightOneSpectrum (𝓞 K), ¬ Algebra.IsUnramifiedAt (𝓞 K) v.asIdeal → v ∈ S) :
@@ -194,15 +199,19 @@ example (𝔪 : Modulus K) : congruenceSubgroup 𝔪 ≤ primeToSubgroup 𝔪 :=
 many finite places, and independent signs at finitely many real places, are met by one global
 element. This does not follow from the chinese remainder theorem and sign surjectivity
 separately, and Mathlib has no weak approximation theorem for inequivalent absolute values at
-the pin. Prove Artin–Whaples weak approximation for a finite set of places and read this off. -/
+the pin. Prove Artin–Whaples weak approximation for a finite set of places and read this off.
+
+The conclusion gives a unit of `K`, and not an element of `K`. With `x : K` the sign condition
+would only say `¬ (0 < embedding w x)` when `ε w = -1`, and `x = 0` would then satisfy every
+negative request. -/
 example (S : Finset (HeightOneSpectrum (𝓞 K))) (a : HeightOneSpectrum (𝓞 K) → K)
     (n : HeightOneSpectrum (𝓞 K) → ℕ) (T : Finset {w : InfinitePlace K // w.IsReal})
     (ε : {w : InfinitePlace K // w.IsReal} → ℤˣ) :
-    ∃ x : K,
-      (∀ v ∈ S, v.valuation K (x - a v) ≤
+    ∃ x : Kˣ,
+      (∀ v ∈ S, v.valuation K ((x : K) - a v) ≤
         ((Multiplicative.ofAdd (-(n v : ℤ)) : Multiplicative ℤ) :
           WithZero (Multiplicative ℤ))) ∧
-        ∀ w ∈ T, (0 < InfinitePlace.embedding_of_isReal w.2 x ↔ ε w = 1) :=
+        ∀ w ∈ T, (0 < InfinitePlace.embedding_of_isReal w.2 (x : K) ↔ ε w = 1) :=
   sorry
 
 /-- **0.2, the ray class corollary of approximation.** The case that Layers 0 and 1 use: one
