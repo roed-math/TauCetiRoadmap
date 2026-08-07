@@ -738,9 +738,11 @@ is often quoted beyond its range.
    `(ℤ/m)ˣ`, and `g = φ(m)/f`.
 3. Which primes ramify: define `n₀ = n/2` when `n ≡ 2 (mod 4)`, and `n₀ = n` otherwise, so that
    `ℚ(ζ_n) = ℚ(ζ_{n₀})`. For `n₀ ≥ 3`, the ramified finite primes are exactly those dividing `n₀`,
-   and the infinite place ramifies as well. For `n₀ ≤ 2` the field is `ℚ`. **Common error.**
-   "Ramified exactly at the primes dividing `n`" is false. `ℚ(ζ₆) = ℚ(ζ₃)` is unramified at `2`.
- 
+   and the infinite place ramifies as well. For `n₀ ≤ 2` the field is `ℚ`.
+
+**Common error.** "Ramified exactly at the primes dividing `n`" is false. `ℚ(ζ₆) = ℚ(ζ₃)` is
+unramified at `2`.
+
 *Prerequisites:* M `Mathlib/NumberTheory/NumberField/Cyclotomic/Ideal.lean`,
 M `IsCyclotomicExtension`.
 
@@ -785,7 +787,7 @@ Prove:
 9. `H^i(G, I_{L,S}) ≅ ⊕_{v ∈ S} H^i(G_w, L_wˣ) ⊕ ⊕_{v ∉ S} H^i(G_w, 𝒪_wˣ)` by Shapiro's lemma
    applied to 2B.6, and `H^i(G_w, 𝒪_wˣ) = 0` for `i ≥ 1` at unramified `v`, so `H^i(G, I_L) ≅ ⊕_v
    H^i(G_w, L_wˣ)` for `i ≥ 1`. Do not hide any of this inside one displayed equality.
- 
+
 *Source.* Neukirch ANT VI §1 and §3; Milne CFT VII §§2–4.
 *Prerequisites:* L 2B.4, L 2B.6, L 2A.5, L I.1, M `Set.unit`,
 M `groupCohomology.coindIso` (Shapiro).
@@ -804,11 +806,13 @@ M `groupCohomology.coindIso` (Shapiro).
 6. hence `h(G, 𝓞_{L,S}ˣ) = (∏_{v ∈ S} [L_w:K_v]) / [L:K]`, and therefore `h(G, C_L) = [L:K]`. Deduce
    `herbrand_ge`: `[C_K : N_{L/K} C_L] ≥ [L:K]`, using finiteness of `H¹(G, C_L)`. Item 4 is the
    content of the sentence "the Herbrand quotient depends only on `ℝ ⊗ M`", and it is a target and
-   not a remark. **Common error.** The Herbrand quotient is defined for a finite cyclic group and a
-   module with finite cohomology. It is not defined for an infinite group, and item 4 fails without
-   the finiteness of both kernel and cokernel.
+   not a remark.
+
+**Common error.** The Herbrand quotient is defined for a finite cyclic group and a module with
+finite cohomology. It is not defined for an infinite group, and item 4 fails without the finiteness
+of both kernel and cokernel.
 *Source.* Neukirch ANT VI §3; Milne CFT VII §§2–5.
- 
+
 *Prerequisites:* L 5.1, L 2C.5,
 M `Mathlib/RepresentationTheory/Homological/GroupCohomology/FiniteCyclic.lean`,
 M `NumberField.Units.DirichletTheorem`, L I.1.
@@ -850,9 +854,10 @@ Then extend to arbitrary finite Galois `L/K` in two named steps.
    multiplication by `[G : G_p]`, which is prime to `p`, so the `p`-primary component of `H^i(G,
    C_L)` injects into `H^i(G_p, C_L)`. Apply step 1 to `L/L^{G_p}`. Multiply over the primes
    dividing `#G` to get `H¹(G, C_L) = 1` and `#H²(G, C_L) ≤ [L:K]`. Corollary: `N_{L/K} C_L` has
-   finite index dividing `[L:K]` in `C_K`, for every finite Galois `L/K`. **Common error.** Solvable
-   induction alone does not reach a general finite group. Step 2 is a separate argument and must be
-   stated.
+   finite index dividing `[L:K]` in `C_K`, for every finite Galois `L/K`.
+
+**Common error.** Solvable induction alone does not reach a general finite group. Step 2 is a
+separate argument and must be stated.
 *Prerequisites:* L 5.2, L 5.3,
 M `Mathlib/RepresentationTheory/Homological/GroupCohomology/LongExactSequence.lean`,
 M `groupCohomology.Functoriality`, M `Sylow`.
@@ -1195,10 +1200,11 @@ further items.
    condition is what allows the infinity type to occur at all, and it forces `n_σ` to be constant
    unless `K` contains a CM subfield.
 3. The pure case, where `n_σ + n_{σ̄}` is a constant weight.
-4. The norm twists `χ · ‖·‖^m`, which are algebraic whenever `χ` is. **Common error.** "All radial
-   exponents are zero, with integer exponents" is not the algebraicity condition. That definition
-   excludes the algebraic norm twists, because `s = n_σ + n_{σ̄}` is not zero in general.
- 
+4. The norm twists `χ · ‖·‖^m`, which are algebraic whenever `χ` is.
+
+**Common error.** "All radial exponents are zero, with integer exponents" is not the algebraicity
+condition. That definition excludes the algebraic norm twists, because `s = n_σ + n_{σ̄}` is not
+zero in general.
 *Prerequisites:* L 10A.2, M `NumberField.Units`, M `NumberField.CMField`.
 **Basic API.**
 - *Constructors:* the infinity type from the exponents `n_σ`; the norm twist `χ · ‖·‖^m`.
@@ -1305,7 +1311,7 @@ field discriminant and the conductor depend on `d` alone:
    holds for squarefree `n` only. For `n = 12` the congruence holds, and `ℤ[√−12]` is not maximal in
    `ℚ(√−3)`; its conductor is 4.
 *Source.* Cox, *Primes of the Form x² + ny²*, §§7–9.
- 
+
 *Prerequisites:* L 10B.2, L 10B.5, L 10B.6, L 10C.1, L 7.4.
 
 **Scope note, on the absence of congruence criteria.** No congruence condition on `p` alone decides
