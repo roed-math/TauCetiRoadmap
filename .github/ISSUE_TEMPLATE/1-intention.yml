@@ -24,9 +24,12 @@ body:
         - Exchangeability
         - GeometricTopology
         - HeegaardFloer
+        - IntegralLattices
         - JacobianChallenge
+        - ModularForms
         - Multiquadratic
         - OneParameterSemigroups
+        - OptimalTransport
         - OrthogonalL2Bases
         - PDE
         - ReductiveGroups
