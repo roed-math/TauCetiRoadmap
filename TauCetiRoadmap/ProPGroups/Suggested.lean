@@ -447,54 +447,59 @@ abbrev contH2 : Type _ :=
 /-- The class of a continuous `2`-cocycle. -/
 def cocycle₂.mk (c : cocycle₂ R G M) : contH2 R G M := Submodule.Quotient.mk c
 
-/-! ### The complex in every degree
+/-! ### The canonical carrier, from Mathlib
 
-Layer 6 needs cohomological dimension, which quantifies over every degree, so the carrier is
-defined in every degree and the explicit low degrees are compared with it. Mathlib's
-`continuousCohomology` is not available at this pin, so the comparison with Mathlib is stated
-in `README.md` and its Lean form waits for a pin that has the object. -/
+Mathlib defines continuous cohomology in every degree at this pin, in
+`Mathlib/Algebra/Category/ContinuousCohomology/Basic.lean`, as the homology of homogeneous
+cochains. That object is the carrier of every cohomological statement in this roadmap:
+`cd_p`, the rank interpretations, the Demushkin predicate, and the Layer 11 inputs all read
+through it. This roadmap defines no second cohomology theory.
 
-/-- Continuous `n`-cochains: the locally constant maps `Gⁿ → M`. -/
-abbrev contCochain (n : ℕ) : Type _ := LocallyConstant (Fin n → G) M
+What is not in Mathlib at this pin is the explicit description in low degrees and the cup
+product, and those are what the Demushkin predicate needs. They are stated here on cocycles,
+with comparison isomorphisms to the canonical object as Layer 5 milestones. The Profinite
+Cohomology roadmap develops the same comparisons in more generality; the interface table
+records that crossing, and the statements here do not wait for it. -/
 
-/-- The inhomogeneous differential, as a function. -/
-noncomputable def contDiffFun (n : ℕ) (f : contCochain G M n) : (Fin (n + 1) → G) → M :=
-  fun g => g 0 • f (fun i => g i.succ)
-    + (Finset.univ : Finset (Fin n)).sum
-        (fun i => (-1 : ℤ) ^ ((i : ℕ) + 1) • f (Fin.contractNth i.castSucc (· * ·) g))
-    + (-1 : ℤ) ^ (n + 1) • f (fun i => g i.castSucc)
+/-- `ZMod p` carries the discrete topology, and so does its lift to a higher universe.
+Mathlib's construction of continuous cohomology puts the coefficients in the universe of the
+group, so the trivial module is `ULift (ZMod p)`. -/
+scoped instance : TopologicalSpace (ZMod p) := ⊥
 
-/-- The inhomogeneous differential on continuous cochains. That the value is locally
-constant is a Layer 5 milestone, as is `d ∘ d = 0`. -/
-noncomputable def contDiff (n : ℕ) (f : contCochain G M n) : contCochain G M (n + 1) :=
-  ⟨contDiffFun G M n f, sorry⟩
+scoped instance : DiscreteTopology (ZMod p) := ⟨rfl⟩
 
-/-- The differential, as an `R`-linear map. -/
-noncomputable def contDiffHom (n : ℕ) : contCochain G M n →ₗ[R] contCochain G M (n + 1) where
-  toFun := contDiff G M n
-  map_add' := sorry
-  map_smul' := sorry
+scoped instance : TopologicalSpace (ULift.{u} (ZMod p)) := ⊥
 
-/-- **`Hⁿ`** of `G` with coefficients in `M`, in every degree. The quotient is by the
-intersection of the coboundaries with the cocycles, so the definition does not wait for
-`d ∘ d = 0`. -/
-noncomputable abbrev contH : ℕ → Type _
-  | 0 => LinearMap.ker (contDiffHom R G M 0)
-  | (n + 1) =>
-    (LinearMap.ker (contDiffHom R G M (n + 1))) ⧸
-      ((LinearMap.range (contDiffHom R G M n)).comap
-        (LinearMap.ker (contDiffHom R G M (n + 1))).subtype)
+scoped instance : DiscreteTopology (ULift.{u} (ZMod p)) := ⟨rfl⟩
 
-/-- **Layer 5, the low degrees agree with the general object.** Three milestones, one per
-degree. Every statement that mixes the explicit form with the general one goes through
-them, and Layer 6 reads the low degrees of `cd_p` this way. -/
-example : Nonempty (contH0 R G M ≃ₗ[R] contH R G M 0) := sorry
+scoped instance : ContinuousAdd (ULift.{u} (ZMod p)) := ⟨continuous_of_discreteTopology⟩
 
-example : Nonempty (contH1 R G M ≃ₗ[R] contH R G M 1) := sorry
+scoped instance : ContinuousSMul (ZMod p) (ULift.{u} (ZMod p)) :=
+  ⟨continuous_of_discreteTopology⟩
 
-example : Nonempty (contH2 R G M ≃ₗ[R] contH R G M 2) := sorry
+/-- The trivial `G`-representation on `𝔽_p`, as an object of Mathlib's category of
+topological representations. -/
+noncomputable def trivialFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] : Action (TopModuleCat.{u} (ZMod p)) G where
+  V := TopModuleCat.of (ZMod p) (ULift.{u} (ZMod p))
+  ρ := 1
+
+/-- **`Hⁿ(G, 𝔽_p)`**, against Mathlib's canonical carrier. Every dimension count below is
+about this object. -/
+noncomputable abbrev cohomFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (n : ℕ) : TopModuleCat.{u} (ZMod p) :=
+  (continuousCohomology (ZMod p) G n).obj (trivialFp p G)
+
+/-- **Layer 6, cohomological dimension**, against the canonical carrier: every cohomology
+above degree `n`, with coefficients in a finite discrete `p`-primary representation,
+vanishes. The quantifier ranges over representations that carry that finiteness, which is
+the `FiniteDiscretePPrimary` predicate of Layer 6. -/
+def cdLE (p n : ℕ) (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] : Prop :=
+  ∀ m : ℕ, n < m → ∀ A : Action (TopModuleCat.{u} (ZMod p)) G,
+    Finite A.V → Subsingleton ((continuousCohomology (ZMod p) G m).obj A)
 
 end Carrier
+
 
 /-! ### Trivial coefficients, and the cup product in bidegree `(1,1)`
 
@@ -564,6 +569,29 @@ example (a b : cocycle₁ A G (TrivMod G A)) :
 
 end Trivial
 
+/-! ### The comparison with the canonical carrier
+
+These are the milestones that tie the explicit low-degree descriptions to Mathlib's object.
+Every statement that mixes the two goes through them. -/
+
+section Comparison
+
+variable (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+  [CompactSpace G] [TotallyDisconnectedSpace G]
+
+/-- **Layer 5, degree one.** The explicit crossed-homomorphism description agrees with
+Mathlib's carrier. -/
+example : Nonempty (contH1 (ZMod p) G (TrivMod G (ZMod p)) ≃ₗ[ZMod p] cohomFp p G 1) := sorry
+
+/-- **Layer 5, degree two.** The explicit `2`-cocycle description agrees with Mathlib's
+carrier; the extension dictionary of Layer 5 is stated on the explicit side. -/
+example : Nonempty (contH2 (ZMod p) G (TrivMod G (ZMod p)) ≃ₗ[ZMod p] cohomFp p G 2) := sorry
+
+/-- **Layer 5, degree zero.** -/
+example : Nonempty (contH0 (ZMod p) G (TrivMod G (ZMod p)) ≃ₗ[ZMod p] cohomFp p G 0) := sorry
+
+end Comparison
+
 /-! ### Twisted coefficients, and the prescription property
 
 The coefficients `I(χ)/p^i` are `ZMod (p ^ i)` with `G` acting through `χ`. The cocycle and
@@ -631,10 +659,10 @@ assumed. -/
 structure IsDemushkin : Prop where
   /-- `G` is a pro-`p` group. -/
   proP : IsProP p G
-  /-- `H¹(G, 𝔽_p)` is finite-dimensional. -/
-  h1_fin : Module.Finite (ZMod p) (contH1 (ZMod p) G (TrivMod G (ZMod p)))
-  /-- `H²(G, 𝔽_p)` is one-dimensional. -/
-  h2_rank : Module.finrank (ZMod p) (contH2 (ZMod p) G (TrivMod G (ZMod p))) = 1
+  /-- `H¹(G, 𝔽_p)` is finite-dimensional, against Mathlib's carrier. -/
+  h1_fin : Module.Finite (ZMod p) (cohomFp p G 1)
+  /-- `H²(G, 𝔽_p)` is one-dimensional, against Mathlib's carrier. -/
+  h2_rank : Module.finrank (ZMod p) (cohomFp p G 2) = 1
   /-- The cup pairing is nondegenerate on the left. -/
   cupLeft : ∀ a : cocycle₁ (ZMod p) G (TrivMod G (ZMod p)),
     cocycle₁.mk (ZMod p) G (TrivMod G (ZMod p)) a ≠ 0 →
@@ -709,22 +737,21 @@ structure LocalFieldInputs (p : ℕ) [Fact p.Prime] (Γ : Type u) [Group Γ] [To
     [IsTopologicalGroup Γ] [CompactSpace Γ] [TotallyDisconnectedSpace Γ] (N : ℕ)
     (hasMu : Prop) where
   /-- Input 1: `H⁰(G_K, 𝔽_p)` is finite-dimensional. -/
-  h0_finite : Module.Finite (ZMod p) (contH0 (ZMod p) Γ (TrivMod Γ (ZMod p)))
+  h0_finite : Module.Finite (ZMod p) (cohomFp p Γ 0)
   /-- Input 1: `H¹(G_K, 𝔽_p)` is finite-dimensional. -/
-  h1_finite : Module.Finite (ZMod p) (contH1 (ZMod p) Γ (TrivMod Γ (ZMod p)))
+  h1_finite : Module.Finite (ZMod p) (cohomFp p Γ 1)
   /-- Input 1: `H²(G_K, 𝔽_p)` is finite-dimensional. -/
-  h2_finite : Module.Finite (ZMod p) (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p)))
+  h2_finite : Module.Finite (ZMod p) (cohomFp p Γ 2)
   /-- Input 1: `dim H⁰(G_K, 𝔽_p) = 1`. -/
-  h0_rank : Module.finrank (ZMod p) (contH0 (ZMod p) Γ (TrivMod Γ (ZMod p))) = 1
+  h0_rank : Module.finrank (ZMod p) (cohomFp p Γ 0) = 1
   /-- Input 1: `dim H²(G_K, 𝔽_p) = 1` when `μ_p ⊆ K`. -/
-  h2_rank_of_mu : hasMu → Module.finrank (ZMod p) (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p))) = 1
+  h2_rank_of_mu : hasMu → Module.finrank (ZMod p) (cohomFp p Γ 2) = 1
   /-- Input 1: `H²(G_K, 𝔽_p)` **vanishes** when `μ_p ⊄ K`. This is the statement the free
   case uses; a `finrank = 0` field would not give it. -/
-  h2_eq_zero_of_not_mu :
-    ¬ hasMu → Subsingleton (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p)))
+  h2_eq_zero_of_not_mu : ¬ hasMu → Subsingleton (cohomFp p Γ 2)
   /-- Input 1: the Euler-characteristic count `dim H¹ = 1 + dim H² + N`. -/
-  h1_rank : Module.finrank (ZMod p) (contH1 (ZMod p) Γ (TrivMod Γ (ZMod p)))
-    = 1 + Module.finrank (ZMod p) (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p))) + N
+  h1_rank : Module.finrank (ZMod p) (cohomFp p Γ 1)
+    = 1 + Module.finrank (ZMod p) (cohomFp p Γ 2) + N
   /-- Input 3: the cup pairing on `H¹(G_K, 𝔽_p)` is nondegenerate on the left when
   `μ_p ⊆ K`. This is local Tate duality at `n = p`, transported along inputs 2 and 4. -/
   cup_nondegenerate_left : hasMu → ∀ a : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
@@ -770,6 +797,21 @@ variable {p : ℕ} [Fact p.Prime] {Γ : Type u} [Group Γ] [TopologicalSpace Γ]
 -- together with closedness of `proPKernel` (Layer 3); it is an argument here, because this
 -- file states milestones and does not prove them.
 variable [TotallyDisconnectedSpace (maximalProPQuotient p Γ)]
+
+/-- **Layer 11, the canonical instance.** The interface is not lawless: this milestone builds
+it for an actual finite extension of `ℚ_p`, from the Local Fields theorems, so that the
+statements below are about `G_K(p)` and not about an abstract structure. `G_K` is Mathlib's
+`Field.absoluteGaloisGroup K`, `N` is the degree, and `hasMu` says that `K` contains the `p`-th
+roots of unity, in whatever form the Local Fields roadmap states it. Every field is proved
+from a named theorem of that roadmap, transported through the Layer 5 comparison. -/
+example (K : Type u) [Field K] [Algebra ℚ_[p] K] [Module.Finite ℚ_[p] K]
+    [TopologicalSpace (Field.absoluteGaloisGroup K)] [IsTopologicalGroup (Field.absoluteGaloisGroup K)]
+    [CompactSpace (Field.absoluteGaloisGroup K)]
+    [TotallyDisconnectedSpace (Field.absoluteGaloisGroup K)]
+    (hasMuOf : Type u → Prop) :
+    Nonempty (LocalFieldInputs p (Field.absoluteGaloisGroup K) (Module.finrank ℚ_[p] K)
+      (hasMuOf K)) :=
+  sorry
 
 /-- **Layer 11, `G_K(p)` is topologically finitely generated.** From the `H¹` count and the
 degree-one inflation isomorphism, and not from finite generation of `G_K`, which this

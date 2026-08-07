@@ -13,10 +13,14 @@ contact does not stand for permission.
 None of these is a prerequisite. If one lands with a compatible object, the roadmap keeps
 its statements and gains a comparison isomorphism, or deletes a local definition.
 
-- Continuous cohomology, `Mathlib/RepresentationTheory/Homological/ContCohomology/`
-  (R. Hill, A. Yang, E. Xie). Present in release `v4.32.2` with `continuousCohomology` in
-  every degree, an explicit description in degree 0 only, and no cup product. Layer 5 owns
-  the low-degree carrier and states the comparison.
+- Continuous cohomology. The carrier the roadmap uses is
+  `Mathlib/Algebra/Category/ContinuousCohomology/Basic.lean` (R. Hill, A. Yang), which is
+  present at the repository pin with `continuousCohomology` in every degree and an explicit
+  description in degree 0 only. A second line of work,
+  `Mathlib/RepresentationTheory/Homological/ContCohomology/`, appears in release `v4.32.2`
+  (R. Hill, A. Yang, E. Xie; PRs #41144 and #41309). Neither has explicit `H¹` or `H²` or a
+  cup product; Layer 5 owns those and states the comparison. If the two lines are unified
+  upstream, the comparison milestone is restated against the survivor.
 - Cup products for continuous cohomology exist in the FLT staging repository
   (`FLT/Mathlib/.../ContCohomology/CupProduct.lean`, E. Xie, FLT#1098, 2026-07-10), and not
   in Mathlib.
@@ -117,3 +121,11 @@ The same applies to the local carriers. When the Profinite Cohomology roadmap or
 supplies a carrier and the comparison isomorphism of Layer 5 is proved, the local
 definitions in `Suggested.lean` become redundant, and a contributor rewrites the consumers
 along the isomorphism and removes them.
+
+## Ecosystem note on the Mathlib release
+
+At the time of the audit the current Mathlib release was `v4.32.2`, which is later than the
+repository pin. The roadmap is written against the pin. Bumping the pin is a repository-level
+change: at `v4.32.2` the whole repository builds except for two files of another roadmap,
+`TauCetiRoadmap/RepresentationTheory/{LieHighestWeight,SpinRepresentations}/Suggested.lean`,
+because Mathlib no longer provides the `LieRing (Matrix (Fin n) (Fin n) K)` instance.
