@@ -49,10 +49,11 @@ namespace TauCetiRoadmap.ProfiniteCohomology
 
 /-! ### Layer 0: discrete modules, invariant coefficients, and continuous sections -/
 
-/-- **Layer 0, discrete modules are smooth.** Over a profinite group (compact, totally
-disconnected, in the unbundled classes of the roadmap's conventions), every element of a
-discrete module is fixed by an open **normal** subgroup: the orbit map factors elementwise
-through a finite quotient, so `M = ⋃_U M^U`. The Layer 3 colimit runs on that union.
+/-- **Layer 0, every element of a discrete module has an open stabilizer.** Over a profinite
+group (compact, totally disconnected, in the unbundled classes of the roadmap's conventions),
+every element of a discrete module is fixed by an open **normal** subgroup: the orbit map
+factors elementwise
+through a finite quotient, so `M = ⋃_U M^U`. The Layer 3 colimit uses that union.
 (Consume `stabilizer_isOpen`/`continuousSMul_iff_stabilizer_isOpen` and
 `exist_openNormalSubgroup_sub_open_nhds_of_one`.) -/
 example {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
@@ -171,7 +172,7 @@ example {G : Type*} [TopologicalSpace G] [LocallyCompactSpace G] {M : Type*}
 the colimit theorem `H¹(G, M) ≅ colim_U H¹(G ⧸ U, M^U)`, stated raw and with **no coboundary
 subtracted**: the zero set of a continuous 1-cocycle is an open subgroup, and any open normal
 `U` inside it makes the cocycle right-`U`-invariant (so it factors through `G ⧸ U`) and
-`U`-fixed-valued (so it lands in `M^U`). The descended `F` is asked to be a 1-cocycle of
+`U`-fixed-valued (so it takes its values in `M^U`). The descended `F` is asked to be a 1-cocycle of
 `G ⧸ U` on `M^U` on the nose, for the action of Layer 0, so that the conclusion says exactly
 that the original cocycle is the inflation of a finite-level cocycle. A coboundary enters
 only in the injectivity half of the colimit theorem. -/
@@ -299,7 +300,7 @@ even be stated otherwise. -/
 def lWord {G : Type*} [Group G] (U : Subgroup G) (t : G ⧸ U → G) (u : G ⧸ U) (γ : G) : G :=
   (t u)⁻¹ * γ * t (γ⁻¹ • u)
 
-/-- **Layer 5, the transversal word lands in `U`.** -/
+/-- **Layer 5, the transversal word takes its value in `U`.** -/
 theorem lWord_mem {G : Type*} [Group G] (U : Subgroup G) (t : G ⧸ U → G)
     (ht : ∀ x : G ⧸ U, QuotientGroup.mk (t x) = x) (u : G ⧸ U) (γ : G) : lWord U t u γ ∈ U :=
   sorry
@@ -418,7 +419,7 @@ example (K : Type*) [Field K] :
   sorry
 
 /-- **Layer 8, `μₙ`,** the `n`-th roots of unity in the separable closure, as a subgroup of
-`(Kˢ)ˣ`. It carries the natural, in general nontrivial, action of `G_K`, and it is the
+`(Kˢ)ˣ`. It has the natural, in general nontrivial, action of `G_K`, and it is the
 coefficient module of the Kummer isomorphism. -/
 noncomputable def muN (K : Type*) [Field K] (n : ℕ) : Subgroup (SeparableClosure K)ˣ :=
   rootsOfUnity n (SeparableClosure K)
