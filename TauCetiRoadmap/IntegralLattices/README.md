@@ -58,7 +58,8 @@ Out of scope, with the owner of each subject:
 | Subject | Owner |
 | --- | --- |
 | square classes, Witt theory, Cartan–Dieudonné, Hasse invariants, the Hilbert symbol, classification of forms over a field | [Quadratic Form Invariants](https://github.com/roed-math/TauCetiRoadmap/pull/4) |
-| the spinor norm, the comparison of `Spin` with `SO`, local point groups, finite adelic point groups, strong approximation, the Tamagawa volume of `SO` | Orthogonal and Spin Groups |
+| the groups `O(Q)` and `SO(Q)` of a quadratic space over a field, and the comparison of `Spin` with `SO` | [Spin Representations](../RepresentationTheory/SpinRepresentations/README.md) |
+| the spinor norm, local point groups, finite adelic point groups, strong approximation, the Tamagawa volume of `SO` | Orthogonal and Spin Groups |
 | structure theory of local fields | [Local Fields](https://github.com/roed-math/TauCetiRoadmap/pull/2) |
 | root systems, Weyl groups, `DynkinType`, the ADE classification | [Root Systems](../RepresentationTheory/RootSystems/README.md) |
 | Poisson summation and the Gaussian theta transformation for a lattice in a real vector space | [L-functions](https://github.com/roed-math/TauCetiRoadmap/pull/8) |
@@ -274,12 +275,13 @@ both roadmaps use, marked with an asterisk, and the supplier owns the final choi
 | 4C | Quadratic Form Invariants | Layer 0 | `SquareClass`, `squareClassOfUnit` | `Kˣ ⧸ Subgroup.square Kˣ`, `Kˣ →* SquareClass K` |
 | 3G | Global Class Field Theory | Layer 11 | `hilbertProductFormula`\* | `∀ a b : ℚˣ, (a,b)_ℝ · ∏_p (a,b)_p = 1` |
 | 4B | Orthogonal and Spin Groups | 0C | `orthogonalGroup_mulEquiv_bilinear`\* | `orthogonalGroup Q ≃* O(Q.polarBilin)` when `2` is invertible |
+| 4B | Orthogonal and Spin Groups | 0C | `orthogonalMap_baseChange`\* | `O(β) →* O(β.baseChange S)` for a symmetric bilinear form over a commutative ring |
 | 4C | Orthogonal and Spin Groups | Layer 1 | `spinorNorm` | `[FiniteDimensional K V] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) : orthogonalGroup Q →* SquareClass K` |
 | 4C | Orthogonal and Spin Groups | Layer 1 | `spinorNorm_reflection` | value of `spinorNorm` on `⟨reflection Q hv, reflection_mem Q hv⟩` |
 | 4C | Orthogonal and Spin Groups | Layer 2 | local point groups | `orthogonalGroup (Q.baseChange ℚ_[p])` with its topology |
 | 4B, 7B | Orthogonal and Spin Groups | Layer 3 | `orthogonalFiniteAdelicPoints`\* | restricted product of the local point groups relative to a compact open family |
-| 4D, 4F | Orthogonal and Spin Groups | Layer 4 | `spin_strongApproximation`\*, `eichlerTransvection`\* | `Spin(V)(𝔸^S) = Spin(V)(ℚ)·U`, and the transvections of its 4A |
-| 7B, 7F, B7 | Orthogonal and Spin Groups | Layer 5 | `specialOrthogonal_tamagawaVolume`\* | `vol(SO(V)(ℚ) \ SO(V)(𝔸)) = 2`, with the canonical measure |
+| 4D, 4F | Orthogonal and Spin Groups | 2C, 4E | `spin_strongApproximation`\*, `eichlerTransvection`\* | `Spin(V)(𝔸^S) = Spin(V)(ℚ)·U` of its 4E, and the Eichler transvections of its 2C |
+| 7B, 7F, B7 | Orthogonal and Spin Groups | 5G, 5I | `specialOrthogonal_tamagawaVolume`\* | `vol(SO(V)(ℚ) \ SO(V)(𝔸)) = 2` of its 5I, with the compact-open volume comparison of its 5G |
 | 6C, 6G | Root Systems | Layer 5 | the ADE classification and `Nat.card P.weylGroup` | a root system of rank 8 with the `E₈` Cartan matrix is of type `E₈` |
 | 8D | L-functions | Layer 2 | `ZLattice.dual`\* | `AnalyticLattice n → AnalyticLattice n` |
 | 8D | L-functions | Layer 2 | `ZLattice.dual_dual`\* | `dual (dual Λ) = Λ` |
