@@ -82,8 +82,9 @@ that a reader can see the boundary.
 ## How to read a milestone
 
 Each layer states its milestones with a label, such as `3E`. Other roadmaps and the tables
-below cite these labels. Each layer ends with a table of direct prerequisites. Every
-prerequisite has one of four kinds:
+below cite these labels. One layer carries a letter instead of a number: Layer B holds the
+binary theory, and its milestones are `B1` to `B8`. Each layer ends with a table of direct
+prerequisites. Every prerequisite has one of four kinds:
 
 - **M**: a declaration that exists in Mathlib.
 - **T**: a declaration that exists in Tau Ceti.
@@ -260,37 +261,57 @@ is unimodularity and not nondegeneracy.
 
 ## What other roadmaps supply
 
-Each row names one interface. A milestone cites the row, and never a whole roadmap.
+Each row is one interface, consumed by the milestone in the first column. A milestone cites
+a row, and never a whole roadmap. The fourth column gives the declaration the supplier owns.
+Where a supplier has not yet fixed a Lean name, the table gives the provisional name that
+both roadmaps use, marked with an asterisk, and the supplier owns the final choice.
 
-| Consumed | Supplier | Consumed by |
-| --- | --- | --- |
-| square classes and their calculus; Witt decomposition and cancellation over a field | Quadratic Form Invariants, Layers 0 and 1 | 3H, 4C |
-| the invariants `discr`, `signedDiscr` and the Hasse invariant `s(q) = ∏_{i<j} (aᵢ,aⱼ)` | Quadratic Form Invariants, Layer 3 | 0C, 3H |
-| classification of forms over `ℚ_p` by `(dim, d±, s)`, including `p = 2` | Quadratic Form Invariants, Layer 6 | 3H |
-| the Hilbert product formula `∏_v (a,b)_v = 1` over `ℚ` | Global Class Field Theory, Layer 11 | 3G |
-| the spinor norm on `O(V_p)`, and the image of `Spin` as the spinor kernel | Orthogonal and Spin Groups, Layers 1 and 2 | 4C |
-| finite adelic point groups as restricted products, with diagonal rational points | Orthogonal and Spin Groups, Layer 3 | 4B, 7B |
-| strong approximation for `Spin(V)`, `V` indefinite of dimension at least 3 | Orthogonal and Spin Groups, Layer 4 | 4D, 4E |
-| Eichler transvections and their spinor norm | Orthogonal and Spin Groups, Layer 4 | 4E |
-| canonical local Haar measures, and `vol(SO(V)(ℚ) \ SO(V)(𝔸)) = 2` | Orthogonal and Spin Groups, Layer 5 | 7B, 7F |
-| the order of `W(E₈)`, the ADE classification, root systems from a bilinear form | Root Systems, Layer 5 | 6C, 7H |
-| Poisson summation and the Gaussian theta transformation for a `ZLattice` | L-functions, Layer 2 | 8D, 8E |
+| Consumer milestone | Supplier | Supplier milestone | Declaration | Type |
+| --- | --- | --- | --- | --- |
+| 0C, 3H | Quadratic Form Invariants | Layer 3 | `discr`, `signedDiscr`, `hasseInvariant` | invariants of a form over a field |
+| 3H | Quadratic Form Invariants | Layer 6 | `hilbertSymbol` | `(a b : Kˣ) → ℤˣ` for a nonarchimedean local field `K` |
+| 3H | Quadratic Form Invariants | Layer 6 | the classification over `ℚ_p` | `(dim, d±, s)` determines the form |
+| 4C | Quadratic Form Invariants | Layer 0 | `SquareClass`, `squareClassOfUnit` | `Kˣ ⧸ Subgroup.square Kˣ`, `Kˣ →* SquareClass K` |
+| 3G | Global Class Field Theory | Layer 11 | `hilbertProductFormula`\* | `∀ a b : ℚˣ, (a,b)_ℝ · ∏_p (a,b)_p = 1` |
+| 4B | Orthogonal and Spin Groups | 0C | `orthogonalGroup_mulEquiv_bilinear`\* | `orthogonalGroup Q ≃* O(Q.polarBilin)` when `2` is invertible |
+| 4C | Orthogonal and Spin Groups | Layer 1 | `spinorNorm` | `[FiniteDimensional K V] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) : orthogonalGroup Q →* SquareClass K` |
+| 4C | Orthogonal and Spin Groups | Layer 1 | `spinorNorm_reflection` | value of `spinorNorm` on `⟨reflection Q hv, reflection_mem Q hv⟩` |
+| 4C | Orthogonal and Spin Groups | Layer 2 | local point groups | `orthogonalGroup (Q.baseChange ℚ_[p])` with its topology |
+| 4B, 7B | Orthogonal and Spin Groups | Layer 3 | `orthogonalFiniteAdelicPoints`\* | restricted product of the local point groups relative to a compact open family |
+| 4D, 4F | Orthogonal and Spin Groups | Layer 4 | `spin_strongApproximation`\*, `eichlerTransvection`\* | `Spin(V)(𝔸^S) = Spin(V)(ℚ)·U`, and the transvections of its 4A |
+| 7B, 7F, B7 | Orthogonal and Spin Groups | Layer 5 | `specialOrthogonal_tamagawaVolume`\* | `vol(SO(V)(ℚ) \ SO(V)(𝔸)) = 2`, with the canonical measure |
+| 6C, 6G | Root Systems | Layer 5 | the ADE classification and `Nat.card P.weylGroup` | a root system of rank 8 with the `E₈` Cartan matrix is of type `E₈` |
+| 8D | L-functions | Layer 2 | `ZLattice.dual`\* | `AnalyticLattice n → AnalyticLattice n` |
+| 8D | L-functions | Layer 2 | `ZLattice.dual_dual`\* | `dual (dual Λ) = Λ` |
+| 8D | L-functions | Layer 2 | `ZLattice.covolume_mul_covolume_dual`\* | `covolume Λ * covolume (dual Λ) = 1` |
+| 8E | L-functions | Layer 2 | `ZLattice.gaussianTheta_one_div`\* | `0 < t → Θ Λ (1/t) = t^(n/2)·(covolume Λ)⁻¹·Θ (dual Λ) t` |
+
+`Suggested.lean` carries one structure for each of the three suppliers whose declarations do
+not exist yet, with exactly these fields, so that a consumer statement is written once and
+does not change when the supplier lands.
 
 ### Shared layer-DAG table: Integral Lattices ↔ L-functions
 
 The two roadmaps consume each other at different layers. This table is the whole
 interface, and it is byte-identical in both `README.md` files. Nothing crosses between the
 two roadmaps except through a row of this table. The supplier owns each name, and the
-consumer cites the name instead of restating the object.
+consumer cites the name instead of restating the object. The carrier is the bundled analytic
+lattice: a submodule of a Euclidean space together with its discreteness and its `IsZLattice`
+proof.
 
 | Consumer layer | Supplier layer | Exact object or theorem | Agreed provisional name |
 | --- | --- | --- | --- |
-| Integral Lattices 8D | L-functions Layer 2, item 1 | the analytic dual of a `ZLattice` in a real inner product space | `ZLattice.dual` |
-| Integral Lattices 8D | L-functions Layer 2, item 3 | `covolume L * covolume Lᵛ = 1` | `ZLattice.covolume_mul_covolume_dual` |
-| Integral Lattices 8E | L-functions Layer 2, item 6 | Poisson summation `∑_{v ∈ L} f v = (covolume L)⁻¹ ∑_{w ∈ Lᵛ} 𝓕f w` | `ZLattice.tsum_eq_covolume_inv_mul_tsum_dual` |
-| Integral Lattices 8E | L-functions Layer 2, item 8 | `Θ_L(1/t) = t^{n/2} (covolume L)⁻¹ Θ_{Lᵛ}(t)` for real `t > 0` | `ZLattice.gaussianTheta_one_div` |
+| Integral Lattices 8D | L-functions Layer 2, item 1 | the dual of a bundled analytic lattice, characterized by integrality of the inner products | `ZLattice.dual` |
+| Integral Lattices 8D | L-functions Layer 2, item 2 | biduality `dual (dual Λ) = Λ` | `ZLattice.dual_dual` |
+| Integral Lattices 8D | L-functions Layer 2, item 3 | `covolume Λ * covolume (dual Λ) = 1` | `ZLattice.covolume_mul_covolume_dual` |
+| Integral Lattices 8E | L-functions Layer 2, item 8 | `Θ_Λ(1/t) = t^{n/2} (covolume Λ)⁻¹ Θ_{dual Λ}(t)` for real `t > 0` | `ZLattice.gaussianTheta_one_div` |
 | L-functions Layer 2, items 10 to 13 | Integral Lattices 1B | the dual lattice of an integral bilinear form, and the vocabulary for it | `IntegralLattice.dual` |
 | L-functions Layer 2, items 10 to 13 | Integral Lattices 8D | the analytic dual of the realization of `L` equals `IntegralLattice.dual` | `IntegralLattice.analyticDual_eq_dual` |
+
+Poisson summation for a lattice is an L-functions target and is not consumed here, so it has
+no row. The dependency is acyclic at item level: L-functions items 1, 2, 3 and 8 use nothing
+from this roadmap; Integral Lattices 8D and 8E use those four items; and L-functions items 10
+to 13 use 1B and 8D.
 
 ---
 
@@ -458,28 +479,35 @@ is `#S_{min L}(L)`, and `r_L(k) = #S_k(L)` are the theta coefficients of Layer 8
 
 **2C. Automorphism groups.** `O(L)` is the group of isometries of `L`, and `SO(L)` is its
 subgroup of elements of determinant 1. For definite `L`, `O(L)` is finite. Also
-`O(L) × O(M) ≤ O(L ⊕ M)`, with the obstruction to equality identified.
+`O(L) × O(M) ≤ O(L ⊕ M)`, with the obstruction to equality identified. Definiteness is
+needed: 4F gives an infinite `O(L)` for every indefinite lattice of rank at least 3, and B4
+settles rank 2, where `O(L)` is infinite exactly when the norm form is anisotropic.
 
 **2D. Covolume.** For a positive definite lattice realized in Euclidean space,
 `covolume(L)² = det L`. This is where the square root in the theta transformation is fixed.
 
-**2E. Minkowski and Hermite bounds.** `min L ≤ c_n (det L)^{1/n}` from the convex body
-theorem, and Hermite's inequality `min L ≤ (4/3)^{(n−1)/2} (det L)^{1/n}` with the explicit
-constant. `A₂` attains equality in rank 2.
+**2E. Minkowski and Hermite bounds.** Both statements assume `rank L = n ≥ 1`, because `min L`
+is defined only there. Minkowski's bound is `min L ≤ c_n (det L)^{1/n}`, with `c_n` the
+explicit constant from the convex body theorem. Hermite's inequality is
+`min L ≤ (4/3)^{(n−1)/2} (det L)^{1/n}`, with that constant. `A₂` attains equality in rank 2.
 
-**2F. Successive minima.** The successive minima `λ₁(L) ≤ … ≤ λₙ(L)` of the Gram form, and
-a basis adapted to them.
+**2F. Successive minima.** For positive definite `L` of rank `n ≥ 1` and `1 ≤ i ≤ n`, the
+`i`-th successive minimum is
+
+    λ_i(L) = min {c : the set {x ∈ L : β x x ≤ c} spans a subgroup of rank at least i},
+
+so `λ_i` is a value of the form `β x x`, and not a length. This milestone asks for: the
+minimum exists, and `λ₁(L) = min L`; the sequence is nondecreasing; vectors `x₁, …, xₙ`
+with `β x_i x_i = λ_i(L)` and `x₁, …, xₙ` linearly independent exist; and Minkowski's second
+theorem `∏_i λ_i(L) ≤ γ_n^n det L` with the explicit constant. Vectors attaining the
+successive minima need not form a `ℤ`-basis, and this roadmap does not claim that they do.
+Milestone 2G produces the basis it needs by reduction, not from 2F.
 
 **2G. Reduction and finiteness of classes.** Minkowski-reduced bases exist. A reduced Gram
 matrix of given rank and determinant has entries bounded explicitly in terms of the rank
 and the determinant. There are therefore finitely many isometry classes of positive
 definite lattices of a given rank and determinant. This is the positive definite case of
 class-number finiteness, and it is what the enumeration in the LMFDB rests on.
-
-**2H. Automorphism groups in rank 2.** For an indefinite nondegenerate lattice of rank 2,
-`O(L)` is infinite exactly when the form is anisotropic. So `O(U) ≅ (ℤ/2)²` is finite, and
-`O(⟨1,−2⟩)` is infinite, being the unit group of `ℤ[√2]`. Milestone 4E treats rank at least
-3.
 
 | Milestone | Direct prerequisites |
 | --- | --- |
@@ -488,9 +516,8 @@ class-number finiteness, and it is what the enumeration in the LMFDB rests on.
 | 2C | M `IsZLattice`; T `orthogonalGroupToLinearIsometryEquiv`; L 2A |
 | 2D | M `ZLattice.covolume`, `covolume_eq_det`; L 0C, 0E |
 | 2E | M `exists_ne_zero_mem_lattice_of_measure_mul_two_pow_lt_measure`, `ZLattice.covolume`; T doubling counts; L 2B, 2D |
-| 2F | L 2B, 2E |
+| 2F | M `exists_ne_zero_mem_lattice_of_measure_mul_two_pow_lt_measure`; L 2B, 2E |
 | 2G | T doubling counts; L 2E, 2F |
-| 2H | M `Matrix.PosDef`; L 0E, 2C |
 
 ### Layer 3: localization, Jordan splittings, and the genus
 
@@ -518,8 +545,10 @@ that two symbols describe isometric lattices exactly when sign walking and oddit
 relate them. The canonical form is the corrected one of Allcock–Gal–Mark.
 
 **3F. The genus.** `gen L = gen M` when `L_p ≅ M_p` for every `p` and the real signatures
-agree. The genus is determined by finitely many congruence conditions, namely equivalence
-over `ℤ/N` for a suitable `N`, which is stated in an effective form.
+agree. Only the primes dividing `2 det L` matter: at every other `p` both localizations are
+unimodular of the same rank and determinant square class, so 3C makes them isometric. The
+genus is therefore decided by the finite family of local isometry classes at `p ∣ 2 det L`
+together with the signature, and 3G turns that family into a finite symbol.
 
 **3G. Genus symbols and their constraints.** The genus symbol is the family of `p`-adic
 symbols for `p ∣ 2·det L`, and it determines the genus. Its well-formedness conditions are
@@ -542,6 +571,83 @@ rational equivalence together with the integral local data gives membership in o
 | 3G | L 3E, 3F; R Global Class Field Theory Layer 11 |
 | 3H | L 3F; R Quadratic Form Invariants Layers 1, 3 and 6 |
 
+### Layer B: binary lattices and quadratic orders
+
+Rank 2 is the exception in four places: 2C and 4F for automorphism groups, 4E for class
+numbers, and 7G for the mass. Its theory is the arithmetic of quadratic orders, and it is
+not the theory the other ranks use. This layer builds it, and it needs Layers 0 and 1 only.
+Mathlib has `Zsqrtd` and Pell's equation, and it has no theory of non-maximal quadratic
+orders or of binary form classes, so B1 to B5 are built here.
+
+**B1. The order of a binary lattice.** Let `L` be nondegenerate of rank 2, with Gram matrix
+`!![A, B; B, C]` in a basis. Its norm form is `N_L(x, y) = A x² + 2B x y + C y²`, an integral
+binary quadratic form with even middle coefficient and discriminant
+`disc N_L = 4B² − 4AC = −4 det L`. Write `N_L = c·f` with `c > 0` the content and `f`
+primitive. Then `Δ(L) := disc f` satisfies `Δ ≡ 0` or `1 (mod 4)`, is negative for definite
+`L`, and is positive for indefinite `L`. The quadratic algebra is `K_Δ = ℚ[t]/(t² − Δ)` and
+the order is `𝒪(L) = ℤ[(Δ + √Δ)/2] ⊆ K_Δ`, of discriminant `Δ`. The milestone also fixes an
+orientation of `L` and proves that `c`, `f` and `Δ` do not depend on the chosen basis.
+
+**B2. Forms and ideal classes.** Fix `Δ ≡ 0` or `1 (mod 4)`, and let `f = (a, b, c)` be a
+primitive form of discriminant `Δ`. Send it to the `𝒪_Δ`-submodule
+`𝔞_f = aℤ + ((−b + √Δ)/2)ℤ` of `K_Δ`. This map is a bijection from proper equivalence
+classes of primitive forms of discriminant `Δ` to proper ideal classes of `𝒪_Δ`. For `Δ < 0` the source is the set of positive definite classes and the
+target is `Pic(𝒪_Δ)`. For `Δ > 0` the target is the narrow class group, in which two proper
+ideals are identified when they differ by a principal ideal with a generator of positive norm.
+Cox, *Primes of the form x²+ny²*, Theorem 7.7 and its narrow analogue is the source.
+
+**B3. Compatibility.** The bijection of B2 carries Gauss composition to multiplication of
+classes, the opposite form to the inverse class, and the principal form to the trivial
+class. It carries the genus of `L`, in the sense of 3F, to a coset of the subgroup of
+squares. Discriminants agree on both sides.
+
+**B4. Automorphisms and the Pell criterion.** For nondegenerate binary `L`,
+`SO(L) ≅ {u ∈ 𝒪(L)ˣ : N(u) = 1}` and `[O(L) : SO(L)] = 2`, so `|O(L)| = 2·#{u : N u = 1}`.
+Three cases follow:
+
+- `Δ < 0`: the unit group is finite, `#𝒪(L)ˣ = 6` for `Δ = −3`, `4` for `Δ = −4`, and `2`
+  otherwise, so `|O(L)| = 2·#𝒪(L)ˣ`;
+- `Δ > 0` and `Δ` is not a square: the norm-one units are infinite, by Pell's equation, so
+  `O(L)` is infinite;
+- `Δ > 0` and `Δ` is a square: `N_L` is isotropic over `ℚ`, the norm-one units are `{±1}`,
+  and `O(L)` is finite. The hyperbolic plane `U` has `Δ = 4` and `|O(U)| = 4`.
+
+**B5. Finiteness of the class group.** `Pic(𝒪_Δ)` and its narrow analogue are finite. The
+route is reduction of binary forms: for `Δ < 0` the reduced forms satisfy `|b| ≤ a ≤ c`, and
+for `Δ > 0` the reduced forms fall into finitely many cycles under the continued-fraction
+step. Both give an explicit finite list of classes for each `Δ`.
+
+**B6. The norm-one torus and its points.** For a binary lattice `L` with algebra `K_Δ`, the
+norm-one group is `T_L(R) = {u ∈ (K_Δ ⊗ R)ˣ : N(u) = 1}` for `R = ℚ`, `ℚ_p`, `ℝ` and `ℤ_p`,
+with `T_L(ℤ_p)` defined through `𝒪(L) ⊗ ℤ_p`. Required: `T_L(ℤ_p)` is compact open in
+`T_L(ℚ_p)`; the isomorphisms `SO(L_p) ≅ T_L(ℤ_p)` and `SO(V_p) ≅ T_L(ℚ_p)` transported from
+B4; and the diagonal embedding of `T_L(ℚ)`.
+
+**B7. Measures in rank 2.** A canonical Haar measure on `T_L(ℚ_p)` and on `T_L(ℝ)`, the
+product measure on the restricted product of the `T_L(ℚ_p)` relative to the `T_L(ℤ_p)`, and
+the finite covolume of the diagonal `T_L(ℚ)`. The normalization is compared with the one the
+sibling roadmap uses for `SO`, so that 7G and 7H speak of one measure.
+
+**B8. The mass of a positive definite binary genus.** Let `L` be positive definite of rank 2
+with order `𝒪 = 𝒪(L)`, so `Δ < 0`. Every class `M` in `gen L` has the same order
+`|O(M)| = 2·#𝒪ˣ`, by B4, and `gen L` has `h(gen L)` classes, which is finite by B5. Hence
+
+    m(gen L) = h(gen L) / (2·#𝒪ˣ),    m⁺(gen L) = h⁺(gen L) / #𝒪ˣ.
+
+For `A₂` this gives `Δ = −3`, `#𝒪ˣ = 6`, `h = 1` and `m = 1/12 = 1/|O(A₂)|`. The milestone
+also proves that this value agrees with the Conway–Sloane normalization of 7H in rank 2.
+
+| Milestone | Direct prerequisites |
+| --- | --- |
+| B1 | M `Matrix.det`, `Zsqrtd`; L 0A, 0C |
+| B2 | M `Ideal`, `Submodule`; L B1 |
+| B3 | L 3F, B2 |
+| B4 | M `Pell.Solution₁`, `Pell.exists_of_not_isSquare`; L 2C, B1, B2 |
+| B5 | L B2 |
+| B6 | M `ℤ_[p]`, `ℚ_[p]`, `LinearMap.BilinForm.baseChange`; L 3A, B4 |
+| B7 | M `MeasureTheory.Measure.haar`; L B6; R Orthogonal and Spin Groups Layer 5 |
+| B8 | L 2C, 3F, B4, B5 |
+
 ### Layer 4: classes, spinor genera, Eichler's theorem, and neighbors
 
 The Orthogonal and Spin Groups roadmap owns the groups and the approximation theorem. This
@@ -553,12 +659,18 @@ The class number `h(L)` is the number of classes in `gen L`, and the proper clas
 its analogue. For definite `L` the class number is finite. In rank 0 and rank 1 the class
 sets are computed directly.
 
-**4B. Stabilizers and the adelic dictionary.** For `V = ℚ ⊗ L`, the stabilizers
-`K_p(L) = {g ∈ O(V_p) : g L_p = L_p}` and `K_p⁺(L) = K_p(L) ∩ SO(V_p)`. Each is compact and
-open. For all but finitely many `p` it is the stabilizer of a unimodular `ℤ_p`-lattice, in
-the form that makes the restricted product well defined. The products `K_f(L)` and
-`K_f⁺(L)` are compact open subgroups. The two correspondences are proved in both
-directions:
+**4B. Stabilizers and the adelic dictionary.** This roadmap is bilinear-first, and the supplier
+states its groups for a quadratic form over a field. The first part of the milestone is the
+transport. Over `ℚ_p` the element 2 is invertible, so the automorphism group of the bilinear
+form `β_p` and the orthogonal group of the half-norm form `Q_p = ½ β_p(x, x)` are the same
+group, by Orthogonal and Spin Groups 0C. The same holds for the determinant-one subgroups.
+Everything below is stated for the transported group.
+
+For `V = ℚ ⊗ L`, the stabilizers are `K_p(L) = {g ∈ O(V_p) : g L_p = L_p}` and
+`K_p⁺(L) = K_p(L) ∩ SO(V_p)`. Prove that each is compact and open. For all but finitely many
+`p` it is the stabilizer of a unimodular `ℤ_p`-lattice, in the form that makes the restricted
+product well defined. The products `K_f(L)` and `K_f⁺(L)` are compact open subgroups. The two
+correspondences are proved in both directions:
 
     {classes in gen L}        ≃  O(V)(ℚ) \ O(V)(𝔸_f) / K_f(L),
     {proper classes in gen L} ≃  SO(V)(ℚ) \ SO(V)(𝔸_f) / K_f⁺(L).
@@ -568,26 +680,54 @@ computed from the Jordan data of Layer 3. The spinor genus `spn L` and the prope
 `spn⁺ L`. The definition through local spinor norms agrees with the definition through adelic
 double cosets.
 
-The number of proper spinor genera in a genus is the order of an explicit finite abelian
-quotient. That quotient is the idele class group of `ℚ`, divided by the subgroup generated by
-three families: the squares, the images `θ_p(K_p⁺(L))`, and the image of `θ_∞`. Every one of
-those subgroups is named in the statement.
+The count of proper spinor genera is a named group. Let `J` be the idele group of `ℚ`, the
+restricted product of the groups `ℚ_pˣ` and `ℝˣ` relative to the subgroups `ℤ_pˣ`. Let `J²`
+be its subgroup of squares, let `ℚˣ` sit in `J` diagonally, and put
+
+    J_L = {j ∈ J : j_p ∈ θ_p(K_p⁺(L)) for every p, and j_∞ ∈ θ_∞(SO(V_∞))}.
+
+Define
+
+    ProperSpinorGenusClassGroup L = J / (ℚˣ · J² · J_L).
+
+The milestone proves three statements:
+
+- the group is finite, and every element has order at most 2;
+- the map that sends a proper class in `gen L` to its idele class induces a bijection from
+  the proper spinor genera in `gen L` to `ProperSpinorGenusClassGroup L`;
+- its order is the count in O'Meara 102:7.
+
 
 **4D. Eichler's theorem.** For an indefinite nondegenerate lattice of rank at least 3, a
 proper spinor genus contains exactly one proper class, so `cls⁺ L = spn⁺ L`. The passage
 from proper classes to classes needs the analysis of when `O(L) ≠ SO(L)`, and that is part
 of the milestone.
 
-**4E. Class numbers of indefinite lattices.** For rank at least 3 the class number is finite,
-and it is bounded by the count of 4C. For rank 2 finiteness is a separate theorem. Binary
-quadratic forms of a given discriminant correspond to ideal classes of the associated quadratic
-order. The class number of that order is finite. The rank-2 proof does not use strong
-approximation, and the proof for rank at least 3 does not cover rank 2.
+**4E. Class numbers of indefinite lattices.** For rank at least 3 the class number is
+finite, and it is bounded by the count of 4C. For rank 2 the theorem is B5, through the
+correspondence B2: the classes in a genus form a subset of the proper ideal classes of
+`𝒪(L)`, and that group is finite. The rank-2 proof does not use strong approximation, and
+the proof for rank at least 3 does not cover rank 2.
 
 **4F. Automorphism groups of indefinite lattices.** For an indefinite nondegenerate lattice
-of rank at least 3, `O(L)` is infinite. The proof produces Eichler transvections in `O(L)`.
-Together with 2H this settles the definite hypothesis in 2C, and it is why Layer 7 treats
-positive definite genera only.
+of rank at least 3, `O(L)` is infinite. The proof splits by whether `V = ℚ ⊗ L` has a nonzero
+isotropic vector, because an indefinite rational space need not have one: the form
+`x² + y² − 3z²` is indefinite over `ℝ` and anisotropic over `ℚ`, since a primitive integral
+solution of `x² + y² = 3z²` forces `3 ∣ x` and `3 ∣ y`.
+
+- **Isotropic case.** Choose an isotropic `u ∈ L` and vectors `w ∈ L` with `β u w = 0`. The
+  Eichler transvections `E_{u,w}` of Orthogonal and Spin Groups Layer 4 preserve `L`, and
+  `w ↦ E_{u,w}` is injective on a subgroup of finite index in `u^⊥ ∩ L`, which is infinite
+  because the rank is at least 3. So `O(L)` is infinite.
+- **Anisotropic case.** Choose a rational nondegenerate indefinite plane `W ⊆ V`, which
+  exists because `t₊ > 0` and `t₋ > 0`. Put `M = L ∩ W` and `N = L ∩ W^⊥`. Then `M ⊕ N` has
+  finite index in `L`, and `M` is an indefinite binary lattice whose norm form is
+  anisotropic over `ℚ`, so `O(M)` is infinite by B4. The group `O(M) × O(N)` acts on the
+  finite set of overlattices of `M ⊕ N` of that index, so the stabilizer of `L` has finite
+  index in it and is again infinite, and it embeds in `O(L)`.
+
+Together with B4 this settles the definiteness hypothesis in 2C, and it is why Layer 7
+treats positive definite genera only.
 
 **4G. Kneser neighbors.** Integral lattices `L` and `M` on `V` are `p`-neighbors when
 `[L : L ∩ M] = [M : L ∩ M] = p`. This milestone asks for:
@@ -603,12 +743,12 @@ claimed, and no consumer may infer a complete list of classes from neighbor step
 
 | Milestone | Direct prerequisites |
 | --- | --- |
-| 4A | L 2C, 2G, 3F |
-| 4B | L 3A, 3B, 4A; R Orthogonal and Spin Groups Layers 2 and 3 |
+| 4A | L 2C, 2G, 3F, B2, B5 |
+| 4B | L 3A, 3B, 4A; R Orthogonal and Spin Groups Layers 0, 2 and 3 |
 | 4C | T `squareClass`; L 3C, 3D, 4B; R Orthogonal and Spin Groups Layers 1 and 2 |
 | 4D | L 4B, 4C; R Orthogonal and Spin Groups Layer 4 |
-| 4E | L 4C, 4D; R Quadratic Form Invariants Layer 1 |
-| 4F | L 2C; R Orthogonal and Spin Groups Layer 4 |
+| 4E | L 4C, 4D, B2, B5 |
+| 4F | L 2C, B4; R Orthogonal and Spin Groups Layer 4 |
 | 4G | M `Submodule.basisOfPid`; L 0C, 3F |
 
 ### Layer 5: discriminant forms and Nikulin's theory
@@ -618,8 +758,12 @@ applications*, where the numbering of the translation agrees with the original. 
 negative definite, so each citation carries the twist.
 
 **5A. The genus and the discriminant form.** For even lattices, `gen L` is determined by
-`(t₊, t₋, q_L)`. The odd analogue is stated as well. The translation between the
-Conway–Sloane symbols of 3E and the invariants `(t₊, t₋, q)` is proved in both directions.
+`(t₊, t₋, q_L)`, which is Nikulin Corollary 1.9.4. The odd analogue is Corollary 1.16.3: the
+genus of any nondegenerate lattice over `ℤ` is determined by its parity together with
+`(t₊, t₋, b_L)`, where `b_L` is the discriminant bilinear form of 1D. Both statements are
+milestones. So is the translation between the Conway–Sloane symbols of 3E and the invariants
+`(t₊, t₋, q)`, in both directions, since the K3 work uses the second and the mass formula
+uses the first.
 
 **5B. Existence.** An even lattice with invariants `(t₊, t₋, q)` exists if and only if:
 
@@ -681,8 +825,11 @@ equivalent:
    `|A_q| ≡ ± discr K(q₂) (mod (ℤ_2^*)²)` if `l₊ + l₋ − t₊ − t₋ = l(A_{q₂})` and `q₂` has no
    summand `q_θ^{(2)}(2)`.
 
-Corollary 1.12.3 is the sufficient form with `l₊ + l₋ − t₊ − t₋ > l(A_q)`. Theorem 1.12.4
-gives the criterion in terms of the signatures alone.
+Corollary 1.12.3 is the sufficient form with `l₊ + l₋ − t₊ − t₋ > l(A_q)`. Theorem 1.12.4 is
+the criterion in terms of the signatures alone: for nonnegative integers `t₊, t₋, l₊, l₋`,
+every even lattice of signature `(t₊, t₋)` embeds primitively into some even unimodular
+lattice of signature `(l₊, l₋)` if and only if `l₊ − l₋ ≡ 0 (mod 8)`, `t₊ ≤ l₊`, `t₋ ≤ l₋`,
+and `2(t₊ + t₋) ≤ l₊ + l₋`.
 
 **5H. Uniqueness of a primitive embedding.** Theorem 1.14.4 concerns a primitive embedding
 of an even lattice `M` of signature `(t₊, t₋)` into an even unimodular lattice `L` of
@@ -703,9 +850,13 @@ embeddings of `S` into even lattices with invariants `(m₊, m₋, q)` correspon
   `δ = (q_S ⊕ (−q))|Γ_γ^⊥ / Γ_γ` and `Γ_γ ⊆ A_S ⊕ A_q` is the graph of `γ`;
 - an isometry `γ_K` from `q_K` to `−δ`.
 
-Two tuples give isomorphic
-embeddings exactly when `H_S = H'_S` and suitable isometries intertwine the data, and
-isomorphic primitive sublattices exactly when `H_S` and `H'_S` are conjugate under `O(S)`.
+Two tuples `(H_S, H_q, γ; K, γ_K)` and
+`(H'_S, H'_q, γ'; K', γ'_K)` give isomorphic primitive embeddings exactly when `H_S = H'_S`
+and there are `ξ ∈ O(q)` and an isometry `ψ : K ≅ K'` with `γ' = ξ ∘ γ` and
+`ξ̄ ∘ γ_K = γ'_{K'} ∘ ψ̄`. Here `ξ̄ : δ ≅ δ'` is the isometry of the quotient forms induced
+by `ξ`, and `ψ̄ : q_K ≅ q_{K'}` is the isometry of discriminant forms induced by `ψ`, through
+the functoriality of 1D. The same tuples give isomorphic primitive sublattices under the
+weaker condition that `H_S` and `H'_S` are conjugate by an automorphism of `S`.
 The lattice `K` is the orthogonal complement of `S`. Corollary 1.15.2 states the genus-level
 version.
 
@@ -743,9 +894,14 @@ follows from 5C, and the roadmap states it that way.
 
 ### Layer 6: unimodular lattices in low rank
 
-**6A. Indefinite classification.** An even indefinite unimodular lattice is
-`U^{min(t₊,t₋)} ⊕ E₈(±1)^{|τ|/8}`, and its signature determines it. An odd indefinite
-unimodular lattice is `⟨1⟩^{t₊} ⊕ ⟨−1⟩^{t₋}`.
+**6A. Indefinite classification.** Let `L` be indefinite unimodular of signature
+`(t₊, t₋)`, and put `k = |t₊ − t₋| / 8`. If `L` is even, then `8 ∣ t₊ − t₋` by 1I, and the
+signature determines `L`:
+
+- if `t₊ ≥ t₋`, then `L ≅ U^{t₋} ⊕ E₈^{k}`, with the positive definite `E₈`;
+- if `t₋ ≥ t₊`, then `L ≅ U^{t₊} ⊕ E₈(−1)^{k}`.
+
+If `L` is odd, then `L ≅ ⟨1⟩^{t₊} ⊕ ⟨−1⟩^{t₋}`. Both statements are proved milestones.
 
 **6B. Existence in the definite case.** An even unimodular positive definite lattice of
 rank `n` exists exactly when `8 ∣ n`.
@@ -756,29 +912,42 @@ indecomposable summands, and a count of characteristic vectors. It follows that 
 unique even unimodular lattice of rank 8. The alternative proof through root systems, in
 which the minimal vectors form a root system of type `E₈`, discharges the same milestone.
 
-**6D. Rank 16.** `E₈²` and `D₁₆⁺` are even unimodular of rank 16, they lie in one genus, and
-they are not isometric. Their root systems differ. That there is no third class is a
-theorem of this milestone. It is proved either by a complete neighbor argument or from the
-mass certificate of 7H.
+**6D. Rank 16, the two classes.** `E₈²` and `D₁₆⁺` are even unimodular of rank 16, they lie
+in one genus, and they are not isometric, because their root systems differ. This milestone
+constructs both lattices and proves those four statements. It claims no completeness: that
+the genus has no third class is 7I, which comes after the mass formula.
 
 **6E. Rank 24 reference lattices.** The 24 Niemeier lattices are defined by explicit Gram
-data or glue data. For each row: evenness, unimodularity, rank 24, the stated root system,
-and non-isometry with the other rows whenever the computed invariants settle it. The name
-Leech denotes the row with no roots. This milestone states no completeness theorem for rank
-24.
+data or glue data. For each row the milestone proves evenness, unimodularity, rank 24, and
+the stated root system. It also proves that the 24 rows are pairwise non-isometric: 23 of
+them have pairwise distinct root systems, and the remaining row has no roots, so the root
+system separates all 24. The name Leech denotes the row with no roots. This milestone states
+no completeness theorem for rank 24, and it proves no characterization of the Leech row
+beyond the ones listed here.
 
 **6F. Two models of `E₈`.** The Gram matrix model of 0G and the coordinate model
 `{x ∈ ℤ⁸ ∪ (ℤ+½)⁸ : ∑ x ∈ 2ℤ}` are isometric. The proof gives Tau Ceti one `E₈` and one
 isometry, rather than two unrelated lattices.
+
+**6G. The order of `O(E₈)`.** Reflections in the 240 roots of `E₈` generate `O(E₈)`, and
+`−1` lies in that group, so `O(E₈) = W(E₈)`. The order is computed by orbits and
+stabilizers: `W(E₈)` is transitive on the 240 roots with stabilizer `W(E₇)`; `W(E₇)` is
+transitive on its 126 roots with stabilizer `W(D₆)`; and `|W(D₆)| = 2⁵·6! = 23040`. Hence
+
+    |O(E₈)| = 240 · 126 · 23040 = 696729600.
+
+This milestone is owned here. The Root Systems roadmap classifies root systems and defines
+the Weyl group order abstractly, and it proves no type-specific value.
 
 | Milestone | Direct prerequisites |
 | --- | --- |
 | 6A | L 1I, 5C, 5D |
 | 6B | L 1I, 0G |
 | 6C | M `CartanMatrix.E₈`; L 0F, 2G; R Root Systems Layer 5 |
-| 6D | L 2C, 3F, 5A, 6B, 4G |
+| 6D | L 2C, 3F, 5A, 6B |
 | 6E | L 0C, 1C, 2B |
 | 6F | L 0G, 2B |
+| 6G | M `CartanMatrix.E₈`; L 0G, 2B, 2C; R Root Systems Layer 5 |
 
 ### Layer 7: the Smith–Minkowski–Siegel mass formula
 
@@ -788,10 +957,11 @@ normalization. The volume theorem of Orthogonal and Spin Groups Layer 5 differs 
 approximation theorem of its Layer 4. Strong approximation is an indefinite statement, and the
 volume theorem is what a positive definite mass needs. Neither implies the other.
 
-**7A. Proper mass and full mass.** The two sums are defined, and both are finite. The
-relation between them is proved, and not assumed. A class either stays one proper class,
-in which case `|O(M)| = 2|SO(M)|`, or splits into two proper classes, in which case
-`O(M) = SO(M)`. In both cases `m⁺ = 2m`.
+**7A. Proper mass and full mass.** The two sums are defined, and both are finite by 2C and
+2G. For `rank L ≥ 1` the relation between them is proved, and not assumed. A class either
+stays one proper class, in which case `|O(M)| = 2|SO(M)|`, or splits into two proper classes,
+in which case `O(M) = SO(M)`. In both cases `m⁺ = 2m`. In rank 0 the relation fails, and 7G
+gives the values there.
 
 There is no product formula for the mass of a direct sum, and that non-statement is
 recorded. The mass of a twist `L(a)` is stated for `a > 0` only.
@@ -805,8 +975,34 @@ The piece of the class of `M` has volume
 
 Every quotient and stabilizer in that formula is named.
 
-**7C. Local densities at odd primes.** The local representation density and the local
-automorphism density, in the Conway–Sloane normalization. This milestone asks for:
+**7C. Local densities at odd primes.** Let `L` be a nondegenerate `ℤ_p`-lattice of rank `n`
+with Gram matrix `A` in a basis. The local automorphism density is
+
+    α_p(L) = lim_{r→∞} p^{−r·n(n−1)/2} · #{X ∈ Mₙ(ℤ/p^r) : Xᵀ A X ≡ A (mod p^r)}.
+
+This milestone asks for:
+
+- stabilization: the counting function equals `p^{r·n(n−1)/2}·α_p(L)` for every `r ≥ r₀`,
+  with `r₀` given explicitly in terms of `n` and `v_p(2 det A)`, so the limit exists and is
+  a positive rational number;
+- independence of the basis, and dependence only on the isometry class of `L_p`;
+- the volume identity `vol(K_p(L)) = α_p(L)` for the measure attached to the gauge form of
+  the equation `Xᵀ A X = A`, which is the local factor of the Tamagawa measure of 7B, and
+  `[K_p(L) : K_p⁺(L)] = 2` exactly when `K_p(L)` contains an element of determinant `−1`;
+- the unramified value: for `p ∤ 2 det L`, so that `L_p` is unimodular,
+
+      α_p(L) = 2 ∏_{i=1}^{m} (1 − p^{−2i})                      if n = 2m + 1,
+      α_p(L) = 2 (1 − ε p^{−m}) ∏_{i=1}^{m−1} (1 − p^{−2i})     if n = 2m,
+
+  where `ε = +1` when the determinant of `L_p` is a square and `ε = −1` otherwise, which is
+  the sign in the genus symbol of 3G;
+- the reduction of `∏_p α_p(L)⁻¹` to a product of the standard Euler factors of those two
+  displays, times the finitely many corrections at `p ∣ 2 det L`, and the convergence of
+  that product;
+- the dictionary to the Conway–Sloane local mass `m_p`, in their section 12, including every
+  factor of 2.
+
+The values at odd `p` are computed from the Jordan decomposition of 3C.
 
 - the normalized congruence counts mod `p^r`;
 - existence and stabilization of the limit;
@@ -819,8 +1015,24 @@ automorphism density, in the Conway–Sloane normalization. This milestone asks 
 
 The formula is proved from the Jordan decomposition of 3C.
 
-**7D. The local density at 2.** The dyadic density is a separate milestone with its own
-inputs:
+**7D. The local density at 2.** At `p = 2` the naive count does not stabilize, and the
+density is read off a smooth model. Cho's theorem is consumed in this form. Let `L` be a
+nondegenerate quadratic `ℤ_2`-lattice of rank `n`. Then there is a smooth affine group
+scheme `𝒢_L` over `ℤ_2`, of relative dimension `n(n−1)/2`, whose generic fiber is the
+orthogonal group of `L ⊗ ℚ_2` and whose `ℤ_2`-points are `O(L)`, and
+
+    α_2(L) = 2^{−n(n−1)/2} · #𝒢_L(𝔽_2).
+
+This milestone asks for:
+
+- the construction of `𝒢_L` from the Jordan data of 3D, with the bound and free
+  constituents and the convention in rank 0;
+- the proof that `𝒢_L` is smooth;
+- the displayed formula;
+- the proof that the resulting factor is the Conway–Sloane dyadic factor, oddity and type
+  included.
+ The Conway–Sloane dyadic tables are data, and not a
+proof.
 
 - the theorem of Cho that is used, stated in full;
 - the smoothened model of the integral automorphism group that it needs;
@@ -829,19 +1041,33 @@ inputs:
 
 The Conway–Sloane dyadic tables are data, and not a proof.
 
-**7E. The archimedean factor.** The real normalization, and the volume of the compact
-orthogonal group of a positive definite space. The route is fixed: identify
-`SO(n)/SO(n−1)` with the unit sphere, compute recursively from the sphere volumes, and
-derive the product of Gamma values. Compatibility with the global measure is proved. The
-final statement displays the factor with every power of `π` and 2.
+**7E. The archimedean factor.** With the measure from the standard Euclidean structure,
+`SO(n)/SO(n−1) ≅ S^{n−1}` and `vol(S^{n−1}) = 2π^{n/2}/Γ(n/2)`, so
+
+    vol(SO(n)) = ∏_{j=2}^{n} 2π^{j/2} / Γ(j/2),      vol(O(n)) = 2·vol(SO(n)).
+
+The milestone proves the fibration, the sphere volume, the product, and then the identity
+that connects it with the mass formula:
+
+    2 π^{−n(n+1)/4} ∏_{j=1}^{n} Γ(j/2) = 2^{n+1} / vol(O(n)).
+
+It also proves that this real volume is the archimedean factor of the measure used in 7B.
 
 **7F. The volume theorem, consumed.** `vol(SO(V)(ℚ) \ SO(V)(𝔸)) = 2`, with the dimension
 hypotheses and the normalization of the supplier, and with the low-dimensional exceptions
 recorded.
 
-**7G. Low rank.** Rank 0 has mass 1. Rank 1 has mass 1/2. Rank 2 is computed through the
-norm-one torus of the associated quadratic order, with its own local and global
-normalization. Rank 2 is not a special case of the general derivation.
+**7G. Low rank.** Three cases are proved directly, and none of them is a specialization of
+the general derivation:
+
+- rank 0: `O(L) = SO(L) = 1` and the genus has one class, so `m⁺ = m = 1`;
+- rank 1: the genus of `⟨a⟩` with `a > 0` has one class, with `O(L) = {±1}` and `SO(L) = 1`,
+  so `m = 1/2` and `m⁺ = 1`;
+- rank 2: B8 gives `m(gen L) = h(gen L)/(2·#𝒪(L)ˣ)` and `m⁺(gen L) = h⁺(gen L)/#𝒪(L)ˣ`,
+  through the norm-one torus of B6 and its measures in B7.
+
+The derivation of 7B to 7F is stated for rank at least 3, and 7H packages all ranks with
+explicit branches.
 
 **7H. The Conway–Sloane formula and its checks.** The formula
 
@@ -853,21 +1079,28 @@ with the dimension guard, together with the dictionary to Siegel's local density
 - the rank-8 even unimodular genus has mass `1/696729600`, class number 1, and
   `|O(E₈)| = |W(E₈)| = 696729600`;
 - the genus of `A₂` has class number 1;
-- in rank 16, `1/|O(E₈²)| + 1/|O(D₁₆⁺)| = m₁₆`.
+- in rank 16, `1/|O(E₈²)| + 1/|O(D₁₆⁺)| = m₁₆`, where `m₁₆` is the mass of the genus of 6D.
 
-The rank-16 equality discharges 6D only after 7B, 7C, 7D, 7E, 7F and both automorphism
-orders are proved. Before that it is a numerical check.
+The third check is the input to 7I.
+
+**7I. The rank-16 genus has two classes.** Both automorphism orders are computed first. `E₈²`
+has two indecomposable summands, both isometric to `E₈`, so `|O(E₈²)| = 2·|O(E₈)|²`, with
+`|O(E₈)|` from 6G. The order `|O(D₁₆⁺)|` is computed from its root system `D₁₆` together
+with the stabilizer of the glue vector. With `m₁₆` from 7H, the
+equality `1/|O(E₈²)| + 1/|O(D₁₆⁺)| = m₁₆` and the finiteness of the class set prove that
+`E₈²` and `D₁₆⁺` exhaust the genus. This is the completeness theorem that 6D does not claim.
 
 | Milestone | Direct prerequisites |
 | --- | --- |
-| 7A | L 2C, 4A, 4E |
+| 7A | L 2C, 2G, 4A |
 | 7B | L 4B, 7A; R Orthogonal and Spin Groups Layers 3 and 5 |
 | 7C | L 3B, 3C, 4B |
 | 7D | L 3D, 3E, 4B |
 | 7E | M `Real.Gamma`, sphere volumes; L 2D |
 | 7F | R Orthogonal and Spin Groups Layer 5 |
-| 7G | L 7A, 7C, 7E; R Quadratic Form Invariants Layer 1 |
-| 7H | L 2C, 6C, 6D, 7B, 7C, 7D, 7E, 7F, 7G; R Root Systems Layer 5 |
+| 7G | L 2C, 4A, 7A, B6, B7, B8 |
+| 7H | L 2C, 6C, 6G, 7B, 7C, 7D, 7E, 7F, 7G |
+| 7I | L 2G, 6D, 6G, 7H |
 
 ### Layer 8: theta series
 
@@ -909,25 +1142,30 @@ For unimodular `L` this becomes `Θ_L(−1/τ) = (τ/i)^{n/2} Θ_L(τ)`.
 
 ### Layer 9: what the LMFDB lattice columns assert
 
-**9A. The stored columns.** Take a stored record with Gram matrix `G` and label
-`dim.det.level.class_number.index`. Then:
+**9A. The stored columns.** A record of the LMFDB lattice section is a Gram matrix `G`, a
+label `dim.det.level.class_number.index`, a list of Gram matrices called the genus
+representatives, and the numerical columns. The milestone defines one object,
+`StoredGenusCertificate`, whose fields are the statements the record asserts:
 
-- the dimension is the rank of 0A;
-- the determinant is that of 0C;
-- the level is that of 0D;
-- the minimum and the kissing number are those of 2B;
-- the automorphism group order is that of 2C;
-- the theta coefficients are those of 8B;
-- the class number is the number of classes in the genus, by 4A and 4E.
+- `G` is integral, symmetric and positive definite, so 0A to 0E apply to the lattice `L` it
+  defines;
+- the dimension is the rank of 0A, the determinant is that of 0C, and the level is that of
+  0D;
+- the minimum and the kissing number are those of 2B, the automorphism group order is that
+  of 2C, and the theta coefficients are those of 8B;
+- every listed Gram matrix defines a lattice in `gen L`, by 3F;
+- the listed lattices are pairwise non-isometric, which is a decidable check for positive
+  definite lattices by 2G;
+- the number of listed lattices is the class number of `gen L`, which is the label
+  component `class_number`, is the invariant defined in 4A, and is finite by 2G.
 
-The stored genus representatives are pairwise non-isometric lattices of one genus, by 3F.
-The statement that they exhaust the genus is the class-number statement. A mass certificate
-from 7H is one way to prove it for a given genus. The fifth label component has no
-mathematical content in this roadmap.
+The last field is the completeness statement, and a mass certificate from 7H is one way to
+prove it for a given genus, not a prerequisite of the definition. The fifth label component
+has no mathematical content in this roadmap.
 
 | Milestone | Direct prerequisites |
 | --- | --- |
-| 9A | L 0A, 0C, 0D, 2B, 2C, 3F, 4A, 4E, 7H, 8B |
+| 9A | L 0A, 0C, 0D, 0E, 2B, 2C, 2G, 3F, 4A, 8B |
 
 ---
 
@@ -1029,6 +1267,23 @@ for the eight items listed. The layer that introduces the object owns them.
 - **Edge cases.** Rank 0, 1 and 2; definite and indefinite.
 - **Downstream.** 4E to 4G, 7A, 7B, 9A.
 
+### The quadratic order of a binary lattice (B1)
+
+- **Constructors.** From a binary Gram matrix through the primitive part of the norm form;
+  from a discriminant `Δ ≡ 0` or `1 (mod 4)`.
+- **Examples.** `A₂` gives `Δ = −3` and `𝒪 = ℤ[ζ₃]`; `U` gives `Δ = 4` and the split
+  algebra; `⟨1,−2⟩` gives `Δ = 8` and `ℤ[√2]`.
+- **Morphisms.** Isometries of binary lattices induce isomorphisms of the associated
+  orders, and proper isometries act trivially on `Pic`.
+- **Functoriality.** Behavior under a twist `L(a)`, and under passage to a sublattice of
+  finite index, which multiplies the content.
+- **Comparison lemmas.** `Δ(L) = disc f` with `disc N_L = −4 det L`; forms and proper ideal
+  classes (B2); composition and multiplication (B3); `SO(L)` and the norm-one units (B4).
+- **Naturality.** The correspondence of B2 commutes with the maps induced by isometries.
+- **Edge cases.** Imprimitive norm forms, square discriminants where the algebra splits,
+  and the two orders with extra units, `Δ = −3` and `Δ = −4`.
+- **Downstream.** 2C, 4E, 4F, 7G.
+
 ### The mass (7A)
 
 - **Constructors.** `m(gen L)` and `m⁺(gen L)`.
@@ -1063,7 +1318,7 @@ for the eight items listed. The layer that introduces the object owns them.
 | Unimodular splitting (0F) | O'Meara §82 | the restriction of `β` to `M` is unimodular | "a nondegenerate restriction splits". Take `L = ℤ` with `β(x,y) = xy` and `M = 2ℤ`. Then `β|_M` is nondegenerate, `M^⊥ = 0`, and `M ⊕ M^⊥ ≠ L`. |
 | Cancellation over `ℤ` (0F) | Milnor–Husemoller II §5; Serre V.2.2 | none: the statement is false | "`L ⊕ N ≅ M ⊕ N` implies `L ≅ M`". Take `N = U`, `L = E₈²`, `M = D₁₆⁺`. Both sums are even unimodular of signature `(17,1)`, hence isometric, while `E₈² ≇ D₁₆⁺`. |
 | Milgram's theorem (1I) | Nikulin Thm 1.3.3; Milnor–Husemoller App. 4 | `L` is even and nondegenerate | "every unimodular lattice has `8 ∣ t₊ − t₋`". The odd lattice `⟨1⟩` is unimodular with `t₊ − t₋ = 1`. |
-| Finiteness of `O(L)` (2C) | O'Meara §102 | `L` is definite | "`O(L)` is finite for every nondegenerate `L`". `O(⟨1,−2⟩)` is infinite, being the unit group of `ℤ[√2]` (2H), and 4F gives infinitude in every indefinite rank at least 3. |
+| Finiteness of `O(L)` (2C) | O'Meara §102 | `L` is definite | "`O(L)` is finite for every nondegenerate `L`". `O(⟨1,−2⟩)` is infinite, being carried by the unit group of `ℤ[√2]` (B4), and 4F gives infinitude in every indefinite rank at least 3. |
 | Diagonalization over `ℤ_p` (3C) | O'Meara 92:1 | `p` is odd | "every symmetric form over `ℤ_2` has an orthogonal basis". The hyperbolic plane `U` has none. |
 | Two unimodular classes per rank (3C) | O'Meara 92:1a | `p` odd and rank at least 1 | "exactly two for every rank". In rank 0 there is one. |
 | Uniqueness of Jordan invariants (3C) | O'Meara 91:9 | `p` is odd | "Jordan invariants are unique for every `p`". At `p = 2` they are not, which is why 3E states the moves. |
@@ -1075,6 +1330,10 @@ for the eight items listed. The layer that introduces the object owns them.
 | The mass formula (7H) | Conway–Sloane, eq. (2) | rank at least 2, in the stated normalization | "the formula holds in every rank". In rank at most 1 a factor 2 becomes 1, and `m` is 1/2 in rank 1 and 1 in rank 0. |
 | The local density at 2 (7D) | Cho, Compositio 151 (2015) | residue characteristic 2, with the smoothened model | "the Conway–Sloane dyadic table proves it". The table is stated there without proof. |
 | Classification in rank at most 9 (6C) | O'Meara 106:13 | rank at most 9, positive definite | "a positive definite unimodular lattice is determined by its rank and parity". Rank 16 has two even classes (6D). |
+| Automorphisms of an indefinite lattice (4F) | O'Meara §104; Cassels ch. 13 | rank at least 3, and a case split on isotropy over `ℚ` | "an indefinite rational space has an isotropic vector". `x² + y² − 3z²` is indefinite over `ℝ` and anisotropic over `ℚ`, so the transvection proof covers only one case. |
+| Automorphisms of a binary lattice (B4) | Pell's equation; Cassels ch. 13 | `Δ > 0` and `Δ` not a square | "an indefinite binary lattice has infinite `O(L)`". `U` has `Δ = 4`, a square, and `|O(U)| = 4`. |
+| Proper against full mass (7A) | Conway–Sloane §2 | `rank L ≥ 1` | "`m⁺ = 2m` always". In rank 0 both masses are 1, because `O(L) = SO(L) = 1`. |
+| Rank-16 completeness (7I) | Witt; Conway–Sloane §9 | the mass formula and both automorphism orders | "the two classes are known to exhaust the genus once they are constructed". 6D proves only that the two exist, lie in one genus, and differ. |
 | Theta convergence (8B) | Poisson summation; `ZLattice` summability | `L` is positive definite | "the theta series of a definite lattice converges". For a negative definite lattice the terms are unbounded. |
 
 ## Worked examples
@@ -1087,15 +1346,17 @@ factor of 2, a wrong sign, or a vacuous definition.
   `ℤ_2` (0G, 3D).
 - `A₂`: even, `det = 3`, level 3, and `A_{A₂} ≅ ℤ/3` with `q = 2/3` in `ℚ/2ℤ`. Its 3-adic
   Jordan splitting has two rank-one constituents, of scales 1 and 3. Equality holds in
-  Hermite's bound, and the class number is 1 (0G, 1D, 2E, 3B, 4A).
+  Hermite's bound, and the class number is 1 (0G, 1D, 2E, 3B, 4A). Its order is `ℤ[ζ₃]`,
+  with `Δ = −3` and six units, so `|O(A₂)| = 12` and the mass of its genus is `1/12`
+  (B1, B4, B8).
 - The family `Aₙ`: `det(Aₙ) = n+1` and `A_{Aₙ} ≅ ℤ/(n+1)` (0G, 1C).
 - `E₈`: even, unimodular, positive definite, `min = 2`, 240 minimal vectors, signature
   `(8,0)`, `sign q_{E₈} = 0`, unique in rank 8, `|O(E₈)| = 696729600`, and mass
   `1/696729600` (0G, 2B, 2C, 6C, 7H).
 - Even unimodular lattices have `8 ∣ t₊ − t₋`, so no even unimodular positive definite
   lattice has rank 1 to 7 (1I, 6B).
-- Rank 16: `E₈²` and `D₁₆⁺` lie in one genus, are not isometric, and exhaust the genus
-  (6D, 7H).
+- Rank 16: `E₈²` and `D₁₆⁺` lie in one genus and are not isometric (6D), and they exhaust
+  the genus (7I).
 - `Λ_{K3} = U³ ⊕ E₈(−1)²`: even, unimodular, signature `(3,19)`, `det = −1`, and unique
   with that signature. For `d > 0` the lattice `⟨2d⟩` embeds primitively, and uniquely up
   to `O(Λ_{K3})`. Every even lattice of signature `(1, ρ−1)` with `ρ ≤ 10` embeds
@@ -1115,10 +1376,12 @@ Layer 0 comes first. After it, three groups of milestones are independent of eac
 The rest of the order follows the prerequisite tables:
 
 - milestones 3F to 3H need Layer 1 and the two suppliers named in their table;
-- Layer 4 needs Layers 2 and 3, and the Orthogonal and Spin Groups roadmap;
+- Layer B needs Layers 0 to 3, and Layers 4 and 7 use it for rank 2;
+- Layer 4 needs Layers 2, 3 and B, and the Orthogonal and Spin Groups roadmap;
 - Layer 5 needs Layers 1 and 3;
 - Layer 6 needs Layers 1, 2 and 5, and milestone 6C also needs Root Systems;
-- Layer 7 needs Layers 2, 3 and 4, the volume theorem, and Layer 6 for its checks;
+- Layer 7 needs Layers 2, 3, 4 and B, the volume theorem, and 6C, 6D and 6G for its
+  checks, and 7I closes rank 16 after 7H;
 - milestones 8A to 8C need Layers 0 to 2, and 8D and 8E also need L-functions Layer 2;
 - Layer 9 comes last.
 

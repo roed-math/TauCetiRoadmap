@@ -5,9 +5,17 @@ here is a prerequisite for a milestone. This file holds information that changes
 time: which Mathlib version the roadmap was checked against, which external work overlaps
 it, and which upstream data model it serves. Each entry carries the date it was checked.
 
-## Mathlib version checked
+## Mathlib versions: built against, and audited against
 
-Checked on 2026-08-07 against the Mathlib release `v4.32.2` (2026-07-28).
+The repository builds against the Mathlib commit named in `lake-manifest.json`, which is
+`9caeba1000ef8f302920981f4a08651d325abc81`, with the toolchain in `lean-toolchain`. Those
+two files belong to the `@TauCetiProject/humans` team, by `CODEOWNERS`, so no roadmap pull
+request changes them. `Suggested.lean` elaborates against that commit, and continuous
+integration builds the repository against it.
+
+Separately, the roadmap's citations were audited on 2026-08-07 against the Mathlib release
+`v4.32.2` (2026-07-28), which is newer. The audit changed the roadmap text where a name or
+a path had moved. It did not change what the repository builds against.
 
 Method: the release source tree was indexed by declaration name, and every declaration
 that `README.md` and `Suggested.lean` cite was looked up in that index.
@@ -36,7 +44,7 @@ roadmap builds what it needs and adopts a Mathlib design if that design lands.
 
 | Mathlib pull request | Subject | Overlap and decision |
 | --- | --- | --- |
-| #35812 (open 2026-08-06) | successive minima, directional basis | Overlaps milestone 2F. The roadmap names its objects as this pull request does, so a later swap is an import. |
+| #35812 (open 2026-08-06) | successive minima, directional basis | Overlaps milestone 2F. The roadmap names its objects as this pull request does, so a later swap is an import. Milestone 2F states the successive minima itself, and does not wait. |
 | #41867 (open 2026-07-24) | `ZLattice` generalized to `AddSubgroupClass` | Touches milestones 2D and 8A. The roadmap states its covolume use through `ZLattice.covolume`. |
 | #42157 (open 2026-07-31) | generalized E-type Cartan matrices | Touches milestone 0G, which cites `CartanMatrix.E₈`. |
 | #38194 (open 2026-07-18) | an `IndefiniteMetric` structure | No mathematical overlap. It uses naming space for indefinite forms. |
@@ -64,6 +72,8 @@ C. Birkbeck, S. Hariharan, B. Mehta, Seewoo Lee, project paper arXiv:2604.23468.
 - Milestone 6F proves that the two `E₈` models defined inside this roadmap are isometric.
   It does not depend on their repository. If the two projects later agree to share one
   `E₈`, the same isometry proof applies to their model.
+- Milestone 6G proves `|O(E₈)| = 696729600` inside this roadmap, because the Root Systems
+  roadmap defines the Weyl group order abstractly and proves no type-specific value.
 - Copying code from that repository requires the authors' agreement, and a licence review.
 
 **math-inc/Sphere-Packing-Lean**, revision `1e98fb493088948ca7bbf47d7faed49cc5b39fc4`
@@ -79,7 +89,7 @@ C. Birkbeck, S. Hariharan, B. Mehta, Seewoo Lee, project paper arXiv:2604.23468.
 
 ## The LMFDB lattice section, as observed on 2026-08-07
 
-The roadmap's milestone 3I states what the stored columns assert. The data model itself is
+The roadmap's milestone 9A states what the stored columns assert. The data model itself is
 outside the roadmap and is recorded here.
 
 - The section holds positive definite integral lattices. A large part comes from the
@@ -91,7 +101,7 @@ outside the roadmap and is recorded here.
 - Conway–Sloane genus symbols are not stored. Genus data is stored as a list of Gram
   matrices, one per class.
 - The fifth label component separates records that agree in the first four components. Its
-  value follows from the order in which records were added. Milestone 3I gives it no
+  value follows from the order in which records were added. Milestone 9A gives it no
   mathematical meaning.
 
 ## Consumers

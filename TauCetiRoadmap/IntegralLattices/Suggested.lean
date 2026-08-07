@@ -8,8 +8,8 @@ import Mathlib
 contributors and reviewers converge on names and signatures; discharging all of them
 finishes neither a layer nor the roadmap.
 
-The narrative roadmap (Layers 0–8, the convention table, the worked examples and the
-references) is in `README.md`. Mathlib has quadratic maps over semirings, symmetric
+The narrative roadmap is in `README.md`: Layers 0 to 9, together with Layer B for binary
+lattices, the convention table, the worked examples and the references. Mathlib has quadratic maps over semirings, symmetric
 bilinear forms with Gram matrices and base change, `ZLattice` covolumes, Smith normal form
 with the index-equals-determinant theorems, and a dual-submodule construction, but no
 integral-lattice arithmetic: no even/odd theory, no discriminant groups or forms, no
@@ -36,8 +36,9 @@ definite classes, the covolume identity, `|O(E₈)| = 696729600`), **Layer 3** (
 orthogonal splitting, the dyadic counterexample, the constraint from the product formula),
 **Layer 4** (the spinor norm of a product of reflections), **Layer 5** (the primitivity
 dictionary, the K3-lattice existence shape), **Layer 6** (indefinite even unimodular
-uniqueness) and **Layer 8** (theta convergence at both levels, and the transformation law
-through the interface). They elaborate against the Mathlib version this repository builds
+uniqueness) and **Layer 8** (theta convergence at both levels, the restriction of the
+holomorphic theta to the imaginary axis, and the transformation law through the
+interface). They elaborate against the Mathlib version this repository builds
 against, and they are stated with `sorry`, which is allowed in this human-owned roadmap
 library.
 
@@ -121,83 +122,134 @@ def FiniteQuadraticForm.Nondegenerate {A : Type u} [AddCommGroup A] [Finite A]
 
 /-! ## Interfaces to the supplier roadmaps
 
-Three roadmaps supply objects that this one consumes: Quadratic Form Invariants, Global
-Class Field Theory, and Orthogonal and Spin Groups, together with L-functions for the
-analytic theta. Their declarations do not exist yet, so each interface is written here as a
-structure whose fields are the exact objects and equations consumed. Every field is a real
-statement, and no field is an opaque `Prop`.
+Three roadmaps supply objects that this one consumes, and their declarations do not exist
+yet: Orthogonal and Spin Groups for the spinor norm, Global Class Field Theory for the
+Hilbert product formula, and L-functions for the analytic theta. Each interface below is a
+structure whose fields are the exact objects and equations consumed, in the supplier's own
+spelling, with the supplier's hypotheses.
 
-Replacing an interface with the supplier's declarations is mechanical: build one term of
-the structure from those declarations, and every consumer keeps its statement. The field
-names follow the names the supplier roadmaps use. -/
+An interface must not admit a model that has nothing to do with the intended mathematics, or
+a theorem quantified over it proves nothing. Each structure therefore pins its fields: the
+orthogonal group by its members, the reflection by its formula, the Hilbert symbols by the
+equations they decide, and the analytic lattice by discreteness together with `IsZLattice`.
+Replacing an interface with the supplier's declarations means building one term of the
+structure, and no consumer statement changes. -/
 
-/-- The square-class group `Kˣ/(Kˣ)²`, in the spelling the Quadratic Form Invariants and
-Orthogonal and Spin Groups roadmaps use. -/
+/-- Square classes, in the spelling of Quadratic Form Invariants Layer 0 and of Orthogonal
+and Spin Groups Layer 1. -/
 abbrev SquareClass (K : Type u) [Field K] : Type u := Kˣ ⧸ Subgroup.square Kˣ
 
-/-- **What Layer 4C consumes from Orthogonal and Spin Groups, Layers 1 and 2.** The
-orthogonal group of a quadratic space, the reflection in an anisotropic vector, and the
-spinor norm with its value on a reflection. Layer 4C computes the images
-`θ_p(K_p⁺(L))` of the stabilizers of `L_p`, and the reflection formula is what makes that
-computation possible from the Jordan data of Layer 3. -/
-structure SpinorNormInterface (K : Type u) (V : Type v) [Field K] [AddCommGroup V]
-    [Module K V] (Q : QuadraticForm K V) where
+/-- The unit-to-square-class homomorphism of the same suppliers. -/
+def squareClassOfUnit (K : Type u) [Field K] : Kˣ →* SquareClass K :=
+  QuotientGroup.mk' _
+
+/-- **What milestone 4C consumes from Orthogonal and Spin Groups, Layers 1 and 2.** The
+hypotheses are the supplier's: `2` is invertible, `V` is finite-dimensional, and `Q` is
+nondegenerate. The reflection formula is the one the supplier proves, with the same argument
+order, so that replacing this structure is a substitution and not a transport.
+
+Milestone 4C computes the images `θ_p(K_p⁺(L))` of the stabilizers of `L_p`. The reflection
+formula is what makes that computation possible from the Jordan data of Layer 3, so it is a
+field here rather than a consequence left to the reader. The fields determine `spinorNorm`,
+because reflections generate the orthogonal group by Cartan–Dieudonné, so a theorem
+quantified over this structure is a theorem about the supplier's spinor norm. -/
+structure SpinorNormInterface (K : Type u) (V : Type v) [Field K] [Invertible (2 : K)]
+    [AddCommGroup V] [Module K V] [FiniteDimensional K V] (Q : QuadraticForm K V)
+    (hQ : Q.Nondegenerate) where
   /-- The orthogonal group of `Q`, inside the linear automorphisms of `V`. -/
   orthogonalGroup : Subgroup (V ≃ₗ[K] V)
   /-- Its elements are exactly the isometries of `Q`. -/
   mem_orthogonalGroup : ∀ f : V ≃ₗ[K] V, f ∈ orthogonalGroup ↔ ∀ x, Q (f x) = Q x
   /-- The reflection in an anisotropic vector. -/
-  reflection : ∀ v : V, Q v ≠ 0 → V ≃ₗ[K] V
-  /-- Its formula, which is what a spinor-norm computation runs through. -/
-  reflection_apply : ∀ (v : V) (hv : Q v ≠ 0) (x : V),
-    reflection v hv x = x - ((Q v)⁻¹ * QuadraticMap.polar Q v x) • v
+  reflection : ∀ {v : V}, Q v ≠ 0 → V ≃ₗ[K] V
+  /-- Its formula, in the supplier's argument order. -/
+  reflection_apply : ∀ {v : V} (hv : Q v ≠ 0) (x : V),
+    reflection hv x = x - (Q v)⁻¹ • QuadraticMap.polar Q x v • v
   /-- A reflection is an isometry. -/
-  reflection_mem : ∀ (v : V) (hv : Q v ≠ 0), reflection v hv ∈ orthogonalGroup
+  reflection_mem : ∀ {v : V} (hv : Q v ≠ 0), reflection hv ∈ orthogonalGroup
   /-- The spinor norm. -/
   spinorNorm : orthogonalGroup →* SquareClass K
   /-- Its value on a reflection is the square class of the norm. -/
-  spinorNorm_reflection : ∀ (v : V) (hv : Q v ≠ 0),
-    spinorNorm ⟨reflection v hv, reflection_mem v hv⟩ = QuotientGroup.mk (Units.mk0 (Q v) hv)
+  spinorNorm_reflection : ∀ {v : V} (hv : Q v ≠ 0) (u : Kˣ), (u : K) = Q v →
+    spinorNorm ⟨reflection hv, reflection_mem hv⟩ = squareClassOfUnit K u
 
-/-- **What Layer 3G consumes from Global Class Field Theory, Layer 11.** The Hilbert symbols
-of `ℚ` at the finite places and at the real place, and the product formula for them. Layer
-3G proves the oddity formula and the sign-product conditions on genus symbols from this one
-statement, and needs nothing else from that roadmap. The symbol is written additively, so
-that the product formula becomes a sum. -/
+/-- Primes carry the primality instance that `ℚ_[p]` needs. -/
+local instance factPrimeOfPrimes (p : Nat.Primes) : Fact (p : ℕ).Prime := ⟨p.2⟩
+
+/-- **What milestone 3G consumes from Global Class Field Theory, Layer 11.** The Hilbert
+symbols of `ℚ` at the finite places and at the real place, and the product formula.
+
+The two `iff` fields are what make the interface canonical: they say that a symbol is
+trivial exactly when the corresponding conic has a rational point over that completion, which
+determines the symbol. Without them the constant map to `1` would satisfy the product formula
+and prove nothing. Inputs are units, so no argument is junk. -/
 structure HilbertSymbolInterface where
   /-- The symbol at a finite place. -/
-  symbol : ℕ → ℚ → ℚ → ZMod 2
+  symbol : Nat.Primes → ℚˣ → ℚˣ → ℤˣ
   /-- The symbol at the real place. -/
-  symbolReal : ℚ → ℚ → ZMod 2
-  /-- All but finitely many symbols vanish. -/
-  symbol_eq_zero : ∀ a b : ℚ, a ≠ 0 → b ≠ 0 → {p : ℕ | symbol p a b ≠ 0}.Finite
+  symbolReal : ℚˣ → ℚˣ → ℤˣ
+  /-- The finite symbol decides solvability over `ℚ_[p]`. -/
+  symbol_eq_one_iff : ∀ (p : Nat.Primes) (a b : ℚˣ),
+    symbol p a b = 1 ↔
+      ∃ x y : ℚ_[(p : ℕ)], ((a : ℚ) : ℚ_[(p : ℕ)]) * x ^ 2 + ((b : ℚ) : ℚ_[(p : ℕ)]) * y ^ 2 = 1
+  /-- The real symbol decides solvability over `ℝ`. -/
+  symbolReal_eq_one_iff : ∀ a b : ℚˣ,
+    symbolReal a b = 1 ↔ ∃ x y : ℝ, ((a : ℚ) : ℝ) * x ^ 2 + ((b : ℚ) : ℝ) * y ^ 2 = 1
+  /-- All but finitely many finite symbols are trivial. -/
+  symbol_ne_one_finite : ∀ a b : ℚˣ, {p : Nat.Primes | symbol p a b ≠ 1}.Finite
   /-- The product formula. -/
-  productFormula : ∀ (a b : ℚ), a ≠ 0 → b ≠ 0 → ∀ S : Finset ℕ,
-    (∀ p, symbol p a b ≠ 0 → p ∈ S) → symbolReal a b + ∑ p ∈ S, symbol p a b = 0
+  productFormula : ∀ (a b : ℚˣ) (S : Finset Nat.Primes),
+    (∀ p, symbol p a b ≠ 1 → p ∈ S) → symbolReal a b * ∏ p ∈ S, symbol p a b = 1
 
-/-- The analytic theta of a lattice in Euclidean space, with respect to the Euclidean norm.
-It assumes no integrality, which is why it also applies to the dual lattice, whose form is
-rational-valued. The general theory of this function is L-functions Layer 2's. -/
-noncomputable def analyticTheta {n : ℕ} (Λ : Submodule ℤ (EuclideanSpace ℝ (Fin n)))
-    (t : ℝ) : ℝ :=
-  ∑' x : Λ, Real.exp (-π * t * ‖(x : EuclideanSpace ℝ (Fin n))‖ ^ 2)
+/-- A lattice in Euclidean space, bundled with the two facts that make its covolume and its
+theta series meaningful. The theorems of L-functions Layer 2 hold for this carrier and not
+for an arbitrary submodule: the zero submodule has no finite inverse covolume. -/
+structure AnalyticLattice (n : ℕ) where
+  /-- The underlying submodule. -/
+  toSubmodule : Submodule ℤ (EuclideanSpace ℝ (Fin n))
+  /-- It is discrete. -/
+  [discrete : DiscreteTopology toSubmodule]
+  /-- It spans the ambient space over `ℝ`. -/
+  isZLattice : IsZLattice ℝ toSubmodule
 
-/-- **What Layers 8D and 8E consume from L-functions, Layer 2.** The analytic dual lattice,
-the product of the two covolumes, and the Gaussian theta transformation for a real
-parameter. Layer 8 adds the arithmetic content: the analytic dual is the dual lattice of
-1B, the covolume is `Real.sqrt (det L)`, and the identity extends from `t > 0` to the upper
-half-plane. -/
+attribute [instance] AnalyticLattice.discrete AnalyticLattice.isZLattice
+
+/-- The covolume of a bundled analytic lattice. -/
+noncomputable def AnalyticLattice.covolume {n : ℕ} (Λ : AnalyticLattice n) : ℝ :=
+  ZLattice.covolume Λ.toSubmodule
+
+/-- The Gaussian theta of a bundled analytic lattice, at a real parameter. -/
+noncomputable def AnalyticLattice.realTheta {n : ℕ} (Λ : AnalyticLattice n) (t : ℝ) : ℝ :=
+  ∑' x : Λ.toSubmodule, Real.exp (-π * t * ‖(x : EuclideanSpace ℝ (Fin n))‖ ^ 2)
+
+/-- The holomorphic theta of a bundled analytic lattice, on the upper half-plane. Milestone
+8A defines the arithmetic theta of a positive definite integral lattice as this function of
+its realization, and 8E states the transformation law here. -/
+noncomputable def AnalyticLattice.theta {n : ℕ} (Λ : AnalyticLattice n) (τ : ℂ) : ℂ :=
+  ∑' x : Λ.toSubmodule,
+    Complex.exp ((π : ℂ) * Complex.I * τ * ((‖(x : EuclideanSpace ℝ (Fin n))‖ ^ 2 : ℝ) : ℂ))
+
+/-- **What milestones 8D and 8E consume from L-functions, Layer 2.** The dual of a bundled
+analytic lattice, biduality, the product of the two covolumes, and the Gaussian
+transformation at a real parameter. These are the four rows of the shared table in
+`README.md`. Poisson summation is an L-functions target and is not consumed here.
+
+The arithmetic content is this roadmap's: the dual is the dual lattice of 1B, the covolume
+is `Real.sqrt (det L)`, and the identity extends from `t > 0` to the upper half-plane. -/
 structure GaussianThetaInterface (n : ℕ) where
   /-- The analytic dual lattice. -/
-  dual : Submodule ℤ (EuclideanSpace ℝ (Fin n)) → Submodule ℤ (EuclideanSpace ℝ (Fin n))
+  dual : AnalyticLattice n → AnalyticLattice n
+  /-- The dual is characterized by integrality of the inner products, so this field is
+  determined by the others and not merely constrained by them. -/
+  mem_dual : ∀ (Λ : AnalyticLattice n) (x : EuclideanSpace ℝ (Fin n)),
+    x ∈ (dual Λ).toSubmodule ↔ ∀ y ∈ Λ.toSubmodule, ∃ m : ℤ, inner ℝ x y = (m : ℝ)
   /-- Biduality. -/
   dual_dual : ∀ Λ, dual (dual Λ) = Λ
   /-- The covolumes are inverse to each other. -/
-  covolume_mul_covolume_dual : ∀ Λ, ZLattice.covolume Λ * ZLattice.covolume (dual Λ) = 1
-  /-- The Gaussian theta transformation, for a real parameter. -/
-  theta_one_div : ∀ (Λ : Submodule ℤ (EuclideanSpace ℝ (Fin n))) (t : ℝ), 0 < t →
-    analyticTheta Λ (1 / t)
-      = t ^ ((n : ℝ) / 2) * (ZLattice.covolume Λ)⁻¹ * analyticTheta (dual Λ) t
+  covolume_mul_covolume_dual : ∀ Λ : AnalyticLattice n, Λ.covolume * (dual Λ).covolume = 1
+  /-- The Gaussian theta transformation, at a real parameter. -/
+  gaussianTheta_one_div : ∀ (Λ : AnalyticLattice n) (t : ℝ), 0 < t →
+    Λ.realTheta (1 / t) = t ^ ((n : ℝ) / 2) * Λ.covolume⁻¹ * (dual Λ).realTheta t
 
 section Layer0
 
@@ -429,9 +481,9 @@ example : ¬ ∃ b : Module.Basis (Fin 2) ℤ_[2] (Fin 2 → ℤ_[2]),
 formula determines the symbol at the real place from the finite ones. The oddity formula
 and the sign-product conditions are the specialization of this identity to the symbols of a
 genus. -/
-example (I : HilbertSymbolInterface) (a b : ℚ) (ha : a ≠ 0) (hb : b ≠ 0) (S : Finset ℕ)
-    (hS : ∀ p, I.symbol p a b ≠ 0 → p ∈ S) :
-    I.symbolReal a b = - ∑ p ∈ S, I.symbol p a b :=
+example (I : HilbertSymbolInterface) (a b : ℚˣ) (S : Finset Nat.Primes)
+    (hS : ∀ p, I.symbol p a b ≠ 1 → p ∈ S) :
+    I.symbolReal a b = (∏ p ∈ S, I.symbol p a b)⁻¹ :=
   sorry
 
 end Layer3
@@ -440,17 +492,19 @@ section Layer4
 
 /-! ## Layer 4: the spinor norm of a lattice stabilizer -/
 
-variable {V : Type v} [AddCommGroup V] [Module ℚ V]
+variable {K : Type u} [Field K] [Invertible (2 : K)]
+variable {V : Type v} [AddCommGroup V] [Module K V] [FiniteDimensional K V]
 
 /-- **Layer 4C, through the interface.** The spinor norm is a homomorphism, so its value on
-a product of reflections is the product of the square classes of the norms. Layer 4C applies
-this to the reflections that generate the stabilizer `K_p⁺(L)`, and reads the answer off the
-Jordan data of Layer 3. -/
-example (Q : QuadraticForm ℚ V) (I : SpinorNormInterface ℚ V Q) (v w : V)
-    (hv : Q v ≠ 0) (hw : Q w ≠ 0) :
-    I.spinorNorm (⟨I.reflection v hv, I.reflection_mem v hv⟩ *
-        ⟨I.reflection w hw, I.reflection_mem w hw⟩)
-      = QuotientGroup.mk (Units.mk0 (Q v) hv * Units.mk0 (Q w) hw) :=
+a product of two reflections is the product of the square classes of the two norms. Layer 4C
+applies this to reflections that generate the stabilizer `K_p⁺(L)`, over `K = ℚ_p`, and reads
+the answer off the Jordan data of Layer 3. -/
+example (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) (I : SpinorNormInterface K V Q hQ)
+    {v w : V} (hv : Q v ≠ 0) (hw : Q w ≠ 0) (u u' : Kˣ)
+    (hu : (u : K) = Q v) (hu' : (u' : K) = Q w) :
+    I.spinorNorm (⟨I.reflection hv, I.reflection_mem hv⟩ *
+        ⟨I.reflection hw, I.reflection_mem hw⟩)
+      = squareClassOfUnit K (u * u') :=
   sorry
 
 end Layer4
@@ -513,15 +567,26 @@ section Layer8
 
 variable {L : Type u} [AddCommGroup L] [Module ℤ L] [Module.Free ℤ L] [Module.Finite ℤ L]
 
-/-- **Layer 8, the analytic level.** The theta of a lattice in a real space needs a
-positive definite *real* quadratic form and no integrality whatever: this is the shape of
-the API supplied by LFunctions Layer 2, and it is why it also applies to the dual lattice
-`L^⋆`, whose form is rational-valued rather than integral. The arithmetic theta of an
-integral lattice is a wrapper around this, not a separate construction. -/
-example {n : ℕ} (Λ : Submodule ℤ (EuclideanSpace ℝ (Fin n))) [DiscreteTopology Λ]
-    [IsZLattice ℝ Λ] (Q : QuadraticForm ℝ (EuclideanSpace ℝ (Fin n))) (hQ : Q.PosDef)
-    {t : ℝ} (ht : 0 < t) :
-    Summable fun x : Λ => Real.exp (-π * t * Q (x : EuclideanSpace ℝ (Fin n))) :=
+/-- **Layer 8A, the analytic level.** The theta of a bundled analytic lattice needs no
+integrality, which is why it also applies to the dual lattice `L^⋆`, whose form is
+rational-valued. The arithmetic theta of an integral lattice is this function of its
+realization, and not a separate construction. -/
+example {n : ℕ} (Λ : AnalyticLattice n) {t : ℝ} (ht : 0 < t) :
+    Summable fun x : Λ.toSubmodule =>
+      Real.exp (-π * t * ‖(x : EuclideanSpace ℝ (Fin n))‖ ^ 2) :=
+  sorry
+
+/-- **Layer 8A, the two thetas agree on the imaginary axis.** The holomorphic theta
+restricted to `τ = it` is the Gaussian sum at `t`. This is the identity that lets 8E extend
+the transformation law from the real parameter of the supplier to the upper half-plane. -/
+example {n : ℕ} (Λ : AnalyticLattice n) {t : ℝ} (ht : 0 < t) :
+    Λ.theta (t * Complex.I) = (Λ.realTheta t : ℂ) :=
+  sorry
+
+/-- **Layer 8B, holomorphy.** The theta series is holomorphic on the upper half-plane. With
+the previous target this is what makes the continuation in 8E legitimate. -/
+example {n : ℕ} (Λ : AnalyticLattice n) :
+    DifferentiableOn ℂ Λ.theta {τ : ℂ | 0 < τ.im} :=
   sorry
 
 /-- **Layer 8, the arithmetic wrapper: convergence.** For a positive definite integral
@@ -541,12 +606,21 @@ example (β : LinearMap.BilinForm ℤ L) (hpos : (LinearMap.BilinMap.toQuadratic
 
 /-- **Layer 8E, the arithmetic form of the transformation, through the interface.** Once the
 covolume of the realization is `Real.sqrt (det L)`, which is 8D, the consumed identity takes
-the shape this roadmap owns. The extension from `t > 0` to `τ` in the upper half-plane is
-the second half of 8E, and it uses the branch fixed in `README.md`. -/
-example {n : ℕ} (I : GaussianThetaInterface n) (Λ : Submodule ℤ (EuclideanSpace ℝ (Fin n)))
-    (d : ℝ) (hd : 0 < d) (hcov : ZLattice.covolume Λ = Real.sqrt d) {t : ℝ} (ht : 0 < t) :
-    analyticTheta Λ (1 / t)
-      = t ^ ((n : ℝ) / 2) * (Real.sqrt d)⁻¹ * analyticTheta (I.dual Λ) t :=
+the shape this roadmap owns. -/
+example {n : ℕ} (I : GaussianThetaInterface n) (Λ : AnalyticLattice n)
+    (d : ℝ) (hd : 0 < d) (hcov : Λ.covolume = Real.sqrt d) {t : ℝ} (ht : 0 < t) :
+    Λ.realTheta (1 / t)
+      = t ^ ((n : ℝ) / 2) * (Real.sqrt d)⁻¹ * (I.dual Λ).realTheta t :=
+  sorry
+
+/-- **Layer 8E, on the upper half-plane.** The same identity for the holomorphic theta, with
+the principal branch of `(τ/i)^{n/2}`, which is legitimate because `τ/i` has positive real
+part there. This is the statement the roadmap owns, and it follows from the two previous
+targets by the identity theorem. -/
+example {n : ℕ} (I : GaussianThetaInterface n) (Λ : AnalyticLattice n)
+    (d : ℝ) (hd : 0 < d) (hcov : Λ.covolume = Real.sqrt d) {τ : ℂ} (hτ : 0 < τ.im) :
+    Λ.theta (-1 / τ)
+      = (τ / Complex.I) ^ ((n : ℂ) / 2) * ((Real.sqrt d : ℝ) : ℂ)⁻¹ * (I.dual Λ).theta τ :=
   sorry
 
 end Layer8
