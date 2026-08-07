@@ -20,8 +20,8 @@ normalization and one computable description. The low-degree layer is where arit
 the canonical layer is where the theory is stated in all degrees.
 
 Suggested home: `TauCeti/RepresentationTheory/Homological/ContCohomology/`, mirroring the Mathlib
-path so that a file which later refactors onto the canonical API can be refactored on its own,
-with the field-theoretic interface (Hilbert 90, Kummer classes) in
+path so that files can be refactored onto the canonical API one at a time, with the
+field-theoretic interface (Hilbert 90, Kummer classes) in
 `TauCeti/FieldTheory/GaloisCohomology/`. The Tau Ceti code repository contains no cohomology,
 profinite-group, or Galois-theoretic material, so this development is greenfield there.
 
@@ -61,8 +61,9 @@ Named theorem by theorem, or file by file, in §4 (Mathlib) and Appendix A (work
 upstream). They are: Mathlib's discrete `groupCohomology` package including `LowDegree`,
 `Functoriality`, `LongExactSequence`, `Shapiro` and `Hilbert90`; Mathlib's
 `OpenSubgroup`/`OpenNormalSubgroup`, `ProfiniteGrp` and `ClopenNhdofOne` material; Mathlib's
-Krull topology, infinite Galois correspondence and separable-closure API; Mathlib's `ContCohomology` on master, once the pin
-reaches it (external prerequisite E0 below); and FLT's canonical cup product.
+Krull topology, infinite Galois correspondence and separable-closure API; Mathlib's
+`ContCohomology` on master, once the pin reaches it (external prerequisite E0 below); and FLT's
+canonical cup product.
 
 ### Supplied to other roadmaps
 
@@ -496,10 +497,11 @@ Ribes-Zalesskii Cor. 6.5.6(a), Koch Thm. 3.16; Serre, *Local Fields* X §3 takes
   6. the composition law for `W ≤ V ≤ U`, identifying the `U`-to-`W` map with the composite
      through the `V`-level.
 
-  Laws 5 and 6 are what "functor" means here, so they are stated as theorems rather than left
-  inside the phrase "transition maps". Also state functoriality of the whole system in `M`. The
-  construction must typecheck against `ProfiniteGrp.toFiniteQuotientFunctor`, whose arrows go the
-  other way, which is the reason for the opposite category.
+  The word "functor" in the first sentence means items 5 and 6, so state them as theorems rather
+  than leaving them inside the phrase "transition maps". Also state functoriality of the whole
+  system in `M`. The construction must typecheck against
+  `ProfiniteGrp.toFiniteQuotientFunctor`, whose arrows go the other way, which is the reason for
+  the opposite category.
 - **The colimit theorem.** `Hⁱ(G, M) ≅ colim_U Hⁱ(G ⧸ U, M^U)` in `AddCommGrp`, for `i = 0, 1, 2`
   on the explicit model. Surjectivity is a strict statement: a continuous 1-cocycle is *itself*
   inflated from a finite level, with no coboundary subtracted, because its zero set is an open
@@ -821,9 +823,10 @@ For profinite `G` and a prime `p`; NSW III §3 is the source of record. Nothing 
 [C1 fields Zulip thread](https://leanprover-community.github.io/archive/stream/116395-maths/topic/C1.20fields.3F.html)
 of August 2025 asked for it and left it open. This layer rests on Layer 9.
 
-- **Types and definitions.** All three invariants are valued in `ℕ∞` (Mathlib's `ENat`), and each is
-  the infimum of a `Prop`-valued predicate on `ℕ` rather than an infimum written out by hand. In
-  the headers below `M` ranges over discrete `G`-modules in the unbundled classes of §3 and `Hⁱ` is
+- **Types and definitions.** The three invariants `cd_p`, `scd_p` and `cd` are valued in `ℕ∞`
+  (Mathlib's `ENat`). The first two are infima of `Prop`-valued predicates on `ℕ`, and each
+  predicate is named and stated in its own right rather than folded into the infimum. In the four
+  headers below `M` ranges over discrete `G`-modules in the unbundled classes of §3 and `Hⁱ` is
   Layer 9's, so all four are **(needs E0)**; `leastENatBound` is the order-theoretic wrapper of
   `Suggested.lean`, which sends a predicate on `ℕ` to the infimum in `ℕ∞` of the naturals
   satisfying it, and to `⊤` when none does.
@@ -1211,12 +1214,11 @@ only in an open pull request.
 
 ## Appendix B: provenance and coordination
 
-These records state evidenced status as of the audit date given at the head of Appendix A. "Not
-recorded" means that adaptation of
-source code is blocked until the revision, license and coordination fields are filled in; it does
-not mean permission is assumed. Consuming a public API, and independently implementing a
-mathematically specified theorem, are not adaptation and are not blocked by any of this; copying or
-translating source code is.
+These records state evidenced status as of the audit date at the head of Appendix A. "Not
+recorded" means that adaptation of source code is blocked until the revision, license and
+coordination fields are filled in; it does not mean permission is assumed. Consuming a public API,
+and independently implementing a mathematically specified theorem, are not adaptation and are not
+blocked by any of this; copying or translating source code is.
 
 | Project | Authors | Revision or PR | License | Overlap | Plan |
 |---|---|---|---|---|---|
