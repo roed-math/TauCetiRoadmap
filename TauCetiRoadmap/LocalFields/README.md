@@ -157,14 +157,14 @@ carry the mixed-characteristic hypothesis for the same reason:
 | invariant map | `inv_{L/K} : H²(Gal(L/K), Lˣ) ≃ (1/[L:K])ℤ/ℤ` in the unramified case, normalized by evaluation at Frobenius: under `H²(Ẑ-quotient, ℤ) ≅ H¹(·, ℚ/ℤ) = Hom(·, ℚ/ℤ)`, the class maps to evaluation at the **arithmetic** Frobenius. For the fundamental class, `inv_K(u_{L/K}) = 1/[L:K]` | Layer 5 |
 | Herbrand quotient | `h(G, M) = #H²(G, M) / #H¹(G, M)` for finite cyclic `G`, equivalently `#Ĥ⁰/#Ĥ¹`. The two values used are `h(Gal(L/K), Lˣ) = [L:K]` and `h(Gal(L/K), 𝒪[L]ˣ) = 1` | Layer 5 |
 | tame relation | `σ τ σ⁻¹ = τ^q`, where `σ` is an **arithmetic** Frobenius lift and `τ` is a topological generator of the tame inertia `I_t ≅ Ẑ^{(p')}(1)`. The `(1)` records that the action of `G_K` on `I_t ≅ lim_{p∤m} μ_m` is the cyclotomic one, which is the same statement as the relation. The presentation with a geometric `σ`, that is `σ⁻¹ τ σ = τ^q`, is isomorphic to it under `σ ↦ σ⁻¹`, and is supplied as a translation lemma | Layer 4 |
-| cohomology carrier | continuous cohomology of `G_K` is `continuousCohomology n A` of Mathlib, for `A` the topological representation attached to a discrete module with continuous action. This roadmap states nothing against a private carrier, and any comparison with an explicit cochain description is a statement about the Mathlib carrier. Finite-level statements use `groupCohomology` and `tateCohomology` of Mathlib | Layer 5 |
+| cohomology carrier | continuous cohomology of `G_K` is `continuousCohomology n A` of Mathlib, for `A` the topological representation attached to a discrete module with continuous action. Any comparison with an explicit cochain description is a statement about the Mathlib carrier. Finite-level statements use Mathlib's `groupCohomology`; finite Tate cohomology is the named carrier of Layer 5, which Mathlib's `tateCohomology` replaces once the Mathlib the repository builds includes it | Layer 5 |
 | Tate dual | one dual for each `n`, and only when `char K ∤ n`. For a finite discrete `G_K`-module `M` killed by `n`, the étale dual is `Hom(M, μ_n)` with the conjugation action. This covers regime 1, and every `n` in regime 2. Compatibility along `μ_n ⊆ μ_{nm}` is a named milestone inside those regimes | Layer 8 |
 | class formation interface | at finite level, a distinguished class `σ_H ∈ H²(H, M)` for every subgroup `H ≤ G`, with `H¹(H, M) = 0` and `H²(H, M)` cyclic of order `Nat.card H`. ⚠ The order is `Nat.card H`, and never the index `[G : H]`. The profinite-level formation `(G_K, (Kˢ)ˣ)`, with compatible invariant maps, is stated on top of the finite-level one, in the style of NSW II §1 | Layer 5 and Layer 6 |
 
 ## What Mathlib has (consume)
 
-Checked against Mathlib `v4.32.2`, which is the version this repository requires. Every
-declaration below exists at that version. Do not rebuild any of it.
+Checked against the Mathlib this repository currently builds. Every declaration below
+exists there. Do not rebuild any of it.
 
 - **The local-field class:** `Mathlib/NumberTheory/LocalField/Basic.lean`, with
   `IsNonarchimedeanLocalField`. It carries the instances `IsTopologicalDivisionRing K`,
@@ -184,7 +184,7 @@ declaration below exists at that version. Do not rebuild any of it.
   (`Hensel.lean`), `ProperSpace ℚ_[p]`, `Padic.valuation` and `addValuation`, and
   `Padic.mulValuation : Valuation ℚ_[p] ℤᵐ⁰` with the instances `ValuativeRel ℚ_[p]`,
   `Valuation.Compatible`, `IsNontrivial`, and `IsRankLeOne` (`Padics/ValuativeRel.lean`). ⚠
-  Mathlib `v4.32.2` has **no** `IsValuativeTopology ℚ_[p]`, and therefore no
+  Mathlib has **no** `IsValuativeTopology ℚ_[p]`, and therefore no
   `IsNonarchimedeanLocalField ℚ_[p]`. That instance is the first milestone of Layer 0.
 - **Valuation extension:** `Mathlib/RingTheory/Valuation/Extension.lean` (the valuation-extension
   class, which uses equivalence and not equality by design, with the normalization discussion of
@@ -231,12 +231,14 @@ declaration below exists at that version. Do not rebuild any of it.
     `H¹(Gal(L/K), Lˣ) = 0` for finite Galois `L/K`, and the cocycle form of Noether;
   - `GroupCohomology/LongExactSequence.lean`, `Shapiro.lean`, and `Functoriality.lean`;
   - `GroupCohomology/FiniteCyclic.lean`, the periodicity of `Hⁱ` for a finite cyclic group. It
-    uses the bicomplex of the norm and `ρ(g) − 1`, which is the engine of the Herbrand quotient;
-  - `TateCohomology/Basic.lean`, Tate cohomology;
-  - `ContCohomology/`, continuous cochain cohomology, in `Basic.lean`, `Functoriality.lean`, and
-    `LowDegree.lean`.
-  ⚠ There is no cup product anywhere in that directory at `v4.32.2`, and no corestriction for
-  group cohomology. Both are fields of `Supplied.CohomologyOps`.
+    uses the bicomplex of the norm and `ρ(g) − 1`, which is the engine of the Herbrand quotient.
+- **Continuous cohomology**: `Mathlib/Algebra/Category/ContinuousCohomology/`, the functor
+  `continuousCohomology` in every degree, with the degree-`0` description
+  `continuousCohomologyZeroIso`.
+  ⚠ There is no cup product for either theory, no corestriction for group cohomology, no Tate
+  cohomology, and no functoriality of `continuousCohomology` in the group variable. The cup
+  product and the coefficient maps are fields of `Supplied.CohomologyOps`; the rest are proof
+  obligations recorded with it, and the Tate carrier is a Layer 5 target.
 - **Cyclotomic characters and Teichmüller lifts:**
   `Mathlib/NumberTheory/Cyclotomic/CyclotomicCharacter.lean` (`cyclotomicCharacter`, with values
   in `ℤ_[p]ˣ`); `Mathlib/RingTheory/Teichmuller.lean` (`Perfection.teichmuller₀ : Perfection (R ⧸
@@ -255,7 +257,7 @@ declaration below exists at that version. Do not rebuild any of it.
 ## What is missing (build here)
 
 Everything below is specific to the arithmetic of local fields, and none of it exists in Mathlib
-`v4.32.2` in the form stated here.
+in the form stated here.
 
 - The normalized `ℤ`-valued valuation and the absolute value `‖·‖_K`.
 - The unit filtration `U(K,i)`, with its graded pieces `𝒪[K]ˣ/U(K,1) ≅ 𝓀[K]ˣ` and
@@ -969,11 +971,13 @@ next layer expressible, add the milestones of that layer to `Suggested.lean` wit
 
 ### Layer 5: cohomology of local fields, part one, the invariant map and the class formation
 
-Finite-level statements use `groupCohomology` and `tateCohomology` of Mathlib directly. They need
-nothing outside Mathlib, and can be built first. Statements about `G_K` use the continuous
-theory. Mathlib `v4.32.2` supplies the continuous cochain complex in `ContCohomology`, together
-with compatible-pair functoriality, but not the colimit description over finite Galois quotients,
-not corestriction, and not cup products. Those three are fields of `Supplied.CohomologyOps`.
+Finite-level statements use Mathlib's `groupCohomology` directly, and Tate cohomology through
+the named Layer 5 carrier. Statements about `G_K` use the continuous
+theory. Mathlib supplies the continuous cochain complex, `continuousCohomology`, but not its
+functoriality in the group variable, not the colimit description over finite Galois quotients,
+not corestriction, and not cup products. The cup product and the coefficient maps are fields of
+`Supplied.CohomologyOps`; restriction, inflation, corestriction and the colimit are proof
+obligations recorded with it.
 
 - **Hilbert 90, at both levels.** The finite level is `H1ofAutOnUnitsUnique` of Mathlib. Restate
   it as `H¹(Gal(L/K), Lˣ) = 0` in the chosen cohomology API, and derive `H¹(G_K, (Kˢ)ˣ) = 0`
@@ -1018,7 +1022,7 @@ not corestriction, and not cup products. Those three are fields of `Supplied.Coh
       and `ZMod 2 ⊗ ZMod 2 ≅ ZMod 2`. That is why Layer 8C states the Hilbert symbol with no
       chosen root of unity, while a general `n` cannot.
 - **The Herbrand quotient.** Define `h(G, M) = #H²/#H¹` for finite cyclic `G`, on top of the
-  periodicity in `FiniteCyclic` and of `tateCohomology`. Prove multiplicativity in a short exact
+  periodicity in `FiniteCyclic` and of the Layer 5 Tate carrier. Prove multiplicativity in a short exact
   sequence, `h = 1` on a finite module, and the two computations `h(Gal(L/K), Lˣ) = [L:K]` and
   `h(Gal(L/K), 𝒪[L]ˣ) = 1` for cyclic `L/K`. The second comes from a cohomologically trivial open
   `G`-stable subgroup of `𝒪[L]ˣ`. Scale a normal basis element by a high power of `π_L`. This
@@ -1027,7 +1031,7 @@ not corestriction, and not cup products. Those three are fields of `Supplied.Coh
   on the finite quotient this gives the second computation. The first then follows from the second
   and from the valuation sequence `0 → 𝒪[L]ˣ → Lˣ → ℤ → 0` of Layer 0.
   - *Prerequisites:*
-    - `Mathlib: groupCohomology.FiniteCyclic`, `tateCohomology`;
+    - `Mathlib: groupCohomology.FiniteCyclic`; `Layer 5: the Tate carrier`;
     - `Layer 1: the unit filtration as an object`;
     - `Layer 0: the normalized valuation`.
   - *API:*
@@ -1084,10 +1088,9 @@ not corestriction, and not cup products. Those three are fields of `Supplied.Coh
   - *Prerequisites:*
     - `Layer 5: unramified cohomology`;
     - `Layer 5: induction from the cyclic case`;
-    - `Mathlib: continuousCohomology` and the compatible-pair `cochainsMap` of
-      `RepresentationTheory/Homological/ContCohomology/Functoriality.lean`, from which restriction
-      and inflation on `continuousCohomology` are a short derivation.
-  - *Proof obligations:* corestriction and the finite-quotient colimit. ⚠ Mathlib `v4.32.2` has
+    - `Mathlib: continuousCohomology`.
+  - *Proof obligations:* restriction and inflation on `continuousCohomology`, corestriction,
+    and the finite-quotient colimit. ⚠ Mathlib has
     no corestriction for group cohomology. `GroupHomology/Functoriality.lean` has a corestriction
     for group *homology*, which is a different map.
   - *API:*
@@ -1122,7 +1125,7 @@ not corestriction, and not cup products. Those three are fields of `Supplied.Coh
   `TauCeti/RepresentationTheory/Homological/GroupCohomology/ClassFormation/`, because it is about
   finite groups. Nothing in it mentions a local field.
   - *Prerequisites:*
-    - `Mathlib: groupCohomology`, `tateCohomology`;
+    - `Mathlib: groupCohomology`; `Layer 5: the Tate carrier`;
     - `Mathlib: groupCohomology.map` of
       `RepresentationTheory/Homological/GroupCohomology/Functoriality.lean`, for restriction.
   - *Proof obligations:* corestriction on `Ĥ²`. ⚠ It is data of the structure, so it does not
@@ -1179,14 +1182,14 @@ constructs the local fundamental class, instantiates the generic structure, and 
 - **The Tate cup product, in all integer bidegrees.** Tate–Nakayama needs cup product with a
   class in `Ĥ²`, acting on `Ĥ^r` for **every** integer `r`, including negative `r`. An ordinary
   cup product does not provide that, in low degrees or in all bidegrees, because ordinary
-  cohomology has no negative degree. Mathlib `v4.32.2` has no Tate cup product. So it is a
+  cohomology has no negative degree. Mathlib has no Tate cup product. So it is a
   milestone here. Construct it from a
   complete resolution, and prove compatibility with the periodicity isomorphism of a finite
   cyclic group, with restriction, and with corestriction. An Ext or dimension-shifting
   construction is an acceptable substitute, provided it is stated in all integer degrees and
   compared with the `r = −2` norm-residue map.
   - *Prerequisites:*
-    - `Mathlib: tateCohomology`, and the complete resolution behind it;
+    - `Layer 5: the Tate carrier`, and the complete resolution behind it;
     - `Mathlib: Rep.tensor`, for the coefficient object of the pairing.
   - *Supplied hypotheses:* an ordinary cup product, for the comparison in non-negative degrees
     only. It is an explicit argument of `tateCup_agrees_ordinary`, and the construction of the
@@ -1220,7 +1223,7 @@ constructs the local fundamental class, instantiates the generic structure, and 
   here is the finite-level input and the shape of the dévissage.
   - *Prerequisites:*
     - `Layer 6: the Tate cup product, in all integer bidegrees`;
-    - `Mathlib: tateCohomology`.
+    - `Layer 5: the Tate carrier`.
   - *API:*
     - the pairing, and the induced map `Ĥ^{−r−1}(G, A^D) → Hom(Ĥ^r(G, A), ℚ/ℤ)`;
     - bijectivity of that map;
@@ -1239,7 +1242,7 @@ constructs the local fundamental class, instantiates the generic structure, and 
   - *Prerequisites:*
     - `Layer 5: the finite class-formation structure`;
     - `Layer 6: the Tate cup product, in all integer bidegrees`;
-    - `Mathlib: tateCohomology`.
+    - `Layer 5: the Tate carrier`.
   - *Source:* Artin–Tate, *Class Field Theory*, and Serre LF IX. The hypotheses are the two
     class-formation conditions on every subgroup. *False generalization:* the conclusion fails
     without the hypothesis on subgroups; vanishing of `H¹(G, M)` alone does not suffice.
@@ -1592,8 +1595,8 @@ modules over every local field" occurs.
   - *Prerequisites:*
     - `Layer 8A: duality`;
     - `Layer 4: inertia`;
-    - `Mathlib: continuousCohomology` and the compatible-pair `cochainsMap`, for the restriction
-      and the inflation in the two descriptions.
+    - `Mathlib: continuousCohomology`; the restriction and the inflation in the two
+      descriptions are the proof obligations recorded with `Supplied.CohomologyOps`.
   - *Source:* Milne ADT I.2.6; NSW (7.2.15). The hypotheses are that `M` is unramified and that
     `#M` is prime to the residue characteristic. *False generalization:* the common value
     `#H⁰(G_K, M)` for both subgroups, which the example above refutes.
@@ -1922,21 +1925,23 @@ uses and does not own. A milestone that needs one names the field it uses, in it
 hypotheses* field, and the Lean statement takes the structure as an argument. No declaration here
 postulates one of these operations with a `sorry`.
 
-**`Supplied.CohomologyOps`**, the cohomology of a profinite group beyond what Mathlib `v4.32.2`
-has. Mathlib supplies the carrier `continuousCohomology` and the compatible-pair `cochainsMap`,
-so restriction and inflation are **not** fields here. The fields are:
+**`Supplied.CohomologyOps`**, the cohomology of a profinite group beyond what Mathlib
+has. Mathlib supplies the carrier `continuousCohomology`; restriction and inflation are proof
+obligations recorded below, and are **not** fields here. The fields are:
 
 | field | mathematical content | consumed by |
 |---|---|---|
 | `tensorObj` | the coefficient object `A ⊗ B` of a cup product. ⚠ Naming it is what stops a statement from asserting a coefficient identification that does not exist | Layer 5 Kummer, Layers 8A, 8B, 8C |
 | `cup` | for coefficients `A` and `B`, the map `H^i(G,A) × H^j(G,B) → H^{i+j}(G, A ⊗ B)`, additive in each variable | Layer 5 Kummer, Layers 8A, 8B, 8C |
-| `coeff` | the map on cohomology induced by a morphism of coefficient objects. Mathlib's `cochainsMap` at the identity group homomorphism gives it; it is a field so that the statements need no detour through the cochain complex | `localSymbol`, `tateDualityPairing` |
+| `coeff` | the map on cohomology induced by a morphism of coefficient objects; it is a field so that the statements need no detour through the cochain complex | `localSymbol`, `tateDualityPairing` |
 
-Four further operations are used **only inside proofs**, so no statement here mentions them and
+Six further operations are used **only inside proofs**, so no statement here mentions them and
 none is a field. They are proof obligations of the milestones that name them:
 
 | operation | mathematical content | used by |
 |---|---|---|
+| restriction | on `continuousCohomology`, for the subgroup changes the proofs use | Layer 5 `Br(K)`, Layers 8A, 8B |
+| inflation | on `continuousCohomology`, along finite Galois quotients | Layer 5 Hilbert 90, Layer 5 `Br(K)`, Layer 8B |
 | corestriction | for an open subgroup of finite index, with `cor ∘ res = [G:U] · id` and the projection formula | Layer 5 `Br(K)`, Layer 6 functoriality |
 | Mackey | the double-coset formula for `res ∘ cor`, and the transfer `Ĥ⁻²(G, ℤ) → Ĥ⁻²(U, ℤ)` | Layer 6 functoriality |
 | Shapiro | `H^i(G, Coind^G_U M) ≅ H^i(U, M)` for `U` open of finite index, natural in `M` | Layer 8A step 5 |

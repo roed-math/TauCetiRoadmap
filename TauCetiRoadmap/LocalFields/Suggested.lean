@@ -522,17 +522,17 @@ structure ProPRankInputs (p : ℕ) [Fact p.Prime] : Prop where
 
 /-! ### The cohomology carrier
 
-The carrier is Mathlib's `continuousCohomology` on the bundled topological representation
-`TopRep`, which carries the discrete topology and the continuous action that the coefficients
+The carrier is Mathlib's `continuousCohomology`, on bundled topological representations of
+`G_F`, which carry the discrete topology and the continuous action that the coefficients
 must have. Only the cup product and the coefficient functoriality are hypotheses. -/
 
 /-- Coefficients for `G_F`, bundled: a topological `ZMod n`-representation. -/
 abbrev GalRep (n : ℕ) (F : Type u) [Field F] : Type (u + 1) :=
-  TopRep.{u, 0, u} (ZMod n) (Field.absoluteGaloisGroup F)
+  Action (TopModuleCat.{u} (ZMod n)) (Field.absoluteGaloisGroup F)
 
 /-- `Hⁱ(G_F, A)`, the continuous cohomology of Mathlib. This roadmap uses no other carrier. -/
 noncomputable abbrev H (n : ℕ) (F : Type u) [Field F] (i : ℕ) (A : GalRep n F) : Type _ :=
-  continuousCohomology i A
+  (continuousCohomology (ZMod n) (Field.absoluteGaloisGroup F) i).obj A
 
 /-- The cup product, with the coefficient object of its target as data. ⚠ The target of a cup
 product of two classes with coefficients in `A` and `B` is `A ⊗ B`, and never `A` again. That is
@@ -545,9 +545,8 @@ structure CohomologyOps (n : ℕ) (F : Type u) [Field F] where
   together with its defining equation, so no degree arithmetic is hidden in a coercion. -/
   cup : ∀ (A B : GalRep n F) (i j k : ℕ), i + j = k →
     H n F i A →+ H n F j B →+ H n F k (tensorObj A B)
-  /-- The map induced on cohomology by a morphism of coefficient objects. Mathlib's
-  `ContinuousCohomology.cochainsMap`, at the identity group homomorphism, gives it; it is a
-  field so that the statements below need no detour through the cochain complex. -/
+  /-- The map induced on cohomology by a morphism of coefficient objects. It is a field so
+  that the statements below need no detour through the cochain complex. -/
   coeff : ∀ {A B : GalRep n F}, (A ⟶ B) → ∀ i : ℕ, H n F i A →+ H n F i B
 
 end Supplied
@@ -666,7 +665,7 @@ discrete module is finite. The Euler-characteristic statement below depends on t
 `Nat.card` is `0` on an infinite type. -/
 theorem finite_H (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [ValuativeRel F]
     [TopologicalSpace F] [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
-    (n : ℕ) (_hn : n ≠ 0) (A : GalRep n F) (_hA : Finite A) (i : ℕ) (_hi : i ≤ 2) :
+    (n : ℕ) (_hn : n ≠ 0) (A : GalRep n F) (_hA : Finite A.V) (i : ℕ) (_hi : i ≤ 2) :
     Finite (H n F i A) :=
   sorry
 
@@ -678,7 +677,7 @@ theorem tateDualityPairing_perfect_mixed (p : ℕ) [Fact p.Prime] (F : Type u) [
     [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F]
     [Module.Finite ℚ_[p] F] (n : ℕ) (_hn : n ≠ 0) (ops : CohomologyOps n F) (A : GalRep n F)
     (ev : ops.tensorObj (tateDual A) A ⟶ muNRep n F)
-    (tr : H n F 2 (muNRep n F) ≃+ ZMod n) (_hA : Finite A) (_hdisc : DiscreteTopology A)
+    (tr : H n F 2 (muNRep n F) ≃+ ZMod n) (_hA : Finite A.V) (_hdisc : DiscreteTopology A.V)
     (i j : ℕ) (hij : i + j = 2) :
     (∀ x : H n F i (tateDual A),
         (∀ y : H n F j A, tateDualityPairing ops A ev tr i j hij x y = 0) → x = 0) ∧
@@ -690,11 +689,11 @@ theorem tateDualityPairing_perfect_mixed (p : ℕ) [Fact p.Prime] (F : Type u) [
 `#H⁰ · #H² / #H¹ = ‖#M‖_K`, written over `ℕ` with `‖#M‖_K⁻¹ = p ^ (N · v_p(#M))`. -/
 theorem eulerCharacteristic_mixed (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [ValuativeRel F]
     [TopologicalSpace F] [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
-    (n : ℕ) (_hn : n ≠ 0) (A : GalRep n F) (_hA : Finite A)
+    (n : ℕ) (_hn : n ≠ 0) (A : GalRep n F) (_hA : Finite A.V)
     (_h0 : Finite (H n F 0 A)) (_h1 : Finite (H n F 1 A)) (_h2 : Finite (H n F 2 A)) :
     Nat.card (H n F 1 A)
       = Nat.card (H n F 0 A) * Nat.card (H n F 2 A)
-        * p ^ (Module.finrank ℚ_[p] F * padicValNat p (Nat.card A)) :=
+        * p ^ (Module.finrank ℚ_[p] F * padicValNat p (Nat.card A.V)) :=
   sorry
 
 /-- **Layer 8B, `eulerCharacteristic_finrank_fp`.** The `𝔽_p`-module corollary,
@@ -702,11 +701,11 @@ theorem eulerCharacteristic_mixed (p : ℕ) [Fact p.Prime] (F : Type u) [Field F
 groups. The downstream table consumes this form. -/
 theorem eulerCharacteristic_finrank_fp (p : ℕ) [Fact p.Prime] (F : Type u) [Field F]
     [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F]
-    [Module.Finite ℚ_[p] F] (A : GalRep p F) (_hA : Finite A) :
+    [Module.Finite ℚ_[p] F] (A : GalRep p F) (_hA : Finite A.V) :
     Module.finrank (ZMod p) (H p F 1 A)
       = Module.finrank (ZMod p) (H p F 0 A)
         + Module.finrank (ZMod p) (H p F 2 A)
-        + Module.finrank ℚ_[p] F * Module.finrank (ZMod p) A :=
+        + Module.finrank ℚ_[p] F * Module.finrank (ZMod p) A.V :=
   sorry
 
 /-- **Layer 7, `artinMap`**, with the local-field hypotheses: there is no local Artin map over an
@@ -759,11 +758,23 @@ theorem hilbertSymbol_eq_tateDuality_pairing (F : Type u) [Field F] [ValuativeRe
 /-! ### Layer 6: the Tate cup product and Tate–Nakayama
 
 Tate–Nakayama needs cup product with a class of `Ĥ²` acting on `Ĥ^r` for every integer `r`,
-including negative `r`. An ordinary cup product does not provide that, and Mathlib `v4.32.2` has
+including negative `r`. An ordinary cup product does not provide that, and Mathlib has
 no Tate cup product, so Layer 6 of this roadmap owns it. It is not a hypothesis, and the laws
 below are the roadmap's own targets. -/
 
 variable {G : Type} [Group G] [Fintype G]
+
+/-- **Layer 5, the Tate carrier.** Mathlib's `tateCohomology`, from the class-field-theory
+project, postdates the Mathlib this repository currently builds, so this named carrier stands
+in its place: `Ĥ^r(G, M)` for every integer `r`, a construction target of Layer 5 like every
+other `sorry` here. Every statement below reads through it, and when the repository's Mathlib
+includes `tateCohomology`, the replacement is this one definition and its instance. -/
+noncomputable def tateH {H : Type} [Group H] [Fintype H] (M : Rep ℤ H) (r : ℤ) : Type :=
+  sorry
+
+noncomputable instance {H : Type} [Group H] [Fintype H] (M : Rep ℤ H) (r : ℤ) :
+    AddCommGroup (tateH M r) :=
+  sorry
 
 /-- **Layer 5, `FiniteClassFormation`.** The interface, defined before any instance of it, so
 that Layer 5 needs nothing from Layer 6. The data are a distinguished class for every subgroup,
@@ -780,22 +791,22 @@ group cohomology in non-negative degrees is a Layer 6 obligation, and `res_comp_
 law that this file states about them. -/
 structure FiniteClassFormation (M : Rep ℤ G) where
   /-- The distinguished class of each subgroup. -/
-  cls : ∀ (H : Subgroup G) [Fintype H], tateCohomology (Rep.res H.subtype M) 2
+  cls : ∀ (H : Subgroup G) [Fintype H], tateH (Rep.res H.subtype M) 2
   /-- Restriction on `Ĥ²` along `H' ≤ H`. -/
   res : ∀ (H H' : Subgroup G) [Fintype H] [Fintype H'], H' ≤ H →
-    tateCohomology (Rep.res H.subtype M) 2 →+ tateCohomology (Rep.res H'.subtype M) 2
+    tateH (Rep.res H.subtype M) 2 →+ tateH (Rep.res H'.subtype M) 2
   /-- Corestriction on `Ĥ²` along `H' ≤ H`. -/
   cor : ∀ (H H' : Subgroup G) [Fintype H] [Fintype H'], H' ≤ H →
-    tateCohomology (Rep.res H'.subtype M) 2 →+ tateCohomology (Rep.res H.subtype M) 2
+    tateH (Rep.res H'.subtype M) 2 →+ tateH (Rep.res H.subtype M) 2
   /-- Field 1: `H¹(H, M) = 0` for every subgroup. -/
   h1_eq_zero : ∀ (H : Subgroup G) [Fintype H],
     Subsingleton (groupCohomology (Rep.res H.subtype M) 1)
   /-- Field 2, first half: `Ĥ²(H, M)` is generated by the distinguished class. -/
-  h2_cyclic : ∀ (H : Subgroup G) [Fintype H] (x : tateCohomology (Rep.res H.subtype M) 2),
+  h2_cyclic : ∀ (H : Subgroup G) [Fintype H] (x : tateH (Rep.res H.subtype M) 2),
     ∃ m : ℤ, x = m • cls H
   /-- Field 2, second half: its order is `Nat.card H`, and not the index `[G : H]`. -/
   h2_card : ∀ (H : Subgroup G) [Fintype H],
-    Nat.card (tateCohomology (Rep.res H.subtype M) 2) = Nat.card H
+    Nat.card (tateH (Rep.res H.subtype M) 2) = Nat.card H
   /-- Fields 3 and 4: restriction sends a distinguished class to a distinguished class, which
   covers `res^G_H σ_G = σ_H` at `H = ⊤` and the tower case `H' ≤ H` at once. -/
   res_cls : ∀ (H H' : Subgroup G) [Fintype H] [Fintype H'] (h : H' ≤ H),
@@ -805,7 +816,7 @@ structure FiniteClassFormation (M : Rep ℤ G) where
     cor H H' h (cls H') = ((H'.subgroupOf H).index : ℤ) • cls H
   /-- The one law relating the two maps: `cor ∘ res` is multiplication by the index. -/
   res_comp_cor : ∀ (H H' : Subgroup G) [Fintype H] [Fintype H'] (h : H' ≤ H)
-    (x : tateCohomology (Rep.res H.subtype M) 2),
+    (x : tateH (Rep.res H.subtype M) 2),
     cor H H' h (res H H' h x) = ((H'.subgroupOf H).index : ℤ) • x
 
 /-- **Layer 6**, the Tate cup product in all integer bidegrees. The target degree is an argument
@@ -815,21 +826,21 @@ together with its defining equation, so that no statement below has to compare `
 ⚠ A family of additive maps `Ĥ^r(G, ℤ) → Ĥ^{r+2}(G, M)` of the right type is not a cup product,
 and supports no part of Tate–Nakayama. The laws below are what make this family usable. -/
 noncomputable def tateCup (A B : Rep ℤ G) (r s t : ℤ) (_h : r + s = t) :
-    tateCohomology A r →+ tateCohomology B s →+ tateCohomology (A ⊗ B) t :=
+    tateH A r →+ tateH B s →+ tateH (A ⊗ B) t :=
   sorry
 
 /-- Associativity, through the associator of the coefficients. -/
 theorem tateCup_assoc (A B C : Rep ℤ G) (r s t w : ℤ) (h : r + s + t = w)
-    (x : tateCohomology A r) (y : tateCohomology B s) (z : tateCohomology C t) :
-    ∃ e : tateCohomology ((A ⊗ B) ⊗ C) w ≃+ tateCohomology (A ⊗ (B ⊗ C)) w,
+    (x : tateH A r) (y : tateH B s) (z : tateH C t) :
+    ∃ e : tateH ((A ⊗ B) ⊗ C) w ≃+ tateH (A ⊗ (B ⊗ C)) w,
       e (tateCup (A ⊗ B) C (r + s) t w h (tateCup A B r s (r + s) rfl x y) z)
         = tateCup A (B ⊗ C) r (s + t) w (by omega) x (tateCup B C s t (s + t) rfl y z) :=
   sorry
 
 /-- Graded commutativity, through the braiding of the coefficients. -/
 theorem tateCup_comm (A B : Rep ℤ G) (r s t : ℤ) (h : r + s = t) (h' : s + r = t)
-    (x : tateCohomology A r) (y : tateCohomology B s) :
-    ∃ e : tateCohomology (B ⊗ A) t ≃+ tateCohomology (A ⊗ B) t,
+    (x : tateH A r) (y : tateH B s) :
+    ∃ e : tateH (B ⊗ A) t ≃+ tateH (A ⊗ B) t,
       e (tateCup B A s r t h' y x)
         = ((-1 : ℤ) ^ (r * s).natAbs) • tateCup A B r s t h x y :=
   sorry
@@ -840,7 +851,7 @@ are arguments, because this roadmap owns neither. -/
 theorem tateCup_agrees_ordinary (A B : Rep ℤ G) (i j : ℕ)
     (ordinary : ∀ (X Y : Rep ℤ G) (m k : ℕ),
       groupCohomology X m →+ groupCohomology Y k →+ groupCohomology (X ⊗ Y) (m + k))
-    (cmp : ∀ (X : Rep ℤ G) (m : ℕ), groupCohomology X m →+ tateCohomology X (m : ℤ))
+    (cmp : ∀ (X : Rep ℤ G) (m : ℕ), groupCohomology X m →+ tateH X (m : ℤ))
     (x : groupCohomology A i) (y : groupCohomology B j) :
     cmp (A ⊗ B) (i + j) (ordinary A B i j x y)
       = tateCup A B (i : ℤ) (j : ℤ) ((i + j : ℕ) : ℤ) (by push_cast; ring)
@@ -850,9 +861,9 @@ theorem tateCup_agrees_ordinary (A B : Rep ℤ G) (i j : ℕ)
 /-- **Layer 6**, cup product with a distinguished class of `Ĥ²`, in every integer degree,
 **defined from** `tateCup` and never independently of it. This is the map that Tate–Nakayama
 inverts. -/
-noncomputable def tateCupSigma (M : Rep ℤ G) (σ : tateCohomology M 2) (r : ℤ)
-    (iso : ∀ s : ℤ, tateCohomology (M ⊗ Rep.trivial ℤ G ℤ) s ≃+ tateCohomology M s) :
-    tateCohomology (Rep.trivial ℤ G ℤ) r →+ tateCohomology M (2 + r) where
+noncomputable def tateCupSigma (M : Rep ℤ G) (σ : tateH M 2) (r : ℤ)
+    (iso : ∀ s : ℤ, tateH (M ⊗ Rep.trivial ℤ G ℤ) s ≃+ tateH M s) :
+    tateH (Rep.trivial ℤ G ℤ) r →+ tateH M (2 + r) where
   toFun x := iso (2 + r) (tateCup M (Rep.trivial ℤ G ℤ) 2 r (2 + r) rfl σ x)
   map_zero' := by simp
   map_add' x y := by simp
@@ -860,8 +871,8 @@ noncomputable def tateCupSigma (M : Rep ℤ G) (σ : tateCohomology M 2) (r : �
 /-- **Layer 6, Tate–Nakayama.** Cup product with the distinguished class of a finite class
 formation is an isomorphism in every integer degree. ⚠ The statement is about the map above, and
 not about the existence of some isomorphism of the same shape. -/
-theorem tateNakayama (M : Rep ℤ G) (_fcf : FiniteClassFormation M) (σ : tateCohomology M 2)
-    (r : ℤ) (iso : ∀ s : ℤ, tateCohomology (M ⊗ Rep.trivial ℤ G ℤ) s ≃+ tateCohomology M s) :
+theorem tateNakayama (M : Rep ℤ G) (_fcf : FiniteClassFormation M) (σ : tateH M 2)
+    (r : ℤ) (iso : ∀ s : ℤ, tateH (M ⊗ Rep.trivial ℤ G ℤ) s ≃+ tateH M s) :
     Function.Bijective (tateCupSigma M σ r iso) :=
   sorry
 
@@ -877,12 +888,12 @@ This theorem uses no class formation, and its home is the class-formation direct
 `Hom(M, μ_n)`, and the two agree only when the field contains `μ_n`. -/
 theorem tateDuality_finiteGroup (A AD QZ : Rep ℤ G) (r s : ℤ) (h : r + s = -1)
     (_ev : A ⊗ AD ⟶ QZ)
-    (evStar : tateCohomology (A ⊗ AD) (-1) →+ tateCohomology QZ (-1))
-    (val : tateCohomology QZ (-1) ≃+ ZMod (Nat.card G))
-    (_hfinA : Finite (tateCohomology A r)) (_hfinAD : Finite (tateCohomology AD s)) :
-    (∀ x : tateCohomology A r,
+    (evStar : tateH (A ⊗ AD) (-1) →+ tateH QZ (-1))
+    (val : tateH QZ (-1) ≃+ ZMod (Nat.card G))
+    (_hfinA : Finite (tateH A r)) (_hfinAD : Finite (tateH AD s)) :
+    (∀ x : tateH A r,
         (∀ y, val (evStar (tateCup A AD r s (-1) h x y)) = 0) → x = 0) ∧
-      (∀ φ : tateCohomology AD s →+ ZMod (Nat.card G), ∃ x : tateCohomology A r,
+      (∀ φ : tateH AD s →+ ZMod (Nat.card G), ∃ x : tateH A r,
         ∀ y, val (evStar (tateCup A AD r s (-1) h x y)) = φ y) :=
   sorry
 
