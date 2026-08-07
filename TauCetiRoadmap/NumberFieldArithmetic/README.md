@@ -1,1258 +1,1666 @@
 # Roadmap: number fields, ramification, Frobenius, and the LMFDB invariants
 
-Mathlib's number-field library is strong: rings of integers over a Dedekind base, the signed
-discriminant with Brill's sign theorem and Hermite's finiteness theorem, finiteness of the class
-group, Dirichlet's unit theorem with a regulator defined as a lattice covolume and the class
-number formula at the residue of the Dedekind zeta function, the fundamental identity
-`Σ eᵢ·fᵢ = n`, Hilbert's ramification theory through `D/I ≅ Gal(residue extension)`, the
-Kummer–Dedekind factorization theorem with matching `e`'s and `f`'s over `ℤ`, the different
-ideal with transitivity in towers, an arithmetic-Frobenius API, complete ramification theory of
-infinite places, cyclotomic fields through their splitting law, and adeles with the product
-formula.
+Mathlib's number-field library is strong. It has:
 
-Unlike its sibling roadmaps, this one completes an existing development rather than starting a
-new one. It says exactly what is missing, and asks for the API that turns those strong but
-disconnected pieces into a usable theory of the **core intrinsic arithmetic invariants of a
-number field, and the relations among them**: degree and signature; the discriminant and the
-primes that ramify; how a prime splits, and its Frobenius class; the different and the relative
-discriminant; integral bases, the index, and monogenicity; subfields; units, torsion, and the
-regulator. An [LMFDB number-field page](https://www.lmfdb.org/NumberField/) is a good statement
-of what that list ought to contain, so Layer 8 goes through such a page datum by datum and says
-which entries are theorems proved here, which are a sibling roadmap's named target, and which
-are database semantics this roadmap does not certify at all. The two main exclusions are the
-label's `.i` coordinate and the choice of a normalized defining polynomial; neither follows
-from Hermite finiteness, and no claim of full page coverage is made anywhere below.
+- rings of integers over a Dedekind base;
+- the signed discriminant, with Brill's sign theorem and Hermite's finiteness theorem;
+- finiteness of the class group;
+- Dirichlet's unit theorem, and a regulator defined as a lattice covolume;
+- the class number formula, at the residue of the Dedekind zeta function;
+- the fundamental identity `Σ eᵢ·fᵢ = n`;
+- Hilbert's ramification theory, through `D/I ≅ Gal(residue extension)`;
+- the Kummer–Dedekind factorization theorem over `ℤ`, with matching `e` and `f`;
+- the different ideal, with transitivity in towers;
+- an arithmetic-Frobenius API;
+- complete ramification theory of infinite places;
+- cyclotomic fields, through their splitting law;
+- adeles, with the product formula.
 
-What is absent upstream is not depth but the connections between the pieces. Nothing
-instantiates the Frobenius API for number fields (`Mathlib/RingTheory/Frobenius.lean` has zero
-reverse dependencies at the pin). There is no Artin symbol, no cycle-type form of Dedekind's
-theorem, no relative Dedekind–Kummer theorem, no relative discriminant ideal, no exact tame or
-wild different exponent, no Stickelberger congruence, no double-coset splitting law for
-non-Galois extensions, no local–global dictionary at finite places (the infinite-place analogue
-is complete, the finite-place one is missing entirely), no monogenicity predicate, no
-certificate that a named unit generates the units modulo torsion, and no label semantics.
+What Mathlib does not have is the connections between those pieces. Nothing instantiates the
+Frobenius API for number fields: `Mathlib/RingTheory/Frobenius.lean` has no reverse
+dependencies. The following are all absent:
 
-Suggested home: `TauCeti/NumberTheory/NumberField/` for the number-field-facing layers
-(`Splitting/`, `Frobenius/`, `ArtinSymbol/`, `DedekindTheorem/`, `Index/`, `Different/`,
-`LocalGlobal/`, `Subfield/`, `Monogenic/`, `Units/`, `LMFDB/`), with the Dedekind-generic halves
-in `TauCeti/NumberTheory/RamificationInertia/` and `TauCeti/RingTheory/DedekindDomain/`,
-mirroring the Mathlib paths that own each notion and extending the TauCeti files that already
-live at exactly these paths.
+- the Artin symbol;
+- the cycle-type form of Dedekind's theorem;
+- the relative Dedekind–Kummer theorem;
+- the relative discriminant ideal;
+- the exact tame and wild different exponents;
+- Stickelberger's congruence;
+- the double-coset splitting law for non-Galois extensions;
+- the local-global dictionary at finite places, although the infinite-place analogue is
+  complete;
+- a monogenicity predicate;
+- a certificate that a named unit generates the units modulo torsion;
+- label semantics.
 
-Four sibling roadmaps supply or consume named theorems here. §Cross-roadmap dependencies gives
-the exact list, milestone by milestone; the short version is that
-[Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) owns all local
-ramification theory and this roadmap owns the comparison of global ideal-theoretic invariants
-with it, [Polynomial Galois Groups PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10)
-consumes Layer 3's Dedekind theorem,
-[Global Class Field Theory PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) consumes
-Layer 2's ideal-theoretic Artin map and supplies the narrow class group and the abelian
-conductor–discriminant formula, and the merged
-[multiquadratic roadmap](../Multiquadratic/README.md) supplies the `(ℤ/2)ⁿ` special case of
-Layers 1–2.
+This roadmap builds those connections. The subject is the intrinsic arithmetic invariants of a
+number field and the relations among them:
+
+- degree and signature;
+- the discriminant and the primes that ramify;
+- the splitting type of a prime, and its Frobenius class;
+- the different and the relative discriminant;
+- integral bases, the index, and monogenicity;
+- subfields;
+- units, torsion, and the regulator.
+
+An [LMFDB number-field page](https://www.lmfdb.org/NumberField/) shows what that list should
+contain. Layer 8 goes through such a page datum by datum. For each datum it says whether the
+datum is a theorem of this roadmap, or a datum this roadmap does not certify.
+
+Suggested home: `TauCeti/NumberTheory/NumberField/` for the number-field layers, with
+subdirectories `Splitting/`, `Frobenius/`, `ArtinSymbol/`, `DedekindTheorem/`, `Index/`,
+`Different/`, `LocalGlobal/`, `Subfield/`, `Monogenic/`, `Units/`, and `LMFDB/`. The
+Dedekind-generic halves go in `TauCeti/NumberTheory/RamificationInertia/` and
+`TauCeti/RingTheory/DedekindDomain/`. These paths mirror the Mathlib paths that own each notion,
+and extend the Tau Ceti files that already exist at exactly these paths.
+
+## Prerequisites
+
+Every milestone below lists its direct prerequisites. Each prerequisite is one of four kinds,
+and nothing else is allowed:
+
+- **Mathlib.** A declaration that exists in Mathlib at the pin.
+- **Tau Ceti.** A declaration that exists in the Tau Ceti code repository.
+- **Layer n.** An earlier milestone of this roadmap.
+- **Roadmap R, Layer n.** A named layer of another roadmap in this repository.
+
+No milestone here has a prerequisite of any other kind. In particular, no milestone waits on:
+
+- a Mathlib pull request;
+- a future pin;
+- an external repository;
+- a roadmap that does not yet exist.
+
+Sometimes the mathematics needs an object that another roadmap will later own. In that case this
+roadmap defines the object itself, under the name and the shape that other roadmap uses.
+Layer 6.1 does this for the local ramification filtration. §Boundaries lists every such case.
+
+## Boundaries
+
+Two neighbouring roadmaps overlap this one. The boundaries are stated once here.
+
+**Local Fields.** That roadmap develops the ramification theory of a single local field: the
+lower and upper numbering filtrations, Herbrand's theorem, Hasse–Arf, and the local different
+formulas. This roadmap develops the canonical completion maps, the comparison of global
+ideal-theoretic invariants with local ones, and the global ideal and discriminant corollaries.
+This roadmap needs one object from that subject, the local lower ramification filtration of
+`L_w/K_v`. Layer 6 defines it, in the shape Serre uses, and proves the comparison theorem
+against the global filtration. That definition is a compatibility interface. If a Local Fields
+roadmap later supplies the same object, the definition here is deleted and the comparison
+theorem is restated against theirs; nothing else changes.
+
+**Global class field theory.** Reciprocity, ray class groups, the narrow class group, and the
+abelian conductor–discriminant formula belong to that subject. This roadmap proves none of them.
+Layer 2 constructs the ideal-theoretic Artin map. Its carrier is chosen so that a reciprocity
+layer can use the map without change. Layer 2 proves nothing about its kernel or its image.
+
+**Polynomial Galois groups.** Resolvents, the classification of transitive groups, and the `nTj`
+label semantics belong to that subject. This roadmap proves none of them. Layer 3 proves the
+factorization-type theorem in `Polynomial.Gal` vocabulary, which such a roadmap can use.
+
+**Artin representations.** The general Artin conductor, Artin integrality, and the general
+conductor–discriminant formula belong to that subject. This roadmap forms no general conductor.
+
+What this roadmap supplies to other subjects:
+
+- the polynomial-side Dedekind theorem (Layer 3);
+- the `S_n`-embedding of the Galois closure of a number field (Layer 7);
+- the ideal-theoretic Artin map `artinHomAway` (Layer 2);
+- the local-field instance on `v.adicCompletion K`, and the localization of the different
+  (Layer 5).
 
 ## Standing hypotheses
 
-Two regimes, spelled out, never bundled into a new class.
+There are two regimes. Neither is bundled into a new class.
 
-- **Dedekind-generic regime** (Layers 1–4 wherever the mathematics is not about `ℚ`, and the
-  different-exponent statements of Layer 6): Mathlib's AKLB setup, with `A` a Dedekind domain
-  with fraction field `K`, `L/K` a finite extension, and `B` the integral closure of `A` in `L`,
-  spelled with the pin's own typeclasses (`[IsDedekindDomain A]`, `[IsFractionRing A K]`,
-  `[IsIntegralClosure B A L]`, `[Module.Finite A B]`, `[Module.IsTorsionFree A B]`,
-  `[IsScalarTower A K L]`, …), and residue hypotheses per statement
-  (`[Algebra.IsSeparable (A ⧸ p) (B ⧸ P)]` or `[Finite (A ⧸ p)]`) exactly where the proof needs
-  them. Do **not** assume finite residue fields in statements that hold without them; do not
-  assume separability where the pin's own `sum_ramification_inertia` does without it. ⚠ Where
-  separability of `L/K` itself *is* needed, as in the exact different exponents, say so with
-  `[Algebra.IsSeparable K L]` and keep the fraction fields visible in the signature. A
-  two-Dedekind-ring signature with a finite torsion-free algebra between them cannot express
-  that hypothesis, so it is the wrong shape for those statements however convenient it looks.
-- **Number-field regime** (the LMFDB-facing layers): `[Field K] [NumberField K]` with `𝓞 K`,
-  Galois groups as `K ≃ₐ[ℚ] K` (or `L ≃ₐ[K] L`), primes presented as `Q : Ideal (𝓞 K)` with
-  instance arguments `[Q.IsPrime]`, `[Q.LiesOver (Ideal.span {(p : ℤ)})]`, `[Fact p.Prime]`,
-  which is the idiom of the landed TauCeti files. Concrete fields enter through a generator:
-  `{θ : 𝓞 K}` with `(hmin : minpoly ℤ θ = …)` and `(hgen : Algebra.adjoin ℚ {(θ : K)} = ⊤)`, as
-  in TauCeti's `Quadratic/Splitting.lean`, never a bespoke `QuadraticField`/`CubicField`
-  structure.
+**Dedekind-generic regime.** This regime covers Layers 1 to 4 wherever the mathematics is not
+about `ℚ`, and the different-exponent statements of Layer 6. It is Mathlib's AKLB setup:
 
-⚠ Never assume `p ≠ 2` or `p` odd except where the mathematics demands it (quadratic-symbol
-statements). The worked-example suite deliberately contains dyadic cases (splitting of `2` in
-quadratic fields by `d mod 8`; `2` as a common index divisor) precisely to catch smuggled
-oddness hypotheses. Never bake `K = ℚ` into a statement whose proof is uniform in the base; the
-`ℚ`-versions are corollaries. TauCeti's `SplitsCompletely.lean` keeps its general-base form
-`private`, and Layer 1 publishes that shape.
+- `A` is a Dedekind domain with fraction field `K`;
+- `L/K` is a finite extension;
+- `B` is the integral closure of `A` in `L`.
 
+Spell it with the pin's own typeclasses: `[IsDedekindDomain A]`, `[IsFractionRing A K]`,
+`[IsIntegralClosure B A L]`, `[Module.Finite A B]`, `[Module.IsTorsionFree A B]`, and
+`[IsScalarTower A K L]`. Add residue hypotheses per statement, either
+`[Algebra.IsSeparable (A ⧸ p) (B ⧸ P)]` or `[Finite (A ⧸ p)]`, exactly where the proof needs
+them.
+
+Two hypotheses are easy to add by accident. Do not assume finite residue fields in a statement
+that holds without them. Do not assume residue separability where Mathlib's own
+`sum_ramification_inertia` does without it.
+
+⚠ Separability of `L/K` itself is needed for the exact different exponents of Layer 6. State it
+as `[Algebra.IsSeparable K L]`, and keep the fraction fields visible in the signature. A
+signature with two Dedekind domains and a finite torsion-free algebra between them cannot state
+that hypothesis at all.
+
+**Number-field regime.** This regime covers the LMFDB-facing layers. Use `[Field K]` and
+`[NumberField K]` with `𝓞 K`. Write Galois groups as `K ≃ₐ[ℚ] K`, or `L ≃ₐ[K] L`. Present a
+prime as `Q : Ideal (𝓞 K)` with instance arguments `[Q.IsPrime]`,
+`[Q.LiesOver (Ideal.span {(p : ℤ)})]`, and `[Fact p.Prime]`. This is the idiom of the Tau Ceti
+files that already exist. Present a concrete field by a generator: `{θ : 𝓞 K}` with
+`(hmin : minpoly ℤ θ = …)` and `(hgen : Algebra.adjoin ℚ {(θ : K)} = ⊤)`, as in Tau Ceti's
+`Quadratic/Splitting.lean`. Do not introduce a `QuadraticField` or `CubicField` structure.
+
+⚠ Never assume `p ≠ 2`, except where the mathematics needs it. Quadratic-symbol statements need
+it; almost nothing else does. The worked examples in §Worked examples contain dyadic cases for
+this reason: the splitting of `2` in quadratic fields by `d mod 8`, and `2` as a common index
+divisor. Those examples detect an unstated oddness hypothesis.
+
+⚠ Never write `K = ℚ` into a statement whose proof is uniform in the base. The `ℚ`-versions are
+corollaries. Tau Ceti's `SplitsCompletely.lean` keeps its general-base form `private`, and
+Layer 1 publishes that shape.
 ## Pinned conventions
 
-| object | convention | source of truth |
-|---|---|---|
-| Frobenius | **arithmetic**: `σ x ≡ x^q mod Q` with `q = Nat.card (A ⧸ Q.under A)`, exactly Mathlib's `AlgHom.IsArithFrobAt` / `IsArithFrobAt`; "Frobenius" unqualified always means arithmetic; the geometric Frobenius is its inverse and is always named `geometric`. Identical to the [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) convention table row | `Mathlib/RingTheory/Frobenius.lean`; LocalFields Layer 2 |
-| Frobenius at ramified primes | `IsArithFrobAt` is satisfiable at every prime with finite residue field, but is canonical only **modulo inertia** (`IsArithFrobAt.mul_inv_mem_inertia`); an unqualified "the Frobenius at `Q`" requires `Algebra.IsUnramifiedAt`; at ramified primes only the coset `σ·I(Q)` is spoken of | Layer 2 |
-| Frobenius is a finite-level notion | every Frobenius statement in this roadmap lives in a **finite** Galois extension, or in the quotient `D_v/I_v ≅ Gal(k̄_v/k_v)`. There is no canonical Frobenius element or conjugacy class in `Gal(K̄/K)`: a lift to `D_v` is well defined only up to inertia, and compatible classes in the finite quotients do not assemble into one. Nothing here claims otherwise | Layer 2; §Explicit scope exclusions |
-| infinite places | the canonical element of the order-2 stabilizer at a real place ramifying in `L` is **complex conjugation** (`ComplexEmbedding.IsConj`, `IsCMField.complexConj`), and is never called a Frobenius. `IsRamified`/`IsUnramified` at infinite places are the pin's | `Mathlib/.../InfinitePlace/Ramification.lean`, `CMField.lean` |
-| Artin symbol | `artinSymbol 𝔭 : ConjClasses (L ≃ₐ[K] L)` for a nonzero prime `𝔭 : Ideal (𝓞 K)` unramified in `L`. The element `Frob Q` at a chosen `Q ∣ 𝔭` is well defined (unramified case), and the class depends only on `𝔭`. The rational-prime form for `K = ℚ` is a corollary, not the definition | Layer 2 |
-| ideal-theoretic Artin map | for finite abelian `L/K` and **an arbitrary finite set `S` of primes of `𝓞 K` containing every prime that ramifies in `L`**, `J^S` is the subgroup of `(FractionalIdeal (𝓞 K)⁰ K)ˣ` of fractional ideals whose support avoids `S`, and `artinHomAway S : J^S →* (L ≃ₐ[K] L)` sends a prime outside `S` to its Artin symbol. `S` is a parameter of the construction, not the ramified set: [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6)'s `J^{𝔪₀}` excludes the support of a modulus, which is usually larger than the ramified set, and **the carrier is the same**, so its reciprocity layers consume this map literally. Taking `S` to be the support of `relDiscr (𝓞 K) (𝓞 L)` is a specialization, and lives in Layer 4 with that ideal. The integral-ideal monoid hom is a corollary | Layer 2 (construction), Layer 4 (discriminant support); PR #6 conventions table |
-| decomposition group | `MulAction.stabilizer G Q`, Mathlib's spelling; **no rival named definition**. Inertia group: `Q.inertia G` (`Ideal.inertia`). Decomposition and inertia *fields*: ⚠ not the pin's `IsDecompositionField`/`IsInertiaField`, which mathlib [#41591](https://github.com/leanprover-community/mathlib4/pull/41591) deprecates, but the ring-level `Ideal.IsDecompositionRing`/`IsInertiaRing` it replaces them with | `Mathlib/RingTheory/Ideal/Pointwise.lean`, `…/NumberTheory/RamificationInertia/HilbertTheory.lean`, mathlib #41591 |
-| ramification groups, indexing | the higher groups are a family `G i` indexed by `i : ℕ`, so `G 0` is inertia; the decomposition group keeps its own name (`MulAction.stabilizer`) and is never written `G (-1)`. Where a statement genuinely needs the `−1` slot, it names the stabilizer explicitly | Layer 6 |
-| `e` and `f` | `Ideal.ramificationIdx p P` / `Ideal.inertiaDeg p P` (no ring-hom argument at the pin) and their Galois-constant versions `ramificationIdxIn`/`inertiaDegIn`. ⚠ Mathlib redefined both, the unprimed names now denoting the localization and residue-field definitions rather than the `sSup` and quotient-rank ones (#41234, #41325). Milestones are stated through characterizations that hold for either, so that the two agree by `ramificationIdx'_eq_ramificationIdx` and `inertiaDeg'_eq_inertiaDeg` instead of by luck | pin + mathlib #41234/#41325 |
-| splitting type | the multiset `{(e₁,f₁), …, (e_g,f_g)}`; "splits completely" is the count equation `(Ideal.primesOver (span {(p:ℤ)}) (𝓞 K)).ncard = finrank ℚ K` (TauCeti's landed convention, no new predicate); cycle types in `Equiv.Perm.cycleType` vocabulary, ⚠ which **omits fixed points**: partition-valued statements must add the `1`s back explicitly | TauCeti `SplitsCompletely.lean`; Layer 3 |
-| discriminant, absolute | the signed `NumberField.discr K : ℤ`; its sign is a theorem (`NumberField.sign_discr`, Brill), never a convention. `\|discr\|` enters labels; the sign is recoverable from the signature | pin |
-| discriminant, relative | a **new** ideal `relDiscr A B : Ideal A := Ideal.relNorm A (differentIdeal A B)` (Layer 4), never conflated with the signed integer; the reconciliation `relDiscr ℤ (𝓞 K) = span {discr K}` is a named lemma | Layer 4 |
-| different | Mathlib's `differentIdeal A B : Ideal B` | `Mathlib/RingTheory/DedekindDomain/Different.lean` |
-| valuation of an ideal at a prime | `v_P(I) := multiplicity P I` for `P` a nonzero prime of a Dedekind domain, matching the pin's `finprod_heightOneSpectrum_pow_multiplicity` normalization. Every exponent formula in Layers 4–6 is stated in this one normalization, including `v_P(e)` for a natural number `e`, which means the multiplicity of `P` in `span {(e : B)}` | Layers 4, 6 |
-| conductor | the only conductor this roadmap forms is Mathlib's bare-namespace **order conductor** `conductor R x : Ideal S`, used by Kummer–Dedekind, together with the number-field invariant `RingOfIntegers.exponent θ` (root namespace; the `absNorm` of the conductor's contraction). No Artin conductor object, and no general conductor exponent `f_𝔭(χ)`, is defined anywhere in this roadmap | `Mathlib/RingTheory/Conductor.lean`, pin `Ideal/KummerDedekind.lean`; Layers 3, 6 |
-| the power-basis index | `RingOfIntegers.exponent θ` is ⚠ **not** the `ℤ`-module index `[𝓞 K : ℤ[θ]]`; the two have the same prime divisors (a Layer-3 lemma), and only the index satisfies `disc(minpoly θ) = index² · discr K`. To keep the index free of junk values, it is defined on a subtype `IntegralPrimitiveElement K` of integral generators, never by a raw `Nat.card` on all of `𝓞 K` (Layer 3) | Layer 3 |
-| completions at finite places | the pin's `v.adicCompletion K` for `v : HeightOneSpectrum (𝓞 K)`, with `FinitePlace K ≃ HeightOneSpectrum (𝓞 K)`; local-field structure is stated in the `IsNonarchimedeanLocalField`/`ValuativeRel` vocabulary. The class itself is already at the pin (`Mathlib/NumberTheory/LocalField/Basic.lean`, with DVR, finite-residue and completeness instances for abstract local fields), adopted by LocalFields; what is missing is the instance for `v.adicCompletion K`, which is Layer 5's milestone. ⚠ `adicCompletion` is `Valued`-based, and Mathlib is replacing `Valued` by `ValuativeRel` (Zulip, J. Jiang): Layer 5 states its instances through the compatibility layer, so that moving to `ValuativeRel` is a refactor and not a re-proof | pin; LocalFields §Provenance |
-| the completion of an extension | for `w ∣ v`, the algebra structure of `L_w` over `K_v` is the **canonical** one, constructed in Layer 5 as the unique continuous `K_v`-algebra structure compatible with `L/K`. ⚠ The pin's own `Module.Finite K_v L_w` instance instead quantifies over an arbitrary `[Algebra K_v L_w] [ContinuousSMul K_v L_w] [IsScalarTower K K_v L_w]`; no theorem in this roadmap does that, since accepting arbitrary structure would let a statement be about the wrong extension | Layer 5 |
-| absolute values at finite places | the pin's `HeightOneSpectrum.adicAbv`, normalized by `absNorm v.asIdeal`, which **is** LocalFields' `‖x‖ = q^{−v(x)}` normalization; the agreement is a named Layer-5 lemma, and the product formula is the cross-check | pin `Completion/FinitePlace.lean`, `ProductFormula.lean` |
-| LMFDB intrinsic label prefix | `d.r.\|D\|`: degree `d = finrank ℚ K`, `r = nrRealPlaces K`, and `\|D\| = (discr K).natAbs`. These three coordinates are intrinsic theorems. The database index `i` and the canonical defining polynomial are deliberately not part of the API: Hermite finiteness alone supplies neither the LMFDB ordering key nor a completeness/deduplication certificate. A full label such as `2.2.5.1` is used below only as an external name for a field, never as a certified output | Layer 8 |
+Decide these before implementation. An implementor who has to guess will guess differently in
+two places.
 
-## What Mathlib already has (consume)
+| Object | Convention |
+|---|---|
+| Frobenius | **Arithmetic**: `σ x ≡ x^q mod Q`, with `q = Nat.card (A ⧸ Q.under A)`. This is Mathlib's `AlgHom.IsArithFrobAt` and `IsArithFrobAt`. "Frobenius" unqualified always means arithmetic. The geometric Frobenius is its inverse and is always called geometric. |
+| Frobenius at a ramified prime | `IsArithFrobAt` is satisfiable at every prime with finite residue field. It is canonical only modulo inertia, by `IsArithFrobAt.mul_inv_mem_inertia`. "The Frobenius at `Q`" needs `Algebra.IsUnramifiedAt`. At a ramified prime only the coset `σ·I(Q)` is used. |
+| Frobenius is a finite-level notion | Every Frobenius statement here lives in a finite Galois extension, or in the quotient `D_v/I_v ≅ Gal(k̄_v/k_v)`. There is no canonical Frobenius element, and no canonical conjugacy class, in `Gal(K̄/K)`. §Explicit scope exclusions states why. |
+| Infinite places | The canonical element of the order-2 stabilizer at a real place that ramifies in `L` is complex conjugation, through `ComplexEmbedding.IsConj` and `IsCMField.complexConj`. It is never called a Frobenius. `IsRamified` and `IsUnramified` at infinite places are Mathlib's. |
+| Artin symbol | `artinSymbol 𝔭 : ConjClasses (L ≃ₐ[K] L)`, for `𝔭 : Ideal (𝓞 K)` a nonzero prime that is unramified in `L`. The rational-prime form for `K = ℚ` is a corollary of it, not the definition. |
+| Ideal-theoretic Artin map | `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)`, for `L/K` finite abelian and `S` an arbitrary `Finset` of primes of `𝓞 K` that contains every prime that ramifies in `L`. `J^S` is the subgroup of `(FractionalIdeal (𝓞 K)⁰ K)ˣ` of fractional ideals with valuation zero at every prime of `S`. `S` is a parameter of the construction. Taking `S` to be the ramified support is Layer 4.2. The integral-ideal monoid homomorphism is a corollary. |
+| Decomposition group | `MulAction.stabilizer G Q`, Mathlib's spelling. There is no second named definition. |
+| Inertia group | `Q.inertia G`, that is `Ideal.inertia`. |
+| Decomposition and inertia fields | Mathlib's `IsDecompositionField` and `IsInertiaField`. Mathlib is moving this API to ring level, on predicates of ideals rather than of fields, and §Provenance records that work. State Layer 1.3 so that the move is a change of the class name and nothing more. |
+| Higher ramification groups | A family `G i` indexed by `i : ℕ`, so `G 0` is inertia. The decomposition group keeps its own name and is never written `G (-1)`. Where a statement needs the `−1` slot it names the stabilizer. |
+| `e` and `f` | `P.ramificationIdx A` and `P.inertiaDeg A`, and the Galois-constant versions `ramificationIdxIn` and `inertiaDegIn`. ⚠ Mathlib has two definitions of each, with **different argument orders**. The unprimed names are the localization and residue-field definitions, and they take the prime of `B` first and the base **ring** `A` second. The primed names `ramificationIdx'` and `inertiaDeg'` are the supremum and quotient-rank definitions, and they take two **ideals**. `ramificationIdx'_eq_ramificationIdx` and `inertiaDeg'_eq_inertiaDeg` relate them. State a milestone through a characterization that holds for both. |
+| Splitting type | The multiset `{(e₁,f₁), …, (e_g,f_g)}`. "Splits completely" is the count equation `(Ideal.primesOver (span {(p:ℤ)}) (𝓞 K)).ncard = finrank ℚ K`, which is Tau Ceti's convention. There is no new predicate. Cycle types use `Equiv.Perm.cycleType`, ⚠ which omits fixed points, so a partition-valued statement adds the `1`s back. |
+| Discriminant, absolute | The signed `NumberField.discr K : ℤ`. Its sign is a theorem, `NumberField.sign_discr`, not a convention. The label uses `\|discr\|`, and the sign is recovered from the signature. |
+| Discriminant, relative | A new ideal `relDiscr A B : Ideal A := Ideal.relNorm A (differentIdeal A B)`, in Layer 4.1. It is never conflated with the signed integer. The reconciliation `relDiscr ℤ (𝓞 K) = span {discr K}` is a named lemma. |
+| Different | Mathlib's `differentIdeal A B : Ideal B`. |
+| Valuation of an ideal at a prime | `v_P(I) := multiplicity P I`, for `P` a nonzero prime of a Dedekind domain. This matches Mathlib's `finprod_heightOneSpectrum_pow_multiplicity`. Every exponent formula in Layers 4 to 6 uses this one normalization. That includes `v_P(e)` for a natural number `e`, which means the multiplicity of `P` in `span {(e : B)}`. |
+| Conductor | The only conductor formed anywhere in this roadmap is Mathlib's order conductor `conductor R x : Ideal S`, which Kummer–Dedekind uses, together with the number-field invariant `RingOfIntegers.exponent θ`. There is no Artin conductor object and no conductor exponent `f_𝔭(χ)`. |
+| The power-basis index | ⚠ `RingOfIntegers.exponent θ` is **not** the `ℤ`-module index `[𝓞 K : ℤ[θ]]`. The two have the same prime divisors, which is Layer 3.4, and only the index satisfies `disc(minpoly θ) = index² · discr K`. The index is defined on the subtype `IntegralPrimitiveElement K` of integral generators, never by `Nat.card` on all of `𝓞 K`. |
+| Completions at finite places | Mathlib's `v.adicCompletion K` for `v : HeightOneSpectrum (𝓞 K)`, with `FinitePlace K ≃ HeightOneSpectrum (𝓞 K)`. Local-field structure uses the `IsNonarchimedeanLocalField` vocabulary. ⚠ `adicCompletion` is `Valued`-based, and Mathlib is replacing `Valued` by `ValuativeRel`. Layer 5.1 states its instances through the compatibility layer. |
+| The completion of an extension | For `w ∣ v`, the algebra structure of `L_w` over `K_v` is the canonical one of Layer 5.2. ⚠ Mathlib's own `Module.Finite K_v L_w` instead quantifies over an arbitrary `[Algebra K_v L_w] [ContinuousSMul K_v L_w] [IsScalarTower K K_v L_w]`. No theorem in this roadmap does that, because an arbitrary structure lets a statement be about the wrong extension. |
+| Absolute values at finite places | Mathlib's `HeightOneSpectrum.adicAbv`, normalized by `absNorm v.asIdeal`. This is the normalization `‖x‖ = q^{−v(x)}`. Layer 5.1 states the agreement, and the product formula is the cross-check. |
+| LMFDB intrinsic label prefix | `d.r.\|D\|`, with `d = finrank ℚ K`, `r = nrRealPlaces K`, and `\|D\| = (discr K).natAbs`. These three coordinates are intrinsic theorems. The database index `i` and the canonical defining polynomial are not part of the API. A full label such as `2.2.5.1` is used below only as an external name for a field. |
 
-Checked against Mathlib at `9caeba1000`, the revision this repository pins; a few declarations
-below are newer than that and are marked "later Mathlib", since a contributor working at the
-pin will not find them. This section is long because the library really is this strong; the
-point of the inventory is that **none of the gaps below it are guesses**.
+## What Mathlib supplies
 
-- **Number fields and rings of integers:** `Mathlib/NumberTheory/NumberField/Basic.lean` has
-  `NumberField`, `NumberField.RingOfIntegers` (`𝓞 K`) with `IsDedekindDomain (𝓞 K)`,
-  `Module.Free ℤ (𝓞 K)`, `IsIntegralClosure (𝓞 K) ℤ K`, `RingOfIntegers.basis`,
-  `NumberField.integralBasis`, `RingOfIntegers.rank`, the relative instances
-  (`IsIntegralClosure (𝓞 L) (𝓞 K) L`), `Rat.ringOfIntegersEquiv : 𝓞 ℚ ≃+* ℤ`, closure
-  properties (`of_module_finite`, instance `of_intermediateField`, `of_tower`), and the
-  `MulSemiringAction G (𝓞 K)` instance for `G` acting on `K`, which is the plumbing Layer 2
-  needs.
-- **Discriminants:** `Discriminant/Defs.lean` has the signed `NumberField.discr K : ℤ`
-  (`Algebra.discr ℤ (RingOfIntegers.basis K)`), `discr_ne_zero`, base-change invariance.
-  `Discriminant/Basic.lean` has
-  **`NumberField.sign_discr : (discr K).sign = (-1) ^ nrComplexPlaces K`** (Brill's theorem; do
-  not re-prove), `rootDiscr`, Minkowski's lower bounds `abs_discr_ge'`/`abs_discr_ge`,
-  **`abs_discr_gt_two`** (Hermite–Minkowski, the `|d| > 1` input to "ℚ has no unramified
-  extension"), and **Hermite's theorem `NumberField.finite_of_discr_bdd`**, the finiteness
-  behind label enumeration. `Mathlib/RingTheory/Discriminant.lean` has `Algebra.discr b`,
-  `Algebra.discr_powerBasis_eq_norm` (`disc = ± N(f′(θ))`), `discr_isIntegral`,
-  `discr_mul_isIntegral_mem_adjoin`.
-- **Units, regulator, torsion:** `Units/Basic.lean` has `isUnit_iff_norm`,
-  `NumberField.Units.torsion` with `IsCyclic`, `torsionOrder`, **`rootsOfUnity_eq_torsion`**,
-  `even_torsionOrder`. `Units/DirichletTheorem.lean` has `logEmbedding`, `unitLattice` (a
-  `ZLattice`), `NumberField.Units.rank`, **`rank_modTorsion`** (Dirichlet's rank statement),
-  `fundSystem`, **`exist_unique_eq_mul_prod`** (every unit is uniquely `ζ·∏ εᵢ^{nᵢ}`), and
-  **`closure_fundSystem_sup_torsion_eq_top`**. `Units/Regulator.lean` has
-  **`NumberField.Units.regulator := ZLattice.covolume (unitLattice K)`**, `regulator_pos`,
-  `regulator_eq_det`, `regOfFamily_eq_det`, and the index formula
-  **`regOfFamily_div_regulator`**
-  (`regOfFamily u / regulator K = (Subgroup.closure (Set.range u) ⊔ torsion K).index`).
-  ⚠ Nothing upstream certifies that a *particular* unit generates modulo torsion; that is
-  Layer 7's explicit-unit milestone, and without it no exact regulator value can be claimed.
-- **Bounded-conjugate finiteness:** `InfinitePlace/Embeddings.lean` has
-  **`NumberField.Embeddings.finite_of_norm_le`**
-  (`{x : K | IsIntegral ℤ x ∧ ∀ φ : K →+* A, ‖φ x‖ ≤ B}.Finite`) and `pow_eq_one_of_norm_eq_one`
-  (Kronecker). This is the finiteness that turns "no unit lies strictly between `1` and `u`"
-  into a finite check, and it is the proof method Layer 7 names.
-- **Class group and class number:** `RingTheory/ClassGroup.lean` and
-  `NumberField/ClassNumber.lean` have the finiteness instance
-  `RingOfIntegers.instFintypeClassGroup`, `NumberField.classNumber`,
-  **`classNumber_eq_one_iff : classNumber K = 1 ↔ IsPrincipalIdealRing (𝓞 K)`** (the pin's
-  idiom for `h = 1` statements), `exists_ideal_in_class_of_norm_le` (Minkowski bound), and the
-  practical PID criteria (`isPrincipalIdealRing_of_abs_discr_lt`,
-  `…_of_isPrincipal_of_mem_primesOver_of_mem_Icc`) that discharge the worked examples' `h = 1`
-  targets. `Rat.classNumber_eq : classNumber ℚ = 1` is the **only** computed class number in
-  the tree.
-- **Dedekind zeta and the class number formula:** `DedekindZeta.lean` has
-  `NumberField.dedekindZeta` (an `LSeries` over ideal counts), `dedekindZeta_residue`
-  (`2^{r₁}(2π)^{r₂}hR/(w√|d|)`), and **`tendsto_sub_one_mul_dedekindZeta_nhdsGT`**, the
-  Dirichlet class number formula as a one-sided real limit at `s = 1⁺`. ⚠ No Euler product, no
-  continuation, no functional equation: those are the
-  [L-functions PR #8](https://github.com/roed-math/TauCetiRoadmap/pull/8) sibling's, and this
-  roadmap only *consumes* the residue as a worked-example cross-check.
-- **Ramification and inertia, Dedekind-generic:** `Mathlib/NumberTheory/RamificationInertia/`.
-  `Ramification.lean`/`Inertia.lean`: `Ideal.ramificationIdx p P` (an `sSup`),
-  `Ideal.inertiaDeg p P` (junk `0` off the fiber); ⚠ both carry "will eventually be replaced by
-  `ramificationIdx'`/`inertiaDeg'`" notes, and master has already completed that swap (see the
-  conventions table). `Basic.lean`: the CRT decomposition `S/pS ≅ ⊕ S/Pᵢ^{eᵢ}` and
-  **`Ideal.sum_ramification_inertia`** (`Σ e·f = n`, `p` maximal ≠ ⊥, **no separability
-  hypothesis**). `Galois.lean`: the `MulAction G (primesOver p B)`, **transitivity**
-  (`exists_smul_eq_of_isGaloisGroup`, instance `isPretransitive_of_isGaloisGroup`), `e` and `f`
-  Galois-constant, the well-defined `ramificationIdxIn`/`inertiaDegIn`,
-  **`ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn`** (`g·e·f = #G`), tower
-  multiplicativity, and the inertia counts `card_inertia_eq_ramificationIdxIn`,
-  `card_stabilizer_eq` (`#D = e·f`, needs separable residue). `HilbertTheory.lean`:
-  `IsDecompositionField`/`IsInertiaField` classes with all five degree formulas
-  (`rank_left/right`, `rank_decompositionField`). `Unramified.lean`: the comparison
-  `Algebra.isUnramifiedAt_iff_of_isDedekindDomain` (`e = 1 ↔ IsUnramifiedAt`, number-ring
-  hypotheses). `Valuation.lean`: `e` against `HeightOneSpectrum` valuations. Later Mathlib:
-  `Mathlib/RingTheory/RamificationInertia/Basic.lean` (#39189) adds the finite-flat `Σ eᵢfᵢ`
-  formula at ring level.
-- **Decomposition-group machinery (the real one):** `Mathlib/RingTheory/Ideal/Pointwise.lean`
-  has the pointwise `MulSemiringAction` on ideals, `Ideal.inertia_le_stabilizer`, and normality
-  of inertia in the stabilizer. `Mathlib/RingTheory/Ideal/Over.lean` has `Ideal.LiesOver`,
-  `Ideal.under`, `Ideal.primesOver`, **`Ideal.Quotient.stabilizerHom : stabilizer G P →*
-  ((B⧸P) ≃ₐ[A⧸p] (B⧸P))`** with `ker_stabilizerHom` (= inertia); ⚠ argument-order trap:
-  `Over.lean` takes the top ideal first (`stabilizerHom P p G`), `Invariant/Basic.lean` names
-  fibers the other way. `Mathlib/RingTheory/Invariant/Basic.lean` has `Algebra.IsInvariant`,
-  `isInvariant_of_isGalois`, `orbit_eq_primesOver`, `IsFractionRing.stabilizerHom` (into
-  `Gal(L/K)`) with **`stabilizerHom_surjective`** (both versions, the theorem that makes
-  Frobenius exist), **`Ideal.Quotient.stabilizerQuotientInertiaEquiv : D/I ≅ Gal((B⧸Q)/(A⧸P))`**,
-  `Ideal.Quotient.normal`, `finite_of_isInvariant`. `Invariant/Profinite.lean` has
-  `stabilizerHom_surjective_of_profinite` (infinite Galois, no `Finite G`).
-  `Mathlib/FieldTheory/Galois/IsGaloisGroup.lean` has the `IsGaloisGroup G A B` class **with the
-  number-field instances `IsGaloisGroup G (𝓞 K) (𝓞 L)` and `IsGaloisGroup G ℤ (𝓞 L)`**.
-  `Mathlib/RingTheory/IntegralClosure/IntegralRestrict.lean` has
-  `galRestrict : Gal(L/K) ≃* (B ≃ₐ[A] B)`. ⚠ `Mathlib/RingTheory/Valuation/RamificationGroup.lean`
-  (`ValuationSubring.decompositionSubgroup`/`inertiaSubgroup`, from M. Karatarakis's 2022 work)
-  is a theorem-free stub disconnected from the ideal-theoretic API, with an explicit TODO for
-  higher ramification groups; do not build on it, and LocalFields owns its future.
-- **Frobenius:** `Mathlib/RingTheory/Frobenius.lean` (A. Yang, 2025) has the arithmetic-Frobenius
-  API in the invariant-ring setting: `AlgHom.IsArithFrobAt` (`φ x ≡ x^q mod Q`,
-  `q = Nat.card (A ⧸ Q.under A)`), the residue restriction `IsArithFrobAt.restrict` with
-  `restrict_apply` (`x ↦ x^q`), the roots-of-unity computation
-  **`IsArithFrobAt.apply_of_pow_eq_one`** (`φ ζ = ζ^q`), **uniqueness at unramified primes at
-  `AlgHom` level** (`eq_of_isUnramifiedAt`), the group-level `IsArithFrobAt R σ Q` with
-  `mem_stabilizer`, **`mul_inv_mem_inertia`** (uniqueness mod inertia), `conj`, **existence**
-  (`exists_of_isInvariant`, via `stabilizerHom_surjective` and the finite-field Frobenius),
-  `exists_primesOver_isConj`, the global choice `arithFrobAt R G Q`, and **`isConj_arithFrobAt`**
-  (conjugacy across the fiber). ⚠ **A leaf file: nothing in Mathlib imports it.** No
-  number-field instantiation, no Artin symbol, no `σ = σ'` uniqueness in the group, no
-  restriction-to-subextension lemma, no order formula; that is Layer 2.
-  `Mathlib/FieldTheory/Finite/Basic.lean` has `FiniteField.frobeniusAlgEquivOfAlgebraic` (the
-  residue Frobenius, with `orderOf_… = finrank` and cyclicity); `…/Finite/Extension.lean` has
-  `FiniteField.exists_forall_apply_eq_pow` (every residue automorphism is a Frobenius power).
-- **Kummer–Dedekind:** `Mathlib/NumberTheory/KummerDedekind.lean` has the conductor-avoiding
-  factorization `KummerDedekind.normalizedFactorsMapEquivNormalizedFactorsMinPolyMk` (factors of
-  `pB` ≃ factors of `f mod p`, hypothesis
-  `(conductor R x).comap (algebraMap R S) ⊔ I = ⊤`), multiplicity matching
-  (`emultiplicity_factors_map_eq_emultiplicity`), the multiset equality,
-  `Ideal.irreducible_map_of_irreducible_minpoly` (converse an explicit file TODO), and the span
-  formula for each factor. `Mathlib/RingTheory/Conductor.lean` has the bare `conductor R x` with
-  `conductor_eq_top_iff_adjoin_eq_top`, `quotAdjoinEquivQuotMap`. Over `ℤ`:
-  `NumberField/Ideal/KummerDedekind.lean` has `RingOfIntegers.exponent θ` with
-  `exponent_eq_one_iff`/`not_dvd_exponent_iff`, `monicFactorsMod θ p`, and
-  **`NumberField.Ideal.primesOverSpanEquivMonicFactorsMod`** with **`inertiaDeg_…_symm_apply`**
-  (`fᵢ = deg` of the factor) and **`ramificationIdx_…_symm_apply`** (`eᵢ = multiplicity`), so
-  Dedekind–Kummer with matching invariants, **but only for `𝓞 K / ℤ`**; the relative AKLB
+Checked against the Mathlib revision this repository pins. The inventory is long because the
+library is strong. Its purpose is that no gap claimed below is a guess.
+
+- **Number fields and rings of integers.** `NumberField`, `NumberField.RingOfIntegers` (`𝓞 K`)
+  with `IsDedekindDomain (𝓞 K)`, `Module.Free ℤ (𝓞 K)`, `IsIntegralClosure (𝓞 K) ℤ K`,
+  `RingOfIntegers.basis`, `NumberField.integralBasis`, `RingOfIntegers.rank`, the relative
+  instances such as `IsIntegralClosure (𝓞 L) (𝓞 K) L`, `Rat.ringOfIntegersEquiv : 𝓞 ℚ ≃+* ℤ`,
+  the closure properties `of_module_finite`, `of_intermediateField` and `of_tower`, and the
+  `MulSemiringAction G (𝓞 K)` instance for `G` acting on `K`.
+- **Discriminants.** The signed `NumberField.discr K : ℤ`, with `discr_ne_zero` and base-change
+  invariance. `NumberField.sign_discr` is Brill's theorem, and is not to be re-proved.
+  `rootDiscr`; Minkowski's lower bounds `abs_discr_ge'` and `abs_discr_ge`; `abs_discr_gt_two`,
+  which is Hermite–Minkowski; and `NumberField.finite_of_discr_bdd`, which is Hermite's theorem.
+  `Algebra.discr b`, `Algebra.discr_powerBasis_eq_norm` (`disc = ± N(f′(θ))`), `discr_isIntegral`,
+  and `discr_mul_isIntegral_mem_adjoin`.
+- **Units, regulator, torsion.** `isUnit_iff_norm`; `NumberField.Units.torsion` with `IsCyclic`,
+  `torsionOrder`, `rootsOfUnity_eq_torsion`, `even_torsionOrder`. `logEmbedding`, `unitLattice`,
+  `NumberField.Units.rank`, `rank_modTorsion`, `fundSystem`, `exist_unique_eq_mul_prod`, and
+  `closure_fundSystem_sup_torsion_eq_top`. `NumberField.Units.regulator`, defined as
+  `ZLattice.covolume (unitLattice K)`, with `regulator_pos`, `regulator_eq_det`,
+  `regOfFamily_eq_det`, and the index formula `regOfFamily_div_regulator`.
+  ⚠ Nothing certifies that a **particular** unit generates modulo torsion. That is Layer 7.4, and
+  without it no exact regulator value can be claimed.
+- **Bounded-conjugate finiteness.** `NumberField.Embeddings.finite_of_norm_le` and
+  `pow_eq_one_of_norm_eq_one`, which is Kronecker's theorem. This finiteness turns the condition "no unit lies strictly
+  between `1` and `u`" into a finite check. Layer 7.4 names it as the proof method.
+- **Class group and class number.** `RingOfIntegers.instFintypeClassGroup`,
+  `NumberField.classNumber`, `classNumber_eq_one_iff`, `exists_ideal_in_class_of_norm_le`, and
+  the practical criteria `isPrincipalIdealRing_of_abs_discr_lt` and
+  `…_of_isPrincipal_of_mem_primesOver_of_mem_Icc`. `Rat.classNumber_eq` is the only computed
+  class number in the library.
+- **Dedekind zeta and the class number formula.** `NumberField.dedekindZeta`,
+  `dedekindZeta_residue` (`2^{r₁}(2π)^{r₂}hR/(w√|d|)`), and
+  `tendsto_sub_one_mul_dedekindZeta_nhdsGT`. ⚠ There is no Euler product, no continuation, and no
+  functional equation. This roadmap uses the residue only as a cross-check on a worked example.
+- **Ramification and inertia.** `Ideal.ramificationIdx` and `Ideal.inertiaDeg`, together with the
+  supremum and quotient-rank forms `ramificationIdx'` and `inertiaDeg'` and the agreement lemmas
+  between them. The Chinese remainder decomposition `S/pS ≅ ⊕ S/Pᵢ^{eᵢ}` and
+  `Ideal.sum_ramification_inertia` (`Σ e·f = n`, for `p` maximal and nonzero, with no
+  separability hypothesis). `MulAction G (primesOver p B)` with transitivity
+  (`exists_smul_eq_of_isGaloisGroup`); `e` and `f` Galois-constant, with `ramificationIdxIn` and
+  `inertiaDegIn`; `ncard_primesOver_mul_ramificationIdxIn_mul_inertiaDegIn` (`g·e·f = #G`); tower
+  multiplicativity; and the inertia counts `card_inertia_eq_ramificationIdxIn` and
+  `card_stabilizer_eq` (`#D = e·f`, which needs a separable residue extension).
+  `IsDecompositionField` and `IsInertiaField` with all five degree formulas. The comparison
+  `Algebra.isUnramifiedAt_iff_of_isDedekindDomain` (`e = 1 ↔ IsUnramifiedAt`) and
+  `Algebra.IsUnramifiedIn`.
+- **Decomposition-group machinery.** The pointwise `MulSemiringAction` on ideals,
+  `Ideal.inertia_le_stabilizer`, and normality of inertia in the stabilizer. `Ideal.LiesOver`,
+  `Ideal.under`, `Ideal.primesOver`, and
+  `Ideal.Quotient.stabilizerHom : stabilizer G P →* ((B⧸P) ≃ₐ[A⧸p] (B⧸P))` with
+  `ker_stabilizerHom`. ⚠ Argument-order trap: `Over.lean` takes the top ideal first, and
+  `Invariant/Basic.lean` names the fibres the other way. `Algebra.IsInvariant`,
+  `isInvariant_of_isGalois`, `orbit_eq_primesOver`, `IsFractionRing.stabilizerHom` with
+  `stabilizerHom_surjective`, `Ideal.Quotient.stabilizerQuotientInertiaEquiv`
+  (`D/I ≅ Gal((B⧸Q)/(A⧸P))`), `Ideal.Quotient.normal`, and `finite_of_isInvariant`.
+  `stabilizerHom_surjective_of_profinite` for infinite Galois groups. The `IsGaloisGroup G A B`
+  class **with the number-field instances** `IsGaloisGroup G (𝓞 K) (𝓞 L)` and
+  `IsGaloisGroup G ℤ (𝓞 L)`. `galRestrict : Gal(L/K) ≃* (B ≃ₐ[A] B)`.
+  ⚠ `Mathlib/RingTheory/Valuation/RamificationGroup.lean` is a stub with no theorems,
+  disconnected from the ideal-theoretic API, and carrying an open TODO for higher ramification
+  groups. Do not build on it.
+- **Frobenius.** `Mathlib/RingTheory/Frobenius.lean` has the arithmetic-Frobenius API in the
+  invariant-ring setting: `AlgHom.IsArithFrobAt`; the residue restriction
+  `IsArithFrobAt.restrict` with `restrict_apply`; the roots-of-unity computation
+  `IsArithFrobAt.apply_of_pow_eq_one`; uniqueness at unramified primes at `AlgHom` level,
+  `eq_of_isUnramifiedAt`; the group-level `IsArithFrobAt R σ Q` with `mem_stabilizer`;
+  `mul_inv_mem_inertia`; `conj`; existence, `exists_of_isInvariant`;
+  `exists_primesOver_isConj`; the global choice `arithFrobAt R G Q`; and `isConj_arithFrobAt`.
+  ⚠ **Nothing in Mathlib imports this file.** There is no number-field instantiation, no Artin
+  symbol, no uniqueness in the group, no restriction lemma, and no order formula. That is
+  Layer 2. `FiniteField.frobeniusAlgEquivOfAlgebraic` is the residue Frobenius, with its order
+  and cyclicity; `FiniteField.exists_forall_apply_eq_pow` says every residue automorphism is a
+  power of it.
+- **Kummer–Dedekind.** The conductor-avoiding factorization
+  `KummerDedekind.normalizedFactorsMapEquivNormalizedFactorsMinPolyMk`, with multiplicity
+  matching, the multiset equality, `Ideal.irreducible_map_of_irreducible_minpoly` (whose converse
+  is an open TODO in that file), and the span formula for each factor. `conductor R x` with
+  `conductor_eq_top_iff_adjoin_eq_top` and `quotAdjoinEquivQuotMap`. Over `ℤ`:
+  `RingOfIntegers.exponent θ` with `exponent_eq_one_iff` and `not_dvd_exponent_iff`,
+  `monicFactorsMod θ p`, and `NumberField.Ideal.primesOverSpanEquivMonicFactorsMod` with the two
+  matching lemmas for `f` and for `e`. ⚠ All of this is for `𝓞 K / ℤ` only. The relative AKLB
   version does not exist.
-- **The different ideal:** `Mathlib/RingTheory/DedekindDomain/Different.lean` has
-  `Submodule.traceDual`, `FractionalIdeal.dual` (full involution API), `differentIdeal A B`,
-  `differentIdeal_ne_bot`, and **transitivity in towers, which IS at the pin**:
-  `differentIdeal_eq_differentIdeal_mul_differentIdeal`
-  (`𝔡_{C/A} = 𝔡_{C/B} · 𝔡_{B/A}·C`, with the fractional-ideal machinery `dual_eq_dual_mul_dual`);
-  **`conductor_mul_differentIdeal`** (`𝔣(x)·𝔡 = (f′(x))`, hence `𝔡 = (f′)` in the monogenic
-  case), `aeval_derivative_mem_differentIdeal`, the tame-direction divisibility
-  **`pow_sub_one_dvd_differentIdeal`** (`P^{e−1} ∣ 𝔡`), `dvd_differentIdeal_of_not_isSeparable`,
-  and the ramification criterion **`not_dvd_differentIdeal_iff` / `dvd_differentIdeal_iff`**
-  (`P ∣ 𝔡 ↔ ¬ Algebra.IsUnramifiedAt A P`; ⚠ root namespace, and ⚠ two lemmas are misspelled
-  `differentialIdeal_le_iff`/`differentialIdeal_le_fractionalIdeal_iff`).
-  `DedekindDomain/LinearDisjoint.lean` has different ideals under linear disjointness
-  (`differentIdeal_eq_map_differentIdeal`, coprime-different compositum splitting).
-  `Mathlib/RingTheory/Unramified/` has `Algebra.IsUnramifiedAt` (formally unramified at the
-  localization) with `isUnramifiedAt_iff_map_eq` (unramified ⟺ `e = 1` plus separable residue).
-  `NumberField/Discriminant/Different.lean` has the absolute reconciliations:
-  **`NumberField.absNorm_differentIdeal`** (`N(𝔡_{K/ℚ}) = |discr K|`), `discr_mem_differentIdeal`,
-  the absolute tower formula
-  **`natAbs_discr_eq_absNorm_differentIdeal_mul_natAbs_discr_pow`**
-  (`|d_L| = N(𝔡_{L/K})·|d_K|^{[L:K]}`), `discr_dvd_discr`, and
-  **`not_dvd_discr_iff_forall_liesOver`** (`p ∤ discr K ↔` all primes over `p` unramified, so
-  ramified ⟺ divides the discriminant, over `ℚ`). Later Mathlib:
-  `not_dvd_discr_iff_isUnramifiedIn` (#40951) and `Algebra.IsUnramifiedIn` (#41323).
-- **Cyclotomic fields:** `Mathlib/NumberTheory/Cyclotomic/` and `NumberField/Cyclotomic/` have
-  `IsCyclotomicExtension` with `isGalois`/`isAbelianGalois`, `Rat.finrank = totient`, **the ring
-  of integers `ℤ[ζ]`** (`cyclotomicRing_isIntegralClosure`, `adjoinEquivRingOfIntegers`),
-  **discriminants** (`IsCyclotomicExtension.Rat.discr`, `discr_prime`, `discr_prime_pow`,
-  `natAbs_discr`), `IsCyclotomicExtension.autEquivPow` and
-  **`Rat.galEquivZMod : Gal(K/ℚ) ≃* (ZMod n)ˣ`** with the restriction square
-  `galEquivZMod_restrictNormal_apply`, **the full splitting law**
-  (`NumberField/Cyclotomic/Ideal.lean`: total ramification at `p ∣ n` via `(1−ζ)`,
-  `inertiaDeg_eq_of_not_dvd` = `orderOf (p : ZMod m)ˣ`, `ramificationIdx_eq_of_not_dvd = 1`, and
-  the general `n = p^k·m` formulas), **the decomposition subgroup**
-  `Rat.galEquivZMod_stabilizer` (`= ⟨[p]⟩ ⊆ (ℤ/n)ˣ`; ⚠ the subgroup only, since no statement
-  identifies a Frobenius *element*, see Layer 2), the character-theoretic Galois correspondence
-  (`intermediateFieldEquivSubgroupChar`, `mem_…_iff_conductor_dvd`), torsion
-  (`Rat.torsionOrder_eq`), and **`Rat.three_pid`/`five_pid`**
-  (`h(ℚ(ζ₃)) = h(ℚ(ζ₅)) = 1`, as `IsPrincipalIdealRing`). `DirichletCharacter/` has `conductor`,
-  `isPrimitive`, Gauss sums, and orthogonality (with `Fintype (DirichletCharacter R n)`); it is
-  the character side of the conductor–discriminant cross-checks, which
-  [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) owns and this roadmap only cites.
-- **Infinite places, complete with ramification:** `InfinitePlace/Basic.lean` has
-  `InfinitePlace`, `IsReal`/`IsComplex`, `mult`, `nrRealPlaces`/`nrComplexPlaces`,
-  `card_add_two_mul_card_eq_rank` (`r₁ + 2r₂ = n`), `prod_eq_abs_norm`.
-  `InfinitePlace/Ramification.lean` has the Galois action on infinite places,
-  `IsUnramified`/`IsRamified` (ramified ⟺ complex over real), stabilizers of order ≤ 2,
-  `IsUnramifiedAtInfinitePlaces`, and the infinite-place fundamental identity
-  `unramifedPlacesOver_ncard_add_eq_finrank` (⚠ mathlib's own typo `unramifed`; quote verbatim).
-  `TotallyRealComplex.lean` has `IsTotallyReal`/`IsTotallyComplex`, `maximalRealSubfield`.
-  `CMField.lean` has `IsCMField` with `complexConj` (canonical complex conjugation,
-  `orderOf_complexConj`, `StarRing`), which is exactly the element Layer 2 names at a ramified
-  real place. `Completion/Ramification.lean` has `InfinitePlace.inertiaDeg` with
-  `sum_inertiaDeg_eq_finrank`, the archimedean local–global identity; ⚠ its finite-place
-  analogue is **absent**, and is Layer 5's first target.
-- **Finite places, completions, adeles, product formula:** `Completion/FinitePlace.lean` has
-  `NumberField.FinitePlace` with **`FinitePlace.equivHeightOneSpectrum`**, the normalized
-  `HeightOneSpectrum.adicAbv` (by `absNorm`), `FinitePlace.norm_def`/`norm_lt_one_iff_mem`,
-  `embedding v : K →+* adicCompletion K v`, `NormedField (adicCompletion K v)`,
-  `IsDiscreteValuationRing (adicCompletionIntegers)`, finite mul-support, and
-  `Module.Finite K_v L_w` under `LiesOver`; ⚠ that last instance takes an *arbitrary* compatible
-  algebra structure as input, so it is not yet a statement about the canonical extension (see
-  the conventions table and Layer 5). `Mathlib/RingTheory/DedekindDomain/AdicValuation.lean` has
-  the underlying `adicCompletion`/`adicCompletionIntegers`.
-  `AdeleRing.lean`/`InfiniteAdeleRing.lean` have `NumberField.AdeleRing` (over a general Dedekind
-  base pair), `ringEquiv_mixedSpace`, weak approximation at infinite places, and
-  `AdeleRing.principalSubgroup`. `ProductFormula.lean` has **`NumberField.prod_abs_eq_one`** (the
-  product formula) and `FinitePlace.prod_eq_inv_abs_norm`. ⚠ No idele group, no
-  finiteness/compactness statements: that is
-  [Global Class Field Theory PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6)'s
-  territory, not this roadmap's.
-- **Canonical embedding, geometry of numbers:** `CanonicalEmbedding/` has `mixedEmbedding`,
-  convex bodies, `minkowskiBound`, the fundamental cone, and `NormLeOne` (feeding the ideal-count
-  asymptotics of `Ideal/Asymptotics.lean`), consumed by EffectiveBounds and cited here only for
-  the worked examples' class-number discharges.
-- **Galois correspondence, generic:** `Mathlib/FieldTheory/Galois/Basic.lean` has
-  `IsGalois.intermediateFieldEquivSubgroup` (the order-reversing lattice equivalence).
-  `FieldTheory/Normal/` has `normalClosure`, `AlgEquiv.restrictNormal(Hom)` with surjectivity.
-  `FieldTheory/PolynomialGaloisGroup.lean` has `Polynomial.Gal`, the transitive `galActionHom`
-  into `Equiv.Perm (rootSet p E)` with `galActionHom_injective`, which is the permutation carrier
-  for Dedekind's theorem (Layer 3). `Mathlib/GroupTheory/DoubleCoset.lean` has
-  `DoubleCoset.Quotient`, the carrier for Layer 1's non-Galois splitting law.
+- **The different ideal.** `Submodule.traceDual`, `FractionalIdeal.dual` with the full involution
+  API, `differentIdeal A B`, `differentIdeal_ne_bot`, and transitivity in towers,
+  `differentIdeal_eq_differentIdeal_mul_differentIdeal`. `conductor_mul_differentIdeal`
+  (`𝔣(x)·𝔡 = (f′(x))`, hence `𝔡 = (f′)` in the monogenic case),
+  `aeval_derivative_mem_differentIdeal`, the tame-direction divisibility
+  `pow_sub_one_dvd_differentIdeal` (`P^{e−1} ∣ 𝔡`), `dvd_differentIdeal_of_not_isSeparable`, and
+  the ramification criterion `not_dvd_differentIdeal_iff` (`P ∣ 𝔡 ↔ ¬ Algebra.IsUnramifiedAt A P`;
+  ⚠ in the root namespace, and two neighbouring lemmas are misspelled `differentialIdeal_…`).
+  Different ideals under linear disjointness. `Algebra.IsUnramifiedAt` with
+  `isUnramifiedAt_iff_map_eq`. The absolute reconciliations
+  `NumberField.absNorm_differentIdeal` (`N(𝔡_{K/ℚ}) = |discr K|`), `discr_mem_differentIdeal`,
+  `natAbs_discr_eq_absNorm_differentIdeal_mul_natAbs_discr_pow`, `discr_dvd_discr`,
+  `not_dvd_discr_iff_forall_liesOver`, and `not_dvd_discr_iff_isUnramifiedIn`.
+- **Cyclotomic fields.** `IsCyclotomicExtension` with `isGalois` and `isAbelianGalois`;
+  `Rat.finrank = totient`; the ring of integers `ℤ[ζ]`; the discriminants
+  `IsCyclotomicExtension.Rat.discr`, `discr_prime`, `discr_prime_pow`, and `natAbs_discr`;
+  `autEquivPow` and `Rat.galEquivZMod : Gal(K/ℚ) ≃* (ZMod n)ˣ` with the restriction square
+  `galEquivZMod_restrictNormal_apply`; the full splitting law, including total ramification at
+  `p ∣ n` through `(1−ζ)`, `inertiaDeg_eq_of_not_dvd = orderOf (p : ZMod m)ˣ`,
+  `ramificationIdx_eq_of_not_dvd = 1`, and the general `n = p^k·m` formulas; the decomposition
+  subgroup `Rat.galEquivZMod_stabilizer` (⚠ the subgroup only: no statement identifies a
+  Frobenius **element**, which is Layer 2.6); the character-theoretic Galois correspondence; the
+  torsion order; and `Rat.three_pid` and `five_pid`. `DirichletCharacter/` has `conductor`,
+  `isPrimitive`, Gauss sums, and orthogonality.
+- **Infinite places.** `InfinitePlace`, `IsReal`, `IsComplex`, `mult`, `nrRealPlaces`,
+  `nrComplexPlaces`, `card_add_two_mul_card_eq_rank` (`r₁ + 2r₂ = n`), and `prod_eq_abs_norm`.
+  The Galois action on infinite places, `IsUnramified` and `IsRamified` (ramified means complex
+  over real), stabilizers of order at most 2, `IsUnramifiedAtInfinitePlaces`, and the
+  infinite-place fundamental identity `unramifedPlacesOver_ncard_add_eq_finrank` (⚠ Mathlib's own
+  spelling, with the typo; quote it exactly). `IsTotallyReal`, `IsTotallyComplex`, and
+  `maximalRealSubfield`. `IsCMField` with `complexConj`, `orderOf_complexConj`, and `StarRing`,
+  which is the element Layer 2.7 names. `InfinitePlace.inertiaDeg` with
+  `sum_inertiaDeg_eq_finrank`, the archimedean local-global identity. ⚠ Its finite-place
+  analogue is absent, and is Layer 5.3.
+- **Finite places, completions, adeles, product formula.** `NumberField.FinitePlace` with
+  `FinitePlace.equivHeightOneSpectrum`; the normalized `HeightOneSpectrum.adicAbv`;
+  `FinitePlace.norm_def` and `norm_lt_one_iff_mem`; `embedding v : K →+* adicCompletion K v`;
+  `NormedField (adicCompletion K v)`; `IsDiscreteValuationRing (adicCompletionIntegers)`; finite
+  multiplicative support; and `Module.Finite K_v L_w` under `LiesOver`, ⚠ which takes an
+  arbitrary compatible algebra structure as input and so is not yet a statement about the
+  canonical extension. `adicCompletion` and `adicCompletionIntegers` themselves.
+  `NumberField.AdeleRing` over a general Dedekind base pair, `ringEquiv_mixedSpace`, weak
+  approximation at infinite places, and `AdeleRing.principalSubgroup`.
+  `NumberField.prod_abs_eq_one`, the product formula, and `FinitePlace.prod_eq_inv_abs_norm`.
+  ⚠ There is no idele group and no compactness statement.
+  `IsNonarchimedeanLocalField` is in `Mathlib/NumberTheory/LocalField/Basic.lean`, with the
+  discrete-valuation-ring, finite-residue and completeness instances for an abstract local field.
+  ⚠ The instance for `v.adicCompletion K` is missing, and is Layer 5.1.
+- **Canonical embedding and geometry of numbers.** `mixedEmbedding`, convex bodies,
+  `minkowskiBound`, the fundamental cone, and `NormLeOne`. This roadmap cites them only for the
+  class-number discharges of the worked examples.
+- **Galois correspondence.** `IsGalois.intermediateFieldEquivSubgroup`, the order-reversing
+  lattice equivalence. `normalClosure` and `AlgEquiv.restrictNormal` with surjectivity.
+  `Polynomial.Gal`, the transitive `galActionHom` into `Equiv.Perm (rootSet p E)` with
+  `galActionHom_injective`, which is the permutation carrier for Layer 3.9.
+  `DoubleCoset.Quotient`, the carrier for Layer 1.4.
 
-### The Mathlib design this roadmap follows
+## What Tau Ceti supplies
 
-Mathlib is consolidating exactly this area, and the design of its API here is Mathlib's to
-decide. The work below is cited for that design: build the corresponding Tau Ceti material now,
-using the names and the shapes these declarations use, so that if the same thing lands in
-Mathlib the change here is a deletion plus an import.
+These files were written under the [Multiquadratic](../Multiquadratic/README.md) roadmap and the
+completed [EffectiveBounds](../../Completed/EffectiveBounds/README.md) roadmap. This roadmap uses
+them and generalizes them, so that the quadratic statements become instances of a uniform API.
 
-- **Ring-level Hilbert theory** (mathlib
-  [#41591](https://github.com/leanprover-community/mathlib4/pull/41591)) introduces
-  `Ideal.IsDecompositionRing`/`Ideal.IsInertiaRing` and deprecates the field-level
-  `IsDecompositionField`/`IsInertiaField` API. Layer 1's decomposition- and inertia-field
-  milestones are stated at ring level for that reason, and the conventions table records the
-  same direction. The surrounding series covers splitting in the decomposition field (#35802)
-  and in the inertia ring (#35808), decomposition and inertia fields of composita and subfields
-  (#35991, #36733), unramified composita with the totally-split criterion
-  `ramificationIdx_inertiaDeg_sup_eq_one` (#36843), and the inertia field of `p` in
-  `ℚ(ζ_{p^k m})` (#37031).
-- **The `ramificationIdx`/`inertiaDeg` definitions** were replaced by their localization and
-  residue-field versions (#41234, #41325). Milestones here are stated through characterizations
-  that survive the swap, as the conventions table says. The neighboring reorganization moves the
-  `IsGaloisGroup` material into `RingTheory/IsGaloisGroup/` and `Invariant/Galois`
-  (#40928, #40942, #41071) and adds low-level `Ideal.inertia` API (#40383).
-- **Adjacent design to follow:** norm congruence at unramified primes (#41180), coprime
-  discriminants giving linear disjointness (#37023), composita of abelian extensions (#40905),
-  `Algebra.IsUnramifiedIn` (#41323), and "Galois groups are generated by inertia subgroups"
-  (#40955), the group-theoretic form of `ℚ` having no unramified extension.
-- **Nothing in Mathlib covers** the conductor–discriminant formula or any ideal-theoretic
-  conductor, different-ideal transitivity beyond what the pin has, any extension of
-  `IsArithFrobAt` (in particular no Artin symbol), higher ramification groups, or certification
-  of a named fundamental unit. Those are the core builds of Layers 2–7, and they duplicate
-  nothing.
-- **Conventions settled on Zulip.** Decomposition group as `MulAction.stabilizer` was settled in
-  [new members > "Working on Frobenius elements"](https://leanprover-community.github.io/archive/stream/113489-new-members/topic/Working.20on.20Frobenius.20elements.html)
-  (M. Karatarakis, with Buzzard, Commelin, Topaz, Lezeau, Wieser, Dillies and Nuccio), which is
-  also the origin of the `ValuationSubring.decompositionSubgroup` stub. Chebotarev is a declared
-  onward goal of PrimeNumberTheoremAnd (Kontorovich–Tao, `#PrimeNumberTheorem+`), which is why
-  no density statement is owned here (→
-  [L-functions PR #8](https://github.com/roed-math/TauCetiRoadmap/pull/8)). The `Valued`
-  deprecation in favor of `ValuativeRel` (J. Jiang) is tracked in
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) §Provenance and
-  constrains how Layer 5 states its instances.
+One change to an existing file is planned, and Layer 1.1 names it: a theorem that is `private` in
+`SplitsCompletely.lean` is published. That is a change of visibility, made with the agreement of
+that file's authors. It is not a fork, and not a duplicate in a second namespace. Nothing else in
+these files is edited.
 
-### Coordination and licence ledger
-
-- **Project / authors:** Mathlib ramification and inertia theory, principally the authors and
-  reviewers of the work cited above.
-- **Licence:** Mathlib is Apache-2.0.
-- **Overlap:** decomposition and inertia predicates, and the `e`/`f` names, in Layers 1–2.
-- **Coordination record:** the public Mathlib pull-request discussions cited above.
-- **Ownership:** Mathlib owns the generic ring-level API. This roadmap owns the number-field
-  comparisons and the Frobenius layer built on them, and takes Mathlib's names and design for
-  anything the two have in common.
-
-- **Project / authors:** C. Birkbeck,
-  [`CBirkbeck/CertifyingInvariantsNF`](https://github.com/CBirkbeck/CertifyingInvariantsNF).
-- **Licence:** no licence is declared in the repository metadata, so no code or data from it is
-  to be copied or adapted without explicit permission.
-- **Overlap:** certified per-field invariant files and the eventual database-label interface.
-- **Coordination record:** none. The authors have not been contacted.
-- **Ownership:** this roadmap proves only the intrinsic `d.r.|D|` prefix and makes no claim on
-  the LMFDB ordering or canonical-polynomial layer. Adding `.i` needs a certified ordering,
-  canonical-polynomial selection, isomorphism deduplication, bounded-list completeness and a
-  position certificate, together with an explicitly licensed interface to build against; that
-  is a different project's specification, not a milestone deferred from this one.
-
-## What TauCeti already has (consume)
-
-These files were authored under the [Multiquadratic](../Multiquadratic/README.md) roadmap
-(Layers 1–2) and the completed
-[EffectiveBounds](../../Completed/EffectiveBounds/README.md) roadmap; this roadmap consumes and
-generalizes them, so that the quadratic statements become instances of the uniform API. One
-narrowly scoped amendment to a landed file is planned and is named as such: Layer 1 publishes a
-theorem that is currently `private` in `SplitsCompletely.lean`. That is an API change to an
-existing file, to be made in coordination with its authors, not a fork and not a duplicate in a
-rival namespace. Nothing else in these files is edited.
-
-- `TauCeti/NumberTheory/NumberField/Frobenius.lean`: `exists_isArithFrobAt(_of_liesOver)`
-  (existence of `σ : K ≃ₐ[ℚ] K` with `IsArithFrobAt ℤ σ Q`, for `IsGalois ℚ K`, the base-`ℚ`
-  instantiation of Mathlib's `exists_of_isInvariant`), and
-  `isArithFrobAt_apply_sqrt(_eq_self_iff)` (`σ √d = (d/p)·√d`). Layer 2 generalizes existence to
-  relative extensions `L/K` and builds the uniqueness and conjugacy-class layer on top.
+- `TauCeti/NumberTheory/NumberField/Frobenius.lean`: `exists_isArithFrobAt` and
+  `exists_isArithFrobAt_of_liesOver`, the base-`ℚ` instantiation of Mathlib's
+  `exists_of_isInvariant`; and `isArithFrobAt_apply_sqrt` with
+  `isArithFrobAt_apply_sqrt_eq_self_iff`. Layer 2.1 generalizes existence to `L/K`, and Layer 2.3
+  builds the symbol on top.
 - `TauCeti/NumberTheory/LegendreSymbol/Frobenius.lean`: the domain-generic
-  `AlgHom.IsArithFrobAt.apply_sqrt` / `IsArithFrobAt.smul_sqrt` (already base-general);
+  `AlgHom.IsArithFrobAt.apply_sqrt` and `IsArithFrobAt.smul_sqrt`.
   `LegendreSymbol/SquareClass.lean`: square-class invariance of Legendre data.
-- `TauCeti/NumberTheory/NumberField/SplitsCompletely.lean`: splits-completely as the count
-  equation, `ncard_primesOver_eq_finrank_iff` (`↔ e = f = 1`) and `…_iff_stabilizer_eq_bot`
-  (`↔` trivial decomposition group), over `ℚ`. ⚠ The general-base form exists there but is
-  `private`; Layer 1 publishes that shape (coordinate; do not re-derive).
-- `TauCeti/NumberTheory/NumberField/Quadratic/Splitting.lean`: `ncard_primesOver_quadratic_iff`
-  (odd `p ∤ d`: splits ⟺ `legendreSym p d = 1`), presented via `minpoly ℤ θ = X² − C d`. The
-  Layer-3 relative Dedekind–Kummer API has this as its degree-2 corollary; the `p = 2` and
-  `d ≡ 1 mod 4` cases it excludes are Layer 3 and Layer 7 worked targets here.
-- `TauCeti/NumberTheory/NumberField/IntegralSqrt.lean`,
+- `TauCeti/NumberTheory/NumberField/SplitsCompletely.lean`: splits-completely as a count
+  equation, with `ncard_primesOver_eq_finrank_iff` and `…_iff_stabilizer_eq_bot`, over `ℚ`.
+  ⚠ The general-base form exists there but is `private`. Layer 1.1 publishes that shape.
+- `TauCeti/NumberTheory/NumberField/Quadratic/Splitting.lean`:
+  `ncard_primesOver_quadratic_iff`, for odd `p` with `p ∤ d`. Layer 3.6 has this as its degree-2
+  corollary. The `p = 2` and `d ≡ 1 mod 4` cases it excludes are worked targets here.
+- `TauCeti/NumberTheory/NumberField/IntegralSqrt.lean` and
   `Internal/QuadraticIntegralBasis.lean`: `integralSqrt` and the `{1, x}` quadratic integral
-  basis; Layer 7 supplies the full `d mod 4`-sensitive `𝓞_{ℚ(√d)}` and generalizes.
+  basis. Layer 7.2 gives the full `d mod 4` statement.
 - `TauCeti/NumberTheory/RamificationInertia/Galois.lean`:
-  `ncard_primesOver_eq_natCard_iff_of_isGaloisGroup` (finite flat Galois extensions of domains).
-  Layer 1's relative splitting dictionary extends this file.
-- `TauCeti/NumberTheory/Multiquadratic/`: the sign-vector Galois theory
-  (`signPattern`/`signHom`/`galoisGroupEquiv`), `MultiquadraticSplitting`, the
-  prime-discriminant/`candidateGenusField` layer, and `Multiquadratic/Frobenius.lean`
-  (`galoisGroupEquiv_frobenius`: Frobenius = Legendre sign vector), the `(ℤ/2)ⁿ` instance of
-  Layers 1–2. The boundary is that anything `(ℤ/2)ⁿ`-specific stays theirs and the uniform
-  statements live here.
+  `ncard_primesOver_eq_natCard_iff_of_isGaloisGroup`. Layer 1.1 extends this file.
+- `TauCeti/NumberTheory/Multiquadratic/`: the sign-vector Galois theory, `MultiquadraticSplitting`,
+  the prime-discriminant layer, and `Multiquadratic/Frobenius.lean`, which identifies the
+  Frobenius with the Legendre sign vector. This is the `(ℤ/2)ⁿ` instance of Layers 1 and 2.
+  Anything specific to `(ℤ/2)ⁿ` stays there, and the uniform statements are here.
 - `TauCeti/NumberTheory/EffectiveBounds/` and `GeometryOfNumbers/`:
   `abs_discr_le_of_basis_isIntegral`, `card_ideal_absNorm_le`, `classNumber_le_bound`,
-  `units_sq_index_eq (= 2^{rank+1})`, `regulator_eq_one_of_rank_eq_zero`,
-  `discr_cyclotomicField_four = -4`, and the Hermite count, consumed by Layers 3, 7 and 8 (the
-  index formula of Layer 3 sharpens `abs_discr_le_of_basis_isIntegral` to an equation).
-- Conventions the repo enforces, and this roadmap adopts: `TauCeti.*` namespaces mirroring
-  Mathlib paths (bare Mathlib namespaces only when extending an existing Mathlib definition's
-  API), the module system (`public import`/`public section`, `@[expose]` where needed),
-  `Internal/` for shared non-headline helpers, dated `@[deprecated]` wrappers, provenance
-  sections in module docstrings, and the presentation idioms recorded in §Standing hypotheses.
+  `units_sq_index_eq`, `regulator_eq_one_of_rank_eq_zero`, `discr_cyclotomicField_four = -4`, and
+  the Hermite count. Layer 3.3 sharpens the first of these from an inequality to an equation.
+- Conventions that the code repository enforces, and that this roadmap adopts: `TauCeti.*`
+  namespaces that mirror Mathlib paths, with bare Mathlib namespaces only when extending the API
+  of an existing Mathlib definition; the module system; `Internal/` for shared helpers that are
+  not headline results; dated `@[deprecated]` wrappers; and provenance sections in module
+  docstrings.
 
-## What is missing (build here)
+## What is missing
 
-The list, in one place. A uniform Frobenius and Artin-symbol API over number fields at finite
-level: the number-field instantiation of `IsArithFrobAt`; group-level uniqueness at unramified
-primes; the conjugacy-class-valued Artin symbol at a prime ideal of the base; the abelian
-collapse and the fractional-ideal Artin homomorphism; `orderOf Frob = f`; behavior under
-restriction and in towers; the identification with the residue-field Frobenius; the cyclotomic
-and quadratic element identifications; and complex conjugation as the canonical element at a
-ramified real place. The relative Dedekind–Kummer theorem with matching `e`/`f` (the pin has it
-only over `ℤ`) together with its converse-irreducibility TODO; the power-basis index with
-`disc(minpoly θ) = index² · discr K` and the same-prime-support comparison with
-`RingOfIntegers.exponent`; Dedekind's criterion over `ℤ`; **Dedekind's theorem** (factorization
-type = Frobenius cycle type) with the common-index-divisor theory that bounds its hypotheses.
-The relative discriminant ideal with its tower formula and `relNorm`-of-different
-characterization; the `Algebra.discr` tower formula and the `Polynomial.discr` link;
-Stickelberger's congruence. The canonical completion of an extension at a finite place and the
-whole finite-place local–global dictionary (`Σ [L_w:K_v] = n`, `[L_w:K_v] = e·f`,
-`D_Q ≅ Gal(L_w/K_v)`, norm and trace, localization of the different,
-`IsNonarchimedeanLocalField` instances on completions). Global ramification consequences
-transported through that dictionary: the lower filtration compared with the local one, the
-different-exponent formula, exact tame and wild exponents, and the permutation-action
-discriminant formula. The double-coset splitting law for non-Galois extensions and
-totally-split-iff-in-the-closure. The subfield-lattice packaging, the monogenicity predicate with
-its quadratic, cyclotomic and Dedekind examples, and explicit unit certification. Intrinsic LMFDB
-label-prefix semantics with a fully computed worked suite. None of this exists upstream as
-stated; every consumable fragment is cited above.
+The complete list, in one place.
 
-## Cross-roadmap dependencies
+- A uniform Frobenius and Artin-symbol API over number fields, at finite level: the number-field
+  instantiation of `IsArithFrobAt`; uniqueness in the group at an unramified prime; the
+  conjugacy-class-valued Artin symbol at a prime ideal of the base; the abelian collapse and the
+  fractional-ideal Artin homomorphism; `orderOf Frob = f`; behaviour under restriction and in
+  towers; the identification with the residue-field Frobenius; the cyclotomic and quadratic
+  element identifications; and complex conjugation as the canonical element at a ramified real
+  place.
+- The relative Dedekind–Kummer theorem with matching `e` and `f`, together with the converse of
+  `irreducible_map_of_irreducible_minpoly`.
+- The power-basis index, with `disc(minpoly θ) = index² · discr K`, and the comparison of its
+  prime divisors with those of `RingOfIntegers.exponent`.
+- Dedekind's criterion over `ℤ`.
+- Dedekind's theorem, that the factorization type is the Frobenius cycle type, with the
+  common-index-divisor theory that bounds its hypotheses.
+- The relative discriminant ideal, with its tower formula and its `relNorm`-of-different
+  description; the `Algebra.discr` tower formula; Stickelberger's congruence.
+- The canonical completion of an extension at a finite place, and the whole finite-place
+  local-global dictionary: `Σ [L_w:K_v] = n`, `[L_w:K_v] = e·f`, `D_Q ≅ Gal(L_w/K_v)`, norm and
+  trace, local monogenicity, localization of the different, and the
+  `IsNonarchimedeanLocalField` instance on a completion.
+- The global ramification consequences carried through that dictionary: the lower filtration and
+  its comparison with the local one, the different-exponent formula, the exact tame and wild
+  exponents, and the permutation-action discriminant formula.
+- The double-coset splitting law for non-Galois extensions, and totally-split in the Galois
+  closure.
+- The subfield lattice, the monogenicity predicate with its quadratic, cyclotomic and Dedekind
+  examples, and explicit unit certification.
+- Intrinsic LMFDB label-prefix semantics, with a fully computed worked suite.
 
-Each row is one named milestone crossing a roadmap boundary. Nothing else crosses.
-
-| Supplier | Exact supplied milestone | Consumer |
-|---|---|---|
-| [PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 0 | local-field structure, the local `e`/`f`, and the `‖x‖ = q^{−v(x)}` normalization | PR #9 Layer 5 |
-| [PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 2 | unramified extensions and the local Frobenius | PR #9 Layer 5 (Frobenius comparison) |
-| [PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 3 | the lower filtration `G_i`, `v_L(𝔡) = Σ_{i≥0}(#G_i − 1)`, the tame exponent `v_L(𝔡) = e − 1`, and the structure theorem (maximal unramified subextension; totally ramified ⟺ Eisenstein) | PR #9 Layer 6 |
-| PR #9 Layer 3 | the polynomial-side Dedekind theorem: for monic `f : ℤ[X]` and `p ∤ f.discr`, some `σ ∈ (f/ℚ).Gal` whose root action has full cycle type the factor-degree multiset of `f mod p` | [PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10) Layer 5 |
-| PR #9 Layer 7 | the `S_n`-embedding of the Galois closure of a number field | [PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10) |
-| [PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10) | `nTj` transitive-group label semantics and low-degree recognition | PR #9 Layer 8 only |
-| PR #9 Layer 2 | `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)` for an arbitrary finite `S` containing the ramified primes, in PR #6's `(FractionalIdeal (𝓞 K)⁰ K)ˣ` carrier | [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layers 6–8 |
-| PR #9 Layer 5 | `IsNonarchimedeanLocalField (v.adicCompletion K)` with the residue-cardinality and normalization lemmas, and the localization of the different | [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layers 2, 9 |
-| [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layer 1 | the narrow class group `Cl⁺ K` and the surjection `Cl⁺ ↠ Cl` | PR #9 Layer 8 |
-| [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layer 9 | the abelian conductor–discriminant formula, used only as a cross-check on the worked examples | PR #9 §Worked examples |
-| [Multiquadratic](../Multiquadratic/README.md) (merged) | the landed TauCeti files listed in §What TauCeti already has | PR #9 Layers 1–2, 7 |
-| [EffectiveBounds](../../Completed/EffectiveBounds/README.md) (completed) | discriminant and class-number bounds | PR #9 Layers 3, 7–8 |
-
-Ownership at the boundary with Local Fields, stated once because it is the boundary most likely
-to be crossed twice: **PR #2 owns the local ramification theory**, meaning the lower and upper
-numbering filtrations, Herbrand's theorem, Hasse–Arf, and the local different formulas. **PR #9
-owns the canonical completion maps, the comparison of global ideal-theoretic invariants with the
-local ones, and the global ideal and discriminant corollaries.** This roadmap does not rebuild a
-second lower-ramification theory. Its global filtration (Layer 6) exists to be compared with the
-local one, and the comparison theorem is that object's central API.
-
+None of this exists in Mathlib as stated. Every part that can be used is cited above.
 ---
 
 ## The build, in layers
 
-The eight layers below are a dependency order: every milestone in Layer `n` rests on Mathlib, on
-TauCeti, on an earlier layer, or on a sibling roadmap's milestone named in §Cross-roadmap
-dependencies. There are no forward references. As each layer makes the next layer's types
-expressible, its milestones are added to `Suggested.lean` with `sorry`.
+The eight layers are a dependency order. Every milestone rests on Mathlib, on Tau Ceti, or on an
+earlier layer. There are no forward references. Each milestone lists its direct prerequisites.
+Each new object lists the basic API that must accompany it. Each hard theorem records its
+source, its true hypotheses, and a nearby false statement.
 
-### Layer 1: the splitting dictionary (Hilbert theory, completed and relativized)
+`Suggested.lean` holds a suggested Lean signature for the milestones whose carrier, index type,
+or map determines the layers below. It is not a checklist, and it is not exhaustive.
 
-- **Publish the relative splitting criteria.** The general-base forms of TauCeti's
-  splits-completely dictionary (count `= n` ⟺ `e = f = 1` ⟺ trivial decomposition group), for
-  `L/K` finite (Galois where stated) over an arbitrary Dedekind base. This publishes the shape
-  that is `private` in `SplitsCompletely.lean`, as a narrowly scoped public-API amendment to that
-  file made in coordination with its authors; the theorem is not restated in a second namespace.
-- **Unramified sets of primes, without a new predicate.** Statements about a finite set of primes
-  being unramified are written with explicit pointwise quantification over the primes of the set,
-  mirroring the pin's archimedean `IsUnramifiedAtInfinitePlaces`. ⚠ Do **not** introduce a Tau
-  Ceti `IsUnramifiedIn` wrapper: Mathlib has `Algebra.IsUnramifiedIn` (#41323), and pointwise
-  statements sit directly on top of it, whereas a wrapper would be redundant from the day it is
-  written.
-- **The prime-in-subfield dictionary** (Neukirch I (9.3)/(9.6)): `e` and `f` of `P ∩ Z` and
-  `P ∩ T` for the decomposition and inertia fields. `P` is the only prime of `L` over `P ∩ Z`;
-  `e(P∩Z/p) = f(P∩Z/p) = 1`; `f(P∩T/P∩Z) = f`, `e(P∩T/P∩Z) = 1`; the inertia field is where `e`
-  concentrates. ⚠ State these at ring level, on `Ideal.IsDecompositionRing`/`IsInertiaRing`
-  rather than on the field-level classes, following the Mathlib direction recorded above
-  (#41591, with #35802/#35808/#35991/#36733 the surrounding results).
-- **The double-coset law for non-Galois splitting** (Neukirch I §9 p. 55, the "proof left to the
-  reader"; genuinely absent upstream): for `M/K` Galois with group `G`, `L` the fixed field of
-  `H ≤ G`, and `D = MulAction.stabilizer G Q` for a prime `Q` over `p`, a named bijection
-  `DoubleCoset.Quotient H D ≃ primesOver p (𝓞 L)`, together with the theorem that it sends
-  `HσD` to `σQ ∩ L`; the invariant read-off
-  `e(𝔮_σ/p)·f(𝔮_σ/p) = |HσD|/|H| = [σDσ⁻¹ : H ∩ σDσ⁻¹]`, refined to
-  `e(𝔮_σ/p) = [σIσ⁻¹ : H ∩ σIσ⁻¹]` with `I = Q.inertia G`; and the consistency identity
-  `Σ_σ |HσD|/|H| = [L:K]` recovering the fundamental identity.
-- **Totally split ⟺ totally split in the Galois closure** (Neukirch I §9 Ex. 4, via the
-  double-coset law), and the compositum statements: `p` totally split in `L₁` and `L₂` ⟺ in
-  `L₁L₂`; `p` unramified in both ⟹ unramified in the compositum. ⚠ Follow mathlib #36843 for the
-  spelling of the unramified-compositum half and its totally-split criterion.
+### Layer 1: the splitting dictionary
 
-### Layer 2: Frobenius elements and the Artin symbol, at finite level
+#### 1.1 The relative splitting criteria
 
-The pin has the entire machinery (existence, conjugacy, uniqueness mod inertia, uniqueness at
-unramified primes at `AlgHom` level) as a leaf file; this layer is the missing instantiation and
-packaging. Everything is stated in `IsArithFrobAt` vocabulary, with no rival definition, and
-everything lives in a finite Galois extension.
+For `L/K` finite over an arbitrary Dedekind base, and Galois where stated, prove the equivalence
+of three conditions on a prime `p`:
 
-- **Number-field and relative instantiation.** For `L/K` finite Galois (`IsGalois K L`) and `Q` a
-  nonzero prime of `𝓞 L`: discharge the `IsArithFrobAt.exists_of_isInvariant` hypotheses once
-  (`Finite Gal`, `Algebra.IsInvariant (𝓞 K) (𝓞 L) Gal`, `Finite (𝓞 L ⧸ Q)`, all derivable from
-  pin instances) and provide `∃ σ : L ≃ₐ[K] L, IsArithFrobAt (𝓞 K) σ Q`, generalizing TauCeti's
-  landed base-`ℚ` `exists_isArithFrobAt`. ⚠ The exponent is `Nat.card (𝓞 K ⧸ Q.under (𝓞 K))`,
-  the **base** residue cardinality `N(𝔭)`, not `N(Q)`; keep the TauCeti convention.
-- **Group-level uniqueness at unramified primes.** Upgrade
-  `AlgHom.IsArithFrobAt.eq_of_isUnramifiedAt` to `σ = τ` in the Galois group via faithfulness
-  (`IsGaloisGroup.faithful`), giving `Subsingleton {σ // IsArithFrobAt (𝓞 K) σ Q}` at unramified
-  `Q`. At ramified `Q` the honest statement is the pin's `mul_inv_mem_inertia`, the Frobenius
-  coset modulo `Q.inertia`, and the ramified convention of the table.
-- **The Artin symbol, at a prime of the base.** For `𝔭 : Ideal (𝓞 K)` nonzero prime and
-  unramified in `L`, `artinSymbol 𝔭 : ConjClasses (L ≃ₐ[K] L)`, well defined by
-  `isConj_arithFrobAt` together with the uniqueness above; `Frob (σ • Q) = σ (Frob Q) σ⁻¹`; the
-  **order** `orderOf (Frob Q) = f(Q/𝔭)` and `Subgroup.zpowers (Frob Q) = MulAction.stabilizer` at
-  unramified `Q` (from the pin's `card_stabilizer_eq`); and the identification with the residue
-  Frobenius, namely that `Ideal.Quotient.stabilizerHom` sends `Frob Q` to
-  `FiniteField.frobeniusAlgEquivOfAlgebraic`, closing the loop between `IsArithFrobAt.restrict`
-  and the finite-field API. ⚠ The Artin symbol is indexed by a prime **ideal** of `𝓞 K`; the
-  familiar `(p, K/ℚ)` for a rational prime `p` is the `K = ℚ` corollary, obtained by specializing
-  `𝔭 = span {(p : ℤ)}`, and is never the primary statement.
-- **Functoriality.** Restriction to subextensions: for `K ⊆ M ⊆ L` with `M/K` Galois,
-  `IsArithFrobAt (𝓞 K) σ Q → IsArithFrobAt (𝓞 K) (σ.restrictNormal M) (Q.under (𝓞 M))` (nothing
-  like it exists upstream; the cyclotomic `galEquivZMod_restrictNormal_apply` is the only
-  restriction square in Mathlib and is not about Frobenius elements); the tower statement for
-  `Frob` over an intermediate prime (`Frob_{L/M}(Q) = Frob_{L/K}(Q)^{f(Q∩M/𝔭)}`); and
-  compatibility of `artinSymbol` with `AlgEquiv.restrictNormalHom`.
-- **The abelian collapse and the ideal-theoretic Artin map.** For abelian `L/K` the symbol is a
-  single element `((L/K)/𝔭) ∈ Gal(L/K)`. Extend it multiplicatively, in exactly the carrier
-  [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) pinned for `J^{𝔪₀}`. The excluded
-  set is a parameter: take any finite `S : Finset (HeightOneSpectrum (𝓞 K))` together with the
-  hypothesis that every prime outside `S` is unramified in `L`. Nothing here has to know which
-  primes those are, which is also what PR #6 needs, since its `𝔪₀` support is generally larger
-  than the ramified set. Milestones, in order:
-  1. the carrier `J^S ≤ (FractionalIdeal (𝓞 K)⁰ K)ˣ`, the fractional ideals with zero valuation
-     at every prime of `S`, and its generation by the primes outside `S`;
-  2. the prime-level Artin element outside `S`, from the symbol above and the abelian collapse;
-  3. the multiplicative extension `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)`, well defined
-     through unique factorization;
-  4. its value on a prime ideal;
-  5. functoriality in the extension `L`;
-  6. the restriction to the monoid of integral ideals prime to `S`, as a corollary rather than
-     the primary object.
+- the number of primes over `p` equals `[L:K]`;
+- `e = 1` and `f = 1` at every prime over `p`;
+- the decomposition group at every prime over `p` is trivial.
 
-  Its reciprocity properties (kernel, surjectivity, factorization through ray class groups) are
-  **not** stated here: PR #6 owns those and consumes this map literally, which is why the
-  carrier is pinned rather than invented. The canonical choice `S = ` the support of the
-  relative discriminant is Layer 4's, since it is the relative discriminant that makes that set
-  a `Finset` in the first place.
-- **Computations.** Cyclotomic: `galEquivZMod n K (Frob Q) = ZMod.unitOfCoprime p hp`, the
-  element identification the pin stops short of (both halves exist: `apply_of_pow_eq_one` and
-  `galEquivZMod_apply_of_pow_eq`). Quadratic: for `K = ℚ(√d)` presented by `θ : 𝓞 K` with
-  `minpoly ℤ θ = X² − C d` and `Algebra.adjoin ℚ {(θ : K)} = ⊤`, and for a rational prime `p`
-  with `p` odd, `p ∤ d`, and `Q` a prime of `𝓞 K` over `p`, `Frob Q = 1 ↔ legendreSym p d = 1`.
-  ⚠ All four hypotheses are part of the statement: `p` odd and `p ∤ d` are what make `p`
-  unramified and the Legendre symbol available, and `hmin`/`hgen` are what make `θ` a generator
-  whose exponent is prime to `p`. This generalizes TauCeti's
-  `isArithFrobAt_apply_sqrt_eq_self_iff` from an element identity to the symbol.
-- **The canonical element at a ramified real place.** For `w` a real place of `K` ramifying in
-  `L`, the stabilizer of a place of `L` above `w` has order 2 (pin). Name its generator: it is
-  complex conjugation, via `ComplexEmbedding.IsConj`, with `IsCMField.complexConj` as the CM
-  instance, and give the basic API (order 2, compatibility with restriction, the fixed field is
-  the real subfield). ⚠ This element is **not** called a Frobenius anywhere: at an infinite place
-  the local Galois group is `Gal(ℂ/ℝ)`, there is no residue field and no `q`-power congruence,
-  and conflating the two notions is exactly the error the naming convention exists to prevent.
+Tau Ceti's `SplitsCompletely.lean` proves this over `ℚ`, and keeps the general-base form
+`private`. This milestone publishes that form. It is a change to the visibility of an existing
+declaration, made with the agreement of that file's authors. Do not restate the theorem in a
+second namespace.
+
+*Prerequisites:* Tau Ceti `NumberField/SplitsCompletely.lean`; Mathlib
+`Ideal.sum_ramification_inertia`, `Ideal.card_stabilizer_eq`.
+
+#### 1.2 Unramified sets of primes
+
+Write a statement about a set of primes being unramified with explicit quantification over the
+primes of the set. This mirrors Mathlib's archimedean `IsUnramifiedAtInfinitePlaces`.
+
+⚠ Do not introduce a Tau Ceti `IsUnramifiedIn` wrapper. Mathlib has `Algebra.IsUnramifiedIn`,
+and a quantified statement uses it directly.
+
+*Prerequisites:* Mathlib `Algebra.IsUnramifiedIn`, `Algebra.IsUnramifiedAt`.
+
+#### 1.3 The prime-in-subfield dictionary
+
+Let `Z` be the decomposition ring and `T` the inertia ring of `P` over `p`. Prove:
+
+- `P` is the only prime of `L` over `P ∩ Z`;
+- `e(P∩Z/p) = 1` and `f(P∩Z/p) = 1`;
+- `f(P∩T/P∩Z) = f` and `e(P∩T/P∩Z) = 1`.
+
+State these on Mathlib's `IsDecompositionField` and `IsInertiaField`. Mathlib is moving the same
+API to ring level, on predicates of ideals rather than of fields, and `PROVENANCE.md` records
+that work. Write the statements so that the move changes the class name and nothing else. State the degree
+and index formulas through `Ideal.under`, `ramificationIdx` and `inertiaDeg` of the ideals. Do
+not state them through the intermediate field.
+
+*Source:* Neukirch I (9.3) and (9.6).
+
+*Prerequisites:* Mathlib `IsDecompositionField`, `IsInertiaField`,
+`Ideal.Quotient.stabilizerHom`, `Ideal.card_stabilizer_eq`; Layer 1.1.
+
+#### 1.4 The double-coset law for non-Galois splitting
+
+Let `M/K` be Galois with group `G`. Let `L` be the fixed field of `H ≤ G`. Let
+`D = MulAction.stabilizer G Q` for a prime `Q` of `M` over `p`, and let `I = Q.inertia G`. Build
+a bijection
+
+```text
+doubleCosetEquiv : DoubleCoset.Quotient H D ≃ Ideal.primesOver p (𝓞 L)
+```
+
+and prove that it sends `HσD` to `σQ ∩ L`. Then prove the invariant formulas:
+
+- `e(𝔮_σ/p) · f(𝔮_σ/p) = |HσD| / |H| = [σDσ⁻¹ : H ∩ σDσ⁻¹]`;
+- `e(𝔮_σ/p) = [σIσ⁻¹ : H ∩ σIσ⁻¹]`;
+- `Σ_σ |HσD| / |H| = [L:K]`, which recovers the fundamental identity.
+
+**New object: `doubleCosetEquiv`.** Basic API:
+
+- *Constructors and instances.* The map, its inverse, and decidability of the index type where a
+  count is needed.
+- *Examples.* `H = 1`, which recovers the Galois case; `H = D`, which gives a single prime.
+- *Morphisms and functoriality.* Behaviour under enlarging `H`, that is, under passing to a
+  subfield of `L`.
+- *Comparison lemmas and naturality.* The value formula `HσD ↦ σQ ∩ L`; compatibility with the
+  `G`-action on `primesOver`.
+- *Edge cases.* `p` ramified, where `I ≠ 1` and the two invariant formulas differ; `p` inert.
+- *Downstream interfaces.* Layer 1.5 and Layer 3.9 both use the bijection, not merely the count.
+
+*Source:* Neukirch I §9, page 55, where the proof is left to the reader. Janusz Ch. I gives a
+complete treatment.
+
+*Hypotheses:* `M/K` Galois and finite. `Q` a nonzero prime of `𝓞 M`. No separability hypothesis
+on residue fields is needed for the bijection.
+
+*False generalization:* the formula `e·f = [σDσ⁻¹ : H ∩ σDσ⁻¹]` does not split into separate
+formulas for `e` and for `f` by replacing `D` with `I` and with `D/I`. Only the `e` half is a
+subgroup index of that kind. The `f` half is an index of images in the quotient, and it is not
+`[σ(D/I)σ⁻¹ : H̄ ∩ σ(D/I)σ⁻¹]` in general, because `H ∩ σDσ⁻¹` need not surject onto its image.
+
+*Prerequisites:* Mathlib `DoubleCoset.Quotient`, `Ideal.primesOver`, `Ideal.inertia`,
+`Algebra.IsInvariant`, `orbit_eq_primesOver`; Layer 1.3.
+
+#### 1.5 Totally split in `L` and in the Galois closure
+
+Prove that `p` is totally split in `L` if and only if `p` is totally split in the Galois closure
+of `L`. Prove the compositum statements:
+
+- `p` totally split in `L₁` and in `L₂` if and only if `p` is totally split in `L₁L₂`;
+- `p` unramified in `L₁` and in `L₂` implies `p` unramified in `L₁L₂`.
+
+*Source:* Neukirch I §9 Exercise 4.
+
+*Prerequisites:* Layer 1.4; Mathlib `IntermediateField.normalClosure`,
+`Algebra.IsUnramifiedAt`.
+
+### Layer 2: Frobenius elements and the Artin symbol
+
+Mathlib has the whole Frobenius machinery in one file with no reverse dependencies: existence,
+conjugacy across a fibre, uniqueness modulo inertia, and uniqueness at unramified primes at
+`AlgHom` level. This layer instantiates it for number fields and builds the symbol on top. Every
+statement uses `IsArithFrobAt`, with no second definition, and every statement lives in a finite
+Galois extension.
+
+#### 2.1 Existence of the relative Frobenius
+
+For `L/K` finite Galois and `Q` a nonzero prime of `𝓞 L`, produce
+`σ : L ≃ₐ[K] L` with `IsArithFrobAt (𝓞 K) σ Q`. Discharge the hypotheses of Mathlib's
+`IsArithFrobAt.exists_of_isInvariant` once: `Finite (L ≃ₐ[K] L)`,
+`Algebra.IsInvariant (𝓞 K) (𝓞 L) (L ≃ₐ[K] L)`, and `Finite (𝓞 L ⧸ Q)`.
+
+⚠ The exponent is `Nat.card (𝓞 K ⧸ Q.under (𝓞 K))`, the residue cardinality of the **base**. It
+is not `N(Q)`.
+
+*Prerequisites:* Mathlib `IsArithFrobAt.exists_of_isInvariant`, `IsGaloisGroup (𝓞 K) (𝓞 L)`;
+Tau Ceti `NumberField/Frobenius.lean` (`exists_isArithFrobAt`, the base-`ℚ` case).
+
+#### 2.2 Uniqueness at unramified primes, in the Galois group
+
+Mathlib proves uniqueness at `AlgHom` level. Upgrade it to `σ = τ` in the Galois group, by
+faithfulness, and record `Subsingleton {σ // IsArithFrobAt (𝓞 K) σ Q}` at unramified `Q`.
+
+At a ramified `Q` the honest statement is Mathlib's `mul_inv_mem_inertia`: the Frobenius is
+well defined only modulo `Q.inertia`.
+
+*Prerequisites:* Mathlib `AlgHom.IsArithFrobAt.eq_of_isUnramifiedAt`, `IsGaloisGroup.faithful`,
+`IsArithFrobAt.mul_inv_mem_inertia`; Layer 2.1.
+
+#### 2.3 The Artin symbol
+
+For `𝔭` a nonzero prime of `𝓞 K`, unramified in `L`, define
+
+```text
+artinSymbol 𝔭 : ConjClasses (L ≃ₐ[K] L)
+```
+
+as the common conjugacy class of the Frobenius elements at the primes over `𝔭`.
+
+**New object: `artinSymbol`.** Basic API:
+
+- *Constructors and instances.* Well-definedness, from conjugacy across the fibre together with
+  uniqueness at an unramified prime.
+- *Examples.* Cyclotomic and quadratic fields, in Layer 2.6.
+- *Morphisms and functoriality.* Compatibility with `AlgEquiv.restrictNormalHom`; the tower
+  formula `Frob_{L/M}(Q) = Frob_{L/K}(Q)^{f(Q∩M/𝔭)}`.
+- *Comparison lemmas and naturality.* `Frob (σ • Q) = σ (Frob Q) σ⁻¹`;
+  `orderOf (Frob Q) = f(Q/𝔭)`; `Subgroup.zpowers (Frob Q) = MulAction.stabilizer` at an
+  unramified `Q`; the image of `Frob Q` under `Ideal.Quotient.stabilizerHom` is
+  `FiniteField.frobeniusAlgEquivOfAlgebraic`.
+- *Edge cases.* `𝔭` ramified, where the symbol is not defined and only the coset modulo inertia
+  exists; `L/K` abelian, where the class is a single element (Layer 2.5).
+- *Downstream interfaces.* Layer 2.5 and Layer 3.9.
+
+⚠ The symbol is indexed by a prime **ideal** of `𝓞 K`. The familiar `(p, K/ℚ)` for a rational
+prime is the `K = ℚ` corollary, obtained by taking `𝔭 = Ideal.span {(p : ℤ)}`. It is not the
+primary statement.
+
+*Source:* Neukirch I §9 Exercise 2.
+
+*Prerequisites:* Mathlib `IsArithFrobAt.isConj_arithFrobAt`, `Ideal.card_stabilizer_eq`,
+`Ideal.Quotient.stabilizerHom`, `FiniteField.frobeniusAlgEquivOfAlgebraic`; Layers 2.1 and 2.2.
+
+#### 2.4 Functoriality of the Frobenius
+
+For `K ⊆ M ⊆ L` with `M/K` Galois, prove
+
+```text
+IsArithFrobAt (𝓞 K) σ Q → IsArithFrobAt (𝓞 K) (σ.restrictNormal M) (Q.under (𝓞 M)).
+```
+
+Nothing like this exists in Mathlib. The cyclotomic square `galEquivZMod_restrictNormal_apply` is
+the only restriction statement there, and it is not about Frobenius elements.
+
+*Prerequisites:* Mathlib `AlgEquiv.restrictNormal`, `Ideal.under`; Layer 2.1.
+
+#### 2.5 The ideal-theoretic Artin map
+
+For `L/K` abelian the symbol is a single element of `Gal(L/K)`. Extend it multiplicatively.
+
+The excluded set is a parameter. Take any `S : Finset (HeightOneSpectrum (𝓞 K))`, together with
+the hypothesis that every prime outside `S` is unramified in `L`. Nothing in the construction
+needs to know which primes ramify.
+
+Milestones, in order:
+
+1. the carrier `J^S ≤ (FractionalIdeal (𝓞 K)⁰ K)ˣ`, the fractional ideals with valuation zero at
+   every prime of `S`, and its generation by the primes outside `S`;
+2. the Artin element at a prime outside `S`, from Layer 2.3 and the abelian collapse;
+3. the multiplicative extension `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)`, well defined by
+   unique factorization;
+4. its value at a prime ideal;
+5. functoriality in `L`;
+6. the restriction to the monoid of integral ideals prime to `S`.
+
+**New object: `artinHomAway`.** Basic API:
+
+- *Constructors and instances.* The carrier `J^S`; the map; generation of `J^S` by primes.
+- *Examples.* `S` the ramified support (Layer 4.2); `S` the support of a modulus, which is the
+  case a reciprocity roadmap needs.
+- *Morphisms and functoriality.* Behaviour under `S ⊆ S'`; functoriality in `L`; the integral
+  restriction.
+- *Comparison lemmas and naturality.* The value at a prime, which determines the map.
+- *Edge cases.* `S = ∅`, allowed only when `L/K` is unramified everywhere; `L = K`, where the map
+  is trivial.
+- *Downstream interfaces.* A global class field theory roadmap uses this map without change.
+  For that reason the carrier is `(FractionalIdeal (𝓞 K)⁰ K)ˣ`, and not a new type.
+
+Its kernel, its image, and its factorization through ray class groups are not stated here.
+
+*Prerequisites:* Mathlib `FractionalIdeal`, `FractionalIdeal.count`,
+`UniqueFactorizationMonoid`; Layer 2.3.
+
+#### 2.6 Computations
+
+*Cyclotomic.* For `K` a cyclotomic field of conductor `n` and `p` coprime to `n`, prove
+`galEquivZMod n K (Frob Q) = ZMod.unitOfCoprime p hp`. Mathlib has both halves,
+`IsArithFrobAt.apply_of_pow_eq_one` and `galEquivZMod_apply_of_pow_eq`, but not the
+identification.
+
+*Quadratic.* Let `K = ℚ(√d)`, presented by `θ : 𝓞 K` with `minpoly ℤ θ = X² − C d` and
+`Algebra.adjoin ℚ {(θ : K)} = ⊤`. Let `p` be a rational prime with `p` odd and `p ∤ d`, and let
+`Q` be a prime of `𝓞 K` over `p`. Prove `Frob Q = 1` if and only if `legendreSym p d = 1`.
+
+*Hypotheses:* all four hypotheses are part of the statement. `p` odd and `p ∤ d` make `p`
+unramified and make the Legendre symbol available. The two hypotheses on `θ` make it a generator
+whose exponent is prime to `p`.
+
+*Prerequisites:* Mathlib `IsCyclotomicExtension.Rat.galEquivZMod`, `legendreSym`; Tau Ceti
+`LegendreSymbol/Frobenius.lean`, `Quadratic/Splitting.lean`; Layer 2.3.
+
+#### 2.7 The canonical element at a ramified real place
+
+Let `w` be a real place of `K` that ramifies in `L`. The stabilizer of a place of `L` above `w`
+has order 2. Name its generator: it is complex conjugation. Give the basic API: order 2,
+compatibility with restriction, and the fixed field.
+
+⚠ This element is not called a Frobenius anywhere. At an infinite place the local Galois group is
+`Gal(ℂ/ℝ)`. There is no residue field and no congruence `σ x ≡ x^q`.
+
+*Prerequisites:* Mathlib `ComplexEmbedding.IsConj`, `IsCMField.complexConj`,
+`InfinitePlace.IsRamified`.
 
 ### Layer 3: the index, Dedekind–Kummer, and Dedekind's theorem
 
-The index material comes first in this layer because the polynomial-side hypothesis `p ∤ f.discr`
-has to be converted into the conductor hypothesis Kummer–Dedekind actually takes, and that
-conversion is the index comparison. Nothing later in the layer may assume it.
+The index material comes first. The polynomial-side hypothesis `p ∤ f.discr` has to be converted
+into the conductor hypothesis that Kummer–Dedekind takes, and that conversion is the index
+comparison. Nothing later in the layer may assume it.
 
-- **The power-basis index, on a carrier with no junk values.** Define
-  `IntegralPrimitiveElement K := {θ : 𝓞 K // Algebra.adjoin ℚ {(θ : K)} = ⊤}` and, on that
-  subtype only, `index θ : ℕ`, the cardinality of `𝓞 K ⧸ Algebra.adjoin ℤ {θ}` as a `ℤ`-module
-  quotient, together with `0 < index θ` (both are free of rank `finrank ℚ K`, so the quotient is
-  finite). ⚠ Do **not** define an index by raw `Nat.card` for every `θ : 𝓞 K`: a non-generator
-  gives an infinite quotient and Mathlib's fallback value `0`, and every subsequent divisibility
-  statement would then be silently true. If a total definition is later wanted, it must be
-  introduced with its junk value documented and with the primitive-element hypothesis retained in
-  the theorems.
-- **The discriminant of a power basis.**
-  `Algebra.discr ℚ (powerBasis θ) = Polynomial.discr (minpoly ℤ θ)` under the canonical maps;
-  both objects exist upstream and are never connected.
-- **The index formula.** `Polynomial.discr (minpoly ℤ θ) = (index θ)² · NumberField.discr K` for
-  `θ : IntegralPrimitiveElement K`. This sharpens EffectiveBounds'
-  `abs_discr_le_of_basis_isIntegral` from an inequality to an equation.
-- **Index and exponent have the same prime divisors.** `p ∣ index θ ↔ p ∣ RingOfIntegers.exponent θ`
-  for `p` prime. ⚠ The two invariants are different integers in general (the exponent is the
-  `absNorm` of the contracted order conductor), and only the index satisfies the formula above;
-  the same-prime-support statement is what makes them interchangeable in hypotheses.
-- **The checkable hypothesis.** Combining the previous two:
-  `¬ (p : ℤ) ∣ Polynomial.discr (minpoly ℤ θ) → ¬ p ∣ RingOfIntegers.exponent θ`. This is the
-  implication every polynomial-side statement below uses. It is a named theorem, not a step
-  buried in a proof, and not a hypothesis assumed by the statements that need it.
-- **The relative Dedekind–Kummer theorem.** Generalize the pin's `𝓞 K/ℤ` package
-  (`primesOverSpanEquivMonicFactorsMod` with `inertiaDeg`/`ramificationIdx` matching) to AKLB:
-  for `θ` generating `L/K` and `p` coprime to `conductor A θ`, primes of `B` over `p` correspond
-  to monic irreducible factors of `minpoly A θ mod p`, with `fᵢ = deg`, `eᵢ = multiplicity`, and
-  the span formula. The general file's TODO (the converse of
-  `irreducible_map_of_irreducible_minpoly`) closes here. TauCeti's
-  `ncard_primesOver_quadratic_iff` becomes the degree-2 corollary.
-- **Dedekind's criterion, over `ℤ`** (Cohen §6.1). Stated for the base `ℤ`, because the criterion
-  divides by `p` and that has no base-free meaning; a relative version would need a chosen
-  uniformizer and explicit localization hypotheses, and is not a milestone here. Let
-  `θ : IntegralPrimitiveElement K`, `f = minpoly ℤ θ`, and `p` prime. Write
+#### 3.1 The power-basis index
 
-  ```text
-  f mod p = ∏ᵢ φᵢ^{eᵢ},   the φᵢ distinct monic irreducibles of 𝔽_p[X],   each eᵢ > 0,
-  ```
+Define the carrier of integral generators and the index on it:
 
-  so that the index set is exactly the set of irreducibles occurring in the factorization,
-  choose monic lifts `Φᵢ : ℤ[X]`, prove that `f − ∏ᵢ Φᵢ^{eᵢ}` has all coefficients divisible by
-  `p`, and set `H := (f − ∏ᵢ Φᵢ^{eᵢ})/p`. Then
+```text
+IntegralPrimitiveElement K := {θ : 𝓞 K // Algebra.adjoin ℚ {(θ : K)} = ⊤}
+index θ : ℕ                                  -- the cardinality of 𝓞 K ⧸ ℤ[θ]
+```
 
-  ```text
-  ¬ p ∣ index θ  ↔  ∀ i, eᵢ = 1 ∨ ¬ φᵢ ∣ (H mod p).
-  ```
+Prove `0 < index θ`. Both modules are free of rank `finrank ℚ K`, so the quotient is finite.
 
-  ⚠ Positivity is a hypothesis of the theorem. An index `i` with `eᵢ = 0` changes neither the
-  factorization nor `H`, but its `φᵢ` would still have to divide `H mod p` for the right-hand
-  side to hold, so the equivalence fails without it.
+⚠ Do not define an index by `Nat.card` for every `θ : 𝓞 K`. A non-generator gives an infinite
+quotient, and Mathlib's `Nat.card` then returns `0`. Every divisibility statement about that
+value would be true for a trivial reason.
 
-  Milestones: independence of the criterion from the choice of lifts `Φᵢ`; the coefficientwise
-  divisibility statement (so that `H` is well defined in `ℤ[X]`); the criterion itself; and the
-  corollary `Squarefree (f mod p) → ¬ p ∣ index θ`. `Suggested.lean` carries the signature.
-- **Splitting fields of rational polynomials are number fields.** For `0 ≠ f : ℚ[X]`, an instance
-  `NumberField f.SplittingField`, so that `Polynomial.Gal f` is the Galois group of a number
-  field and Frobenius elements are available in it. Without this the theorem below can only be
-  stated for an auxiliary Galois number field in which `f` splits, and the transfer back to the
-  canonical `Polynomial.Gal` object is left to the reader; state whichever of the two is used,
-  and state it here.
-- **Dedekind's theorem** (the named statement supplied to
-  [Polynomial Galois Groups PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10)).
-  Suggested name: `TauCeti.NumberField.factorizationType_eq_cycleType_isArithFrobAt`. For
-  `K = ℚ(θ)`, `f = minpoly ℤ θ`, `p ∤ RingOfIntegers.exponent θ` with `f mod p` squarefree, `M` a
-  Galois number field in which `f` splits, and `σ` any Frobenius at a prime of `𝓞 M` over `p`:
-  the multiset of degrees of the monic irreducible factors of `f mod p` equals the cycle type of
-  `Polynomial.Gal.galActionHom f M σ` on the roots, as partitions of `n`. ⚠ Two traps pinned by
-  convention: `Equiv.Perm.cycleType` omits fixed points (the statement adds
-  `Multiset.replicate #fixed 1`), and the hypothesis is `p ∤ exponent θ` **together with**
-  squarefreeness mod `p`, which forces `p` unramified in `K` but is assumed rather than derived;
-  `p ∤ disc f` implies both, by the index material above, and is the checkable form. Proof
-  outline: Layer 1's double-coset law identifies the primes of `K` over `p` with `⟨Frob⟩`-orbits
-  on `H\G`, that is, on the roots, and the relative Dedekind–Kummer correspondence identifies
-  those primes with the factors, matching `f`'s with orbit sizes.
-- **The polynomial-side corollary, for arbitrary monic `f`.** For monic `f : ℤ[X]` and a prime
-  `p ∤ f.discr`, produce `σ : (f.map ℚ).Gal` whose arithmetic-Frobenius root action has full
-  cycle type (cycle type with fixed points restored) equal to the factor-degree multiset of
-  `f mod p`. This is the exact interface PR #10 consumes, and PR #10 uses it on reducible `f`
-  (it derives the classical mod-`p` irreducibility criterion from it), so the statement must
-  genuinely cover reducible `f`. The reduction is a milestone, not an afterthought:
-  - `p ∤ f.discr` gives `f.discr ≠ 0`, hence `f` separable over `ℚ`, hence
-    `f = ∏ⱼ fⱼ` with the `fⱼ` distinct monic irreducibles of `ℤ[X]` (Gauss);
-  - `f.discr = (∏ⱼ fⱼ.discr) · (∏_{j<k} Res(fⱼ, f_k))²`, so `p` divides no factor discriminant
-    and no resultant, hence the `fⱼ mod p` are squarefree and pairwise coprime;
-  - `rootSet f` is the disjoint union of the `rootSet fⱼ`, the Galois action respects the
-    decomposition, and full cycle type is additive along it;
-  - the factor-degree multiset of `f mod p` is the sum of those of the `fⱼ mod p`;
-  - a single Frobenius `σ` at one prime of a Galois number field containing all the roots
-    restricts to a Frobenius on each `ℚ(θⱼ)`'s closure, so one `σ` realizes all the pieces at
-    once.
+**New object: `index`.** Basic API:
 
-  Each of those five is a named lemma. Do not derive the reducible case silently from the
-  irreducible one.
-- **Common index divisors.** Definition: `p` is a common index divisor of `K` if `p ∣ index θ`
-  for **every** `θ : IntegralPrimitiveElement K`. The counting obstruction, the elementary
-  direction, proved here: if the splitting type of `p` in `K` requires more monic irreducible
-  polynomials of some degree `d` over `𝔽_p` than exist, then `p` is a common index divisor, and
-  hence `𝓞 K` is not monogenic. The converse (Hensel's criterion: common index divisors are
-  exactly the primes whose splitting type is unrealizable mod `p`) is outside this roadmap and is
-  cited to Narkiewicz in §References. Worked example: `2` in `ℚ[x]/(x³ − x² − 2x − 8)`
-  (Dedekind's field; Neukirch III §2 Ex. 1), where `2` splits completely into three primes of
-  residue degree 1 but `𝔽₂` has only two monic linear polynomials.
+- *Constructors and instances.* The subtype `IntegralPrimitiveElement`, its coercion to `𝓞 K`,
+  and `Nontrivial` where needed.
+- *Examples.* `index θ = 1` for `ℤ[i]`; `index θ = 2` for Dedekind's cubic.
+- *Morphisms and functoriality.* Behaviour under `θ ↦ θ + n` and `θ ↦ −θ`, which do not change
+  the index.
+- *Comparison lemmas and naturality.* Layer 3.3 and Layer 3.4.
+- *Edge cases.* `K = ℚ`, where the index is `1` for every generator.
+- *Downstream interfaces.* Layers 3.7, 3.11, and 7.3.
 
-### Layer 4: the relative discriminant, algebraically
+*Prerequisites:* Mathlib `Algebra.adjoin`, `NumberField.RingOfIntegers.basis`, `Module.Free`.
 
-The pin's `Different.lean` is strong and includes transitivity; this layer adds the discriminant
-ideal it never defined, and the identities that need nothing beyond it. Everything whose proof
-runs through a completion is in Layer 6.
+#### 3.2 The discriminant of a power basis
 
-- **The relative discriminant ideal.**
-  `relDiscr A B : Ideal A := Ideal.relNorm A (differentIdeal A B)` with: multiplicativity in
-  towers, `relDiscr A C = (relDiscr A B)^{[M:L]} · relNorm A (relDiscr B C)` (Neukirch III (2.10),
-  from the pin's different-transitivity plus multiplicativity of `relNorm`); localization; the
-  ramification criterion `p` ramified in `B` ⟺ `p ∣ relDiscr A B` (Neukirch III (2.12),
-  generalizing the pin's `ℚ`-only `not_dvd_discr_iff_forall_liesOver`); and the absolute
-  reconciliation `relDiscr ℤ (𝓞 K) = span {NumberField.discr K}` (against
-  `absNorm_differentIdeal`, with the sign from `sign_discr`). Stated in the general-Dedekind
-  form; the `ℚ`-corollary is one line from the pin but is absent upstream.
-- **The ramified support, and the Artin map on it.** `ramifiedSupport L/K`, the finite set of
-  primes of `𝓞 K` dividing `relDiscr (𝓞 K) (𝓞 L)`, with its finiteness (divisors of a nonzero
-  ideal of a Dedekind domain) and the characterization that a prime lies outside it exactly
-  when it is unramified in `L`, from the criterion above. This is what makes the ramified set a
-  `Finset`, and specializing Layer 2's `artinHomAway` to it gives the Artin map on the
-  fractional ideals prime to the discriminant, which is the form the classical statement takes.
-  The specialization is a milestone; Layer 2's construction does not depend on it.
-- **Discriminants of bases, connected.** The `Algebra.discr` tower formula
-  `disc_{M/K}(compatible bases) = disc_{L/K}^{[M:L]} · N(disc_{M/L})`.
-- **Stickelberger's congruence** `discr K % 4 ∈ {0, 1}`: absent upstream, classical, and
-  self-contained (split the Leibniz expansion of the embedding determinant into even and odd
-  permutations, and observe that the two halves are conjugate algebraic integers).
-- ⚠ Scope note. The exact exponents `v_P(𝔡) = e − 1` in the tame case and `e ≤ v_P(𝔡) ≤ e − 1 +
-  v_P(e)` in the wild case are **not** here, because their proofs localize and complete. They are
-  Layer 6, after the Layer-5 dictionary exists. The local computations they rest on belong to
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 3.
+Prove `Algebra.discr ℚ (powerBasis θ) = Polynomial.discr (minpoly ℤ θ)` under the canonical maps.
+Both objects exist in Mathlib and are never connected there.
 
-### Layer 5: the global–local dictionary at finite places
+*Prerequisites:* Mathlib `Algebra.discr`, `Polynomial.discr`, `Algebra.discr_powerBasis_eq_norm`.
 
-Everything is stated in
-[Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s vocabulary
-(`IsNonarchimedeanLocalField`, their `v_K`/`‖·‖_K` normalizations, their `e`/`f`). Their Layer 0
-reconciles the local objects with `Ideal.ramificationIdx` once; the global halves of that
-reconciliation live here. Signatures can be written as soon as their Layer-0 vocabulary exists;
-the proofs consume their Layers 0–2 and nothing deeper. ⚠ Nothing in this layer uses the local
-higher ramification filtration; that dependency is Layer 6's, on their Layer 3.
+#### 3.3 The index formula
 
-- **Completions are local fields.** For `v : HeightOneSpectrum (𝓞 K)`, the instance
-  `IsNonarchimedeanLocalField (v.adicCompletion K)`. The class itself is the pin's
-  (`Mathlib/NumberTheory/LocalField/Basic.lean`); the milestone is the missing instance chain,
-  from the pin's `NormedField`, DVR integers, and finite residue field, and it is stated as the
-  full class, with local compactness as one corollary rather than as the target. With it: the
-  residue-field identification `𝓀(K_v) ≅ 𝓞 K ⧸ v.asIdeal`, the residue cardinality
-  `Ideal.absNorm v.asIdeal`, and the normalization lemma saying that the pin's `adicAbv`
-  (normalized by `absNorm`) equals LocalFields' `‖x‖ = q^{−v(x)}`, cross-checked by the product
-  formula. ⚠ `Valued`-versus-`ValuativeRel` migration risk as pinned in the conventions table:
-  state the instances through the compatibility layer so the deprecation is a refactor.
-- **The canonical completion of an extension**, as a named map. For
-  `w : HeightOneSpectrum (𝓞 L)` with `w.asIdeal.LiesOver v.asIdeal`, define
+Prove `Polynomial.discr (minpoly ℤ θ) = (index θ)² · NumberField.discr K` for
+`θ : IntegralPrimitiveElement K`. This sharpens Tau Ceti's `abs_discr_le_of_basis_isIntegral`
+from an inequality to an equation.
 
-  ```text
-  completionAlgHom v w : K_v →ₐ[K] L_w
-  ```
+*Prerequisites:* Layers 3.1 and 3.2; Mathlib `NumberField.discr`, `Algebra.discr_of_matrix_vecMul`;
+Tau Ceti `EffectiveBounds/`.
 
-  by continuous extension of `K → L`, and prove: continuity; the compatibility square with
-  `K → L`; **uniqueness** among continuous maps making that square commute; the induced
-  `Algebra K_v L_w` instance together with `IsScalarTower K K_v L_w` and
-  `ContinuousSMul K_v L_w`; and `Module.Finite K_v L_w` for that instance. An existence
-  statement is not enough on its own: everything below is a theorem about this map, so it has
-  to be an object, not a `∃`. ⚠ The pin's own `Module.Finite K_v L_w` instance takes
-  `[Algebra K_v L_w] [ContinuousSMul K_v L_w] [IsScalarTower K K_v L_w]` as hypotheses; a
-  theorem stated that way is a theorem about an arbitrary compatible structure, and can be about
-  the wrong extension. Re-derive `Module.Finite` for the canonical map, and state the pin's
-  instance as the corollary.
-- **Semi-local structure**, as a named equivalence. Write `W v` for the subtype
-  `{w : HeightOneSpectrum (𝓞 L) // w.asIdeal.LiesOver v.asIdeal}`, and define
+#### 3.4 Index and exponent have the same prime divisors
 
-  ```text
-  semilocalEquiv v : K_v ⊗[K] L  ≃ₐ[K_v]  ∏ (w : W v), L_w
-  ```
+Prove `p ∣ index θ ↔ p ∣ RingOfIntegers.exponent θ` for `p` prime.
 
-  (Neukirch II (8.3)), for the algebra structures of the previous milestone, together with its
-  value on pure tensors,
+⚠ The two invariants are different integers in general. `RingOfIntegers.exponent θ` is the
+`absNorm` of the contracted order conductor. Only the index satisfies the formula of Layer 3.3.
+The statement about prime divisors is what lets one be used in place of the other in a
+hypothesis.
 
-  ```text
-  semilocalEquiv v (a ⊗ₜ x) w = algebraMap K_v L_w a * algebraMap L L_w x,
-  ```
+*Prerequisites:* Mathlib `RingOfIntegers.exponent`, `conductor`, `Ideal.absNorm`; Layer 3.1.
 
-  which is what pins the equivalence down; a bare `Nonempty (… ≃+* …)` determines nothing that
-  a later compatibility theorem can use. The completion is written on the left of the tensor
-  product so that the `K_v`-algebra structure on the source is Mathlib's
-  `Algebra.TensorProduct.leftAlgebra`; Neukirch writes `L ⊗_K K_v`, which is the same object.
-  Also name the equivalence `W v ≃ Ideal.primesOver v.asIdeal (𝓞 L)` so both spellings are
-  available. Consequence: **`Σ_{w ∣ v} [L_w : K_v] = [L : K]`**, the finite-place analogue of
-  the pin's archimedean `InfinitePlace.sum_inertiaDeg_eq_finrank`, absent upstream.
-- **Norm and trace, with every map written out.** For `x : L`,
+#### 3.5 The checkable hypothesis
 
-  ```text
-  algebraMap K K_v (Algebra.norm K x)  = ∏_{w ∣ v} Algebra.norm K_v (algebraMap L L_w x)
-  algebraMap K K_v (Algebra.trace K L x) = Σ_{w ∣ v} Algebra.trace K_v L_w (algebraMap L L_w x)
-  ```
+Prove `¬ (p : ℤ) ∣ Polynomial.discr (minpoly ℤ θ) → ¬ p ∣ RingOfIntegers.exponent θ`.
 
-  (Neukirch II (8.4)). These are also what proves the different localization below.
-- **Invariant matching.** `[L_w : K_v] = e(w ∣ v) · f(w ∣ v)` with `e` and `f` the *global*
-  `Ideal.ramificationIdx`/`inertiaDeg` (their local `e·f = n` is LocalFields'; the equality of
-  the two factor pairs is this milestone).
-- **The decomposition group is the local Galois group**, again through a named map. Under
-  `IsGalois K L`, continuous extension gives
+Every polynomial-side statement below uses this implication. It is a named theorem, not a step
+inside another proof, and not a hypothesis of the statements that need it.
 
-  ```text
-  decompositionHom v w : MulAction.stabilizer (L ≃ₐ[K] L) w.asIdeal →* (L_w ≃ₐ[K_v] L_w),
-  ```
+*Prerequisites:* Layers 3.3 and 3.4.
 
-  and the milestones are its defining property on the dense image of `L`
-  (`decompositionHom v w σ (algebraMap L L_w x) = algebraMap L L_w (σ x)`), injectivity (density
-  of `L` in `L_w`), surjectivity, and the resulting `MulEquiv` (Neukirch II §9). With it:
-  compatibility with the residue maps, and the statement that an `IsArithFrobAt` element of the
-  stabilizer maps to LocalFields' Layer-2 Frobenius. The two conventions agree by construction,
-  and this theorem is what puts that on record. As with the semi-local equivalence, an unnamed
-  `Nonempty (… ≃* …)` would leave the map that Layer 6's comparison theorem transports along
-  undetermined.
-- **The different localizes.** First the algebra structure the statement needs: the canonical
-  map carries `𝓞_{K_v}` into `𝓞_{L_w}`, and the resulting extension is torsion-free, which is
-  what lets `differentIdeal` be formed for it at all. Then, with the actual ideal map into the
-  completed integer ring,
+#### 3.6 The relative Dedekind–Kummer theorem
 
-  ```text
-  (differentIdeal (𝓞 K) (𝓞 L)).map (algebraMap (𝓞 L) (w.adicCompletionIntegers L))
-    = differentIdeal (v.adicCompletionIntegers K) (w.adicCompletionIntegers L)
-  ```
+Mathlib has the `𝓞 K / ℤ` case, with matching `inertiaDeg` and `ramificationIdx`. Generalize it
+to AKLB. Let `θ` generate `L/K`, and let `p` be coprime to `conductor A θ`. Then the primes of
+`B` over `p` correspond to the monic irreducible factors of `minpoly A θ mod p`. Along that
+correspondence, prove:
 
-  (Neukirch III (2.2)(iii)), stated with the map and not as informal multiplication by
-  `𝓞_{L_w}`.
-- **The relative discriminant valuation.** In the multiplicity normalization of the conventions
-  table,
+- `fᵢ` is the degree of the factor;
+- `eᵢ` is its multiplicity;
+- the span formula for each factor;
+- the converse of `irreducible_map_of_irreducible_minpoly`, which is an open TODO in Mathlib's
+  file.
 
-  ```text
-  v_𝔭(relDiscr (𝓞 K) (𝓞 L)) = Σ_{P ∣ 𝔭} f(P/𝔭) · v_P(differentIdeal (𝓞 K) (𝓞 L)),
-  ```
+Tau Ceti's `ncard_primesOver_quadratic_iff` becomes the degree-2 corollary.
 
-  the residue-degree weights coming from `Ideal.relNorm P = 𝔭 ^ f(P/𝔭)`. This is the statement
-  every exponent computation in Layer 6 lands in.
+*Source:* Neukirch I (8.3).
+
+*Prerequisites:* Mathlib `KummerDedekind.normalizedFactorsMapEquivNormalizedFactorsMinPolyMk`,
+`conductor_eq_top_iff_adjoin_eq_top`, `NumberField.Ideal.primesOverSpanEquivMonicFactorsMod`.
+
+#### 3.7 Dedekind's criterion, over `ℤ`
+
+The criterion divides by `p`, and that has no base-free meaning, so it is stated for the base
+`ℤ`. A relative version would need a chosen uniformizer and explicit localization hypotheses. It
+is not a milestone.
+
+Let `θ : IntegralPrimitiveElement K`, let `f = minpoly ℤ θ`, and let `p` be prime. Write
+
+```text
+f mod p = ∏ᵢ φᵢ^{eᵢ},   the φᵢ distinct monic irreducibles of 𝔽_p[X],   each eᵢ > 0,
+```
+
+so that the index set is exactly the set of irreducibles that occur. Choose monic lifts
+`Φᵢ : ℤ[X]`. Prove that every coefficient of `f − ∏ᵢ Φᵢ^{eᵢ}` is divisible by `p`, and set
+`H := (f − ∏ᵢ Φᵢ^{eᵢ}) / p`. Then
+
+```text
+¬ p ∣ index θ  ↔  ∀ i, eᵢ = 1 ∨ ¬ φᵢ ∣ (H mod p).
+```
+
+Milestones: independence of the criterion from the choice of lifts; the coefficientwise
+divisibility statement, so that `H` is well defined in `ℤ[X]`; the criterion itself; and the
+corollary `Squarefree (f mod p) → ¬ p ∣ index θ`.
+
+*Source:* Cohen §6.1.
+
+*Hypotheses:* `θ` is an integral generator. Every `eᵢ` is positive.
+
+*False generalization:* the criterion fails if the index set is allowed to contain an `i` with
+`eᵢ = 0`. Such an `i` changes neither the factorization nor `H`, but its `φᵢ` would still have to
+divide `H mod p` for the right-hand side to hold.
+
+*Prerequisites:* Layers 3.1 and 3.6; Mathlib `Polynomial.map`, `ZMod`, `UniqueFactorizationMonoid`.
+
+#### 3.8 Splitting fields of rational polynomials are number fields
+
+For `0 ≠ f : ℚ[X]`, give the instance `NumberField f.SplittingField`. Without it, Layer 3.9 can be stated only in an
+auxiliary Galois number field where `f` splits. The transfer back to `Polynomial.Gal` is then
+left implicit.
+
+*Prerequisites:* Mathlib `Polynomial.SplittingField`, `NumberField`,
+`Polynomial.IsSplittingField.finiteDimensional`.
+
+#### 3.9 Dedekind's theorem
+
+Suggested name: `TauCeti.NumberField.factorizationType_eq_cycleType_isArithFrobAt`.
+
+Let `K = ℚ(θ)` and `f = minpoly ℤ θ`. Let `p` satisfy `p ∤ RingOfIntegers.exponent θ`, with
+`f mod p` squarefree. Let `M` be a Galois number field in which `f` splits, and let `σ` be a
+Frobenius at a prime of `𝓞 M` over `p`. Then the multiset of degrees of the monic irreducible
+factors of `f mod p` equals the cycle type of `σ` acting on the roots. Read both as partitions
+of `n`.
+
+Proof outline: Layer 1.4 identifies the primes of `K` over `p` with the orbits of `⟨Frob⟩` on
+`H\G`, that is, on the roots. Layer 3.6 identifies those primes with the factors. The two
+identifications match sizes.
+
+*Source:* Neukirch I §8 Exercises 4 and 5; Marcus Ch. 4.
+
+*Hypotheses:* `p ∤ exponent θ` **and** `f mod p` squarefree. Together they force `p` unramified
+in `K`, but that is a consequence and not a substitute. `p ∤ disc f` implies both, by Layer 3.5,
+and is the checkable form.
+
+*False generalization:* "`p` unramified in `K`" does not suffice. Dedekind's field
+`ℚ[x]/(x³ − x² − 2x − 8)` has `2` unramified, yet `f mod 2 = x²(x+1)` while `2` splits completely.
+See §Worked examples.
+
+⚠ `Equiv.Perm.cycleType` omits fixed points. The statement adds `Multiset.replicate #fixed 1`.
+
+*Prerequisites:* Layers 1.4, 2.1, 3.5, 3.6, 3.8; Mathlib `Polynomial.Gal.galActionHom`,
+`Equiv.Perm.cycleType`, `RingOfIntegers.monicFactorsMod`.
+
+#### 3.10 The polynomial-side corollary, for arbitrary monic `f`
+
+For monic `f : ℤ[X]` and a prime `p ∤ f.discr`, produce `σ : (f.map ℚ).Gal` whose root action has
+full cycle type, with fixed points restored, equal to the factor-degree multiset of `f mod p`.
+
+A polynomial Galois groups roadmap uses this interface on **reducible** `f`, to derive the
+classical mod-`p` irreducibility criterion. The reduction to the irreducible case is five named
+lemmas, not an afterthought:
+
+1. `p ∤ f.discr` gives `f.discr ≠ 0`. So `f` is separable over `ℚ`, and by Gauss
+   `f = ∏ⱼ fⱼ` with the `fⱼ` distinct monic irreducibles of `ℤ[X]`.
+2. `f.discr = (∏ⱼ fⱼ.discr) · (∏_{j<k} Res(fⱼ, f_k))²`. So `p` divides no factor discriminant
+   and no resultant, and the `fⱼ mod p` are squarefree and pairwise coprime.
+3. `rootSet f` is the disjoint union of the `rootSet fⱼ`, the Galois action respects the
+   decomposition, and full cycle type is additive along it;
+4. the factor-degree multiset of `f mod p` is the sum of those of the `fⱼ mod p`;
+5. one Frobenius `σ` at one prime of a Galois number field containing all the roots restricts to
+   a Frobenius on the closure of each `ℚ(θⱼ)`.
+
+*Prerequisites:* Layers 2.4, 3.8, 3.9; Mathlib `Polynomial.discr`, `Polynomial.resultant`,
+`Polynomial.Gal.restrict`.
+
+#### 3.11 Common index divisors
+
+Define: `p` is a common index divisor of `K` if `p ∣ index θ` for **every**
+`θ : IntegralPrimitiveElement K`.
+
+Prove the counting obstruction. Suppose the splitting type of `p` in `K` needs more monic
+irreducible polynomials of some degree `d` over `𝔽_p` than exist. Then `p` is a common index
+divisor, and `𝓞 K` is not monogenic.
+
+*Source:* Neukirch III §2 Exercise 1.
+
+*Hypotheses:* the elementary direction only. The converse is Hensel's criterion: the common index
+divisors are exactly the primes whose splitting type is not realizable modulo `p`. That converse
+is outside this roadmap, and §References cites Narkiewicz for it.
+
+*Prerequisites:* Layers 3.1, 3.6, 3.7; Mathlib `Polynomial.Monic`, `Irreducible`,
+`Ideal.primesOver`.
+### Layer 4: the relative discriminant
+
+Mathlib's `Different.lean` is strong, and it includes transitivity. This layer adds the
+discriminant ideal that Mathlib never defines, and the identities that need nothing beyond it.
+Everything whose proof runs through a completion is in Layer 6.
+
+#### 4.1 The relative discriminant ideal
+
+Define `relDiscr A B : Ideal A := Ideal.relNorm A (differentIdeal A B)`.
+
+**New object: `relDiscr`.** Basic API:
+
+- *Constructors and instances.* The definition; `relDiscr A B ≠ ⊥`, from
+  `differentIdeal_ne_bot` and injectivity of `relNorm` on nonzero ideals.
+- *Examples.* `relDiscr ℤ (𝓞 K) = Ideal.span {NumberField.discr K}`, the reconciliation with the
+  signed integer. The sign comes from `NumberField.sign_discr` and is not part of the ideal.
+- *Morphisms and functoriality.* Multiplicativity in towers:
+  `relDiscr A C = (relDiscr A B)^{[M:L]} · relNorm A (relDiscr B C)`.
+- *Comparison lemmas and naturality.* Localization at a prime of `A`; behaviour under base
+  change.
+- *Edge cases.* `B = A`, where the ideal is `⊤`; an inseparable extension, where
+  `differentIdeal` is `⊥` and the definition is not useful.
+- *Downstream interfaces.* Layer 4.2, Layer 5.9, Layer 6.5, Layer 8.2.
+
+Prove the ramification criterion: `p` ramifies in `B` if and only if `p ∣ relDiscr A B`. Mathlib
+has the `ℚ`-only form `not_dvd_discr_iff_forall_liesOver`. State the general form.
+
+⚠ `relDiscr` is an ideal of `A`. Do not conflate it with the signed integer `NumberField.discr`.
+
+*Source:* Neukirch III (2.9), (2.10), and (2.12).
+
+*Prerequisites:* Mathlib `differentIdeal`,
+`differentIdeal_eq_differentIdeal_mul_differentIdeal`, `Ideal.relNorm`,
+`NumberField.absNorm_differentIdeal`, `NumberField.sign_discr`,
+`not_dvd_differentIdeal_iff`.
+
+#### 4.2 The ramified support
+
+Define `ramifiedSupport L/K`, the set of primes of `𝓞 K` that divide `relDiscr (𝓞 K) (𝓞 L)`.
+Prove that it is finite, being the set of prime divisors of a nonzero ideal of a Dedekind domain.
+Prove that a prime lies outside it exactly when that prime is unramified in `L`.
+
+Finiteness makes the ramified set a `Finset`. Layer 2.5 takes a `Finset` as its parameter, so
+this milestone produces the classical Artin map on the fractional ideals prime to the
+discriminant. The dependency runs in this direction only. Layer 2.5 does not use `relDiscr`.
+
+*Prerequisites:* Layers 2.5 and 4.1; Mathlib `UniqueFactorizationMonoid.factors`,
+`Ideal.finite_factors`.
+
+#### 4.3 Discriminants of bases
+
+Prove the `Algebra.discr` tower formula
+`disc_{M/K}(compatible bases) = disc_{L/K}^{[M:L]} · N(disc_{M/L})`.
+
+*Prerequisites:* Mathlib `Algebra.discr`, `Algebra.discr_of_matrix_vecMul`, `Algebra.norm`.
+
+#### 4.4 Stickelberger's congruence
+
+Prove `NumberField.discr K % 4 ∈ {0, 1}`.
+
+Proof outline: split the Leibniz expansion of the embedding determinant into the even and the odd
+permutations. The two halves are conjugate algebraic integers, say `a` and `b`. Their sum and their product
+are therefore rational integers, and the discriminant is `(a − b)² = (a + b)² − 4ab`.
+
+*Source:* Stickelberger 1897; Narkiewicz Ch. 4.
+
+*Hypotheses:* none beyond `[NumberField K]`.
+
+*False generalization:* the congruence is about the **absolute** discriminant. There is no
+corresponding statement for `relDiscr A B`, which is an ideal and has no residue modulo 4.
+
+*Prerequisites:* Mathlib `NumberField.discr`, `Algebra.discr`, `Matrix.det_apply`.
+
+⚠ Scope note. The exact exponents are not in this layer. They are `v_P(𝔡) = e − 1` in the tame
+case, and `e ≤ v_P(𝔡) ≤ e − 1 + v_P(e)` in the wild case. Their proofs complete, so they are
+Layer 6.4, after the Layer 5 dictionary exists.
+
+### Layer 5: the global-local dictionary at finite places
+
+This layer builds the finite-place analogue of Mathlib's complete archimedean theory. Every
+comparison map is a named object with a characteristic property. An existence statement fixes a map mathematically, but
+leaves later theorems with nothing to refer to. A `Nonempty (… ≃ …)` statement does not even do
+that.
+
+⚠ Mathlib's own `Module.Finite K_v L_w` instance quantifies over an arbitrary
+`[Algebra K_v L_w] [ContinuousSMul K_v L_w] [IsScalarTower K K_v L_w]`. A theorem stated that way
+is a theorem about an arbitrary compatible structure, and can be about the wrong extension.
+Nothing in this layer does that.
+
+#### 5.1 Completions are local fields
+
+For `v : HeightOneSpectrum (𝓞 K)`, give the instance
+`IsNonarchimedeanLocalField (v.adicCompletion K)`. The class is Mathlib's. The missing part is
+the instance chain, from Mathlib's `NormedField`, the discrete valuation ring of integers, and
+the finite residue field. State the full class. Local compactness is a corollary, not the target.
+
+With it, prove:
+
+- the residue-field identification `𝓀(K_v) ≅ 𝓞 K ⧸ v.asIdeal`;
+- the residue cardinality `Ideal.absNorm v.asIdeal`;
+- that Mathlib's `adicAbv`, normalized by `absNorm`, equals the normalization `‖x‖ = q^{−v(x)}`.
+
+The product formula is the cross-check on the normalization.
+
+⚠ `adicCompletion` is `Valued`-based, and Mathlib is replacing `Valued` by `ValuativeRel`. State
+the instances through the compatibility layer, so that the move to `ValuativeRel` is a change of
+one instance and not a new proof.
+
+*Prerequisites:* Mathlib `IsNonarchimedeanLocalField`,
+`IsDedekindDomain.HeightOneSpectrum.adicCompletion`, `adicCompletionIntegers`,
+`NumberField.FinitePlace.equivHeightOneSpectrum`, `NumberField.prod_abs_eq_one`.
+
+#### 5.2 The canonical completion of an extension
+
+For `w : HeightOneSpectrum (𝓞 L)` with `w.asIdeal.LiesOver v.asIdeal`, define
+
+```text
+completionAlgHom v w : K_v →ₐ[K] L_w
+```
+
+by continuous extension of `K → L`.
+
+**New object: `completionAlgHom`.** Basic API:
+
+- *Constructors and instances.* The map; continuity; the induced `Algebra K_v L_w`; the derived
+  `IsScalarTower K K_v L_w` and `ContinuousSMul K_v L_w`; `Module.Finite K_v L_w` for that
+  instance.
+- *Examples.* `L = K`, where the map is the identity; an unramified `w`, where `L_w/K_v` is
+  unramified of degree `f`.
+- *Morphisms and functoriality.* Transitivity in a tower `K ⊆ M ⊆ L`.
+- *Comparison lemmas and naturality.* **Uniqueness**: any continuous ring map `K_v → L_w` that
+  extends `K → L` equals this one. The compatibility square with `K → L`.
+- *Edge cases.* Several `w` over one `v`, where the maps differ and the index `w` is not
+  optional.
+- *Downstream interfaces.* Layers 5.3 to 5.9, and Layer 6.
+
+Mathlib's `Module.Finite K_v L_w` for an arbitrary structure is then a corollary of the version
+for this instance.
+
+*Source:* Neukirch II §6.
+
+*Prerequisites:* Mathlib `UniformSpace.Completion.extensionHom`,
+`HeightOneSpectrum.denseRange_algebraMap`, `Module.Finite`; Layer 5.1.
+
+#### 5.3 Semi-local structure
+
+Write `W v` for the subtype `{w : HeightOneSpectrum (𝓞 L) // w.asIdeal.LiesOver v.asIdeal}`.
+Define
+
+```text
+semilocalEquiv v : K_v ⊗[K] L  ≃ₐ[K_v]  ∏ (w : W v), L_w
+```
+
+and prove its value on pure tensors:
+
+```text
+semilocalEquiv v (a ⊗ₜ x) w = algebraMap K_v L_w a * algebraMap L L_w x.
+```
+
+The value on pure tensors is what determines the map. Write the completion on the left of the
+tensor product, so that the `K_v`-algebra structure on the source is Mathlib's
+`Algebra.TensorProduct.leftAlgebra`. Neukirch writes `L ⊗_K K_v`, which is the same object.
+
+Name the equivalence `W v ≃ Ideal.primesOver v.asIdeal (𝓞 L)` as well, so that both spellings are
+available.
+
+Consequence: `Σ_{w ∣ v} [L_w : K_v] = [L : K]`, the finite-place analogue of Mathlib's
+archimedean `InfinitePlace.sum_inertiaDeg_eq_finrank`.
+
+*Source:* Neukirch II (8.3).
+
+*Hypotheses:* `L/K` finite and separable. Separability is automatic for number fields.
+
+*False generalization:* the statement fails for an inseparable finite extension of general
+fields. `𝔽_p(t^{1/p}) ⊗_{𝔽_p(t)} 𝔽_p(t)_v` is not a product of fields; it has nilpotents.
+
+*Prerequisites:* Layer 5.2; Mathlib `Algebra.TensorProduct.leftAlgebra`,
+`Ideal.primesOver`, `Algebra.IsSeparable`.
+
+#### 5.4 Norm and trace
+
+For `x : L`, prove
+
+```text
+algebraMap K K_v (Algebra.norm K x)   = ∏_{w ∣ v} Algebra.norm K_v (algebraMap L L_w x)
+algebraMap K K_v (Algebra.trace K L x) = Σ_{w ∣ v} Algebra.trace K_v L_w (algebraMap L L_w x)
+```
+
+These are also what proves the localization of the different, in Layer 5.8.
+
+*Source:* Neukirch II (8.4).
+
+*Prerequisites:* Layer 5.3; Mathlib `Algebra.norm`, `Algebra.trace`.
+
+#### 5.5 Invariant matching
+
+Prove `[L_w : K_v] = e(w ∣ v) · f(w ∣ v)`, with `e` and `f` the **global**
+`Ideal.ramificationIdx` and `Ideal.inertiaDeg`.
+
+*Prerequisites:* Layers 5.1 and 5.2; Mathlib `Ideal.ramificationIdx`, `Ideal.inertiaDeg`,
+`IsNonarchimedeanLocalField`.
+
+#### 5.6 The decomposition group is the local Galois group
+
+Under `IsGalois K L`, continuous extension gives
+
+```text
+decompositionHom v w : MulAction.stabilizer (L ≃ₐ[K] L) w.asIdeal →* (L_w ≃ₐ[K_v] L_w).
+```
+
+**New object: `decompositionHom`.** Basic API:
+
+- *Constructors and instances.* The map.
+- *Examples.* `w` unramified over `v`, where the group is cyclic of order `f`.
+- *Morphisms and functoriality.* Compatibility with the `L ≃ₐ[K] L`-action on the primes over
+  `v`. Written out: `decompositionHom v (σ • w) ∘ conj σ = conj (…) ∘ decompositionHom v w`.
+- *Comparison lemmas and naturality.* The defining property
+  `decompositionHom v w σ (algebraMap L L_w x) = algebraMap L L_w (σ x)`; injectivity, from the
+  density of `L` in `L_w`; surjectivity; the resulting `MulEquiv`; compatibility with the residue
+  maps; and the statement that an `IsArithFrobAt` element maps to the local Frobenius.
+- *Edge cases.* `w` ramified, where the group is larger than the residue Galois group.
+- *Downstream interfaces.* Layer 6.2, which is an equality of subgroups along this map.
+
+*Source:* Neukirch II §9.
+
+*Prerequisites:* Layers 2.1, 5.2, 5.5; Mathlib `MulAction.stabilizer`,
+`IsFractionRing.stabilizerHom`, `stabilizerHom_surjective`.
+
+#### 5.7 The completed local extension is monogenic
+
+Prove that `𝓞_{L_w}` is generated over `𝓞_{K_v}` by one element:
+
+```text
+∃ x : w.adicCompletionIntegers L, Algebra.adjoin (v.adicCompletionIntegers K) {x} = ⊤.
+```
+
+Proof outline: the residue extension is an extension of finite fields, hence simple; lift a
+residue generator and adjoin a uniformizer.
+
+This milestone is what makes Layer 6 self-contained. With it, Mathlib's
+`conductor_mul_differentIdeal` computes the local different as `(g′(x))`, and Layer 6.3 follows
+by a valuation count.
+
+*Source:* Serre, *Local Fields*, III §6 Proposition 12.
+
+*Hypotheses:* a complete discrete valuation ring with a **finite**, hence separable, residue
+extension. Number fields satisfy this everywhere.
+
+*False generalization:* the statement fails for a complete discrete valuation ring with an
+inseparable residue extension. Serre gives the standard counterexample in III §6, Remark.
+
+*Prerequisites:* Layers 5.1 and 5.2; Mathlib `IsDiscreteValuationRing`,
+`FiniteField.exists_forall_apply_eq_pow`, `Algebra.adjoin`.
+
+#### 5.8 The different localizes
+
+The canonical map carries `𝓞_{K_v}` into `𝓞_{L_w}`, and the resulting extension is torsion-free.
+Both are part of this milestone, because `differentIdeal` cannot be formed without them. Then
+prove
+
+```text
+(differentIdeal (𝓞 K) (𝓞 L)).map (algebraMap (𝓞 L) (w.adicCompletionIntegers L))
+  = differentIdeal (v.adicCompletionIntegers K) (w.adicCompletionIntegers L).
+```
+
+State it with the ideal map, not as multiplication by `𝓞_{L_w}`.
+
+*Source:* Neukirch III (2.2)(iii).
+
+*Prerequisites:* Layers 5.2 and 5.4; Mathlib `differentIdeal`, `Ideal.map`,
+`Module.IsTorsionFree`.
+
+#### 5.9 The relative discriminant valuation
+
+In the multiplicity normalization of §Pinned conventions, prove
+
+```text
+v_𝔭(relDiscr (𝓞 K) (𝓞 L)) = Σ_{P ∣ 𝔭} f(P/𝔭) · v_P(differentIdeal (𝓞 K) (𝓞 L)).
+```
+
+The residue-degree weights come from `Ideal.relNorm P = 𝔭 ^ f(P/𝔭)`. Every exponent computation
+of Layer 6 reduces to this formula.
+
+*Prerequisites:* Layers 4.1 and 5.5; Mathlib `Ideal.relNorm`, `multiplicity`.
 
 ### Layer 6: global ramification consequences
 
-This layer transports the local ramification theory of
-[Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 3 through the
-Layer-5 dictionary and reads off global ideal-theoretic corollaries. It does **not** develop a
-second ramification theory: Herbrand's theorem, upper numbering and Hasse–Arf are PR #2's and are
-neither restated nor re-proved here.
+This layer computes the exponents of the different and of the discriminant. It uses the Layer 5
+dictionary and nothing beyond it.
 
-- **The global filtration, defined to be compared.** For `L/K` Galois, `Q` a prime of `𝓞 L` over
-  `𝔭`, and `i : ℕ`, set
-  `G i := {σ ∈ MulAction.stabilizer (L ≃ₐ[K] L) Q | ∀ x : 𝓞 L, σ x − x ∈ Q^(i+1)}`,
-  a decreasing chain of normal subgroups of the stabilizer, eventually trivial, with
-  `G 0 = Q.inertia` (a reconciliation lemma against the pin's `Ideal.inertia`). ⚠ The
-  decomposition group is *not* a member of this family; it keeps its own name, per the
-  conventions table. **The central API of this object is the comparison theorem**, and it is an
-  equality of subgroups along Layer 5's named `decompositionHom`, not an abstract isomorphism:
-  the image of `G i` under `decompositionHom v w` is PR #2's local lower ramification group
-  `G_i` of `L_w/K_v`, equivalently `G i` is its preimage. Saying only that the two groups are
-  isomorphic would leave the identification unusable, since every downstream computation moves
-  an element across it. Every property of `G i` beyond the definition and this comparison is
-  obtained by transport.
-- **The different-exponent formula.** `v_Q(differentIdeal (𝓞 K) (𝓞 L)) = Σ_{i ≥ 0} (#(G i) − 1)`
-  (Serre LF IV §1 Prop. 4), proved by transporting PR #2's local formula through the comparison
-  theorem and the different-localization lemma of Layer 5.
-- **Exact tame and wild exponents** (Neukirch III (2.6), Serre LF III §6 Prop. 13; the pin has
-  only `P^{e−1} ∣ 𝔡`): `v_P(𝔡) = e − 1` exactly when the extension is tame at `P`
-  (`ringChar (A ⧸ 𝔭) ∤ e`), and in the wild case `e ≤ v_P(𝔡) ≤ e − 1 + v_P(e)`, where `v_P(e)`
-  is the multiplicity of `P` in `span {(e : B)}`, in the same normalization as `v_P(𝔡)`.
-  ⚠ Hypotheses. These are theorems about a **finite separable** extension of fraction fields.
-  Without separability the trace form vanishes identically, `differentIdeal` is the zero ideal,
-  and `v_P(𝔡)` is a junk value rather than an exponent. State them either for a finite extension
-  of number fields, where separability is automatic, or in the AKLB form with `A` Dedekind with
-  fraction field `K`, `L/K` finite with `[Algebra.IsSeparable K L]`, and `B` the integral
-  closure of `A` in `L`. A two-ring signature that never mentions the fraction fields cannot
-  express that hypothesis at all, and is not acceptable here. `Suggested.lean` carries the
-  number-field instance; the AKLB form is the milestone.
-  Route: localize and complete, then quote PR #2 Layer 3's tame exponent `v_L(𝔡) = e − 1` and
-  its structure theorem (unramified subextension plus totally-ramified-equals-Eisenstein), then
-  descend through Layer 5. ⚠ The wild upper bound is **not** a PR #2 milestone and is not cited
-  as one: it is proved here from that structure theorem, which makes `𝓞_{L_w}` monogenic over
-  `𝓞_{K_v}`, together with the pin's `conductor_mul_differentIdeal` (`𝔡 = (g′(π))` in the
-  monogenic case) and a valuation count on `g′(π)`. A divisibility-only formulation
-  (`P^{e−1+v_P(e)+1} ∤ 𝔡`) is acceptable if the additive ideal valuation turns out to be awkward
-  in Mathlib; state whichever is used and keep it consistent across the layer.
-- **The permutation-action discriminant exponent formula.** For `L/K` Galois with group `G`,
-  `H ≤ G`, `M = L^H`, `Q` a prime of `𝓞 L` over `𝔭`, and `𝔮 = Q ∩ 𝓞 M`:
+#### 6.1 The local lower filtration
 
-  ```text
-  e(Q/𝔮) · v_𝔮(differentIdeal (𝓞 K) (𝓞 M)) = Σ_{i ≥ 0} (#(G i) − #(G i ⊓ H)).
-  ```
+Define, for the local extension `L_w/K_v` and `i : ℕ`,
 
-  Both sides are integers and no conductor object appears. The right-hand side is a fixed-point
-  count for the permutation action of `G i` on `G/H`: `#(G i ⊓ H)` is the number of elements of
-  `G i` fixing the base point. Proof: different-transitivity (pin) plus the subgroup
-  compatibility `H_i = H ∩ G_i` (PR #2 Layer 3) plus the exponent formula above. Combined with
-  Layer 5's discriminant-valuation formula and Layer 1's double-coset enumeration of the primes
-  of `M` over `𝔭` (using `G i (σ • Q) = σ (G i Q) σ⁻¹`), this computes `v_𝔭(relDiscr (𝓞 K) (𝓞 M))`
-  outright. ⚠ A future ArtinRepresentations roadmap may recognize this integer as the Artin
-  conductor of the permutation character; that identification is theirs, and is not needed to
-  state or prove anything here.
-- ⚠ No conductor object. This roadmap defines no Artin conductor, no conductor exponent
-  `f_𝔭(χ)`, and no ideal whose exponents are the ramification sum `Σ_i |G_i|/|G_0| · (…)`, which
-  is rational before Artin's integrality theorem. General Artin conductors, Artin integrality,
-  and the general conductor–discriminant formula belong to a future ArtinRepresentations roadmap;
-  the abelian conductor–discriminant formula is
-  [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layer 9's. The only conductor
-  formed anywhere in this roadmap is the order conductor of the conventions table.
+```text
+localRamificationGroup i := {τ | ∀ x : 𝓞_{L_w}, τ x − x ∈ 𝔪_{L_w}^{i+1}},
+```
 
+a subgroup of `L_w ≃ₐ[K_v] L_w`. Prove that it is a decreasing chain of normal subgroups, that
+`localRamificationGroup 0` is the inertia subgroup, and that the chain is eventually trivial.
+
+⚠ This definition is a compatibility interface. The subject of the local ramification filtration
+belongs to a local fields roadmap. This roadmap defines the object because Layer 6.2 compares
+against it and cannot be stated otherwise. If a local fields roadmap supplies the same object,
+delete this definition and restate Layer 6.2 against theirs. Nothing else in this roadmap
+changes. The definition here uses Serre's shape, so the replacement is mechanical.
+
+*Source:* Serre, *Local Fields*, IV §1.
+
+*Prerequisites:* Layers 5.1 and 5.2; Mathlib `IsLocalRing.maximalIdeal`, `AlgEquiv`.
+
+#### 6.2 The global filtration, and the comparison
+
+For `L/K` Galois, `Q` a prime of `𝓞 L` over `𝔭`, and `i : ℕ`, define
+
+```text
+ramificationGroup Q i := {σ ∈ MulAction.stabilizer (L ≃ₐ[K] L) Q | ∀ x : 𝓞 L, σ x − x ∈ Q^(i+1)}.
+```
+
+**New object: `ramificationGroup`.** Basic API:
+
+- *Constructors and instances.* The subgroup structure; normality in the stabilizer;
+  `ramificationGroup Q 0 = Q.inertia`; eventual triviality.
+- *Examples.* `2` in `ℚ(i)`, where `G_0 = G_1 = ℤ/2` and `G_2 = 1`; an unramified `Q`, where
+  `G_0 = 1`.
+- *Morphisms and functoriality.* Conjugation: `ramificationGroup (σ • Q) i = σ (ramificationGroup Q i) σ⁻¹`.
+- *Comparison lemmas and naturality.* **The comparison theorem**: an element `σ` of the
+  stabilizer lies in `ramificationGroup Q i` if and only if `decompositionHom v w σ` lies in
+  `localRamificationGroup i`. This is an equality of subgroups along a named map, not an abstract
+  isomorphism, because every computation below moves an element across it.
+- *Edge cases.* `i` large, where the group is trivial; `Q` ramified but tame, where `G_1 = 1`.
+- *Downstream interfaces.* Layers 6.3, 6.4, and 6.5.
+
+⚠ The decomposition group is not a member of this family. It keeps its own name,
+`MulAction.stabilizer`, and is never written `G (-1)`.
+
+*Prerequisites:* Layers 5.6 and 6.1; Mathlib `Ideal.inertia`, `galRestrict`,
+`MulAction.stabilizer`.
+
+#### 6.3 The different-exponent formula
+
+Prove `v_Q(differentIdeal (𝓞 K) (𝓞 L)) = Σ_{i ≥ 0} (#(G i) − 1)`.
+
+Proof outline: Layer 5.7 gives a generator `x` of the completed local ring. Mathlib's
+`conductor_mul_differentIdeal` then gives `𝔡 = (g′(x))` for `g` the minimal polynomial of `x`.
+Expand `g′(x) = ∏_{τ ≠ 1} (x − τ x)`, and count: `v(x − τ x) ≥ i + 1` exactly when `τ` lies in
+the `i`-th local group. Layers 5.8 and 6.2 carry the result back to `𝓞 L`.
+
+*Source:* Serre, *Local Fields*, IV §1 Proposition 4.
+
+*Hypotheses:* `L/K` Galois. The formula is false without it, because the left side is defined
+while the right side is not.
+
+*Prerequisites:* Layers 5.7, 5.8, 6.1, 6.2; Mathlib `conductor_mul_differentIdeal`,
+`aeval_derivative_mem_differentIdeal`.
+
+#### 6.4 Exact tame and wild exponents
+
+Prove:
+
+- `v_P(𝔡) = e − 1` when the extension is tame at `P`, that is, `ringChar (A ⧸ 𝔭) ∤ e`;
+- `e ≤ v_P(𝔡) ≤ e − 1 + v_P(e)` in the wild case, where `v_P(e)` is the multiplicity of `P` in
+  `span {(e : B)}`, in the same normalization as `v_P(𝔡)`.
+
+Mathlib has only the divisibility `P^{e−1} ∣ 𝔡`.
+
+A formulation by divisibility alone, `P^{e−1+v_P(e)+1} ∤ 𝔡`, is acceptable if the additive
+valuation of an ideal is awkward. State whichever is used, and use the same one across the layer.
+
+*Source:* Neukirch III (2.6); Serre, *Local Fields*, III §6 Proposition 13.
+
+*Hypotheses:* a finite **separable** extension of fraction fields. Without separability the trace
+form vanishes, `differentIdeal` is the zero ideal, and `v_P(𝔡)` is a value with no meaning. State
+the hypothesis as `[Algebra.IsSeparable K L]` in a signature where the fraction fields appear.
+`Suggested.lean` carries the number-field instance, where separability is automatic.
+
+*False generalization:* the tame formula does not extend to the wild case with `e − 1` replaced
+by `e`. In `ℚ(i)` at `P = (1 + i)` the exponent is `2 = e`, so the lower bound is attained; the
+upper bound `e − 1 + v_P(e) = 1 + 2 = 3` is strict. Both bounds are therefore sharp in different
+examples, and neither is an equality in general.
+
+*Prerequisites:* Layer 6.3; Mathlib `pow_sub_one_dvd_differentIdeal`, `ringChar`,
+`multiplicity`.
+
+#### 6.5 The permutation-action discriminant exponent formula
+
+For `L/K` Galois with group `G`, `H ≤ G`, `M = L^H`, `Q` a prime of `𝓞 L` over `𝔭`, and
+`𝔮 = Q ∩ 𝓞 M`, prove
+
+```text
+e(Q/𝔮) · v_𝔮(differentIdeal (𝓞 K) (𝓞 M)) = Σ_{i ≥ 0} (#(G i) − #(G i ⊓ H)).
+```
+
+Both sides are integers, and no conductor object appears. The right side is a fixed-point count
+for the action of `G i` on `G/H`: `#(G i ⊓ H)` is the number of elements of `G i` that fix the
+base point.
+
+Proof: transitivity of the different, from Mathlib; the subgroup compatibility `H_i = H ∩ G_i`;
+and Layer 6.3. Combined with Layer 5.9 and the enumeration of Layer 1.4, this computes
+`v_𝔭(relDiscr (𝓞 K) (𝓞 M))`.
+
+*Source:* Serre, *Local Fields*, IV §1 Proposition 2 and IV §2.
+
+*Prerequisites:* Layers 1.4, 5.9, 6.2, 6.3; Mathlib
+`differentIdeal_eq_differentIdeal_mul_differentIdeal`.
+
+⚠ No conductor object. This roadmap defines no Artin conductor and no conductor exponent
+`f_𝔭(χ)`. It also defines no ideal whose exponents are the sum `Σ_i |G_i|/|G_0| · (…)`; that sum
+is rational before Artin's integrality theorem. The only conductor formed anywhere in this
+roadmap is the order conductor of §Pinned conventions.
 ### Layer 7: subfields, integral bases, monogenicity, and explicit units
 
-- **The subfield dictionary.** Package `IsGalois.intermediateFieldEquivSubgroup` for number
-  fields: for arbitrary `K` with Galois closure `M` (`normalClosure ℚ K M`), the lattice of
-  subfields of `K` corresponds anti-isomorphically to the subgroups between `Gal(M/K)` and
-  `Gal(M/ℚ)`; the counting statements; and `Gal(M/ℚ) ↪ S_n` via `Polynomial.Gal.galActionHom`,
-  with transitivity ⟺ irreducibility (consume). The classification of which transitive groups
-  occur, and the `nTj` labels, are
-  [Polynomial Galois Groups PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10)'s and
-  are not duplicated here; the `S_n`-embedding is what this roadmap supplies to it. Worked
-  targets: the three subfields of `ℚ(ζ₅)`, and that the cubic field of discriminant `−23` has no
-  proper subfield.
-- **Integral bases of quadratic fields.** `𝓞_{ℚ(√d)}` with the `d mod 4` case split (`ℤ[√d]`
-  versus `ℤ[(1+√d)/2]`) and `discr = d` or `4d`, generalizing TauCeti's `IntegralSqrt` and
-  `QuadraticIntegralBasis` to the statement the LMFDB page needs, with the `p = 2` splitting law
-  by `d mod 8` as the acceptance test.
-- **Monogenicity.** The predicate, in the `NumberField` namespace and applied to the field:
+#### 7.1 The subfield dictionary
 
-  ```text
-  NumberField.IsMonogenic (K : Type*) [Field K] [NumberField K] : Prop :=
-    ∃ θ : 𝓞 K, Algebra.adjoin ℤ {θ} = ⊤
-  ```
+For an arbitrary number field `K` with Galois closure `M`, package Mathlib's
+`IsGalois.intermediateFieldEquivSubgroup`:
 
-  ⚠ Search Mathlib for an existing `IsMonogenic` at implementation time, and do not put this in
-  the root namespace: a bare `IsMonogenic` invites a collision with a future generic
-  ring-theoretic version, and if such a version lands, this becomes an abbreviation for it. The
-  working criterion is the pin's `exponent_eq_one_iff`. Instances: quadratic fields, cyclotomic
-  fields (consume the pin), and the **non-monogenicity** of Dedekind's cubic, via Layer 3's
-  common-index-divisor obstruction.
-- **Explicit unit certification (rank one).** Mathlib's Dirichlet theorem gives a fundamental
-  system, and `regOfFamily_div_regulator` gives the index of a candidate family, but nothing
-  upstream certifies that a *named* unit generates modulo torsion. Without such a certificate no
-  exact regulator value can be asserted, so this is a prerequisite for the worked examples, not
-  an extra. For `K` with `NumberField.Units.rank K = 1` and `u : (𝓞 K)ˣ`, build:
-  - the criterion `Subgroup.closure {u} ⊔ NumberField.Units.torsion K = ⊤ ↔` no unit `v` has
-    `0 < ‖logEmbedding v‖ < ‖logEmbedding u‖`;
-  - the finiteness that makes the right-hand side checkable: a unit whose log embedding is
-    bounded has all its archimedean absolute values bounded, so
-    `NumberField.Embeddings.finite_of_norm_le` applies, and the candidate set is finite. For a
-    real quadratic or a signature-`(1,1)` cubic field this becomes an explicit finite search over
-    integral minimal polynomials with bounded coefficients, which is the proof method the worked
-    examples use. ⚠ "Mathlib has Dirichlet's unit theorem" is not a proof of index one, and no
-    example below may cite it as one;
-  - the consequence `regOfFamily ![u] = NumberField.Units.regulator K` from
-    `regOfFamily_div_regulator` with index `1`, and the rank-one evaluation, from
-    `regOfFamily_eq_det`:
+- the lattice of subfields of `K` corresponds, order-reversing, to the subgroups between
+  `Gal(M/K)` and `Gal(M/ℚ)`;
+- the counting statements;
+- the embedding `Gal(M/ℚ) ↪ S_n` through `Polynomial.Gal.galActionHom`, with transitivity
+  equivalent to irreducibility.
 
-    ```text
-    regulator K = w.mult * Real.log (w u)   for any infinite place w with 1 < w u.
-    ```
+Worked targets: the three subfields of `ℚ(ζ₅)`; the cubic field of discriminant `−23` has no
+proper subfield.
 
-    ⚠ Do not drop `mult`. In rank one there are exactly two infinite places, and
-    `Σ_w mult w · log (w u) = log |N(u)| = 0` makes the two choices of `w` agree, but a version
-    without `mult` is wrong at every field with a complex place: the regulator of `ℚ(ζ₅)` is
-    `2·log((1+√5)/2)`, not `log((1+√5)/2)`. Mathlib's `logEmbedding` carries `mult` for the same
-    reason.
+*Prerequisites:* Mathlib `IsGalois.intermediateFieldEquivSubgroup`,
+`IntermediateField.normalClosure`, `Polynomial.Gal.galActionHom`; Layer 3.8.
 
-  With those three, an exact regulator value is a computation about one explicit unit, and the
-  worked examples state their units and their generation theorems rather than a decimal. ⚠ Every
-  such value is an equation between `regulator K` and `Real.log` applied to a **real number**
-  obtained by evaluating a named infinite place at the unit. `Real.log` of an element of `K` or
-  of `𝓞 K` does not typecheck, and writing it that way in prose hides a missing embedding.
+#### 7.2 Integral bases of quadratic fields
+
+Give `𝓞_{ℚ(√d)}` with the case split on `d mod 4`: `ℤ[√d]` when `d ≡ 2, 3`, and `ℤ[(1+√d)/2]`
+when `d ≡ 1`. Give the discriminant, `4d` and `d` respectively.
+
+The splitting law for `2` by `d mod 8` is the acceptance test for this milestone.
+
+*Prerequisites:* Tau Ceti `NumberField/IntegralSqrt.lean`,
+`Internal/QuadraticIntegralBasis.lean`; Layers 3.6 and 3.7.
+
+#### 7.3 Monogenicity
+
+Define the predicate in the `NumberField` namespace, as a property of the field:
+
+```text
+NumberField.IsMonogenic (K : Type*) [Field K] [NumberField K] : Prop :=
+  ∃ θ : 𝓞 K, Algebra.adjoin ℤ {θ} = ⊤
+```
+
+**New object: `IsMonogenic`.** Basic API:
+
+- *Constructors and instances.* The definition; the criterion `exponent θ = 1`.
+- *Examples.* Quadratic fields; cyclotomic fields, from Mathlib; `ℚ(i)`.
+- *Morphisms and functoriality.* Monogenicity is not inherited by subfields, and this is worth a
+  counterexample rather than a lemma.
+- *Comparison lemmas and naturality.* `IsMonogenic K ↔ ∃ θ, index θ = 1`, from Layer 3.4.
+- *Edge cases.* `K = ℚ`, which is monogenic; Dedekind's cubic, which is not.
+- *Downstream interfaces.* Layer 8.2.
+
+⚠ Search Mathlib for an existing `IsMonogenic` before writing this, and keep it out of the root
+namespace. A bare `IsMonogenic` would collide with a future ring-theoretic version. If such a
+version exists, make this an abbreviation for it.
+
+*Prerequisites:* Layers 3.1, 3.4, 3.11; Mathlib `RingOfIntegers.exponent_eq_one_iff`,
+`Algebra.adjoin`.
+
+#### 7.4 Explicit unit certification, rank one
+
+Mathlib's Dirichlet theorem gives a fundamental system, and `regOfFamily_div_regulator` gives the
+index of a candidate family. Nothing in Mathlib certifies that a **named** unit generates modulo
+torsion. Without such a certificate no exact regulator value can be asserted, so this milestone
+comes before every worked example that states one.
+
+For `K` with `NumberField.Units.rank K = 1` and `u : (𝓞 K)ˣ`, build three statements.
+
+1. *The criterion.* `Subgroup.closure {u} ⊔ NumberField.Units.torsion K = ⊤` if and only if no
+   unit `v` satisfies `0 < ‖logEmbedding v‖ < ‖logEmbedding u‖`.
+2. *The finiteness that makes the criterion checkable.* A unit with a bounded log embedding has
+   bounded archimedean absolute values. Mathlib's `NumberField.Embeddings.finite_of_norm_le`
+   then applies, and the candidate set is finite. For a real quadratic field, or a cubic field
+   of signature `(1,1)`, this is a finite search over integral minimal polynomials with bounded
+   coefficients. That is the proof method the worked examples use.
+3. *The evaluation.* From `regOfFamily_div_regulator` with index `1`, and `regOfFamily_eq_det`:
+
+   ```text
+   regulator K = w.mult * Real.log (w u)   for any infinite place w with 1 < w u.
+   ```
+
+⚠ "Mathlib has Dirichlet's unit theorem" is not a proof that the index is one. No worked example
+may cite it as one.
+
+⚠ Do not drop `mult`. In rank one there are exactly two infinite places. The identity
+`Σ_w mult w · log (w u) = log |N(u)| = 0` makes the two choices of `w` agree. A version without
+`mult` is wrong at every field with a complex place: the regulator of `ℚ(ζ₅)` is
+`2·log((1+√5)/2)`, not `log((1+√5)/2)`. Mathlib's `logEmbedding` carries `mult` for this reason.
+
+⚠ `Real.log` is applied to `w u`, a real number. There is no `Real.log` of an element of `K` or
+of `𝓞 K`, so every exact regulator statement names an infinite place.
+
+*Source:* Cohen §5.7 for the search method.
+
+*Hypotheses:* rank exactly one. The criterion is false at higher rank, where minimality at one
+place does not give generation.
+
+*Prerequisites:* Mathlib `NumberField.Units.rank`, `logEmbedding`, `regOfFamily_div_regulator`,
+`regOfFamily_eq_det`, `NumberField.Embeddings.finite_of_norm_le`.
 
 ### Layer 8: the intrinsic label prefix and the invariant suite
 
-- **The intrinsic prefix predicate.** `HasLMFDBIntrinsicLabel K d r D` means
-  `finrank ℚ K = d ∧ nrRealPlaces K = r ∧ (discr K).natAbs = D`, together with sign recovery
-  `discr K = (−1)^{(d−r)/2}·D` from `sign_discr`. ⚠ The full label's `.i` coordinate is not a
-  deliverable of this roadmap in any form: it requires an external certified database ordering, a
-  canonical defining polynomial, isomorphism deduplication, and a bounded-list completeness
-  certificate, none of which is extractable from `finite_of_discr_bdd`. A label such as `2.2.5.1`
-  is used below only as an external name for a field.
-- **Page coverage map.** For each datum an LMFDB number-field page displays, who owns it and what
-  its status is. `existing` means Mathlib or landed TauCeti; `built here` means a milestone of
-  Layers 1–8; `sibling` means another roadmap's named milestone; `out of scope` means this
-  roadmap makes no claim.
+#### 8.1 The intrinsic prefix predicate
 
-  | Page datum | Owner | Status |
-  |---|---|---|
-  | degree, defining-polynomial degree | Mathlib (`Module.finrank ℚ K`) | existing |
-  | signature `(r₁, r₂)` | Mathlib (`nrRealPlaces`, `nrComplexPlaces`) | existing |
-  | discriminant, signed | Mathlib (`NumberField.discr`, `sign_discr`) | existing |
-  | root discriminant | Mathlib (`rootDiscr`) | existing |
-  | ramified primes | Layer 4 | built here |
-  | factorization of `p𝓞_K`, unramified `p` | Layers 2–3 | built here |
-  | factorization of `p𝓞_K`, ramified `p` | Layer 3 (Kummer–Dedekind) with Layers 4, 6 | built here |
-  | Frobenius cycle type at unramified `p` | Layer 3 | built here |
-  | local algebras at a ramified prime | Layer 5 with PR #2 | built here / sibling |
-  | Galois group, as an abstract group | Layer 7 (`S_n`-embedding) | built here |
-  | Galois group `nTj` label | [PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10) | sibling |
-  | class group and class number | Mathlib with EffectiveBounds | existing |
-  | narrow class group | [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layer 1 | sibling |
-  | unit rank, torsion order | Mathlib | existing |
-  | fundamental units | Layer 7 (explicit unit certification) | built here |
-  | regulator | Mathlib defines it; Layer 7 certifies each value | existing / built here |
-  | Dedekind zeta residue at `s = 1` | Mathlib (class number formula) | existing |
-  | zeta continuation, functional equation, densities | [PR #8](https://github.com/roed-math/TauCetiRoadmap/pull/8) | sibling |
-  | subfields | Layer 7 | built here |
-  | monogenicity, index, common index divisors | Layers 3, 7 | built here |
-  | CM and totally real flags | Mathlib (`IsCMField`, `IsTotallyReal`) | existing |
-  | intrinsic label prefix `d.r.\|D\|` | Layer 8 | built here |
-  | label index `.i` | nobody | out of scope |
-  | canonical/normalized defining polynomial | nobody | out of scope |
-  | completeness of a bounded list, isomorphism deduplication | nobody | out of scope |
-  | sibling fields, arithmetic equivalence | nobody | out of scope |
-  | Artin conductors of associated representations | future ArtinRepresentations | out of scope |
+Define
 
-- **The worked suite.** Five fields, computed end to end: `2.2.5.1`, `2.0.4.1`, `4.0.125.1`,
-  `3.1.23.1`, `3.1.503.1`. Each is stated in §Worked examples with its assertions split into what
-  is proved here and what is consumed from a sibling, and each has a section in `Suggested.lean`.
+```text
+HasLMFDBIntrinsicLabel K d r D :=
+  finrank ℚ K = d ∧ nrRealPlaces K = r ∧ (discr K).natAbs = D
+```
 
-### Explicit scope exclusions and future directions
+and prove sign recovery, `discr K = (−1)^{(d−r)/2}·D`, from `NumberField.sign_discr`.
 
-- **No Frobenius in the absolute Galois group.** There is no canonical Frobenius element or
-  conjugacy class in `Gal(K̄/K)`, and this roadmap constructs none. The canonical object at an
-  unramified place is arithmetic Frobenius in `D_v / I_v ≅ Gal(k̄_v/k_v) ≅ Ẑ`; a lift to `D_v`,
-  and hence to `Gal(K̄/K)`, differs by inertia. The correct downstream use belongs to a future
-  ArtinRepresentations roadmap and takes the form: a representation with finite image that is
-  unramified at `v` kills `I_v`, so the image of *any* lift of arithmetic Frobenius is well
-  defined up to conjugacy, and its characteristic polynomial is an invariant of `v`. That
-  statement needs no absolute-Galois Frobenius class, and none is offered here.
+⚠ The `.i` coordinate of a full LMFDB label is not a target of this roadmap in any form. It needs
+a certified database ordering, a canonical defining polynomial, deduplication up to isomorphism,
+and a certificate that a bounded list is complete. None of the four follows from
+`finite_of_discr_bdd`. A full label such as `2.2.5.1` is used below only as an external name for
+a field.
+
+*Prerequisites:* Mathlib `Module.finrank`, `NumberField.InfinitePlace.nrRealPlaces`,
+`NumberField.discr`, `NumberField.sign_discr`.
+
+#### 8.2 The page coverage map
+
+For each datum that an LMFDB number-field page shows, this table says where it comes from.
+`Mathlib` and `Tau Ceti` mean the datum already exists. `Layer n` means a milestone of this
+roadmap. `Not built here` means this roadmap makes no claim, and names the subject that would
+own it.
+
+| Page datum | Source |
+|---|---|
+| degree | Mathlib `Module.finrank ℚ K` |
+| signature `(r₁, r₂)` | Mathlib `nrRealPlaces`, `nrComplexPlaces` |
+| discriminant, signed | Mathlib `NumberField.discr`, `sign_discr` |
+| root discriminant | Mathlib `rootDiscr` |
+| ramified primes | Layer 4.2 |
+| factorization of `p𝓞_K`, `p` unramified | Layers 2.3 and 3.6 |
+| factorization of `p𝓞_K`, `p` ramified | Layers 3.6, 4.1, 6.4 |
+| Frobenius cycle type at unramified `p` | Layer 3.9 |
+| local algebras at a ramified prime | Layer 5.3 |
+| Galois group, as an abstract group | Layer 7.1 |
+| Galois group `nTj` label | Not built here: polynomial Galois groups |
+| class group and class number | Mathlib, with Tau Ceti `EffectiveBounds/` |
+| narrow class group | Not built here: global class field theory |
+| unit rank, torsion order | Mathlib |
+| fundamental units | Layer 7.4 |
+| regulator | Mathlib defines it; Layer 7.4 certifies each value |
+| Dedekind zeta residue at `s = 1` | Mathlib `dedekindZeta_residue` |
+| zeta continuation, functional equation, densities | Not built here: L-functions |
+| subfields | Layer 7.1 |
+| monogenicity, index, common index divisors | Layers 3.1, 3.11, 7.3 |
+| CM and totally real flags | Mathlib `IsCMField`, `IsTotallyReal` |
+| intrinsic label prefix `d.r.\|D\|` | Layer 8.1 |
+| label index `.i` | Not built here, and not built anywhere yet |
+| canonical defining polynomial | Not built here, and not built anywhere yet |
+| completeness of a bounded list, deduplication | Not built here, and not built anywhere yet |
+| sibling fields, arithmetic equivalence | Not built here, and not built anywhere yet |
+| Artin conductors of associated representations | Not built here: Artin representations |
+
+No claim of full page coverage is made anywhere in this roadmap.
+
+*Prerequisites:* Layer 8.1, and the layers named in the table.
+
+#### 8.3 The worked suite
+
+Five fields, computed end to end: `2.2.5.1`, `2.0.4.1`, `4.0.125.1`, `3.1.23.1`, `3.1.503.1`.
+§Worked examples states them. Each has a section in `Suggested.lean`.
+
+*Prerequisites:* Layers 1 to 8, as named in each example.
+
+## Explicit scope exclusions
+
+- **No Frobenius in the absolute Galois group.** There is no canonical Frobenius element in
+  `Gal(K̄/K)`, and no canonical conjugacy class there. This roadmap constructs none. The
+  canonical object at an unramified place is arithmetic Frobenius in
+  `D_v / I_v ≅ Gal(k̄_v/k_v) ≅ Ẑ`. A lift to `D_v`, and so to `Gal(K̄/K)`, is well defined only
+  modulo inertia. The compatible classes in the finite quotients do not assemble into one
+  element. The correct downstream use belongs to an Artin representations subject, and takes
+  this form. A representation with finite image that is unramified at `v` is trivial on `I_v`. The
+  image
+  of any lift of arithmetic Frobenius is therefore well defined up to conjugacy, and its
+  characteristic polynomial is an invariant of `v`. That statement needs no absolute-Galois
+  Frobenius class.
 - **No general Artin conductor**, no Artin integrality, and no general conductor–discriminant
-  formula (→ ArtinRepresentations). The abelian conductor–discriminant formula is
-  [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layer 9's.
-- **No density statements.** Chebotarev and the distribution of Frobenius classes go to
-  [L-functions PR #8](https://github.com/roed-math/TauCetiRoadmap/pull/8), on
-  PrimeNumberTheoremAnd's declared path.
-- **No local ramification theory.** Upper numbering, Herbrand's theorem and Hasse–Arf are
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 3's.
-- Hensel's realizability criterion, extending Layer 3's common-index-divisor theory; relative
-  integral bases and Steinitz classes; finiteness of power integral bases (Győry); arithmetic
-  equivalence and Gassmann triples (the LMFDB's "sibling fields" and "arithmetically equivalent"
-  data); the LMFDB `.i` ordering and canonical-polynomial certificate described above; unit
-  certification beyond rank one; and the `Valued → ValuativeRel` migration of Layer 5's instances
-  when mathlib completes the deprecation.
+  formula.
+- **No density statements.** Chebotarev and the distribution of Frobenius classes belong to an
+  L-functions subject.
+- **No local ramification theory.** Upper numbering, Herbrand's theorem, and Hasse–Arf belong to
+  a local fields subject. Layer 6.1 defines the local lower filtration only, and only as the
+  compatibility interface that Layer 6.2 compares against.
 
-## Worked examples (acceptance criteria)
+Related mathematics that no milestone here covers, and that a later roadmap may take up: Hensel's
+realizability criterion; relative integral bases and Steinitz classes; finiteness of power
+integral bases; arithmetic equivalence and Gassmann triples; the LMFDB ordering and
+canonical-polynomial certificate; unit certification above rank one.
 
-Each field catches a specific error class: a wrong normalization, a vacuous instance, a smuggled
-hypothesis, a missing dyadic case. All numerics were re-verified computationally for this
-roadmap (splitting data by factorization mod `p`; discriminants by the cubic formula). Decimal
-values appear only as orientation and are never theorem targets; every asserted equality below is
-exact. Each entry says which assertions are proved here and which are consumed.
+## Worked examples
 
-- **`2.2.5.1` = ℚ(√5)**, presented by `θ` with `minpoly ℤ θ = X² − X − 1`.
-  *Proved here:* `discr K = 5`; signature `(2,0)`; `torsionOrder = 2`; `Units.rank = 1`;
-  `Subgroup.closure {θ} ⊔ torsion K = ⊤` by Layer 7's certification, hence
-  `regulator K = Real.log ((1 + √5)/2)`; splitting, `p` splits ⟺ `legendreSym p 5 = 1`, that is
-  `p ≡ ±1 mod 5`, with `2` inert since `5 ≡ 5 mod 8`.
-  *Consumed:* `classNumber K = 1` from the pin's `isPrincipalIdealRing_of_abs_discr_lt`;
-  the class-number-formula consistency check
-  `dedekindZeta_residue = 2·log((1+√5)/2)/√5` from the pin's `dedekindZeta_residue`, which turns
-  the certified regulator, the class number, and the discriminant into one equation and catches a
-  wrong CNF normalization.
-- **`2.0.4.1` = ℚ(i)**.
-  *Proved here:* `discr K = −4` (⚠ the sign is Brill's theorem in action, `(−1)^{r₂} = −1`);
-  `ℤ[i]` monogenic with index `1`; `2 = −i(1+i)²` is ramified with `e = 2`, and
-  `v_P(𝔡) = 2 = e`, so the **wild** lower bound of Layer 6 is attained while the upper bound
-  `e − 1 + v_P(e) = 1 + 2 = 3` is strict. This is the dyadic case that a tame-only exponent
-  formula must not claim, and it is why Layer 6 states the wild bounds separately.
-  *Consumed:* `classNumber K = 1` and `torsionOrder K = 4` from the pin; `discr = −4` also
-  cross-checks TauCeti's landed `discr_cyclotomicField_four`.
-- **`4.0.125.1` = ℚ(ζ₅)**, as `CyclotomicField 5 ℚ`.
-  *Proved here:* the Frobenius data, `f(p) = orderOf (p : ZMod 5)ˣ`, with `2, 3, 7` inert
-  (`f = 4`), `19` of type `f = 2, g = 2`, `11` split completely, and `5` totally ramified via
-  `(1 − ζ)⁴`; the subfield lattice `{ℚ, ℚ(√5), ℚ(ζ₅)}`, of cardinality 3, matching the subgroup
-  lattice of `C₄`.
-  *Consumed:* `discr = 125` and signature `(0,4)` from `IsCyclotomicExtension.Rat.discr_prime`;
-  `classNumber = 1` from the pin's `five_pid`; `torsionOrder = 10` and monogenicity (`ℤ[ζ₅]`)
-  from the pin. The conductor–discriminant instance `∏_{χ mod 5} cond(χ) = 1·5·5·5 = 125` is
-  **not** a target of this roadmap: it is
-  [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layer 9's abelian
-  conductor–discriminant theorem, quoted here only as a cross-check once that roadmap proves it.
-- **`3.1.23.1`**, the non-Galois cubic `minpoly = X³ − X² + 1`, `disc(minpoly) = −23` squarefree,
-  so `index θ = 1` and `discr K = −23`.
-  *Proved here:* signature `(1,1)`; non-Galois with `S₃` Galois closure; no proper subfield;
-  `Units.rank = 1` with the explicit unit `u = θ² − θ`, characterized by `θ·(θ² − θ) = −1`, so
-  `u = −θ⁻¹`; `Subgroup.closure {u} ⊔ torsion K = ⊤` by Layer 7's certification; and, with `w`
-  the unique real place (`w.mult = 1`, and `1 < w u` since `w u ≈ 1.3247`),
+Each field detects a specific error: a wrong normalization, a vacuous instance, an unstated
+hypothesis, a missing dyadic case. Every asserted equality is exact. Decimal values appear only
+for orientation and are never targets. Each entry says which assertions are proved here.
 
-  ```text
-  regulator K = Real.log (w ((u : 𝓞 K) : K))
-  ```
+### `2.2.5.1` = ℚ(√5)
 
-  exactly (numerically `≈ 0.2812`, for orientation only). ⚠ Naming `w` is what makes this a
-  statement: `θ² − θ` is an element of `𝓞 K`, not a real number, and `Real.log` of it is not
-  a well-formed expression.
-  Unramified splitting and cycle types, all instances of Layer 3's Dedekind theorem: `2` and `3`
-  are inert, cycle type `(3)`; `5` and `7` have type `(1,2)`; `59` splits completely, cycle type
-  `(1,1,1)`, that is `Frob = 1`. ⚠ Ramified `23` is listed **separately** and is not a
-  cycle-type statement: `23 ∣ discr K`, so there is no Frobenius class at `23`, and the
-  factorization `𝔭²𝔮` there comes from Kummer–Dedekind (Layer 3) together with the different
-  (Layers 4 and 6). The root of `minpoly mod 23` is a double root at `16` and a simple root at
-  `15`; nothing about a "cycle type at `23`" is asserted anywhere.
-  ⚠ Also not asserted: that `59` is the *least* totally split prime. That would require a finite
-  check at every smaller prime, which no milestone here performs. The claim is that `59` splits
-  completely.
-  *Consumed:* `classNumber K = 1` from the pin's PID criteria. The density-`1/6` statement for
-  split primes is deliberately absent (Chebotarev → PR #8).
-- **`3.1.503.1` = Dedekind's field**, `minpoly = X³ − X² − 2X − 8`, with
-  `disc(minpoly) = −2012 = −4·503`, `index θ = 2`, `discr K = −503`.
-  *Proved here:* `2` **splits completely** even though `minpoly mod 2 = x²(x+1)`, the
-  index-divisor caveat as a theorem rather than a warning; `2` is a common index divisor
-  (`∀ θ' : IntegralPrimitiveElement K, 2 ∣ index θ'`); hence `¬ NumberField.IsMonogenic K`. The
-  citation anchor is Neukirch III §2 Ex. 1 ("außerwesentliche Diskriminantenteiler"). ⚠ This
-  example is the reason Layer 3's polynomial-side corollary is hypothesized on `p ∤ f.discr` and
-  not on "`p` unramified": here `2` is unramified in `K` and the factorization of `f mod 2`
-  still lies about the splitting.
-  *Consumed:* `classNumber K = 1` from the pin's PID criteria.
-- **The dyadic quadratic law** (Layer 7): for squarefree `d ≡ 1 mod 4` with `θ = (1+√d)/2`, so
-  `minpoly ℤ θ = X² − X + C ((1−d)/4)`, `2` splits ⟺ `d ≡ 1 mod 8`. This is unreachable from the
-  landed `X² − d` presentation, whose exponent is even here, which is exactly the point: it is
-  the test that no statement in Layers 3 or 7 has quietly acquired an oddness hypothesis.
+Presented by `θ` with `minpoly ℤ θ = X² − X − 1`.
 
-## Ordering and parallelism
+*Proved here:* `discr K = 5`; signature `(2,0)`; `torsionOrder = 2`; `Units.rank = 1`;
+`Subgroup.closure {θ} ⊔ torsion K = ⊤` by Layer 7.4, hence
+`regulator K = Real.log ((1 + √5)/2)`. The splitting law: `p` splits if and only if
+`legendreSym p 5 = 1`, that is `p ≡ ±1 mod 5`. In particular `2` is inert, because
+`5 ≡ 5 mod 8`.
 
-The layer numbering is a topological order, so any schedule that respects it is valid. The useful
-extra information is which layers can run at the same time.
+*From Mathlib:* `classNumber K = 1`, by `isPrincipalIdealRing_of_abs_discr_lt`. Also the class
+number formula check `dedekindZeta_residue = 2·log((1+√5)/2)/√5`. That one equation relates the
+certified regulator, the class number and the discriminant, and it detects a wrong
+normalization.
 
-- **Layer 1** goes first: it is mostly consume-and-publish, plus the double-coset law.
-- **Layer 2** needs Layer 1's dictionary and nothing else. Its Artin map takes the excluded set
-  `S` as a parameter, so it does not wait on the relative discriminant; Layer 4 specializes `S`
-  to the discriminant support once that ideal exists.
-- **Layer 3** needs Layer 1 (double cosets) and Layer 2 (Frobenius) for the cycle-type theorem.
-  Its index material and its relative Dedekind–Kummer half need neither, and can run in parallel
-  with Layer 2 from the start.
-- **Layer 4** needs nothing from Layers 2–3 and can begin immediately; it is `Different.lean`
-  completion plus `relNorm`.
-- **Layer 5** is statement-expressible as soon as
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 0 lands, and
-  proof-complete against their Layers 0–2. It needs Layer 4 for the discriminant-valuation
-  formula and Layer 2 for the Frobenius comparison. Its four boundary statements (the
-  `adicAbv` normalization lemma, the `e·f` matching, `D ≅ Gal(L_w/K_v)`, and the
-  different-localization lemma) should be co-reviewed with that roadmap's authors.
-- **Layer 6** needs Layer 5 and PR #2 **Layer 3**, not their Layers 0–2. It is the only layer
-  here that consumes local higher ramification theory, and it cannot start before that lands.
-- **Layer 7** needs Layers 1–3. Its unit certification needs nothing else and can run early;
-  everything downstream that quotes a regulator waits on it.
-- **Layer 8** assembles the rest, and its worked targets discharge alongside the layers that
-  enable them; each example above names the layers it uses.
+### `2.0.4.1` = ℚ(i)
 
-Layers 1–3 can therefore be built well before PR #10's material, which only Layer 8 consumes,
-and before PR #2 Layer 3, which only Layer 6 consumes.
+*Proved here:* `discr K = −4`; `ℤ[i]` monogenic with index `1`; `2 = −i(1+i)²` is ramified with
+`e = 2`, and `v_P(𝔡) = 2 = e`.
+
+This is the dyadic example. The **wild** lower bound of Layer 6.4 is attained, and the upper
+bound `e − 1 + v_P(e) = 1 + 2 = 3` is strict. A tame-only exponent formula must not claim this
+case.
+
+⚠ The sign of the discriminant is Brill's theorem in use: `r₂ = 1`, so the sign is `−1`.
+
+*From Mathlib:* `classNumber K = 1`; `torsionOrder K = 4`. Tau Ceti's
+`discr_cyclotomicField_four` gives a second check on `discr = −4`.
+
+### `4.0.125.1` = ℚ(ζ₅)
+
+Presented as `CyclotomicField 5 ℚ`.
+
+*Proved here:* the Frobenius data, `f(p) = orderOf (p : ZMod 5)ˣ`, in these cases:
+
+- `2`, `3` and `7` are inert, so `f = 4`;
+- `19` has `f = 2` and `g = 2`;
+- `11` splits completely;
+- `5` is totally ramified, through `(1 − ζ)⁴`.
+
+Also the subfield lattice `{ℚ, ℚ(√5), ℚ(ζ₅)}`, of cardinality 3, which matches the subgroup
+lattice of `C₄`.
+
+*From Mathlib:* `discr = 125` and signature `(0,4)`, by
+`IsCyclotomicExtension.Rat.discr_prime`; `classNumber = 1`, by `five_pid`; `torsionOrder = 10`;
+monogenicity, since `𝓞 = ℤ[ζ₅]`.
+
+⚠ The identity `∏_{χ mod 5} cond(χ) = 1·5·5·5 = 125` is the abelian conductor–discriminant
+formula. It is not a target of this roadmap, and it is not used here.
+
+### `3.1.23.1`
+
+The non-Galois cubic with `minpoly = X³ − X² + 1`. `disc(minpoly) = −23` is squarefree, so
+`index θ = 1` and `discr K = −23`.
+
+*Proved here:* signature `(1,1)`; not Galois, with `S₃` Galois closure; no proper subfield;
+`Units.rank = 1` with the explicit unit `u = θ² − θ`, characterized by `θ·(θ² − θ) = −1`, so
+`u = −θ⁻¹`; `Subgroup.closure {u} ⊔ torsion K = ⊤` by Layer 7.4; and, with `w` the unique real
+place, so `w.mult = 1`, and `1 < w u` because `w u ≈ 1.3247`,
+
+```text
+regulator K = Real.log (w ((u : 𝓞 K) : K))
+```
+
+exactly. Numerically `≈ 0.2812`, for orientation only.
+
+⚠ Naming `w` is what makes this a statement. `θ² − θ` is an element of `𝓞 K`, not a real number.
+
+*Proved here, splitting:* `2` and `3` are inert, cycle type `(3)`; `5` and `7` have type `(1,2)`;
+`59` splits completely, cycle type `(1,1,1)`, so `Frob = 1`. All are instances of Layer 3.9.
+
+⚠ `23` is ramified, and is listed separately. Since `23 ∣ discr K`, there is no Frobenius class at
+`23`, and no cycle type. The factorization `𝔭²𝔮` comes from Layer 3.6 with Layers 4.1 and 6.4.
+The reduction of `minpoly` modulo `23` has a double root at `16` and a simple root at `15`.
+
+⚠ This roadmap does not claim that `59` is the **least** totally split prime. That would need a
+finite check at every smaller prime, which no milestone performs. The claim is that `59` splits
+completely.
+
+*From Mathlib:* `classNumber K = 1`, by the principal-ideal-ring criteria.
+
+The density `1/6` for split primes is deliberately absent; density statements belong to an
+L-functions subject.
+
+### `3.1.503.1` = Dedekind's field
+
+`ℚ[x]/(x³ − x² − 2x − 8)`, with `disc(f) = −2012 = −4·503`, `index θ = 2`, and `discr K = −503`.
+
+*Proved here:* `2` splits completely, although `minpoly mod 2 = x²(x+1)`; `2` is a common index
+divisor, that is, `∀ θ' : IntegralPrimitiveElement K, 2 ∣ index θ'`; hence
+`¬ NumberField.IsMonogenic K`.
+
+This example is why Layer 3.10 is hypothesized on `p ∤ f.discr` and not on "`p` unramified". Here
+`2` is unramified in `K`, and the factorization of `f mod 2` still does not give the splitting
+type.
+
+*Source:* Neukirch III §2 Exercise 1.
+
+*From Mathlib:* `classNumber K = 1`, by the principal-ideal-ring criteria.
+
+### The dyadic quadratic law
+
+Let `d` be squarefree with `d ≡ 1 mod 4`. Let `θ = (1+√d)/2`, so that
+`minpoly ℤ θ = X² − X + C ((1−d)/4)`. Prove that `2` splits if and only if `d ≡ 1 mod 8`.
+
+This statement is not reachable from the `X² − d` presentation, whose exponent is even here. That
+is why the example is here: it detects an oddness hypothesis that has entered Layer 3 or Layer 7
+by accident.
+
+## Ordering
+
+The layer numbering is a dependency order, so any schedule that respects it is valid. The useful
+extra information is which layers are independent of each other.
+
+- **Layer 1** comes first. It is mostly publication of existing material, plus the double-coset
+  law.
+- **Layer 2** needs Layer 1 and nothing else. Its Artin map takes the excluded set as a
+  parameter, so it does not need the relative discriminant.
+- **Layer 3** needs Layer 1 and Layer 2 for the cycle-type theorem. Its index material and its
+  relative Dedekind–Kummer half need neither, and are independent of Layer 2.
+- **Layer 4** needs Layer 2.5 only for the specialization of the Artin map. The rest is
+  independent of Layers 2 and 3.
+- **Layer 5** needs Layer 2 for the Frobenius comparison and Layer 4 for the discriminant
+  valuation. Nothing else.
+- **Layer 6** needs Layer 5 and nothing else.
+- **Layer 7** needs Layers 1 to 3. Its unit certification needs nothing else and can be done
+  early. Every statement that quotes a regulator waits for it.
+- **Layer 8** assembles the rest. Each worked example names the layers it uses.
 
 ## References
 
-- J. Neukirch, *Algebraic Number Theory*, Springer 1999, the primary source. Ch. I §2
-  (integral bases, discriminants of bases), §8 (Dedekind extensions: (8.1)–(8.2) fundamental
-  identity, **(8.3) Dedekind–Kummer via the conductor**, (8.4) finitely many ramified primes,
-  (8.5) quadratic splitting, §8 Ex. 4–5 for the Galois closure and the index form of (8.3)), §9
-  (Hilbert theory: (9.1) transitivity, (9.2) decomposition group, the double-coset bijection on
-  p. 55, (9.3)/(9.6) the `Z`/`T` dictionary, (9.4)–(9.5) `D/I ≅ Gal(κ)`, §9 Ex. 2 the Frobenius
-  automorphism, Ex. 4 totally-split-iff-closure), §10 (cyclotomic: (10.2) `ℤ[ζ]`, (10.3) the
-  splitting law); Ch. II §8 (extensions of valuations, (8.3)–(8.4) semi-local structure and the
-  norm/trace formulas), §9 (Galois theory of valuations, that is the global–local decomposition
-  dictionary); Ch. III §2 (the different: (2.1)–(2.2) definition, tower and
-  **localization (2.2)(iii)**, (2.4)–(2.5) the monogenic and gcd descriptions, (2.6) exact
-  tame/wild exponents, (2.9) `𝔡 = N(𝔇)`, (2.10)–(2.12) the discriminant tower and ramified ⟺
-  divides, §2 Ex. 1 Dedekind's non-monogenic cubic). Ch. VII §11 (the Artin conductor) and §13
-  (density) are cited only as boundaries: both are outside this roadmap.
-- J.-P. Serre, *Local Fields*, GTM 67. Ch. I §§4–7 (Dedekind decomposition), Ch. III (the
-  different: localization and the monogenic case; §4 Prop. 8 for the tower identity behind
-  Layer 6's permutation formula), Ch. IV §1 (the ramification filtration; Prop. 2 for
-  `H_i = H ∩ G_i`; Prop. 4 for `v(𝔡) = Σ(#Gᵢ − 1)`, the source of Layer 6's exponent formula).
-  Ch. VI §2 (the Artin conductor) is a boundary citation only. The local side of every Layer-5
-  and Layer-6 statement follows
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s reading of this
-  book.
-- S. Lang, *Algebraic Number Theory*, 2nd ed., GTM 110. Ch. I (Dedekind theory, the decomposition
-  group), Ch. III (the different and discriminant; alternative proofs of the Layer-4 material).
-- G. J. Janusz, *Algebraic Number Fields*, 2nd ed., GSM 7. Ch. I (ramification, the Frobenius
-  automorphism, double cosets; the cleanest textbook treatment of Layer 1's non-Galois law),
-  Ch. II–III (units, class groups, cyclotomic fields).
-- D. A. Marcus, *Number Fields*, 2nd ed. (library list, not held locally). Ch. 2–3 (integral
-  bases, the Dedekind–Kummer theorem, essential discriminant divisors; Dedekind's field appears
-  in the Ch. 2–3 exercise track), Ch. 4 (decomposition, inertia and Frobenius via exercises), and
-  the unit computations of Ch. 5 Ex. that Layer 7's certification formalizes. Mathlib's own
-  class-number-formula citation.
-- H. Cohen, *A Course in Computational Algebraic Number Theory*, GTM 138 (library list).
-  §4.8 and §6.1 (Dedekind's criterion, index computations, the algorithmic side of Layers 3
-  and 7), §5.7 (fundamental units by bounded search, the algorithmic form of Layer 7's
-  certification).
-- W. Narkiewicz, *Elementary and Analytic Theory of Algebraic Numbers*, 3rd ed. (library list).
-  Ch. 4 (inessential discriminant divisors; Hensel's realizability criterion, the citation for
-  the converse deliberately left out of Layer 3).
-- L. C. Washington, *Introduction to Cyclotomic Fields*, GTM 83 (library list). Ch. 1–4
-  (cyclotomic worked instances of Layers 2 and 6; the character-conductor dictionary that
-  PR #6 owns).
+**J. Neukirch, *Algebraic Number Theory*, Springer 1999.** The primary source.
 
-## Provenance and coordination
+- Ch. I §2: integral bases, and discriminants of bases.
+- Ch. I §8: Dedekind extensions. (8.1)–(8.2) give the fundamental identity. **(8.3) gives
+  Dedekind–Kummer through the conductor.** (8.4) gives finiteness of the ramified primes. (8.5)
+  gives quadratic splitting. Exercises 4 and 5 give the Galois closure and the index form
+  of (8.3).
+- Ch. I §9: Hilbert theory. (9.1) gives transitivity, and (9.2) the decomposition group. The
+  double-coset bijection is on page 55. (9.3) and (9.6) give the `Z` and `T` dictionary.
+  (9.4)–(9.5) give `D/I ≅ Gal(κ)`. Exercise 2 gives the Frobenius automorphism, and Exercise 4
+  gives totally split in the closure.
+- Ch. I §10: cyclotomic fields. (10.2) gives `ℤ[ζ]`, and (10.3) the splitting law.
+- Ch. II §8: extensions of valuations. (8.3)–(8.4) give the semi-local structure and the norm and
+  trace formulas.
+- Ch. II §9: the Galois theory of valuations, that is the global-local decomposition dictionary.
+- Ch. III §2: the different. (2.1)–(2.2) give the definition and the tower, and **(2.2)(iii) the
+  localization.** (2.4)–(2.5) give the monogenic and gcd descriptions. (2.6) gives the exact tame
+  and wild exponents. (2.9) gives `𝔡 = N(𝔇)`. (2.10)–(2.12) give the discriminant tower and the
+  ramification criterion. Exercise 1 gives Dedekind's non-monogenic cubic.
+- Ch. VII §11 on the Artin conductor, and §13 on density, are cited only as boundaries.
 
-- **Mathlib** (§The Mathlib design this roadmap follows): the ring-level Hilbert-theory work
-  (#41591 and its series) and the `ramificationIdx`/`inertiaDeg` redefinition (#41234, #41325)
-  fix the shape of Layers 1–2, and those milestones are written to match. Layers 2–7's core
-  builds, on the other hand, correspond to nothing in Mathlib: there is no ideal-theoretic
-  conductor, no Artin symbol, no higher ramification group, and no fundamental-unit
-  certification there.
-- **TauCeti landed files** (§What TauCeti already has): authored under the Multiquadratic and
-  EffectiveBounds roadmaps; the consume-and-generalize contract per file is spelled there. One
-  landed file is amended: `SplitsCompletely.lean` keeps its general-base form `private`, and
-  publishing it is a Layer-1 milestone, to be done as a narrowly scoped public-API change in
-  coordination with its authors rather than by duplicating the theorem in a rival namespace.
-- **[Multiquadratic](../Multiquadratic/README.md)** (merged): the boundary is that
-  `(ℤ/2)ⁿ`-specific material stays there and the uniform statements live here. Its splitting law
-  and sign-vector Frobenius are instances of Layers 1–2. ⚠ The narrow class group is **not**
-  taken from this roadmap: under the current family contract
-  [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layer 1 owns `Cl⁺` and the
-  surjection `Cl⁺ ↠ Cl`, Multiquadratic consumes them, and Layer 8's page map consumes them from
-  PR #6.
-- **[Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2):** the conventions
-  table adopts its Frobenius row verbatim. Layer 5 is the boundary, and the `adicAbv`
-  normalization lemma, the `e·f` matching, the `D ≅ Gal(L_w/K_v)` isomorphism and the
-  different-localization lemma are the four statements both roadmaps must recognize; co-review
-  them there. Their Layer-0 lemma that `primesOver` is a singleton for local fields is theirs;
-  the semi-local `Σ [L_w:K_v] = n` is this roadmap's. Ownership of ramification theory is stated
-  once in §Cross-roadmap dependencies: their Layer 3 owns the local filtration and the local
-  different formulas, and Layer 6 here owns only the comparison and the global corollaries.
-- **[Global Class Field Theory PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6):**
-  consumes Layer 2's `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)` literally, in its own `J^{𝔪₀}`
-  carrier. Because `S` is a parameter there, PR #6 instantiates it at the support of its own
-  modulus and does not have to reconcile that with the ramified set. It also consumes Layer 5's
-  local-field instances and the different localization. It supplies the narrow class group (its
-  Layer 1) and the abelian conductor–discriminant formula (its Layer 9), the latter used here
-  only as a cross-check on `ℚ(ζ₅)`. No conductor–discriminant statement is a milestone of this
-  roadmap.
-- **[Polynomial Galois Groups PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10):**
-  consumes Layer 3's Dedekind theorem in `Polynomial.Gal.galActionHom` vocabulary, including the
-  reducible case, and Layer 7's `S_n`-embedding; it owns resolvents, transitive-group
-  classification and the `nTj` label semantics, which Layer 8 consumes back.
-- **ArtinRepresentations** (future roadmap, not a current dependency): owns the general conductor
-  object, Artin integrality, the general conductor–discriminant theorem, and whatever profinite
-  Frobenius formalism it needs. Layer 6's permutation-action discriminant formula and finite
-  ramification filtration are stated so that they can be recognized there as special cases. This
-  roadmap forms no general conductor and claims no absolute-Galois Frobenius class.
-- **[EffectiveBounds](../../Completed/EffectiveBounds/README.md)** (completed): its bounds
-  discharge the worked examples' class-number targets, and Layer 3's index formula sharpens its
-  discriminant inequality to an equation, which is a new statement rather than a modification.
-- **FLT / kbuzzard-ClassFieldTheory**: `Mathlib/RingTheory/Frobenius.lean` (A. Yang) is
-  FLT-adjacent infrastructure, and the `erd1/LCFT` local-CFT interface normalizes its Artin map
-  at arithmetic Frobenius via `IsArithFrobAt`. Layer 2's packaging stays translation-compatible
-  with that shape, which the shared `IsArithFrobAt` vocabulary guarantees by construction.
-- **Zulip**: the convention threads cited above. Layers 2, 5 and 6 touch the most shared
-  vocabulary, so register an intention for those before starting, per the root README's
-  coordination process.
+**J.-P. Serre, *Local Fields*, GTM 67.**
+
+- Ch. I §§4–7: the Dedekind decomposition.
+- Ch. III: the different. §6 Proposition 12 gives local monogenicity, and Proposition 13 the tame
+  and wild bounds. §4 Proposition 8 gives the tower identity behind Layer 6.5.
+- Ch. IV §1: the ramification filtration. Proposition 2 gives `H_i = H ∩ G_i`, and Proposition 4
+  gives `v(𝔡) = Σ(#Gᵢ − 1)`.
+- Ch. VI §2 on the Artin conductor is cited only as a boundary.
+
+**S. Lang, *Algebraic Number Theory*, 2nd ed., GTM 110.**
+
+- Ch. I: Dedekind theory, and the decomposition group.
+- Ch. III: the different and the discriminant, with alternative proofs of the Layer 4 material.
+
+**G. J. Janusz, *Algebraic Number Fields*, 2nd ed., GSM 7.**
+
+- Ch. I: ramification, the Frobenius automorphism, and double cosets. This is the cleanest
+  textbook treatment of Layer 1.4.
+- Ch. II–III: units, class groups, and cyclotomic fields.
+
+**D. A. Marcus, *Number Fields*, 2nd ed.**
+
+- Ch. 2–3: integral bases, the Dedekind–Kummer theorem, and essential discriminant divisors.
+  Dedekind's field appears in the exercises.
+- Ch. 4: decomposition, inertia, and Frobenius.
+- Ch. 5, exercises: the unit computations that Layer 7.4 formalizes.
+
+**H. Cohen, *A Course in Computational Algebraic Number Theory*, GTM 138.**
+
+- §4.8 and §6.1: Dedekind's criterion, and index computations.
+- §5.7: fundamental units by bounded search.
+
+**W. Narkiewicz, *Elementary and Analytic Theory of Algebraic Numbers*, 3rd ed.**
+
+- Ch. 4: inessential discriminant divisors, and Hensel's realizability criterion. That criterion
+  is the converse deliberately left out of Layer 3.11.
+
+**L. C. Washington, *Introduction to Cyclotomic Fields*, GTM 83.**
+
+- Ch. 1–4: the cyclotomic instances of Layers 2 and 6.
