@@ -9,24 +9,21 @@ contributors and reviewers converge on names and signatures; discharging all of 
 finishes neither a layer nor the roadmap. `sorry` is allowed in this human-owned roadmap
 library: these are goals, not proofs.
 
-Pinned Mathlib (`9caeba1000`, 2026-06-03) has the `ProfiniteGrp` category with limits, the
-finite-quotient limit description, and the profinite completion adjunction, but **no**
-continuous cohomology (master grew `RepresentationTheory/Homological/ContCohomology/` in
-June–July 2026, still without explicit `H¹`/`H²` or cup products). Consequently the
-milestones whose statements are inherently cohomological (the presentation rank
-interpretations (Layer 5), cohomological dimension (Layer 6), the Demushkin predicate and
-the canonical character (Layer 7), the classification (Layer 9), and the arithmetic
-statements of Layer 11) cannot be written as Lean declarations here. They are specified in
-`README.md`, and the intended declaration headers are reproduced in the pseudocode block at
-the end of this file so that their hypotheses are unambiguous; we do not fake their
-conditions with stand-in predicates or empty `Prop` fields.
+This file carries the carrier types, so that the central interface of the roadmap is Lean
+code and not pseudocode. The cohomology of Layer 5 is defined here by continuous cochains,
+in degrees `0`, `1` and `2`, with its cup product in bidegree `(1,1)`. The Demushkin
+predicate, the rank and `q` invariants, the prescription property that pins the canonical
+character, and the arithmetic inputs of Layer 11 are all stated against that carrier. When
+the Profinite Cohomology roadmap or Mathlib supplies a carrier, the comparison isomorphism
+of Layer 5 transports the statements and the local definitions are deleted.
 
-What *is* statable at the pin is below: the profinite foundations, the supernatural order
-and index, Sylow theory, the pro-`p`/Frattini/generation layers, the free pro-`C` class
-formalism and free pro-`p` groups with their universal property, the finite-quotient
-determinacy (reconstruction) theorem, the lower `p`-series, the closed-subgroup theory of
+Everything else that the pin supports is here too: the profinite foundations, the
+supernatural order and index, Sylow theory, the pro-`p`, Frattini and generation layers, the
+free pro-`C` class formalism, free pro-`p` groups with their universal property, the
+finite-quotient determinacy theorem, the lower `p`-series, the closed-subgroup theory of
 `ℤ₂ˣ`, and the presentation-level worked examples, including the group
-`D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩` of the dyadic acceptance instance.
+`D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩` of the dyadic acceptance instance. A short block at the end
+holds the few headers that still need vocabulary this pin does not have.
 
 The `def`s in the Prototypes section pin suggested *forms* for the objects the examples
 mention (each is also a design decision recorded in `README.md`); they are prototypes, not
@@ -285,32 +282,6 @@ abbrev topAbelianization (G : Type u) [Group G] [TopologicalSpace G] [IsTopologi
     Type u :=
   G ⧸ (commutator G).topologicalClosure
 
-open Classical in
-/-- **Labute's `q`-invariant, interim prototype.** `0` if the topological abelianization is
-torsion-free (Labute's `q = p^∞ = 0` convention), and otherwise the number of its torsion
-elements, which for a Demushkin group `G`, where `G^{ab} ≅ ℤ_p^{n-1} × ℤ/q`, is exactly `q`.
-
-⚠ **The finiteness argument is temporary and must disappear.** The final API takes the
-Demushkin hypothesis and derives finiteness and cyclicity of the torsion internally, from the
-Layer 4 structure theorem for finitely generated abelian pro-`p` groups:
-
-```
-noncomputable def demushkinQ (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
-    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
-    (hG : IsDemushkin p G) : ℕ
-```
-
-with `demushkinQ_eq_zero_iff`, `demushkinQ_isPrimePow_or_zero`, and invariance under
-topological isomorphism as its API. No downstream statement may expose a proof witness in the
-*value* of the invariant, which is exactly what the version below does; it exists only so
-that the `D₀` computation is expressible before `IsDemushkin` is. -/
-noncomputable def demushkinQ (G : Type u) [Group G] [TopologicalSpace G]
-    [IsTopologicalGroup G]
-    (_hfinite : Finite {x : topAbelianization G // IsOfFinOrder x}) : ℕ := by
-  letI := _hfinite
-  exact if ∀ x : topAbelianization G, IsOfFinOrder x → x = 1 then 0
-    else Nat.card {x : topAbelianization G // IsOfFinOrder x}
-
 /-- `ℤ̂`, the profinite completion of `ℤ` (a stress-test object for Layers 0–2). -/
 noncomputable abbrev zHat : Type :=
   ProfiniteGrp.profiniteCompletion.obj (GrpCat.of (Multiplicative ℤ))
@@ -350,6 +321,388 @@ over bundled finite groups instead of over arbitrary topology-bearing types. -/
 def IsFiniteContinuousQuotient (G : Type u) [Group G] [TopologicalSpace G]
     (Q : FiniteGrp.{v}) : Prop :=
   ∃ f : G →* Q, Function.Surjective f ∧ IsOpen ((f.ker : Subgroup G) : Set G)
+
+/-! ## Layer 5: the continuous cochain carrier
+
+This roadmap owns its cohomology in low degrees, so that no milestone waits for another
+roadmap. Coefficients are a finite discrete module `M` over a commutative ring `R`, with a
+continuous `G`-action that commutes with the `R`-action.
+
+Two comparison milestones connect the carrier to its neighbours, and neither is a
+prerequisite of anything here: `contH n` agrees with Mathlib's `continuousCohomology n` in
+degrees `n ≤ 2`, and with the object of the Profinite Cohomology roadmap when that roadmap
+supplies one. Mathlib's `continuousCohomology` is not available at this pin, so the first
+comparison is stated in `README.md` and not here. -/
+
+section Carrier
+
+variable (R : Type) [CommRing R]
+variable (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+variable (M : Type v) [AddCommGroup M] [Module R M] [TopologicalSpace M] [DiscreteTopology M]
+  [DistribMulAction G M] [SMulCommClass G R M] [ContinuousSMul G M]
+
+/-- **`H⁰`**: the invariants of `M`, as an `R`-submodule. -/
+def contH0 : Submodule R M where
+  carrier := {m | ∀ g : G, g • m = m}
+  add_mem' {a b} ha hb := by intro g; simp [smul_add, ha g, hb g]
+  zero_mem' := by intro g; simp
+  smul_mem' r m hm := by intro g; rw [smul_comm g r m, hm g]
+
+/-- Continuous `1`-cocycles: locally constant crossed homomorphisms. Local constancy is
+continuity, because the coefficients are discrete. -/
+def cocycle₁ : Submodule R (LocallyConstant G M) where
+  carrier := {f | ∀ g h : G, f (g * h) = g • f h + f g}
+  add_mem' {f₁ f₂} h₁ h₂ := by
+    intro g h
+    simp only [LocallyConstant.add_apply, h₁ g h, h₂ g h, smul_add]
+    abel
+  zero_mem' := by intro g h; simp
+  smul_mem' r f hf := by
+    haveI := SMulCommClass.symm G R M
+    intro g h
+    simp only [LocallyConstant.smul_apply, hf g h, smul_add, smul_comm r g]
+
+/-- The principal crossed homomorphism attached to `m`. -/
+def principalCocycle (m : M) : LocallyConstant G M :=
+  ⟨fun g => g • m - m, by
+    rw [IsLocallyConstant.iff_continuous]
+    exact (continuous_id.smul continuous_const).sub continuous_const⟩
+
+/-- Principal crossed homomorphisms, as a linear map from the coefficients. -/
+def principalHom : M →ₗ[R] LocallyConstant G M where
+  toFun := principalCocycle G M
+  map_add' m m' := by ext g; simp [principalCocycle, smul_add]; abel
+  map_smul' r m := by
+    haveI := SMulCommClass.symm G R M
+    ext g; simp [principalCocycle, smul_sub, smul_comm r g]
+
+/-- Continuous `1`-coboundaries. -/
+def coboundary₁ : Submodule R (LocallyConstant G M) :=
+  LinearMap.range (principalHom R G M)
+
+omit [IsTopologicalGroup G] in
+theorem coboundary₁_le_cocycle₁ : coboundary₁ R G M ≤ cocycle₁ R G M := by
+  rintro _ ⟨m, rfl⟩ g h
+  simp [principalHom, principalCocycle, mul_smul, smul_sub]
+
+/-- **`H¹`** of `G` with coefficients in `M`, by continuous cochains. -/
+abbrev contH1 : Type _ :=
+  (cocycle₁ R G M) ⧸ ((coboundary₁ R G M).comap (cocycle₁ R G M).subtype)
+
+/-- The class of a continuous `1`-cocycle. -/
+def cocycle₁.mk (a : cocycle₁ R G M) : contH1 R G M := Submodule.Quotient.mk a
+
+/-- Continuous `2`-cocycles. -/
+def cocycle₂ : Submodule R (LocallyConstant (G × G) M) where
+  carrier := {c | ∀ g h k : G, g • c (h, k) - c (g * h, k) + c (g, h * k) - c (g, h) = 0}
+  add_mem' {c₁ c₂} h₁ h₂ := by
+    intro g h k
+    have e₁ := h₁ g h k
+    have e₂ := h₂ g h k
+    simp only [LocallyConstant.add_apply, smul_add]
+    rw [show ∀ a b c d e f g' h' : M,
+        (a + b) - (c + d) + (e + f) - (g' + h') = (a - c + e - g') + (b - d + f - h') from
+      by intros; abel, e₁, e₂, add_zero]
+  zero_mem' := by intro g h k; simp
+  smul_mem' r c hc := by
+    intro g h k
+    have h₀ := hc g h k
+    simp only [LocallyConstant.smul_apply]
+    rw [smul_comm g r]
+    simp only [← smul_sub, ← smul_add]
+    rw [h₀, smul_zero]
+
+/-- The coboundary of a continuous `1`-cochain. -/
+def d₁ (f : LocallyConstant G M) : LocallyConstant (G × G) M :=
+  ⟨fun x => x.1 • f x.2 - f (x.1 * x.2) + f x.1, by
+    rw [IsLocallyConstant.iff_continuous]
+    exact (((continuous_fst.smul (f.continuous.comp continuous_snd)).sub
+      (f.continuous.comp (continuous_fst.mul continuous_snd))).add
+      (f.continuous.comp continuous_fst))⟩
+
+/-- Continuous `2`-coboundaries. -/
+def coboundary₂ : Submodule R (LocallyConstant (G × G) M) :=
+  LinearMap.range
+    ({ toFun := d₁ G M
+       map_add' := by intro f f'; ext x; simp [d₁, smul_add]; abel
+       map_smul' := by
+        haveI := SMulCommClass.symm G R M
+        intro r f; ext x; simp [d₁, smul_sub, smul_add, smul_comm r] } :
+      LocallyConstant G M →ₗ[R] LocallyConstant (G × G) M)
+
+theorem coboundary₂_le_cocycle₂ : coboundary₂ R G M ≤ cocycle₂ R G M := by
+  rintro _ ⟨f, rfl⟩ g h k
+  simp only [LinearMap.coe_mk, AddHom.coe_mk, d₁, LocallyConstant.coe_mk]
+  simp [mul_smul, smul_sub, smul_add, mul_assoc]
+  abel
+
+/-- **`H²`** of `G` with coefficients in `M`, by continuous cochains. -/
+abbrev contH2 : Type _ :=
+  (cocycle₂ R G M) ⧸ ((coboundary₂ R G M).comap (cocycle₂ R G M).subtype)
+
+/-- The class of a continuous `2`-cocycle. -/
+def cocycle₂.mk (c : cocycle₂ R G M) : contH2 R G M := Submodule.Quotient.mk c
+
+end Carrier
+
+/-! ### Trivial coefficients, and the cup product in bidegree `(1,1)`
+
+`TrivMod G A` is a type synonym for `A`, so that the trivial action is never an instance on
+`A` itself. The Demushkin predicate uses `A = ZMod p`. -/
+
+/-- `A` with the trivial `G`-action. -/
+def TrivMod (_G : Type u) (A : Type) := A
+
+section Trivial
+
+variable (A : Type) [CommRing A]
+variable (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+
+instance : CommRing (TrivMod G A) := inferInstanceAs (CommRing A)
+instance : Module A (TrivMod G A) := inferInstanceAs (Module A A)
+instance : TopologicalSpace (TrivMod G A) := ⊥
+instance : DiscreteTopology (TrivMod G A) := ⟨rfl⟩
+
+instance : DistribMulAction G (TrivMod G A) where
+  smul _ a := a
+  one_smul _ := rfl
+  mul_smul _ _ _ := rfl
+  smul_zero _ := rfl
+  smul_add _ _ _ := rfl
+
+instance : SMulCommClass G A (TrivMod G A) := ⟨fun _ _ _ => rfl⟩
+instance : ContinuousSMul G (TrivMod G A) := ⟨continuous_snd⟩
+
+omit [TopologicalSpace G] [IsTopologicalGroup G] in
+@[simp] theorem trivMod_smul (g : G) (a : TrivMod G A) : g • a = a := rfl
+
+/-- **The cup product in bidegree `(1,1)`, at the level of cocycles**:
+`(a ∪ b)(g, h) = a g * b h`. That it descends to a bilinear map
+`contH1 × contH1 → contH2` is a Layer 5 milestone; every statement below that needs only
+nondegeneracy is phrased through `cupCocycle`, so it does not wait for the descent. -/
+def cupCocycle (a b : cocycle₁ A G (TrivMod G A)) : cocycle₂ A G (TrivMod G A) :=
+  ⟨⟨fun x => (a : LocallyConstant G (TrivMod G A)) x.1 *
+      (b : LocallyConstant G (TrivMod G A)) x.2, by
+      rw [IsLocallyConstant.iff_continuous]
+      exact ((a : LocallyConstant G (TrivMod G A)).continuous.comp continuous_fst).mul
+        ((b : LocallyConstant G (TrivMod G A)).continuous.comp continuous_snd)⟩, by
+    intro g h k
+    have ha := a.2 g h
+    have hb := b.2 h k
+    simp only [trivMod_smul, LocallyConstant.coe_mk] at *
+    rw [ha, hb]
+    ring⟩
+
+end Trivial
+
+/-! ### Twisted coefficients, and the prescription property
+
+The coefficients `I(χ)/p^i` are `ZMod (p ^ i)` with `G` acting through `χ`. The cocycle and
+coboundary conditions for that action are written out here, rather than through a second
+module structure on `ZMod (p ^ i)`, so that no instance has to be installed on a Mathlib type
+and no statement below depends on one. -/
+
+section Prescription
+
+variable {p : ℕ} [Fact p.Prime] {G : Type u} [Group G] [TopologicalSpace G]
+
+/-- The scalar by which `g` acts on `I(χ)/p^i`. -/
+noncomputable def charScalar (χ : G →* ℤ_[p]ˣ) (i : ℕ) (g : G) : ZMod (p ^ i) :=
+  PadicInt.toZModPow i ((χ g : ℤ_[p]ˣ) : ℤ_[p])
+
+/-- The scalar by which `g` acts on `I(χ)/p`. -/
+noncomputable def charScalarBase (χ : G →* ℤ_[p]ˣ) (g : G) : ZMod p :=
+  PadicInt.toZMod ((χ g : ℤ_[p]ˣ) : ℤ_[p])
+
+/-- A continuous crossed homomorphism with values in `I(χ)/p^i`. -/
+def IsCharCocycle (χ : G →* ℤ_[p]ˣ) (i : ℕ) (f : LocallyConstant G (ZMod (p ^ i))) : Prop :=
+  ∀ g h : G, f (g * h) = charScalar χ i g * f h + f g
+
+/-- A continuous crossed homomorphism with values in `I(χ)/p`. -/
+def IsCharCocycleBase (χ : G →* ℤ_[p]ˣ) (f : LocallyConstant G (ZMod p)) : Prop :=
+  ∀ g h : G, f (g * h) = charScalarBase χ g * f h + f g
+
+/-- A principal crossed homomorphism with values in `I(χ)/p`. -/
+def IsCharCoboundaryBase (χ : G →* ℤ_[p]ˣ) (f : LocallyConstant G (ZMod p)) : Prop :=
+  ∃ m : ZMod p, ∀ g : G, f g = charScalarBase χ g * m - m
+
+/-- **The prescription property, in lifting form** (condition 1 of the conventions). Every
+continuous crossed homomorphism with values in `I(χ)/p` is, modulo principal ones, the
+reduction of a continuous crossed homomorphism with values in `I(χ)/p^i`. This says exactly
+that `H¹(G, I(χ)/p^i) → H¹(G, I(χ)/p)` is surjective for every `i ≥ 1`. It is the property
+that pins Serre's canonical character: a Demushkin group has exactly one continuous `χ` with
+it (Labute Thm 4). -/
+def HasPrescriptionProperty (χ : G →* ℤ_[p]ˣ) : Prop :=
+  ∀ i : ℕ, ∀ hi : 1 ≤ i, ∀ c : LocallyConstant G (ZMod p), IsCharCocycleBase χ c →
+    ∃ c' : LocallyConstant G (ZMod (p ^ i)), IsCharCocycle χ i c' ∧
+      IsCharCoboundaryBase χ
+        (LocallyConstant.map (ZMod.castHom (dvd_pow_self p (by omega : i ≠ 0)) (ZMod p)) c'
+          - c)
+
+end Prescription
+
+/-! ## Layer 7: the Demushkin predicate, its rank, and its invariants
+
+These declarations were pseudocode while the cohomology had no carrier. They are statements
+now, against the Layer 5 carrier. -/
+
+section Demushkin
+
+variable (p : ℕ) [Fact p.Prime]
+variable (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+  [TotallyDisconnectedSpace G]
+
+/-- **The Demushkin predicate** (Labute p. 106). The pro-`p` hypothesis is a field, so that
+no downstream theorem applies to a group that satisfies only the cohomological clauses. Both
+nondegeneracy clauses are fields; if the cup product is proved graded-commutative in this
+bidegree, the second becomes a theorem and the field is dropped. Nondegeneracy is stated
+through `cupCocycle`, so it does not wait for the descent of the cup product to cohomology.
+Finite generation is derived from `h1_fin` and the Burnside basis theorem, and is never
+assumed. -/
+structure IsDemushkin : Prop where
+  /-- `G` is a pro-`p` group. -/
+  proP : IsProP p G
+  /-- `H¹(G, 𝔽_p)` is finite-dimensional. -/
+  h1_fin : Module.Finite (ZMod p) (contH1 (ZMod p) G (TrivMod G (ZMod p)))
+  /-- `H²(G, 𝔽_p)` is one-dimensional. -/
+  h2_rank : Module.finrank (ZMod p) (contH2 (ZMod p) G (TrivMod G (ZMod p))) = 1
+  /-- The cup pairing is nondegenerate on the left. -/
+  cupLeft : ∀ a : cocycle₁ (ZMod p) G (TrivMod G (ZMod p)),
+    cocycle₁.mk (ZMod p) G (TrivMod G (ZMod p)) a ≠ 0 →
+    ∃ b : cocycle₁ (ZMod p) G (TrivMod G (ZMod p)),
+      cocycle₂.mk (ZMod p) G (TrivMod G (ZMod p)) (cupCocycle (ZMod p) G a b) ≠ 0
+  /-- The cup pairing is nondegenerate on the right. -/
+  cupRight : ∀ b : cocycle₁ (ZMod p) G (TrivMod G (ZMod p)),
+    cocycle₁.mk (ZMod p) G (TrivMod G (ZMod p)) b ≠ 0 →
+    ∃ a : cocycle₁ (ZMod p) G (TrivMod G (ZMod p)),
+      cocycle₂.mk (ZMod p) G (TrivMod G (ZMod p)) (cupCocycle (ZMod p) G a b) ≠ 0
+
+/-- **Layer 7, a Demushkin group is topologically finitely generated.** From `h1_fin`, the
+`H¹` interpretation of Layer 5, and the Burnside basis theorem of Layer 3. -/
+theorem IsDemushkin.isTopologicallyFinitelyGenerated {p G} [Fact p.Prime] [Group G]
+    [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (_hG : IsDemushkin p G) : IsTopologicallyFinitelyGenerated G :=
+  sorry
+
+/-- **The rank of a Demushkin group**, as a natural number. Every numerical statement about
+Demushkin groups is about this accessor, and never about an unqualified rank. -/
+noncomputable def demushkinRank {p G} [Fact p.Prime] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hG : IsDemushkin p G) : ℕ :=
+  topologicalGeneratorRankNat G hG.isTopologicallyFinitelyGenerated
+
+open scoped Classical in
+/-- **Labute's `q`-invariant.** It is `0` when the topological abelianization is
+torsion-free, which is Labute's `q = p^∞` convention, and the number of torsion elements
+otherwise. For a Demushkin group the torsion subgroup is finite and cyclic by Layer 7, so
+this is the `q` of `G^{ab} ≅ ℤ_p^{n-1} × ℤ/q`. `Nat.card` is `0` on an infinite type, so no
+finiteness hypothesis is needed to make the definition total; the Layer 7 theorem is what
+makes it correct. -/
+noncomputable def demushkinQ {p G} [Fact p.Prime] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (_hG : IsDemushkin p G) : ℕ :=
+  if ∀ x : topAbelianization G, IsOfFinOrder x → x = 1 then 0
+  else Nat.card {x : topAbelianization G // IsOfFinOrder x}
+
+/-- **Layer 7, the `q`-invariant is an isomorphism invariant.** -/
+example {p G H} [Fact p.Prime] [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [CompactSpace G] [TotallyDisconnectedSpace G] [Group H] [TopologicalSpace H]
+    [IsTopologicalGroup H] [CompactSpace H] [TotallyDisconnectedSpace H]
+    (hG : IsDemushkin p G) (hH : IsDemushkin p H) (_e : G ≃ₜ* H) :
+    demushkinQ hG = demushkinQ hH :=
+  sorry
+
+/-- **Layer 7, the canonical character.** The prescription property is stated in the
+lifting form: every continuous cocycle with values in `ℤ/p`, twisted by `χ`, lifts modulo
+coboundaries to one with values in `ℤ/p^i`. The twisted coefficients are `CharMod` below.
+The theorem is that a Demushkin group has exactly one continuous `χ` with that property
+(Serre; Labute Thm 4). -/
+example {p G} [Fact p.Prime] [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [CompactSpace G] [TotallyDisconnectedSpace G] (_hG : IsDemushkin p G) :
+    ∃! χ : G →* ℤ_[p]ˣ, Continuous χ ∧ HasPrescriptionProperty χ :=
+  sorry
+
+end Demushkin
+
+/-! ## Layer 11: the arithmetic inputs, as a local interface
+
+The five inputs of Layer 11 are theorems about `G_K` that the Local Fields roadmap proves.
+They are bundled here as one structure over an abstract profinite group `Γ`, which stands
+for `G_K`, so that every theorem of Layer 11 is a statement of this roadmap with the inputs
+as a hypothesis. Nothing waits for another roadmap: the Local Fields roadmap supplies an
+instance of this structure, and the shared table names the object behind each field. -/
+
+/-- **The arithmetic inputs of Layer 11.** `N` is the degree `[K : ℚ_p]`, and `hasMu` says
+that `μ_p ⊆ K`. The fields are the parts of inputs 1, 3, 4 and 5 that Layer 11 uses. -/
+structure LocalFieldInputs (p : ℕ) [Fact p.Prime] (Γ : Type u) [Group Γ] [TopologicalSpace Γ]
+    [IsTopologicalGroup Γ] [CompactSpace Γ] [TotallyDisconnectedSpace Γ] (N : ℕ)
+    (hasMu : Prop) where
+  /-- Input 1: `dim H⁰(G_K, 𝔽_p) = 1`. -/
+  h0_rank : Module.finrank (ZMod p) (contH0 (ZMod p) Γ (TrivMod Γ (ZMod p))) = 1
+  /-- Input 1: `dim H²(G_K, 𝔽_p) = 1` when `μ_p ⊆ K`. -/
+  h2_rank_of_mu : hasMu → Module.finrank (ZMod p) (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p))) = 1
+  /-- Input 1: `H²(G_K, 𝔽_p) = 0` when `μ_p ⊄ K`. -/
+  h2_rank_of_not_mu :
+    ¬ hasMu → Module.finrank (ZMod p) (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p))) = 0
+  /-- Input 1: the Euler-characteristic count `dim H¹ = 1 + dim H² + N`. -/
+  h1_rank : Module.finrank (ZMod p) (contH1 (ZMod p) Γ (TrivMod Γ (ZMod p)))
+    = 1 + Module.finrank (ZMod p) (contH2 (ZMod p) Γ (TrivMod Γ (ZMod p))) + N
+  /-- Input 3: the cup pairing on `H¹(G_K, 𝔽_p)` is nondegenerate when `μ_p ⊆ K`. This is
+  local Tate duality at `n = p`, transported along inputs 2 and 4. -/
+  cup_nondegenerate : hasMu → ∀ a : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
+    cocycle₁.mk (ZMod p) Γ (TrivMod Γ (ZMod p)) a ≠ 0 →
+    ∃ b : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
+      cocycle₂.mk (ZMod p) Γ (TrivMod Γ (ZMod p)) (cupCocycle (ZMod p) Γ a b) ≠ 0
+  /-- Input 5: the cyclotomic character. -/
+  cyclotomic : Γ →* ℤ_[p]ˣ
+  /-- Input 5: it is continuous. -/
+  cyclotomic_continuous : Continuous cyclotomic
+  /-- Input 4: its finite quotients satisfy the prescription property of Layer 7, which is
+  what the Kummer compatibility square gives. -/
+  cyclotomic_prescription : hasMu → HasPrescriptionProperty cyclotomic
+
+section LocalFields
+
+variable {p : ℕ} [Fact p.Prime] {Γ : Type u} [Group Γ] [TopologicalSpace Γ]
+  [IsTopologicalGroup Γ] [CompactSpace Γ] [TotallyDisconnectedSpace Γ] {N : ℕ} {hasMu : Prop}
+
+-- `G_K(p)` is a quotient of a profinite group by a closed normal subgroup, so it is
+-- profinite. That instance is the Layer 0 milestone `TotallyDisconnectedSpace (G ⧸ N)`
+-- together with closedness of `proPKernel` (Layer 3); it is an argument here, because this
+-- file states milestones and does not prove them.
+variable [TotallyDisconnectedSpace (maximalProPQuotient p Γ)]
+
+/-- **Layer 11, `G_K(p)` is topologically finitely generated.** From the `H¹` count and the
+degree-one inflation isomorphism, and not from finite generation of `G_K`, which this
+roadmap never assumes. -/
+example (_inp : LocalFieldInputs p Γ N hasMu) :
+    IsTopologicallyFinitelyGenerated (maximalProPQuotient p Γ) :=
+  sorry
+
+/-- **Layer 11, the free case (Shafarevich).** If `μ_p ⊄ K` then `G_K(p)` is free pro-`p` of
+rank `N + 1`. -/
+example (_inp : LocalFieldInputs p Γ N hasMu) (_h : ¬ hasMu) :
+    Nonempty (maximalProPQuotient p Γ ≃ₜ* freeProP p (Fin (N + 1))) :=
+  sorry
+
+/-- **Layer 11, the Demushkin case.** If `μ_p ⊆ K` then `G_K(p)` is Demushkin of rank
+`N + 2`. -/
+example (_inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu)
+    (hD : IsDemushkin p (maximalProPQuotient p Γ)) :
+    demushkinRank hD = N + 2 :=
+  sorry
+
+/-- **Layer 11, the orientation is cyclotomic.** The cyclotomic character is trivial on the
+kernel of `G_K ↠ G_K(p)`, so it descends, and the descent has the prescription property.
+With the uniqueness half of Labute Thm 4, the descent is the canonical character of
+`G_K(p)`. -/
+example (inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu) :
+    ∃ ψ : maximalProPQuotient p Γ →* ℤ_[p]ˣ, Continuous ψ ∧
+      ψ.comp (QuotientGroup.mk' (proPKernel p Γ)) = inp.cyclotomic ∧
+      HasPrescriptionProperty ψ :=
+  sorry
+
+end LocalFields
 
 /-! ## Layer 0: profinite foundations -/
 
@@ -777,16 +1130,10 @@ example :
       Multiplicative (ℤ_[2] × ℤ_[2] × ZMod 2)) :=
   sorry
 
-/-- **Layer 7, finiteness needed by the interim `q`-invariant API.** The torsion subgroup of
-`D₀^{ab} ≅ ℤ₂² × ℤ/2` is finite. In the final API this is a consequence of the Layer 4
-structure theorem rather than an argument to `demushkinQ`. -/
-example : Finite {x : topAbelianization demushkinD0 // IsOfFinOrder x} :=
-  sorry
-
-/-- **Layer 7, the `q`-invariant of `D₀`.** `q(D₀) = 2`: the torsion subgroup of
-`D₀^{ab} ≅ ℤ₂² × ℤ/2` has two elements. -/
-example (hfinite : Finite {x : topAbelianization demushkinD0 // IsOfFinOrder x}) :
-    demushkinQ demushkinD0 hfinite = 2 :=
+/-- **Layer 7, the `q`-invariant of `D₀`.** The torsion subgroup of `D₀^{ab} ≅ ℤ₂² × ℤ/2`
+has two elements, so `q(D₀) = 2`. This is a computation with the presentation, and it does
+not use the classification. -/
+example : Nat.card {x : topAbelianization demushkinD0 // IsOfFinOrder x} = 2 :=
   sorry
 
 /-! ## Layer 8: the lower `p`-series and finite-quotient determinacy -/
@@ -866,88 +1213,26 @@ example {G H : Type u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Co
   sorry
 
 /-!
-## Pseudocode: the declaration headers that cannot be written at this pin
+## The few headers that still need vocabulary this pin does not have
 
-The following are the intended shapes of the cohomological declarations. They do not compile
-here (`H`, `cup`, `trivialModule`, and `cd` are
-[Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)'s, and their
-final names are that roadmap's to fix), but their hypotheses are settled, and this block is
-what a contributor should reproduce once those names exist. Nothing here is faked with an
-empty `Prop` field or a stand-in predicate.
+Everything cohomological in low degrees is Lean code above, against the Layer 5 carrier.
+What is left needs cohomology in every degree, which means `continuousCohomology` from
+Mathlib `v4.32.2`, a release later than this repository's pin. The shapes are recorded here,
+and nothing in them is faked with an empty `Prop` field or a stand-in predicate.
 
 ```
-/-- Layer 7: the Demushkin predicate. Carries `IsProP` as a field, so that no downstream
-theorem can be applied to a non-pro-`p` group satisfying only the cohomological clauses.
-`cupRight` becomes a theorem, and the field disappears, if PR #1 delivers graded
-commutativity of the cup product in this bidegree. -/
-structure IsDemushkin (p : ℕ) (G : Type u) [Fact p.Prime]
-    [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
-    [CompactSpace G] [TotallyDisconnectedSpace G] : Prop where
-  proP     : IsProP p G
-  h1_fin   : Module.Finite (ZMod p) (H 1 G (trivialModule (ZMod p)))
-  h2_rank  : Module.finrank (ZMod p) (H 2 G (trivialModule (ZMod p))) = 1
-  cupLeft  : ∀ a ≠ 0, ∃ b, cup a b ≠ 0
-  cupRight : ∀ b ≠ 0, ∃ a, cup a b ≠ 0
+/-- Layer 6: cohomological dimension, against Mathlib's all-degree object. -/
+def cdLE (p n : ℕ) (G : Type u) [Group G] [TopologicalSpace G] : Prop :=
+  ∀ m > n, ∀ A : TopRep (ZMod p) G, IsFiniteDiscrete A → continuousCohomology m A = 0
 
-/-- Layer 7: the `q`-invariant, final API. Finiteness and cyclicity of the torsion of
-`topAbelianization G` are derived from `hG` through the Layer 4 structure theorem; no proof
-witness appears in the value. -/
-noncomputable def demushkinQ (p : ℕ) (G : Type u) [Fact p.Prime] [Group G]
-    [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
-    (hG : IsDemushkin p G) : ℕ
+/-- Layer 5: the comparison with Mathlib's carrier, in degrees at most two. -/
+theorem contH_eq_continuousCohomology (n : ℕ) (hn : n ≤ 2) : ...
 
-theorem demushkinQ_eq_zero_iff (hG : IsDemushkin p G) :
-    demushkinQ p G hG = 0 ↔ ∀ x : topAbelianization G, IsOfFinOrder x → x = 1
+/-- Layer 7: dimension two for an infinite Demushkin group (Tate). -/
+theorem cd_eq_two (hG : IsDemushkin p G) (hinf : Infinite G) : cdLE p 2 G ∧ ¬ cdLE p 1 G
 
-theorem demushkinQ_congr (hG : IsDemushkin p G) (hH : IsDemushkin p H) (e : G ≃ₜ* H) :
-    demushkinQ p G hG = demushkinQ p H hH
-
-/-- Layer 7: the prescription property of a continuous character, in the finite-quotient
-form. `I p χ i` is `ZMod (p^i)` with `G` acting through `χ mod p^i`. -/
-def HasPrescriptionProperty (χ : G →* ℤ_[p]ˣ) (hχ : Continuous χ) : Prop :=
-  ∀ i : ℕ, 1 ≤ i → Function.Surjective (coeffMap (I p χ i) (I p χ 1) :
-    H 1 G (I p χ i) → H 1 G (I p χ 1))
-
-/-- Layer 7: the canonical character exists and is unique (Serre; Labute Thm 4). -/
-theorem exists_unique_demushkinCharacter (hG : IsDemushkin p G) :
-    ∃! χ : G →* ℤ_[p]ˣ, Continuous χ ∧ HasPrescriptionProperty χ ‹_›
-
-noncomputable def demushkinCharacter (hG : IsDemushkin p G) : G →* ℤ_[p]ˣ
-
-/-- Layer 7: a Demushkin group is topologically finitely generated (`h1_fin` plus the
-Burnside basis theorem), and `n(G)` is its rank as a natural number. Every numerical
-statement below is about this accessor; no declaration takes a bare `rank`. -/
-theorem IsDemushkin.topFG (hG : IsDemushkin p G) : IsTopologicallyFinitelyGenerated G
-
-noncomputable def demushkinRank (hG : IsDemushkin p G) : ℕ :=
-  topologicalGeneratorRankNat G hG.topFG
-
-/-- Layer 7: dimension two, the trace isomorphism, and the perfect pairing on the finite
-coefficient system of the canonical character: the concrete duality package that replaces
-any appeal to a general theory of duality groups. -/
-theorem cd_eq_two (hG : IsDemushkin p G) (hinf : Infinite G) : cd p G = 2
-
-noncomputable def demushkinTrace (hG : IsDemushkin p G) :
-    H 2 G (trivialModule (ZMod p)) ≃ₗ[ZMod p] ZMod p
-
-theorem demushkinPairing_perfect (hG : IsDemushkin p G) (hinf : Infinite G) (i j : ℕ)
-    (hj : j ≤ 2) : ... -- perfect pairing H^j(G, M) × H^(2-j)(G, Mᵛ) → ZMod (p^i)
-
-/-- Layer 7: open subgroups, from that package plus the three-term Euler formula. -/
-theorem isDemushkin_of_open (hG : IsDemushkin p G) (hinf : Infinite G) (U : OpenSubgroup G) :
-    IsDemushkin p U
-
-theorem demushkinRank_of_open (hG : IsDemushkin p G) (hinf : Infinite G)
-    (U : OpenSubgroup G) :
-    (demushkinRank (isDemushkin_of_open hG hinf U) : ℤ) - 2
-      = U.toSubgroup.index * ((demushkinRank hG : ℤ) - 2)
-
-theorem demushkinCharacter_of_open (hG : IsDemushkin p G) (hinf : Infinite G)
-    (U : OpenSubgroup G) :
-    demushkinCharacter (isDemushkin_of_open hG hinf U)
-      = (demushkinCharacter hG).comp U.subtype
-
-/-- Layer 9: the classification. Uniqueness first, then existence. -/
+/-- Layer 9: the classification. Uniqueness first, then existence. `demushkinCharacter` is
+the character whose existence and uniqueness Layer 7 states above. -/
 theorem demushkin_iso_of_invariants (hG : IsDemushkin p G) (hH : IsDemushkin p H)
     (hrank : demushkinRank hG = demushkinRank hH)
     (himage : (demushkinCharacter hG).range = (demushkinCharacter hH).range) :
@@ -957,31 +1242,6 @@ theorem exists_demushkin_of_invariants (n : ℕ) (A : Subgroup ℤ_[p]ˣ)
     (hA : IsClosed (A : Set ℤ_[p]ˣ)) (h : RealizableInvariants p n A) :
     ∃ (G : Type u) (hG : IsDemushkin p G),
       demushkinRank hG = n ∧ (demushkinCharacter hG).range = A
-
-/-- Layer 11: the carrier, the two inflation theorems, the rank in both cases, and the
-arithmetic instances. The carrier `absoluteGaloisGroupProP` is a real definition above, and
-is the name the shared layer-DAG table fixes for `G_K(p)`; the LocalFields roadmap's Layer 9
-cites it rather than re-forming the quotient, and `N` below is the degree `[K : ℚ_p]`, never
-a rank. -/
-theorem inflation_h1_bijective (K : Type u) [Field K] [IsLocalField K] ... :
-    Function.Bijective (inf : H 1 (absoluteGaloisGroupProP p K) 𝔽ₚ → H 1 (G K) 𝔽ₚ)
-
-theorem inflation_h2_bijective_of_not_mu (hmu : ¬ HasEnoughRootsOfUnity K p) : ...
-theorem inflation_h2_bijective_of_mu (hmu : HasEnoughRootsOfUnity K p) : ...
-
-theorem isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP :
-    IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p K)
-
-theorem topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu
-    (hmu : ¬ HasEnoughRootsOfUnity K p) :
-    topologicalGeneratorRankNat (absoluteGaloisGroupProP p K) ‹_› = N + 1
-
-theorem topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu
-    (hmu : HasEnoughRootsOfUnity K p) :
-    topologicalGeneratorRankNat (absoluteGaloisGroupProP p K) ‹_› = N + 2
-
-theorem demushkinCharacter_eq_cyclotomic (hmu : HasEnoughRootsOfUnity K p) :
-    demushkinCharacter ‹IsDemushkin p (absoluteGaloisGroupProP p K)› = χ_cyc.descend
 ```
 -/
 

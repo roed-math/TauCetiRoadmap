@@ -27,6 +27,7 @@ body:
         - OptimalTransport
         - OrthogonalL2Bases
         - PDE
+        - ProPGroups
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers
