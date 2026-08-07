@@ -89,6 +89,41 @@ noncomputable def dualCompleted (d : AnalyticLFunctionData) (s : ℂ) : ℂ :=
 functional equation at `s`. -/
 noncomputable def reflectedPoint (s : ℂ) : ℂ := 1 - starRingEnd ℂ s
 
+/-- **Layer 0.2, the dual record.** ⚠ `dualCompleted` is a function; the functional equation of
+a **non-self-dual** record relates `d` to a whole other *record*, not to itself, and every
+consumer that states the equation needs that record by name. It is owned here, so that no
+downstream roadmap has to build its own: conjugate coefficients, conjugated shifts, conjugated
+root number, the same conductor, `completed = d.dualCompleted`, and the polar divisor
+transported along `p ↦ conj p`. -/
+noncomputable def dual (d : AnalyticLFunctionData) : AnalyticLFunctionData where
+  coeff n := starRingEnd ℂ (d.coeff n)
+  conductor := d.conductor
+  gammaR := d.gammaR.map (starRingEnd ℂ)
+  gammaC := d.gammaC.map (starRingEnd ℂ)
+  rootNumber := starRingEnd ℂ d.rootNumber
+  completed := d.dualCompleted
+  polarOrder := d.polarOrder.mapDomain (starRingEnd ℂ)
+
+theorem dual_gammaFactor (d : AnalyticLFunctionData) (s : ℂ) :
+    d.dual.gammaFactor s = starRingEnd ℂ (d.gammaFactor (starRingEnd ℂ s)) := sorry
+
+theorem dual_dual (d : AnalyticLFunctionData) : d.dual.dual = d := sorry
+
+theorem dual_degree (d : AnalyticLFunctionData) : d.dual.degree = d.degree := sorry
+
+/-- **Layer 0.2, self-duality.** For a record with real coefficients and real shifts — which
+covers `ζ_K` and every real character — the dual is the record itself, and the functional
+equation collapses to the familiar reflection. A non-real finite-order Hecke character is the
+test that catches a statement written as though it always did. -/
+theorem dual_eq_self {d : AnalyticLFunctionData}
+    (hcoeff : ∀ n, starRingEnd ℂ (d.coeff n) = d.coeff n)
+    (hR : d.gammaR.map (starRingEnd ℂ) = d.gammaR)
+    (hC : d.gammaC.map (starRingEnd ℂ) = d.gammaC)
+    (hε : starRingEnd ℂ d.rootNumber = d.rootNumber)
+    (hΛ : d.dualCompleted = d.completed)
+    (hp : d.polarOrder.mapDomain (starRingEnd ℂ) = d.polarOrder) :
+    d.dual = d := sorry
+
 /-- **Layer 0.2, Dirichlet-series agreement.** Independent of continuation, functional
 equation, Euler product, and coefficient bounds, because instances satisfy different
 subsets. -/
@@ -132,6 +167,24 @@ what every instance can prove; pointwise bounds remain instance-specific. -/
 structure HasAverageCoefficientBound (d : AnalyticLFunctionData) : Prop where
   coeff_avg : ∀ δ : ℝ, 0 < δ →
     (fun n : ℕ ↦ ∑ k ∈ Finset.Icc 1 n, ‖d.coeff k‖) =O[atTop] fun n ↦ (n : ℝ) ^ (1 + δ)
+
+/-- **Layer 0.2, predicate transport along the dual record.** ⚠ Without these a consumer cannot
+use `dual` in any theorem whose hypotheses are the Layer-0 predicates — which is every theorem
+about the functional equation, since that equation names the dual record on its right-hand
+side. -/
+theorem dual_hasDirichletAgreement {d : AnalyticLFunctionData} (h : d.HasDirichletAgreement) :
+    d.dual.HasDirichletAgreement := sorry
+
+theorem dual_hasMeromorphicContinuation {d : AnalyticLFunctionData}
+    (h : d.HasMeromorphicContinuation) : d.dual.HasMeromorphicContinuation := sorry
+
+theorem dual_hasAverageCoefficientBound {d : AnalyticLFunctionData}
+    (h : d.HasAverageCoefficientBound) : d.dual.HasAverageCoefficientBound := sorry
+
+/-- **Layer 0.2, the functional equation against the dual record**, which is the form a
+non-self-dual instance needs and the reason `dual` is owned here. -/
+theorem hasFunctionalEquation_dual {d : AnalyticLFunctionData} (h : d.HasFunctionalEquation)
+    (s : ℂ) : d.completed s = d.rootNumber * d.dual.completed (1 - s) := sorry
 
 end AnalyticLFunctionData
 
@@ -345,7 +398,7 @@ example {s : ℂ} (hs : 1 < s.re) :
 
 /-- **Layer 1.4, the abscissa**: the Dedekind zeta series converges absolutely exactly for
 `Re s > 1`. -/
-example : LSeries.abscissaOfAbsConv (idealCoeff K) = 1 := sorry
+theorem abscissaOfAbsConv_idealCoeff : LSeries.abscissaOfAbsConv (idealCoeff K) = 1 := sorry
 
 /-- **Layer 1.6, counting ideals in a class with an error term.** The pin has the limit
 (`Ideal.tendsto_norm_le_and_mk_eq_div_atTop`); the error form, with the exponent `1 - 1/d`
@@ -473,52 +526,84 @@ example (K : Type*) [Field K] [NumberField K] :
 
 /-! ## Layer 3: Dedekind zeta — continuation and functional equation
 
-Stated in `∃`-form: the continued objects (`dedekindZetaC`, `completedDedekindZeta`) do
-not exist at the pin; building them *is* the layer, and these statements pin their
-defining properties. Layer 3.5 (uniqueness of the continuation) is what makes these
-`∃`-statements determine anything. -/
+⚠ The continued objects do not exist at the pin, and building them *is* this layer. They are
+declared here as **named** `sorry`-definitions with their characterizing theorems beside them,
+and not as anonymous `∃`-statements: a consumer needs a declaration to cite, an `example` is not
+one, and the zeros roadmap consumes both objects by name. Layer 3.5's uniqueness
+(`eq_of_meromorphic_of_eqOn_halfPlane`) is what makes the characterizations below determine the
+objects rather than merely constrain them. -/
 
-/-- **Layer 3.7, analytic continuation of `ζ_K`** with its unique simple pole at `s = 1`,
-whose residue is the pin's `dedekindZeta_residue` — upgrading the pin's real-limit class
-number formula (`tendsto_sub_one_mul_dedekindZeta_nhdsGT`) to a genuine complex residue. -/
-example :
-    ∃ Z : ℂ → ℂ,
-      (∀ s : ℂ, 1 < s.re → Z s = dedekindZeta K s) ∧
-      Meromorphic Z ∧
-      meromorphicOrderAt Z 1 = (-1 : WithTop ℤ) ∧
-      (∀ s : ℂ, s ≠ 1 → 0 ≤ meromorphicOrderAt Z s) ∧
-      Tendsto (fun s : ℂ ↦ (s - 1) * Z s) (𝓝[≠] 1)
-        (𝓝 (dedekindZeta_residue K : ℂ)) := sorry
+/-- **Layer 3.7, the continued Dedekind zeta function**, meromorphic on `ℂ` with a single simple
+pole at `s = 1`. -/
+noncomputable def dedekindZetaC (K : Type*) [Field K] [NumberField K] : ℂ → ℂ := sorry
 
-/-- **Layer 3.5, uniqueness of the continuation.** Without this the `∃`-statements above and
+/-- **Layer 3.7**: it continues the series. -/
+theorem dedekindZetaC_eq {s : ℂ} (hs : 1 < s.re) :
+    dedekindZetaC K s = dedekindZeta K s := sorry
+
+theorem meromorphic_dedekindZetaC : Meromorphic (dedekindZetaC K) := sorry
+
+theorem meromorphicOrderAt_dedekindZetaC_one :
+    meromorphicOrderAt (dedekindZetaC K) 1 = (-1 : WithTop ℤ) := sorry
+
+/-- **Layer 3.7**: the pole at `1` is the only one. This is the statement a consumer reads as
+`regular_away`, and it is what discharges the zeros roadmap's canonical-representative
+hypothesis. -/
+theorem meromorphicOrderAt_dedekindZetaC_nonneg {s : ℂ} (hs : s ≠ 1) :
+    0 ≤ meromorphicOrderAt (dedekindZetaC K) s := sorry
+
+/-- **Layer 3.7, the residue**, upgrading the pin's real-limit class number formula
+(`tendsto_sub_one_mul_dedekindZeta_nhdsGT`) to a genuine complex residue. -/
+theorem tendsto_sub_one_mul_dedekindZetaC :
+    Tendsto (fun s : ℂ ↦ (s - 1) * dedekindZetaC K s) (𝓝[≠] 1)
+      (𝓝 (dedekindZeta_residue K : ℂ)) := sorry
+
+/-- **Layer 3.5, uniqueness of the continuation.** Without this the characterizations above and
 below pin nothing: two continuations agreeing on `Re s > 1` agree wherever both are
 meromorphic, by the identity theorem on the connected set `ℂ ∖ {0, 1}`. -/
-example (Z W : ℂ → ℂ) (hZ : Meromorphic Z) (hW : Meromorphic W)
-    (h : ∀ s : ℂ, 1 < s.re → Z s = W s) :
+theorem eq_of_meromorphic_of_eqOn_halfPlane (Z W : ℂ → ℂ) (hZ : Meromorphic Z)
+    (hW : Meromorphic W) (h : ∀ s : ℂ, 1 < s.re → Z s = W s) :
     ∀ s : ℂ, s ≠ 0 → s ≠ 1 → Z s = W s := sorry
 
 /-- **Layer 3.6, the completed Dedekind zeta function and its functional equation**
 (Hecke; Neukirch VII (5.10)): `Λ_K(s) = |d_K|^{s/2} Γ_ℝ(s)^{r₁} Γ_ℂ(s)^{r₂} ζ_K(s)` on
 the convergence half-plane, holomorphic on `ℂ ∖ {0, 1}`, with the self-dual equation
 `Λ_K(1 − s) = Λ_K(s)`. -/
-example :
-    ∃ Λ : ℂ → ℂ,
-      (∀ s : ℂ, 1 < s.re →
-        Λ s = ((|discr K| : ℤ) : ℂ) ^ (s / 2) * Gammaℝ s ^ nrRealPlaces K *
-          Gammaℂ s ^ nrComplexPlaces K * dedekindZeta K s) ∧
-      Meromorphic Λ ∧
-      meromorphicOrderAt Λ 0 = (-1 : WithTop ℤ) ∧
-      meromorphicOrderAt Λ 1 = (-1 : WithTop ℤ) ∧
-      (∀ s : ℂ, s ≠ 0 → s ≠ 1 → 0 ≤ meromorphicOrderAt Λ s) ∧
-      Tendsto (fun s : ℂ ↦ (s - 1) * Λ s) (𝓝[≠] 1)
-        (𝓝 (((|discr K| : ℤ) : ℂ) ^ ((1 : ℂ) / 2) *
-          Gammaℝ 1 ^ nrRealPlaces K * Gammaℂ 1 ^ nrComplexPlaces K *
-          (dedekindZeta_residue K : ℂ))) ∧
-      Tendsto (fun s : ℂ ↦ s * Λ s) (𝓝[≠] 0)
-        (𝓝 (-(((|discr K| : ℤ) : ℂ) ^ ((1 : ℂ) / 2) *
-          Gammaℝ 1 ^ nrRealPlaces K * Gammaℂ 1 ^ nrComplexPlaces K *
-          (dedekindZeta_residue K : ℂ)))) ∧
-      (∀ s : ℂ, s ≠ 0 → s ≠ 1 → Λ (1 - s) = Λ s) := sorry
+noncomputable def completedDedekindZeta (K : Type*) [Field K] [NumberField K] : ℂ → ℂ := sorry
+
+theorem completedDedekindZeta_eq {s : ℂ} (hs : 1 < s.re) :
+    completedDedekindZeta K s =
+      ((|discr K| : ℤ) : ℂ) ^ (s / 2) * Gammaℝ s ^ nrRealPlaces K *
+        Gammaℂ s ^ nrComplexPlaces K * dedekindZeta K s := sorry
+
+theorem meromorphic_completedDedekindZeta : Meromorphic (completedDedekindZeta K) := sorry
+
+theorem meromorphicOrderAt_completedDedekindZeta_zero :
+    meromorphicOrderAt (completedDedekindZeta K) 0 = (-1 : WithTop ℤ) := sorry
+
+theorem meromorphicOrderAt_completedDedekindZeta_one :
+    meromorphicOrderAt (completedDedekindZeta K) 1 = (-1 : WithTop ℤ) := sorry
+
+/-- **Layer 3.6**: the two poles are the only ones — the `regular_away` statement for `Λ_K`. -/
+theorem meromorphicOrderAt_completedDedekindZeta_nonneg {s : ℂ} (h0 : s ≠ 0) (h1 : s ≠ 1) :
+    0 ≤ meromorphicOrderAt (completedDedekindZeta K) s := sorry
+
+theorem tendsto_sub_one_mul_completedDedekindZeta :
+    Tendsto (fun s : ℂ ↦ (s - 1) * completedDedekindZeta K s) (𝓝[≠] 1)
+      (𝓝 (((|discr K| : ℤ) : ℂ) ^ ((1 : ℂ) / 2) *
+        Gammaℝ 1 ^ nrRealPlaces K * Gammaℂ 1 ^ nrComplexPlaces K *
+        (dedekindZeta_residue K : ℂ))) := sorry
+
+theorem tendsto_mul_completedDedekindZeta_zero :
+    Tendsto (fun s : ℂ ↦ s * completedDedekindZeta K s) (𝓝[≠] 0)
+      (𝓝 (-(((|discr K| : ℤ) : ℂ) ^ ((1 : ℂ) / 2) *
+        Gammaℝ 1 ^ nrRealPlaces K * Gammaℂ 1 ^ nrComplexPlaces K *
+        (dedekindZeta_residue K : ℂ)))) := sorry
+
+/-- **Layer 3.6, the functional equation.** ⚠ An identity of *values* only away from the two
+poles; at `0` and `1` both sides are junk values of a total representative. -/
+theorem completedDedekindZeta_one_sub {s : ℂ} (h0 : s ≠ 0) (h1 : s ≠ 1) :
+    completedDedekindZeta K (1 - s) = completedDedekindZeta K s := sorry
 
 /-! ## Layer 4: special values — the `ℚ(i)` factorization -/
 
@@ -540,6 +625,24 @@ functions everywhere). -/
 example (F : Type*) [Field F] [NumberField F] [IsCyclotomicExtension {4} ℚ F]
     {s : ℂ} (hs : 1 < s.re) :
     dedekindZeta F s = riemannZeta s * DirichletCharacter.LFunction χ₄C s := sorry
+
+/-- **Layer 4.2, the quadratic factorization for the continued functions**, which is the form a
+consumer counting zeros needs: on `Re s > 1` this is an identity of convergent series, but the
+zeros are not there, and off that half-plane a raw `LSeries` is a junk value. ⚠ Named, because
+the zeros roadmap turns it into an additivity of divisors and cannot cite an `example`. -/
+theorem dedekindZetaC_quadratic (F : Type*) [Field F] [NumberField F]
+    (hF : Module.finrank ℚ F = 2) :
+    ∃ (N : ℕ) (_ : NeZero N) (χ : DirichletCharacter ℂ N),
+      ∀ s : ℂ, dedekindZetaC F s = riemannZeta s * DirichletCharacter.LFunction χ s := sorry
+
+/-- **Layer 4.4, the cyclotomic factorization for the continued functions**, over the primitive
+characters inducing the characters modulo `n`. -/
+theorem dedekindZetaC_cyclotomic (n : ℕ) [NeZero n] (F : Type*) [Field F] [NumberField F]
+    [IsCyclotomicExtension {n} ℚ F] :
+    ∃ (m : DirichletCharacter ℂ n → ℕ) (_ : ∀ χ, NeZero (m χ))
+      (χ' : ∀ χ : DirichletCharacter ℂ n, DirichletCharacter ℂ (m χ)),
+      ∀ s : ℂ, dedekindZetaC F s =
+        ∏ χ : DirichletCharacter ℂ n, DirichletCharacter.LFunction (χ' χ) s := sorry
 
 /-! ## Layers 5 and 6: the character interfaces -/
 
@@ -580,6 +683,52 @@ structure RayClassCharacter where
   primitive : ∀ 𝔫 : Ideal (𝓞 K), 𝔫 ∣ conductor₀ → 𝔫 ≠ conductor₀ →
     ¬ ∃ ψ : Ideal (𝓞 K) → ℂ,
         (∀ I, IsCoprime I 𝔫 → ψ I = weight.toFun I) ∧ ∀ 𝔭 ∈ weight.bad, 𝔭.asIdeal ∣ 𝔫
+
+/-! ### Layers 5.3, 5.7 and 5.8: the Hecke L-function, by name
+
+⚠ Named rather than existential, for the same reason as Layer 3: the zeros roadmap builds its
+Hecke instance on these objects and cannot cite an anonymous `example`. -/
+
+/-- **Layer 5.3, the continued Hecke L-function.** -/
+noncomputable def heckeLFunctionC (K : Type*) [Field K] [NumberField K]
+    (χ : RayClassCharacter K) : ℂ → ℂ := sorry
+
+theorem heckeLFunctionC_eq (χ : RayClassCharacter K) {s : ℂ} (hs : 1 < s.re) :
+    heckeLFunctionC K χ s = LSeries (idealCoeffOfWeight K χ.weight.toFun) s := sorry
+
+/-- **Layer 5.7, the completed Hecke L-function**, conductor power and gamma factor included. -/
+noncomputable def completedHeckeLFunction (K : Type*) [Field K] [NumberField K]
+    (χ : RayClassCharacter K) : ℂ → ℂ := sorry
+
+/-- **Layer 5.7, entirety.** ⚠ For a **nontrivial** primitive character only: the trivial
+character's completed function has poles at `0` and `1`, and the statement without that
+hypothesis is false there. -/
+theorem differentiable_completedHeckeLFunction (χ : RayClassCharacter K)
+    (hχ : ∃ I : Ideal (𝓞 K), χ.weight.toFun I ≠ 1 ∧ χ.weight.toFun I ≠ 0) :
+    Differentiable ℂ (completedHeckeLFunction K χ) := sorry
+
+/-- **Layer 5.8, the root number.** -/
+noncomputable def heckeRootNumber (K : Type*) [Field K] [NumberField K]
+    (χ : RayClassCharacter K) : ℂ := sorry
+
+/-- **Layer 5.8, the root number has modulus one**, which is what the Gauss-sum evaluation
+`|τ(χ)| = √𝔑𝔣₀` of 5.6 is for, and what every growth estimate downstream needs. -/
+theorem norm_heckeRootNumber (χ : RayClassCharacter K) : ‖heckeRootNumber K χ‖ = 1 := sorry
+
+/-- **Layer 5.8, the functional equation**, against the conjugate character and not against `χ`
+itself. ⚠ For a non-real `χ` those are different characters, and an equation written as though
+they were the same is false. -/
+theorem completedHeckeLFunction_one_sub (χ χ' : RayClassCharacter K)
+    (hχ' : ∀ I, χ'.weight.toFun I = starRingEnd ℂ (χ.weight.toFun I)) (s : ℂ) :
+    completedHeckeLFunction K χ s =
+      heckeRootNumber K χ * completedHeckeLFunction K χ' (1 - s) := sorry
+
+/-- **Layer 5.7, the Mellin representation**, which is what a consumer turns into a
+vertical-strip bound and hence into finite order. -/
+theorem exists_mellin_completedHeckeLFunction (χ : RayClassCharacter K) :
+    ∃ θ : ℝ → ℂ, ∀ s : ℂ, 1 < s.re →
+      completedHeckeLFunction K χ s =
+        ∫ t in Set.Ioi (0 : ℝ), θ t * (t : ℂ) ^ s / (t : ℂ) := sorry
 
 /-- **Layer 6.1, the Grossencharacter interface (compatibility interface).** The global class
 field theory roadmap's infinity-type layer will own this vocabulary.
@@ -641,18 +790,34 @@ example {a : ℕ → ℂ} (ha₀ : 0 ≤ a) {x₀ : ℝ}
 For the ζ instance the correct statements are `meromorphicOrderAt riemannZeta 1 = -1` and,
 for `t ≠ 0`, order `0` at `1 + it`. Both are pin-expressible; the second is the pin's
 `riemannZeta_ne_zero_of_one_le_re` in the form the roadmap wants everywhere. -/
-example : meromorphicOrderAt riemannZeta 1 = (-1 : WithTop ℤ) := sorry
+theorem meromorphicOrderAt_riemannZeta_one :
+    meromorphicOrderAt riemannZeta 1 = (-1 : WithTop ℤ) := sorry
 
 /-- **Layer 7.5, nonvanishing off the pole**, in the same language. -/
-example {t : ℝ} (ht : t ≠ 0) :
+theorem meromorphicOrderAt_riemannZeta_one_add {t : ℝ} (ht : t ≠ 0) :
     meromorphicOrderAt riemannZeta (1 + t * I) = (0 : WithTop ℤ) := sorry
 
 /-- **Layer 7.5, nonvanishing for a nontrivial character**: order `0` at every point of the
 line, including `s = 1`, where there is no pole. This is the shape the ray-class and
 cyclotomic families are stated in. -/
-example {N : ℕ} [NeZero N] {χ : DirichletCharacter ℂ N} (hχ : χ ≠ 1) (t : ℝ) :
+theorem meromorphicOrderAt_dirichletLFunction_one_add {N : ℕ} [NeZero N]
+    {χ : DirichletCharacter ℂ N} (hχ : χ ≠ 1) (t : ℝ) :
     meromorphicOrderAt (DirichletCharacter.LFunction χ) (1 + t * I) = (0 : WithTop ℤ) :=
   sorry
+
+/-- **Layer 7.4, nonvanishing on `Re s = 1` for `ζ_K`**, in meromorphic-order form and stated
+for the continued function of 3.7 — the only object on which the statement is meaningful, since
+at `s = 1` a raw `LSeries` is a junk value. The pole itself is
+`meromorphicOrderAt_dedekindZetaC_one`. -/
+theorem meromorphicOrderAt_dedekindZetaC_one_add {t : ℝ} (ht : t ≠ 0) :
+    meromorphicOrderAt (dedekindZetaC K) (1 + t * I) = (0 : WithTop ℤ) := sorry
+
+/-- **Layer 7.3, the `3-4-1` positivity, at its root.** `3 + 4 cos θ + cos 2θ = 2(1 + cos θ)²`
+is the whole content of every `3-4-1` product bound: the bound is this inequality applied to the
+arguments of the Euler factors. It is named here so that the zeros roadmap's quantitative
+version and this roadmap's limiting version make the *same* inequality quantitative. -/
+theorem three_four_one_nonneg (θ : ℝ) :
+    0 ≤ 3 + 4 * Real.cos θ + Real.cos (2 * θ) := sorry
 
 open scoped Classical in
 /-- **Layer 7.6, the ideal von Mangoldt weight**: `log 𝔑𝔭` at a prime power `𝔭^m`, and `0`
@@ -664,9 +829,16 @@ noncomputable def idealVonMangoldt (I : Ideal (𝓞 K)) : ℂ :=
 
 /-- **Layer 7.6, the logarithmic derivative of `ζ_K`** as a Dirichlet series on `Re s > 1`,
 in the shape of Mathlib's `LSeries_vonMangoldt_eq_deriv_riemannZeta_div`. -/
-example {s : ℂ} (hs : 1 < s.re) :
+theorem LSeries_idealVonMangoldt_eq {s : ℂ} (hs : 1 < s.re) :
     LSeries (idealCoeffOfWeight K (idealVonMangoldt K)) s =
       -deriv (dedekindZeta K) s / dedekindZeta K s := sorry
+
+/-- **Layer 7.6, nonnegativity of the ideal von Mangoldt weight.** ⚠ Named because the `3-4-1`
+argument needs exactly this and nothing else about the weight: with
+`three_four_one_nonneg` it gives the quantitative inequality the zeros roadmap's zero-free
+regions run on. -/
+theorem idealVonMangoldt_nonneg (I : Ideal (𝓞 K)) :
+    0 ≤ (idealVonMangoldt K I).re ∧ (idealVonMangoldt K I).im = 0 := sorry
 
 /-! ## Layer 8: densities and the Chebotarev density theorem -/
 

@@ -54,6 +54,23 @@ around it, and none of them is a prerequisite of any milestone.
   the real-parameter Gaussian theta, its transformation, and Poisson summation; the
   holomorphic theta on the upper half-plane and its modular transformation law are that
   roadmap's Layer 8. Neither roadmap states the other's half.
+- **The zeros roadmap consumes this one by declaration name**, which is why several targets in
+  `Suggested.lean` that used to be anonymous `example`s stating an `∃` are now named
+  `sorry`-definitions with their characterizing theorems beside them: `dedekindZetaC` and
+  `completedDedekindZeta` (Layers 3.6 and 3.7), the Hecke family `heckeLFunctionC`,
+  `completedHeckeLFunction` and `heckeRootNumber` (Layers 5.3, 5.7 and 5.8), the two
+  factorizations at the continued level (`dedekindZetaC_quadratic`, `dedekindZetaC_cyclotomic`),
+  and the smaller crossings `abscissaOfAbsConv_idealCoeff`,
+  `eq_of_meromorphic_of_eqOn_halfPlane`, `three_four_one_nonneg`, `idealVonMangoldt_nonneg`,
+  `LSeries_idealVonMangoldt_eq`, and the three nonvanishing statements of 7.4. ⚠ An anonymous
+  `example` is not a declaration contract: a downstream roadmap cannot cite it, import it, or
+  check against it, so anything another roadmap consumes is named here.
+- **The dual record is owned here**, as `AnalyticLFunctionData.dual`, with `dual_gammaFactor`,
+  `dual_dual`, `dual_degree`, `dual_eq_self`, the three predicate-transport theorems, and
+  `hasFunctionalEquation_dual`. ⚠ It belongs here rather than downstream: the functional equation
+  of a **non-self-dual** record names a second *record* on its right-hand side, so the roadmap
+  that owns the record owns its dual. The zeros roadmap built its own `dualData` so that nothing
+  waited; it now consumes this one.
 
 ## What is in motion elsewhere
 
