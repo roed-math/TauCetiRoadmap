@@ -29,6 +29,7 @@ If you want to write or review a roadmap, start with [CONTRIBUTING.md](CONTRIBUT
 - [The Jacobian challenge](TauCetiRoadmap/JacobianChallenge/README.md)
 - [Universal covers](TauCetiRoadmap/UniversalCovers/README.md)
 - [Weighted orthogonal L² bases: completeness, Hilbert bases, and products of orthogonal systems](TauCetiRoadmap/OrthogonalL2Bases/README.md)
+- [Zeros of L-functions: growth, zero-free regions, counting, and the explicit formula](TauCetiRoadmap/LFunctionZeros/README.md)
 
 ## Completed roadmaps
 
