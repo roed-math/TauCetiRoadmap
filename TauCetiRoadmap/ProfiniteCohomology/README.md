@@ -2,14 +2,13 @@
 
 Continuous cochain cohomology of a profinite group acting on discrete modules is the language of
 Galois cohomology. Local and global class field theory, the duality theorems, Demushkin groups,
-and the cohomological invariants of quadratic forms are all written in it. Mathlib is
-mid-construction: it has a deep theory of discrete group cohomology, and a continuous cohomology
-functor of which only degree `0` has been computed. Almost everything one computes with is
-missing, at Mathlib and at every neighboring project: explicit inhomogeneous `H⁰, H¹, H²` with
+and the cohomological invariants of quadratic forms are all written in it. Mathlib supplies a deep
+theory of discrete group cohomology and a continuous cohomology functor; §4 records that
+inventory. This roadmap builds what one computes with: explicit inhomogeneous `H⁰, H¹, H²` with
 their cocycle identities, the comparison isomorphisms between models, the description as a colimit
 over finite quotients, long exact sequences, corestriction, Shapiro's lemma for closed subgroups,
 cup products with their compatibilities, cohomological dimension, Hilbert 90 and Kummer theory in
-profinite form, and the Evens norm. This roadmap builds that theory.
+profinite form, and the Evens norm.
 
 One definitional decision is fixed before anything else: **we do not create a third cohomology
 theory.** Mathlib's continuous cohomology is the canonical object. An explicit inhomogeneous
@@ -168,11 +167,10 @@ with the **conjugate** class on the right. Dropping the conjugate gives a differ
 this roadmap does not supply it; a consumer that wants the unconjugated form must prove the two
 equivalent under stated hypotheses.
 
-Once a consuming roadmap is accepted, record the joint contract as a four-column table, consumer
-layer against supplier layer against exact object against declaration name, carried identically in
-both roadmaps. Coordination with roadmaps still under review is recorded in
-[`PROVENANCE.md`](PROVENANCE.md), which is not normative, so that this section states only what is
-actually agreed.
+A joint contract with a consuming roadmap is recorded as a four-column table, consumer layer
+against supplier layer against exact object against declaration name, carried identically in both
+roadmaps. This section states settled contracts only. Coordination that is not yet settled is
+recorded in [`PROVENANCE.md`](PROVENANCE.md), which is not normative.
 
 Nothing here depends on another roadmap except the merged
 [`RepresentationTheory/InductionRestriction`](../RepresentationTheory/InductionRestriction/README.md),
@@ -229,7 +227,7 @@ cited in Layer 7.
   continuous), `Z² = C² ⊓ ker d²`, and `B² = d¹(C¹)`, the image of the **continuous** 1-cochains.
   `H⁰(G,M)` is the invariant subgroup `M^G` itself, not a quotient.
 - **Functoriality is by compatible pairs**, in the direction of Mathlib's discrete
-  `groupCohomology.cochainsMap` and master's `ContinuousCohomology.cochainsMap`: a continuous
+  `groupCohomology.cochainsMap` and of `ContinuousCohomology.cochainsMap`: a continuous
   homomorphism `φ : H →ₜ* G` together with an `H`-equivariant continuous map from the restricted
   module (`f (φ h • m) = h • f m`) induces `Hⁱ(G, M) → Hⁱ(H, N)`. Restriction (`φ` the inclusion
   of a subgroup, any subgroup; openness is needed only for corestriction), inflation (`φ` a
@@ -358,7 +356,7 @@ All paths at the Mathlib the repository currently builds.
   (`Rep.indCoindIso : Ind_S^G A ≅ Coind_S^G A` for `[S.FiniteIndex]`).
 - **Continuous representations:** `Mathlib/RepresentationTheory/Continuous/Basic.lean`
   (`ContRepresentation R G V = G →* V →L[R] V`, `ContIntertwiningMap`,
-  `ContRepresentation.coind₁`), the pin-side seed of master's `TopRep`.
+  `ContRepresentation.coind₁`), the unbundled counterpart of the `TopRep` carrier fixed in §1.
 - **Profinite groups:** `Mathlib/Topology/Algebra/OpenSubgroup.lean` (`OpenSubgroup`,
   `OpenNormalSubgroup`, their lattice structure); `Mathlib/Topology/Algebra/ClopenNhdofOne.lean`
   (`exist_openNormalSubgroup_sub_open_nhds_of_one` under
@@ -510,12 +508,12 @@ canonical-facing statement below uses.
 - **Functoriality in compatible pairs.** For a continuous homomorphism `φ : H →ₜ* G` and a
   morphism `f : Action.res _ φ X ⟶ Y` in `TopRep R H`: the cochain map `cochainsMap φ f`, then
   `cocyclesMap φ f n`, then `map φ f n : Hⁿ_cont(G, X) ⟶ Hⁿ_cont(H, Y)`, with `map_id` and
-  `map_comp`. Master's names for these are `ContinuousCohomology.cochainsMap`, `cocyclesMap` and
-  `map`; use them, so that the swap is mechanical.
+  `map_comp`. Name them `ContinuousCohomology.cochainsMap`, `cocyclesMap` and `map`, matching
+  Mathlib's continuous-cohomology functoriality API, so that the swap to it is a deletion.
 - **The three named instances.** Restriction along the inclusion of a subgroup, inflation along a
   quotient map with invariant coefficients, and coefficient maps at `φ = id`, each as a natural
-  transformation of functors on `TopRep R G`, and each with its composition law. Master calls the
-  first two `resNatTrans` and `inflNatTrans`.
+  transformation of functors on `TopRep R G`, and each with its composition law. Name the first
+  two `resNatTrans` and `inflNatTrans`, again matching Mathlib.
 - **Degree 0.** `map φ f 0` commutes with `continuousCohomologyZeroIso` and the induced map on
   invariants, which is what makes the low-degree comparisons of Layer 3 checkable at `n = 0`
   before any of the harder degrees exist.
@@ -566,7 +564,7 @@ group to a torsion-free group is trivial.
   `G →ₜ* M`, and `H⁰ = M`.
 - **Compatible-pair functoriality.** The pullback `Hⁱ(G, M) → Hⁱ(H, N)` of §3, on cochains,
   cocycles and cohomology, with the identity and composition laws. This is the continuous twin of
-  the pin's `groupCohomology.cochainsMap` package, aligned with master's
+  Mathlib's `groupCohomology.cochainsMap` package, named to align with Layer 1's
   `ContinuousCohomology.cochainsMap`.
 - **The three instances.** Restriction `res : Hⁱ(G, M) → Hⁱ(H, M)` for any subgroup with the
   subspace topology; inflation `inf : Hⁱ(G ⧸ N, M^N) → Hⁱ(G, M)` for closed normal `N`; and
@@ -1515,7 +1513,7 @@ Every entry in the right-hand column is a Mathlib declaration, an earlier layer 
 a merged roadmap. Every dependency points backwards: no layer above uses a milestone of a later
 one, and an integration theorem is stated in the first layer where both of its sides exist.
 Nothing here needs a pull request, a later toolchain pin, or another repository, so every layer can
-be started at the current pin.
+be started immediately.
 
 ---
 
