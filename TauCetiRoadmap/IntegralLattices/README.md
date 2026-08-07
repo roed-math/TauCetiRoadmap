@@ -26,7 +26,7 @@ refactor, among them the `IsApply` reworking of `QuadraticMap` in #42134 and the
 This roadmap builds the arithmetic, through its classical high points: the classification
 of even unimodular lattices in low rank, the Smith–Minkowski–Siegel mass formula in the
 Conway–Sloane normalization, and Nikulin's discriminant-form theory of existence,
-uniqueness and primitive embeddings, which is what K3-surface theory actually runs on. It
+uniqueness and primitive embeddings, the theory K3-surface arguments run on. It
 serves the LMFDB's lattice section, whose records are positive definite integral lattices
 with their genus representatives, and the K3 pipeline, which enumerates genera and needs
 Nikulin's embedding criteria.
@@ -554,8 +554,8 @@ can be built at the same time.
   `q = ⊕_p q_p`; isometries and the group `O(q)`; the generators `q_θ^{(p)}(p^k)`,
   `u^{(2)}(2^k)`, `v^{(2)}(2^k)` of Nikulin Proposition 1.8.1, with the proof that every
   finite quadratic form is an orthogonal sum of them; and the relations among them of
-  Nikulin Proposition 1.8.2, which is what makes the list into a classification and is used
-  by Layers 3 and 5 to recognize when two symbols name the same form. Both the generation
+  Nikulin Proposition 1.8.2, without which the list is not yet a classification; Layers 3
+  and 5 use them to recognize when two symbols name the same form. Both the generation
   statement and the relations are milestones of this layer, since Layer 5's existence and
   uniqueness theorems quantify over these summands by name.
 - **The Gauss-sum invariant.** `∑_{a ∈ A} e^{πi q(a)} = √#A · e^{2πi·sign(q)/8}` for
