@@ -10,7 +10,7 @@ Galois/Dirichlet-character dictionary for cyclotomic fields
 Frobenius elements (`Mathlib/RingTheory/Frobenius.lean`). What it does not have is any of
 global class field theory's own objects: no ray class groups or moduli (verified at the pin:
 zero matches for ray or narrow class anywhere), no narrow class group, no idele class group
-(being defined right now in [PR #40735](https://github.com/leanprover-community/mathlib4/pull/40735)),
+(being defined in [PR #40735](https://github.com/leanprover-community/mathlib4/pull/40735)),
 no Hecke characters or Grossencharacters (none in any Lean 4 development we could find), no
 global Artin map, no reciprocity law, no conductors of abelian extensions, no existence
 theorem, no Hilbert class field (now a `theorem_wanted` file in
@@ -41,12 +41,11 @@ exists there today (the repository tree is `Cohomology/`, `IsNonarchimedeanLocal
 the two adelic compactness results this roadmap needs: `NumberField.AdeleRing.cocompact`
 (compactness of `𝔸_K/K`) and Fujisaki's lemma (`FLT/DivisionAlgebra/Finiteness.lean`, the
 idelic compactness that subsumes class-number finiteness and the unit theorem). This roadmap
-does not yet choose an independent implementation over those active lines. At the review
-refresh recorded in §Provenance no relevant author had been contacted, so the coordination
-requirements stated there apply before implementation: prefer consuming or contributing
-reusable results upstream; use an independent Tau Ceti proof only after recording why it does
-not fork the API. The mathematical targets below are pinned in the pin's vocabulary and remain
-convention-compatible with all three projects.
+does not yet choose an independent implementation over those active lines. No relevant author
+has been contacted, as §Provenance records, so the coordination requirements stated there apply
+before implementation: consume what exists, and develop the same mathematics independently only
+after recording why doing so does not fork the API. The mathematical targets below are pinned
+in the pin's vocabulary and remain convention-compatible with all three projects.
 
 Suggested home: `TauCeti/NumberTheory/ClassFieldTheory/Global/`, with subdirectories per layer
 (`Modulus/`, `RayClass/`, `IdeleClass/`, `Archimedean/`, `HeckeCharacter/`, `NormIndex/`,
@@ -55,28 +54,26 @@ Suggested home: `TauCeti/NumberTheory/ClassFieldTheory/Global/`, with subdirecto
 `Mathlib/NumberTheory/ClassFieldTheory/Local/Basic.lean` is the path erdOne's mathlib fork
 branch `erd1/LCFT` already stakes out for class field theory upstream (see the local-fields
 roadmap's audit), so `NumberTheory/ClassFieldTheory/Global/` mirrors the namespace Mathlib
-itself is converging on and makes eventual upstreaming a file move; it also sits beside the
-prospective `ClassFieldTheory/Local/` home of the local roadmap's late layers. The purely
-Dedekind-domain material of Layers 0 and 1 should be written so that its eventual Mathlib home
-could be next to `RingTheory/ClassGroup/`; note the intended split in file docstrings.
+itself is converging on, which keeps the two developments legible to each other; it also sits
+beside the prospective `ClassFieldTheory/Local/` home of the local roadmap's late layers. The
+purely Dedekind-domain material of Layers 0 and 1 belongs next to the `RingTheory/ClassGroup/`
+material it generalizes rather than with the number-field theory; note the intended split in
+file docstrings.
 
 ## Prerequisites, and who owns what
 
-This roadmap is part of the coordinated 2026-07-30 family, and it consumes three of its
-siblings. All three are still open pull requests today, and an open pull request is not a
-roadmap a contributor can build against. **This roadmap therefore merges only after all three
-have merged**, and the merge commit must carry the rebase described here:
+This roadmap consumes three of its siblings. The table says what it takes from each, so that a
+contributor can look the statement up in the supplier's own roadmap.
 
-| supplier | pull request | what this roadmap consumes | link after the rebase |
-|---|---|---|---|
-| Local Fields | [#2](https://github.com/roed-math/TauCetiRoadmap/pull/2) | nonarchimedean local reciprocity (its Layer 7), unramified norm computations (Layer 2), differents and local conductors (Layer 3), the local Herbrand quotient (Layer 5), local Hilbert symbols (Layer 8) | `../LocalFields/README.md` |
-| Number Field Arithmetic | [#9](https://github.com/roed-math/TauCetiRoadmap/pull/9) | the decomposition/inertia/Frobenius API, the ideal-theoretic Artin symbol and its multiplicativity, the cyclotomic Frobenius computation, the completion dictionary at finite places, the globalization of the different | `../NumberFieldArithmetic/README.md` |
-| Profinite Cohomology | [#1](https://github.com/roed-math/TauCetiRoadmap/pull/1) | continuous cohomology of `G_K` and colimits over finite quotients, used by Layer 11 and nothing else | `../ProfiniteCohomology/README.md` |
+| supplier | what this roadmap consumes |
+|---|---|
+| [Local Fields](https://github.com/roed-math/TauCetiRoadmap/pull/2) | nonarchimedean local reciprocity (its Layer 7), unramified norm computations (Layer 2), differents and local conductors (Layer 3), the local Herbrand quotient (Layer 5), local Hilbert symbols (Layer 8) |
+| [Number Field Arithmetic](https://github.com/roed-math/TauCetiRoadmap/pull/9) | the decomposition/inertia/Frobenius API, the ideal-theoretic Artin symbol and its multiplicativity, the cyclotomic Frobenius computation, the completion dictionary at finite places, the globalization of the different |
+| [Profinite Cohomology](https://github.com/roed-math/TauCetiRoadmap/pull/1) | continuous cohomology of `G_K` and colimits over finite quotients, used by Layer 11 and nothing else |
 
-At that rebase, replace every pull-request link by the relative path above, check that each
-link resolves, and settle the
-root-list number and the aggregate import in `TauCetiRoadmap.lean` against the family
-integration branch rather than against the numbering in this branch.
+Each link points at the pull request carrying that roadmap, and becomes the relative path
+(`../LocalFields/README.md`, `../NumberFieldArithmetic/README.md`,
+`../ProfiniteCohomology/README.md`) once its directory exists here.
 
 The [L-functions roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/8) is **not** a
 prerequisite. It consumes Layer 3's Hecke characters and owns everything analytic: Hecke
@@ -166,14 +163,14 @@ must carry their true hypotheses.
 | nonarchimedean local normalizations | imported from the local-fields roadmap's pinned table: normalized valuation `v(π) = 1`, residue cardinality `q_v`, **arithmetic Frobenius** `x ↦ x^{q_v}` as the distinguished generator, `Art_{K_v}(π) = Frob_v` | LocalFields Layers 0/2/7 |
 | archimedean local normalizations | built here, in Layer 2C, since the local roadmap is nonarchimedean. `Art_ℂ : ℂˣ → Gal(ℂ/ℂ)` is trivial; `Art_ℝ : ℝˣ → Gal(ℂ/ℝ)` sends positive elements to `1` and negative elements to complex conjugation, so `ker Art_ℝ = ℝ_{>0} = N_{ℂ/ℝ}(ℂˣ)`. Invariants: `inv_ℂ = 0` and the nontrivial class at a real place has invariant `1/2`. Hilbert symbols: `(a,b)_ℂ = 1` always, and `(a,b)_ℝ = −1` exactly when `a < 0` and `b < 0` | Layer 2C |
 | Artin map, direction and normalization | finite level: `θ_{L/K} : C_K ⧸ N_{L/K} C_L ≃* Gal(L/K)` for finite abelian `L/K`, **defined** as the compilation of local maps, `θ((x_v)_v) = ∏_v Art_{K_v}(x_v)∣_L`. Normalization: for `v` unramified in `L` and `x` the class of an idele that is a uniformizer at `v` and a unit at every other place, `θ(x) = Frob_v`, arithmetic. Profinite level: `Art_K : C_K →* Gal(K^{ab}/K)` continuous and **surjective**, with kernel the identity component `D_K`. ⚠ This is the opposite failure mode from the local case, where `Art_{K_v}` is injective and not surjective; porting a local statement verbatim is the classic error | Layers 6–7; Neukirch ANT VI §5 |
-| ideal-theoretic Artin map | the map `J^𝔪 →* Gal(L/K)`, `𝔭 ↦ Frob_𝔭` in the pin's `IsArithFrobAt`/`arithFrobAt` vocabulary, is **defined and proved multiplicative in the Number Field Arithmetic roadmap**, and consumed here. Its agreement with the idelic map, under the Layer 2A dictionary and for `𝔪` divisible by the conductor, is a named theorem of Layer 6 | NumberFieldArithmetic Layer 2; Layers 6–8 |
+| ideal-theoretic Artin map | the map `𝔭 ↦ Frob_𝔭` in the pin's `IsArithFrobAt`/`arithFrobAt` vocabulary is **defined and proved multiplicative in the Number Field Arithmetic roadmap**, as `artinHomUnramified : J^S →* (L ≃ₐ[K] L)` with `S` the primes dividing `relDiscr (𝓞 K) (𝓞 L)`, on the same `(FractionalIdeal (𝓞 K)⁰ K)ˣ` carrier used here. This roadmap consumes that declaration literally: for `𝔪₀` divisible by every ramified prime, `J^{𝔪₀} ≤ J^S`, and the map on `J^{𝔪₀}` is the restriction, never a second definition. Its agreement with the idelic map, under the Layer 2A dictionary and for `𝔪` divisible by the conductor, is a named theorem of Layer 6 | NumberFieldArithmetic Layer 2; Layers 6–8 |
 | Hecke character | a continuous homomorphism `χ : IdeleClassGroup (𝓞 K) K →* ℂˣ` (Mathlib's `ContinuousMonoidHom`). The dictionary: `χ` has finite order iff `ker χ` is open iff `χ` factors through a ray class group `Cl_𝔪 K`, each equivalence a named theorem. "Ray class character" is the composite notion, never an independent definition. Unitary characters and the decomposition `χ = χ_u · ‖·‖^s` are Layer 3; algebraic characters and infinity types are Layer 10A | Layer 3 |
 | conductor of a character | two notions, because one does not cover the other. The **finite conductor ideal** of an arbitrary continuous quasicharacter is assembled from the depths at which its nonarchimedean local components become trivial on principal units. The **ray conductor modulus** is defined for finite-order characters, and more generally for characters trivial on the connected component of the archimedean part: it is the smallest `𝔪` with `U_𝔪 ⊆ ker χ`, and its infinite part records the real places where the local sign component is nontrivial. ⚠ A general quasicharacter has no ray conductor: `‖·‖^s` is not trivial on any `U_𝔪`. Over `ℚ`, `DirichletCharacter.conductor` matches the finite part, and parity determines the infinite part | Layer 3 |
 | conductor of an abelian extension | of a finite abelian `L/K`: the smallest modulus `𝔣` with `U_𝔣 ⊆ Kˣ · N_{L/K}(I_L)`, equivalently the modulus assembled from the local conductors of the local-fields roadmap's Layer 7 together with the ramified real places. Both faces are stated and their agreement is a theorem | Layer 7 |
 | inequality naming | the two norm-index bounds are named by content, `herbrand_ge` (`[C_K : N C_L] ≥ [L:K]`, cyclic, via the Herbrand quotient) and `kummer_le` (`≤`, via Kummer theory), and never "first" and "second": the literature disagrees on the ordinals (the ClassFieldTheory blueprint's "first inequality" is the density-route `≤`, Neukirch's First is the `≥`), and a name that flips meaning between sources is a defect | Layer 5 |
 | ambient closure | fix one algebraic closure `K̄` (a `[IsAlgClosure K K̄]` hypothesis, or `AlgebraicClosure K`) at the start of Layers 7 through 11 and construct every abelian extension as an `IntermediateField K K̄`. Composita, intersections, `K^{ab} = ⨆_𝔪 K_𝔪`, the tower of ray class fields, and the direct limit `colim_L C_L` are all statements inside that closure. Isomorphisms of profinite groups are `ContinuousMulEquiv`s, never bare `MulEquiv`s | Layers 7–11 |
 | class formation interface | identical to the local roadmap's: finite level in the shape of kbuzzard/ClassFieldTheory's `FiniteClassFormation` (distinguished `H²` class, `H¹` vanishing, compatible invariants), with the profinite formation `(G_K, colim_L C_L)` NSW-style on top | Layer 11 |
-**Pinned route decision** (delegated by the master plan; recorded here with its rationale).
+**Pinned route decision**, recorded here with its rationale.
 The global Artin map is **assembled from the local reciprocity maps**, Neukirch-style, rather
 than constructed from a global fundamental class. The map is *defined* on ideles by
 `(x_v)_v ↦ ∏_v Art_{K_v}(x_v)∣_L`, with almost all factors trivial by unramifiedness, so that
@@ -325,10 +322,11 @@ number field beyond the generic `ClassGroup R`; Layer 10B builds it.
   `df510478253d`, updated 2026-07-29: the finite-adele norm), both Mercuri. Layer 2A's topology
   and norm milestones refactor onto them. The companion instance-transparency PR #42130 was
   **closed unmerged on 2026-08-06**, so do not plan against it.
-- **Mathlib PR [#41765](https://github.com/leanprover-community/mathlib4/pull/41765)**
-  (R. Brasca; open, head `0b8f53734ea1`, updated 2026-08-05):
-  `NumberTheory/NumberField/DirichletDensity`. This is the L-functions sibling's territory,
-  cited here only to mark the boundary: nothing in this roadmap may depend on it.
+- **Dirichlet density.** Mathlib has none at the pin, and the attempt to add it
+  ([#41765](https://github.com/leanprover-community/mathlib4/pull/41765), R. Brasca,
+  `NumberTheory/NumberField/DirichletDensity`) was closed unmerged on 2026-08-07. Density is
+  the L-functions sibling's territory, and the boundary is what matters here: nothing in this
+  roadmap may depend on it, whether or not it lands upstream.
 - **kbuzzard/ClassFieldTheory** (`main = ccc3323c6750abca25b49b35106f54eb3a398509`, top commit
   2026-07-31, checked 2026-08-06; maintainer Yunzhou "Edison" Xie): the global chapter is still
   blueprint only (`_4_global.tex`: the idele-class Herbrand quotient via S-ideles and the unit
@@ -860,7 +858,7 @@ the infinite places.
   the norm index is `1`; this contradicts `herbrand_ge` for nontrivial cyclic `M/K`. No
   Chebotarev-style argument may be imported here (Janusz V §5; Artin–Tate).
 - **The reciprocity law.** `θ_{L/K}(Kˣ) = 1`, that is `∏_v Art_{K_v}(x)∣_L = 1` for `x ∈ Kˣ`.
-  Pinned route, in two stages.
+  Pinned route, in three stages.
   1. Cyclotomic extensions of `ℚ`, by direct computation: Layer 4's anchor together with the
      local roadmap's cyclotomic-orientation clause `χ_cyc(Art(u)) = u⁻¹`, plus the archimedean
      factor from Layer 2C. The two roadmaps' conventions meet at this milestone, and a sign
@@ -881,17 +879,19 @@ the infinite places.
        Since `m` is prime to `𝔭` and `𝔭` is unramified in `L`, it is unramified in `L(ζ_m)/K`
        and so in `LE/K`. ⚠ `E/K` itself is **not** cyclotomic, and nothing in the argument
        makes it so: the cyclotomic extensions in the lemma are `K(ζ_m)/K` and `E(ζ_m)/E`. The
-       lattice, which is what the proof is really about:
+       lattice:
 
        ```
-              L(ζ_m) = E(ζ_m)
-                    |
-                   L·E
-                  /   \
-                 L     E          K(ζ_m) between K and L(ζ_m)
-                  \   /
-                    K
+           L(ζ_m) = E(ζ_m)
+                 |
+                LE
+               /   \
+              L     E
+               \   /
+                 K
        ```
+
+       with `K(ζ_m)` sitting between `K` and `L(ζ_m)` and meeting `L` in `K`.
 
        Construction, as targets: `Gal(L(ζ_m)/K) ≅ Gal(L/K) × Gal(K(ζ_m)/K)` by (ii); with `σ` a
        generator of `Gal(L/K)` and `τ ∈ Gal(K(ζ_m)/K)` of order divisible by `n` and generating
@@ -982,7 +982,7 @@ operations inside `K̄`, and profinite identifications are `ContinuousMulEquiv`s
      group, say `U' = N(M'/K')` for a finite abelian `M'/K'`. Let `M` be the largest
      subextension of `M'/K` that is abelian over `K`. Then **norm limitation** gives
      `N_{M/K} C_M = N_{M'/K} C_{M'} = N_{K'/K}(U') ⊆ U`, and item 1 promotes that to `U`
-     itself being a norm group. Three things earn their keep here: `M'/K` is in general neither
+     itself being a norm group. Three points matter here: `M'/K` is in general neither
      abelian nor Galois, so the descended field is `M` and not `M'`; the step needs the equality
      of norm groups, not the containment `N_{M'/K}C_{M'} ⊆ N_{M/K}C_M` that comes free from
      `M ⊆ M'`, which is exactly what norm limitation supplies and why that theorem is proved
@@ -1013,9 +1013,9 @@ operations inside `K̄`, and profinite identifications are `ContinuousMulEquiv`s
   corresponds to the class `[𝔭]`, so `𝔭` splits completely in `K_𝔪` iff `𝔭 ∈ P_𝔪`. The
   transition maps `K_𝔪 ⊆ K_𝔫` for `𝔪 ∣ 𝔫` correspond to the Layer 1 surjections `Cl_𝔫 ↠ Cl_𝔪`.
 - **The ideal-theoretic dictionary.** For finite abelian `L/K` of conductor dividing `𝔪`, the
-  Number Field Arithmetic roadmap's ideal-theoretic Artin map `J^𝔪 →* Gal(L/K)` is surjective
-  with kernel `P_𝔪 · N_{L/K}(J_L^𝔪)`, and agrees with the idelic map under the Layer 2A
-  isomorphism. This is Takagi's classification in ideal terms and the form quadratic genus
+  Number Field Arithmetic roadmap's `artinHomUnramified`, restricted along `J^{𝔪₀} ≤ J^S`, is
+  surjective onto `Gal(L/K)` with kernel `P_𝔪 · N_{L/K}(J_L^𝔪)`, and agrees with the idelic map
+  under the Layer 2A isomorphism. This is Takagi's classification in ideal terms and the form quadratic genus
   theory consumes; the map itself is consumed, not redefined, and this milestone is the class
   field theory about it.
 - **The profinite Artin map.** `K^{ab} = ⨆_𝔪 K_𝔪` inside `K̄`, and
@@ -1034,16 +1034,17 @@ Statement shapes aligned with Mathlib PR #40661's wanted statements; report dive
 
 - **The Hilbert class field.** `H = K_{((1),∅)}`, with `Gal(H/K) ≃* ClassGroup (𝓞 K)`; `H/K` is
   unramified at every place, `Algebra.Unramified (𝓞 K) (𝓞 H)` at the finite ones and
-  `IsUnramifiedAtInfinitePlaces K H` at the real ones (the pin's two vocabularies, both kept
-  first-class, which is why Layer 0 carried real places); and it is maximal in the exact sense
+  `IsUnramifiedAtInfinitePlaces K H` at the real ones (the pin's two vocabularies, both of which
+  this roadmap uses, which is why Layer 0 carried real places); and it is maximal in the exact sense
   that **every finite abelian extension of `K` inside `K̄` that is unramified at all places,
   finite and infinite, is contained in `H`**. Say "maximal finite abelian unramified
   everywhere" rather than "maximal such": since the class group is finite, `H` is in fact the
   largest unramified abelian extension outright, but the theorem to state is the containment
-  above, and an unbound "such" is what makes the narrow variant confusing. A prime `𝔭` splits completely in `H` iff it is principal;
-  `H = K` iff `h_K = 1`. The **narrow** Hilbert class field `H⁺ = K_{((1), all real places)}`
-  has `Gal(H⁺/K) ≅ Cl⁺ K` and is the maximal finite abelian extension unramified at all finite
-  places, with no condition at the infinite ones. **Interface milestone (Multiquadratic
+  above, and an unbound "such" is what makes the narrow variant confusing. A prime `𝔭` splits
+  completely in `H` iff it is principal, and `H = K` iff `h_K = 1`. The **narrow** Hilbert
+  class field `H⁺ = K_{((1), all real places)}` has `Gal(H⁺/K) ≅ Cl⁺ K` and is the maximal
+  finite abelian extension unramified at all finite places, with no condition at the infinite
+  ones. **Interface milestone (Multiquadratic
   Layer 3):** the genus field of a quadratic `K/ℚ` is the maximal subfield of `H` (respectively
   of `H⁺`) that is abelian over `ℚ`, and `Gal(H/K) ↠ Gal(K_gen/K)` realizes `Cl ↠ Cl/Cl²`;
   state this compatibility here, in the multiquadratic roadmap's vocabulary.
@@ -1421,8 +1422,8 @@ delegated to some future implementer.
   **Contact status:** not contacted.
   **Agreed ownership:** none. The proposal is that #40735 and Mathlib own these definitions and
   that this roadmap consumes their exact names.
-  **Plan:** contact Browning before Layers 2A and 3; offer the reusable follow-up theorems
-  upstream; keep prototypes prose-only while the in-flight API is still moving.
+  **Plan:** contact Browning before Layers 2A and 3, adopt his names and shapes, and keep
+  prototypes prose-only while the in-flight API is still moving.
   **Refactor trigger:** #40735 merges, or changes a carrier, namespace, topology, or local map.
 - **Project / authors:** Mathlib Hilbert-class-field wanted statements, F. A. E. Nuccio.
   **Exact revision or PR:** open PR
@@ -1444,10 +1445,10 @@ delegated to some future implementer.
   **Overlap:** `NumberField.AdeleRing.discrete`, `NumberField.AdeleRing.cocompact`, and Fujisaki
   compactness, which are Layer 2A inputs rather than new targets.
   **Contact status:** not contacted.
-  **Agreed ownership:** none. The preference is upstream or FLT ownership of the existing
-  proofs, consumed here after an agreed dependency or an upstream move.
-  **Plan:** contact the maintainers; prefer contributing the general statements to Mathlib. An
-  independent proof is permitted only with a recorded reason and no code copying.
+  **Agreed ownership:** none. The preference is that FLT keeps these proofs and that Layer 2A
+  consumes them under an agreed dependency.
+  **Plan:** contact the maintainers before Layer 2A. An independent proof is permitted only
+  with a recorded reason and no code copying.
   **Refactor trigger:** any of these theorems lands upstream, or FLT changes their generality.
 - **Project / authors:** kbuzzard/ClassFieldTheory (maintainer Yunzhou "Edison" Xie and
   contributors).
@@ -1492,9 +1493,9 @@ delegated to some future implementer.
 
 Announcements and named contacts. The active authors whose in-flight work this roadmap tracks
 are **T. Browning** (PR #40735, the idele class group, and a stated intent to build Hecke
-L-functions: contact before Layers 2A and 3, adopt his shapes, and offer the Layer 2A and 3
-material as upstream follow-ups), **S. Mercuri** (adele topology, #36404 and #36275, and the AFM
-2025 paper), **F. A. E. Nuccio** (#40661, and the mariainesdff collaboration),
+L-functions: contact before Layers 2A and 3 and adopt his shapes), **S. Mercuri** (adele
+topology, #36404 and #36275, and the AFM 2025 paper), **F. A. E. Nuccio** (#40661, and the
+mariainesdff collaboration),
 **M. I. de Frutos-Fernández** (the Lean 3 ideles development and the Mathlib `FiniteAdeleRing`
 and `AdicValuation` substrate: coordinate before Layers 2A and 7, per the root README's
 coordination rule), **X. Roblot** (the cyclotomic Galois dictionary that Layer 4 rests on, and
@@ -1511,8 +1512,8 @@ pinned in the conventions table, and refactor Layer 11 onto their global half if
 Lean code that reaches Mathlib, keeping Layers 5 through 7 as independent developments of the
 same mathematics, diverging only with a recorded reason. For **FLT**: Layer 2A's compactness
 milestones duplicate mathematics they have already proved, so coordinate before implementing;
-the preferred outcome is that their statements upstream and this layer consumes them, the
-fallback an independent proof that cites theirs, and code is not copied without agreement.
+the preferred outcome is that this layer consumes their statements under an agreed dependency,
+the fallback an independent proof that cites theirs, and code is not copied without agreement.
 FLT axiomatizes only local class field theory today, so no reciprocity-level coordination
 is needed yet; tell them when Layer 6 lands, since their future global chapters will want it.
 
@@ -1525,8 +1526,8 @@ From **Number Field Arithmetic**, the decomposition and Frobenius API, the ideal
 symbol, and the different globalization, with the ownership boundary stated at the top of this
 roadmap. **L-functions** owns everything analytic, including Chebotarev; this roadmap's
 density-free discipline exists so that the dependency points from there to here, the
-Hecke-character interface of Layer 3 is frozen in coordination with it, and the master plan's
-Tate's-thesis-versus-theta route decision is theirs. **Multiquadratic** (merged) receives the
+Hecke-character interface of Layer 3 is frozen in coordination with it, and the choice between
+Tate's thesis and the theta route is theirs. **Multiquadratic** (merged) receives the
 narrow class group of Layer 1 and the genus-field compatibility of Layer 8, built to its
 Layer 3's stated needs. The Wave-2 consumers are QuaternionArithmetic (Layer 11's Hilbert
 reciprocity), CurvesOverFiniteFields and Honda–Tate (Layer 11's sum of invariants), and
@@ -1534,11 +1535,11 @@ AbelianVarieties and CM (Layer 10A's algebraic characters and Layer 10C's ring c
 each interface is a named milestone above, so those roadmaps can cite a specific target rather
 than "global class field theory".
 
-Three refinements to the master plan's §4 entry, recorded per its own ground rule: the idele
-class group is not Mathlib material to consume but an open PR to align with; ProfiniteCohomology
-is a Layer-11-only dependency rather than a blanket one, since the reciprocity core runs on the
-pin's finite group cohomology; and two artifacts the plan predates, the ClassFieldTheory global
-blueprint chapter and the #40661 wanted-statements file, now fix the external statement shapes
-for Layers 5, 8, 9, and 11. A fourth, added at this review: the local-fields roadmap is
-nonarchimedean by construction, so the archimedean local theory is this roadmap's to build, and
-it is Layer 2C.
+Four places where the dependencies are not what a reader would guess. The idele class group is
+not Mathlib material to consume but an open pull request whose shapes this roadmap adopts.
+Profinite Cohomology is a Layer-11-only dependency and not a blanket one, since the reciprocity
+core runs on the pin's finite group cohomology. The external statement shapes for Layers 5, 8,
+9 and 11 are fixed by two artifacts outside Mathlib proper, the ClassFieldTheory global
+blueprint chapter and the #40661 wanted-statements file. And the local-fields roadmap is
+nonarchimedean by construction, so the archimedean local theory is this roadmap's to build; it
+is Layer 2C.

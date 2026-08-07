@@ -497,7 +497,7 @@ sending the class of `(p)`, for `p` prime to `n`, to the automorphism that `galE
 carries to `[p]`. That this automorphism is the *arithmetic* Frobenius at `p`, meaning
 `σ x ≡ x^p mod P` on integers, is the Number Field Arithmetic roadmap's theorem: it is consumed
 here through the right-hand side below and deliberately not restated as a target, so that the
-`arithFrobAt`/`galEquivZMod` bridge has a single proof owner. ⚠ The orientation is what makes
+identification of `arithFrobAt` with `galEquivZMod` has a single proof owner. ⚠ The orientation is what makes
 this the normalization anchor rather than the splitting law: the geometric convention would put
 `[p]⁻¹` on the right, and both conventions compose with `galEquivZMod` to give an automorphism
 of `(ℤ/n)ˣ`, so an error here survives degree-counting tests. -/
