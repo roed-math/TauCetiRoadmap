@@ -14,28 +14,30 @@ references) is in `README.md`. Mathlib has the class `IsNonarchimedeanLocalField
 filtration, no unramified/Frobenius theory, no higher ramification, no tame quotient, no
 local class field theory, no duality. We build that in `TauCeti/`.
 
-This file holds targets from the **cohomology-free early layers** (Layers 0–2, with worked
-examples reaching into the acceptance criteria of Layers 7–9), stated with `sorry` against
-the pinned Mathlib. Per the honest-`sorry` rule, milestones whose *statements* need API that
-does not exist at the pin are **not** stated here and live in `README.md` only: the
-lower/upper ramification filtration and Herbrand functions (Layer 3), the tame quotient and
-its Iwasawa presentation (Layer 4, which needs PR #3 Layer 4's `presentedProfiniteGroup`),
-and everything cohomological (Layers 5–8: invariant map, class formations, reciprocity,
-duality, Euler characteristic, all consuming PR #1 Profinite Cohomology). Power classes and
-Layer 8 are split into the two regimes of the roadmap's standing hypotheses; `p`-power
+This file holds targets from Layers 0 to 2, the worked examples that reach into the
+acceptance criteria of Layers 7 to 9, and the interface section below. Power classes and
+Layer 8 are split into the two regimes of the roadmap's standing hypotheses. `p`-power
 coefficients in equal characteristic are outside the roadmap, and no statement here is to be
 generalized to cover them. The same boundary cuts Layer 7: the existence theorem is a
-milestone away from
-the residue characteristic for a general local field, and in full only for `K` a finite
-extension of `ℚ_p`, so anything derived from full existence (injectivity of the Artin map,
-the ordinary profinite completion of `Kˣ`) is mixed-characteristic. As later layers make
-their types expressible in `TauCeti/`, add their milestones here with `sorry`.
+milestone away from the residue characteristic for a general local field, and in full only
+for `K` a finite extension of `ℚ_p`. So anything derived from full existence, such as
+injectivity of the Artin map or the ordinary profinite completion of `Kˣ`, is
+mixed-characteristic.
 
-Definitions carrying a `sorry` body (`normalizedValuation`, `ramificationIndex`,
-`inertiaDegree`, `teichmuller`, `unitFiltration`) are suggested *names and types* for objects
-the roadmap asks for, together with the characteristic lemmas that pin them down. They are
-placeholders for data whose type is already expressible, never for a condition we cannot
-state.
+Definitions with a `sorry` body (`normalizedValuation`, `ramificationIndex`,
+`inertiaDegree`, `teichmuller`, `unitFiltration`, and the interface section) are suggested
+*names and types* for objects the roadmap asks for, together with the characteristic lemmas
+that fix them. They are placeholders for data whose type is expressible now, and never for a
+condition we cannot state.
+
+## The interface section
+
+Section `Interface` below carries one declaration for each object that another Tau Ceti
+roadmap owns, in the name that the shared interface table of `README.md` fixes. Some are real
+definitions, and some are placeholders for data. The purpose is that every statement which
+crosses a roadmap boundary elaborates here, rather than sitting in prose. When the other
+roadmap supplies the object, delete the declaration here and import theirs: the statements
+that use it do not change.
 -/
 
 namespace TauCetiRoadmap.LocalFields
@@ -350,22 +352,178 @@ example : ¬ ∃ x y : ℚ_[2], (-1 : ℚ_[2]) = x ^ 2 + y ^ 2 :=
 
 /-- **Layer 9, the exact rank of the full absolute Galois group:**
 `d(G_F) = [F : ℚ_p] + 2`, stated as leastness of `[F : ℚ_p] + 2` among the cardinalities of
-topologically generating finite sets (`d` itself is PR #3 Layer 3's
-`topologicalGeneratorRankNat`). The upper bound is NSW VII §4; the lower bound comes from the
-rank of the maximal pro-`p` quotient together with the Schreier bound, and the equality is
+topologically generating finite sets. The rank `d` itself is `Interface.topologicalRank`
+below, which the Pro-`p` Groups roadmap owns. The upper bound is NSW VII §4. The lower bound
+uses the rank of the maximal pro-`p` quotient and the Schreier bound, and the equality is
 Jarden–Shusterman Thm. 2.1.
 
 ⚠ The familiar `[F : ℚ_p] + 1` count is a statement about the maximal pro-`p` quotient
-`G_F(p)`, which is free pro-`p` of that rank when `μ_p ⊄ F` (PR #3 Layer 11's
-`topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu`), and never about
-`G_F`: the full group has rank `[F : ℚ_p] + 2` in both cases. The bare finite-generation
-corollary at `F = ℚ_2`, namely generation by 3 elements, is gq2's B1. -/
+`G_F(p)`, which is free pro-`p` of that rank when `μ_p ⊄ F`, and never about `G_F`: the full
+group has rank `[F : ℚ_p] + 2` in both cases. The finite-generation corollary at `F = ℚ_2`,
+namely generation by 3 elements, is the label `B1` of the downstream table. -/
 example (p : ℕ) [Fact p.Prime] (F : Type*) [Field F] [Algebra ℚ_[p] F]
     [Module.Finite ℚ_[p] F] :
     IsLeast
       {n : ℕ | ∃ s : Finset (Field.absoluteGaloisGroup F), s.card = n ∧
         (Subgroup.closure (s : Set (Field.absoluteGaloisGroup F))).topologicalClosure = ⊤}
       (Module.finrank ℚ_[p] F + 2) :=
+  sorry
+
+/-! ## Interface: objects owned by a sibling roadmap
+
+One declaration per row of the shared interface table of `README.md`, under the name that the
+table fixes. Four of them are real definitions in the shape the table pins. The rest are
+placeholders for data whose type is expressible now. Every statement below that crosses a
+roadmap boundary elaborates against these, so no interface is left in prose. Replacement is
+mechanical: delete the declaration, import the supplier's, and the statements are unchanged.
+-/
+
+namespace Interface
+
+variable (p : ℕ) (G : Type*) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+
+/-- **Pro-`p` Groups Layer 3, `IsProP`,** in the quotient form: every open normal subgroup has
+index a power of `p`. Layer 1 uses it for `U(K,1)`, and Layer 4 for wild inertia. -/
+def IsProP : Prop :=
+  ∀ N : Subgroup G, N.Normal → IsOpen (N : Set G) → ∃ k : ℕ, N.index = p ^ k
+
+/-- **Pro-`p` Groups Layer 3, `IsTopologicallyFinitelyGenerated`,** in the pinned shape. -/
+def IsTopologicallyFinitelyGenerated : Prop :=
+  ∃ s : Finset G, (Subgroup.closure (s : Set G)).topologicalClosure = ⊤
+
+/-- **Pro-`p` Groups Layer 3, `topologicalGeneratorRankNat`:** the least cardinality of a
+finite topologically generating set, and `0` when none exists. -/
+noncomputable def topologicalRank : ℕ :=
+  sInf {n : ℕ | ∃ s : Finset G, s.card = n ∧
+    (Subgroup.closure (s : Set G)).topologicalClosure = ⊤}
+
+/-- **Pro-`p` Groups Layer 2, `IsProPSylow`:** a closed pro-`p` subgroup that is maximal among
+the closed pro-`p` subgroups. Layer 4 identifies the one inside `I_K` with `Gal(K̄/K^t)`. -/
+def IsProPSylow (P : Subgroup G) : Prop :=
+  IsClosed (P : Set G) ∧ IsProP p P ∧
+    ∀ Q : Subgroup G, IsClosed (Q : Set G) → IsProP p Q → P ≤ Q → Q = P
+
+/-- **Pro-`p` Groups Layer 4, `freeProfiniteGroup`,** on a finite generating set. ⚠ This is
+the profinite object, and not the pro-`p` one of the same layer. -/
+def freeProfiniteGroup (_ι : Type) : ProfiniteGrp := sorry
+
+/-- **Pro-`p` Groups Layer 4, `presentedProfiniteGroup`:** the quotient of the free profinite
+group by the closed normal closure of a set of relators. Layer 4 states
+`G_K^t = ⟨σ, τ ∣ στσ⁻¹τ^{−q}⟩` in this shape. -/
+def presentedProfiniteGroup (ι : Type) (_rels : Set (freeProfiniteGroup ι)) :
+    ProfiniteGrp := sorry
+
+/-- **Pro-`p` Groups Layer 11, `absoluteGaloisGroupProP`:** the maximal pro-`p` quotient
+`G_F(p)` of the absolute Galois group. Layer 9 consumes its rank in both cases. -/
+def absoluteGaloisGroupProP (F : Type*) [Field F] : ProfiniteGrp := sorry
+
+/-- **The `G_F`-module `μ_n(F̄)`, written additively.** The carrier is real. The action is the
+restriction of the Galois action on `AlgebraicClosure F`; that instance is data here, and a
+theorem of Layer 5. -/
+abbrev muN (F : Type u) [Field F] (n : ℕ) : Type u :=
+  Additive ↥(rootsOfUnity n (AlgebraicClosure F))
+
+noncomputable instance instMuNAction (F : Type u) [Field F] (n : ℕ) :
+    DistribMulAction (Field.absoluteGaloisGroup F) (muN F n) := sorry
+
+/-- **Profinite Cohomology Layers 1 to 8, `H^i(G_F, M)`:** continuous cohomology of the
+absolute Galois group with coefficients in a discrete module. Mathlib `v4.32.2` has the
+continuous cochain complex in `ContCohomology`, but no cohomology object with the colimit
+description and the cup products that Layers 5 to 8 use. -/
+def contH (F : Type u) [Field F] (_i : ℕ) (M : Type v) [AddCommGroup M]
+    [DistribMulAction (Field.absoluteGaloisGroup F) M] : Type v := sorry
+
+noncomputable instance instContHGroup (F : Type u) [Field F] (i : ℕ) (M : Type v)
+    [AddCommGroup M] [DistribMulAction (Field.absoluteGaloisGroup F) M] :
+    AddCommGroup (contH F i M) := sorry
+
+/-- **The Tate dual `M' = Hom(M, μ_n)`,** with the conjugation action. The carrier is real; the
+action is data here, and a theorem of Layer 8. -/
+noncomputable instance instDualAction (F : Type u) [Field F] (n : ℕ) (M : Type u)
+    [AddCommGroup M] [DistribMulAction (Field.absoluteGaloisGroup F) M] :
+    DistribMulAction (Field.absoluteGaloisGroup F) (M →+ muN F n) := sorry
+
+/-- **Profinite Cohomology Layer 8, the cup product** in the one degree that Layer 8C uses. -/
+def cup2 (F : Type u) [Field F] (_a _b : contH F 1 (muN F 2)) : ZMod 2 := sorry
+
+/-- **Quadratic Form Invariants Layer 2, the Hilbert symbol** with values in `{±1} ⊆ ℤˣ`.
+Layer 8C identifies the mod-2 duality pairing with it. -/
+def hilbertSymbol (F : Type u) [Field F] (_a _b : Fˣ) : ℤˣ := sorry
+
+end Interface
+
+/-! ## Cross-roadmap statements
+
+Each statement below is a row of the shared interface table, on the supplying side. They are
+stated against `Interface`, so that a change of supplier is a rename. -/
+
+/-- **Layer 5, the Kummer class of a unit.** The image of `a` under
+`Kˣ → H¹(G_K, μ_n)`, whose kernel is `(Kˣ)ⁿ`. -/
+def kummerClass (F : Type u) [Field F] (n : ℕ) (_a : Fˣ) :
+    Interface.contH F 1 (Interface.muN F n) :=
+  sorry
+
+/-- **Layer 5, `kummerEquiv`.** For `n` invertible in `𝒪[K]`, the Kummer map induces an
+isomorphism `Kˣ/(Kˣ)ⁿ ≅ H¹(G_K, μ_n)`. Layer 8C and Pro-`p` Groups Layer 11 consume it. -/
+example (n : ℕ) (_hn : n ≠ 0) (_hn' : IsUnit (n : ↥𝒪[K])) :
+    Nonempty ((Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range) ≃
+      Interface.contH K 1 (Interface.muN K n)) :=
+  sorry
+
+/-- **Layer 7, `artinMap`.** The reciprocity map into the topological abelianization of the
+absolute Galois group: continuous, with dense image, and with kernel the intersection of the
+norm groups. ⚠ It is not surjective, so it supports no `Nat.card` statement about its
+target. -/
+noncomputable def artinMap (F : Type u) [Field F] :
+    Fˣ →* Field.absoluteGaloisGroupAbelianization F :=
+  sorry
+
+/-- **Layer 7, `cyclotomicCharacter_artinMap_padic`.** The cyclotomic orientation at
+`K = ℚ_p`: `χ_cyc(σ) = u⁻¹` for any `σ` above `Art(u)`. ⚠ The general statement carries the
+field norm, as `N_{K/ℚ_p}(u)⁻¹`; this is its specialization at `K = ℚ_p`, and not its general
+form. -/
+example (p : ℕ) [Fact p.Prime] (u : ℤ_[p]ˣ) (σ : Field.absoluteGaloisGroup ℚ_[p])
+    (_hσ : (QuotientGroup.mk σ : Field.absoluteGaloisGroupAbelianization ℚ_[p]) =
+      artinMap ℚ_[p] (Units.map (algebraMap ℤ_[p] ℚ_[p]).toMonoidHom u)) :
+    cyclotomicCharacter (AlgebraicClosure ℚ_[p]) p σ.toRingEquiv = u⁻¹ :=
+  sorry
+
+/-- **Layer 8B, `h2MuEquivZMod_mixed`.** The trace isomorphism `H²(G_K, μ_n) ≃ ZMod n`, for
+**every** `n ≥ 1` in mixed characteristic. ⚠ The 8A statement of the same shape carries
+`IsUnit (n : 𝒪[K])` and says nothing at `n = p`. Pro-`p` Groups Layer 11 consumes this one. -/
+example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
+    (n : ℕ) (_hn : n ≠ 0) :
+    Nonempty (Interface.contH F 2 (Interface.muN F n) ≃+ ZMod n) :=
+  sorry
+
+/-- **Layer 8B, `tateDualityPairing_perfect_mixed`.** Local duality in mixed characteristic:
+for a finite module `M` killed by `n`, cohomology of the Tate dual `M' = Hom(M, μ_n)` in
+degree `i` is the dual group of cohomology of `M` in degree `2 − i`, for `i = 0, 1, 2`. -/
+example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
+    (n : ℕ) (_hn : n ≠ 0) (M : Type u) [AddCommGroup M]
+    [DistribMulAction (Field.absoluteGaloisGroup F) M] (_hM : Finite M)
+    (i : ℕ) (_hi : i ≤ 2) :
+    Nonempty (Interface.contH F i (M →+ Interface.muN F n) ≃+
+      (Interface.contH F (2 - i) M →+ ZMod n)) :=
+  sorry
+
+/-- **Layer 8B, `eulerCharacteristic_mixed`.** For finite `M`,
+`#H⁰ · #H² / #H¹ = ‖#M‖_K`. Written over `ℕ`, with `‖#M‖_K⁻¹ = p ^ (N · v_p(#M))` and
+`N = [K : ℚ_p]`, that is the equation below. Pro-`p` Groups Layer 11 consumes it. -/
+example (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
+    (M : Type u) [AddCommGroup M] [DistribMulAction (Field.absoluteGaloisGroup F) M]
+    (_hM : Finite M) :
+    Nat.card (Interface.contH F 1 M)
+      = Nat.card (Interface.contH F 0 M) * Nat.card (Interface.contH F 2 M)
+        * p ^ (Module.finrank ℚ_[p] F * padicValNat p (Nat.card M)) :=
+  sorry
+
+/-- **Layer 8C, `hilbertSymbol_eq_tateDuality_pairing`.** At `n = 2` the mod-2 duality pairing,
+read through the Kummer identification on each factor, is the classical Hilbert symbol. The
+statement carries the conversion between `ZMod 2` and `{±1} ⊆ ℤˣ`. -/
+example (F : Type u) [Field F] (_h : ringChar F ≠ 2) (a b : Fˣ) :
+    Interface.cup2 F (kummerClass F 2 a) (kummerClass F 2 b) = 0 ↔
+      Interface.hilbertSymbol F a b = 1 :=
   sorry
 
 end TauCetiRoadmap.LocalFields
