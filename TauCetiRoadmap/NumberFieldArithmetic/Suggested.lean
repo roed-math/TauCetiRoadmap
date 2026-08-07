@@ -13,10 +13,11 @@ carrier, index type, or map determines everything below them. Every declaration 
 against the pinned Mathlib. Every proof is `sorry`, which this human-owned roadmap library
 allows.
 
-Every carrier and every cross-subject interface in this file compiles. Where a comparison
-needs an object that another roadmap will later own, the object is defined here, in the
-standard shape, and marked as a compatibility interface. `localRamificationGroup` is the only
-such case.
+Every carrier and every cross-subject interface in this file compiles as a named declaration.
+That includes `artinSymbol`, the carrier `idealsAway`, `artinHomAway`, `ramifiedSupport`, the
+three Layer 5 comparison maps, and `localRamificationGroup`. Where a comparison needs an object
+that a neighbouring subject also touches, this roadmap defines the object and owns it;
+`localRamificationGroup` is the one such case.
 
 Conventions, recorded in `README.md`:
 
@@ -92,9 +93,9 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
     ∃ σ : L ≃ₐ[K] L, IsArithFrobAt (𝓞 K) σ Q :=
   sorry
 
-/-- **Layer 2.2, uniqueness at unramified primes, in the Galois group.** The pin proves uniqueness at
-`AlgHom` level (`AlgHom.IsArithFrobAt.eq_of_isUnramifiedAt`); the Galois-group statement is
-the missing faithfulness upgrade. -/
+/-- **Layer 2.2, uniqueness at unramified primes, in the Galois group.** The pin proves
+uniqueness at `AlgHom` level (`AlgHom.IsArithFrobAt.eq_of_isUnramifiedAt`); the Galois-group
+statement is the missing faithfulness upgrade. -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
     {σ τ : L ≃ₐ[K] L} {Q : Ideal (𝓞 L)} [Q.IsPrime] (hQ : Q ≠ ⊥)
     [Algebra.IsUnramifiedAt (𝓞 K) Q] (hσ : IsArithFrobAt (𝓞 K) σ Q)
@@ -104,17 +105,25 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
 
 /-- **Layer 2.3, the Artin symbol, at a prime ideal of the base.** For `𝔭` a
 nonzero prime of `𝓞 K` unramified in `L`, all Frobenius elements at all primes of `𝓞 L` over
-`𝔭` lie in one conjugacy class: the class `artinSymbol 𝔭`. Existence is the pin's
-`IsArithFrobAt.exists_of_isInvariant`, conjugacy across the fiber is `isConj_arithFrobAt`,
-and this statement packages both as the defining property of the `ConjClasses`-valued symbol.
+`𝔭` lie in one conjugacy class, and this is that class.
 ⚠ Relative and prime-ideal-indexed: the familiar `(p, K/ℚ)` is the `K = ℚ` specialization
 `𝔭 = Ideal.span {(p : ℤ)}`, stated as a corollary and not as the definition. -/
-example {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
-    (𝔭 : Ideal (𝓞 K)) [𝔭.IsMaximal] (h𝔭 : 𝔭 ≠ ⊥)
+noncomputable def artinSymbol {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
+    (𝔭 : Ideal (𝓞 K)) [𝔭.IsMaximal]
     (hur : ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver 𝔭], Algebra.IsUnramifiedAt (𝓞 K) Q) :
-    ∃! c : ConjClasses (L ≃ₐ[K] L),
-      ∀ (Q : Ideal (𝓞 L)) (σ : L ≃ₐ[K] L), Q.IsPrime →
-        Q.LiesOver 𝔭 → IsArithFrobAt (𝓞 K) σ Q → ConjClasses.mk σ = c :=
+    ConjClasses (L ≃ₐ[K] L) :=
+  sorry
+
+/-- **Layer 2.3, the characteristic property of `artinSymbol`.** Every Frobenius at every prime
+over `𝔭` represents the class. Existence is `IsArithFrobAt.exists_of_isInvariant`, conjugacy
+across the fibre is `isConj_arithFrobAt`, and Layer 2.2 makes the representative unique at each
+prime; together they say the class is well defined and that this equation determines it. -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
+    (𝔭 : Ideal (𝓞 K)) [𝔭.IsMaximal]
+    (hur : ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver 𝔭], Algebra.IsUnramifiedAt (𝓞 K) Q)
+    (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver 𝔭] (σ : L ≃ₐ[K] L)
+    (hσ : IsArithFrobAt (𝓞 K) σ Q) :
+    ConjClasses.mk σ = artinSymbol 𝔭 hur :=
   sorry
 
 /-- **Layer 2.3, the base-`ℚ` specialization of the Artin symbol.** The rational-prime form the
@@ -143,34 +152,74 @@ example {M : Type*} [Field M] [NumberField M] [IsGalois ℚ M] (K : Intermediate
     IsArithFrobAt ℤ (σ.restrictNormal K) (Q.under (𝓞 K)) :=
   sorry
 
-/-- **Layer 2.5, the ideal-theoretic Artin map, in the carrier the Global Class Field Theory
-roadmap pinned.** The excluded set `S` is a **parameter**: any finite set of primes outside
-which `L/K` is unramified will do, and the construction says nothing about which primes those
-are. That is what keeps this layer independent of the relative discriminant, and it is also
-what a reciprocity layer needs, since the support of a modulus is generally larger than the
-ramified
-set. `J` is the group `J^S` of invertible fractional ideals with zero valuation on `S`, spelled
-inside `(FractionalIdeal (𝓞 K)⁰ K)ˣ`, which is the carrier `J^{𝔪₀}` uses, and the map sends a
-prime outside `S` to its Frobenius. Uniqueness is automatic because the primes generate `J`, so
-the milestone is existence together with the values on primes. Specializing `S` to the support
-of the relative discriminant is a Layer 4 statement, below. ⚠ Reciprocity (kernel,
-surjectivity, factorization through ray class groups) is deliberately absent. A global class
-field theory roadmap owns those, and uses this map without change. -/
-example {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
+/-- **Layer 2.5, the carrier `J^S`.** The fractional ideals with valuation zero at every prime
+of `S`, inside `(FractionalIdeal (𝓞 K)⁰ K)ˣ`. That is the carrier a reciprocity layer uses for
+`J^{𝔪₀}`, which is why it is this type and not a new one. -/
+def idealsAway (S : Finset (HeightOneSpectrum (𝓞 K))) :
+    Subgroup (FractionalIdeal (𝓞 K)⁰ K)ˣ where
+  carrier := {I | ∀ v ∈ S, FractionalIdeal.count K v (I : FractionalIdeal (𝓞 K)⁰ K) = 0}
+  mul_mem' := sorry
+  one_mem' := sorry
+  inv_mem' := sorry
+
+/-- **Layer 2.5, `idealsAway S` is generated by the primes outside `S`.** This is what makes the
+value on primes determine the map. -/
+example (S : Finset (HeightOneSpectrum (𝓞 K))) :
+    idealsAway S = Subgroup.closure {I : (FractionalIdeal (𝓞 K)⁰ K)ˣ |
+      ∃ v : HeightOneSpectrum (𝓞 K), v ∉ S ∧
+        ((I : FractionalIdeal (𝓞 K)⁰ K) = (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K))} :=
+  sorry
+
+/-- **Layer 2.5, `S`-monotonicity of the carrier.** A larger excluded set gives a smaller group.
+The two Artin maps then agree on the smaller one. -/
+example (S S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S') :
+    idealsAway (K := K) S' ≤ idealsAway (K := K) S :=
+  sorry
+
+/-- **Layer 2.5, the ideal-theoretic Artin map.** The excluded set `S` is a **parameter**: any
+finite set of primes outside which `L/K` is unramified will do, and the construction says
+nothing about which primes those are. That keeps this layer independent of the relative
+discriminant, and it is also what a reciprocity layer needs, since the support of a modulus is
+generally larger than the ramified set. Specializing `S` to `ramifiedSupport K L` is a Layer 4.3
+statement. ⚠ Reciprocity (kernel, surjectivity, factorization through ray class groups) is
+deliberately absent. A global class field theory roadmap owns those, and uses this map without
+change. -/
+noncomputable def artinHomAway {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
     (hab : ∀ σ τ : L ≃ₐ[K] L, Commute σ τ)
     (S : Finset (HeightOneSpectrum (𝓞 K)))
     (hur : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
-      ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q)
-    (J : Subgroup (FractionalIdeal (𝓞 K)⁰ K)ˣ)
-    (hJ : ∀ I : (FractionalIdeal (𝓞 K)⁰ K)ˣ,
-      I ∈ J ↔ ∀ v ∈ S, FractionalIdeal.count K v (I : FractionalIdeal (𝓞 K)⁰ K) = 0) :
-    ∃ φ : J →* (L ≃ₐ[K] L),
-      ∀ (v : HeightOneSpectrum (𝓞 K)), v ∉ S → ∀ (I : J),
-        ((I : (FractionalIdeal (𝓞 K)⁰ K)ˣ) : FractionalIdeal (𝓞 K)⁰ K) =
-          (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K) →
-        ∀ (Q : Ideal (𝓞 L)) (_ : Q.IsPrime) (_ : Q.LiesOver v.asIdeal) (σ : L ≃ₐ[K] L),
-          IsArithFrobAt (𝓞 K) σ Q → φ I = σ :=
+      ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q) :
+    idealsAway (K := K) S →* (L ≃ₐ[K] L) :=
   sorry
+
+section ArtinHomAway
+variable {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
+  (hab : ∀ σ τ : L ≃ₐ[K] L, Commute σ τ)
+  (S : Finset (HeightOneSpectrum (𝓞 K)))
+  (hur : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
+    ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q)
+
+/-- **Layer 2.5, the value at a prime.** -/
+example (I : idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉ S)
+    (hI : ((I : (FractionalIdeal (𝓞 K)⁰ K)ˣ) : FractionalIdeal (𝓞 K)⁰ K) =
+      (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K))
+    (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal] (σ : L ≃ₐ[K] L)
+    (hσ : IsArithFrobAt (𝓞 K) σ Q) :
+    artinHomAway (L := L) hab S hur I = σ :=
+  sorry
+
+/-- **Layer 2.5, the values on primes determine the map.** With the generation statement above,
+this is what lets a reciprocity layer recognize its own construction as this one. -/
+example (φ : idealsAway (K := K) S →* (L ≃ₐ[K] L))
+    (hφ : ∀ (I : idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K)), v ∉ S →
+      ((I : (FractionalIdeal (𝓞 K)⁰ K)ˣ) : FractionalIdeal (𝓞 K)⁰ K) =
+        (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K) →
+      ∀ (Q : Ideal (𝓞 L)) (_ : Q.IsPrime) (_ : Q.LiesOver v.asIdeal) (σ : L ≃ₐ[K] L),
+        IsArithFrobAt (𝓞 K) σ Q → φ I = σ) :
+    φ = artinHomAway (L := L) hab S hur :=
+  sorry
+
+end ArtinHomAway
 
 /-- **Layer 2.6, the cyclotomic Frobenius is `p` itself.** The pin has the decomposition
 *subgroup* (`IsCyclotomicExtension.Rat.galEquivZMod_stabilizer` = `⟨[p]⟩`) but never
@@ -224,6 +273,38 @@ noncomputable def index (θ : IntegralPrimitiveElement K) : ℕ :=
 
 example (θ : IntegralPrimitiveElement K) : 0 < index θ := sorry
 
+/-- **Layer 3.2, the power basis of an integral generator.** Layer 3.3's index formula and the
+discriminant comparison both need an actual `PowerBasis ℚ K`, not the phrase "the power basis of
+`θ`". -/
+noncomputable def powerBasisOfIntegralPrimitiveElement (θ : IntegralPrimitiveElement K) :
+    PowerBasis ℚ K :=
+  sorry
+
+example (θ : IntegralPrimitiveElement K) :
+    (powerBasisOfIntegralPrimitiveElement θ).gen = (θ.1 : K) :=
+  sorry
+
+/-- **Layer 3.2, the minimal polynomials agree after the cast.** Needed before the next
+statement can be written at all. -/
+example (θ : IntegralPrimitiveElement K) :
+    minpoly ℚ (θ.1 : K) = (minpoly ℤ θ.1).map (algebraMap ℤ ℚ) :=
+  sorry
+
+/-- **Layer 3.2, the discriminant comparison, with the cast written out.** The two discriminants
+live in different rings: `Algebra.discr ℚ` is rational and `Polynomial.discr (minpoly ℤ θ)` is
+integral. Without `algebraMap ℤ ℚ` this is not an equation. -/
+example (θ : IntegralPrimitiveElement K) :
+    Algebra.discr ℚ (powerBasisOfIntegralPrimitiveElement θ).basis =
+      algebraMap ℤ ℚ (minpoly ℤ θ.1).discr :=
+  sorry
+
+/-- **Layer 3.1, `index` is invariant under translation and negation**, because the subring is
+unchanged: `ℤ[θ + n] = ℤ[θ] = ℤ[−θ]`. -/
+example (θ : IntegralPrimitiveElement K) (n : ℤ) (θ' : IntegralPrimitiveElement K)
+    (hθ' : θ'.1 = θ.1 + (n : 𝓞 K)) :
+    Algebra.adjoin ℤ {θ'.1} = Algebra.adjoin ℤ {θ.1} :=
+  sorry
+
 /-- **Layer 3.3, the index formula** `disc(minpoly θ) = index(θ)² · disc K`, the equation
 sharpening TauCeti's landed inequality `abs_discr_le_of_basis_isIntegral`. The link
 `Algebra.discr ℚ (powerBasis θ) = Polynomial.discr (minpoly ℤ θ)` is the companion milestone;
@@ -259,7 +340,7 @@ example {R S : Type*} [CommRing R] [IsDomain R] [IsIntegrallyClosed R] [CommRing
     (hcond : (conductor R x).comap (algebraMap R S) ⊔ I = ⊤)
     {J : Ideal S} (hJ : J ∈ UniqueFactorizationMonoid.normalizedFactors
       (I.map (algebraMap R S))) :
-    J.inertiaDeg R =
+    Ideal.inertiaDeg I J =
       (KummerDedekind.normalizedFactorsMapEquivNormalizedFactorsMinPolyMk
         hI hI' hcond hx ⟨J, hJ⟩).val.natDegree :=
   sorry
@@ -322,11 +403,11 @@ open scoped Classical in
 interface a polynomial Galois groups roadmap uses, and it uses it on **reducible** `f` (it
 derives the classical mod-`p` irreducibility criterion from it), so the statement genuinely
 covers reducible `f` and the reduction to irreducible factors is a milestone, not an
-afterthought: `p ∤ f.discr` gives separability and pairwise coprime reductions of the `ℤ`-irreducible
-factors, the root set is their disjoint union, full cycle type and factor-degree multisets are
-both additive along that decomposition, and one Frobenius upstairs restricts to a Frobenius on
-each factor's field. The right side restores fixed points, matching that roadmap's
-`fullCycleType`. -/
+afterthought: `p ∤ f.discr` gives separability and pairwise coprime reductions of the
+`ℤ`-irreducible factors, the root set is their disjoint union, full cycle type and
+factor-degree multisets are both additive along that decomposition, and one Frobenius upstairs
+restricts to a Frobenius on each factor's field. The right side restores fixed points, matching
+the `fullCycleType` such a roadmap uses. -/
 example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr) :
     ∃ σ : (f.map (Int.castRingHom ℚ)).Gal,
       (Polynomial.Gal.galActionHom (f.map (Int.castRingHom ℚ)) ℂ σ).cycleType +
@@ -350,14 +431,14 @@ example (p : ℕ) [Fact p.Prime]
 
 /-! ## Layer 4: the relative discriminant, algebraically -/
 
-/-- **Layer 4.1, the relative discriminant ideal, reconciled.** The relative norm of the
+/-- **Layer 4.2, the relative discriminant ideal, reconciled.** The relative norm of the
 different is the (ideal generated by the) absolute discriminant: the ideal-level sharpening
 of the pin's `NumberField.absNorm_differentIdeal`, and the `L/ℚ` instance of the missing
 `relDiscr A B := Ideal.relNorm A (differentIdeal A B)`. -/
 example : Ideal.relNorm ℤ (differentIdeal ℤ (𝓞 K)) = Ideal.span {NumberField.discr K} :=
   sorry
 
-/-- **Layer 4.1, the relative discriminant in towers** (Neukirch III (2.10)):
+/-- **Layer 4.2, the relative discriminant in towers** (Neukirch III (2.10)):
 `𝔡_{M/K} = 𝔡_{L/K}^{[M:L]} · N_{L/K}(𝔡_{M/L})` at the level of discriminant ideals, from
 the pin's different-ideal transitivity (`differentIdeal_eq_differentIdeal_mul_differentIdeal`)
 and multiplicativity of `Ideal.relNorm`. The pin has only the absolute `ℤ`-version
@@ -370,25 +451,33 @@ example {L M : Type*} [Field L] [NumberField L] [Field M] [NumberField M] [Algeb
         Ideal.relNorm (𝓞 K) (Ideal.relNorm (𝓞 L) (differentIdeal (𝓞 L) (𝓞 M))) :=
   sorry
 
-/-- **Layer 4.1, ramified if and only if it divides the relative discriminant** (Neukirch III (2.12)),
-generalizing the pin's `ℚ`-only `NumberField.not_dvd_discr_iff_forall_liesOver`. -/
+/-- **Layer 4.2, ramified if and only if it divides the relative discriminant**
+(Neukirch III (2.12)), generalizing the pin's `ℚ`-only
+`NumberField.not_dvd_discr_iff_forall_liesOver`. -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     (p : Ideal (𝓞 K)) [p.IsMaximal] (hp : p ≠ ⊥) :
     ¬ p ∣ Ideal.relNorm (𝓞 K) (differentIdeal (𝓞 K) (𝓞 L)) ↔
       ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver p], Algebra.IsUnramifiedAt (𝓞 K) Q :=
   sorry
 
-/-- **Layer 4.2, the ramified support is finite**, being the set of prime divisors of a nonzero
-ideal of a Dedekind domain. This is what turns the ramified set into a `Finset`; feeding that
-`Finset` and the criterion above into Layer 2's Artin map gives the classical map on the
-fractional ideals prime to the discriminant. The dependency runs this way and not the other:
-Layer 2 takes its excluded set as a parameter and does not know about `relDiscr`. -/
-example {L : Type*} [Field L] [NumberField L] [Algebra K L] :
-    ∃ S : Finset (HeightOneSpectrum (𝓞 K)), ∀ v : HeightOneSpectrum (𝓞 K),
-      v ∈ S ↔ v.asIdeal ∣ Ideal.relNorm (𝓞 K) (differentIdeal (𝓞 K) (𝓞 L)) :=
+/-- **Layer 4.3, the ramified support**, as a named `Finset`. It exists because
+`relDiscr (𝓞 K) (𝓞 L) ≠ ⊥`, which needs separability of the fraction fields and is automatic for
+number fields. Feeding this `Finset` and the membership lemma below into Layer 2.5's
+`artinHomAway` gives the classical Artin map on the fractional ideals prime to the discriminant.
+The dependency runs this way and not the other: Layer 2.5 takes its excluded set as a parameter
+and does not mention `relDiscr`. -/
+noncomputable def ramifiedSupport (K : Type*) [Field K] [NumberField K]
+    (L : Type*) [Field L] [NumberField L] [Algebra K L] :
+    Finset (HeightOneSpectrum (𝓞 K)) :=
   sorry
 
-/-- **Layer 4.4, Stickelberger's congruence** (absent upstream): the discriminant of a number
+/-- **Layer 4.3, membership in the ramified support.** -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L] (v : HeightOneSpectrum (𝓞 K)) :
+    v ∈ ramifiedSupport K L ↔
+      v.asIdeal ∣ Ideal.relNorm (𝓞 K) (differentIdeal (𝓞 K) (𝓞 L)) :=
+  sorry
+
+/-- **Layer 4.5, Stickelberger's congruence** (absent upstream): the discriminant of a number
 field is `0` or `1 mod 4`. -/
 example : NumberField.discr K % 4 = 0 ∨ NumberField.discr K % 4 = 1 :=
   sorry
@@ -435,6 +524,18 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     (hcomp : ∀ x : K, f (algebraMap K (v.adicCompletion K) x) =
       algebraMap L (w.adicCompletion L) (algebraMap K L x)) :
     f = (completionAlgHom (K := K) v w : v.adicCompletion K →+* w.adicCompletion L) :=
+  sorry
+
+/-- **Layer 5.2, the tower equation.** For `K ⊆ M ⊆ L` with `w ∣ u ∣ v`, the three canonical
+maps compose. It follows from the uniqueness statement above, because the left side is
+continuous and extends `K → L`. -/
+example {M L : Type*} [Field M] [NumberField M] [Algebra K M]
+    [Field L] [NumberField L] [Algebra K L] [Algebra M L] [IsScalarTower K M L]
+    (v : HeightOneSpectrum (𝓞 K)) (u : HeightOneSpectrum (𝓞 M)) (w : HeightOneSpectrum (𝓞 L))
+    [u.asIdeal.LiesOver v.asIdeal] [w.asIdeal.LiesOver u.asIdeal]
+    [w.asIdeal.LiesOver v.asIdeal] :
+    (completionAlgHom (K := M) u w).toRingHom.comp (completionAlgHom (K := K) v u).toRingHom =
+      (completionAlgHom (K := K) v w).toRingHom :=
   sorry
 
 /-- **Layer 5.2, the algebra structure the canonical map induces.** Everything downstream uses
@@ -510,7 +611,7 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
     [w.asIdeal.LiesOver v.asIdeal] :
     Module.finrank (v.adicCompletion K) (w.adicCompletion L) =
-      w.asIdeal.ramificationIdx (𝓞 K) * w.asIdeal.inertiaDeg (𝓞 K) :=
+      Ideal.ramificationIdx v.asIdeal w.asIdeal * Ideal.inertiaDeg v.asIdeal w.asIdeal :=
   sorry
 
 /-- **Layer 5.6, the decomposition group is the local Galois group** (Neukirch II §9), again as
@@ -532,6 +633,40 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
       algebraMap L (w.adicCompletion L) ((σ : L ≃ₐ[K] L) x) :=
   sorry
 
+/-- **Layer 5.6, the completion isomorphism induced by an automorphism.** `σ` carries `w` to
+`w'`, so it extends continuously to an isomorphism of the two completions. This is the map the
+conjugation square below needs, and writing it down is what removes the placeholder from that
+square. -/
+noncomputable def completionCongr {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w w' : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] [w'.asIdeal.LiesOver v.asIdeal]
+    (σ : L ≃ₐ[K] L) (hσ : σ • w.asIdeal = w'.asIdeal) :
+    w.adicCompletion L ≃ₐ[v.adicCompletion K] w'.adicCompletion L :=
+  sorry
+
+/-- **Layer 5.6, what `completionCongr` does.** -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w w' : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] [w'.asIdeal.LiesOver v.asIdeal]
+    (σ : L ≃ₐ[K] L) (hσ : σ • w.asIdeal = w'.asIdeal) (x : L) :
+    completionCongr v w w' σ hσ (algebraMap L (w.adicCompletion L) x) =
+      algebraMap L (w'.adicCompletion L) (σ x) :=
+  sorry
+
+/-- **Layer 5.6, the conjugation square.** Conjugating in the stabilizer corresponds to
+conjugating by `completionCongr σ`. Stated on the dense image of `L`, which determines it. -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w w' : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] [w'.asIdeal.LiesOver v.asIdeal]
+    (σ : L ≃ₐ[K] L) (hσ : σ • w.asIdeal = w'.asIdeal)
+    (τ : MulAction.stabilizer (L ≃ₐ[K] L) w.asIdeal)
+    (hτ : σ * (τ : L ≃ₐ[K] L) * σ⁻¹ ∈ MulAction.stabilizer (L ≃ₐ[K] L) w'.asIdeal) (x : L) :
+    decompositionHom v w' ⟨σ * (τ : L ≃ₐ[K] L) * σ⁻¹, hτ⟩
+        (algebraMap L (w'.adicCompletion L) x) =
+      completionCongr v w w' σ hσ
+        (decompositionHom v w τ (algebraMap L (w.adicCompletion L) (σ⁻¹ x))) :=
+  sorry
+
 /-- **Layer 5.6, `decompositionHom` is bijective**, hence the isomorphism `D_Q ≅ Gal(L_w/K_v)`.
 Compatibility with the residue maps, and the fact that it carries `IsArithFrobAt` to the
 local Frobenius, are the companion milestones: the two conventions agree by
@@ -542,8 +677,25 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
     Function.Bijective (decompositionHom v w) :=
   sorry
 
-/-- **Layer 5.7, the canonical map on integers.** The completion map carries `𝓞_{K_v}` into
-`𝓞_{L_w}`; this is the algebra structure the local different is formed for. -/
+/-- **Layer 5.7, the canonical map on completed integer rings**, as a named map. The completion
+map carries `𝓞_{K_v}` into `𝓞_{L_w}`, and this is that restriction. -/
+noncomputable def completionIntegersAlgHom {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] :
+    v.adicCompletionIntegers K →+* w.adicCompletionIntegers L :=
+  sorry
+
+/-- **Layer 5.7, the square with `completionAlgHom`.** This is what says the restriction is the
+right one. -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] (x : v.adicCompletionIntegers K) :
+    ((completionIntegersAlgHom v w x : w.adicCompletionIntegers L) : w.adicCompletion L) =
+      completionAlgHom v w (x : v.adicCompletion K) :=
+  sorry
+
+/-- **Layer 5.7, the canonical map on completed integer rings.** The completion map carries
+`𝓞_{K_v}` into `𝓞_{L_w}`; this is the algebra structure the local different is formed for. -/
 @[reducible] noncomputable def completionIntegersAlgebra {L : Type*} [Field L] [NumberField L]
     [Algebra K L] (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
     [w.asIdeal.LiesOver v.asIdeal] :
@@ -560,7 +712,7 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     Module.IsTorsionFree (v.adicCompletionIntegers K) (w.adicCompletionIntegers L) :=
   sorry
 
-/-- **Layer 5.7, the completed local extension is monogenic** (Serre, *Local Fields*, III §6
+/-- **Layer 5.8, the completed local extension is monogenic** (Serre, *Local Fields*, III §6
 Proposition 12). The residue extension is an extension of finite fields, hence simple; lift a
 residue generator and adjoin a uniformizer. This is what makes Layer 6 self-contained: with a
 generator `x`, Mathlib's `conductor_mul_differentIdeal` gives the local different as `(g′(x))`,
@@ -572,7 +724,7 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L]
       Algebra.adjoin (v.adicCompletionIntegers K) {x} = ⊤ :=
   sorry
 
-/-- **Layer 5.8, the different localizes** (Neukirch III (2.2)(iii)), written with the actual
+/-- **Layer 5.9, the different localizes** (Neukirch III (2.2)(iii)), written with the actual
 ideal map into the completed integer ring rather than as informal multiplication by
 `𝓞_{L_w}`. -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L]
@@ -583,14 +735,14 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L]
       differentIdeal (v.adicCompletionIntegers K) (w.adicCompletionIntegers L) :=
   sorry
 
-/-- **Layer 5.9, the relative discriminant valuation, with the residue-degree weights written
+/-- **Layer 5.10, the relative discriminant valuation, with the residue-degree weights written
 out.** In the multiplicity normalization pinned by the conventions table, and stated with a
 `finsum` so that no finiteness instance has to be threaded through. This is where every
 exponent computation of Layer 6 lands. -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L] (v : HeightOneSpectrum (𝓞 K)) :
     multiplicity v.asIdeal (Ideal.relNorm (𝓞 K) (differentIdeal (𝓞 K) (𝓞 L))) =
       ∑ᶠ P ∈ Ideal.primesOver v.asIdeal (𝓞 L),
-        P.inertiaDeg (𝓞 K) * multiplicity P (differentIdeal (𝓞 K) (𝓞 L)) :=
+        Ideal.inertiaDeg v.asIdeal P * multiplicity P (differentIdeal (𝓞 K) (𝓞 L)) :=
   sorry
 
 /-! ## Layer 6: global ramification consequences
@@ -601,11 +753,9 @@ Hasse–Arf belong to a local fields subject, and are not restated here. -/
 
 /-- **Layer 6.1, the local lower filtration**, in Serre's shape (*Local Fields*, IV §1).
 
-⚠ This definition is a compatibility interface. The subject of the local ramification filtration
-belongs to a local fields roadmap. This roadmap defines the object because Layer 6.2 compares
-against it and cannot be stated otherwise. If a local fields roadmap supplies the same object,
-delete this definition and restate Layer 6.2 against theirs; nothing else changes. The
-replacement is mechanical because the shape here is the standard one. -/
+This roadmap owns this object. Layer 6.2 compares it with the global filtration, and Layers 6.3
+to 6.5 compute through that comparison. Upper numbering, Herbrand's theorem and Hasse–Arf are a
+different subject and are not built here. -/
 noncomputable def localRamificationGroup {L : Type*} [Field L] [NumberField L] [Algebra K L]
     (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
     [w.asIdeal.LiesOver v.asIdeal] (i : ℕ) :
@@ -678,8 +828,8 @@ conclusion. -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     {p : Ideal (𝓞 K)} [p.IsMaximal] (hp : p ≠ ⊥)
     {P : Ideal (𝓞 L)} [P.IsPrime] [P.LiesOver p]
-    (htame : ¬ ringChar (𝓞 K ⧸ p) ∣ P.ramificationIdx (𝓞 K)) :
-    ¬ P ^ P.ramificationIdx (𝓞 K) ∣ differentIdeal (𝓞 K) (𝓞 L) :=
+    (htame : ¬ ringChar (𝓞 K ⧸ p) ∣ Ideal.ramificationIdx p P) :
+    ¬ P ^ Ideal.ramificationIdx p P ∣ differentIdeal (𝓞 K) (𝓞 L) :=
   sorry
 
 /-- **Layer 6.4, the wild bounds** `e ≤ v_P(𝔡) ≤ e − 1 + v_P(e)` (Neukirch III (2.6), Serre LF
@@ -691,12 +841,12 @@ Mathlib's `conductor_mul_differentIdeal`. -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     {p : Ideal (𝓞 K)} [p.IsMaximal] (hp : p ≠ ⊥)
     {P : Ideal (𝓞 L)} [P.IsPrime] [P.LiesOver p]
-    (hwild : ringChar (𝓞 K ⧸ p) ∣ P.ramificationIdx (𝓞 K))
-    (he : P.ramificationIdx (𝓞 K) ≠ 0) :
-    P.ramificationIdx (𝓞 K) ≤ multiplicity P (differentIdeal (𝓞 K) (𝓞 L)) ∧
+    (hwild : ringChar (𝓞 K ⧸ p) ∣ Ideal.ramificationIdx p P)
+    (he : Ideal.ramificationIdx p P ≠ 0) :
+    Ideal.ramificationIdx p P ≤ multiplicity P (differentIdeal (𝓞 K) (𝓞 L)) ∧
       multiplicity P (differentIdeal (𝓞 K) (𝓞 L)) ≤
-        P.ramificationIdx (𝓞 K) - 1 +
-          multiplicity P (Ideal.span {(P.ramificationIdx (𝓞 K) : 𝓞 L)}) :=
+        Ideal.ramificationIdx p P - 1 +
+          multiplicity P (Ideal.span {(Ideal.ramificationIdx p P : 𝓞 L)}) :=
   sorry
 
 /-- **Layer 6.5, the permutation-action discriminant exponent formula.** Both sides are
@@ -706,7 +856,7 @@ permutation action. A future ArtinRepresentations roadmap may recognize this int
 Artin conductor; that identification is theirs and is needed by nothing here. -/
 example {L : Type*} [Field L] [NumberField L] [IsGalois ℚ L] (M : IntermediateField ℚ L)
     (Q : Ideal (𝓞 L)) [Q.IsPrime] (hQ : Q ≠ ⊥) :
-    Q.ramificationIdx (𝓞 M) *
+    Ideal.ramificationIdx (Q.under (𝓞 M)) Q *
         multiplicity (Q.under (𝓞 M)) (differentIdeal ℤ (𝓞 M)) =
       ∑ᶠ i : ℕ, (Nat.card (ramificationGroup (K := ℚ) Q i) -
         Nat.card ((ramificationGroup (K := ℚ) Q i ⊓ M.fixingSubgroup :

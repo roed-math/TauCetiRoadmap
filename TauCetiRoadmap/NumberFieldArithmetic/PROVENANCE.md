@@ -24,10 +24,11 @@ change of class costs nothing. The surrounding series covers:
   `ramificationIdx_inertiaDeg_sup_eq_one` (#36843);
 - the inertia field of `p` in `ℚ(ζ_{p^k m})` (#37031).
 
-**The `ramificationIdx` and `inertiaDeg` definitions.** Mathlib replaced both by their
+**The `ramificationIdx` and `inertiaDeg` definitions.** Mathlib is replacing both by their
 localization and residue-field versions (#41234, #41325), keeping the supremum and quotient-rank
-forms as `ramificationIdx'` and `inertiaDeg'`. Both pairs are present at the pinned revision,
-with agreement lemmas between them. README §Pinned conventions records the resulting rule.
+forms as `ramificationIdx'` and `inertiaDeg'`. The new definitions also change the argument
+order: they take the prime of the extension first and the base **ring** second, where the
+definitions at the pin take two ideals. README §Pinned conventions records the resulting rule.
 
 **Neighbouring work.** `Ideal.inertia` API (#40383); the reorganization of the `IsGaloisGroup`
 material (#40928, #40942, #41071); the finite-flat `Σ eᵢfᵢ` formula at ring level (#39189);
