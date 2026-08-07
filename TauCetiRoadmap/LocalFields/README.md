@@ -19,19 +19,17 @@ filtration in both numberings, the tame quotient of the absolute Galois group, a
 field theory through duality, the Euler characteristic, and the topological finite generation of
 `G_K`, each layer with its complete basic theory rather than only its headline theorem.
 
-Local class field theory is being formalized in `kbuzzard/ClassFieldTheory` (the 2025 Clay
-Summer School project, maintained by Yunzhou "Edison" Xie). Its abstract half is done: Tate cohomology (since upstreamed to Mathlib master), the Herbrand-quotient calculus, and a
-`FiniteClassFormation` interface with a sorry-free abstract reciprocity isomorphism. Its local
-half (unramified-unit cohomology, the local-unit Herbrand quotient, fundamental classes, the
-Artin map) is open at the audited revision. Ramification filtrations have a partial, stalled
-formalization in [Akwardbro/RamificationGroup](https://github.com/Akwardbro/RamificationGroup)
-(Junjie Bai, Jiedong Jiang, et al., following Serre *Local Fields* IV). This roadmap develops the
-same mathematics **independently in Tau Ceti**, in Mathlib's
-`IsNonarchimedeanLocalField`/`ValuativeRel` vocabulary, citing and staying convention-compatible
-with both projects (see Provenance): the interfaces are aligned so that milestones can refactor
-onto their work if it lands in Mathlib, and so that results proved here are usable by their
-consumers (the [FLT](https://github.com/ImperialCollegeLondon/FLT) blueprint explicitly consumes
-local reciprocity as a `\notready` input).
+Two Lean projects outside Mathlib cover part of the same ground: local class field theory in
+[kbuzzard/ClassFieldTheory](https://github.com/kbuzzard/ClassFieldTheory), whose abstract half
+is finished and whose local half is not, and the ramification filtrations in
+[Akwardbro/RamificationGroup](https://github.com/Akwardbro/RamificationGroup), following Serre
+*Local Fields* IV. Provenance has a status record for each. This roadmap develops the same
+mathematics **independently in Tau Ceti**, in Mathlib's
+`IsNonarchimedeanLocalField`/`ValuativeRel` vocabulary, citing both and keeping their
+conventions: the interfaces are aligned so that a milestone can be replaced by their work if it
+lands in Mathlib, and so that results proved here are usable by their consumers (the
+[FLT](https://github.com/ImperialCollegeLondon/FLT) blueprint takes local reciprocity as a
+`\notready` input).
 
 Suggested home: `TauCeti/NumberTheory/LocalField/`, mirroring the Mathlib path that owns the
 `IsNonarchimedeanLocalField` class, with subdirectories per layer (`Basic/`, `UnitFiltration/`,
@@ -39,8 +37,8 @@ Suggested home: `TauCeti/NumberTheory/LocalField/`, mirroring the Mathlib path t
 `Reciprocity/`, `Duality/`, `FiniteGeneration/`). One generic theorem proved along the way does
 not belong under `NumberTheory/`: the finite-group class formation and Tate–Nakayama material of
 Layer 6 is about finite groups and their cohomology, and its home is
-`TauCeti/RepresentationTheory/Homological/GroupCohomology/ClassFormation/`. Keeping the Tau Ceti
-paths parallel to the Mathlib ones makes eventual upstreaming a file move rather than a renaming.
+`TauCeti/RepresentationTheory/Homological/GroupCohomology/ClassFormation/`. Parallel paths keep
+it visible, file by file, which part of the theory Mathlib owns and which part we are adding.
 
 This roadmap is one of four coordinated developments. It **consumes** PR
 [#1, Profinite Cohomology](https://github.com/roed-math/TauCetiRoadmap/pull/1): its Layers 0–7
@@ -92,8 +90,18 @@ is not sequencing: the statements are false there. At `K = 𝔽_q((t))` and `n =
 `H¹(G_K, ℤ/p)` is infinite with it; `cd_p(G_K)` is `1`, not `2`; and `μ_{p^r}` is not the finite
 étale dual that the duality pairing needs. Artin–Schreier–Witt theory and finite flat (Cartier)
 duality are what replace them, and this roadmap does not build either. Every regime-1 hypothesis
-below is stated as `IsUnit (n : 𝒪[K])` precisely so that this case is excluded by the
-hypothesis rather than by a side condition a reader can overlook.
+below is written `IsUnit (n : 𝒪[K])`, so that the excluded case fails the hypothesis outright
+instead of hiding in a side condition a reader can skip past.
+
+The boundary reaches further than Layer 8's duality. The route to the existence theorem in
+Layer 7 is Kummer theory over `K(μ_n)`, which for `p ∣ n` in characteristic `p` supplies
+nothing at all, so the roadmap proves the existence theorem in full only for `K/ℚ_p` finite,
+and away from the residue characteristic otherwise. In equal characteristic the full theorem is
+true; a proof of it belongs to a roadmap that builds Artin–Schreier–Witt theory. Everything
+Layer 7 deduces *from* full existence, namely injectivity of `Art_K`, the identification of the
+normic topology with the topology of all open finite-index subgroups, and the ordinary
+profinite completion `(Kˣ)^∧ ≅ G_K^{ab}`, therefore carries the mixed-characteristic hypothesis
+too.
 
 ## Pinned conventions
 
@@ -105,6 +113,7 @@ hypothesis rather than by a side condition a reader can overlook.
 | residue field, integers | `𝒪[K]`, `𝓂[K]`, `𝓀[K]`, the `ValuativeRel`-scoped notations (`Valuation.integer (valuation K)` and friends); never a rival valuation subring | `Mathlib/Topology/Algebra/Valued/ValuativeRel.lean` |
 | unit filtration | `U(K, i) : Subgroup Kˣ` indexed by `i : ℕ`, with `U(K, 0) = 𝒪[K]ˣ` and `U(K, i) = 1 + 𝓂[K]^i` for `i ≥ 1` (literature `U_K^{(i)}`) | Layer 1 |
 | ramification filtration | lower numbering `G_i` indexed by `i : ℤ`, total, with `G_i = ⊤` for `i ≤ −1`, `G_0` the inertia group and `G_1` the wild inertia group (Serre LF IV §1); real index `G_u := G_{⌈u⌉}` for `u : ℝ`; Herbrand functions `φ_{L/K}, ψ_{L/K} : ℝ → ℝ`; upper numbering `G^u = G_{ψ(u)}`. The two filtrations use different index sets on purpose: any statement relating `U(K, i)` to `G_j` writes the shift out | Layer 3 |
+| Herbrand values as unit depths | `ψ_{L/K}` carries `ℕ` into `ℕ`, and the resulting `ψℕ_{L/K} : ℕ → ℕ` is the one conversion used: a unit group is indexed by a natural number or by a value of `ψℕ`, never by `φ` or by a real number. `φ` keeps its real values and appears only inside the Herbrand calculus and in floors, as in `⌊φ_{L/K}(i)⌋` | Layer 3 |
 | Frobenius | **arithmetic** Frobenius `x ↦ x^q` on residue fields is the distinguished generator; "Frobenius" unqualified always means arithmetic; geometric Frobenius is its inverse and is always named `geometric` | Layer 2 |
 | absolute Galois group | `Field.absoluteGaloisGroup K`, that is `Gal(AlgebraicClosure K / K)`, in every public statement, including in characteristic `p`. Restriction to the separable closure is a topological isomorphism, proved once as a comparison theorem and used wherever a separable-closure model is convenient internally | Layer 4 |
 | reciprocity normalization | `Art_K : Kˣ →* G_K^{ab}` sends **uniformizers to arithmetic Frobenius**; equivalently `ν_K ∘ Art_K = ι ∘ v_K`, where `ν_K : G_K^{ab} →* Ẑ` is normalized by `ν_K(Frob) = 1` and `ι : ℤ → Ẑ` is the completion map (the Neukirch/NSW convention). The geometric normalization `Art_K^{geo} = Art_K ∘ (·)⁻¹` is a definition plus a translation lemma, never a second convention | Layer 7 |
@@ -205,41 +214,17 @@ the pin, to be consumed on the next toolchain bump rather than rebuilt.
   totally-ramified correspondence.
 - **Trace forms and duality:** `Mathlib/RingTheory/Trace/` and
   `Mathlib/RingTheory/DedekindDomain/Different.lean` (`differentIdeal` for an extension of
-  Dedekind domains, via the trace dual), which Layer 3 specializes and computes rather than
-  redefines.
+  Dedekind domains, via the trace dual), which Layer 3 specializes and computes without
+  redefining.
 
-### Work under way elsewhere (checked 2026-08-06; coordinate, cite, do not fork)
+### Mathlib work under way
 
-- **kbuzzard/ClassFieldTheory** (`main` at `ccc3323c6750`, 2026-07-31; active maintainer
-  Yunzhou "Edison" Xie). Sorry-free and directly relevant: the `FiniteClassFormation` class with
-  the abstract Tate–Nakayama `reciprocityIso` (`Cohomology/SplittingModule.lean`); the
-  Herbrand-quotient calculus (`Cohomology/FiniteCyclic/HerbrandQuotient/`); `localInv`
-  (`Cohomology/LocalInv.lean`); the valuation short exact sequence
-  `0 → 𝒪[L]ˣ → Lˣ → ℤ → 0` (`IsNonarchimedeanLocalField/ValuationExactSequence.lean`); the
-  canonical `UnramifiedExtension K n` with its universal property and `maximalUnramified`
-  (`IsNonarchimedeanLocalField/Unramified.lean`); the Teichmüller character
-  (`LocalCFT/Teichmuller.lean`); `IsNonarchimedeanLocalField ℚ_[p]` (`Qp.lean`). Open at that
-  revision, each a single explicit `sorry` or not started: positive-degree vanishing of
-  `Hⁱ(Gal(L/K), 𝒪[L]ˣ)` for unramified `L/K` (`UnramifiedCohomology.lean`), the local-unit
-  Herbrand quotient `h(𝒪[L]ˣ) = 1` (`IsNonarchimedeanLocalField/HerbrandQuotient.lean`, marked
-  "hard work"), the fundamental-class construction, and the Artin map (no files yet). This
-  updates the gq2 planning document's §7.2 gap list: all four gaps are still gaps, and the
-  abstract machinery above is new since that survey. Owner override to that document's
-  §7.1/§21: this roadmap develops local CFT **in Tau Ceti**, not as contributions into
-  ClassFieldTheory; the alignment obligations of the Provenance section remain.
-- **Akwardbro/RamificationGroup** (Junjie Bai, Jiedong Jiang, Prowler99, Yicheng Tao; last
-  commit `c3fd8515a8e3`, 2026-03-01, stalled; built on the dormant mariainesdff stack rather
-  than on `IsNonarchimedeanLocalField`): lower-numbering ramification groups,
-  `AlgEquiv.lowerIndex`, Herbrand `φ`/`ψ`, upper numbering, aimed at Kronecker–Weber; roughly 27
-  of 41 files still carry sorries; no Mathlib PRs have come out of it. Layer 3 is an independent
-  development in the pin's vocabulary; cite this repository and Serre LF IV, and coordinate with
-  the authors before any code reuse.
-- **mariainesdff/LocalClassFieldTheory** (de Frutos-Fernández–Nuccio, arXiv:2310.01998; last
-  commit `9ebdafa0b464`, 2025-07-02, dormant): complete-DVR local fields in both
-  characteristics, unique valuation extension to finite extensions
-  (`DiscreteValuationRing/Extensions.lean`, **not** yet in Mathlib), an empty
-  `ClassFormation.lean`, no Lubin–Tate. Their spectral-norm and valuation-algebra layers *did*
-  land in Mathlib (see the consume list) and are used here.
+Open Mathlib PRs and the settled design decisions that constrain the statements below. None of
+it is a reason to wait: build the missing piece here, named and shaped as the landed version
+will be, and delete ours when theirs lands. Three Lean projects outside Mathlib develop parts
+of this mathematics; their revisions, status, licences, and the conditions on using them have
+one record each in Provenance, and the layers cite them where they bear on a milestone.
+
 - **Mathlib open PRs shaping the substrate** (2026-07): the `ValuativeRel` wave, namely
   #26886/#26885/#26827 (pechersky: `ValuativeRel ℚ_[p]` follow-ups, `ValuativeTopology 𝒪[K]`,
   normed-field helpers), #40309/#36769/#40315 (jjdishere: `Normed → IsValuativeTopology`,
@@ -253,7 +238,7 @@ the pin, to be consumed on the next toolchain bump rather than rebuilt.
   Lubin–Tate development, which this roadmap's reciprocity deliberately does not depend on, see
   Layer 6, matching Buzzard–Hill's 2025-04 decision to "define the Artin map via the group
   cohomology approach" and not via Lubin–Tate). No open Mathlib PR on higher ramification
-  groups, Herbrand quotients, class formations, or reciprocity exists at the audit date.
+  groups, Herbrand quotients, class formations, or reciprocity turned up in that survey.
 - **The `erd1/LCFT` interface** (erdOne's mathlib4 branch, file
   `Mathlib/NumberTheory/ClassFieldTheory/Local/Basic.lean`; per Andrew Yang's FLT update of
   2026-07-27 this is the exact statement his four-axiom modularity-lifting artifact assumes as
@@ -294,7 +279,8 @@ theory `Kˣ/(Kˣ)ⁿ ≅ H¹(G_K, μ_n)` for `char K ∤ n`, the Herbrand-quotie
 `H²(unramified) ≅ (1/n)ℤ/ℤ`, solvability of local Galois groups, the invariant map
 `inv_K : Br(K) ≅ ℚ/ℤ`, fundamental classes, the class formation, Tate–Nakayama, finite-level
 reciprocity with tower functoriality, the Artin map with its normalizations, norm groups, norm
-limitation, the existence theorem, local Tate duality and Euler characteristics in the two
+limitation, the existence theorem (away from the residue characteristic for a general local
+field, in full for `K/ℚ_p` finite), local Tate duality and Euler characteristics in the two
 regimes, the mod-2 Hilbert-symbol identification, and the exact rank `d(G_K) = [K:ℚ_p] + 2`. None
 of this exists upstream as stated.
 
@@ -349,7 +335,7 @@ expressible, its milestones are added to `Suggested.lean` with `sorry`.
   `e * f = Module.finrank K L`; multiplicativity of each in towers; and the comparison lemmas
   with the Dedekind-level `Ideal.ramificationIdx` and `Ideal.inertiaDeg` of the pin. The
   comparison needs one bridging fact proved once, that `primesOver 𝓂[K] 𝒪[L] = {𝓂[L]}` is a
-  singleton at a local field. ⚠ Do not re-derive the Dedekind theory here, and do not force
+  singleton at a local field. Do not re-derive the Dedekind theory here, and do not force
   every consumer through `Ideal.ramificationIdx`'s `sSup`.
 
 ### Layer 1: units, the filtration, and the multiplicative group
@@ -395,7 +381,7 @@ expressible, its milestones are added to `Suggested.lean` with `sorry`.
   named lemma and the formula collapses to `n · #μ_n(K)`; that case holds in either
   characteristic. In regime 2, `K/ℚ_p` finite, the formula holds for every `n ≠ 0`, including
   `p ∣ n`, with the `p`-primary factor supplied by the deep-unit logarithm above. Finiteness of
-  the quotient is a corollary of the formula rather than a separate theorem.
+  the quotient falls out of the formula and is not stated on its own.
 - **Power classes, the absolute-value form.** Only after the `ℕ`-valued theorem, derive
   `#(Kˣ/(Kˣ)ⁿ) = n · #μ_n(K) · ‖n‖_K⁻¹` as an equality in `ℚ≥0`, with the coercion `ℕ → ℚ≥0`
   named in the statement. This is the form that makes the comparison with Layer 8's Euler
@@ -440,7 +426,7 @@ expressible, its milestones are added to `Suggested.lean` with `sorry`.
 - **The maximal unramified extension.** `K^{ur} ⊆ AlgebraicClosure K` as the union of the `K_f`;
   `Gal(K^{ur}/K) ≅ Ẑ` carrying Frobenius to the canonical topological generator `1`, with
   `Ẑ ≅ lim ℤ/n` built on `ProfiniteGrp`'s completion API. Every unramified coordinate downstream
-  is expressed through this isomorphism (⚠ target `Ẑ`, never `ℤ`).
+  is expressed through this isomorphism, with target `Ẑ` and never `ℤ`.
 - **Norms.** For `L/K` unramified: `N_{L/K}(𝒪[L]ˣ) = 𝒪[K]ˣ` (Serre LF V §2; by the filtration,
   surjectivity on each graded piece plus completeness) and `N_{L/K}(Lˣ) = π^{fℤ} × 𝒪[K]ˣ`. This
   is the concrete form of "units are universal norms in the unramified direction", used by the
@@ -482,43 +468,87 @@ expressible, its milestones are added to `Suggested.lean` with `sorry`.
   `G_3H/H = G/H`, while `(G/H)_3 = 1` because
   `v_{ℚ_2(√2)}(σ(√2) − √2) = v_{ℚ_2(√2)}(2√2) = 3`. Upper numbering exists to repair exactly
   this failure.
-- **The quotient embeddings.** `G_0/G_1 ↪ 𝓀[L]ˣ` (hence cyclic of order prime to `p`) and
-  `G_i/G_{i+1} ↪ 𝓀[L]⁺` for `i ≥ 1` (hence elementary abelian `p`); consequently `G_1` is the
-  unique `p`-Sylow subgroup of `G_0` and is normal, which is wild inertia at finite level, and
-  `G_0` has the cyclic tame quotient `G_0/G_1`. The action formula: for `σ ∈ G_0` and
-  `τ ∈ G_i/G_{i+1}`, `στσ⁻¹ = θ_0(σ)^i · τ`, where `θ_0 : G_0/G_1 ↪ 𝓀[L]ˣ` is the tame
-  character. This is the finite-level form of the `(1)`-twist in Layer 4's tame sequence.
+- **The quotient embeddings.** One formula covers every level: `θ_i : G_i/G_{i+1} ↪
+  U(L,i)/U(L,i+1)` by `σ ↦ σ(π_L)/π_L`, injective and independent of the uniformizer. Composed
+  with Layer 1's graded pieces this reads `θ_0 : G_0/G_1 ↪ 𝓀[L]ˣ`, the tame character, so
+  `G_0/G_1` is cyclic of order prime to `p`, and `θ_i : G_i/G_{i+1} ↪ 𝓀[L]⁺` for `i ≥ 1` by
+  `σ ↦ (σ(π_L) − π_L)/π_L^{i+1}`, so those quotients are elementary abelian `p`. Consequently
+  `G_1` is the unique `p`-Sylow subgroup of `G_0` and is normal, which is wild inertia at finite
+  level, and `G_0` has the cyclic tame quotient `G_0/G_1`. The action formula: for `σ ∈ G_0` and
+  `τ ∈ G_i/G_{i+1}`, `στσ⁻¹ = θ_0(σ)^i · τ`. This is the finite-level form of the `(1)`-twist in
+  Layer 4's tame sequence, and `θ_t` is the constant in the norm computation below.
 - **Herbrand functions and upper numbering.** `φ_{L/K}(u) = ∫_0^u dt/[G_0 : G_t]` for `u ≥ −1`,
   with the usual convention that the integrand is `[G_t : G_0]` on `[−1, 0]`. Pin the analytic
   facts as milestones: `φ` is continuous, piecewise linear with an explicit finite-sum formula,
   strictly increasing, concave, `φ(0) = 0`, `φ(u) = u` for `−1 ≤ u ≤ 0`; `ψ_{L/K} : ℝ → ℝ` is
-  its inverse on `[−1, ∞)`, with `φ ∘ ψ = id` and `ψ ∘ φ = id` there; both send integers to
-  rationals and `ψ` sends the jumps of the upper filtration to the jumps of the lower one.
+  its inverse on `[−1, ∞)`, with `φ ∘ ψ = id` and `ψ ∘ φ = id` there; and `ψ` carries the jumps
+  of the upper filtration to the jumps of the lower one.
   Upper numbering is `G^u := G_{ψ(u)}` (using the real-index groups above), and the two theorems
   that justify it are **Herbrand's theorem** `(G/H)^u = G^u H/H` (Serre LF IV §3) and
   transitivity `φ_{L/K} = φ_{L'/K} ∘ φ_{L/L'}`. Upper numbering is defined here because Layer 7
   needs it for reciprocity compatibility and the conductor.
-- **The norm on the unit filtration.** These are the theorems that Hasse–Arf and Layer 5's
-  Herbrand-quotient computation both consume, so they are built once, here, as named results.
-  For `L/K` finite Galois:
-  1. `N_{L/K}(U(L, ψ_{L/K}(i))) ⊆ U(K, i)` for all `i ≥ 0`, and `N_{L/K}(U(L,i)) ⊆ U(K,i)`.
-  2. For `L/K` unramified: `N_{L/K}(U(L,i)) = U(K,i)` for every `i ≥ 0` (this is the graded
-     refinement of Layer 2's norm surjectivity).
-  3. For `L/K` cyclic totally ramified of prime degree `ℓ` with its single ramification jump at
-     `t` (so `G_i = G` for `i ≤ t` and `G_i = 1` for `i > t`), the induced maps on graded pieces,
-     in the three cases that occur: for `i > t` the map
-     `U(L,ψ(i))/U(L,ψ(i)+1) → U(K,i)/U(K,i+1)` is an isomorphism; for `0 < i < t` (which forces
-     `ℓ = p`, since a tame extension has `t = 0`) it is `y ↦ y^ℓ`, the Frobenius of `𝓀`, hence
-     injective; at `i = t` it is the Artin–Schreier-type map `y ↦ y^ℓ − c·y` determined by
-     `σ(π_L)/π_L`, an `𝔽_ℓ`-linear map whose kernel and cokernel have order `ℓ` (Serre LF V §3).
-  4. Consequently `N_{L/K}(U(L,i)) = U(K, φ_{L/K}(i))` for `i` large, and the index
-     `[U(K,i) : N_{L/K}(U(L,ψ(i)))]` is computed in each of the three cases above.
+- **Herbrand values as unit depths.** `φ` takes non-integral values at integers: in
+  `ℚ_2(μ_8)/ℚ_2` below, `φ(2) = 3/2`. Its inverse does not, and that asymmetry is why the norm
+  theorems below can be stated at all with unit groups indexed by `ℕ`. Prove that `ψ_{L/K}(n)`
+  is a natural number for every `n : ℕ`, and package the proof as a function
+  `ψℕ_{L/K} : ℕ → ℕ` with the characterizing lemma `(ψℕ_{L/K} n : ℝ) = ψ_{L/K} n`, together
+  with `ψℕ 0 = 0`, monotonicity, `n ≤ ψℕ n`, and transitivity
+  `ψℕ_{M/K} = ψℕ_{L/K} ∘ ψℕ_{M/L}` in a tower. This is the only conversion
+  from a Herbrand value to a unit depth in the roadmap: every index of `U(K, −)` and
+  `U(L, −)` below is either a literal natural number or a value of `ψℕ`, and `φ` never indexes
+  a unit group. The proof is the piecewise formula together with Lagrange: writing `g_i = #G_i`
+  and taking `t` to be the largest jump with `φ(t) ≤ n`, one has
+  `ψ(n) = t + (g_0·n − ∑_{i=1}^{t} g_i) / g_{t+1}`, and `g_{t+1}` divides `g_0` and every `g_i`
+  with `i ≤ t`, the filtration being decreasing.
+- **The norm on the unit filtration.** ⚠ `N_{L/K}(U(L,i)) ⊆ U(K,i)` is **false** for ramified
+  `L/K`: already in a tame quadratic extension in residue characteristic `3` the norm of an
+  element of `U(L,2)` lands outside `U(K,2)`, and the worked examples carry the computation.
+  The true inclusion carries a Herbrand shift, and no milestone may drop it. Each item below
+  names what consumes it.
+  1. *The norm on valuations and units, any finite `L/K`.* `v_K(N_{L/K}(x)) = f · v_L(x)` for
+     `x : Lˣ`, hence `N_{L/K}(𝒪[L]ˣ) ⊆ 𝒪[K]ˣ`, which is `N_{L/K}(U(L,0)) ⊆ U(K,0)`, and
+     `N_{L/K}(π_L)` is a uniformizer of `K` when `L/K` is totally ramified. This is the basic
+     API of the norm at a local field, needed to state the rest, and the last part fixes the
+     coordinate on the target of the graded maps in item 4.
+  2. *The Herbrand-shifted inclusion, `L/K` finite Galois.*
+     `N_{L/K}(U(L, ψℕ_{L/K}(i))) ⊆ U(K, i)` for every `i : ℕ` (Serre LF V §6), with the
+     ℕ-valued `ψℕ` pinned above, so that both depths elaborate as natural numbers. Its
+     unshifted corollary, which is what survives of the false statement, is
+     `N_{L/K}(U(L,i)) ⊆ U(K, ⌊φ_{L/K}(i)⌋)`, from `ψ(⌊φ(i)⌋) ≤ i`. Layer 7's conductor and its
+     compatibility `Art_K(U(K,n)) = (G_K^{ab})^{(n)}` consume the shifted form.
+  3. *Unramified `L/K`.* `N_{L/K}(U(L,i)) = U(K,i)` for every `i : ℕ` (Serre LF V §2), an
+     equality, and here `ψℕ` is the identity. The case `i = 0` is Layer 2's norm surjectivity
+     on units, and Layer 5's vanishing `Hⁱ(Gal(L/K), 𝒪[L]ˣ) = 0` is the cohomological form of
+     the same computation.
+  4. *Cyclic totally ramified of prime degree `ℓ`, the graded maps.* Write `G = ⟨σ⟩` and let
+     `t ≥ 0` be the unique jump, so `G_i = G` for `i ≤ t` and `G_i = 1` for `i > t`. Then
+     `ψ(v) = v` for `v ≤ t` and `ψ(v) = t + ℓ(v − t)` for `v ≥ t`, and `t = 0` exactly in the
+     tame case `ℓ ≠ p`, where the Galois hypothesis forces `μ_ℓ ⊆ K` and hence `ℓ ∣ q − 1`.
+     Coordinatize the graded pieces by a uniformizer `π_L` and by `π_K = N_{L/K}(π_L)`. The
+     norm then induces `gr_v N : U(L, ψℕ v)/U(L, ψℕ v + 1) → U(K, v)/U(K, v+1)`, and the
+     milestone is its computation in the four cases that occur (Serre LF V §3):
+     - `v = t = 0`, the tame case: `y ↦ y^ℓ` on `𝓀ˣ`, with kernel and cokernel `μ_ℓ(𝓀)` of
+       order `ℓ`, using `ℓ ∣ q − 1`;
+     - `v = 0 < t`, so `ℓ = p`: `y ↦ y^p` on `𝓀ˣ`, the Frobenius of a finite field, bijective;
+     - `0 < v < t`, which again forces `ℓ = p`: `y ↦ y^p` on `𝓀⁺`, Frobenius again, bijective;
+     - `v = t > 0`: the additive map `y ↦ y^ℓ − c^{ℓ−1}·y` on `𝓀⁺`, where `c = θ_t(σ) ∈ 𝓀ˣ` is
+       the value at a generator `σ` of `G` of the level-`t` embedding `θ_t : G_t/G_{t+1} ↪ 𝓀⁺`
+       from the quotient-embedding milestone above. It is `𝔽_ℓ`-linear, with kernel the line
+       `𝔽_ℓ·c` and cokernel of order `ℓ`. ⚠ The exponent on `c` is not a slip: `c` changes when the
+       generator `σ` does, `c^{ℓ−1}` does not (`λ^{ℓ−1} = 1` for `λ ∈ 𝔽_ℓˣ`), and a version
+       with a bare `c` would make the kernel depend on a choice the norm map cannot see.
 
-  Consumers, so that nothing here is built speculatively: Hasse–Arf uses 1, 3, and 4;
-  `h(G, 𝒪[L]ˣ) = 1` in Layer 5 uses 1, 2, and 4; Layer 2's norm surjectivity is 2; Layer 7's
-  reciprocity/ramification compatibility uses 1 together with Hasse–Arf.
+     Summarizing the four cases: `gr_v N` is bijective for `v ≠ t`, and at `v = t` its kernel
+     and cokernel both have order `ℓ`.
+  5. *What comes out of item 4.* `N_{L/K}(U(L, ψℕ v)) = U(K,v)` for every `v > t`, by
+     successive approximation from item 4 and completeness;
+     `[U(K,v) : N_{L/K}(U(L, ψℕ v)) · U(K,v+1)] = ℓ` for `v = t` and `= 1` for `v ≠ t`; and,
+     multiplying up the filtration, `[𝒪[K]ˣ : N_{L/K}(𝒪[L]ˣ)] = ℓ`. Hasse–Arf's induction
+     consumes item 4 and these indices, and Layer 7's conductor of a cyclic extension of prime
+     degree comes out of them as `c(L/K) = t + 1`.
 - **Hasse–Arf.** For `G` abelian the jumps of the upper-numbering filtration are integers (Serre
-  LF V §7). Sequenced after the norm computations above, which are its input.
+  LF V §7). Sequenced after items 4 and 5 above, which are its input, and after transitivity of
+  `φ`, which is how the general abelian case reduces to the cyclic prime-degree one.
 - **The different and the discriminant.** For `L/K` finite separable, the different
   `𝔡_{L/K} ⊆ 𝒪[L]` is defined from the trace form, as the inverse of the trace dual of `𝒪[L]`
   (compare with Mathlib's `differentIdeal` and prove the two agree); the discriminant
@@ -556,7 +586,7 @@ expressible, its milestones are added to `Suggested.lean` with `sorry`.
   that single relation (NSW (7.5.2)/(7.5.3), Iwasawa). State the presentation through its
   universal property, as a continuous surjection from the free profinite group on two generators
   whose kernel is the closed normal closure of the relator, consuming PR #3 Layer 4's free
-  profinite groups rather than defining a local copy.
+  profinite groups instead of defining a local copy.
 - **Translation lemmas.** The geometric-`σ` presentation (`σ ↦ σ⁻¹`), and the finite-level
   compatibility: restricting the sequence to finite tame quotients recovers Layer 3's
   `G_0/G_1`-twist formula. The reciprocity-facing statements ("units land in inertia, a
@@ -583,11 +613,12 @@ proceed **in parallel with** PR #1.
 - **The Herbrand quotient.** `h(G, M) = #H²/#H¹` for finite cyclic `G`, defined on top of
   Mathlib's `FiniteCyclic` periodicity (and restated against `TateCohomology` after the bump):
   multiplicativity in short exact sequences, `h = 1` on finite modules, and the two computations
-  `h(Gal(L/K), Lˣ) = [L:K]` and `h(Gal(L/K), 𝒪[L]ˣ) = 1` for cyclic `L/K`, the second from
-  Layer 3's norm-on-filtration theorems together with a cohomologically trivial open submodule
-  (the `lem:serre_approx` argument of the ClassFieldTheory blueprint; both are open sorries
-  there at the audit date, so this is live coordination territory rather than duplication of
-  finished work).
+  `h(Gal(L/K), Lˣ) = [L:K]` and `h(Gal(L/K), 𝒪[L]ˣ) = 1` for cyclic `L/K`. The second is proved
+  from an open `G`-stable subgroup of `𝒪[L]ˣ` that is cohomologically trivial, obtained from a
+  normal basis for `𝒪[L]` over `𝒪[K][G]` (the `lem:serre_approx` argument of the
+  ClassFieldTheory blueprint), together with `h = 1` on the finite quotient; the first then
+  follows from it and Layer 0's valuation sequence `0 → 𝒪[L]ˣ → Lˣ → ℤ → 0`. Neither consumes
+  Layer 3: the norm-on-filtration theorems are for Hasse–Arf and the conductor.
 - **Unramified cohomology.** For `L/K` unramified, so cyclic and generated by Frobenius:
   `Hⁱ(Gal(L/K), 𝒪[L]ˣ) = 0` for `i ≥ 1` (filtration, finite-field vanishing, completeness),
   hence `H²(Gal(L/K), Lˣ) ≅ H²(Gal(L/K), ℤ) ≅ ℤ/[L:K]` through the valuation sequence
@@ -625,10 +656,10 @@ that shortcuts it would be circular.
 The abstract theorem in this layer is about finite groups, not about local fields. **PR #1 owns**
 the cohomology objects themselves: comparison maps, exact sequences, restriction and
 corestriction, Shapiro, and cup products. **This roadmap owns** the generic finite class
-formation and Tate–Nakayama, because local reciprocity is what needs them, and their home is
-`TauCeti/RepresentationTheory/Homological/GroupCohomology/ClassFormation/`, reusable by anything
-else with a class formation. `TauCeti/NumberTheory/LocalField/` then constructs the local
-fundamental class, instantiates the generic structure, and specializes.
+formation and Tate–Nakayama, since local reciprocity is the theory that needs them; their home
+is `TauCeti/RepresentationTheory/Homological/GroupCohomology/ClassFormation/`, where anything
+else with a class formation can reuse them. `TauCeti/NumberTheory/LocalField/` then constructs
+the local fundamental class, instantiates the generic structure, and specializes.
 
 - **Tate–Nakayama, in the pinned generality.** For a finite group `G` and a distinguished class
   `σ ∈ H²(G, M)` satisfying the class-formation hypotheses, cup product with `σ` induces
@@ -657,6 +688,14 @@ The order of this layer matters. The inverse limit of the finite-level isomorphi
 that topology with the topology of *all* open finite-index subgroups is the existence theorem.
 Stating the second identification first would make the layer circular, so the milestones are
 sequenced as follows.
+
+Steps 1 to 5 and step 8 hold for every local field, apart from the cyclotomic orientation inside
+step 3, which is `ℤ_pˣ`-valued and says nothing in characteristic `p`. Steps 6, 7 and 9 assume
+`K` is a finite extension of `ℚ_p`: the route to the existence theorem here is Kummer theory,
+and its `p`-primary half in equal characteristic would need the Artin–Schreier–Witt machinery
+that the scope boundary excludes. "General local field", "prime to the residue characteristic" and
+"finite extension of `ℚ_p`" are three different hypotheses in this layer, and a milestone that
+swaps one for another is a different theorem.
 
 1. **Norm groups and the normic topology.** `NormGroup L/K := (N_{L/K})(Lˣ) : Subgroup Kˣ` for
    `L/K` finite abelian; each is open of finite index with `[Kˣ : NormGroup L/K] = [L:K]`
@@ -695,9 +734,10 @@ sequenced as follows.
    be the fixed field of `H · [G,G]`; prove that this `F` is `L ∩ K^{ab}` and that the norm
    groups agree. The proof uses Layer 6's corestriction/transfer compatibility and the finite
    index equality, and it does **not** use the existence theorem, which is why it appears here.
-5. **The existence theorem.** A subgroup of `Kˣ` is a norm group of a finite abelian extension
-   if and only if it is open of finite index. One direction is step 1. The other is the
-   following chain, each item a milestone:
+5. **The existence theorem away from the residue characteristic.** Let `H ≤ Kˣ` be open of
+   finite index and let `n` be the exponent of `Kˣ/H`. If `IsUnit (n : 𝒪[K])`, then `H` is the
+   norm group of a finite abelian extension. This is regime 1, so it holds in either
+   characteristic, and the chain is:
    1. *Upward closure.* If `H ≤ Kˣ` contains `NormGroup L/K` for some finite abelian `L/K`,
       then `H` is itself a norm group, namely of the subfield of `L` fixed by
       `θ_{L/K}(H/NormGroup L/K)`. Uses finite reciprocity only.
@@ -707,27 +747,45 @@ sequenced as follows.
    3. *Cyclotomic base change and Kummer.* `K' := K(μ_n)` is finite abelian over `K`. Over `K'`,
       Layer 1 makes `K'ˣ/(K'ˣ)^n` finite, so `L' := K'((K'ˣ)^{1/n})` is a finite abelian
       extension of `K'` with `Gal(L'/K') ≅ Hom(K'ˣ/(K'ˣ)^n, μ_n)`, and finite-level reciprocity
-      over `K'` identifies `NormGroup L'/K' = (K'ˣ)^n`. This is where Kummer theory is used, with
-      its true hypothesis `μ_n ⊆ K'`.
+      over `K'` identifies `NormGroup L'/K' = (K'ˣ)^n`. This is where Kummer theory is used, and
+      both of its hypotheses are live here: `μ_n ⊆ K'`, and `n` invertible in `𝒪[K']`, which is
+      what makes `X^n − 1` separable, `K(μ_n)/K` finite abelian and unramified, and
+      `K'ˣ/(K'ˣ)^n` finite by Layer 1's regime-1 count. ⚠ `[K(μ_n) : K]` is the order of `q`
+      mod `n` and can perfectly well be divisible by `p`, as `[ℚ_2(μ_5) : ℚ_2] = 4` shows; it is
+      `n`, not that degree, that is prime to the residue characteristic here.
    4. *Descent of the norm.* Transitivity of norms and `N_{K'/K}((K'ˣ)^n) ⊆ (Kˣ)^n` give
       `N_{L'/K}(L'ˣ) ⊆ (Kˣ)^n`.
    5. *Back to an abelian extension.* `L'/K` need not be abelian, so apply norm limitation
       (step 4): with `F = L' ∩ K^{ab}`, `NormGroup F/K = N_{L'/K}(L'ˣ) ⊆ (Kˣ)^n ⊆ H`.
    6. *Conclusion.* By item 1, `H` is a norm group, and by Layer 6 its index equals the degree
-      of the corresponding extension, so the correspondence `L ↦ NormGroup L/K` is an
-      inclusion-reversing bijection between finite abelian extensions of `K` and open
-      finite-index subgroups of `Kˣ`, with `NormGroup` of a compositum the intersection and of
-      an intersection the compositum's norm group.
+      of the corresponding extension, so `L ↦ NormGroup L/K` restricts to an inclusion-reversing
+      bijection between the finite abelian extensions of `K` of degree prime to the residue
+      characteristic and the open subgroups of `Kˣ` of index prime to it, with `NormGroup` of a
+      compositum the intersection and of an intersection the compositum's norm group.
 
    No milestone in this chain uses Layer 8; the sequencing is deliberate, and the roadmap does
    not admit a proof that reverses it. This route also avoids formal groups: if Mathlib's
    `FormalGroup` series grows a Lubin–Tate theory, the note in Provenance applies.
-6. **Consequences of existence.** The intersection of all norm groups is trivial, so `Art_K` is
-   injective; the normic topology on `Kˣ` is the topology of all open finite-index subgroups;
-   and only now, `Art_K` extends to an isomorphism `(Kˣ)^∧ ≅ G_K^{ab}` from the profinite
-   completion of `Kˣ` in the ordinary sense. `Kˣ/N_{L/K}Lˣ` is finite for every finite `L/K`,
-   abelian or not, with order `[L ∩ K^{ab} : K]` by step 4.
-7. **Ramification compatibility and the conductor.** `U(K,n)` is compact, so its continuous
+6. **The existence theorem in full, for `K/ℚ_p` finite.** In regime 2 the same six items go
+   through for every `n`, with no condition on `H` beyond openness and finite index: `char K = 0`
+   makes `μ_n ⊆ K(μ_n)` available for every `n`, and Layer 1's regime-2 count makes
+   `K'ˣ/(K'ˣ)^n` finite for every `n`, including `p ∣ n`. So for `K` a finite extension of `ℚ_p`,
+   `L ↦ NormGroup L/K` is an inclusion-reversing bijection between all finite abelian extensions
+   of `K` and all open finite-index subgroups of `Kˣ`. ⚠ In equal characteristic the theorem is
+   still true and is not proved here: adjoining `μ_p` to a field of characteristic `p` adds
+   nothing, `Kˣ/(Kˣ)^p` is infinite, and the replacement is Artin–Schreier–Witt theory, which
+   the scope boundary excludes. No milestone below may carry a hypothesis that quietly covers
+   the equal-characteristic `p`-primary case.
+7. **Consequences of the full existence theorem, `K/ℚ_p` finite.** The intersection of all norm
+   groups is trivial, so `Art_K` is injective; the normic topology on `Kˣ` is the topology of
+   all open finite-index subgroups; and only now, `Art_K` extends to an isomorphism
+   `(Kˣ)^∧ ≅ G_K^{ab}` from the profinite completion of `Kˣ` in the ordinary sense. ⚠ Step 5
+   alone gives none of these, in either characteristic. Injectivity runs through
+   `⋂_n (Kˣ)^n = 1`, and at `K = 𝔽_q((t))` the intersection over `n` prime to `p` still contains
+   `U(K,1)`, which is `n`-divisible for every such `n`, being pro-`p`. What is valid in either
+   characteristic, from step 4 and Layer 6 and needing no existence theorem at all:
+   `Kˣ/N_{L/K}Lˣ` is finite for every finite `L/K`, abelian or not, with order `[L ∩ K^{ab} : K]`.
+8. **Ramification compatibility and the conductor.** `U(K,n)` is compact, so its continuous
    image is closed, and the correct statement is an equality rather than a density statement. At
    finite level, for `L/K` finite abelian,
    `θ_{L/K}(U(K,n)·N_{L/K}Lˣ / N_{L/K}Lˣ) = Gal(L/K)^{(n)}`, the upper-numbering ramification
@@ -745,12 +803,13 @@ sequenced as follows.
    and for `c(L/K) = n > 0`, minimality reads `U(K,n) ≤ NormGroup L/K` and
    `U(K, n−1) ≰ NormGroup L/K`, a statement whose `n − 1` is meaningful exactly because `n > 0`.
    The letter `f` keeps its Layer-0 meaning throughout.
-8. **The FLT-facing interface.** Assemble the finite-abelian-level isomorphisms, the
-   arithmetic-Frobenius normalization, the tower compatibility, and the existence theorem in the
-   form of the `erd1/LCFT` interface (`LocalArtinMapData` plus `SatisfiesLocalExistenceTheorem`,
-   described above under work under way elsewhere), and prove the translation as a milestone.
-   That interface is what a confirmed downstream consumer (FLT's modularity-lifting artifact)
-   axiomatizes at the snapshot date.
+9. **The FLT-facing interface, `K/ℚ_p` finite.** Assemble the finite-abelian-level isomorphisms,
+   the arithmetic-Frobenius normalization, the tower compatibility, and the full existence
+   theorem of step 6 in the form of the `erd1/LCFT` interface (`LocalArtinMapData` plus
+   `SatisfiesLocalExistenceTheorem`), and prove the translation as a milestone. The
+   mixed-characteristic hypothesis is inherited from step 6 through
+   `SatisfiesLocalExistenceTheorem`, and it costs nothing here, since the consumer works over
+   finite extensions of `ℚ_p`.
 
 ### Layer 8: local Tate duality and the Euler characteristic
 
@@ -770,11 +829,24 @@ modules over every local field" theorem appears.
   for `i = 0, 1, 2`. Compatibility along `μ_n ⊆ μ_{nm}` stays inside this regime.
 - **Unramified subgroups and their annihilators.** Define `H¹_{ur}(K, M)` as the kernel of
   restriction `H¹(G_K, M) → H¹(I_K, M)`, and prove it equals the image of inflation from
-  `H¹(G_K/I_K, M^{I_K})`, so that the two usual descriptions are interchangeable. For `M`
-  unramified (that is, `I_K` acts trivially) and `#M` prime to the residue characteristic,
-  `H¹_{ur}(K, M)` and `H¹_{ur}(K, M')` are exact annihilators of each other under the pairing
-  above, and each has order `#H⁰(G_K, M)`. State the degrees, the coefficient dual, and the
-  value group explicitly in the statement rather than in prose (Milne ADT I.2.6, NSW (7.2.15)).
+  `H¹(G_K/I_K, M^{I_K})`, so that the two usual descriptions are interchangeable. Make the
+  definition for both coefficient modules, with the dual action on `M'` the one used in the
+  pairing. For `M` unramified (that is, `I_K` acts trivially) and `#M` prime to the residue
+  characteristic, `H¹_{ur}(K, M)` and `H¹_{ur}(K, M')` are exact annihilators of each other
+  under the pairing above, and their orders are
+
+  ```text
+  #H¹_ur(K, M)  = #H⁰(K, M),
+  #H¹_ur(K, M') = #H⁰(K, M').
+  ```
+
+  ⚠ Two formulas, with no equality asserted between their right-hand sides. `H¹_ur(K,M)` is
+  `M/(Frob − 1)M`, whose order equals that of `M^{G_K}`; the same computation run on `M'`
+  answers `#H⁰(K,M')`, a different number in general. At `K = ℚ_2` and `M = ℤ/3` with trivial
+  action, `#H¹_ur(K,M) = 3` while
+  `M' = μ_3` and `μ_3(ℚ_2) = 1`, so `#H¹_ur(K,M') = 1`. State the degrees, the coefficient
+  dual, and the value group explicitly in the statement rather than in prose (Milne ADT I.2.6,
+  NSW (7.2.15)).
 - **Euler characteristic.** For finite `M` of order prime to `p`,
   `#H⁰(G_K,M) · #H²(G_K,M) / #H¹(G_K,M) = 1`, which is the specialization of `‖#M‖_K` because
   `#M` is a unit in `𝒪[K]`.
@@ -827,9 +899,9 @@ slogan is not the statement the argument needs.
   formula, and duality). ⚠ The naive criterion "all `H¹(G, 𝔽_ℓ)` finite implies `G`
   topologically finitely generated" is **false** for profinite groups: `∏_ℕ A₅` has
   `H¹(−, 𝔽_ℓ) = 0` for every `ℓ`, each factor being perfect, yet is not topologically finitely
-  generated since `d(A₅^m) → ∞`. The argument below is why the theorem is true regardless, and
-  this is why route (c) of the gq2 planning document §13.1 (bounded-degree extension finiteness
-  plus a generic criterion) was rejected: no such generic criterion exists at this generality.
+  generated since `d(A₅^m) → ∞`. So these counts are an input to the argument below and not a
+  proof on their own; there is no generic criterion at this generality to appeal to, and the
+  arithmetic of `G_K` has to be used.
 - **The tame frame.** `G_K^{t}` is topologically 2-generated (Layer 4) and `P_K` is pro-`p`
   (Layer 4), so by the pro-`p` Frattini generation criterion of PR #3 Layer 3 (a subset generates
   a pro-`p` group if and only if it generates its Frattini quotient, together with the relative
@@ -893,6 +965,13 @@ instance, a sign flip, a wrong normalization, or a dropped dyadic case.
   upper-numbering jumps at `1` and `2` (`φ(1) = 1`, `φ(3) = 2`), integers as Hasse–Arf demands.
   This example also carries the failure of lower-numbering quotient compatibility recorded in
   Layer 3. A tame contrast: `ℚ_3(3^{1/2})/ℚ_3` has `G_0 = ℤ/2`, `G_1 = 1`.
+- **The norm drops unit depth** (Layer 3): in `L = ℚ_3(√3)` over `K = ℚ_3`, the element
+  `x = 4 = 1 + π_L²` lies in `U(L,2)`, while `N_{L/K}(x) = 16` and `v_3(16 − 1) = 1`, so
+  `N_{L/K}(U(L,2)) ⊄ U(K,2)`. Here `φ_{L/K}(u) = u/2` and `ψ_{L/K}(v) = 2v`, so the shifted
+  inclusion `N(U(L, ψℕ(1))) = N(U(L,2)) ⊆ U(K,1)` holds and is sharp, as is the floored
+  corollary. Tame quadratic extensions in odd residue characteristic are the cheapest witnesses
+  that unit depth is not preserved, and this example is in the test suite so that a later
+  simplification of the norm package cannot quietly reintroduce the unshifted inclusion.
 - **The tame relation over `ℚ_3`** (Layer 4): in `G_{ℚ_3}^{t}`, `στσ⁻¹ = τ³` for the arithmetic
   Frobenius lift; at finite level, in `Gal(ℚ_3(μ_8, 3^{1/8})/ℚ_3)`, the conjugation formula is
   checkable by hand from the `σ`-action on the `μ_8`-indexed roots of `3`.
@@ -927,9 +1006,6 @@ be built at any time. PR #3 Layer 11 consumes Layers 5, 7, and 8 and supplies La
 therefore last. PR #4 Layers 6–7 consume only 8C. The worked examples are required in their
 assigned layers.
 
-Until the sibling branches merge, the PR links above are canonical; relative links must not be
-assumed to resolve on this branch.
-
 ## Downstream consumers in gq2
 
 The late layers are the intrinsic form of several acceptance targets in
@@ -951,8 +1027,9 @@ carried over from it.
 
 - J.-P. Serre, *Local Fields*, GTM 67 (1979), the primary source: Ch. I §§1–8 (discrete valuation
   rings, Frobenius substitution), Ch. III §5 (unramified extensions), Ch. IV (ramification
-  groups, lower and upper numbering, Herbrand `φ/ψ`), Ch. V (the norm on the filtration; §7
-  Hasse–Arf), Ch. VIII (Tate cohomology of finite groups, Herbrand quotient), Ch. IX
+  groups, lower and upper numbering, Herbrand `φ/ψ`), Ch. V (the norm: §2 the unramified case,
+  §3 the cyclic totally ramified case of prime degree, §6 the Galois case and the shifted
+  inclusion, §7 Hasse–Arf), Ch. VIII (Tate cohomology of finite groups, Herbrand quotient), Ch. IX
   (Tate–Nakayama), Ch. X–XI (Galois cohomology, class formations, existence theorem), Ch. XII–XIII
   (the Brauer group of a local field, local CFT), Ch. XIV (local symbols, `(a,b)`, the existence
   theorem, `ℚ_pᵃᵇ`), Ch. XV (ramification and norm-group numerics).
@@ -996,12 +1073,25 @@ carried over from it.
 claimed; public repositories and PR metadata were inspected. The conditions recorded below are
 part of the milestones they attach to, not advice.
 
-- **`kbuzzard/ClassFieldTheory`**, Kevin Buzzard, Yunzhou "Edison" Xie, and contributors.
-  **Revision:**
+- **`kbuzzard/ClassFieldTheory`**, Kevin Buzzard, Yunzhou "Edison" Xie, and contributors, the
+  2025 Clay Summer School project. **Revision:**
   [`ccc3323c6750`](https://github.com/kbuzzard/ClassFieldTheory/commit/ccc3323c6750abca25b49b35106f54eb3a398509)
   (2026-07-31, the head of `main` at the snapshot date). **Licence:** Apache-2.0. **Overlap:**
   Layer 0's local-field instances and valuation sequence; Layers 5–6's finite class formations,
-  Herbrand quotient, and abstract reciprocity. **Contact status:** not contacted; no ownership
+  Herbrand quotient, and abstract reciprocity. **Status at that revision:** the abstract half is
+  sorry-free, namely Tate cohomology (since upstreamed to Mathlib master), the
+  `FiniteClassFormation` class with the abstract Tate–Nakayama `reciprocityIso`
+  (`Cohomology/SplittingModule.lean`), the Herbrand-quotient calculus
+  (`Cohomology/FiniteCyclic/HerbrandQuotient/`), `localInv` (`Cohomology/LocalInv.lean`), the
+  valuation sequence `0 → 𝒪[L]ˣ → Lˣ → ℤ → 0`
+  (`IsNonarchimedeanLocalField/ValuationExactSequence.lean`), the canonical
+  `UnramifiedExtension K n` with its universal property and `maximalUnramified`
+  (`IsNonarchimedeanLocalField/Unramified.lean`), the Teichmüller character
+  (`LocalCFT/Teichmuller.lean`), and `IsNonarchimedeanLocalField ℚ_[p]` (`Qp.lean`). The local
+  half is open, each item a single explicit `sorry` or no file yet: positive-degree vanishing of
+  `Hⁱ(Gal(L/K), 𝒪[L]ˣ)` for unramified `L/K` (`UnramifiedCohomology.lean`), the local-unit
+  Herbrand quotient `h(𝒪[L]ˣ) = 1` (`IsNonarchimedeanLocalField/HerbrandQuotient.lean`), the
+  fundamental class, and the Artin map. **Contact status:** not contacted; no ownership
   agreement recorded. **Plan:** consume their results that have landed in Mathlib; otherwise
   prove the Tau Ceti milestones independently against the same public interfaces, with three
   standing obligations. (i) *Interface alignment*: the `FiniteClassFormation` interface, the
@@ -1017,7 +1107,11 @@ part of the milestones they attach to, not advice.
   contributors. **Revision:**
   [`c3fd8515a8e3`](https://github.com/Akwardbro/RamificationGroup/commit/c3fd8515a8e35c2876057ab59f4751be6638f3ab)
   (2026-03-01). **Licence:** no licence file was found in the 2026-08-06 check. **Overlap:**
-  Layer 3's lower and upper numbering and Herbrand functions. **Contact status:** not contacted.
+  Layer 3's lower and upper numbering and Herbrand functions. **Status at that revision:**
+  lower-numbering ramification groups, `AlgEquiv.lowerIndex`, Herbrand `φ`/`ψ`, and upper
+  numbering, aimed at Kronecker–Weber, built on the mariainesdff stack rather than on
+  `IsNonarchimedeanLocalField`; development stopped in March 2026 with sorries in roughly 27 of
+  41 files, and no Mathlib PR has come out of it. **Contact status:** not contacted.
   **Plan:** independent proof from the cited mathematics in the `IsNonarchimedeanLocalField`
   substrate; their file layout (`LowerNumbering`/`HerbrandFunction`/`UpperNumbering`) and lemma
   granularity are useful prior art and are cited on Layer 3. **Refactor trigger:** compatible
@@ -1029,7 +1123,10 @@ part of the milestones they attach to, not advice.
   (2025-07-02). **Licence:** no licence file was found in the 2026-08-06 check. **Overlap:**
   the finite-extension valuation layer that has not landed upstream, which is prior art for
   Layer 0's construction milestone; their spectral-norm and valuation-algebra work did land and
-  is consumed directly. **Contact status:** not contacted. **Plan:** consume only their landed
+  is consumed directly. **Status at that revision:** complete-DVR local fields in both
+  characteristics, the unique extension of a valuation to a finite extension
+  (`DiscreteValuationRing/Extensions.lean`), an empty `ClassFormation.lean`, and no Lubin–Tate;
+  development stopped in July 2025. **Contact status:** not contacted. **Plan:** consume only their landed
   Mathlib work; prove the intrinsic milestone independently. **Refactor trigger:** the remaining
   extension API lands upstream. **No transfer of unlanded code** without licence clarification
   and recorded permission.
@@ -1070,7 +1167,7 @@ part of the milestones they attach to, not advice.
   [FLT > "update"](https://leanprover.zulipchat.com/#narrow/channel/416277-FLT/topic/update/near/613077432)
   (A. Yang, 2026-07-27); and the open `TopRep` debate in
   [maths > "Continuous cohomology"](https://leanprover.zulipchat.com/#narrow/channel/116395-maths/topic/Continuous.20cohomology/near/610038284)
-  (2026-07). ⚠ The ClassFieldTheory project's day-to-day channel is **private** (created for the
+  (2026-07). The ClassFieldTheory project's day-to-day channel is **private** (created for the
   2025 Clay workshop; access by DM to Buzzard), so the repository's sorry state is the best
   public proxy for its progress; confirm anything decision-critical in `#maths` or by requesting
   access. Announce intentions, per the root README's claims process, before starting Layer 0 and

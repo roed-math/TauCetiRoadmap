@@ -19,13 +19,16 @@ examples reaching into the acceptance criteria of Layers 7–9), stated with `so
 the pinned Mathlib. Per the honest-`sorry` rule, milestones whose *statements* need API that
 does not exist at the pin are **not** stated here and live in `README.md` only: the
 lower/upper ramification filtration and Herbrand functions (Layer 3), the tame quotient and
-its Iwasawa presentation (Layer 4 — needs presented profinite groups), and everything
+its Iwasawa presentation (Layer 4, which needs presented profinite groups), and everything
 cohomological (Layers 5–8: invariant map, class formations, reciprocity, duality, Euler
-characteristic — these consume PR #1 Profinite Cohomology). Power classes and Layer 8 are
+characteristic, all consuming PR #1 Profinite Cohomology). Power classes and Layer 8 are
 split into the two regimes of the roadmap's standing hypotheses; `p`-power coefficients in
 equal characteristic are outside the roadmap, and no statement here is to be generalized to
-cover them. As later layers make their types expressible in `TauCeti/`, add their milestones
-here with `sorry`.
+cover them. The same boundary cuts Layer 7: the existence theorem is a milestone away from
+the residue characteristic for a general local field, and in full only for `K` a finite
+extension of `ℚ_p`, so anything derived from full existence (injectivity of the Artin map,
+the ordinary profinite completion of `Kˣ`) is mixed-characteristic. As later layers make
+their types expressible in `TauCeti/`, add their milestones here with `sorry`.
 
 Definitions carrying a `sorry` body (`normalizedValuation`, `ramificationIndex`,
 `inertiaDegree`, `teichmuller`, `unitFiltration`) are suggested *names and types* for objects
@@ -204,7 +207,7 @@ basis of `1` in `Kˣ`. -/
 theorem iInf_unitFiltration : ⨅ i, unitFiltration K i = ⊥ :=
   sorry
 
-/-- **Layer 1, reduction is surjective on units** — the depth-`0` graded piece
+/-- **Layer 1, reduction is surjective on units**, the depth-`0` graded piece
 `𝒪[K]ˣ ↠ 𝓀[K]ˣ` of the unit filtration, whose kernel is `U(K,1)`. The deeper pieces
 `U(K,i)/U(K,i+1) ≅ 𝓀[K]⁺` are stated once the quotient API is in `TauCeti/`. -/
 example :
