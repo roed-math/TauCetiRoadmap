@@ -160,12 +160,19 @@ Dated, not normative, and deliberately outside the roadmap: the roadmap's export
 states only what is agreed, and this records what still has to be agreed with roadmaps that are
 under review. Recorded 2026-08-07.
 
-- **Continuous cohomology has one owner.** The Pro-p Groups roadmap presently carries its own
-  `contH`, `contH1`, `contH2` and cup carrier. Two independently owned continuous-cohomology
-  carriers cannot both be right, so before either roadmap is accepted one of two things must
-  happen: that roadmap replaces its carrier with the declarations of the exported-interface table,
-  or it supplies explicit natural comparison isomorphisms and transports every operation it uses.
-  Until then no claim of composability between the two is made anywhere in the roadmap.
+- **Continuous cohomology has one owner: settled at the all-degree carrier, open in low degrees.**
+  The Pro-p Groups roadmap now states that Mathlib's `continuousCohomology` is the carrier of every
+  cohomological statement it makes, and that it defines no second cohomology theory: its `cd_p`,
+  the rank interpretations, the Demushkin predicate and its Layer 11 inputs all read through that
+  object. The earlier claim recorded here, that it carries a separate all-degree `contH`, no longer
+  describes it. What remains is the low-degree overlap. It still defines `contH0`, `contH1` and
+  `contH2` as explicit subquotients over a finite discrete module, with a bidegree `(1,1)` cup
+  product on cocycles and its own comparison isomorphisms with `continuousCohomology`. Those are a
+  second copy of this roadmap's Layers 2, 3 and 8 under different coefficient hypotheses. Before
+  either roadmap is accepted, one of the two must consume the other's explicit model through the
+  exported-interface table rather than restate it, or a transport of every operation used across
+  the two must be stated. Until then no claim of composability in low degrees is made anywhere in
+  the roadmap. Recorded against Pro-p Groups head `62017de`.
 - **The Evens polarization: resolved.** The Quadratic Form Invariants roadmap now states its
   `evens_add` with a `conjClass` factor, which matches the mathematical shape exported here,
   `N(α + β) - N(α) - N(β) = cor (α ⌣ (s · β))`, following Kozlowski's Lemma 2.4. What remains is

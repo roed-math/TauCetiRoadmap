@@ -1343,6 +1343,11 @@ Layer 12.
   ```
   its continuity and its 2-cocycle identity, and the resulting class
   `N^{Ev}(α) ∈ H²(G, 𝔽₂)`. Independence of the choice of `s`, as an explicit coboundary.
+  ⚠ `b₁` and `b_s` are **cochains and not cocycles**, so neither has a class in `H¹(G, 𝔽₂)`. For
+  `G = C₄ = ⟨σ⟩`, `U = ⟨σ²⟩` and `α ≠ 0`, the values of `b₁` at `1, σ, σ², σ³` are `0, 1, 1, 0`,
+  so `b₁(σ · σ) = 1` while `b₁(σ) + b₁(σ) = 0`. Only the sum is a cocycle, so identity 3 below is
+  an equation about the sum, and giving the two components separate classes is a type error
+  dressed as a statement.
 - **The four characterizing identities**, which are what Evens-Kahn uses (Kozlowski Lemma 2.4 in
   cohomological form):
   1. `res_U N^{Ev}(α) = α ⌣ (s · α)`, the cup with the conjugate class;
