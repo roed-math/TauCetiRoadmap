@@ -148,8 +148,9 @@ structure of the full absolute Galois group `G_K` rather than its maximal pro-`p
   **Rank-1 and degenerate conventions:** `n = 1` is allowed by the definition, and `ℤ/2`
   (at `p = 2`) is the unique finite Demushkin group and the unique rank-1 one (for `p` odd
   the cup pairing on `H¹` is alternating, so on a one-dimensional space it vanishes and
-  cannot be nondegenerate); `ℤ_p` is **not** Demushkin (`H² = 0`; it is free pro-`p` of rank 1), and no
-  theorem here adopts the occasional literature convention that smuggles it in. Labute's
+  cannot be nondegenerate); `ℤ_p` is **not** Demushkin (`H² = 0`; it is free pro-`p` of
+  rank 1), and no theorem here adopts the occasional literature convention that smuggles it
+  in. Labute's
   normal-form theorems require `n ≥ 2` (case `q ≠ 2`) or hold vacuously/separately at
   `n = 1`; each classification statement below carries the `n` hypothesis it actually needs.
 - **The `q`-invariant and the orientation, Labute's normalizations.** For a Demushkin group,
@@ -217,8 +218,9 @@ structure of the full absolute Galois group `G_K` rather than its maximal pro-`p
   `pLowerCentralSeries` (0-based, matching Mathlib's `lowerCentralSeries`; Labute's `F_i` is
   index `i - 1`), `freeProfiniteGroup`, `freeProC`, `freeProP`, `presentedProP`,
   `topAbelianization`, `IsDemushkin`, `demushkinRank`, `demushkinQ`, `demushkinCharacter`.
-  `Suggested.lean` fixes the forms. The maximal pro-`p` quotient has exactly one name: `proPKernel p G` is the
-  subgroup and `maximalProPQuotient p G := G ⧸ proPKernel p G` the quotient. `G(p)` is
+  `Suggested.lean` fixes the forms. The maximal pro-`p` quotient has exactly one name:
+  `proPKernel p G` is the subgroup and `maximalProPQuotient p G := G ⧸ proPKernel p G` the
+  quotient. `G(p)` is
   informal prose for `maximalProPQuotient p G` and nothing else; there is no `maxProP`.
 
 ## What Mathlib already has (consume)
@@ -737,10 +739,9 @@ pro-`p`-specific theorems, stated against that formalism.
   (the action factors through a finite `p`-quotient, and a finite `p`-group acting on a
   nonzero finite `p`-group fixes a nonzero element; Mathlib's
   `IsPGroup.card_modEq_card_fixedPoints`). Iterating, every such `M` has a `G`-stable
-  filtration whose factors are
-  one-dimensional with trivial action; so any `ℤ`-valued function of the coefficients that
-  is additive along short exact sequences takes the value `dim_{𝔽_p} M` times its value at
-  `𝔽_p`. This is a pro-`p` statement, hence ours and not PR #1's, and both Euler formulas
+  filtration whose factors are one-dimensional with trivial action, so any `ℤ`-valued
+  function of the coefficients that is additive along short exact sequences takes the value
+  `dim_{𝔽_p} M` times its value at `𝔽_p`. This is a pro-`p` statement, hence ours and not PR #1's, and both Euler formulas
   use it: the two-term one above, and the degree-`0,1,2` version stated in Layer 7, where
   the Demushkin rank formula needs it.
 - **Pro-`p` Nielsen–Schreier, open case.** An open subgroup `U` of index `m` in a free
