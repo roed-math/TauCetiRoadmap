@@ -67,7 +67,8 @@ Three levels of generality appear, and the difference between them is deliberate
    `[CommRing R] [IsDedekindDomain R] [Field K] [Algebra R K] [IsFractionRing R K]`. This matches
    Mathlib's own parametrization of `AdeleRing R K`. It covers the finite part of a modulus, the
    fractional ideals prime to it, and the congruence subgroup of `Kˣ`. It also covers the ray
-   class quotient, the transition maps, the moving lemma, and the exact sequence. Layer 10B and any later function-field
+   class quotient, the transition maps, the moving lemma, and the exact sequence. Layer 10B and any
+   later function-field
    work reuse this generality.
 2. **Finiteness.** A general Dedekind domain has neither finite residue rings nor a finite class
    group. Ray class groups are therefore not finite at that generality, and the cardinality formula
@@ -272,7 +273,8 @@ this repository, and it makes every later layer independent of any external deve
 11. the Hilbert symbol `(·,·)_F : Fˣ × Fˣ → μ_n`, bimultiplicative and nondegenerate.
 
 Items 1 to 7 are used by Layer 6. Item 8 is used by Layer 7 and Layer 9. Item 9 is used by Layer 5.
-Items 10 and 11 are used by Layer 11. *Prerequisites:* M `Mathlib/RingTheory/Frobenius.lean`, M
+Items 10 and 11 are used by Layer 11.
+*Prerequisites:* M `Mathlib/RingTheory/Frobenius.lean`, M
 `Mathlib/RepresentationTheory/Homological/GroupCohomology/`.
 
 **I.2. The ideal-theoretic Artin map.** Let `L/K` be finite abelian. Let `S` be a finite set of
@@ -307,19 +309,22 @@ completion `v.adicCompletion K` is a nonarchimedean local field. Its residue car
 `Ideal.absNorm v.asIdeal`. Its normalized valuation restricts to `HeightOneSpectrum.valuation` on
 `K`. The absolute value `FinitePlace.mk v` is `q_v^{-v(·)}`. Phrase every unit condition through
 `adicCompletionIntegers` or through the `ValuativeRel` API. Do not state new lemmas against the
-deprecated `Valued` interface. *Prerequisites:* M `HeightOneSpectrum.adicCompletion`, M
-`adicCompletionIntegers`, M `FinitePlace`, M `Ideal.absNorm`.
+deprecated `Valued` interface.
+*Prerequisites:* M `HeightOneSpectrum.adicCompletion`, M `adicCompletionIntegers`, M `FinitePlace`,
+M `Ideal.absNorm`.
 
 **I.4. An instance of the interface for the completions.** Produce an instance of I.1 for
 `v.adicCompletion K` and its finite abelian extensions. This is local class field theory, and this
 roadmap does not develop it. An implementor discharges I.4 in one of two ways. If a Tau Ceti local
 class field theory exists, import it and build the instance from its declarations; that is a
 mechanical edit. If none exists, prove the instance from Serre, *Corps Locaux*, Ch. XIII and XIV, or
-from Neukirch ANT Ch. V. *Prerequisites:* L I.1, L I.3.
+from Neukirch ANT Ch. V.
+*Prerequisites:* L I.1, L I.3.
 
 **I.5. The archimedean part of the interface.** The class of I.1 is nonarchimedean. Layer 2C gives
 the real and complex statements in the same shape. Layer 6 uses the two families together, so keep
-the names parallel: `Art_ℝ`, `Art_ℂ`, `inv_ℝ`, `inv_ℂ`. *Prerequisites:* L I.1, L 2C.1, L 2C.3.
+the names parallel: `Art_ℝ`, `Art_ℂ`, `inv_ℝ`, `inv_ℂ`.
+*Prerequisites:* L I.1, L 2C.1, L 2C.3.
 ### Layer 0: moduli, approximation, and multiplicative congruences
 
 **0.1. The modulus.** Build the structure of the conventions table: a nonzero ideal together with a
@@ -329,8 +334,10 @@ between the two descriptions. Provide the divisibility relation in the pinned or
 trivial modulus `((1), ∅)`, and the modulus with all real places that Layer 1 uses for the narrow
 class group. Real places are the reason the formalism exists. A design in which `𝔪∞ = ∅` is the easy
 case produces the wide class group everywhere. Give the two components equal weight in the API, and
-test with `𝔪∞ ≠ ∅` from the first lemma. *Prerequisites:* M `Ideal`, M `InfinitePlace.IsReal`, M
-`UniqueFactorizationMonoid.factorization`, M `Associates.count`. **Basic API.**
+test with `𝔪∞ ≠ ∅` from the first lemma.
+*Prerequisites:* M `Ideal`, M `InfinitePlace.IsReal`, M `UniqueFactorizationMonoid.factorization`, M
+`Associates.count`.
+**Basic API.**
 - *Constructors:* from an ideal and a `Finset`; from an exponent function of finite support.
 - *Examples:* `((1), ∅)`; `((1), all real places)`; `((n), ∞)` over `ℚ`.
 - *Morphisms:* the divisibility order, `gcd`, `lcm`.
@@ -349,28 +356,31 @@ is one `x ∈ Kˣ` with `ord_{v_i}(x − a_i) ≥ n_i` for every `i` and `sign_w
 `w`. Two facts make this a target and not a citation. Mathlib has no weak approximation theorem for
 inequivalent absolute values at the pin. The finite conditions and the infinite conditions must hold
 for a single element, which the chinese remainder theorem and sign surjectivity do not give
-separately. Route: first prove Artin–Whaples weak approximation. Its form is: the image of `K` is dense in
+separately. Route: first prove Artin–Whaples weak approximation. Its form is: the image of `K` is
+dense in
 `∏_{v ∈ S} K_v`, for a finite set `S` of pairwise inequivalent places. Then read off the
 congruence-and-sign form. The archimedean case is Mathlib's
-`InfinitePlace.denseRange_algebraMap_pi`, and it is the model for the general proof. *Source.*
-Artin–Whaples, as in Cassels–Fröhlich Ch. II §6; Lang ANT Ch. II §1. *False generalization.* Strong
-approximation is a different statement. It is false to ask for one element that meets the congruence
-conditions and is integral at every other place. The obstruction is the class group. Ask for that
-only in the `S`-idele form of Layer 5. *Prerequisites:* M `InfinitePlace.denseRange_algebraMap_pi`,
-M `HeightOneSpectrum.valuation`, M `IsDedekindDomain.quotientEquivPiFactors`.
+`InfinitePlace.denseRange_algebraMap_pi`, and it is the model for the general proof.
+*Source.* Artin–Whaples, as in Cassels–Fröhlich Ch. II §6; Lang ANT Ch. II §1.
+*False generalization.* Strong approximation is a different statement. It is false to ask for one
+element that meets the congruence conditions and is integral at every other place. The obstruction
+is the class group. Ask for that only in the `S`-idele form of Layer 5.
+*Prerequisites:* M `InfinitePlace.denseRange_algebraMap_pi`, M `HeightOneSpectrum.valuation`, M
+`IsDedekindDomain.quotientEquivPiFactors`.
 
 **0.3. Sign maps.** Define the total sign homomorphism `Kˣ →* Π_{w real} {±1}`. Its target is a
 group of order two at each place, so use `ℤˣ` or `Multiplicative (ZMod 2)`. Fix that choice once in
 `Suggested.lean` and use it unchanged. Layer 1 exact sequence, Layer 3 parity dictionary and Layer
-2C `Art_ℝ` all land in the same group. Surjectivity is the archimedean case of 0.2. *Prerequisites:*
-M `InfinitePlace.embedding_of_isReal`, L 0.2.
+2C `Art_ℝ` all land in the same group. Surjectivity is the archimedean case of 0.2.
+*Prerequisites:* M `InfinitePlace.embedding_of_isReal`, L 0.2.
 
 **0.4. The congruence subgroup of `Kˣ`.** Define `K(𝔪) := {x : Kˣ | x ≡ 1 mod* 𝔪}` in the pinned
 spelling: valuation inequalities at `v ∣ 𝔪₀`, positivity through `embedding_of_isReal` at `w ∈ 𝔪∞`.
 Prove that it is a subgroup, and that it is antitone in `𝔪`. State the comparison with `1 + 𝔪₀` for
 integral elements prime to `𝔪₀`, with the hypothesis visible. Prove the subgroup property from the
 ultrametric inequality and the sign rules. Do not define `K(𝔪)` through the quotient ring `𝓞 K ⧸
-𝔪₀`. *Prerequisites:* L 0.1, M `HeightOneSpectrum.valuation`, M `InfinitePlace.embedding_of_isReal`.
+𝔪₀`.
+*Prerequisites:* L 0.1, M `HeightOneSpectrum.valuation`, M `InfinitePlace.embedding_of_isReal`.
 **Basic API.**
 - *Constructors:* membership from the two conditions.
 - *Examples:* `K(((1),∅)) = Kˣ`; `K(((1), all real places))` is the totally positive elements.
@@ -385,26 +395,27 @@ ultrametric inequality and the sign rules. Do not define `K(𝔪)` through the q
 
 **0.5. The elements prime to the finite part.** "Prime to `𝔪₀`" is not a Lean type. Define the
 subgroup `Kˣ_{𝔪₀} := {x : Kˣ | ∀ v ∣ 𝔪₀, ord_v x = 0}` of `Kˣ`. State that it is the unit group of
-the localization of `𝓞 K` away from `𝔪₀`, and prove the two descriptions equal. *Prerequisites:* L
-0.1, M `HeightOneSpectrum.valuation`, M `IsLocalization`.
+the localization of `𝓞 K` away from `𝔪₀`, and prove the two descriptions equal.
+*Prerequisites:* L 0.1, M `HeightOneSpectrum.valuation`, M `IsLocalization`.
 
 **0.6. The reduction map and its kernel.** On `Kˣ_{𝔪₀}`, define `Kˣ_{𝔪₀} →* (𝓞 K ⧸ 𝔪₀)ˣ × Π_{w ∈ 𝔪∞}
 {±1}` through the chinese remainder theorem and the sign maps. Prove that it is surjective, with
 0.2. Prove that its kernel is exactly `K(𝔪)`. That kernel identity is the computational form of the
-Layer 1 exact sequence, so prove it here. *Prerequisites:* L 0.2, L 0.3, L 0.4, L 0.5, M
-`IsDedekindDomain.quotientEquivPiFactors`.
+Layer 1 exact sequence, so prove it here.
+*Prerequisites:* L 0.2, L 0.3, L 0.4, L 0.5, M `IsDedekindDomain.quotientEquivPiFactors`.
 
 ### Layer 1: ray class groups and the narrow class group
 
 **1.1. The ideal group and the ray.** Define `J^{𝔪₀}`, the subgroup of `(FractionalIdeal (𝓞 K)⁰ K)ˣ`
 of fractional ideals whose support is disjoint from `𝔪₀`. Spell support through the `v`-adic count
 of the factorization. Provide the description `I = 𝔞𝔟⁻¹` with `𝔞` and `𝔟` integral and prime to
-`𝔪₀`. Define the ray `P_𝔪`, the principal ideals of elements of `K(𝔪)`. *Prerequisites:* L 0.4, M
-`FractionalIdeal`, M `toPrincipalIdeal`, M `FractionalIdeal.count`.
+`𝔪₀`. Define the ray `P_𝔪`, the principal ideals of elements of `K(𝔪)`.
+*Prerequisites:* L 0.4, M `FractionalIdeal`, M `toPrincipalIdeal`, M `FractionalIdeal.count`.
 
 **1.2. The ray class group.** Define `Cl_𝔪 K := J^{𝔪₀} ⧸ P_𝔪`. Prove `Cl_{((1),∅)} ≃* ClassGroup (𝓞
-K)` as a named isomorphism, through compatibility with `ClassGroup.mk0`. *Prerequisites:* L 1.1, M
-`ClassGroup`, M `ClassGroup.mk0`. **Basic API.**
+K)` as a named isomorphism, through compatibility with `ClassGroup.mk0`.
+*Prerequisites:* L 1.1, M `ClassGroup`, M `ClassGroup.mk0`.
+**Basic API.**
 - *Constructors:* the class of a fractional ideal prime to `𝔪₀`; the class of an integral ideal.
 - *Examples:* `Cl_{((1),∅)}(K) = Cl(K)`; `Cl_{(n)∞}(ℚ) ≃* (ZMod n)ˣ`; `Cl_{((1),∞)}(ℚ) = 1`.
 - *Morphisms:* the quotient map from `J^{𝔪₀}`; the transition maps of 1.4; the map to `ClassGroup (𝓞
@@ -426,7 +437,8 @@ generality, because both the surjectivity of `Cl_𝔫 ↠ Cl_𝔪` and the ideal
 `HeightOneSpectrum.valuation_exists_uniformizer`.
 
 **1.4. The transition maps.** For `𝔪 ∣ 𝔫`, construct `Cl_𝔫 ↠ Cl_𝔪`. Prove surjectivity from 1.3.
-Prove that the maps compose in a tower `𝔪 ∣ 𝔫 ∣ 𝔩`. *Prerequisites:* L 1.2, L 1.3.
+Prove that the maps compose in a tower `𝔪 ∣ 𝔫 ∣ 𝔩`.
+*Prerequisites:* L 1.2, L 1.3.
 
 **1.5. The ray class exact sequence.** Prove the sequence
 
@@ -435,37 +447,42 @@ Prove that the maps compose in a tower `𝔪 ∣ 𝔫 ∣ 𝔩`. *Prerequisites:
 where `𝓞_{K,𝔪}ˣ = 𝓞_Kˣ ∩ K(𝔪)`. The third map is 0.6 restricted to global units. The fourth map
 sends a class to the ideal it generates. Prove exactness at each interior place as a separate lemma.
 Derive the image form `1 → im(𝓞_Kˣ) → (𝓞 K ⧸ 𝔪₀)ˣ × signs → Cl_𝔪 K → Cl K → 1` from it, and not the
-reverse. *Prerequisites:* L 0.6, L 1.2, L 1.3, M `NumberField.Units`.
+reverse.
+*Prerequisites:* L 0.6, L 1.2, L 1.3, M `NumberField.Units`.
 
 **1.6. Finiteness and the class number formula.** For a number field, `Cl_𝔪 K` is finite of order
 `h_K · #(𝓞 K ⧸ 𝔪₀)ˣ · 2^{#𝔪∞} / [𝓞_Kˣ : 𝓞_{K,𝔪}ˣ]`. State the index form and not only finiteness.
 Prove it from 1.5. State it for number fields, or under the explicit finiteness package of the
-standing hypotheses. *False generalization.* The formula is false for a general Dedekind domain,
-where the class group and the residue rings can be infinite. The hypotheses are not decoration.
+standing hypotheses.
+*False generalization.* The formula is false for a general Dedekind domain, where the class group
+and the residue rings can be infinite. The hypotheses are not decoration.
 *Prerequisites:* L 1.5, M `NumberField.classNumber`, M `NumberField.Units.DirichletTheorem`.
 
 **1.7. The unit obstruction.** Prove that `Cl_𝔪` is not `(𝓞/𝔪₀)ˣ × signs × Cl` in general. The exact
 sequence shows that the global units glue the factors, and the size of the unit image is a global
 quantity. It is the reason ray class groups of real quadratic fields are hard, and the reason `Cl⁺ ≠
 Cl` exactly when no unit realizes a given sign pattern. Every statement in this layer must go
-through 1.5 and not through a claimed product decomposition. *Prerequisites:* L 1.5, L 1.6.
+through 1.5 and not through a claimed product decomposition.
+*Prerequisites:* L 1.5, L 1.6.
 
 **1.8. The narrow class group.** Define `Cl⁺ K` as in the conventions table. Prove `Cl⁺ = Cl` for
 totally imaginary `K`. Compute the kernel of `Cl⁺ ↠ Cl` from 1.5: it is an elementary abelian
 2-group of order `2^{r₁}/[𝓞_Kˣ : 𝓞_Kˣ⁺]`. Prove the characterization by totally positive principal
 ideals. The narrow class group and the surjection `Cl⁺ ↠ Cl` are what the merged Multiquadratic
 roadmap names as prerequisites for its real-quadratic 2-rank theorem. Freeze this API with any
-implementor who works there. *Prerequisites:* L 1.2, L 1.5.
+implementor who works there.
+*Prerequisites:* L 1.2, L 1.5.
 
 **1.9. Dedekind generality.** State 1.1 to 1.5, except the sign components, for a Dedekind domain
 with fraction field. Specialize to number fields. Layer 10B and any later function-field work reuse
-this. *Prerequisites:* L 1.1 to L 1.5.
+this.
+*Prerequisites:* L 1.1 to L 1.5.
 ### Layer 2A: the idele class group
 
 **2A.1. The objects.** Define `IdeleGroup R K := (AdeleRing R K)ˣ`, its subgroup of principal
 ideles, and `IdeleClassGroup R K` as the quotient. Keep both as reducible abbreviations over
-`(AdeleRing R K)ˣ`, so that every `Units` lemma of Mathlib applies without glue. *Prerequisites:* M
-`NumberField.AdeleRing`, M `AdeleRing.principalSubgroup`, M `Units.map`.
+`(AdeleRing R K)ˣ`, so that every `Units` lemma of Mathlib applies without glue.
+*Prerequisites:* M `NumberField.AdeleRing`, M `AdeleRing.principalSubgroup`, M `Units.map`.
 
 **2A.2. The topology.** Prove that `IdeleGroup (𝓞 K) K` is a locally compact topological group. Use
 the units topology, which comes from `x ↦ (x, x⁻¹)`, and handle the finite part with
@@ -477,28 +494,32 @@ compact Hausdorff group. **Common error.** The idele topology is not the subspac
 
 **2A.3. Discreteness and cocompactness.** Prove that `K` is discrete in `𝔸_K`, and that the quotient
 `𝔸_K/K` is compact. These are the additive local-global finiteness statements that the rest of the
-layer uses. *Source.* Cassels–Fröhlich Ch. II §§14–16; Weil, *Basic Number Theory*, Ch. IV.
+layer uses.
+*Source.* Cassels–Fröhlich Ch. II §§14–16; Weil, *Basic Number Theory*, Ch. IV.
 *Prerequisites:* M `NumberField.AdeleRing`, M `NumberField.canonicalEmbedding`, M
 `Mathlib/NumberTheory/NumberField/CanonicalEmbedding/`.
 
 **2A.4. The idele norm and the norm-one subgroup.** Define `‖·‖ : IdeleGroup →* ℝ_{>0}` in the
 pinned normalization. Prove the product formula `‖x‖ = 1` for principal `x`, from `prod_abs_eq_one`.
-Define `C_K^1` as the kernel on classes, and prove that it is closed. *Prerequisites:* L 2A.1, M
-`NumberField.prod_abs_eq_one`, M `FinitePlace`, M `InfinitePlace.mult`.
+Define `C_K^1` as the kernel on classes, and prove that it is closed.
+*Prerequisites:* L 2A.1, M `NumberField.prod_abs_eq_one`, M `FinitePlace`, M `InfinitePlace.mult`.
 
 **2A.5. Compactness of `C_K^1`.** Prove that the norm-one idele class group is compact. This is the
 main analytic input of the layer, and the source of the two classical finiteness theorems. Derive as
 corollaries the finiteness of `ClassGroup (𝓞 K)` and Dirichlet's unit theorem, and compare each with
 Mathlib's independent proof. **Common error.** `C_K` itself is neither compact nor profinite. There
 is a choice-dependent splitting `C_K ≅ C_K^1 × ℝ_{>0}`, so `Nat.card` statements about `C_K` say
-nothing. *Source.* Cassels–Fröhlich Ch. II §16; Weil, *Basic Number Theory*, Ch. IV §4.
+nothing.
+*Source.* Cassels–Fröhlich Ch. II §16; Weil, *Basic Number Theory*, Ch. IV §4.
 *Prerequisites:* L 2A.3, L 2A.4, M `NumberField.classNumber`, M
 `NumberField.Units.DirichletTheorem`.
 
 **2A.6. The congruence subgroups.** Define `IdeleCongruenceSubgroup 𝔪`, written `U_𝔪`, with the
 carrier of the conventions table. Define `RaySubgroup 𝔪` as its image in `C_K`. Prove that both are
-open, and that both are antitone in `𝔪`. *Prerequisites:* L 0.1, L 2A.1, M `adicCompletionIntegers`,
-M `InfinitePlace.Completion.ringEquivRealOfIsReal`. **Basic API.**
+open, and that both are antitone in `𝔪`.
+*Prerequisites:* L 0.1, L 2A.1, M `adicCompletionIntegers`, M
+`InfinitePlace.Completion.ringEquivRealOfIsReal`.
+**Basic API.**
 - *Constructors:* membership from the component conditions.
 - *Examples:* `U_{((1),∅)}` is the everywhere-integral units; `U_{((1), all real places)}` adds
   positivity at every real place.
@@ -514,8 +535,8 @@ M `InfinitePlace.Completion.ringEquivRealOfIsReal`. **Basic API.**
 **2A.7. The ray class dictionary.** Prove `C_K ⧸ RaySubgroup 𝔪 ≃* Cl_𝔪 K`. Use the map `x ↦ ∏_{v ∤
 𝔪₀} v^{ord_v(x_v)}` on ideles, and compute the kernel with 1.3 and 0.6. Prove the special case `𝔪 =
 ((1), ∅)`, which is `C_K ⧸ RaySubgroup ((1),∅) ≃* ClassGroup (𝓞 K)`. Prove that the isomorphisms
-commute with the transition maps of 1.4 as `𝔪` grows. *Prerequisites:* L 1.2, L 1.3, L 1.4, L 0.6, L
-2A.6.
+commute with the transition maps of 1.4 as `𝔪` grows.
+*Prerequisites:* L 1.2, L 1.3, L 1.4, L 0.6, L 2A.6.
 
 **2A.8. Open subgroups and the connected component.** Prove that every open subgroup of `C_K`
 contains `RaySubgroup 𝔪` for some `𝔪`. Prove that `D_K`, the identity component of `C_K`, is closed
@@ -523,8 +544,8 @@ and divisible, and that `D_K ≤ RaySubgroup 𝔪` for every `𝔪`. Prove that 
 that `C_K/D_K ≅ lim_𝔪 Cl_𝔪` as topological groups. The full structure of `D_K` as a solenoid is not
 a target. The three properties above are what Layers 3 and 7 use. **Common error.** "Every open
 subgroup contains some `U_𝔪`" is a statement about open subgroups. The kernel of a continuous
-character need not be open, so it says nothing about a general character. *Prerequisites:* L 2A.5, L
-2A.6, L 2A.7.
+character need not be open, so it says nothing about a general character.
+*Prerequisites:* L 2A.5, L 2A.6, L 2A.7.
 
 ### Layer 2B: ideles in a finite extension
 
@@ -533,25 +554,28 @@ place `v` of `K`. Layers 5, 6 and 11 treat `C_L` as a `Gal(L/K)`-module, and eve
 use is here.
 
 **2B.1. The base-change algebra structure.** Give `𝔸_L` the structure of an `𝔸_K`-algebra, and prove
-the comparison `𝔸_L ≃ L ⊗_K 𝔸_K` as topological rings. *Source.* Cassels–Fröhlich Ch. II §19; Weil,
-*Basic Number Theory*, Ch. IV §1. *Prerequisites:* M `NumberField.AdeleRing`, M `FiniteAdeleRing`, M
-`InfiniteAdeleRing`, L I.3.
+the comparison `𝔸_L ≃ L ⊗_K 𝔸_K` as topological rings.
+*Source.* Cassels–Fröhlich Ch. II §19; Weil,
+*Basic Number Theory*, Ch. IV §1.
+*Prerequisites:* M `NumberField.AdeleRing`, M `FiniteAdeleRing`, M `InfiniteAdeleRing`, L I.3.
 
 **2B.2. The Galois action.** For `L/K` Galois with `G = Gal(L/K)`, define the action of `G` on
 `𝔸_L`, on `I_L` and on `C_L`. Prove that it permutes the places over each `v`, that it acts on each
 completion through the induced isomorphism `L_w ≃ L_{σw}`, and that it is continuous. Prove that the
 principal ideles form a `G`-stable subgroup, and that the action restricts to the usual action on
-`L`. *Prerequisites:* L 2B.1, M `Ideal.primesOver`, M `MulAction.stabilizer`.
+`L`.
+*Prerequisites:* L 2B.1, M `Ideal.primesOver`, M `MulAction.stabilizer`.
 
 **2B.3. The extension map.** Define `I_K →* I_L` with component at `w ∣ v` induced by `K_v → L_w`.
 Prove that it is well defined on the restricted product, continuous and injective. Define the
-descent `C_K →* C_L`, and prove compatibility with `K ⊆ L` on principal ideles. *Prerequisites:* L
-2B.1.
+descent `C_K →* C_L`, and prove compatibility with `K ⊆ L` on principal ideles.
+*Prerequisites:* L 2B.1.
 
 **2B.4. The idele norm.** Define `N_{L/K} : I_L →* I_K` with component formula `N(x)_v = ∏_{w ∣ v}
 N_{L_w/K_v}(x_w)`. Prove: well-definedness on the restricted product, using that `N_{L_w/K_v}` maps
 local units to local units at almost all `w`; continuity; `N(principal x) = principal (Algebra.norm
-K x)`; and the descent `N_{L/K} : C_L →* C_K`. *Prerequisites:* L 2B.1, L I.3, M `Algebra.norm`.
+K x)`; and the descent `N_{L/K} : C_L →* C_K`.
+*Prerequisites:* L 2B.1, L I.3, M `Algebra.norm`.
 
 **2B.5. Towers and base change.** Prove `N_{M/K} = N_{L/K} ∘ N_{M/L}` for `K ⊆ L ⊆ M`. Prove the
 matching transitivity of extension maps. Prove the commuting squares that relate extension, norm and
@@ -560,16 +584,17 @@ the Galois action. Prove `N_{L/K} ∘ (extension) = (·)^{[L:K]}` on `I_K` and o
 
 **2B.6. The semi-local decomposition.** Let `L/K` be Galois and let `v` be a place of `K`. Prove
 that the `G`-module `∏_{w ∣ v} L_wˣ` is coinduced from the decomposition group `G_w` acting on
-`L_wˣ`, for any chosen `w ∣ v`. Prove that the statement is independent of the choice, up to the canonical
+`L_wˣ`, for any chosen `w ∣ v`. Prove that the statement is independent of the choice, up to the
+canonical
 isomorphism. Prove the identification of `G_w` with `Gal(L_w/K_v)`. This is the input to Shapiro's
-lemma in Layer 5. The component formula of 2B.4 is its multiplicative shadow. *Prerequisites:* L
-2B.2, L I.3, M `MulAction.stabilizer`, M `Ideal.ramificationIdx`.
+lemma in Layer 5. The component formula of 2B.4 is its multiplicative shadow.
+*Prerequisites:* L 2B.2, L I.3, M `MulAction.stabilizer`, M `Ideal.ramificationIdx`.
 
 **2B.7. Invariants.** Prove `(I_L)^G ≃ I_K`. Prove `(C_L)^G ≃ C_K`, and derive it from the first
 statement through the exact sequence `1 → Lˣ → I_L → C_L → 1` and Hilbert 90. **Common error.**
 `(C_L)^G ≃ C_K` is not formal. The cokernel of `C_K → (C_L)^G` injects into `H¹(G, Lˣ)`, and it is
-Hilbert 90 that makes that group trivial. *Prerequisites:* L 2B.2, M
-`groupCohomology.H1ofAutOnUnitsUnique` (Hilbert 90).
+Hilbert 90 that makes that group trivial.
+*Prerequisites:* L 2B.2, M `groupCohomology.H1ofAutOnUnitsUnique` (Hilbert 90).
 
 ### Layer 2C: the archimedean local package
 
@@ -580,43 +605,46 @@ elementary, it is expressible at the pin, and Layers 5, 6, 7 and 11 use it. Stat
 **2C.1. Classification of the completions.** For an infinite place `w` of `K`, prove that
 `w.Completion` is `ℝ` when `w.IsReal` and `ℂ` when `w.IsComplex`. Fix once which of the two
 embeddings `ℂ → ℂ` is used at a complex place, and prove that the objects below do not depend on
-that choice. *Prerequisites:* M `InfinitePlace.Completion.ringEquivRealOfIsReal`, M
+that choice.
+*Prerequisites:* M `InfinitePlace.Completion.ringEquivRealOfIsReal`, M
 `ringEquivComplexOfIsComplex`.
 
 **2C.2. The local Galois group.** Prove that `Gal(ℂ/ℝ)` is cyclic of order two, generated by complex
 conjugation, and that `Gal(ℂ/ℂ)` is trivial. For `w ∣ v` infinite places of `L/K`, prove that the
 decomposition group at `w` is trivial when `v` splits, and is generated by complex conjugation when
-`v` ramifies. *Prerequisites:* L 2C.1, M `InfinitePlace.IsRamified`, M `Complex.conjAe`.
+`v` ramifies.
+*Prerequisites:* L 2C.1, M `InfinitePlace.IsRamified`, M `Complex.conjAe`.
 
 **2C.3. The reciprocity maps.** Define `Art_ℂ : ℂˣ →* Gal(ℂ/ℂ)`, which is trivial. Define `Art_ℝ :
 ℝˣ →* Gal(ℂ/ℝ)`, which sends a positive element to `1` and a negative element to complex
-conjugation. Prove surjectivity of `Art_ℝ` and `ker Art_ℝ = ℝ_{>0}`. *Prerequisites:* L 2C.1, L
-2C.2.
+conjugation. Prove surjectivity of `Art_ℝ` and `ker Art_ℝ = ℝ_{>0}`.
+*Prerequisites:* L 2C.1, L 2C.2.
 
 **2C.4. Norms and norm groups.** Prove `N_{ℂ/ℝ}(ℂˣ) = ℝ_{>0}`, so that `ℝˣ / N_{ℂ/ℝ}(ℂˣ)` has order
 two and `Art_ℝ` induces an isomorphism onto `Gal(ℂ/ℝ)`. Prove that at a complex place the norm map
 is surjective and the quotient trivial. These two statements are the archimedean case of local
-reciprocity, in the shape of I.1. *Prerequisites:* L 2C.3, M `Complex.normSq`.
+reciprocity, in the shape of I.1.
+*Prerequisites:* L 2C.3, M `Complex.normSq`.
 
 **2C.5. Cohomology.** Prove `H¹(Gal(ℂ/ℝ), ℂˣ) = 1` and `Ĥ⁰(Gal(ℂ/ℝ), ℂˣ) ≅ ℤ/2`, hence `h(Gal(ℂ/ℝ),
 ℂˣ) = 2 = [ℂ:ℝ]`. Layer 5 uses these as the archimedean factors of the global Herbrand computation,
-where they carry as much weight as the finite ones. *Prerequisites:* L 2C.4, M
-`Mathlib/RepresentationTheory/Homological/TateCohomology/Basic.lean`.
+where they carry as much weight as the finite ones.
+*Prerequisites:* L 2C.4, M `Mathlib/RepresentationTheory/Homological/TateCohomology/Basic.lean`.
 
 **2C.6. Invariants.** Prove `inv_ℂ = 0` and `inv_ℝ : H²(Gal(ℂ/ℝ), ℂˣ) ≃ (1/2)ℤ/ℤ ⊆ ℚ/ℤ`, with the
 nontrivial class going to `1/2`. State the compatibility with the normalization of `inv_v` in
-I.1.10, because Layer 11 adds the finite and infinite invariants together. *Prerequisites:* L 2C.5,
-L I.1.
+I.1.10, because Layer 11 adds the finite and infinite invariants together.
+*Prerequisites:* L 2C.5, L I.1.
 
 **2C.7. Ramification and conductors at infinity.** For finite abelian `L/K` and a real place `w` of
 `K`, prove that the following are equivalent: `w` is unramified in `L`; the local norm group at `w`
-is all of `ℝˣ`; `w ∉ 𝔣(L/K)∞`. This is the real-place clause of 6.5 and of 7.4. *Prerequisites:* L
-2C.4, L 2C.2.
+is all of `ℝˣ`; `w ∉ 𝔣(L/K)∞`. This is the real-place clause of 6.5 and of 7.4.
+*Prerequisites:* L 2C.4, L 2C.2.
 
 **2C.8. Hilbert symbols.** Prove `(a, b)_ℂ = 1` for all `a, b ∈ ℂˣ`. Prove `(a, b)_ℝ = −1` exactly
 when `a < 0` and `b < 0`. Prove bimultiplicativity and nondegeneracy in the real case. Use the same
-symbol vocabulary as I.1.11, because Layer 11 takes a product over all places. *Prerequisites:* L
-2C.1, L I.1.
+symbol vocabulary as I.1.11, because Layer 11 takes a product over all places.
+*Prerequisites:* L 2C.1, L I.1.
 ### Layer 3: Hecke characters and the finite-order dictionary
 
 **3.1. The definition and the finite-order dictionary.** Define `HeckeCharacter K :=
@@ -626,7 +654,8 @@ Each implication is a named lemma. Deduce the bijection between the finite-order
 with `U_𝔪 ⊆ ker χ` and the characters of the finite group `Cl_𝔪 K`. That composite notion is what
 "ray class character" names. The step from an open kernel to a ray class character is 2A.8. The step
 back uses finiteness of `Cl_𝔪 K`, and the compactness of `C_K/D_K`; it is not formal.
-*Prerequisites:* L 1.6, L 2A.7, L 2A.8, M `ContinuousMonoidHom`. **Basic API.**
+*Prerequisites:* L 1.6, L 2A.7, L 2A.8, M `ContinuousMonoidHom`.
+**Basic API.**
 - *Constructors:* from a character of `Cl_𝔪 K`; from a Dirichlet character over `ℚ`; the norm
   character `‖·‖^s`.
 - *Examples:* the trivial character; `ZMod.χ₄` over `ℚ`; the quadratic character of `ℚ(√d)`.
@@ -642,19 +671,22 @@ back uses finiteness of `Cl_𝔪 K`, and the compactness of `C_K/D_K`; it is not
 
 **3.2. The finite conductor ideal.** Let `χ` be a continuous quasicharacter. Prove that the local
 component `χ_v` is trivial on `1 + 𝔭_v^n` for `n` large. The reason is that the principal-unit
-filtration is a neighbourhood basis of `1`. Define `n_v(χ)` as the least such `n`, with `n_v(χ) = 0` exactly when
+filtration is a neighbourhood basis of `1`. Define `n_v(χ)` as the least such `n`, with `n_v(χ) = 0`
+exactly when
 `χ_v` is trivial on `𝒪_vˣ`. Prove `n_v(χ) = 0` for almost all `v`, and define `𝔣₀(χ) = ∏_v
-𝔭_v^{n_v(χ)}`. Minimality here is one place at a time and needs no global argument. *Prerequisites:*
-L 3.1, L I.3.
+𝔭_v^{n_v(χ)}`. Minimality here is one place at a time and needs no global argument.
+*Prerequisites:* L 3.1, L I.3.
 
 **3.3. The ray conductor modulus.** Let `χ` be trivial on the connected component of the
 archimedean part. Every finite-order character has that property. Define the ray conductor of
-`χ` as the least `𝔪` with `U_𝔪 ⊆ ker χ`. Prove that its finite part is `𝔣₀(χ)`, and that its infinite part is
+`χ` as the least `𝔪` with `U_𝔪 ⊆ ker χ`. Prove that its finite part is `𝔣₀(χ)`, and that its
+infinite part is
 the set of real places where the local sign component is nontrivial. Prove that a least element
 exists: show that the set of admissible moduli is closed under `gcd`, with 3.2 at the finite places
 and the sign components at the real places. State primitivity, and induction from a smaller modulus,
 in the shape of `DirichletCharacter.changeLevel`. **Common error.** A general quasicharacter has no
-ray conductor, because `‖·‖^s` is trivial on no `U_𝔪`. Keep 3.2 and 3.3 apart. *Prerequisites:* L
+ray conductor, because `‖·‖^s` is trivial on no `U_𝔪`. Keep 3.2 and 3.3 apart.
+*Prerequisites:* L
 3.2, L 2A.6, M `DirichletCharacter.changeLevel`.
 
 **3.4. Local components and the Dirichlet dictionary.** Define `χ_v` on local units at finite `v`,
@@ -667,12 +699,14 @@ component is nontrivial exactly when the Dirichlet character is odd. So the infi
 the ray conductor exactly for odd characters. State `ZMod.χ₄` as the instance: finite conductor `4`,
 ray conductor `(4)·∞`. **Common error.** There is no sign character of `ℚ`. `Cl_{((1),∞)}(ℚ) = 1`,
 because every fractional ideal of `ℤ` has a unique positive generator. State that triviality
-explicitly. *Prerequisites:* L 3.1, L 3.3, M `DirichletCharacter`, M `ZMod.χ₄`.
+explicitly.
+*Prerequisites:* L 3.1, L 3.3, M `DirichletCharacter`, M `ZMod.χ₄`.
 
 **3.5. Unitary theory.** Prove that `|χ| = ‖·‖^σ` for a unique real `σ`, and that `χ = χ_u · ‖·‖^σ`
 with `χ_u` unitary. Uniqueness holds because `σ` is fixed by `|χ| = ‖·‖^σ` and `‖·‖` surjects onto
 `ℝ_{>0}`. Normalize the exponent to be real, because a complex exponent is ambiguous exactly up to
-the unitary twists `‖·‖^{it}`. *Prerequisites:* L 2A.4, L 3.1.
+the unitary twists `‖·‖^{it}`.
+*Prerequisites:* L 2A.4, L 3.1.
 
 ### Layer 4: the cyclotomic anchor
 
@@ -682,8 +716,9 @@ reciprocity proof reduces to.
 **4.1. The splitting law in `ℚ(ζₙ)`.** For `p ∤ n`, prove that the decomposition group at `p` is
 generated by `[p]` under `galEquivZMod`. Deduce that `f` is the order of `p` in `(ℤ/n)ˣ`, and that
 `p` splits completely exactly when `p ≡ 1 (mod n)`. Spell "splits completely" with `Set.ncard` of
-`Ideal.primesOver`. *Prerequisites:* M `IsCyclotomicExtension.Rat.galEquivZMod`, M
-`galEquivZMod_stabilizer`, M `Ideal.primesOver`.
+`Ideal.primesOver`.
+*Prerequisites:* M `IsCyclotomicExtension.Rat.galEquivZMod`, M `galEquivZMod_stabilizer`, M
+`Ideal.primesOver`.
 
 **4.2. Ramification, in three statements.** State them in increasing generality, because the first
 is often quoted beyond its range.
@@ -695,8 +730,9 @@ is often quoted beyond its range.
    `ℚ(ζ_n) = ℚ(ζ_{n₀})`. For `n₀ ≥ 3`, the ramified finite primes are exactly those dividing `n₀`,
    and the infinite place ramifies as well. For `n₀ ≤ 2` the field is `ℚ`. **Common error.**
    "Ramified exactly at the primes dividing `n`" is false. `ℚ(ζ₆) = ℚ(ζ₃)` is unramified at `2`.
-   *Prerequisites:* M `Mathlib/NumberTheory/NumberField/Cyclotomic/Ideal.lean`, M
-   `IsCyclotomicExtension`.
+ 
+*Prerequisites:* M `Mathlib/NumberTheory/NumberField/Cyclotomic/Ideal.lean`, M
+`IsCyclotomicExtension`.
 
 **4.3. Artin reciprocity for `(ℚ, ℚ(ζₙ))`.** Prove `Cl_{(n)∞}(ℚ) ≃* (ZMod n)ˣ` from 1.5 at `K = ℚ`,
 where the units `±1` are absorbed by the sign component. Compose with the Mathlib isomorphism `(ZMod
@@ -706,13 +742,15 @@ and it is the normalization anchor for Layer 6. The identification of the arithm
 `[p]` under `galEquivZMod` is I.2 and Mathlib's `arithFrobAt`; use it, and do not restate it as a
 separate target. **Common error.** The geometric convention sends `[p]` to `Frob_p⁻¹`. Both
 conventions compose with `galEquivZMod` to give an automorphism of `(ℤ/n)ˣ`, so a degree count does
-not detect the error. Fix the direction by the stabilizer computation of 4.1. *Prerequisites:* L
+not detect the error. Fix the direction by the stabilizer computation of 4.1.
+*Prerequisites:* L
 1.5, L I.2, L 4.1, M `IsCyclotomicExtension.Rat.galEquivZMod`.
 
 **4.4. Modulus against conductor.** Prove `ℚ_{(n)∞} = ℚ(ζₙ)` for every `n`, including nonminimal
 moduli. Prove that the conductor of `ℚ(ζₙ)/ℚ` is `(n₀)·∞` for `n₀ ≥ 3`, and the trivial modulus
 otherwise. Keep the two apart in every statement: a ray class field belongs to a modulus, and a
-conductor is the least modulus that works. *Prerequisites:* L 4.2, L 4.3, L 7.5.
+conductor is the least modulus that works.
+*Prerequisites:* L 4.2, L 4.3, L 7.5.
 
 ### Layer 5: the norm-index machinery
 
@@ -721,7 +759,8 @@ statement uses the Galois action, the norms and the semi-local decomposition of 
 
 **5.1. The `S`-idele setup.** Fix the convention. `S` is a finite set of places of `K` that
 contains the infinite places and the places ramified in `L`. `S_L` is the set of places of `L`
-above `S`. Then `S_L` is finite and `G`-stable, so no separate stability hypothesis is needed. Prove:
+above `S`. Then `S_L` is finite and `G`-stable, so no separate stability hypothesis is needed.
+Prove:
 1. `I_{L,S} := {x ∈ I_L | ∀ w ∉ S_L, x_w ∈ 𝒪_wˣ}` is an open `G`-stable subgroup;
 2. the `S`-unit group `𝓞_{L,S}ˣ = Lˣ ∩ I_{L,S}` agrees with Mathlib's `Set.unit` for the
    corresponding set of finite places;
@@ -737,7 +776,9 @@ above `S`. Then `S_L` is finite and `G`-stable, so no separate stability hypothe
 9. `H^i(G, I_{L,S}) ≅ ⊕_{v ∈ S} H^i(G_w, L_wˣ) ⊕ ⊕_{v ∉ S} H^i(G_w, 𝒪_wˣ)` by Shapiro's lemma
    applied to 2B.6, and `H^i(G_w, 𝒪_wˣ) = 0` for `i ≥ 1` at unramified `v`, so `H^i(G, I_L) ≅ ⊕_v
    H^i(G_w, L_wˣ)` for `i ≥ 1`. Do not hide any of this inside one displayed equality.
-   *Prerequisites:* L 2B.4, L 2B.6, L 2A.5, M `Set.unit`, M `groupCohomology.coindIso` (Shapiro), L I.1.
+ 
+*Prerequisites:* L 2B.4, L 2B.6, L 2A.5, M `Set.unit`, M `groupCohomology.coindIso` (Shapiro), L
+I.1.
 
 **5.2. Herbrand quotients.** For cyclic `L/K`, prove in order:
 1. `h(G, I_{L,S}) = ∏_{v ∈ S} [L_w : K_v]`, from 5.1.9, from `h(G_w, L_wˣ) = [L_w:K_v]` at finite
@@ -755,9 +796,11 @@ above `S`. Then `S_L` is finite and `G`-stable, so no separate stability hypothe
    content of the sentence "the Herbrand quotient depends only on `ℝ ⊗ M`", and it is a target and
    not a remark. **Common error.** The Herbrand quotient is defined for a finite cyclic group and a
    module with finite cohomology. It is not defined for an infinite group, and item 4 fails without
-   the finiteness of both kernel and cokernel. *Source.* Neukirch ANT VI §3; Milne CFT VII §§2–5.
-   *Prerequisites:* L 5.1, L 2C.5, M `Mathlib/RepresentationTheory/Homological/TateCohomology/`, M
-   `NumberField.Units.DirichletTheorem`, L I.1.
+   the finiteness of both kernel and cokernel.
+*Source.* Neukirch ANT VI §3; Milne CFT VII §§2–5.
+ 
+*Prerequisites:* L 5.1, L 2C.5, M `Mathlib/RepresentationTheory/Homological/TateCohomology/`, M
+`NumberField.Units.DirichletTheorem`, L I.1.
 
 **5.3. `kummer_le`.** For cyclic `L/K`, prove `[C_K : N C_L] ≤ [L:K]`. Use the algebraic route, in
 eight steps.
@@ -781,12 +824,12 @@ eight steps.
 6. Prove finiteness and the dimension count for `Kˣ_S/(Kˣ_S)^p` as an `𝔽_p`-space, from the `S`-unit
    theorem.
 7. Prove the counting lemma `[I_K : Kˣ · N I_L · U] ≤ p` for the relevant open subgroup `U`.
-8. Induct back up the tower. *Source.* Chevalley's argument, as in Milne CFT VII §6; Lang ANT Ch.
-   IX; Janusz V §§2–4. **Common error.** The analytic route through Dirichlet density proves the
-   same inequality. Do not use it here: reciprocity would then depend on an analytic development,
-   which inverts the dependency order. Record it only as an alternative proof that these statements
-   stay compatible with. *Prerequisites:* L 5.1, L 5.2, L 2B.5, M
-   `Mathlib/FieldTheory/KummerExtension.lean`, M `Set.unit`.
+8. Induct back up the tower.
+*Source.* Chevalley's argument, as in Milne CFT VII §6; Lang ANT Ch. IX; Janusz V §§2–4. **Common
+error.** The analytic route through Dirichlet density proves the same inequality. Do not use it
+here: reciprocity would then depend on an analytic development, which inverts the dependency order.
+Record it only as an alternative proof that these statements stay compatible with.
+*Prerequisites:* L 5.1, L 5.2, L 2B.5, M `Mathlib/FieldTheory/KummerExtension.lean`, M `Set.unit`.
 
 **5.4. The class field axiom.** For cyclic `L/K`, prove `#Ĥ⁰(G, C_L) = [L:K]` and `H¹(G, C_L) = 1`.
 Then extend to arbitrary finite Galois `L/K` in two named steps.
@@ -798,8 +841,9 @@ Then extend to arbitrary finite Galois `L/K` in two named steps.
    dividing `#G` to get `H¹(G, C_L) = 1` and `#H²(G, C_L) ≤ [L:K]`. Corollary: `N_{L/K} C_L` has
    finite index dividing `[L:K]` in `C_K`, for every finite Galois `L/K`. **Common error.** Solvable
    induction alone does not reach a general finite group. Step 2 is a separate argument and must be
-   stated. *Prerequisites:* L 5.2, L 5.3, M `groupCohomology.LongExactSequence`, M
-   `groupCohomology.Functoriality`, M `Sylow`.
+   stated.
+*Prerequisites:* L 5.2, L 5.3, M `groupCohomology.LongExactSequence`, M
+`groupCohomology.Functoriality`, M `Sylow`.
 
 **5.5. The Hasse norm theorem.** For **cyclic** `L/K`, prove that `x ∈ Kˣ` is a norm from `Lˣ`
 exactly when it is a local norm at every place. Deduce it from `H¹(G, C_L) = 1` and the exact
@@ -809,8 +853,9 @@ the knot group `Kn(L/K) := (Kˣ ∩ N_{L/K} I_L) / N_{L/K} Lˣ`, which is trivia
 principle holds. State Tate's description of it through `Ĥ^{-3}(G, ℤ) ≅ H₂(G, ℤ)` and the local
 groups `Ĥ^{-3}(G_v, ℤ)`. For `G ≅ (ℤ/2)²` with every decomposition group proper, hence cyclic, every
 local group vanishes and the knot group is `ℤ/2`. The instance to prove is `L = ℚ(√13, √17)` and the
-rational `25`; see the worked examples. *Source.* Milne CFT VIII §3; Cassels–Fröhlich Exercise 5.3,
-p. 360. *Prerequisites:* L 5.4, L 2B.4, L 2B.7.
+rational `25`; see the worked examples.
+*Source.* Milne CFT VIII §3; Cassels–Fröhlich Exercise 5.3, p. 360.
+*Prerequisites:* L 5.4, L 2B.4, L 2B.7.
 ### Layer 6: the global Artin map and the reciprocity law
 
 From here on the interface of Layer I is essential, together with Layer 2C at the infinite places.
@@ -830,8 +875,8 @@ of the following is a target.
 6. Prove that `θ_{L/K}` is continuous.
 7. Prove `θ(ι_v(x)) = Art_{K_v}(x)∣_L` for an idele supported at one place. This is the local-global
    compatibility statement that every later layer uses, and it holds by construction.
-8. Prove functoriality in `L`: `θ_{M/K}` restricts to `θ_{L/K}` for `K ⊆ L ⊆ M`. *Prerequisites:* L
-   I.1, L 2B.6, L 2C.3, L 2A.1.
+8. Prove functoriality in `L`: `θ_{M/K}` restricts to `θ_{L/K}` for `K ⊆ L ⊆ M`.
+*Prerequisites:* L I.1, L 2B.6, L 2C.3, L 2A.1.
 
 **6.2. Surjectivity, without density.** Prove that `θ_{L/K}` is surjective. Argument: if the image
 were a proper subgroup, its fixed field would be a nontrivial subextension `M/K`, which may be taken
@@ -839,8 +884,9 @@ cyclic. The compiled map to `M` would then be trivial, so every local Artin map 
 trivial. By local reciprocity every place of `K` would split completely in `M`, and every local norm
 map would be surjective. By 2B.4 the global norm `N_{M/K} : I_M → I_K` would then be surjective, so
 `N_{M/K} C_M = C_K` and the norm index would be `1`. That contradicts `herbrand_ge` for nontrivial
-cyclic `M/K`. **Common error.** Do not import a Chebotarev-style density argument here. *Source.*
-Janusz V §5; Artin–Tate. *Prerequisites:* L 6.1, L 5.2, L 2B.4, L I.1.
+cyclic `M/K`. **Common error.** Do not import a Chebotarev-style density argument here.
+*Source.* Janusz V §5; Artin–Tate.
+*Prerequisites:* L 6.1, L 5.2, L 2B.4, L I.1.
 
 **6.3. The reciprocity law.** Prove `θ_{L/K}(Kˣ) = 1`, that is `∏_v Art_{K_v}(x)∣_L = 1` for `x ∈
 Kˣ`. The route has three stages.
@@ -885,8 +931,9 @@ I.1.7.
   modulo `m`, together with an independent `b`. That argument is the cyclotomic-polynomial argument
   behind Mathlib's `Nat.exists_prime_gt_modEq_one`, and it is elementary. No theorem on primes in
   arithmetic progressions is used, which is what keeps this layer independent of any analytic
-  development. *Source.* Lang ANT Ch. X §2, p. 202; Janusz V, Lemma 5.6, p. 194; the numerical
-  lemmas are Janusz V, Lemmas 5.3 and 5.4, pp. 192–193.
+  development.
+*Source.* Lang ANT Ch. X §2, p. 202; Janusz V, Lemma 5.6, p. 194; the numerical lemmas are Janusz V,
+Lemmas 5.3 and 5.4, pp. 192–193.
 - **One prime at a time.** Use the one-prime form. Do not state a simultaneous version. The proof
   applies the lemma separately to each prime in the factorization of the ideal whose symbol is
   computed. It chooses the `m_i` pairwise coprime, through the parameter `S`. It then works in
@@ -905,7 +952,9 @@ I.1.7.
 *Stage 3, general abelian `L/K`.* No further induction on the degree is needed. Write `Gal(L/K) = C₁
 × ⋯ × C_s`, and put `E_j = L^{H_j}` with `H_j = ∏_{i ≠ j} C_i`. Each `E_j/K` is cyclic, and `L =
 E₁⋯E_s`. An automorphism trivial on every `E_j` is trivial on `L`, so 6.1.8 carries the cyclic case
-to `L`. *Source.* Janusz V, Theorem 5.8, p. 197; Lang ANT Ch. X §§1–3. *Prerequisites:* L 4.3, L
+to `L`.
+*Source.* Janusz V, Theorem 5.8, p. 197; Lang ANT Ch. X §§1–3.
+*Prerequisites:* L 4.3, L
 5.2, L 5.3, L 6.1, L 6.2, L I.1, M `Nat.exists_prime_gt_modEq_one`.
 
 **6.4. The norm-residue isomorphism.** Prove that `θ_{L/K}` descends to `C_K ⧸ N_{L/K} C_L ≃*
@@ -913,14 +962,16 @@ Gal(L/K)` for finite abelian `L/K`. The two groups have the same finite order by
 the map is surjective by 6.2. State the functoriality package: towers, base change along `K'/K`, and
 compatibility with the transfer, which Layer 8 uses. **False generalization.** For nonabelian Galois
 `L/K` the statement is `C_K/N C_L ≃ Gal(L/K)^{ab}`. It is not a corollary of the abelian case. It
-needs norm limitation, so it is 7.2. *Prerequisites:* L 6.3, L 5.2, L 5.3.
+needs norm limitation, so it is 7.2.
+*Prerequisites:* L 6.3, L 5.2, L 5.3.
 
 **6.5. Ramification and the conductor.** For finite abelian `L/K` and `v` a finite place or a real
 place, prove that the following are equivalent: `v` is unramified in `L`; the local component of
 `N_{L/K} C_L` contains the full local unit group at `v`, meaning all of `ℝˣ` at a real place; `v ∤
 𝔣(L/K)`. Prove the local assembly `𝔣(L/K) = ∏_v 𝔣_v`, with the finite local conductors from I.1.8
 and the real ones from 2C.7. Higher-ramification refinements are local and are not targets here;
-only the assembly is global. *Prerequisites:* L 6.4, L I.1, L 2C.7.
+only the assembly is global.
+*Prerequisites:* L 6.4, L I.1, L 2C.7.
 
 ### Layer 7: norm groups, the existence theorem, and ray class fields
 
@@ -931,7 +982,9 @@ Composita and intersections are taken inside `K̄`. Profinite identifications ar
 **7.1. The norm-group lattice.** For finite abelian `L/K` define `N(L/K) := (Kˣ · N_{L/K}(I_L))/Kˣ ≤
 C_K`. Prove that `L ↦ N(L/K)` is inclusion-reversing and injective, that `N(LL') = N(L) ∩ N(L')`,
 and that `N(L ∩ L') = N(L)·N(L')`. Together these are the Takagi correspondence between finite
-abelian extensions and their norm groups. *Prerequisites:* L 6.4, L 2B.4. **Basic API.**
+abelian extensions and their norm groups.
+*Prerequisites:* L 6.4, L 2B.4.
+**Basic API.**
 - *Constructors:* `N(L/K)` from `L`; the extension from an open subgroup, by 7.3.
 - *Examples:* `N(K/K) = C_K`; `N(ℚ(ζₙ)/ℚ) = RaySubgroup ((n),∞)`.
 - *Morphisms:* the order-reversing bijection with finite abelian extensions.
@@ -944,8 +997,9 @@ abelian extensions and their norm groups. *Prerequisites:* L 6.4, L 2B.4. **Basi
 
 **7.2. Norm limitation.** For an arbitrary finite extension `L/K` inside `K̄`, with `L^{ab}` the
 maximal subextension abelian over `K`, prove `N_{L/K} C_L = N_{L^{ab}/K} C_{L^{ab}}`. Deduce `C_K /
-N_{L/K} C_L ≃* Gal(L/K)^{ab}` for finite Galois `L/K`, by applying 6.4 to `L^{ab}/K`. *Source.*
-Milne CFT Ch. VIII; Artin–Tate Ch. XI. *Prerequisites:* L 6.4, L 2B.5.
+N_{L/K} C_L ≃* Gal(L/K)^{ab}` for finite Galois `L/K`, by applying 6.4 to `L^{ab}/K`.
+*Source.* Milne CFT Ch. VIII; Artin–Tate Ch. XI.
+*Prerequisites:* L 6.4, L 2B.5.
 
 **7.3. The existence theorem.** Prove that every open subgroup of finite index in `C_K` is `N(L/K)`
 for a unique finite abelian `L/K`. Decompose the proof.
@@ -968,7 +1022,8 @@ for a unique finite abelian `L/K`. Decompose the proof.
    gives `N_{M/K} C_M = N_{M'/K} C_{M'} = N_{K'/K}(U') ⊆ U`, and item 1 makes `U` itself a norm
    group. Three points matter. `M'/K` is in general neither abelian nor Galois, so the descended
    field is `M` and not `M'`. The step needs the equality of norm groups, which is 7.2; the
-   containment `N_{M'/K}C_{M'} ⊆ N_{M/K}C_M` is free from `M ⊆ M'` and is not enough. The ramification descends. `M ⊆ M'`, and `M'/K` is ramified only at two kinds of place: the
+   containment `N_{M'/K}C_{M'} ⊆ N_{M/K}C_M` is free from `M ⊆ M'` and is not enough. The
+   ramification descends. `M ⊆ M'`, and `M'/K` is ramified only at two kinds of place: the
    places ramified in `K'/K`, which divide `p` or are infinite; and the places under the support
    of `𝔣(M'/K')`. That bounds `𝔣(M/K)`.
 6. The induction, on the index `(C_K : U)`: take a prime `p` dividing it; use item 5 with `K' =
@@ -981,17 +1036,18 @@ for a unique finite abelian `L/K`. Decompose the proof.
    Openness is not automatic from finite index. `D_K` is divisible, so it lies in every finite-index
    subgroup, and `π₀(C_K) ≅ Gal(K^{ab}/K)` is not topologically finitely generated. With the axiom
    of choice it therefore has dense subgroups of finite index, and these pull back to finite-index
-   subgroups of `C_K` that are not open. The openness hypothesis does real work. *Source.* Milne CFT
-   VII §9, items 9.1 to 9.5; Neukirch ANT VI §6; Janusz V §§7–9. Tate's article in Cassels–Fröhlich,
-   p. 202, gives the route that avoids norm limitation. *Prerequisites:* L 6.4, L 7.1, L 7.2, L
-   2A.8, L 5.1, M `Mathlib/FieldTheory/KummerExtension.lean`.
+   subgroups of `C_K` that are not open. The openness hypothesis does real work.
+*Source.* Milne CFT VII §9, items 9.1 to 9.5; Neukirch ANT VI §6; Janusz V §§7–9. Tate's article in
+Cassels–Fröhlich, p. 202, gives the route that avoids norm limitation.
+*Prerequisites:* L 6.4, L 7.1, L 7.2, L 2A.8, L 5.1, M `Mathlib/FieldTheory/KummerExtension.lean`.
 
 **7.4. Ray class fields.** Define `K_𝔪` as the abelian extension inside `K̄` with `N(K_𝔪/K) =
 RaySubgroup 𝔪`. It exists by 7.3 and is unique by 7.1. Prove `Gal(K_𝔪/K) ≃* Cl_𝔪 K`, by composing
 with 2A.7. Prove that the ramification support is inside the support of `𝔪`. Prove the splitting
 law: for `𝔭 ∤ 𝔪₀`, the Frobenius at `𝔭` corresponds to the class `[𝔭]`, so `𝔭` splits completely in
 `K_𝔪` exactly when `𝔭 ∈ P_𝔪`. Prove that the transition maps `K_𝔪 ⊆ K_𝔫` for `𝔪 ∣ 𝔫` correspond to
-the surjections `Cl_𝔫 ↠ Cl_𝔪` of 1.4. *Prerequisites:* L 7.3, L 2A.7, L 6.4, L 1.4.
+the surjections `Cl_𝔫 ↠ Cl_𝔪` of 1.4.
+*Prerequisites:* L 7.3, L 2A.7, L 6.4, L 1.4.
 
 **7.5. The ideal-theoretic dictionary.** Let `L/K` be finite abelian of conductor dividing `𝔪`.
 Restrict `artinHom` of I.2 along `J^{𝔪₀} ≤ J^S`. Prove that the restriction is surjective onto
@@ -1002,13 +1058,14 @@ This is Takagi's classification in ideal terms, and quadratic genus theory uses 
 **7.6. The profinite Artin map.** Prove `K^{ab} = ⨆_𝔪 K_𝔪` inside `K̄`. Prove `Gal(K^{ab}/K) ≃ lim_𝔪
 Cl_𝔪 ≃ C_K/D_K` as topological groups, so that `Art_K : C_K → Gal(K^{ab}/K)` is continuous and
 surjective with kernel `D_K`. State the compatibility of the limit with the transition maps of 1.4
-and 2A.7, and give the identification as a `ContinuousMulEquiv`. *Prerequisites:* L 7.4, L 2A.8, M
-`Field.absoluteGaloisGroup`, M `IsGaloisGroup`.
+and 2A.7, and give the identification as a `ContinuousMulEquiv`.
+*Prerequisites:* L 7.4, L 2A.8, M `Field.absoluteGaloisGroup`, M `IsGaloisGroup`.
 
 **7.7. The instance over `ℚ`.** Prove that the ray class field of `ℚ` for the modulus `(n)·∞` is
 `ℚ(ζₙ)`. One containment holds because 4.3 exhibits the norm group of `ℚ(ζₙ)` as containing
 `RaySubgroup ((n),∞)`. Equality follows from the degree count `#Cl_{(n)∞}(ℚ) = φ(n) = [ℚ(ζₙ) : ℚ]`.
-Deduce `Gal(ℚ^{ab}/ℚ) ≅ lim_n (ℤ/n)ˣ = Ẑˣ` as topological groups. *Prerequisites:* L 4.3, L 7.4, L
+Deduce `Gal(ℚ^{ab}/ℚ) ≅ lim_n (ℤ/n)ˣ = Ẑˣ` as topological groups.
+*Prerequisites:* L 4.3, L 7.4, L
 7.6.
 ### Layer 8: the Hilbert class field and the principal ideal theorem
 
@@ -1020,8 +1077,9 @@ infinite, is contained in `H`. Prove that a prime `𝔭` splits completely in `H
 principal, and that `H = K` exactly when `h_K = 1`. Write "maximal finite abelian unramified
 everywhere" and not "maximal such". The class group is finite, so `H` is in fact the largest
 unramified abelian extension; but the theorem to state is the containment, and an unbound "such" is
-what makes the narrow variant confusing. *Prerequisites:* L 7.4, L 6.5, M `Algebra.Unramified`, M
-`IsUnramifiedAtInfinitePlaces`. **Basic API.**
+what makes the narrow variant confusing.
+*Prerequisites:* L 7.4, L 6.5, M `Algebra.Unramified`, M `IsUnramifiedAtInfinitePlaces`.
+**Basic API.**
 - *Constructors:* `H` from `K`.
 - *Examples:* `H = ℚ` for `K = ℚ`; `H = ℚ(√−5, i)` for `K = ℚ(√−5)`; `H` of degree 8 for `K =
   ℚ(√−14)`.
@@ -1038,8 +1096,8 @@ what makes the narrow variant confusing. *Prerequisites:* L 7.4, L 6.5, M `Algeb
 with no condition at the infinite places. Prove the genus-field compatibility: for quadratic `K/ℚ`,
 the genus field is the maximal subfield of `H`, respectively of `H⁺`, that is abelian over `ℚ`, and
 `Gal(H/K) ↠ Gal(K_gen/K)` realizes `Cl ↠ Cl/Cl²`. State it in the vocabulary of the merged
-Multiquadratic roadmap, which is merged. *Prerequisites:* L 8.1, L 1.8, T Multiquadratic
-Layer 3, for the genus-field vocabulary.
+Multiquadratic roadmap, which is merged.
+*Prerequisites:* L 8.1, L 1.8, T Multiquadratic Layer 3, for the genus-field vocabulary.
 
 **8.3. Capitulation and the principal ideal theorem.** The extension map is Mathlib's
 `ClassGroup.extendedHom`. Prove `ClassGroup.extendedHom (𝓞 K) (𝓞 H) = 1`, that is, every ideal of
@@ -1055,8 +1113,9 @@ Layer 3, for the genus-field vocabulary.
    usually not abelian, so the argument lives in `Gal(H'/K)`. Set the two-step tower up carefully.
    **False generalization.** Total capitulation in `H` does not continue up the tower. The class
    field tower need not terminate, which is the Golod–Shafarevich theorem, and no statement here
-   should suggest that it does. *Source.* Artin–Tate Ch. XIII; Neukirch ANT VI §7. *Prerequisites:*
-   L 8.1, L 6.4, M `ClassGroup.extendedHom`, M `MonoidHom.transfer`.
+   should suggest that it does.
+*Source.* Artin–Tate Ch. XIII; Neukirch ANT VI §7.
+*Prerequisites:* L 8.1, L 6.4, M `ClassGroup.extendedHom`, M `MonoidHom.transfer`.
 
 ### Layer 9: Kronecker–Weber and the conductor–discriminant formula
 
@@ -1071,7 +1130,8 @@ field, abelian extensions are not contained in cyclotomic extensions of the base
 The field `K(∛2)` is abelian over `K`: it is a Kummer extension of degree 3, because `K` contains
 `ζ₃`. It is the ring class field of the order of conductor 6, as 10C.2 records.
 It is not contained in any `K(ζ_n)`: each `K(ζ_n)` is abelian over `ℚ`, and `ℚ(√−3, ∛2)/ℚ` has
-Galois group `S₃`. *Prerequisites:* L 7.7, L 4.2, L 6.5.
+Galois group `S₃`.
+*Prerequisites:* L 7.7, L 4.2, L 6.5.
 
 **9.2. The abelian conductor–discriminant formula.** For finite abelian `L/K`, prove `d_{L/K} = ∏_χ
 𝔣₀(χ)`. Here `χ` ranges over the characters of `Gal(L/K)`. The term `𝔣₀(χ)` is the finite part of
@@ -1082,7 +1142,8 @@ formula from I.1.8. Prove the globalization of the different as part of this mil
 reproduces Mathlib's values for `disc(ℚ(ζₙ))`. **False generalization.** The formula as stated is
 abelian. For a nonabelian extension the correct statement uses Artin conductors of the irreducible
 characters, which needs Artin `L`-functions and is not a target here. State the abelian scope in the
-statement. *Source.* Serre, *Corps Locaux*, Ch. VI §3, for the local formula; Neukirch ANT VII §11.
+statement.
+*Source.* Serre, *Corps Locaux*, Ch. VI §3, for the local formula; Neukirch ANT VII §11.
 *Prerequisites:* L 3.3, L 6.4, L 7.4, L I.1, M `differentIdeal`, M
 `Mathlib/NumberTheory/Cyclotomic/Discriminant.lean`.
 
@@ -1097,7 +1158,8 @@ exponent cannot carry a uniqueness statement, because only the parity is determi
 *Prerequisites:* M `ContinuousMonoidHom`, M `Complex.exp`, M `Real.log`.
 
 **10A.2. The infinity type of a Hecke character.** Define `χ_∞ = ∏_{w ∣ ∞} χ_w`, the restriction of
-`χ` to the archimedean part of the ideles, with each `χ_w` classified by 10A.1. *Prerequisites:* L
+`χ` to the archimedean part of the ideles, with each `χ_w` classified by 10A.1.
+*Prerequisites:* L
 3.4, L 10A.1.
 
 **10A.3. Algebraic characters.** Define: `χ` is algebraic when `χ_∞` is the restriction of an
@@ -1114,13 +1176,15 @@ further items.
 4. The norm twists `χ · ‖·‖^m`, which are algebraic whenever `χ` is. **Common error.** "All radial
    exponents are zero, with integer exponents" is not the algebraicity condition. That definition
    excludes the algebraic norm twists, because `s = n_σ + n_{σ̄}` is not zero in general.
-   *Prerequisites:* L 10A.2, M `NumberField.Units`, M `NumberField.CMField`.
+ 
+*Prerequisites:* L 10A.2, M `NumberField.Units`, M `NumberField.CMField`.
 
 **10A.4. The associated ideal-side character.** For an algebraic `χ` of conductor `𝔣`, define the
 induced character on ideals prime to `𝔣`. Prove that it takes values in a number field, namely the
 field generated by its values. Prove multiplicativity. **Common error.** The field-of-values
 statement belongs to the ideal-side character. The idelic character takes transcendental values on
-archimedean elements in general. *Prerequisites:* L 10A.3, L 7.5.
+archimedean elements in general.
+*Prerequisites:* L 10A.3, L 7.5.
 
 ### Layer 10B: orders and their Picard groups
 
@@ -1130,34 +1194,41 @@ Layers 0 and 1 does not apply to them, because an order is usually not integrall
 **10B.1. Orders.** Define an order `O ⊆ 𝓞 K` as a subring that is free of rank `[K:ℚ]` over `ℤ` and
 has `K` as its field of fractions. Give the equivalent description as a full-rank subring, in the
 vocabulary of `Module.Finite` and `IsFractionRing`. Give the basic examples, including `ℤ[√−n]` and
-`ℤ + f𝓞_K`. *Prerequisites:* M `Module.Finite`, M `IsFractionRing`, M `NumberField.RingOfIntegers`.
+`ℤ + f𝓞_K`.
+*Prerequisites:* M `Module.Finite`, M `IsFractionRing`, M `NumberField.RingOfIntegers`.
 
 **10B.2. The conductor.** Define `𝔠(O) = {x ∈ K | x 𝓞_K ⊆ O}`, and prove that it is the largest
 `𝓞_K`-ideal contained in `O`. Prove the annihilator characterization, and the index formula `disc O
-= [𝓞_K : O]² disc 𝓞_K`. *Prerequisites:* L 10B.1, M `Algebra.discr`.
+= [𝓞_K : O]² disc 𝓞_K`.
+*Prerequisites:* L 10B.1, M `Algebra.discr`.
 
 **10B.3. Proper fractional ideals.** Define a proper fractional `O`-ideal as an `I` with `{x ∈ K |
-xI ⊆ I} = O`. Prove the equivalence with invertibility, and that they form a group. *Prerequisites:*
-L 10B.1.
+xI ⊆ I} = O`. Prove the equivalence with invertibility, and that they form a group.
+*Prerequisites:* L 10B.1.
 
 **10B.4. The Picard group.** Identify Mathlib's generic `ClassGroup O` with the group of 10B.3
 modulo principal ideals. If the generic definition does not agree, say which object is the target
-and prove the comparison. *Prerequisites:* L 10B.3, M `ClassGroup`.
+and prove the comparison.
+*Prerequisites:* L 10B.3, M `ClassGroup`.
 
 **10B.5. Extension and contraction.** Prove that extension and contraction are mutually inverse
 multiplicative bijections between proper `O`-ideals prime to `𝔠(O)` and `𝓞_K`-ideals prime to
-`𝔠(O)`. *Prerequisites:* L 10B.2, L 10B.3.
+`𝔠(O)`.
+*Prerequisites:* L 10B.2, L 10B.3.
 
 **10B.6. The congruence description.** Prove `Pic O ≅ J^{𝔠}(𝓞_K) / P_{ℤ,𝔠}`, where `P_{ℤ,𝔠}` is the
 group of principal ideals `(α)` with `α ≡ a (mod 𝔠 𝓞_K)` for some rational integer `a` prime to `𝔠`.
 This is what makes `Pic O` a ray-class-style quotient, and it is the reason Layer 7 can produce a
-class field for it. *Prerequisites:* L 10B.5, L 1.1.
+class field for it.
+*Prerequisites:* L 10B.5, L 1.1.
 
 **10B.7. Finiteness.** Prove that `Pic O` is finite, with the classical index formula in terms of
-`h_K`, the conductor and the unit index. *Prerequisites:* L 10B.6, L 1.6.
+`h_K`, the conductor and the unit index.
+*Prerequisites:* L 10B.6, L 1.6.
 
 **10B.8. Specialization.** Prove that for `O = 𝓞_K` everything above reduces to Layer 1, and that
-the class field of 10C.1 reduces to the Hilbert class field. *Prerequisites:* L 10B.7, L 8.1.
+the class field of 10C.1 reduces to the Hilbert class field.
+*Prerequisites:* L 10B.7, L 8.1.
 
 ### Layer 10C: ring class fields and representation by quadratic forms
 
@@ -1185,8 +1256,10 @@ field discriminant and the conductor depend on `d` alone:
    and unramified in `K`, because the conductor divides `2n`. That is what 10B.5 needs. **Common
    error, with a counterexample.** The criterion "`ℤ[√−n]` is maximal exactly when `−n ≢ 1 (mod 4)`"
    holds for squarefree `n` only. For `n = 12` the congruence holds, and `ℤ[√−12]` is not maximal in
-   `ℚ(√−3)`; its conductor is 4. *Source.* Cox, *Primes of the Form x² + ny²*, §§7–9.
-   *Prerequisites:* L 10B.2, L 10B.5, L 10B.6, L 10C.1, L 7.4.
+   `ℚ(√−3)`; its conductor is 4.
+*Source.* Cox, *Primes of the Form x² + ny²*, §§7–9.
+ 
+*Prerequisites:* L 10B.2, L 10B.5, L 10B.6, L 10C.1, L 7.4.
 
 **Scope note, on the absence of congruence criteria.** No congruence condition on `p` alone decides
 `p = x² + 14y²`. That is a statement about the distribution of Frobenius elements and needs
@@ -1201,25 +1274,29 @@ H²(Gal(L/K), C_L) ≃ (1/[L:K])ℤ/ℤ`; and a fundamental class `u_{L/K}` with
 constructed from the cyclic cyclotomic case by inflation. Package it in the shape of the conventions
 table. Prove that Tate–Nakayama in degree `−2` re-derives the isomorphism of 6.4, and prove the
 compatibility theorem: the two constructions agree. That compatibility is the content of "the
-cohomological route", given the route pinned above. *Prerequisites:* L 5.4, L 6.4, L 2C.6, M
-`Mathlib/RepresentationTheory/Homological/TateCohomology/`, M `groupCohomology.Functoriality`.
+cohomological route", given the route pinned above.
+*Prerequisites:* L 5.4, L 6.4, L 2C.6, M `Mathlib/RepresentationTheory/Homological/TateCohomology/`,
+M `groupCohomology.Functoriality`.
 
 **11.2. Continuous cohomology of the absolute Galois group.** State the continuous cohomology of
 `Gal(K̄/K)` with coefficients in a discrete module, as the colimit over the finite quotients. Prove
 that the colimit description agrees with the cochain description for a discrete module. This is the
 only place where profinite cohomology is used, and it is stated here so that Layer 11 has no
-external dependency. *Prerequisites:* M `Mathlib/RepresentationTheory/Homological/GroupCohomology/`,
-M `Field.absoluteGaloisGroup`, M `Mathlib/Topology/Algebra/Category/ProfiniteGrp/`.
+external dependency.
+*Prerequisites:* M `Mathlib/RepresentationTheory/Homological/GroupCohomology/`, M
+`Field.absoluteGaloisGroup`, M `Mathlib/Topology/Algebra/Category/ProfiniteGrp/`.
 
 **11.3. Sum of local invariants.** Prove the exact sequence `0 → H²(G_K, K̄ˣ) → ⊕_v H²(G_{K_v},
 K̄_vˣ) → ℚ/ℤ → 0` in invariant-map coordinates. The local invariants come from I.1.10 at the
-finite places, and from 2C.6 at the infinite places. Prove the reciprocity statement `∑_v inv_v(α) = 0` for
-a global class. *Prerequisites:* L 11.1, L 11.2, L I.1, L 2C.6.
+finite places, and from 2C.6 at the infinite places. Prove the reciprocity statement `∑_v inv_v(α) =
+0` for
+a global class.
+*Prerequisites:* L 11.1, L 11.2, L I.1, L 2C.6.
 
 **11.4. Hilbert reciprocity.** Prove `∏_v (a, b)_v = 1` for `a, b ∈ Kˣ`, with the local symbols from
 I.1.11 at the finite places and from 2C.8 at the real places. Derive quadratic reciprocity over `ℚ`
-as the worked example, and compare with Mathlib's `legendreSym` reciprocity. *Prerequisites:* L
-11.3, L I.1, L 2C.8, M `legendreSym`.
+as the worked example, and compare with Mathlib's `legendreSym` reciprocity.
+*Prerequisites:* L 11.3, L I.1, L 2C.8, M `legendreSym`.
 
 **Scope note.** Everything in this layer is stated in Galois cohomology. The translation to central
 simple algebras, division algebras and a Brauer-group API is out of scope. This layer supplies the
@@ -1273,9 +1350,11 @@ cyclic, subgroup of `(ℤ/2)²`: the ramified primes `13` and `17` are each a sq
 so both have residue degree `1`; the unramified decomposition groups are cyclic of order at most
 `2`; and both infinite places split. Every local degree `[L_w : ℚ_v]` is therefore at most `2`. For
 `a ∈ ℚˣ` the norm from a local extension of degree at most `2` is `a` or `a²`. Every rational
-square is therefore a local norm everywhere in this extension. The example is sharper than it looks. `4` and
+square is therefore a local norm everywhere in this extension. The example is sharper than it looks.
+`4` and
 `9` are global norms from `L`, so being a square is not the point, and `5` itself is not even a
-local norm at `5`. *Source.* Cassels–Fröhlich Exercise 5.3, p. 360, quoted in Milne CFT VIII §3.
+local norm at `5`.
+*Source.* Cassels–Fröhlich Exercise 5.3, p. 360, quoted in Milne CFT VIII §3.
 
 **W7. The Hilbert class field of `ℚ(√−5)`** (Layers 8, 10C). `h = 2` and `H = ℚ(√−5, i)`, which is
 also the genus field. The acceptance statement is the class-field one: for `p ≠ 2, 5`, `p` splits
