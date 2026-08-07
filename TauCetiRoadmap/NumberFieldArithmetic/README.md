@@ -149,6 +149,14 @@ finite torsion-free algebra between them cannot state the hypothesis at all. A n
 specialization may omit it, because it is automatic there, but the Dedekind-generic milestone
 must display it.
 
+⚠ Separability of the fraction-field extension does not give separability of a residue extension.
+Over an imperfect residue field a finite separable `L/K` can have an inseparable residue
+extension, and then `P` divides the different however small `e` is. That is Mathlib's
+`dvd_differentIdeal_of_not_isSeparable`. So Layer 6.4 carries `[Algebra.IsSeparable (A ⧸ p) (B ⧸ P)]`
+as well, and §Pinned conventions makes residue separability part of the definition of tame and of
+wild. Layer 6.4 gives the example that forces it. The number-field corollaries may omit the
+hypothesis, because a finite residue field is perfect.
+
 **Number-field regime.** This regime covers the LMFDB-facing layers. Use `[Field K]` and
 `[NumberField K]` with `𝓞 K`. Write Galois groups as `K ≃ₐ[ℚ] K`, or `L ≃ₐ[K] L`. Present a
 prime as `Q : Ideal (𝓞 K)` with instance arguments `[Q.IsPrime]`,
@@ -187,6 +195,7 @@ two places.
 | Discriminant, absolute | The signed `NumberField.discr K : ℤ`. Its sign is a theorem, `NumberField.sign_discr`, not a convention. The label uses `\|discr\|`, and the sign is recovered from the signature. |
 | Discriminant, relative | A new ideal `relDiscr A B : Ideal A := Ideal.relNorm A (differentIdeal A B)`, defined in Layer 4.1 without hypotheses. Its theory, in Layer 4.2, carries `[Algebra.IsSeparable (FractionRing A) (FractionRing B)]`, without which the different, and so this ideal, can be `⊥`. It is never conflated with the signed integer. The reconciliation `relDiscr ℤ (𝓞 K) = span {discr K}` is a named lemma. |
 | Different | Mathlib's `differentIdeal A B : Ideal B`. |
+| Tame and wild | One definition, used everywhere. `L/K` is **tame at `P`**, for `P` a nonzero prime of `B` over `p`, when the residue extension `(B ⧸ P)/(A ⧸ p)` is separable **and** `ringChar (A ⧸ p) ∤ e(P/p)`. It is **wild at `P`** when that residue extension is separable and `ringChar (A ⧸ p) ∣ e(P/p)`. Residue separability belongs to both, and neither `Algebra.IsSeparable K L` nor the condition on `e` implies it. A prime with an inseparable residue extension is neither tame nor wild, and Layer 6.4 states nothing about it. For number fields the residue fields are finite, hence perfect, so the condition is automatic and the corollaries there omit it. |
 | Valuation of an ideal at a prime | `v_P(I) := multiplicity P I`, for `P` a nonzero prime of a Dedekind domain. This matches Mathlib's `finprod_heightOneSpectrum_pow_multiplicity`. Every exponent formula in Layers 4 to 6 uses this one normalization. That includes `v_P(e)` for a natural number `e`, which means the multiplicity of `P` in `span {(e : B)}`. |
 | Conductor | The only conductor formed anywhere in this roadmap is Mathlib's order conductor `conductor R x : Ideal S`, which Kummer–Dedekind uses, together with the number-field invariant `RingOfIntegers.exponent θ`. There is no Artin conductor object and no conductor exponent `f_𝔭(χ)`. |
 | The power-basis index | ⚠ `RingOfIntegers.exponent θ` is **not** the `ℤ`-module index `[𝓞 K : ℤ[θ]]`. The two have the same prime divisors, which is Layer 3.4, and only the index satisfies `disc(minpoly θ) = index² · discr K`. The index is defined on the subtype `IntegralPrimitiveElement K` of integral generators, never by `Nat.card` on all of `𝓞 K`. |
@@ -320,7 +329,11 @@ library is strong. Its purpose is that no gap claimed below is a guess.
   `NormedField (adicCompletion K v)`; `IsDiscreteValuationRing (adicCompletionIntegers)`; finite
   multiplicative support; and `Module.Finite K_v L_w` under `LiesOver`, ⚠ which takes an
   arbitrary compatible algebra structure as input and so is not yet a statement about the
-  canonical extension. `adicCompletion` and `adicCompletionIntegers` themselves.
+  canonical extension. `adicCompletion` and `adicCompletionIntegers` themselves;
+  `adicCompletionIntegers` is a `ValuationSubring`, so `IsFractionRing (adicCompletionIntegers) (adicCompletion)`
+  and `IsIntegrallyClosed (adicCompletionIntegers)` are instances. ⚠ Nothing relates the completed
+  integer rings of `L_w` and of `K_v`: there is no algebra structure, no integral-closure
+  statement and no module finiteness between them, and that is Layer 5.7.
   `NumberField.AdeleRing` over a general Dedekind base pair, `ringEquiv_mixedSpace`, weak
   approximation at infinite places, and `AdeleRing.principalSubgroup`.
   `NumberField.prod_abs_eq_one`, the product formula, and `FinitePlace.prod_eq_inv_abs_norm`.
@@ -403,8 +416,9 @@ The complete list, in one place.
   description; the `Algebra.discr` tower formula; Stickelberger's congruence.
 - The canonical completion of an extension at a finite place, and the whole finite-place
   local-global dictionary: `Σ [L_w:K_v] = n`, `[L_w:K_v] = e·f`, `D_Q ≅ Gal(L_w/K_v)`, norm and
-  trace, local monogenicity, localization of the different, and the
-  `IsNonarchimedeanLocalField` instance on a completion.
+  trace, the completed integer rings as an integral-closure pair with module finiteness, local
+  monogenicity, localization of the different, and the `IsNonarchimedeanLocalField` instance on a
+  completion.
 - The global ramification consequences carried through that dictionary: the lower filtration and
   its comparison with the local one, the different-exponent formula, the exact tame and wild
   exponents, and the permutation-action discriminant formula.
@@ -628,16 +642,37 @@ Milestones, in order:
 3. the multiplicative extension `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)`, well defined by
    unique factorization;
 4. its value at a prime ideal;
-5. functoriality in `L`;
-6. the restriction to the monoid of integral ideals prime to `S`.
+5. the inclusion homomorphism `idealsAwayInclusion h : idealsAway S' →* idealsAway S`, for
+   `h : S ⊆ S'`, together with the equation
+
+   ```text
+   artinHomAway S' hur' = (artinHomAway S hur).comp (idealsAwayInclusion h),
+   ```
+
+   an equality of homomorphisms on `idealsAway S'`, where `hur` and `hur'` are the two unramified
+   hypotheses and `hur'` is what `hur` gives on the smaller set of primes;
+6. functoriality in `L`, as an equation. Let `M` be an intermediate field of `L/K`. Since `L/K` is
+   abelian, `M/K` is Galois and abelian, and every prime outside `S` that is unramified in `L` is
+   unramified in `M`. Then
+
+   ```text
+   (AlgEquiv.restrictNormalHom M).comp (artinHomAway S hur for L/K) = artinHomAway S hurM for M/K,
+   ```
+
+   with the same excluded set `S` on both sides and `hurM` derived from `hur`;
+7. the monoid `integralIdealsAway S` of nonzero integral ideals of `𝓞 K` that no prime of `S`
+   divides, its homomorphism into `J^S`, the composite integral Artin homomorphism
+   `artinHomAwayIntegral S hur : integralIdealsAway S →* (L ≃ₐ[K] L)`, and the value of that
+   composite at a prime ideal outside `S`, which is the Frobenius there.
 
 **New object: `artinHomAway`.** Basic API:
 
 - *Constructors and instances.* The carrier `J^S`; the map; generation of `J^S` by primes.
 - *Examples.* `S = ramifiedSupport K L` (Layer 4.3); `S` the support of a modulus, which is the
   case a reciprocity roadmap needs.
-- *Morphisms and functoriality.* Behaviour under `S ⊆ S'`; functoriality in `L`; the integral
-  restriction.
+- *Morphisms and functoriality.* The three named maps and their three equations, items 5 to 7
+  above. ⚠ An inequality of carriers, `idealsAway S' ≤ idealsAway S`, is not one of them. It
+  says nothing about the two Artin maps, and item 5 is the statement that does.
 - *Comparison lemmas and naturality.* The value at a prime, which determines the map.
 - *Edge cases.* `S = ∅`, allowed only when `L/K` is unramified everywhere; `L = K`, where the map
   is trivial.
@@ -917,7 +952,19 @@ Everything whose proof runs through a completion is in Layer 6.
 
 #### 4.1 The relative discriminant ideal, as a definition
 
-Define `relDiscr A B : Ideal A := Ideal.relNorm A (differentIdeal A B)`.
+Define
+
+```text
+relDiscr A B : Ideal A := Ideal.relNorm A (differentIdeal A B)
+```
+
+with exactly the hypotheses its two ingredients carry, and no others: `[IsDedekindDomain A]`,
+`[IsDedekindDomain B]`, `[Algebra A B]`, `[Module.Finite A B]`, `[Module.IsTorsionFree A B]`.
+
+⚠ This is a named definition, not a phrase. `Suggested.lean` carries it, and every statement of
+Layers 4 to 6 and of Layer 8 is written with the name and not with
+`Ideal.relNorm A (differentIdeal A B)` expanded in place. An expanded prototype does not say that
+the roadmap has a relative discriminant ideal; it says that it has a relative norm of a different.
 
 The definition needs no separability hypothesis, and it is stated at that generality. Every
 theorem about it is in Layer 4.2. Two facts hold at this generality:
@@ -958,8 +1005,24 @@ Everything here is under the AKLB setup, with
   what Mathlib's `differentIdeal_eq_differentIdeal_mul_differentIdeal` takes. Separability of the
   two steps follows from it, by `isSeparable_tower_bot_of_isSeparable` and
   `isSeparable_tower_top_of_isSeparable`.
-- *Comparison lemmas and naturality.* Localization at a prime `p` of `A`:
-  `relDiscr A B` localized at `p` equals `relDiscr (Localization.AtPrime p) (localization of B)`.
+- *Comparison lemmas and naturality.* Localization at a prime `p` of `A`. Name the two rings
+  first. `A_p` is `Localization.AtPrime p`. `B_p` is the localization of `B` at the image of
+  `p.primeCompl`, that is `Localization (Algebra.algebraMapSubmonoid B p.primeCompl)`, and its
+  `A_p`-algebra structure is `localizationAlgebra p.primeCompl B`. The statement is then an
+  equation of ideals of `A_p`, along the ideal map of `algebraMap A A_p`:
+
+  ```text
+  (relDiscr A B).map (algebraMap A A_p) = relDiscr A_p B_p.
+  ```
+
+  ⚠ "The localization of `B`" is not a statement. Two localizations of `B` are in play at a prime
+  of `A`, at `p.primeCompl` and at the primes of `B` over `p`, and the equation is about the
+  first. Prove the milestone for an arbitrary pair satisfying `IsLocalization p.primeCompl A_p`
+  and `IsLocalization (Algebra.algebraMapSubmonoid B p.primeCompl) B_p`, with the two named
+  rings as the canonical instance, so that Layer 5's completed local rings can consume it as
+  well. The pin collects the instances for a localized ring extension in
+  `Mathlib/RingTheory/DedekindDomain/Instances.lean`.
+
   ⚠ There is no unqualified base-change equation here, and none is asked for. An arbitrary base
   change does not commute with the different, and any such statement would need its own
   flatness or linear-disjointness hypotheses.
@@ -1236,9 +1299,66 @@ The last two are not decoration. `differentIdeal` cannot be formed for the local
 without the algebra instance, and Mathlib's definition takes `IsTorsionFree` as a hypothesis. So
 neither Layer 5.8 nor Layer 5.9 can even be stated before this milestone.
 
+Then build the rest of the integral-closure package, which is what Layer 6.3 consumes. Cite the
+pin where the pin already has the statement, and prove the rest here.
+
+- **From the pin, by citation.** `v.adicCompletionIntegers K` is a `ValuationSubring`, and a
+  `ValuationSubring` carries `IsFractionRing`. So
+
+  ```text
+  IsFractionRing (v.adicCompletionIntegers K) (v.adicCompletion K)
+  IsFractionRing (w.adicCompletionIntegers L) (w.adicCompletion L)
+  ```
+
+  are instances, as are `IsIntegrallyClosed (v.adicCompletionIntegers K)` and
+  `IsDedekindDomain (w.adicCompletionIntegers L)`, through the pin's
+  `IsDiscreteValuationRing (v.adicCompletionIntegers K)`. Record them, do not re-prove them.
+- **The composite algebra and the two towers.** The algebra structure of
+  `v.adicCompletionIntegers K` on `w.adicCompletion L`, as the composite of the map above with
+  the inclusion, and
+
+  ```text
+  IsScalarTower (v.adicCompletionIntegers K) (w.adicCompletionIntegers L) (w.adicCompletion L)
+  IsScalarTower (v.adicCompletionIntegers K) (v.adicCompletion K)      (w.adicCompletion L)
+  ```
+- **The integral closure.** Prove
+
+  ```text
+  IsIntegralClosure
+    (w.adicCompletionIntegers L) (v.adicCompletionIntegers K) (w.adicCompletion L).
+  ```
+
+  The two halves are not symmetric. That an element of `w.adicCompletion L` integral over
+  `v.adicCompletionIntegers K` lies in `w.adicCompletionIntegers L` is Mathlib's
+  `Valuation.Integers.mem_of_integral`, because a valuation subring is integrally closed in its
+  own field. The content is the other half: every element of `w.adicCompletionIntegers L` is
+  integral over `v.adicCompletionIntegers K`. Its minimal polynomial over `v.adicCompletion K`
+  has integral coefficients, because the valuation of `L_w` is the unique extension of the
+  valuation of `K_v` and is computed from the norm.
+- **Module finiteness.** `Module.Finite (v.adicCompletionIntegers K) (w.adicCompletionIntegers L)`,
+  from the previous item and `FiniteDimensional (v.adicCompletion K) (w.adicCompletion L)` of
+  Layer 5.2, by Mathlib's `IsIntegralClosure.finite` over the Dedekind base.
+- **Separability of the local fraction fields.**
+  `Algebra.IsSeparable (v.adicCompletion K) (w.adicCompletion L)`. ⚠ It is not an instance at the
+  pin. The completions have characteristic zero, but `CharZero (v.adicCompletion K)` is itself
+  not an instance there, so the chain to `Algebra.IsSeparable` does not fire and this is a
+  milestone and not a citation.
+
+None of this is decoration, and none of it can be deferred to an implementation detail. Mathlib's
+`conductor_mul_differentIdeal`, which is the named route of Layer 6.3, takes at the pin
+`[IsFractionRing A K]`, `[FiniteDimensional K L]`, `[Algebra.IsSeparable K L]`,
+`[IsIntegralClosure B A L]`, `[IsIntegrallyClosed A]`, `[IsDedekindDomain B]`,
+`[Module.IsTorsionFree A B]`, and the two scalar towers `[IsScalarTower A K L]` and
+`[IsScalarTower A B L]`. The list above is that list, instantiated at
+`A = v.adicCompletionIntegers K`, `K = v.adicCompletion K`, `B = w.adicCompletionIntegers L`,
+`L = w.adicCompletion L`. `Suggested.lean` applies the Mathlib theorem to that instantiation, so
+the bridge is checked and not asserted.
+
 *Prerequisites:* Layers 5.1 and 5.2; Mathlib
 `IsDedekindDomain.HeightOneSpectrum.adicCompletionIntegers`, `mem_adicCompletionIntegers`,
-`RingHom.toAlgebra`, `Module.IsTorsionFree`.
+`RingHom.toAlgebra`, `Module.IsTorsionFree`, `ValuationSubring`,
+`Valuation.Integers.mem_of_integral`, `IsIntegralClosure.finite`,
+`IsDiscreteValuationRing (v.adicCompletionIntegers K)`.
 
 #### 5.8 The completed local extension is monogenic
 
@@ -1250,6 +1370,24 @@ Prove that `𝓞_{L_w}` is generated over `𝓞_{K_v}` by one element:
 
 Proof outline: the residue extension is an extension of finite fields, hence simple; lift a
 residue generator and adjoin a uniformizer.
+
+Two companion statements about that generator belong to this milestone, because Layer 6.3 uses
+them and not the displayed one.
+
+- `x` is integral over `v.adicCompletionIntegers K`, so that `minpoly (v.adicCompletionIntegers K) x`
+  is the minimal polynomial of an integral element. This is immediate from the integral-closure
+  package of Layer 5.7, by `IsIntegralClosure.isIntegral`, and it is recorded rather than
+  re-proved.
+- The field-level form
+
+  ```text
+  Algebra.adjoin (v.adicCompletion K) {algebraMap (w.adicCompletionIntegers L) (w.adicCompletion L) x} = ⊤,
+  ```
+
+  which is what `conductor_mul_differentIdeal` takes as its hypothesis. ⚠ The displayed
+  ring-level statement is the stronger one, and the implication is the direction that is used.
+  A milestone that stops at the ring level leaves Layer 6.3 with a hypothesis it cannot discharge
+  from anything named.
 
 This milestone is what makes Layer 6 self-contained. With it, Mathlib's
 `conductor_mul_differentIdeal` computes the local different as `(g′(x))`, and Layer 6.3 follows
@@ -1263,7 +1401,9 @@ extension. Number fields satisfy this everywhere.
 *False generalization:* the statement fails for a complete discrete valuation ring with an
 inseparable residue extension. Serre gives the standard counterexample in III §6, Remark.
 
-*Prerequisites:* Layers 5.1, 5.2 and 5.7; Mathlib `IsDiscreteValuationRing`,
+*Prerequisites:* Layers 5.1, 5.2 and 5.7, the last for the algebra structure, the integral
+closure and the integrality of the generator; Mathlib `IsDiscreteValuationRing`,
+`IsIntegralClosure.isIntegral`,
 `FiniteField.exists_forall_apply_eq_pow`, `Algebra.adjoin`.
 
 #### 5.9 The different localizes
@@ -1276,11 +1416,16 @@ Prove
 ```
 
 State it with the ideal map, not as multiplication by `𝓞_{L_w}`. The right-hand side is formed
-for the algebra structure of Layer 5.7 and for no other.
+for the algebra structure of Layer 5.7 and for no other, and it needs the `IsTorsionFree`
+instance of that milestone to exist at all.
+
+The proof compares the two trace duals, through the trace formula of Layer 5.4. Both sides are
+ideals of `w.adicCompletionIntegers L`.
 
 *Source:* Neukirch III (2.2)(iii).
 
-*Prerequisites:* Layers 5.2, 5.4 and 5.7; Mathlib `differentIdeal`, `Ideal.map`.
+*Prerequisites:* Layers 5.2, 5.4 and 5.7; Mathlib `differentIdeal`, `Ideal.map`,
+`Submodule.traceDual`.
 
 #### 5.10 The relative discriminant valuation
 
@@ -1363,38 +1508,78 @@ ramificationGroup Q i := {σ ∈ MulAction.stabilizer (L ≃ₐ[K] L) Q | ∀ x 
 
 Prove `v_Q(differentIdeal (𝓞 K) (𝓞 L)) = Σ_{i ≥ 0} (#(G i) − 1)`.
 
-Proof outline: Layer 5.8 gives a generator `x` of the completed local ring. Mathlib's
-`conductor_mul_differentIdeal` then gives `𝔡 = (g′(x))` for `g` the minimal polynomial of `x`.
-Expand `g′(x) = ∏_{τ ≠ 1} (x − τ x)`, and count: `v(x − τ x) ≥ i + 1` exactly when `τ` lies in
-the `i`-th local group. Layers 5.9 and 6.2 carry the result back to `𝓞 L`.
+Proof outline: Layer 5.8 gives a generator `x` of the completed local ring, integral over
+`v.adicCompletionIntegers K` and generating `L_w` over `K_v`. Layer 5.7 supplies the instances
+that Mathlib's `conductor_mul_differentIdeal` takes, which then gives `𝔡 = (g′(x))` for `g` the
+minimal polynomial of `x` over `v.adicCompletionIntegers K`, the conductor being `⊤` by the ring
+generation. Expand `g′(x) = ∏_{τ ≠ 1} (x − τ x)`, and count: `v(x − τ x) ≥ i + 1` exactly when
+`τ` lies in the `i`-th local group. Layers 5.9 and 6.2 carry the result back to `𝓞 L`.
+
+⚠ This is the one place where a milestone of this roadmap is applied to a Mathlib theorem with a
+long instance list, so Layer 5.7 lists that list and `Suggested.lean` discharges it. Do not treat
+the instantiation as an implementation detail.
 
 *Source:* Serre, *Local Fields*, IV §1 Proposition 4.
 
 *Hypotheses:* `L/K` Galois. The formula is false without it, because the left side is defined
 while the right side is not.
 
-*Prerequisites:* Layers 5.8, 5.9, 6.1, 6.2; Mathlib `conductor_mul_differentIdeal`,
-`aeval_derivative_mem_differentIdeal`.
+*Prerequisites:* Layers 5.7, 5.8, 5.9, 6.1, 6.2; Mathlib `conductor_mul_differentIdeal`,
+`aeval_derivative_mem_differentIdeal`, `conductor_eq_top_iff_adjoin_eq_top`.
 
 #### 6.4 Exact tame and wild exponents
 
-Prove:
+Both statements are under the two separability hypotheses of §Standing hypotheses, on the
+fraction fields **and** on the residue extension:
 
-- `v_P(𝔡) = e − 1` when the extension is tame at `P`, that is, `ringChar (A ⧸ 𝔭) ∤ e`;
-- `e ≤ v_P(𝔡) ≤ e − 1 + v_P(e)` in the wild case, where `v_P(e)` is the multiplicity of `P` in
-  `span {(e : B)}`, in the same normalization as `v_P(𝔡)`.
+```text
+[Algebra.IsSeparable K L]        [Algebra.IsSeparable (A ⧸ 𝔭) (B ⧸ P)]
+```
+
+With those in place, and with the meaning of tame and wild fixed by §Pinned conventions, prove:
+
+- `v_P(𝔡) = e − 1` when the extension is tame at `P`, that is, when `ringChar (A ⧸ 𝔭) ∤ e`;
+- `e ≤ v_P(𝔡) ≤ e − 1 + v_P(e)` in the wild case, that is when `ringChar (A ⧸ 𝔭) ∣ e`, where
+  `v_P(e)` is the multiplicity of `P` in `span {(e : B)}`, in the same normalization as `v_P(𝔡)`.
 
 Mathlib has only the divisibility `P^{e−1} ∣ 𝔡`.
 
 A formulation by divisibility alone, `P^{e−1+v_P(e)+1} ∤ 𝔡`, is acceptable if the additive
 valuation of an ideal is awkward. State whichever is used, and use the same one across the layer.
 
-*Source:* Neukirch III (2.6); Serre, *Local Fields*, III §6 Proposition 13.
+The number-field statements are corollaries, where a residue field is finite and the residue
+hypothesis is automatic. `Suggested.lean` carries those, and says which hypothesis it is
+discharging.
 
-*Hypotheses:* a finite **separable** extension of fraction fields. Without separability the trace
-form vanishes, `differentIdeal` is the zero ideal, and `v_P(𝔡)` is a value with no meaning. State
-the hypothesis as `[Algebra.IsSeparable K L]` in a signature where the fraction fields appear.
-`Suggested.lean` carries the number-field instance, where separability is automatic.
+*Source:* Neukirch III (2.6); Serre, *Local Fields*, III §6 Proposition 13. Serre's §6 assumes a
+separable residue extension throughout, and Proposition 13 is stated under that assumption.
+
+*Hypotheses:* a finite **separable** extension of fraction fields, and a **separable residue
+extension** at `P`. Without the first the trace form vanishes, `differentIdeal` is the zero ideal,
+and `v_P(𝔡)` is a value with no meaning. State it as `[Algebra.IsSeparable K L]` in a signature
+where the fraction fields appear. The second is what makes the words tame and wild exhaustive.
+
+*False generalization:* `ringChar (A ⧸ 𝔭) ∤ e` alone does not give `v_P(𝔡) = e − 1`, and dropping
+residue separability is not a harmless weakening of hypotheses. Take `k = 𝔽_p(s)`, which is
+imperfect, `A = k[[x]]` and `K = k((x))`, and
+
+```text
+L = K[y]/(y^p − x y − s),   B = A[y]/(y^p − x y − s).
+```
+
+The polynomial is separable over `K`, because its derivative is the unit `−x`, so `L/K` is a
+finite separable extension. Modulo `x` it is `y^p − s`, which is irreducible over `k` because `s`
+is not a `p`-th power there. So `B` is local with maximal ideal `P = xB`, hence a discrete
+valuation ring and the integral closure of `A` in `L`, with
+
+```text
+e(P/xA) = 1,   f(P/xA) = p,   B ⧸ P = k(s^{1/p}),
+```
+
+an inseparable residue extension. Here `ringChar (A ⧸ xA) = p ∤ 1 = e`, so the condition on `e`
+holds, and `e − 1 = 0`. But `P ∣ 𝔡` by Mathlib's `dvd_differentIdeal_of_not_isSeparable`, so
+`v_P(𝔡) ≥ 1`. The stated equality fails. The same example shows that "wild" is not the complement
+of "tame" once residue separability is dropped: this prime is neither.
 
 *False generalization:* in the wild case `v_P(𝔡) = e` is false, and so is
 `v_P(𝔡) = e − 1 + v_P(e)`. Both bounds are attained, at `2` in two different quadratic fields:
@@ -1409,8 +1594,9 @@ For `ℚ(√2)`, `g = X² − 2` is Eisenstein at `2`, so `𝔡 = (g′(√2)) =
 Eisenstein family `X^p − p` over `ℚ_p` behaves the same way: `e = p` and
 `v_P(𝔡) = v_P(p π^{p−1}) = p + (p − 1) = 2p − 1 = e − 1 + v_P(e)`.
 
-*Prerequisites:* Layer 6.3; Mathlib `pow_sub_one_dvd_differentIdeal`, `ringChar`,
-`multiplicity`.
+*Prerequisites:* Layer 6.3; Mathlib `pow_sub_one_dvd_differentIdeal`,
+`dvd_differentIdeal_of_not_isSeparable`, `ringChar`, `multiplicity`,
+`Algebra.IsSeparable (A ⧸ 𝔭) (B ⧸ P)`.
 
 #### 6.5 The permutation-action discriminant exponent formula
 
@@ -1454,8 +1640,16 @@ For an arbitrary number field `K` with Galois closure `M`, package Mathlib's
 Worked targets: the three subfields of `ℚ(ζ₅)`; the cubic field of discriminant `−23` has no
 proper subfield.
 
+⚠ The second target is a statement about `K` itself and needs no Galois group. `[K : ℚ] = 3` is
+prime, so `Module.finrank_mul_finrank` forces `finrank ℚ M ∈ {1, 3}` for an intermediate field
+`M`, and `IntermediateField.finrank_eq_one_iff` and `IntermediateField.finrank_eq_one_iff_eq_top`
+turn the two cases into `M = ⊥` and `M = ⊤`. Do not route it through an identification of the
+Galois closure: no milestone here supplies one, and none is needed.
+
 *Prerequisites:* Mathlib `IsGalois.intermediateFieldEquivSubgroup`,
-`IntermediateField.normalClosure`, `Polynomial.Gal.galActionHom`; Layer 3.8.
+`IntermediateField.normalClosure`, `Polynomial.Gal.galActionHom`, `Module.finrank_mul_finrank`,
+`IntermediateField.finrank_eq_one_iff`, `IntermediateField.finrank_eq_one_iff_eq_top`;
+Layer 3.8.
 
 #### 7.2 Integral bases of quadratic fields
 
@@ -1507,21 +1701,50 @@ For `K` with `NumberField.Units.rank K = 1` and `u : (𝓞 K)ˣ`, build four sta
 2. *The finiteness that makes the criterion checkable.* A unit with a bounded log embedding has
    bounded archimedean absolute values. Mathlib's `NumberField.Embeddings.finite_of_norm_le`
    then applies, and the candidate set is finite.
-3. *The certificate itself.* Finiteness alone is not a certificate, so this milestone turns it
-   into one. For a bound `B` on the real place, build the finite set of monic integer
-   polynomials that can be the minimal polynomial of a unit `v` with `1 < w v < B`, and prove
-   that the list is complete. The coefficients are bounded because every root of the minimal
-   polynomial is bounded: the conjugates of a unit satisfy `∏_w (w v)^{mult w} = 1`, so bounding
-   `w v` above bounds the remaining conjugates below and above. Concretely:
+3. *The certificate itself.* Finiteness alone is not a certificate, and neither is a finite list
+   of candidates. The certificate is the finite list **together with an elimination of every
+   candidate on it**, and this milestone is all three steps.
 
-   - degree 2 with two real places: `v` has minimal polynomial `X² − mX ± 1` with
-     `m = v + v′`, and `1 < v < B` with `v v′ = ±1` bounds `m`;
-   - degree 3 with signature `(1,1)`: `v` has minimal polynomial `X³ − aX² + bX − c` with
-     `c = ±1`, `|v′| = (w v)^{−1/2}` at the complex place, and hence
-     `|a| ≤ B + 2` and `|b| ≤ 2B + 1`.
+   a. *The candidate set.* For an infinite place `w` and a bound `B` there, build
 
-   The milestone is the general construction together with the completeness theorem. A checker
-   that eliminates every candidate is then a decidable finite computation.
+      ```text
+      unitCandidates K w B : Finset ℤ[X]
+      ```
+
+      the monic integer polynomials that can be the minimal polynomial of a unit `v` with
+      `1 < w v < B`. The coefficients are bounded because every conjugate of `v` is bounded: the
+      conjugates satisfy `∏_w (w v)^{mult w} = 1`, so bounding `w v` above bounds the remaining
+      conjugates below and above. Concretely:
+
+      - degree 2 with two real places: `v` has minimal polynomial `X² − mX ± 1` with
+        `m = v + v′`, and `1 < v < B` with `v v′ = ±1` bounds `m`;
+      - degree 3 with signature `(1,1)`: `v` has minimal polynomial `X³ − aX² + bX − c` with
+        `c = ±1`, `|v′| = (w v)^{−1/2}` at the complex place, and hence
+        `|a| ≤ B + 2` and `|b| ≤ 2B + 1`.
+
+   b. *Completeness.* Prove that the minimal polynomial of every competing unit is in the set:
+      if `v : (𝓞 K)ˣ` and `1 < w v < B` then `minpoly ℤ v ∈ unitCandidates K B`. Note what this
+      needs: `v` generates `K` over `ℚ`, so that the minimal polynomial has the expected degree.
+      For a field of prime degree that is Layer 7.1's argument, since a unit with `w v ≠ 1` is not
+      rational.
+
+   c. *Elimination.* Prove that no candidate is the minimal polynomial of a unit of `K` that lies
+      strictly between `1` and `u`. This has two halves, and only the first is about the interval:
+
+      - the **root test**: a candidate that is the minimal polynomial of such a `v` has a real
+        root in the open interval `(1, B)`, by exact root isolation, which is a decidable check
+        on integer polynomials;
+      - the **field test**: every candidate that survives the root test is eliminated as a
+        minimal polynomial **in `K`**. Layer 3.3 is the general tool. If `g = minpoly ℤ v` for an
+        integral generator `v` of `K`, then `Polynomial.discr g = index(v)² · discr K`, so a
+        candidate whose discriminant is not `discr K` times a square is not a minimal polynomial
+        in `K`. Reducibility eliminates a candidate outright, since a minimal polynomial is
+        irreducible.
+
+   ⚠ The root test alone is not an elimination, and a milestone that stops there has a gap. The
+   candidate set contains polynomials other than `minpoly ℤ u` that do have roots in `(1, w u)`.
+   §Worked examples exhibits two of them for `3.1.23.1` and eliminates them by the field test.
+
 4. *The evaluation.* From `regOfFamily_div_regulator` with index `1`, and `regOfFamily_eq_det`:
 
    ```text
@@ -1544,8 +1767,9 @@ of `𝓞 K`, so every exact regulator statement names an infinite place.
 *Hypotheses:* rank exactly one. The criterion is false at higher rank, where minimality at one
 place does not give generation.
 
-*Prerequisites:* Mathlib `NumberField.Units.rank`, `logEmbedding`, `regOfFamily_div_regulator`,
-`regOfFamily_eq_det`, `NumberField.Embeddings.finite_of_norm_le`.
+*Prerequisites:* Layers 3.1 and 3.3, for the index formula that the field test uses; Mathlib
+`NumberField.Units.rank`, `logEmbedding`, `regOfFamily_div_regulator`, `regOfFamily_eq_det`,
+`NumberField.Embeddings.finite_of_norm_le`, `Polynomial.discr`.
 
 ### Layer 8: the intrinsic label prefix and the invariant suite
 
@@ -1726,7 +1950,8 @@ formula. It is not a target of this roadmap, and it is not used here.
 The non-Galois cubic with `minpoly = X³ − X² + 1`. `disc(minpoly) = −23` is squarefree, so
 `index θ = 1` and `discr K = −23`.
 
-*Proved here:* signature `(1,1)`; not Galois; no proper subfield;
+*Proved here:* signature `(1,1)`; not Galois; no proper subfield, from `[K : ℚ] = 3` prime and
+the tower-degree formula, by Layer 7.1;
 `Units.rank = 1` with the explicit unit `u = θ² − θ`, characterized by `θ·(θ² − θ) = −1`, so
 `u = −θ⁻¹`; `Subgroup.closure {u} ⊔ torsion K = ⊤` by Layer 7.4; and, with `w` the unique real
 place, so `w.mult = 1`, and `1 < w u` because `w u ≈ 1.3247`,
@@ -1749,10 +1974,40 @@ the complex place has `mult = 2`. Suppose `v` is a unit with `1 < w v < w u`, wh
 c = ±1,   a = w v + 2 Re v′,   b = 2 (w v)(Re v′) + |v′|²,
 ```
 
-so `|a| ≤ w u + 2 < 4` and `|b| ≤ 2 w u + 1 < 4`. The candidates are therefore the monic cubics
-with `a, b ∈ {−3, …, 3}` and `c ∈ {−1, 1}`: at most `98` polynomials. Discard those with no root
-in `(1, w u)`, and the certificate is complete. This is the acceptance target for Layer 7.4 in
-degree 3, and it is the reason Layer 7.4 asks for a completeness theorem and not only for
+so `|a| ≤ w u + 2 < 4` and `|b| ≤ 2 w u + 1 < 4`. The candidate set is therefore the monic cubics
+`X³ − aX² + bX − c` with `a, b ∈ {−3, …, 3}` and `c ∈ {−1, 1}`: exactly `98` polynomials. That
+list is where the certificate begins.
+
+⚠ Discarding the candidates with no root in `(1, w u)` does not finish it. Exactly `14` of the
+`98` have a real root in that interval, and `minpoly ℤ u = X³ − X − 1` is not one of them, since
+its root there is the endpoint `u` itself. Twelve of the `14` are reducible, each with `1` or
+`−1` as a root, and a minimal polynomial is irreducible. The two that remain are genuine
+candidates that the interval test does not touch:
+
+| candidate | root in `(1, w u)` | `Polynomial.discr` |
+|---|---|---|
+| `X³ + X² − 2X − 1` | yes: `f(1) = −1` and `f(5/4) = 1/64` | `49` |
+| `X³ + 2X² − 3X − 1` | yes: `f(1) = −1` and `f(5/4) = 21/64` | `257` |
+
+Both roots are below `w u`, because `w u > 5/4`: `(5/4)³ − 5/4 − 1 = −19/64 < 0`, and
+`X³ − X − 1` is increasing for `X > 1`.
+
+*The elimination.* A unit `v` with `1 < w v` is not rational, since the rational units are `±1`,
+and `[K : ℚ] = 3` is prime, so `v` is an integral generator of `K`. Layer 3.3 then gives
+
+```text
+disc(minpoly ℤ v) = index(v)² · discr K = index(v)² · (−23) < 0.
+```
+
+Both surviving candidates have positive discriminant, so neither is a minimal polynomial in `K`.
+No unit lies strictly between `1` and `u`, and the certificate is complete.
+
+The same computation states the whole elimination in one decidable check: of the `98` candidates,
+`16` have discriminant `−23`, none has discriminant `−23m²` for any `m ≥ 2`, and none of those
+`16` has a root in `(1, w u)`.
+
+This is the acceptance target for Layer 7.4 in degree 3, and it is the reason Layer 7.4 asks for
+a candidate set, a completeness theorem, a root test **and** a field test, rather than for
 `Set.Finite`.
 
 *Proved here, splitting:* `2` and `3` are inert, cycle type `(3)`; `5` and `7` have type `(1,2)`;
@@ -1817,8 +2072,9 @@ extra information is which layers are independent of each other.
 - **Layer 5** needs Layer 2 for the Frobenius comparison and Layer 4 for the discriminant
   valuation. Nothing else.
 - **Layer 6** needs Layer 5 and nothing else.
-- **Layer 7** needs Layers 1 to 3. Its unit certification needs nothing else and can be done
-  early. Every statement that quotes a regulator waits for it.
+- **Layer 7** needs Layers 1 to 3. Its unit certification needs only Layers 3.1 and 3.3, for the
+  index formula that eliminates a candidate minimal polynomial, so it can be done early. Every
+  statement that quotes a regulator waits for it.
 - **Layer 8** assembles the rest. Each worked example names the layers it uses.
 
 ## References

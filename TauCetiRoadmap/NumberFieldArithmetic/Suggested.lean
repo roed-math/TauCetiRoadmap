@@ -11,12 +11,22 @@ signatures. Discharging all of them finishes neither a layer nor the roadmap.
 What is prototyped here, in preference to end theorems, are the objects whose choice of
 carrier, index type, or map determines everything below them. Every declaration elaborates
 against the pinned Mathlib. Every proof is `sorry`, which this human-owned roadmap library
-allows.
+allows, with two kinds of exception, each of which records something about the pin instead of
+stating a milestone:
+
+* three statements in the Layer 5.7 block are proved `by infer_instance`, because the pin
+  already supplies them and the milestone is to cite them rather than to prove them;
+* the last declaration of that block applies Mathlib's `conductor_mul_differentIdeal` to the
+  completed local extension. It is there so that Layer 6.3's proof route is checked rather than
+  asserted: were the integral-closure package incomplete, that declaration would fail to
+  elaborate.
 
 Every carrier and every cross-subject interface in this file compiles as a named declaration.
-That includes `artinSymbol`, the carrier `idealsAway`, `artinHomAway`, `ramifiedSupport`, the
-three Layer 5 comparison maps, and `localRamificationGroup`. Where a comparison needs an object
-that a neighbouring subject also touches, this roadmap defines the object and owns it;
+That includes `artinSymbol`, the carrier `idealsAway` with `idealsAwayInclusion`, `artinHomAway`
+with `integralIdealsAway` and `artinHomAwayIntegral`, `relDiscr`, `ramifiedSupport`, the three
+Layer 5 comparison maps, `localRamificationGroup`, and the unit-certificate candidate sets
+`unitCandidates` and `cubicUnitCandidates`. Where a comparison needs an object that a
+neighbouring subject also touches, this roadmap defines the object and owns it;
 `localRamificationGroup` is the one such case.
 
 Conventions, recorded in `README.md`:
@@ -31,7 +41,14 @@ Conventions, recorded in `README.md`:
   with the decomposition group named separately.
 * Splits-completely is the `primesOver`-count equation.
 * The ideal-theoretic Artin map takes its excluded set of primes as a parameter; specializing
-  it to the support of the relative discriminant is a Layer 4 statement.
+  it to the support of the relative discriminant is a Layer 4 statement. Its functoriality is
+  stated as equations of homomorphisms, never as an inequality of carriers.
+* The relative discriminant is the named `relDiscr`, and every statement uses that name rather
+  than expanding it as `Ideal.relNorm A (differentIdeal A B)`.
+* Tame and wild both include separability of the residue extension; see the Layer 6.4
+  docstrings. The number-field prototypes get it from the finiteness of the residue field.
+* A unit certificate is a candidate `Finset`, a completeness theorem, a root test **and** a
+  field test. Neither `Set.Finite` nor root isolation alone certifies anything.
 * Comparison maps are named objects. Where a milestone is a canonical map or equivalence
   (Layer 5's completion map, semi-local decomposition and decomposition-group comparison) the
   prototype is a `def` with its characteristic property, not `∃!` and never `Nonempty (… ≃ …)`,
@@ -170,10 +187,29 @@ example (S : Finset (HeightOneSpectrum (𝓞 K))) :
         ((I : FractionalIdeal (𝓞 K)⁰ K) = (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K))} :=
   sorry
 
-/-- **Layer 2.5, `S`-monotonicity of the carrier.** A larger excluded set gives a smaller group.
-The two Artin maps then agree on the smaller one. -/
+/-- **Layer 2.5, `S`-monotonicity of the carrier.** A larger excluded set gives a smaller group. -/
 example (S S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S') :
     idealsAway (K := K) S' ≤ idealsAway (K := K) S :=
+  sorry
+
+/-- **Layer 2.5, the inclusion homomorphism for `S ⊆ S'`.** ⚠ The subgroup inequality above is
+not the milestone: it relates the two carriers and says nothing about the two Artin maps. This
+is the map along which they are compared, and the equation below is the comparison. -/
+noncomputable def idealsAwayInclusion {S S' : Finset (HeightOneSpectrum (𝓞 K))} (h : S ⊆ S') :
+    idealsAway (K := K) S' →* idealsAway (K := K) S :=
+  Subgroup.inclusion sorry
+
+/-- **Layer 2.5, the monoid of integral ideals prime to `S`.** The carrier for the classical
+integral-ideal form of the Artin map, which is what a reciprocity layer pairs with a modulus. -/
+def integralIdealsAway (S : Finset (HeightOneSpectrum (𝓞 K))) : Submonoid (Ideal (𝓞 K)) where
+  carrier := {I | I ≠ ⊥ ∧ ∀ v ∈ S, ¬ v.asIdeal ∣ I}
+  mul_mem' := sorry
+  one_mem' := sorry
+
+/-- **Layer 2.5, integral ideals prime to `S` sit inside `J^S`.** A nonzero integral ideal that no
+prime of `S` divides is a fractional ideal with valuation zero at every prime of `S`. -/
+noncomputable def integralIdealsAwayHom (S : Finset (HeightOneSpectrum (𝓞 K))) :
+    integralIdealsAway (K := K) S →* idealsAway (K := K) S :=
   sorry
 
 /-- **Layer 2.5, the ideal-theoretic Artin map.** The excluded set `S` is a **parameter**: any
@@ -217,6 +253,46 @@ example (φ : idealsAway (K := K) S →* (L ≃ₐ[K] L))
       ∀ (Q : Ideal (𝓞 L)) (_ : Q.IsPrime) (_ : Q.LiesOver v.asIdeal) (σ : L ≃ₐ[K] L),
         IsArithFrobAt (𝓞 K) σ Q → φ I = σ) :
     φ = artinHomAway (L := L) hab S hur :=
+  sorry
+
+/-- **Layer 2.5, `S`-monotonicity of the map.** For `h : S ⊆ S'` the two Artin maps agree on the
+smaller carrier, as homomorphisms on `idealsAway S'`. This is the statement that a reciprocity
+layer needs when it enlarges the excluded set to the support of a modulus, and an inequality of
+carriers is not a substitute for it. -/
+example (S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S')
+    (hur' : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S' →
+      ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q) :
+    artinHomAway (L := L) hab S' hur' =
+      (artinHomAway (L := L) hab S hur).comp (idealsAwayInclusion h) :=
+  sorry
+
+/-- **Layer 2.5, functoriality in `L`, as an equation.** For an intermediate field `M`, normal
+over `K` (automatic here, since `L/K` is abelian), restriction of automorphisms carries the Artin
+map of `L/K` to the Artin map of `M/K` on the same carrier. ⚠ The excluded set is the same `S` on
+both sides, and `hurM` is what `hur` gives for the subextension: a prime unramified in `L` is
+unramified in `M`. -/
+example (M : IntermediateField K L) [NumberField M] [Normal K M] [IsGalois K M]
+    (habM : ∀ σ τ : M ≃ₐ[K] M, Commute σ τ)
+    (hurM : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
+      ∀ (Q : Ideal (𝓞 M)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q) :
+    (AlgEquiv.restrictNormalHom (F := K) M).comp (artinHomAway (L := L) hab S hur) =
+      artinHomAway (L := M) habM S hurM :=
+  sorry
+
+/-- **Layer 2.5, the integral Artin homomorphism.** The composite of `integralIdealsAwayHom` with
+the map on fractional ideals. This is the form the classical statements are in, and it is a
+corollary of the fractional-ideal map rather than a second construction. -/
+noncomputable def artinHomAwayIntegral :
+    integralIdealsAway (K := K) S →* (L ≃ₐ[K] L) :=
+  (artinHomAway (L := L) hab S hur).comp (integralIdealsAwayHom S)
+
+/-- **Layer 2.5, the value of the integral Artin homomorphism at a prime.** With the generation
+statement above, this determines it. -/
+example (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉ S)
+    (hmem : v.asIdeal ∈ integralIdealsAway (K := K) S)
+    (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal] (σ : L ≃ₐ[K] L)
+    (hσ : IsArithFrobAt (𝓞 K) σ Q) :
+    artinHomAwayIntegral (L := L) hab S hur ⟨v.asIdeal, hmem⟩ = σ :=
   sorry
 
 end ArtinHomAway
@@ -431,11 +507,25 @@ example (p : ℕ) [Fact p.Prime]
 
 /-! ## Layer 4: the relative discriminant, algebraically -/
 
-/-- **Layer 4.2, the relative discriminant ideal, reconciled.** The relative norm of the
-different is the (ideal generated by the) absolute discriminant: the ideal-level sharpening
-of the pin's `NumberField.absNorm_differentIdeal`, and the `L/ℚ` instance of the missing
-`relDiscr A B := Ideal.relNorm A (differentIdeal A B)`. -/
-example : Ideal.relNorm ℤ (differentIdeal ℤ (𝓞 K)) = Ideal.span {NumberField.discr K} :=
+/-- **Layer 4.1, the relative discriminant ideal, as a definition.** The central new object of
+Layer 4, carrying exactly the hypotheses `Ideal.relNorm` and `differentIdeal` carry and no
+others; in particular no separability hypothesis, since the definition needs none. ⚠ Every
+statement below uses this name. Expanding it in place as `Ideal.relNorm A (differentIdeal A B)`
+would leave the roadmap with a relative norm of a different and no relative discriminant. -/
+noncomputable def relDiscr (A B : Type*) [CommRing A] [IsDedekindDomain A]
+    [CommRing B] [IsDedekindDomain B] [Algebra A B] [Module.Finite A B]
+    [Module.IsTorsionFree A B] : Ideal A :=
+  Ideal.relNorm A (differentIdeal A B)
+
+/-- **Layer 4.1, the two facts that hold with no separability hypothesis.** -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L] :
+    relDiscr (𝓞 K) (𝓞 L) = ⊥ ↔ differentIdeal (𝓞 K) (𝓞 L) = ⊥ :=
+  sorry
+
+/-- **Layer 4.2, the relative discriminant ideal, reconciled.** The relative discriminant over
+`ℤ` is the ideal generated by the absolute discriminant: the ideal-level sharpening of the pin's
+`NumberField.absNorm_differentIdeal`. -/
+example : relDiscr ℤ (𝓞 K) = Ideal.span {NumberField.discr K} :=
   sorry
 
 /-- **Layer 4.2, the relative discriminant in towers** (Neukirch III (2.10)):
@@ -446,9 +536,28 @@ and multiplicativity of `Ideal.relNorm`. The pin has only the absolute `ℤ`-ver
 statement is absent upstream. -/
 example {L M : Type*} [Field L] [NumberField L] [Field M] [NumberField M] [Algebra K L]
     [Algebra L M] [Algebra K M] [IsScalarTower K L M] :
-    Ideal.relNorm (𝓞 K) (differentIdeal (𝓞 K) (𝓞 M)) =
-      Ideal.relNorm (𝓞 K) (differentIdeal (𝓞 K) (𝓞 L)) ^ Module.finrank L M *
-        Ideal.relNorm (𝓞 K) (Ideal.relNorm (𝓞 L) (differentIdeal (𝓞 L) (𝓞 M))) :=
+    relDiscr (𝓞 K) (𝓞 M) =
+      relDiscr (𝓞 K) (𝓞 L) ^ Module.finrank L M *
+        Ideal.relNorm (𝓞 K) (relDiscr (𝓞 L) (𝓞 M)) :=
+  sorry
+
+/-- **Layer 4.2, the relative discriminant localizes.** ⚠ "`relDiscr A B` localized at `p`" is
+not a statement until both localizations are named. `Aₚ` is the localization of `A` at
+`p.primeCompl`, `Bₚ` is the localization of `B` at the image of `p.primeCompl` under
+`algebraMap A B` (`Algebra.algebraMapSubmonoid`), and the equation is one of ideals of `Aₚ` along
+the ideal map of `algebraMap A Aₚ`. The canonical instance is `Aₚ = Localization.AtPrime p` and
+`Bₚ = Localization (Algebra.algebraMapSubmonoid B p.primeCompl)`, with the algebra structure
+`localizationAlgebra p.primeCompl B`; stating it for an arbitrary `IsLocalization` pair is what
+lets Layer 5.9 consume it at a completion. -/
+example {A B : Type*} [CommRing A] [IsDedekindDomain A] [CommRing B] [IsDedekindDomain B]
+    [Algebra A B] [Module.Finite A B] [Module.IsTorsionFree A B]
+    (p : Ideal A) [p.IsPrime]
+    (Aₚ Bₚ : Type*) [CommRing Aₚ] [IsDedekindDomain Aₚ] [CommRing Bₚ] [IsDedekindDomain Bₚ]
+    [Algebra A Aₚ] [IsLocalization p.primeCompl Aₚ]
+    [Algebra B Bₚ] [IsLocalization (Algebra.algebraMapSubmonoid B p.primeCompl) Bₚ]
+    [Algebra Aₚ Bₚ] [Algebra A Bₚ] [IsScalarTower A Aₚ Bₚ] [IsScalarTower A B Bₚ]
+    [Module.Finite Aₚ Bₚ] [Module.IsTorsionFree Aₚ Bₚ] :
+    (relDiscr A B).map (algebraMap A Aₚ) = relDiscr Aₚ Bₚ :=
   sorry
 
 /-- **Layer 4.2, ramified if and only if it divides the relative discriminant**
@@ -456,7 +565,7 @@ example {L M : Type*} [Field L] [NumberField L] [Field M] [NumberField M] [Algeb
 `NumberField.not_dvd_discr_iff_forall_liesOver`. -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     (p : Ideal (𝓞 K)) [p.IsMaximal] (hp : p ≠ ⊥) :
-    ¬ p ∣ Ideal.relNorm (𝓞 K) (differentIdeal (𝓞 K) (𝓞 L)) ↔
+    ¬ p ∣ relDiscr (𝓞 K) (𝓞 L) ↔
       ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver p], Algebra.IsUnramifiedAt (𝓞 K) Q :=
   sorry
 
@@ -473,8 +582,7 @@ noncomputable def ramifiedSupport (K : Type*) [Field K] [NumberField K]
 
 /-- **Layer 4.3, membership in the ramified support.** -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L] (v : HeightOneSpectrum (𝓞 K)) :
-    v ∈ ramifiedSupport K L ↔
-      v.asIdeal ∣ Ideal.relNorm (𝓞 K) (differentIdeal (𝓞 K) (𝓞 L)) :=
+    v ∈ ramifiedSupport K L ↔ v.asIdeal ∣ relDiscr (𝓞 K) (𝓞 L) :=
   sorry
 
 /-- **Layer 4.5, Stickelberger's congruence** (absent upstream): the discriminant of a number
@@ -712,6 +820,109 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     Module.IsTorsionFree (v.adicCompletionIntegers K) (w.adicCompletionIntegers L) :=
   sorry
 
+/-! ### Layer 5.7, the integral-closure package
+
+Layer 6.3's named route is Mathlib's `conductor_mul_differentIdeal`, which at the pin takes
+`[IsFractionRing A K]`, `[FiniteDimensional K L]`, `[Algebra.IsSeparable K L]`,
+`[IsIntegralClosure B A L]`, `[IsIntegrallyClosed A]`, `[IsDedekindDomain B]`,
+`[Module.IsTorsionFree A B]`, `[IsScalarTower A K L]` and `[IsScalarTower A B L]`. The
+declarations below are that list at `A = 𝓞_{K_v}`, `K = K_v`, `B = 𝓞_{L_w}`, `L = L_w`. The three
+that the pin already supplies are recorded with `by infer_instance` rather than as milestones,
+and the last statement of the block applies the Mathlib theorem, so the bridge is checked here
+and not asserted. -/
+
+/-- **Layer 5.7, supplied by the pin.** `v.adicCompletionIntegers K` is a `ValuationSubring`, and
+a `ValuationSubring` is a fraction ring of its own field. -/
+example (v : HeightOneSpectrum (𝓞 K)) :
+    IsFractionRing (v.adicCompletionIntegers K) (v.adicCompletion K) := by infer_instance
+
+/-- **Layer 5.7, supplied by the pin**, through `IsDiscreteValuationRing (adicCompletionIntegers)`
+and the integral closedness of a valuation subring. -/
+example (v : HeightOneSpectrum (𝓞 K)) :
+    IsDedekindDomain (v.adicCompletionIntegers K) := by infer_instance
+
+example (v : HeightOneSpectrum (𝓞 K)) :
+    IsIntegrallyClosed (v.adicCompletionIntegers K) := by infer_instance
+
+/-- **Layer 5.7, the algebra structure of `𝓞_{K_v}` on `L_w`**, as the composite of the map on
+integer rings with the inclusion. Both scalar towers below are stated for this structure. -/
+@[reducible] noncomputable def completionIntegersFieldAlgebra {L : Type*} [Field L]
+    [NumberField L] [Algebra K L] (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] :
+    Algebra (v.adicCompletionIntegers K) (w.adicCompletion L) :=
+  ((algebraMap (w.adicCompletionIntegers L) (w.adicCompletion L)).comp
+    (algebraMap (v.adicCompletionIntegers K) (w.adicCompletionIntegers L))).toAlgebra
+
+attribute [local instance] completionIntegersFieldAlgebra
+
+example {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] :
+    IsScalarTower (v.adicCompletionIntegers K) (w.adicCompletionIntegers L)
+      (w.adicCompletion L) :=
+  sorry
+
+example {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] :
+    IsScalarTower (v.adicCompletionIntegers K) (v.adicCompletion K) (w.adicCompletion L) :=
+  sorry
+
+/-- **Layer 5.7, separability of the local fraction-field extension.** ⚠ Not an instance at the
+pin: the completions have characteristic zero, but `CharZero (v.adicCompletion K)` is itself not
+an instance there, so nothing fires. It is a milestone, not a citation. -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] :
+    Algebra.IsSeparable (v.adicCompletion K) (w.adicCompletion L) :=
+  sorry
+
+/-- **Layer 5.7, `𝓞_{L_w}` is the integral closure of `𝓞_{K_v}` in `L_w`.** The content is one of
+the two halves: every element of `𝓞_{L_w}` is integral over `𝓞_{K_v}`, because the valuation of
+`L_w` is the unique extension of the valuation of `K_v`, so a minimal polynomial over `K_v` has
+integral coefficients. The other half is the pin's `Valuation.Integers.mem_of_integral`, since a
+valuation subring is integrally closed in its own field. -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal]
+    [IsScalarTower (v.adicCompletionIntegers K) (w.adicCompletionIntegers L)
+      (w.adicCompletion L)] :
+    IsIntegralClosure (w.adicCompletionIntegers L) (v.adicCompletionIntegers K)
+      (w.adicCompletion L) :=
+  sorry
+
+/-- **Layer 5.7, module finiteness of the completed integer rings**, from the integral closure
+above and `FiniteDimensional K_v L_w` of Layer 5.2, over the Dedekind base. -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] :
+    Module.Finite (v.adicCompletionIntegers K) (w.adicCompletionIntegers L) :=
+  sorry
+
+/-- **Layer 5.7, the bridge, checked.** With the package above in scope, Layer 6.3's route is
+available: this is Mathlib's `conductor_mul_differentIdeal` applied to the completed local
+extension, and the proof is that application and nothing else. `hx` is the field-level form of
+Layer 5.8's generator. If a milestone above were missing, this declaration would not
+elaborate. -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal]
+    [FiniteDimensional (v.adicCompletion K) (w.adicCompletion L)]
+    [Algebra.IsSeparable (v.adicCompletion K) (w.adicCompletion L)]
+    [IsScalarTower (v.adicCompletionIntegers K) (v.adicCompletion K) (w.adicCompletion L)]
+    [IsScalarTower (v.adicCompletionIntegers K) (w.adicCompletionIntegers L)
+      (w.adicCompletion L)]
+    [IsIntegralClosure (w.adicCompletionIntegers L) (v.adicCompletionIntegers K)
+      (w.adicCompletion L)]
+    [Module.IsTorsionFree (v.adicCompletionIntegers K) (w.adicCompletionIntegers L)]
+    (x : w.adicCompletionIntegers L)
+    (hx : Algebra.adjoin (v.adicCompletion K)
+      {algebraMap (w.adicCompletionIntegers L) (w.adicCompletion L) x} = ⊤) :
+    conductor (v.adicCompletionIntegers K) x *
+        differentIdeal (v.adicCompletionIntegers K) (w.adicCompletionIntegers L) =
+      Ideal.span {aeval x (derivative (minpoly (v.adicCompletionIntegers K) x))} :=
+  conductor_mul_differentIdeal _ (v.adicCompletion K) (w.adicCompletion L) x hx
+
 /-- **Layer 5.8, the completed local extension is monogenic** (Serre, *Local Fields*, III §6
 Proposition 12). The residue extension is an extension of finite fields, hence simple; lift a
 residue generator and adjoin a uniformizer. This is what makes Layer 6 self-contained: with a
@@ -722,6 +933,18 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     [w.asIdeal.LiesOver v.asIdeal] :
     ∃ x : w.adicCompletionIntegers L,
       Algebra.adjoin (v.adicCompletionIntegers K) {x} = ⊤ :=
+  sorry
+
+/-- **Layer 5.8, the field-level form of the generator.** ⚠ This, and not the ring-level
+statement above, is the hypothesis `conductor_mul_differentIdeal` takes; the ring-level statement
+is the stronger one and this is the direction that is used. Without it Layer 6.3 has a hypothesis
+it cannot discharge from any named milestone. -/
+example {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (v : HeightOneSpectrum (𝓞 K)) (w : HeightOneSpectrum (𝓞 L))
+    [w.asIdeal.LiesOver v.asIdeal] (x : w.adicCompletionIntegers L)
+    (hx : Algebra.adjoin (v.adicCompletionIntegers K) {x} = ⊤) :
+    Algebra.adjoin (v.adicCompletion K)
+      {algebraMap (w.adicCompletionIntegers L) (w.adicCompletion L) x} = ⊤ :=
   sorry
 
 /-- **Layer 5.9, the different localizes** (Neukirch III (2.2)(iii)), written with the actual
@@ -740,7 +963,7 @@ out.** In the multiplicity normalization pinned by the conventions table, and st
 `finsum` so that no finiteness instance has to be threaded through. This is where every
 exponent computation of Layer 6 lands. -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L] (v : HeightOneSpectrum (𝓞 K)) :
-    multiplicity v.asIdeal (Ideal.relNorm (𝓞 K) (differentIdeal (𝓞 K) (𝓞 L))) =
+    multiplicity v.asIdeal (relDiscr (𝓞 K) (𝓞 L)) =
       ∑ᶠ P ∈ Ideal.primesOver v.asIdeal (𝓞 L),
         Ideal.inertiaDeg v.asIdeal P * multiplicity P (differentIdeal (𝓞 K) (𝓞 L)) :=
   sorry
@@ -817,14 +1040,21 @@ example {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
 `P^{e−1} ∣ 𝔡`): in the tame case `P^e` does *not* divide the different, so `v_P(𝔡) = e − 1`
 exactly.
 
-⚠ Hypotheses. This and the next statement are about a finite **separable** extension of
-fraction fields. Without separability the trace form vanishes, `differentIdeal` is the zero
-ideal, and `v_P(𝔡)` is a junk value. Two Dedekind domains with a finite torsion-free algebra
-between them cannot express that hypothesis, so the prototype is stated for number fields,
-where separability is automatic. The milestone in `README.md` is the AKLB form, with `A`
-Dedekind with fraction field `K`, `[Algebra.IsSeparable K L]`, and `B` the integral closure of
-`A` in `L`; the number-field statement here is its instance and fixes the shape of the
-conclusion. -/
+⚠ Hypotheses, both of them. **(i)** A finite separable extension of fraction fields. Without it
+the trace form vanishes, `differentIdeal` is the zero ideal, and `v_P(𝔡)` is a junk value. Two
+Dedekind domains with a finite torsion-free algebra between them cannot express that hypothesis.
+**(ii)** A separable residue extension `[Algebra.IsSeparable (𝓞 K ⧸ p) (𝓞 L ⧸ P)]`. It does not
+follow from (i): over an imperfect residue field a separable `L/K` can have an inseparable
+residue extension, and then `P ∣ 𝔡` by the pin's `dvd_differentIdeal_of_not_isSeparable` however
+small `e` is, so `v_P(𝔡) = e − 1` fails. `README.md` Layer 6.4 gives the example. Per the
+conventions table, tame means (ii) **and** `ringChar (𝓞 K ⧸ p) ∤ e`, and wild means (ii) and
+`ringChar (𝓞 K ⧸ p) ∣ e`; a prime with an inseparable residue extension is neither.
+
+The `README.md` milestone is the AKLB form, with `A` Dedekind with fraction field `K`,
+`[Algebra.IsSeparable K L]`, `[Algebra.IsSeparable (A ⧸ p) (B ⧸ P)]`, and `B` the integral
+closure of `A` in `L`. The prototype here is its number-field instance, which fixes the shape of
+the conclusion; both hypotheses are automatic there, (i) in characteristic zero and (ii) because
+`𝓞 K ⧸ p` is finite, hence perfect. That is why neither appears below. -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     {p : Ideal (𝓞 K)} [p.IsMaximal] (hp : p ≠ ⊥)
     {P : Ideal (𝓞 L)} [P.IsPrime] [P.LiesOver p]
@@ -837,7 +1067,9 @@ III §6 Prop. 13), with `v_P(e)` the multiplicity of `P` in the ideal generated 
 same normalization as `v_P(𝔡)`. The lower bound is attained at `2` in `ℚ(i)` and the upper
 bound is strict there, which is the dyadic worked example. ⚠ The upper bound is not a
 milestone of another roadmap and is not cited as one. It is proved here, from Layer 5.7 and
-Mathlib's `conductor_mul_differentIdeal`. -/
+Mathlib's `conductor_mul_differentIdeal`. ⚠ The residue-separability hypothesis of the previous
+docstring applies here too: the AKLB milestone carries it, and this number-field instance gets
+it from the finiteness of `𝓞 K ⧸ p`. -/
 example {L : Type*} [Field L] [NumberField L] [Algebra K L]
     {p : Ideal (𝓞 K)} [p.IsMaximal] (hp : p ≠ ⊥)
     {P : Ideal (𝓞 L)} [P.IsPrime] [P.LiesOver p]
@@ -911,9 +1143,35 @@ infinite place has all its archimedean absolute values bounded, so the pin's
 `NumberField.Embeddings.finite_of_norm_le` applies and the candidate set is finite; for a real
 quadratic or a signature-`(1,1)` cubic field this becomes a finite search over integral minimal
 polynomials with bounded coefficients. ⚠ "Mathlib has Dirichlet's unit theorem" is not a proof
-of index one, and no worked example may cite it as one. -/
+of index one, and no worked example may cite it as one. ⚠ Finiteness is also not a certificate:
+the three declarations after this one are what turn it into one. -/
 example (B : ℝ) :
     {u : (𝓞 K)ˣ | ∀ w : NumberField.InfinitePlace K, w ((u : 𝓞 K) : K) ≤ B}.Finite :=
+  sorry
+
+/-- **Layer 7.4, the candidate set.** The monic integer polynomials that can be the minimal
+polynomial of a unit `v` with `1 < w v < B`, as a `Finset`. The coefficient bounds come from the
+conjugates: `∏_w (w v)^{mult w} = 1`, so an upper bound at one place bounds every conjugate above
+and below. -/
+noncomputable def unitCandidates (K : Type*) [Field K] [NumberField K]
+    (w : NumberField.InfinitePlace K) (B : ℝ) : Finset ℤ[X] :=
+  sorry
+
+/-- **Layer 7.4, completeness of the candidate set.** ⚠ This is the half that makes the search
+exhaustive, and it needs `v` to generate `K`: a unit with `w v ≠ 1` is not rational, and for a
+field of prime degree that already forces `ℚ(v) = K` (Layer 7.1). -/
+example (w : NumberField.InfinitePlace K) (B : ℝ) (v : (𝓞 K)ˣ)
+    (h1 : 1 < w ((v : 𝓞 K) : K)) (h2 : w ((v : 𝓞 K) : K) < B) :
+    minpoly ℤ (v : 𝓞 K) ∈ unitCandidates K w B :=
+  sorry
+
+/-- **Layer 7.4, the field test.** The general elimination tool: by Layer 3.3 the minimal
+polynomial of an integral generator has discriminant `index² · discr K`, so a candidate whose
+discriminant is not `discr K` times a square is not a minimal polynomial in `K`. ⚠ Together with
+the root test this is what closes the certificate. Root isolation on its own leaves candidates
+standing; §`Worked_3_1_23_1` exhibits two of them. -/
+example (θ : IntegralPrimitiveElement K) :
+    ∃ m : ℕ, (minpoly ℤ θ.1).discr = (m : ℤ) ^ 2 * NumberField.discr K :=
   sorry
 
 /-- **Layer 7.4, the regulator of a certified generator.** Once the closure statement above
@@ -1061,10 +1319,12 @@ end Worked_4_0_125_1
 
 section Worked_3_1_23_1
 /-! **LMFDB `3.1.23.1`**: the non-Galois cubic `X³ − X² + 1`, `disc = −23` squarefree (so the
-index is `1`), `S₃` Galois closure. The unramified splitting data at `2, 3, 5, 7, 59` are
-instances of Layer 3's Dedekind theorem. ⚠ `23` is ramified, so there is **no** Frobenius
-class and **no** cycle type at `23`; its factorization is a Kummer–Dedekind statement and is
-listed separately below. -/
+index is `1`). The unramified splitting data at `2, 3, 5, 7, 59` are instances of Layer 3's
+Dedekind theorem. ⚠ `23` is ramified, so there is **no** Frobenius class and **no** cycle type
+at `23`; its factorization is a Kummer–Dedekind statement and is listed separately below.
+⚠ Nothing here identifies the Galois group of the Galois closure. No milestone of this roadmap
+supplies the cubic discriminant-square criterion, and recognition of a polynomial Galois group is
+out of scope; the statements below are about `K` itself. -/
 
 variable {θ : 𝓞 K} (hmin : minpoly ℤ θ = X ^ 3 - X ^ 2 + 1)
   (hgen : Algebra.adjoin ℚ {(θ : K)} = ⊤)
@@ -1084,8 +1344,54 @@ example : NumberField.Units.rank K = 1 := sorry
 /-- The explicit unit: `θ·(θ² − θ) = −1`, so `θ² − θ = −θ⁻¹` is a positive unit. -/
 example : θ * (θ ^ 2 - θ) = -1 := sorry
 
-/-- The certification, by Layer 7's criterion and the finite search: `θ² − θ` generates the
-units modulo torsion. Only after this is the regulator value legitimate. -/
+/-! #### The unit certificate for `3.1.23.1`, in four steps
+
+`u = θ² − θ` has `w u ≈ 1.3247` at the real place, and satisfies `u³ − u − 1 = 0`. The
+coefficient bounds of Layer 7.4 give `|a| ≤ 3`, `|b| ≤ 3`, `c = ±1` for the minimal polynomial
+`X³ − aX² + bX − c` of a competing unit, so the candidate set is these `98` polynomials. -/
+
+open scoped Classical in
+/-- **Step 1, the candidate set**, concretely: the monic cubics `X³ − aX² + bX − c` with
+`|a|, |b| ≤ 3` and `c = ±1`. -/
+noncomputable def cubicUnitCandidates : Finset ℤ[X] :=
+  ((Finset.Icc (-3 : ℤ) 3) ×ˢ (Finset.Icc (-3 : ℤ) 3) ×ˢ ({-1, 1} : Finset ℤ)).image
+    fun p => X ^ 3 - C p.1 * X ^ 2 + C p.2.1 * X - C p.2.2
+
+/-- **Step 2, completeness.** A unit strictly between `1` and `u` at the real place has its
+minimal polynomial in the list. Note the degree-`3` step: `v` is not rational, since the rational
+units are `±1`, and `[K : ℚ] = 3` is prime, so `ℚ(v) = K`. -/
+example (w : NumberField.InfinitePlace K) (hw : w.IsReal) (u v : (𝓞 K)ˣ)
+    (hu : (u : 𝓞 K) = θ ^ 2 - θ) (h1 : 1 < w ((v : 𝓞 K) : K))
+    (h2 : w ((v : 𝓞 K) : K) < w ((u : 𝓞 K) : K)) :
+    minpoly ℤ (v : 𝓞 K) ∈ cubicUnitCandidates := sorry
+
+/-- **Step 3, the root test, with its exact outcome.** ⚠ This is where "discard the candidates
+with no root in `(1, w u)`" stops being enough. Fourteen of the `98` have a real root in that
+interval; twelve are reducible, each with `1` or `−1` as a root, and a minimal polynomial is
+irreducible. Exactly two irreducible candidates survive, and `minpoly ℤ u = X³ − X − 1` is not
+among them, since its root in the closed interval is the endpoint `u` itself. -/
+example (w : NumberField.InfinitePlace K) (hw : w.IsReal) (u : (𝓞 K)ˣ)
+    (hu : (u : 𝓞 K) = θ ^ 2 - θ) (g : ℤ[X]) (hg : g ∈ cubicUnitCandidates) (hirr : Irreducible g)
+    (hroot : ∃ x : ℝ, 1 < x ∧ x < w ((u : 𝓞 K) : K) ∧ aeval x g = 0) :
+    g = X ^ 3 + X ^ 2 - 2 * X - 1 ∨ g = X ^ 3 + 2 * X ^ 2 - 3 * X - 1 := sorry
+
+/-- **Step 4, the field test**, which eliminates the two survivors. Their discriminants are
+positive, while Layer 3.3 forces `disc(minpoly v) = index(v)² · (−23) < 0` for every integral
+generator `v` of `K`. -/
+example : (X ^ 3 + X ^ 2 - 2 * X - 1 : ℤ[X]).discr = 49 := sorry
+
+example : (X ^ 3 + 2 * X ^ 2 - 3 * X - 1 : ℤ[X]).discr = 257 := sorry
+
+example (θ' : IntegralPrimitiveElement K) : (minpoly ℤ θ'.1).discr < 0 := sorry
+
+/-- The conclusion of the four steps: no unit lies strictly between `1` and `u`, which is
+Layer 7.4's criterion. -/
+example (w : NumberField.InfinitePlace K) (hw : w.IsReal) (u : (𝓞 K)ˣ)
+    (hu : (u : 𝓞 K) = θ ^ 2 - θ) (v : (𝓞 K)ˣ) :
+    w ((v : 𝓞 K) : K) ≤ 1 ∨ w ((u : 𝓞 K) : K) ≤ w ((v : 𝓞 K) : K) := sorry
+
+/-- The certification, from the four steps above and Layer 7.4's criterion: `θ² − θ` generates
+the units modulo torsion. Only after this is the regulator value legitimate. -/
 example (u : (𝓞 K)ˣ) (hu : (u : 𝓞 K) = θ ^ 2 - θ) :
     Subgroup.closure {u} ⊔ NumberField.Units.torsion K = ⊤ := sorry
 
@@ -1120,7 +1426,13 @@ example : (Ideal.primesOver (Ideal.span {(23 : ℤ)}) (𝓞 K)).ncard = 2 := sor
 `not_dvd_discr_iff_forall_liesOver`); Layer 2's Artin symbol is undefined at such a prime. -/
 example : (23 : ℤ) ∣ NumberField.discr K := sorry
 
-/-- `3.1.23.1` has no proper subfield: no subgroup strictly between `C₂` and `S₃`. -/
+/-- `3.1.23.1` has no proper subfield, so its intermediate-field lattice is `{⊥, ⊤}`. The reason
+is the degree alone: `[K : ℚ] = 3` is prime, so `Module.finrank_mul_finrank` leaves an
+intermediate field with `finrank ℚ M ∈ {1, 3}`, and `IntermediateField.finrank_eq_one_iff` and
+`IntermediateField.finrank_eq_one_iff_eq_top` turn those into `M = ⊥` and `M = ⊤`. ⚠ No Galois
+group is involved, and none is identified anywhere in this section. -/
+example (M : IntermediateField ℚ K) : M = ⊥ ∨ M = ⊤ := sorry
+
 example : Nat.card (IntermediateField ℚ K) = 2 := sorry
 
 end Worked_3_1_23_1
