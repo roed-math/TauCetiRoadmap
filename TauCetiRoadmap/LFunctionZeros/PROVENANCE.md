@@ -33,6 +33,18 @@ Each row is an obligation across roadmap boundaries, not a target.
   argument lift are owned here and exported under *Interfaces supplied to other roadmaps*; a
   future consolidation into the contour roadmap would be a deletion plus an import here, which
   is why the statements are phrased in its vocabulary.
+- **Two of that supplier's hypotheses shaped Layer 7, and both are worth flagging to it.**
+  `IsPwC1ImmersionOn` requires a non-vanishing one-sided derivative on every breakpoint-free
+  piece, which makes the boundary of a degenerate rectangle inadmissible and is why
+  `Rect.Nondegenerate` exists here and is separate from `Rect.Valid`. And
+  `hungerbuhlerWasem_residueTheorem` takes `DifferentiableOn ℂ f (U \ ↑S)` over an explicit
+  finite `S`, not `MeromorphicOn` plus a divisor — a gap that is real rather than cosmetic,
+  since a meromorphic representative may be redefined at an isolated point without changing any
+  order. Layer 7.2a is the bridge, under the hypothesis that every point of nonnegative order
+  is a point of analyticity. Two things that roadmap could add and this one would then delete:
+  a `HasCauchyPV`-to-interval-integral lemma under continuity on the curve (Layer 7.2b here),
+  and the canonical-representative bridge itself, which is generic complex analysis and not
+  L-function mathematics.
 - **The modular forms roadmap's analytic conductor.** Both roadmaps pin Iwaniec–Kowalski
   (5.7), and Layer 2.4 here proves the agreement rather than assuming it. The two
   conventions differ in presentation, not in value: that roadmap writes the newform quantity
@@ -48,19 +60,45 @@ Each row is an obligation across roadmap boundaries, not a target.
   which is the convention Layer 2.3 here needs and states: with the opposite sign the conductor
   translation and the modular-forms agreement are both false. If that roadmap's signs move
   again, Layer 2.3 and its two instance tests are the first things to re-check.
-- **Theorem numbering in the printed sources is not pinned.** The *Sources for the hard
-  milestones* table in the README fixes, for each hard milestone, the source, its hypotheses,
-  the translation into this roadmap's normalization, and the dependence of every constant, but
-  cites chapters and named statements rather than theorem numbers. Someone with physical
-  copies of Iwaniec–Kowalski, Davenport, Titchmarsh, Lang, and Kadiri should replace the
-  chapter references by exact numbers; until then a wrong number is the worse failure mode.
-- **The L-functions roadmap is not yet merged.** Every declaration name this roadmap cites
-  from it (`AnalyticLFunctionData`, `NormalizationTranslation`, `idealCoeff`, and the rest) is
-  pinned against that roadmap's prototype rather than against an accepted file, and
-  `Suggested.lean` here cannot import it. When it lands, the dependency rows become exact
-  imports and the generic `entireCompletion`, `continuedL`, `IsFiniteOrder`, and
-  `analyticConductorAt` signatures should be restated over the accepted record rather than at
-  the ζ instance.
+- **Theorem numbering in the printed sources, now pinned except for one source.** The
+  *Sources for the hard milestones* table in the README fixes, for each hard milestone, the
+  exact source location, its hypotheses, the translation into this roadmap's normalization,
+  the dependence of every constant, and — where no single source proves the displayed theorem
+  — the additional steps as milestones. The numbers were checked against copies of the
+  sources, not recalled: Kadiri Theorem 1.1 with its two displayed regions (1.7) and (1.8) and
+  Corollary 1.2; Titchmarsh Lemma 3.12 (3.12.1), §9.2 and Theorem 9.2, §9.3 and Theorem 9.3
+  with (9.3.1) and (9.3.2), and Theorem 9.4 with (9.4.2) and (9.4.3); Lang ch. XVII §3
+  Theorem 3.1 and Theorem 3.2, the Barner conditions (a), (b), (c) as that section states
+  them, and ch. XV §§4–5; and Davenport's third-edition section numbering (§13 to §21).
+  ⚠ Two corrections came out of that check and are now in the README: Davenport §19 is *The
+  Explicit Formula for `ψ(x,χ)`*, so the `exp(−c√log x)` shape is §18 and §20 rather than
+  §§18–19; and Kadiri's Theorem 1.1 is two statements, "no zeros" for `|Im s| ≥ 1` and "at most
+  one, real and simple" for `|Im s| ≤ 1`, which the earlier row conflated into one.
+  **Still open:** Iwaniec–Kowalski's within-chapter theorem numbers. The chapter-5 section
+  numbering is exact (§5.1 to §5.14 and §5.A, with §5.3 the zero-counting section), but no
+  accessible copy of the body was found, so the two rows citing it cite the section. Neither
+  row's proof route depends on the number. Someone with a physical copy should finish this one
+  item.
+- **The L-functions roadmap is not yet merged, and that is the last blocker.** Every
+  declaration name this roadmap cites from it (`AnalyticLFunctionData`,
+  `HasMeromorphicContinuation` and its `regular_away` field, `NormalizationTranslation`,
+  `idealCoeff`, `idealVonMangoldt`, `riemannZetaData`, and the rest) is pinned against that
+  roadmap's prototype rather than against an accepted file, and `Suggested.lean` here cannot
+  import it. The dependency table now names each crossing exactly and marks *unnamed* every
+  crossing that roadmap states as an anonymous `example`; those marks are the list of names
+  owed there, and they are as much a blocker as the merge, since an anonymous example is not a
+  declaration contract. When it lands, the following are added to `Suggested.lean` and are the
+  exact remaining Lean work:
+  - generic `entireCompletion` over the record, replacing the ζ-only existential;
+  - generic `invGammaFactor` and the regularized `continuedL`, with the order formula, the
+    analyticity clause, and the ζ value test;
+  - `dualData`, and the functional equation of `continuedL` against it — ⚠ that record is an
+    object the L-functions roadmap should own, since it names `dualCompleted` but no dual
+    record; it is built here so that nothing waits, and it is a candidate to move there;
+  - `IsFiniteOrder`, record-level `analyticConductorAt`, and the normalization transport of
+    both the conductor and `continuedL` (Layer 2.3);
+  - the Dedekind and Hecke instance bridges of Layer 1.6, which are the two comparison
+    theorems that cannot be stated at all until that roadmap names its continued objects.
 
 ## What is in motion elsewhere
 

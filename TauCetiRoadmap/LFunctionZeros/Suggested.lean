@@ -16,22 +16,34 @@ order of an entire function, no Hadamard factorization, no zero counting, no zer
 and no way to say that a list of zeros is complete. We build that in `TauCeti/`.
 
 The file states pin-elaborating targets from **Layer 0** (order, the entire completion, and
-vertical-strip growth), **Layer 1** (Stirling and the branch of `log Γ`), **Layer 2** (the
-three conductors), **Layer 4** (the two counts through `MeromorphicOn.divisor`), **Layer 6**
-(the zero-free region), **Layer 7** (Riemann–von Mangoldt), and **Layer 9** (certificates and
-`GRH`), stated with `sorry` against the pinned Mathlib and, wherever possible, for the Riemann
-zeta function, whose completed form is the one instance that exists at the pin. Milestones
-whose statements need the L-functions roadmap's data record, or objects no layer has built yet
-— Hadamard factorization, the explicit formula, the Dedekind and Hecke instances of the
-zero-free region — are in `README.md` only, and are added here as those types become
-expressible.
+vertical-strip growth), **Layer 1** (Stirling, the branch of `log Γ`, and the continued
+uncompleted L-function), **Layer 2** (the three conductors), **Layer 3** (the pole-cleared
+convexity route), **Layer 4** (the two counts through `MeromorphicOn.divisor`), **Layer 6**
+(the zero-free region), **Layer 7** (the rectangle contour and Riemann–von Mangoldt), and
+**Layer 9** (certificates and `GRH`), stated with `sorry` against the pinned Mathlib and,
+wherever possible, for the Riemann zeta function, whose completed form is the one instance
+that exists at the pin. Milestones whose statements need the L-functions roadmap's data record,
+or objects no layer has built yet — the generic `entireCompletion`, the generic `continuedL`
+and its dual record, `IsFiniteOrder`, the record-level `analyticConductorAt`, the
+normalization transport, Hadamard factorization, the explicit formula, and the Dedekind and
+Hecke instance bridges — are in `README.md` only. ⚠ They are not omitted by choice: that
+roadmap is not yet accepted, so this file cannot import it, and `PROVENANCE.md` records the
+exact list. Each is added here as the corresponding type becomes expressible.
 
-⚠ Two conventions carry most of the weight, and both are stated in the README's conventions
-table. Zeros and poles are read off `meromorphicOrderAt` and never off the value `f z`, which
-at a pole is a junk value (`Complex.Gamma` and `Gammaℝ` are assigned `0` at theirs). And the
-signed `divisorCount`, which the argument principle computes, is a different object from the
-natural-valued `zeroCount`, which certificates and `N(T)` use; they agree only on regions with
-no poles.
+⚠ Four conventions carry most of the weight, and all four are in the README's conventions
+table.
+
+1. Zeros and poles are read off `meromorphicOrderAt` and never off the value `f z`, which at a
+   pole is a junk value (`Complex.Gamma` and `Gammaℝ` are assigned `0` at theirs).
+2. And conversely: `meromorphicOrderAt f z = 0` is a punctured-germ condition and constrains
+   no value, no derivative, and no continuity at `z`. It is the right hypothesis for a *count*
+   and the wrong one for anything evaluated pointwise; see
+   `meromorphicOrderAt_zero_not_pointwise`.
+3. The signed `divisorCount`, which the argument principle computes, is a different object
+   from the natural-valued `zeroCount`, which certificates and `N(T)` use; they agree only on
+   regions with no poles.
+4. `Rect.Valid` carries the sets and the counts; `Rect.Nondegenerate` carries every geometric
+   statement, because the supplier's curve regularity forbids a constant edge.
 -/
 
 namespace TauCetiRoadmap.LFunctionZeros
@@ -80,19 +92,7 @@ example :
       (∀ s : ℂ, s ≠ 0 → s ≠ 1 → g s = s * (s - 1) * completedRiemannZeta s) ∧
       g 0 ≠ 0 ∧ g 1 ≠ 0 ∧ OrderLE g 1 := sorry
 
-/-- **Layer 0.6, the continued uncompleted L-function.** ⚠ The data record carries the
-coefficients and a total representative of the *completed* continuation, and `LSeries` is a
-junk value off its half-plane of convergence, so no statement about `L` at `1/2 + it` may be
-phrased through the series. The milestone is the meromorphic object that agrees with the
-series where the series is meaningful and satisfies the completed identity everywhere; at the
-ζ instance it is `riemannZeta`, and this example pins the shape the general construction must
-have over the L-functions roadmap's record. -/
-example :
-    ∃ L : ℂ → ℂ, MeromorphicOn L Set.univ ∧
-      (∀ s : ℂ, 1 < s.re → L s = LSeries (fun _ ↦ 1) s) ∧
-      (∀ s : ℂ, s ≠ 0 → s ≠ 1 → completedRiemannZeta s = Gammaℝ s * L s) := sorry
-
-/-! ## Layer 1: Stirling asymptotics for the gamma factors -/
+/-! ## Layer 1: Stirling asymptotics, and the continued L-function -/
 
 /-- **Layer 1.1, a holomorphic branch of `log Γ` on a sector.** Route:
 `Complex.exists_continuousOn_eqOn_exp_comp` on the sector, which is open and simply connected
@@ -127,6 +127,68 @@ shifts, and the statement is about `meromorphicOrderAt`, never about the value: 
 `Gammaℝ` the total representative is `0`, which is why `Gammaℝ_eq_zero_iff` must not be read
 as a vanishing statement. -/
 example (n : ℕ) : meromorphicOrderAt Gammaℝ (-2 * n) = (-1 : WithTop ℤ) := sorry
+
+/-- **Layer 1.6, the analytic reciprocal of the gamma factor.** `Gammaℝ` has no zeros, so
+`1 / Gammaℝ` is analytic off the poles and extends analytically across each of them by the
+value `0`. This entire function is what `continuedL` is built from, and it is what replaces
+every division by a gamma factor: the pointwise quotient `Λ s / Gammaℝ s` divides by the junk
+value `Gammaℝ (-2n) = 0` at each pole, while this product does not. -/
+example :
+    ∃ g : ℂ → ℂ, Differentiable ℂ g ∧
+      (∀ s : ℂ, Gammaℝ s ≠ 0 → g s * Gammaℝ s = 1) ∧
+      (∀ n : ℕ, g (-2 * n) = 0) := sorry
+
+/-- **Layer 1.6, the continued uncompleted L-function.** ⚠ The data record carries the
+coefficients and a total representative of the *completed* continuation, and `LSeries` is a
+junk value off its half-plane of convergence, so no statement about `L` at `1/2 + it` may be
+phrased through the series. ⚠ And this is **not** the raw quotient. The last two conjuncts are
+what a raw quotient fails: `analyticAt` is what later layers need in order to evaluate the
+function at all, and the value at `0` is where the ζ instance separates the two constructions.
+The milestone over the L-functions roadmap's record is this shape with `Gammaℝ` replaced by
+`d.gammaFactor` and the conductor power restored; at the ζ instance the object is
+`riemannZeta`. -/
+example :
+    ∃ L : ℂ → ℂ, MeromorphicOn L Set.univ ∧
+      (∀ s : ℂ, 1 < s.re → L s = LSeries (fun _ ↦ 1) s) ∧
+      (∀ s : ℂ, Gammaℝ s ≠ 0 → completedRiemannZeta s = Gammaℝ s * L s) ∧
+      (∀ z : ℂ, 0 ≤ meromorphicOrderAt L z → AnalyticAt ℂ L z) ∧
+      L 0 = -1 / 2 := sorry
+
+/-- **Layer 1.6, the completed identity is an equality of germs, not of values.** ⚠ The
+hypothesis `Gammaℝ s ≠ 0` above is not decoration. At a pole of `Gammaℝ` the pointwise product
+`Gammaℝ s * L s` multiplies the junk value `0` by the compensating trivial zero of `L` and
+gives `0`, while `Λ` is analytic and *nonzero* there — that is what "the trivial zeros are not
+zeros of `Λ`" means. So the global identity of Layer 1.6 is an identity of meromorphic germs,
+and its pointwise form holds exactly off the gamma poles. `s = -2` is the smallest witness. -/
+example : completedRiemannZeta (-2) ≠ Gammaℝ (-2) * riemannZeta (-2) := sorry
+
+/-- **Layer 1.6, the ζ instance names the object**: the construction must produce
+`riemannZeta` itself, not merely something with its germs. -/
+example :
+    ∃ L : ℂ → ℂ, (∀ s : ℂ, Gammaℝ s ≠ 0 → completedRiemannZeta s = Gammaℝ s * L s) ∧
+      (∀ z : ℂ, 0 ≤ meromorphicOrderAt L z → AnalyticAt ℂ L z) ∧
+      L = riemannZeta := sorry
+
+/-- **Layer 1.6, why the raw quotient is wrong**, as a refutation rather than a warning. Both
+`completedRiemannZeta` and `Gammaℝ` have a simple pole at `s = 0`, so the continued `ζ` is
+regular there with the value `-1/2` (`riemannZeta_zero`); the pointwise quotient divides by the
+junk value `Gammaℝ 0 = 0` and is therefore `0`. The pin's own `riemannZeta_def_of_ne_zero`
+carries the hypothesis `s ≠ 0` for exactly this reason. A `continuedL` defined as the quotient
+satisfies every other clause above and fails this one. -/
+example : completedRiemannZeta 0 / Gammaℝ 0 ≠ riemannZeta 0 := sorry
+
+/-- **Layer 1.6, the functional equation is against the *dual* record.** ⚠ Over the
+L-functions roadmap's record this relates `continuedL d` to `continuedL (dualData d)`, where
+`dualData` conjugates the coefficients, the shifts, and the root number; it is a self-relation
+only for a self-dual record, and a non-real finite-order Hecke character is the test that
+catches the difference. The ζ record is self-dual, so at the pin the statement collapses to
+the pin's own `riemannZeta_one_sub`, and this example records the shape rather than the test:
+the general form is an equality of *products*, never of quotients, so that no junk division
+appears at a pole of either gamma factor. ⚠ Both gamma factors must be hypothesised nonzero,
+and not only the one at `s`: at `s = 3` the point `1 - s = -2` is a pole of `Gammaℝ`, the left
+side is `0 * 0`, and the right side is not `0`. -/
+example (s : ℂ) (hs : Gammaℝ s ≠ 0) (hs' : Gammaℝ (1 - s) ≠ 0) :
+    Gammaℝ (1 - s) * riemannZeta (1 - s) = Gammaℝ s * riemannZeta s := sorry
 
 /-! ## Layer 2: the three conductors -/
 
@@ -168,6 +230,44 @@ data (`N = 1`, one real gamma factor at shift `0`), where it is a bound on `|t| 
 example :
     (fun t : ℝ ↦ analyticConductorAt 1 {0} 0 (t * I)) =Θ[atTop] fun t : ℝ ↦ |t| := sorry
 
+/-! ## Layer 3: convexity, on the pole-cleared *uncompleted* function
+
+⚠ The interpolation is run on `continuedL`, never on the completed function. Layer 1.5 gives
+`|γ(σ + it)| = exp(-π d |t| / 4) |t|^{A(σ) + o(1)}`, so a polynomial bound for `Λ` — which is
+true, and is what Layer 0.4 proves — divides to give a bound for `L` carrying `exp(+π d |t|/4)`.
+That is exponentially growing, not `q^{1/4 + ε}`, and no choice of polynomial exponent repairs
+it. The two edges below are polynomial in the analytic conductor with no exponential in either,
+and the only division at the end is by the polynomial clearing the poles. -/
+
+/-- **Layer 3.3, the pole-cleared strip bound**, at the ζ instance, where the clearing
+polynomial is `s - 1` and the arithmetic conductor is `1`. The exponent is the linear
+interpolation between `0` at `Re s = 1 + δ` (absolute convergence) and `1/2 + δ` at
+`Re s = -δ` (the functional equation against the dual, with the two gamma exponentials
+cancelling inside the quotient). ⚠ The factor `1 + |s.im|` is the clearing polynomial's own
+growth and is not slack; dropping it makes the statement false on the right edge, where
+`‖(s - 1) ζ(s)‖ ≍ |t|`. -/
+example (δ : ℝ) (hδ : 0 < δ) (hδ' : δ < 1 / 2) :
+    ∃ C : ℝ, 0 < C ∧ ∀ s : ℂ, -δ ≤ s.re → s.re ≤ 1 + δ →
+      ‖(s - 1) * riemannZeta s‖ ≤
+        C * (1 + |s.im|) *
+          (|s.im| + 3) ^ ((1 / 2 + δ) * (1 + δ - s.re) / (1 + 2 * δ)) := sorry
+
+/-- **Layer 3.3, the central-line convexity bound**, the corollary at `σ = 1/2` where the
+interpolated exponent `(1/2 + δ)(1/2 + δ)/(1 + 2δ)` is exactly `1/4 + δ/2`. The clearing
+polynomial is divided out here because its only root, `s = 1`, is off the critical line.
+⚠ Subconvexity is out of scope: no milestone improves `1/4`. -/
+example (ε : ℝ) (hε : 0 < ε) :
+    ∃ C : ℝ, 0 < C ∧ ∀ t : ℝ,
+      ‖riemannZeta (1 / 2 + t * I)‖ ≤ C * (|t| + 3) ^ (1 / 4 + ε) := sorry
+
+/-- **Layer 3.3, the wide-strip corollary above the polar heights**, which is the shape Layer
+4.7 consumes on `Re s ∈ [-2, 6]` to keep the gamma exponential in the numerator of the Jensen
+ratio. ⚠ The height threshold is what keeps the clearing polynomial bounded away from `0`. -/
+example (a b : ℝ) :
+    ∃ C B T₀ : ℝ, 0 < C ∧ 0 ≤ B ∧ 0 ≤ T₀ ∧
+      ∀ s : ℂ, a ≤ s.re → s.re ≤ b → T₀ ≤ |s.im| →
+        ‖riemannZeta s‖ ≤ C * (|s.im| + 3) ^ B := sorry
+
 /-! ## Layer 4: the two counts -/
 
 /-- **Layer 4.1, the signed divisor count** of `f` over a region `R`, for `f` meromorphic on
@@ -189,10 +289,12 @@ noncomputable def zeroCount (f : ℂ → ℂ) (U R : Set ℂ) : ℕ :=
 
 /-- **The closed rectangle** `[σ₁, σ₂] × [t₁, t₂]`, as a four-real bundle over the exact set
 expression the conventions table pins. Closed rectangles with regular boundary carry contour
-integrals and certificates. The ordering of the endpoints is `Rect.Valid` rather than a
+integrals and certificates. The ordering of the endpoints is a predicate rather than a
 structure field, so that the definitions below stay total: `Set.Icc` of a reversed pair is
-empty, so an invalid rectangle has empty region and count `0`, and validity is carried
-explicitly by every statement that needs it. -/
+empty, so an invalid rectangle has empty region and count `0`, and the ordering is carried
+explicitly by every statement that needs it. ⚠ Two predicates, and they are not
+interchangeable: `Rect.Valid` for sets and counts, `Rect.Nondegenerate` for everything
+geometric. -/
 structure Rect where
   /-- Left edge. -/
   σ₁ : ℝ
@@ -206,9 +308,24 @@ structure Rect where
 /-- The underlying set of a closed rectangle. -/
 def Rect.toSet (B : Rect) : Set ℂ := Set.Icc B.σ₁ B.σ₂ ×ℂ Set.Icc B.t₁ B.t₂
 
-/-- The endpoints of a rectangle are in order. Required wherever the geometry matters: the
-boundary of an invalid rectangle is not the four edges, and its interior is empty. -/
+/-- The endpoints of a rectangle are in order. This is the predicate the *set and count*
+statements carry: `Set.Icc` of a reversed pair is empty, so a reversed rectangle has empty
+region and count `0`, and `Rect.Valid` is what makes a subdivision or a certificate mean what
+it says. ⚠ It is **not** enough for anything geometric; see `Rect.Nondegenerate`. -/
 def Rect.Valid (B : Rect) : Prop := B.σ₁ ≤ B.σ₂ ∧ B.t₁ ≤ B.t₂
+
+/-- The endpoints of a rectangle are in **strict** order. This is the predicate every contour,
+winding-number, null-homology and argument-principle statement carries.
+⚠ `Rect.Valid` is false-making here, not merely weak. `IsPwC1ImmersionOn` demands a non-zero
+one-sided derivative on every breakpoint-free piece, and if `σ₁ = σ₂` the two horizontal edges
+of `rectBoundary` are constant maps whose `derivWithin` vanishes identically on a whole piece;
+a point rectangle makes all four edges constant. The interior-winding statement is also
+vacuous under `Valid`, since a degenerate rectangle has empty interior. -/
+def Rect.Nondegenerate (B : Rect) : Prop := B.σ₁ < B.σ₂ ∧ B.t₁ < B.t₂
+
+/-- Nondegenerate rectangles are valid, so the counting API applies to them unchanged. -/
+theorem Rect.Valid.of_nondegenerate {B : Rect} (h : B.Nondegenerate) : B.Valid :=
+  ⟨h.1.le, h.2.le⟩
 
 /-- The half-open rectangle `[σ₁, σ₂] × (t₁, t₂]`, which is what exact partitions and `N(T)`
 use: a zero on a shared horizontal edge is counted once rather than twice. -/
@@ -304,42 +421,131 @@ example (ρ : ℂ) (hρ : 0 < MeromorphicOn.divisor completedRiemannZeta Set.uni
 `hungerbuhlerWasem_residueTheorem`, not its Layer 2: its pinned `argumentPrinciple` and
 `classicalResidueTheorem_circle` are stated for a circle, and a rectangle is not one. The
 declarations below are stated against its exact types, so the contract is machine-checked
-rather than promised in prose. -/
+rather than promised in prose, and they are **named** rather than anonymous because they are
+this roadmap's exported interface — an `example` is not a declaration contract.
+
+⚠ Two hypotheses run through all of them and neither may be weakened.
+`Rect.Nondegenerate`, because the supplier's curve regularity forbids a constant edge; and
+pointwise `AnalyticAt ℂ f z ∧ f z ≠ 0` on the boundary, because
+`meromorphicOrderAt f z = 0` is a condition on the punctured germ that constrains no value.
+See `meromorphicOrderAt_zero_not_pointwise` below for the countermodel. -/
 
 open TauCetiRoadmap.ContourIntegration
 
 /-- **Layer 7.1, the rectangle boundary as a contour**: the positively oriented boundary of a
-closed rectangle, parametrized on `[0, 4]` with one edge per unit interval. -/
+closed rectangle, parametrized on `[0, 4]` with one edge per unit interval, so that the
+breakpoint witness `IsPwC1ImmersionOn` asks for is `{1, 2, 3}`. -/
 noncomputable def rectBoundary (B : Rect) : ℝ → ℂ := sorry
 
+/-- **Layer 7.1, the boundary curve traces the frontier**, which is what lets the pointwise
+boundary hypotheses below be applied at each `rectBoundary B t`. -/
+theorem rectBoundary_mem_frontier {B : Rect} (hB : B.Nondegenerate) {t : ℝ}
+    (ht : t ∈ Set.Icc (0 : ℝ) 4) : rectBoundary B t ∈ frontier B.toSet := sorry
+
 /-- **Layer 7.1, the curve structure the supplier's theorem hypothesizes**: a closed
-piecewise-`C¹` immersion, the corners being the piece boundaries. -/
-example (B : Rect) (hB : B.Valid) :
+piecewise-`C¹` immersion, the corners being the piece boundaries. ⚠ The hypothesis is
+`Rect.Nondegenerate`, and under `Rect.Valid` alone the statement is **false**: a rectangle
+with a zero-length edge has a constant edge, whose `derivWithin` vanishes on a whole piece,
+contradicting the non-vanishing tangent `IsPwC1ImmersionOn` requires. -/
+theorem isPwC1ImmersionOn_rectBoundary {B : Rect} (hB : B.Nondegenerate) :
     IsPwC1ImmersionOn (rectBoundary B) 0 4 ∧ rectBoundary B 0 = rectBoundary B 4 := sorry
 
-/-- **Layer 7.1, the winding numbers**: `1` inside, `0` outside. -/
-example (B : Rect) (hB : B.Valid) (z : ℂ) (hz : z ∈ interior B.toSet) :
-    windingNumber (rectBoundary B) 0 4 z = 1 := sorry
+/-- **Layer 7.1, the winding number inside**: `1` about each interior point. -/
+theorem windingNumber_rectBoundary_of_mem_interior {B : Rect} (hB : B.Nondegenerate) {z : ℂ}
+    (hz : z ∈ interior B.toSet) : windingNumber (rectBoundary B) 0 4 z = 1 := sorry
+
+/-- **Layer 7.1, the winding number outside**: `0` about each point off the closed rectangle.
+Together with the previous theorem this is what collapses the supplier's weighted residue sum
+to a count over the rectangle. -/
+theorem windingNumber_rectBoundary_of_not_mem {B : Rect} (hB : B.Nondegenerate) {z : ℂ}
+    (hz : z ∉ B.toSet) : windingNumber (rectBoundary B) 0 4 z = 0 := sorry
 
 /-- **Layer 7.1, null-homology**, the hypothesis `hungerbuhlerWasem_residueTheorem` takes. -/
-example (B : Rect) (hB : B.Valid) (U : Set ℂ) (hU : B.toSet ⊆ U) :
-    IsNullHomologous (rectBoundary B) 0 4 U := sorry
+theorem isNullHomologous_rectBoundary {B : Rect} (hB : B.Nondegenerate) {U : Set ℂ}
+    (hU : B.toSet ⊆ U) : IsNullHomologous (rectBoundary B) 0 4 U := sorry
 
 /-- **Layer 7.2, the local bridge**: the residue of the logarithmic derivative is the order.
 This is what turns the supplier's weighted residue sum into a divisor count. -/
-example (f : ℂ → ℂ) (z : ℂ) (n : ℤ) (hf : MeromorphicAt f z)
+theorem residue_logDeriv_eq_order {f : ℂ → ℂ} {z : ℂ} {n : ℤ} (hf : MeromorphicAt f z)
     (hn : meromorphicOrderAt f z = (n : WithTop ℤ)) :
     residue (logDeriv f) z = (n : ℂ) := sorry
 
 /-- **Layer 7.2, the argument principle on a rectangle**, as the specialization of
-`hungerbuhlerWasem_residueTheorem` to `logDeriv f` on `rectBoundary B`. Its conclusion is a
-Cauchy principal value; a separate milestone identifies that with the ordinary contour
-integral, since the integrand is continuous on the boundary under `hbdry`. -/
-example (f : ℂ → ℂ) (U : Set ℂ) (B : Rect) (hU : IsOpen U) (hB : B.Valid)
-    (hBU : B.toSet ⊆ U) (hf : MeromorphicOn f U)
-    (hbdry : ∀ z ∈ frontier B.toSet, meromorphicOrderAt f z = 0) :
+`hungerbuhlerWasem_residueTheorem` to `logDeriv f` on `rectBoundary B`, stated against an
+**explicit finite singular set** and with the supplier's actual hypotheses.
+
+⚠ `MeromorphicOn f U` plus a divisor does **not** give the supplier's
+`hf : DifferentiableOn ℂ (logDeriv f) (U \ ↑S)`; `hanalytic` and `hsupp` are what do, and
+`hsupp` is also where finiteness of `S` comes from. ⚠ `hbdry` is pointwise. The conclusion is
+a Cauchy principal value with the supplier's generalized winding weights;
+`windingNumber_rectBoundary_of_mem_interior` collapses them, and
+`intervalIntegral_of_hasCauchyPV` turns the principal value into an ordinary integral. -/
+theorem hasCauchyPV_rectBoundary_logDeriv {f : ℂ → ℂ} {U : Set ℂ} {B : Rect} {S : Finset ℂ}
+    {ord : ℂ → ℤ}
+    (hU : IsOpen U) (hB : B.Nondegenerate) (hBU : B.toSet ⊆ U) (hSU : (S : Set ℂ) ⊆ U)
+    (hSbdry : ∀ s ∈ S, s ∉ frontier B.toSet)
+    (hanalytic : AnalyticOnNhd ℂ f (U \ (S : Set ℂ)))
+    (hmero : ∀ s ∈ S, MeromorphicAt f s)
+    (hord : ∀ s ∈ S, meromorphicOrderAt f s = (ord s : WithTop ℤ))
+    (hsupp : ∀ z ∈ U, meromorphicOrderAt f z ≠ 0 → z ∈ S)
+    (hbdry : ∀ z ∈ frontier B.toSet, AnalyticAt ℂ f z ∧ f z ≠ 0) :
     HasCauchyPV (rectBoundary B) 0 4 (logDeriv f)
-      (2 * (Real.pi : ℂ) * Complex.I * (divisorCount f U B.toSet : ℂ)) := sorry
+      (2 * (Real.pi : ℂ) * Complex.I *
+        ∑ s ∈ S, windingNumber (rectBoundary B) 0 4 s * (ord s : ℂ)) := sorry
+
+/-- **Layer 7.2b, from the principal value to the ordinary integral.** The supplier's
+conclusion is a `HasCauchyPV`, not an interval integral, and nothing connects Layer 7's
+statements to Layer 9's counts without this. Continuity of the integrand on the image of the
+curve is what `AnalyticAt ℂ f z ∧ f z ≠ 0` on the boundary supplies and what the order
+condition alone does not. -/
+theorem intervalIntegral_of_hasCauchyPV {γ : ℝ → ℂ} {a b : ℝ} {g : ℂ → ℂ} {v : ℂ}
+    (hγ : IsPiecewiseC1On γ a b) (hcont : ContinuousOn g (γ '' Set.uIcc a b))
+    (h : HasCauchyPV γ a b g v) :
+    ∫ t in a..b, deriv γ t • g (γ t) = v := sorry
+
+/-- **Layer 7.2a, the canonical-representative bridge**, which is what connects the argument
+principle to the divisor language every other layer uses.
+
+⚠ `hcanon` is the load-bearing hypothesis and is not implied by `hf`: `MeromorphicAt` is a
+punctured-germ condition, so a representative may be redefined at one point without changing
+any order, and the defect is invisible to `MeromorphicOn.divisor`. With `hcanon`, the
+order-zero boundary condition upgrades to `AnalyticAt` there, and an analytic function of
+order `0` at a point is nonzero there — so `hcanon` and `hbdry` together give both pointwise
+facts that `hasCauchyPV_rectBoundary_logDeriv` needs. The L-functions roadmap's records
+satisfy `hcanon` through their `regular_away` field, and `entireCompletion` and `continuedL`
+inherit it from Layers 0.2 and 1.6. -/
+theorem intervalIntegral_logDeriv_eq_divisorCount {f : ℂ → ℂ} {U : Set ℂ} {B : Rect}
+    (hU : IsOpen U) (hB : B.Nondegenerate) (hBU : B.toSet ⊆ U)
+    (hf : MeromorphicOn f U)
+    (hcanon : ∀ z ∈ U, 0 ≤ meromorphicOrderAt f z → AnalyticAt ℂ f z)
+    (hfin : {z ∈ U | meromorphicOrderAt f z ≠ 0}.Finite)
+    (hbdry : ∀ z ∈ frontier B.toSet, meromorphicOrderAt f z = 0) :
+    ∫ t in (0:ℝ)..4, deriv (rectBoundary B) t • logDeriv f (rectBoundary B t) =
+      2 * (Real.pi : ℂ) * Complex.I * (divisorCount f U B.toSet : ℂ) := sorry
+
+/-- **The countermodel that makes `hcanon` and the pointwise boundary hypotheses necessary.**
+Take `f` equal to `1` except at one point, where it is `0`. Every germ condition holds — `f` is
+meromorphic everywhere, every order is `0`, the divisor is identically `0` — and yet `f` is not
+continuous, `logDeriv f` is undefined at that point, and the image of any path through it meets
+`0`. So `meromorphicOrderAt f z = 0` on a boundary implies neither analyticity there nor
+non-vanishing there, and the argument lift of 7.3 does not exist for this `f`. -/
+theorem meromorphicOrderAt_zero_not_pointwise :
+    ∃ f : ℂ → ℂ, (∀ z : ℂ, MeromorphicAt f z) ∧ (∀ z : ℂ, meromorphicOrderAt f z = 0) ∧
+      (∀ z : ℂ, MeromorphicOn.divisor f Set.univ z = 0) ∧
+      ¬ Continuous f ∧ (∃ z : ℂ, f z = 0) := sorry
+
+/-- **Layer 7.3, the continuous argument lift.** ⚠ The hypothesis is pointwise analyticity and
+non-vanishing on the boundary, which is what makes the image curve continuous and `0`-avoiding;
+under `meromorphicOrderAt f z = 0` alone the conclusion is false, by
+`meromorphicOrderAt_zero_not_pointwise`. ⚠ No basepoint value may be asserted: `θ 0` is *some*
+argument of `f (rectBoundary B 0)`, and every statement downstream uses only a difference
+`θ b - θ a`, which is independent of the choice. -/
+theorem exists_argLift_rectBoundary {f : ℂ → ℂ} {B : Rect} (hB : B.Nondegenerate)
+    (hbdry : ∀ z ∈ frontier B.toSet, AnalyticAt ℂ f z ∧ f z ≠ 0) :
+    ∃ θ : ℝ → ℝ, ContinuousOn θ (Set.Icc 0 4) ∧
+      ∀ t ∈ Set.Icc (0 : ℝ) 4,
+        f (rectBoundary B t) =
+          (‖f (rectBoundary B t)‖ : ℂ) * Complex.exp (θ t * Complex.I) := sorry
 
 /-! ## Layer 7: the Riemann–von Mangoldt formula -/
 
@@ -364,7 +570,13 @@ stops an omitted zero from cancelling an omitted pole in a signed total — with
 the natural-valued `zeroCount`. Boundary regularity is `meromorphicOrderAt f z = 0`, not
 `f z ≠ 0`, because a total representative takes a junk value at a pole and `f z ≠ 0` neither
 excludes one nor is implied by regularity. And disjointness is of *interiors*, since abutting
-rectangles are the normal case and their shared edge is zero-free by the boundary hypothesis. -/
+rectangles are the normal case and their shared edge is zero-free by the boundary hypothesis.
+⚠ `Rect.Valid` is the right predicate here, and the germ-level `regular_frontier` is the right
+boundary condition: certificate semantics is about counts, and a count is a statement about
+germs. It follows that a certificate does **not** on its own license the contour evaluation of
+Layer 7 — that needs `Rect.Nondegenerate` and pointwise analyticity and non-vanishing on the
+boundary, and the bridge is `intervalIntegral_logDeriv_eq_divisorCount` under its `hcanon`
+hypothesis. -/
 structure HasZerosInRects (f : ℂ → ℂ) (U : Set ℂ) (R : Rect) (boxes : List Rect)
     (mult : List ℕ) : Prop where
   /-- The ambient set is open. -/
