@@ -7,22 +7,15 @@ valuations, the factorization calculus `FractionalIdeal.count` (an unlabelled is
 with its conductor formula, `Ideal.sum_ramification_inertia`, Kähler differentials with the
 full smooth/étale/separability dictionary, and even an Ostrowski theorem classifying the
 places of `RatFunc K` over an arbitrary field `K` — and **no theory of algebraic curves at
-all**: a whole-library grep finds **zero** occurrences of `genus`, zero of `Riemann–Roch`,
-zero divisor types of any kind (every `divisor` hit in `Mathlib/AlgebraicGeometry/` is
-`NoZeroDivisors`), no degree of a closed point, no `L(D)`, no canonical divisor, no Weil
-differentials or repartitions, no product formula for function fields, and no
-Riemann–Hurwitz. The in-flight modular-curves roadmap
-([PR #81](https://github.com/TauCetiProject/TauCetiRoadmap/pull/81), Katz–Mazur,
-C. Birkbeck) names this gap as its one assumed input:
+all**: no genus, no Riemann–Roch theorem, no divisor type of any kind, no degree of a
+closed point, no `L(D)`, no canonical divisor, no Weil differentials or repartitions, no
+product formula for function fields, and no Riemann–Hurwitz. Everything downstream of a
+curve — elliptic-curve arithmetic beyond the group law, the geometry of modular and
+Shimura curves, Jacobians, function fields of positive characteristic, Goppa codes —
+eventually stands on this theory, and Riemann–Roch has been a named target of the Lean
+community for years.
 
-> **Riemann–Roch and the coherent cohomology of curves** — an independent formalization
-> effort is building these, so this roadmap never constructs them: the critical path to the
-> modular curves does not use them at all, and the one milestone that mathematically needs
-> them (Layer 1's genus-`1` ⟹ locally-Weierstrass converse) is stated against an **assumed
-> Riemann–Roch interface**, an explicit hypothesis to be discharged by that external work
-> when it lands.
-
-This roadmap is that external work. It builds the theory of algebraic function fields of
+This roadmap builds the theory of algebraic function fields of
 one variable — places, divisors, the class group, Riemann–Roch spaces `L(D)` and `ℓ(D)`,
 the genus, **Riemann–Roch** proved with Weil differentials and the canonical class by the
 adele/repartition argument, its consequences (the `deg > 2g − 2` regime, Clifford,
@@ -46,12 +39,13 @@ scheme divisors, coherent cohomology, and Serre duality on the way to `Pic⁰` (
 A–B state Riemann–Roch as `χ(L) = deg L + 1 − g` with `g := dim H¹(X, 𝒪_X)`), and this
 roadmap's final layer carries the **comparison contract** identifying the two theories over
 the curves ↔ function-fields dictionary, so the two routes meet instead of duplicating
-(§Provenance). Elliptic curves are deliberately *not* redeveloped here: the in-flight
-[elliptic-curves roadmap (PR #68)](https://github.com/TauCetiProject/TauCetiRoadmap/pull/68)
+(§Provenance). Elliptic curves are deliberately *not* redeveloped here: the merged
+[EllipticCurves](../EllipticCurves/README.md) roadmap
 owns the arithmetic of `WeierstrassCurve.FunctionField` and proves everything it needs
-"with no Riemann–Roch anywhere"; this roadmap supplies the *general* theory its Layer-0
-place-and-divisor interface instantiates, with named compatibility milestones
-(§Provenance).
+"with no Riemann–Roch anywhere"; its Layer 0 builds places and divisors for Weierstrass
+function fields concretely, leaving the implementation "to the upstream coordination" —
+this roadmap supplies the *general* theory those places instantiate, with named
+compatibility milestones (§Provenance).
 
 Suggested home: `TauCeti/FieldTheory/FunctionField/`, with subdirectories per layer
 (`Place/`, `RatFunc/`, `AffineModel/`, `Divisor/`, `RiemannRoch/`, `Consequences/`,
@@ -61,9 +55,8 @@ Justification: the objects of Layers 0–11 are field-theoretic — valuations o
 on `k`, `Finsupp` divisors, subspaces of `F` — and their Mathlib substrate lives in
 `Mathlib/FieldTheory/RatFunc/`, `Mathlib/RingTheory/Valuation/`, and
 `Mathlib/RingTheory/DedekindDomain/`; Mathlib's own `Mathlib/NumberTheory/FunctionField.lean`
-is the *global-fields* view (finite constant field, one chosen generator), which is the
-CurvesOverFiniteFields specialization ("Wave 2" here and below = the planned second wave
-of LMFDB-background roadmaps, following the current wave this roadmap belongs to), not
+is the *global-fields* view (finite constant field, one chosen generator) — the
+finite-constant-field specialization a future CurvesOverFiniteFields roadmap would own, not
 the general theory; and
 `TauCeti/AlgebraicGeometry/` is where the dictionary layer's outputs belong, next to the
 JacobianChallenge home, so the two roadmaps meet in one namespace. ⚠ Name hygiene: Mathlib's
@@ -77,30 +70,31 @@ Note also the pin's notation collision: `F⟮X⟯` is scoped notation for `RatFu
 ## Scope boundaries (what is deliberately not here)
 
 - **Zeta functions and everything over finite constant fields as such** (Stichtenoth Ch. 5:
-  rationality, the functional equation, Hasse–Weil) → the Wave-2 **CurvesOverFiniteFields**
-  future CurvesOverFiniteFields roadmap. That future roadmap is a consumer, not a dependency
-  of this PR. This roadmap proves the finite-field-relevant *inputs*
-  that are pure Riemann–Roch (finiteness of the degree-zero class group over a finite
-  constant field — the zeta-free half of Stichtenoth 5.1, Lemma 5.1.1 + Prop. 5.1.3; the
-  class-number finiteness bridge to Mathlib's `ClassGroup (ringOfIntegers Fq F)`), and
+  rationality, the functional equation, Hasse–Weil) → a future CurvesOverFiniteFields
+  roadmap, a consumer, not a dependency, of this one. This roadmap proves the
+  finite-field-relevant *inputs* that are pure Riemann–Roch (finiteness of the degree-zero
+  class group over a finite constant field — the zeta-free half of Stichtenoth 5.1,
+  Lemma 5.1.1 + Prop. 5.1.3; the class-number finiteness bridge to Mathlib's
+  `ClassGroup (ringOfIntegers Fq F)` — Layer 5's finite-constant-field subsection), and
   stops there.
 - **Jacobians and abelian varieties** → [JacobianChallenge](../JacobianChallenge/README.md)
-  (construction) and the Wave-2 AbelianVarieties roadmap (arithmetic). Here `Cl⁰(F)` is a
+  (construction) and a future AbelianVarieties roadmap (arithmetic). Here `Cl⁰(F)` is a
   plain abelian group; giving it a variety structure is exactly the JacobianChallenge.
-- **Modular curves** → PR #81 (algebraic, Katz–Mazur) and PR #47's Layer 10 (the analytic
-  quotient `Γ\ℍ*` with its genus via Euler characteristics — its dimension-formula upper
-  bounds go by the valence formula, and the lower bounds are gated on a planned analytic
-  compact-Riemann-surfaces Riemann–Roch, not on this roadmap, so it consumes nothing
-  from here; the eventual analytic ↔ algebraic genus comparison is an explicit scope
-  exclusion recorded after Layer 12).
-- **Elliptic-curve specifics** → PR #68 (isogenies, torsion, heights, Mordell–Weil, …).
+- **Modular curves** — the moduli-theoretic theory (Katz–Mazur level structures, fine and
+  coarse spaces) is its own subject and no part of this roadmap. The merged
+  [ModularForms](../ModularForms/README.md) roadmap builds the analytic quotient `Γ\ℍ*`
+  with its genus and an analytic compact-Riemann-surfaces Riemann–Roch chain **inside its
+  own Layer 10**, so it consumes nothing from here; the eventual analytic ↔ algebraic
+  genus comparison is an explicit scope exclusion recorded after Layer 12.
+- **Elliptic-curve specifics** → the merged [EllipticCurves](../EllipticCurves/README.md)
+  roadmap (isogenies, torsion, heights, Mordell–Weil, …).
   Here elliptic function fields appear once, as the genus-1 model class with the
   compatibility milestones of Layer 10.
 - **Hyperelliptic arithmetic invariants** (Igusa invariants, minimal models, cluster
-  pictures) → Wave-2 HyperellipticCurves; here hyperelliptic function fields are a model
-  class (existence of the degree-2 rational subfield, the genus formula).
-- **Belyi maps and dessins** → Wave-2 BelyiMaps, which will consume this roadmap's
-  extension/ramification layers and Riemann–Hurwitz.
+  pictures) → a future HyperellipticCurves roadmap; here hyperelliptic function fields are
+  a model class (existence of the separable degree-2 rational subfield, the genus formula).
+- **Belyi maps and dessins** → a future BelyiMaps roadmap, which would consume this
+  roadmap's extension/ramification layers and Riemann–Hurwitz.
 
 ## Standing hypotheses
 
@@ -140,9 +134,9 @@ hypotheses appear constantly and must always be **explicit**, never absorbed:
   shortcut in the literature is a trap flagged at its layer.
 
 Do not fix `k` finite, algebraically closed, or of characteristic zero in the general
-layers: the LMFDB consumers live over `ℚ` and number fields (genus of modular and Shimura
-curves), over finite fields (Wave 2), and over `ℂ` (Belyi); the theory is stated over an
-arbitrary field with the honest hypotheses above.
+layers: downstream consumers live over `ℚ` and number fields (genus of modular and Shimura
+curves), over finite fields (curves over `𝔽_q`), and over `ℂ` (Belyi maps); the theory is
+stated over an arbitrary field with the honest hypotheses above.
 
 ## Pinned conventions
 
@@ -158,10 +152,10 @@ arbitrary field with the honest hypotheses above.
 | class group | `Cl(F) := Divisor ⧸ principal`, `Cl⁰(F) := ker deg ⧸ principal` (`deg (div f) = 0` is the product formula, a theorem). Bridge milestones to Mathlib's `ClassGroup` of affine models via `FractionalIdeal.count`, never a redefinition of `ClassGroup` | Layers 3, 10 |
 | Riemann–Roch space | `L(D) : Submodule k F`, carrier `{f | ∀ P, v_P f ≤ exp (D P)}` (equivalently `f = 0 ∨ div f + D ≥ 0`); **`ℓ(D) := Module.finrank k (L D)`** with finiteness a Layer-3 theorem. `L(0) = k` iff the constant field is exact | Layer 3 |
 | genus | `g(F/k) := sSup (Set.range fun D => (deg D + 1 − ℓ(D)).toNat)` — Stichtenoth's definition; well-defined (bounded) by Riemann's theorem, which also pins the characterization `∃ c, ∀ D, deg D ≥ c → ℓ(D) = deg D + 1 − g`. Genus is **defined before** Riemann–Roch and never via `H¹` or differentials; the identities `ℓ(W) = g`, `deg W = 2g − 2` are theorems | Layer 3 |
-| repartitions / adeles | `A_F` := the restricted product `{a : Place k F → F // ∀ᶠ P in cofinite, ord_P (a P) ≥ 0}` — entries in `F` itself (Chevalley's repartitions; Stichtenoth's 𝒜_F), **no completions**. The completion-level `FiniteAdeleRing` of an affine model is related by a Layer-5 comparison milestone, not used in the RR proof. `A_F(D)` the sub-`k`-space with `ord_P (a P) ≥ −D P` everywhere | Layer 4 |
+| repartitions / adeles | `A_F` := the restricted product `{a : Place k F → F // ∀ᶠ P in cofinite, v_P (a P) ≤ 1}` — entries in `F` itself (Chevalley's repartitions; Stichtenoth's 𝒜_F), **no completions**. The completion-level `FiniteAdeleRing` of an affine model is related by a Layer-5 comparison milestone, not used in the RR proof. `A_F(D)` := the sub-`k`-space `{a ∈ A_F ∣ ∀ P, v_P (a P) ≤ exp (D P)}` — the **multiplicative** condition, exactly as in `L(D)`, never the additive `ord_P (a P) ≥ −D P` (whose junk value `ord_P 0 = 0` would wrongly exclude zero entries wherever `D P < 0`); so `0 ∈ A_F(D)` for every `D`, definitionally | Layer 4 |
 | Weil differential | a `k`-linear map `ω : A_F → k` vanishing on `A_F(D) + F` for some `D`; `Ω_F` the `F`-vector space of them (`(f · ω) a := ω (f · a)`), one-dimensional over `F`. The **canonical divisor** `(ω)` of `ω ≠ 0` is the largest `D` with `ω` vanishing on `A_F(D) + F`; canonical class `W = [(ω)]`, well-defined | Layer 4 |
 | differential formalism | **Weil differentials are the formalism of record** for the canonical class and the RR proof (they exist at the pin's vocabulary level with no new analysis); Mathlib's Kähler differentials `Ω[F⁄k]` (`KaehlerDifferential`) enter in Layer 9, where `dim_F Ω[F⁄k] = 1` (separably generated case) and the comparison isomorphism Kähler ≅ Weil via residues are **named milestones** — after which `(dx)` is a canonical divisor and the two formalisms are interchangeable. Neither is redefined in terms of the other before that layer | Layers 4, 9 |
-| extensions of function fields | `F′/F` with `[Algebra F F′]`, both function fields, `k′ ⊇ k` the respective constant fields; `P′ ∣ P` ("lies over") iff `v_{P′}` restricted to `F` is equivalent to `v_P`; `e(P′∣P)` the ramification index (`v_{P′}(x) = e · v_P(x)` on `Fˣ`, in additive form), `f(P′∣P) := [F′_{P′} : F_P]` the relative residue degree. Reconciliation lemmas with `Ideal.ramificationIdx`/`Ideal.inertiaDeg` at affine models — one bridge each, consumers never forced through the `sSup`/`if` definitions. ⚠ churn flag: the pin's own docstrings announce replacement by `ramificationIdx'`/`inertiaDeg'` | Layer 6 |
+| extensions of function fields | the full scalar tower, pinned: `[Field k] [Field k′] [Field F] [Field F′]`, `[Algebra k k′] [Algebra k F] [Algebra k′ F′] [Algebra F F′] [Algebra k F′]` with `[IsScalarTower k k′ F′]` and `[IsScalarTower k F F′]`, `F/k` and `F′/k′` function fields, `[FiniteDimensional F F′]`; the constant fields are **identified, not assumed**: `k′` maps onto `algebraicClosure k′ F′`-exactness by hypothesis (`IsIntegrallyClosedIn k′ F′` where a layer needs it) and the induced `k → k′` is the constant-field inclusion, with `algebraicClosure k F′ = k′`-shaped comparison milestones in Layer 6. `P′ ∣ P` ("lies over") iff `v_{P′}` restricted to `F` is equivalent to `v_P`; `e(P′∣P)` the ramification index (`v_{P′}(x) = e · v_P(x)` on `Fˣ`, in additive form), `f(P′∣P) := [F′_{P′} : F_P]` the relative residue degree. Reconciliation lemmas with `Ideal.ramificationIdx`/`Ideal.inertiaDeg` at affine models — one bridge each, consumers never forced through the `sSup`/`if` definitions. ⚠ churn flag: the pin's own docstrings announce replacement by `ramificationIdx'`/`inertiaDeg'`. Degree formulas mixing `[F′ : F]` and `[k′ : k]` are stated **cross-multiplied** (no natural-number division): see Layers 6–7 | Layer 6 |
 | the different | the different **divisor** `Diff(F′/F) := ∑ d(P′∣P) · P′` with `d(P′∣P)` the different exponent, defined via the trace dual as in the pin's `differentIdeal` (`Mathlib/RingTheory/DedekindDomain/Different.lean`) and computed at all places by the two-charts device; the identity `v_{P′}(differentIdeal) = d(P′∣P)` at affine models is the reconciliation milestone | Layer 7 |
 
 ## What Mathlib already has (consume)
@@ -270,9 +264,10 @@ material, to be consumed when the repository's Mathlib reaches it rather than re
   **`IsElliptic`** (⚠ the old `EllipticCurve` structure is gone, no alias),
   `Affine.CoordinateRing := AdjoinRoot W.polynomial` (with `IsDomain` but ⚠ **no
   `IsDedekindDomain` instance** — supplying it via the general affine-model layer is a
-  milestone #68 also wants), `Affine.FunctionField := FractionRing CoordinateRing`,
+  milestone the merged [EllipticCurves](../EllipticCurves/README.md) roadmap also wants),
+  `Affine.FunctionField := FractionRing CoordinateRing`,
   `Point.toClass : W.Point →+ Additive (ClassGroup W.CoordinateRing)` **injective only**
-  (surjectivity is PR #68's seeded `toClass_surjective`), division polynomials, normal
+  (surjectivity is that roadmap's seeded `toClass_surjective`), division polynomials, normal
   forms, `j`, minimal models and reduction types over DVRs (`Reduction.lean`), and the
   formal `WeierstrassCurve.LFunction` — the concrete curve family every genus-1 milestone
   is checked against.
@@ -291,72 +286,37 @@ material, to be consumed when the repository's Mathlib reaches it rather than re
   `SheafOfModules.IsQuasicoherent`. ⚠ No divisors, no `Pic(X)`, no dimension theory, no
   coherent cohomology, no `ℙⁿ` as a named scheme.
 
-### What is in motion elsewhere (checked 2026-07-30; coordinate, cite, do not fork)
+### Existing formalizations of this material
 
-The Riemann–Roch space is **crowded and hot as of July 2026** — two essentially complete
-Lean 4 formalizations exist and a coordinated Mathlib PR campaign is running. This roadmap
-was audited against all of it; the coordination obligations are binding (§Provenance).
+Riemann–Roch is being formalized on several fronts, and this roadmap is written with
+all of them in view. None is a reason to wait, and none is a dependency; the standing
+relationships are in §[Provenance and coordination](#provenance-and-coordination), and
+the dated evidence (inspected revisions, licences, pull-request lists, search record)
+is in [PROVENANCE.md](PROVENANCE.md).
 
 - **[vaca22/riemann-roch-function-fields](https://github.com/vaca22/riemann-roch-function-fields)**
-  (Guanghao Li; Apache-2.0; created 2026-07-13, against Mathlib v4.31.0). A complete,
-  kernel-checked, **sorry-free, axiom-clean function-field Riemann–Roch**: intrinsic
-  places (DVR-subring valuations), divisors indexed by places, adele spaces, Weil
-  differentials, canonical divisors, genus, full RR
-  (`ℓ(D) = deg D + 1 − g + ℓ(W − D)`), duality, Riemann's and Clifford's inequalities,
-  and the applications "Weierstrass curves have genus 1" and the degree-one-places ↔
-  Picard-group / elliptic-curve group-law link — **the same mathematics as Layers 0–5 and
-  parts of 10 of this roadmap**, by the same (Stichtenoth-style) route. Its README states
-  upstreaming to Mathlib is in progress, with live PRs #41729 (Dedekind divisor-group
-  core), #41732, #41728, #41696; it already has a downstream consumer
-  ([yuma-mizuno/markoff-modp](https://github.com/yuma-mizuno/markoff-modp), strong
-  approximation for Markoff triples). This is the single largest overlap with this
-  roadmap; the coordination stance is pinned in §Provenance.
-- **Mathlib's scheme-side "conditional Riemann–Roch" campaign** (Raphael Douglas Giles,
-  Raph-DG): draft PR [#41621](https://github.com/leanprover-community/mathlib4/pull/41621)
-  (2026-07-11, sorry-free WIP, ~6k lines) proves `χ(𝒪_X(D)) = deg D + χ(𝒪_X)` for
-  locally Noetherian integral schemes of dimension ≤ 1 over a field, *conditional on*
-  finiteness/vanishing of coherent cohomology; merged substrate **already on master and
-  absent from this pin**: `AlgebraicGeometry/AlgebraicCycle/Basic.lean` (#37901,
-  2026-06-25 — cycles as locally finite point functions on kebekus's
-  `Function.locallyFinsupp`), `AlgebraicGeometry/OrderOfVanishing.lean` (#29774,
-  2026-07-02); open stack: #38472 (principal Weil divisors), #38953 (the sheaf `𝒪_X(D)`),
-  #41198 (degree of a zero-cycle), #41042, #38002, #41317, #40509. ⚠ This campaign owns
-  the scheme-side divisor namespace on Mathlib master; Layer 12's dictionary milestones
-  must be stated against `AlgebraicCycle`/`OrderOfVanishing` vocabulary on the next
-  toolchain bump (refactor-onto flags in Layer 12), and this roadmap's function-field
-  divisors must never fork a rival scheme-divisor notion.
-- **Sheaf-cohomology substrate** (Brian Nugent, UW; with J. Riou's sites-level
-  `Sheaf.H` already at the pin): merged #34267/#35785/#34742/#32412 (abelian sheaves,
-  flasque, cohomology API, Artinian schemes); open #36218 (long exact sequence), #35790
-  (flasque vanishing), #36345 (affine vanishing); plus J. Alama's Euler-characteristic
-  PRs (#31121 merged, #29713 open). This is the cohomological route's infrastructure —
-  consumed by #41621, relevant here only to Layer 12's contract statements.
-- **The algebraic Jacobian-challenge line**: Buzzard's 2026 challenge (compact Riemann
-  surfaces; solved sorry-free by rkirov/jacobian-claude, lean-eval-verified 2026-06-11)
-  and **Christian Merten's algebraic reformulation** (Zulip #Autoformalization > "Jacobian
-  challenge") — the [JacobianChallenge](../JacobianChallenge/README.md) roadmap is its
-  TauCeti home; an external workspace
-  ([AxelDlv00/LeanAlgebraicGeometry](https://github.com/AxelDlv00/LeanAlgebraicGeometry),
-  active 2026-07-30) attacks the Picard-scheme route with `RiemannRoch/Ledger` files.
-  Overlap with this roadmap is confined to the Layer-12 contracts.
-- **Graph Riemann–Roch** (Baker–Norine): DhyeyMavani2003/chip-firing-with-lean
-  (Mavani–Pflueger, arXiv:2606.16679, sorry-free) — no mathematical overlap, but a
-  naming precedent for `Divisor`/`deg`/`genus`-style identifiers in the Lean ecosystem,
-  and a reminder to namespace ours under the function-field theory.
-- **Elliptic-curve upstream motion**: PR #25983 (Angdinata, affine scheme of an elliptic
-  curve, open since 2025-06); the Angdinata–Xu ITP 2023 paper's stated future work is
-  exactly "a version of the Riemann–Roch theorem" to redefine elliptic curves — their
+  (Guanghao Li; Apache-2.0): a complete, kernel-checked, **sorry-free function-field
+  Riemann–Roch** — intrinsic places, divisors, adele spaces, Weil differentials,
+  canonical divisors, genus, full RR, duality, Riemann's and Clifford's inequalities,
+  and genus-one applications — the same mathematics as Layers 0–5 and parts of 10, by
+  the same Stichtenoth-style route, with parts being upstreamed to Mathlib as open
+  pull requests. The single largest overlap; the definite plan is in §Provenance.
+- **Mathlib's scheme-side campaign** (R. D. Giles): conditional Riemann–Roch
+  `χ(𝒪_X(D)) = deg D + χ(𝒪_X)` in draft, with the cycle/order-of-vanishing substrate
+  already on Mathlib master. That campaign owns the scheme-side divisor namespace;
+  Layer 12's dictionary milestones are stated against its vocabulary when the
+  repository's Mathlib reaches it, and this roadmap's function-field divisors never
+  fork a rival scheme-divisor notion.
+- **The [JacobianChallenge](../JacobianChallenge/README.md) roadmap** (merged, in this
+  repository): scheme divisors, coherent cohomology, `χ`-form RR, and Serre duality on
+  the way to `Pic⁰` — the cohomological route this roadmap meets, by contract, in
+  Layer 12E.
+- **Adjacent, no mathematical overlap**: graph Riemann–Roch (Baker–Norine, sorry-free
+  in Lean) is a naming precedent for `Divisor`/`deg`/`genus`-style identifiers — a
+  reminder to namespace ours under the function-field theory; Mathlib's elliptic-curve
   group law deliberately routes around RR via `ClassGroup`, which is why Layer 10's
-  compatibility milestones close the triangle without re-proving the group law.
-- **Zulip threads of record**: #Is-there-code-for-X? > "Riemann-Roch" (latest activity
-  2025-12-19); #Autoformalization > "Jacobian challenge" (Merten's algebraic version);
-  #maths > "thoughts on elliptic curves" (2020 — RR named as the blocker); the Banff
-  2023 "Riemann–Roch race" blog post and the AIM "Formalising algebraic geometry"
-  workshop report (June 2024) — RR has been a named community target for three years;
-  this roadmap is the TauCeti vehicle for the function-field lane.
-- **Isabelle/Coq**: no Riemann–Roch for curves or function fields in AFP or Coq/Rocq
-  (checked 2026-07-30); the Coq elliptic-curve library explicitly avoids RR. No prior-art
-  obligations outside Lean.
+  compatibility milestones close the triangle without re-proving the group law; no
+  Riemann–Roch for curves or function fields exists in Isabelle's AFP or in Coq/Rocq.
 
 ## What is missing (build here)
 
@@ -379,8 +339,11 @@ the honest inseparability hypotheses; `dim_F Ω[F⁄k] = 1` and the Kähler ↔ 
 with residues and the residue theorem; the genus computations for the model classes
 (rational, elliptic, hyperelliptic, smooth plane quartics and `(d−1)(d−2)/2`); finiteness
 of automorphism groups (`g ≥ 2`) and the `84(g−1)` bound; and the curves ↔ function-fields
-dictionary with the cross-roadmap comparison contracts. None of this exists upstream in
-any form.
+dictionary with the cross-roadmap comparison contracts. None of this is present in the
+Mathlib the repository builds; substantial parts exist in external formalizations and
+open Mathlib pull requests, recorded with revisions and licences in
+[PROVENANCE.md](PROVENANCE.md) — build here now, shaped so that whatever lands in
+Mathlib replaces ours by deletion plus an import.
 
 ---
 
@@ -454,14 +417,13 @@ Stichtenoth I.2. The base case of everything, and the first acceptance suite.
   under `IsRankOneDiscrete` + `IsTrivialOn` becomes a bijection
   `Place k (RatFunc k) ≃ {monic irreducibles} ⊕ {∞}`), do not reprove it; the degree-one
   places are `ℙ¹(k) = k ∪ {∞}` (Cor. 1.2.3).
-- **Divisor identities on `ℙ¹`** (statable as soon as Layer 3's types exist; listed here
-  because they are `k(x)`-specific): `div x = P_{(X)} − P_∞`; the pole divisor of `f` has
-  degree `max (natDegree f.num) (natDegree f.denom) = [k(x) : k(f)]` (consume
-  `RatFunc.finrank_eq_max_natDegree`); `∑_p natDegree p · ord_p(f) = intDegree f` (the
-  product formula on `ℙ¹`, concretely).
-- **`L(n·P_∞)` is the polynomials of degree `≤ n`** — the model computation
-  `ℓ(n·P_∞) = n + 1` (`n ≥ 0`), proved by hand here, long before Riemann–Roch; genus 0
-  falls out at Layer 3. Lüroth (in Mathlib) cited as the classification of the subfields.
+- **Order functions on `k(x)`, concretely**: `ord_∞ f = −intDegree f` and
+  `ord_{P_p} f` = the multiplicity of `p` in `f` — computation lemmas connecting the
+  place vocabulary to `RatFunc.num`/`denom` arithmetic, consumed by every later
+  `k(x)`-calculation. Lüroth (in Mathlib) cited as the classification of the subfields
+  of `k(x)`. The divisor-level identities on `ℙ¹` (`div x`, the pole-divisor degree, the
+  concrete product formula, `ℓ(n·P_∞) = n + 1`, genus `0`) are Layer 3's
+  rational-function-field subsection: they need Layer 3's types, so they live there.
 
 ### Layer 2: affine models — the Dedekind bridge
 
@@ -473,26 +435,18 @@ Mathlib-consumption layer: the affine half of the theory falls out of
   closure of `k[x]` in `F`; it is Dedekind with fraction field `F` (consume
   `IsIntegralClosure.isDedekindDomain` + `integralClosure.isFractionRing_of_finite_extension`;
   ⚠ the separable case is instance-level at the pin — the general case, inseparable
-  included, is a stated milestone here, Krull–Akizuki-grade, exactly the input PR #81's
-  Layer-2 comparison also names).
+  included, is a stated milestone here, Krull–Akizuki-grade).
 - **Places ↔ height-one primes.** The bijection `{P : Place k F | ord_P x ≥ 0} ≃
   HeightOneSpectrum R_x`, matching `v_P` with `𝔭.valuation F` and residue fields with
   `𝔭.ResidueField`; the finitely many places with `ord_P x < 0` ("places over `∞`") are
   exactly the places of `F` over `P_∞` of `k(x)`. Corollary: **the place set is the
   two-chart union** `HeightOneSpectrum R_x ⊔ {places over ∞}` — and `∞` is not special:
   it is the finite chart of `1/x` (the two-charts device used again for the different in
-  Layer 7).
-- **Divisor dictionary** (statable once Layer 3 exists): the group isomorphism
-  `{D : Divisor k F | supp D ⊆ finite chart} ≅ (FractionalIdeal R_x⁰ F)ˣ` via
-  `FractionalIdeal.count` (consume `count_mul/inv/zpow`, `finite_factors`,
-  `finprod_heightOneSpectrum_factorization'` — zero new proof work is the design goal);
-  `ord_P` versus `intValuation`; S-domains `𝒪_S` (holomorphy rings, Stichtenoth III.2)
-  via the pin's `Set.integer` S-integers.
-- **Class-group bridge** (statable once Layer 3 exists): the exact sequence
-  `0 → ⟨places over ∞⟩ → Cl(F) → ClassGroup R_x → 0`-shape relating the divisor class
-  group to Mathlib's `ClassGroup` of any affine model; specialization: for a model with a
-  single degree-1 place at infinity, `Cl⁰(F) ≅ ClassGroup R_x` — the statement that makes
-  Mathlib's elliptic-curve group law an instance of the general theory (Layer 10).
+  Layer 7). `ord_P` versus `intValuation` reconciliation; S-domains `𝒪_S` (holomorphy
+  rings, Stichtenoth III.2) via the pin's `Set.integer` S-integers. The divisor-level
+  half of this bridge — the fractional-ideal dictionary and the class-group exact
+  sequence — is Layer 3's affine-bridge subsection: it needs Layer 3's types, so it
+  lives there.
 
 ### Layer 3: divisors, `L(D)`, Riemann's theorem, and the genus
 
@@ -519,9 +473,32 @@ force (Stichtenoth's global assumption, declared at the head of §1.4).
   (Prop. 1.4.14); **the genus** `genus k F` as pinned (Def. 1.4.15:
   `g = max {deg A − ℓ(A) + 1}`; `sSup`, junk-guarded by 1.4.14), `g ≥ 0` (Cor. 1.4.16);
   **Riemann's theorem** (Thm. 1.4.17): `ℓ(D) ≥ deg D + 1 − g` for all `D`, with
-  equality for `deg D ≥ c` (`∃ c` form); `g(k(x)) = 0` (Ex. 1.4.18, from Layer 1's
-  computation); the **index of specialty** `i(D) := ℓ(D) − deg D − 1 + g ≥ 0`
-  (Def. 1.5.1), `i(D) = 0` for large degrees.
+  equality for `deg D ≥ c` (`∃ c` form); the **index of specialty**
+  `i(D) := ℓ(D) − deg D − 1 + g ≥ 0` (Def. 1.5.1), `i(D) = 0` for large degrees.
+- **The rational function field, at divisor level** (`k(x)`-specific calculations on the
+  Layer-1 places, the base case and first acceptance suite): `div x = P_{(X)} − P_∞`; the
+  pole divisor of nonconstant `f` has degree
+  `max (natDegree f.num) (natDegree f.denom) = [k(x) : k(f)]` (consume
+  `RatFunc.finrank_eq_max_natDegree`); `∑_p natDegree p · ord_p(f) = intDegree f` (the
+  product formula on `ℙ¹`, concretely); **`L(n·P_∞)` is the polynomials of degree `≤ n`**
+  — the model computation `ℓ(n·P_∞) = n + 1` (`n ≥ 0`), proved by hand, long before
+  Riemann–Roch; hence **`g(k(x)) = 0`** (Ex. 1.4.18) and Riemann's inequality is sharp at
+  every `n`.
+- **The affine bridge, at divisor level** (the Layer-2 models meeting Layer-3 types): the
+  group isomorphism `{D : Divisor k F | supp D ⊆ finite chart} ≅ (FractionalIdeal R_x⁰ F)ˣ`
+  via `FractionalIdeal.count` (consume `count_mul/inv/zpow`, `finite_factors`,
+  `finprod_heightOneSpectrum_factorization'` — zero new proof work is the design goal;
+  the same dictionary, on the abstract Dedekind side, is the subject of the open Mathlib
+  PR [#41729](https://github.com/leanprover-community/mathlib4/pull/41729) — shape this
+  milestone the way that PR shapes it, and consume it if it lands). **Class-group
+  bridge**: the restriction-to-finite-chart map induces a surjection
+  `π : Cl(F) →+ ClassGroup R_x`, and its kernel is **the subgroup of `Cl(F)` generated by
+  the classes `[P]` of the finitely many places `P` over `∞`** (not a free group on them:
+  any function whose divisor is supported over `∞` imposes a relation), so
+  `⟨[P] : P ∣ ∞⟩ → Cl(F) → ClassGroup R_x → 0` is exact. Specialization: for a model
+  with a single degree-1 place at infinity, the restriction of `π` to degree zero is an
+  isomorphism `Cl⁰(F) ≅ ClassGroup R_x` — the statement that makes Mathlib's
+  elliptic-curve group law an instance of the general theory (Layer 10).
 
 ### Layer 4: repartitions, Weil differentials, and Riemann–Roch
 
@@ -530,7 +507,13 @@ Stichtenoth I.5 — the summit of the first half.
 - **Repartitions.** `A_F` as pinned (Def. 1.5.2 — Stichtenoth says *adeles* and notes
   "some authors use the name repartition"; entries in `F`, cofinite integrality —
   `Filter.cofinite` vocabulary, **no completions**); the diagonal `F ↪ A_F`; the
-  filtration `A_F(D)` (Def. 1.5.3). **The quotient interpretation of the index of
+  filtration `A_F(D)` (Def. 1.5.3), in the **multiplicative junk-free form of the
+  convention table** (`v_P (a P) ≤ exp (D P)` at every place — prototyped in
+  `Suggested.lean` so the additive-junk mistake cannot reappear). Its basic calculus as
+  named milestones: `0 ∈ A_F(D)` (and `A_F(D)` is a `k`-submodule of `A_F`);
+  monotonicity `D ≤ E ⟹ A_F(D) ≤ A_F(E)` with the dimension formula
+  `dim_k (A_F(E)/A_F(D)) = deg E − deg D` (Lemma 1.5.4's computation); `A_F(D) + F` is
+  a `k`-submodule; `A_F = ⋃_D A_F(D)`. **The quotient interpretation of the index of
   specialty**: `i(D) = dim_k (A_F ⧸ (A_F(D) + F))` (Thm. 1.5.4), so
   `g = dim_k (A_F ⧸ (A_F(0) + F))` (Cor. 1.5.5) — Riemann's theorem re-proved as
   finiteness of these quotients.
@@ -556,10 +539,12 @@ Stichtenoth I.5 — the summit of the first half.
 Stichtenoth I.6–I.7.
 
 - **The `deg > 2g − 2` regime**: `deg D ≥ 2g − 1 ⟹ ℓ(D) = deg D + 1 − g`
-  (Thm. 1.5.17; the bound is sharp — `W` fails it) — the workhorse identity (this, at
-  genus 1 and `D = n·[0]`, is the fibrewise content of PR #81's assumed interface).
-  Non-special divisors and their calculus (Def. 1.6.10, Rem. 1.6.11); every `P` and
-  `n ≥ 2g` admit `x` with `(x)_∞ = nP` (Prop. 1.6.6); existence of an effective
+  (Thm. 1.5.17; the bound is sharp — `W` fails it) — the workhorse identity. Named
+  reusable corollary at genus 1: for a rational place `[0]` on a genus-1 function field,
+  **`ℓ(n·[0]) = n` for all `n ≥ 1`** — the section-dimension ladder every
+  Weierstrass-model argument runs on (Layer 10 restates it at Mathlib's elliptic
+  curves). Non-special divisors and their calculus (Def. 1.6.10, Rem. 1.6.11); every
+  `P` and `n ≥ 2g` admit `x` with `(x)_∞ = nP` (Prop. 1.6.6); existence of an effective
   non-special divisor of degree `g` supported on ≥ `g` given rational places
   (Prop. 1.6.12).
 - **Genus 0**: `g = 0` **and a divisor of degree 1** ⟺ `F` rational (Prop. 1.6.3 — the
@@ -571,9 +556,9 @@ Stichtenoth I.6–I.7.
 - **Strong approximation** (Thm. 1.6.5): for a *proper* subset `S ⊊ ℙ_F`, places
   `P₁ … P_r ∈ S`, targets and orders as in weak approximation, there is `x` with
   `ord_{Pᵢ}(x − xᵢ) = nᵢ` for all `i` **and** `ord_P x ≥ 0` at every other place of
-  `S` — free behaviour only outside `S`. The statement CurvesOverFiniteFields'
-  Goppa-style consumers want; proved from RR, which is why it is here and not in
-  Layer 0.
+  `S` — free behaviour only outside `S`. The statement Goppa-style consumers (a future
+  CurvesOverFiniteFields roadmap) want; proved from RR, which is why it is here and not
+  in Layer 0.
 - **Weierstrass gaps** (Thm. 1.6.8): at a **rational** place `P` of a function field of
   genus `g > 0`, exactly `g` numbers `i₁ < … < i_g` are pole gaps, with `i₁ = 1` and
   `i_g ≤ 2g − 1` — characteristic-free, the theorem of record. ⚠ Char-`p` honesty: the
@@ -582,13 +567,38 @@ Stichtenoth I.6–I.7.
   algebraically closed `k`; here it is a Layer-11 development (the Wronskian/Hasse-
   derivative route). Generic classicality (`1, …, g`) is not a Layer-5 deliverable and is
   listed under scope exclusions below — non-classical curves exist in char `p`.
-- **Clifford's theorem** (Thm. 1.6.13): `0 ≤ deg D ≤ 2g − 2` ⟹
-  `ℓ(D) ≤ 1 + (deg D)/2`. ⚠ **Proof-hypothesis trap, flagged as a cross-layer
-  dependency**: Stichtenoth's proof (via Lemma 1.6.14) assumes `k` *infinite*; he
-  completes the finite-`k` case only via constant-field extension (Thm. 3.6.3(d), our
-  Layer 8). Either formalize the reduction in that order (Clifford for infinite `k`
-  here; the finite case discharged after Layer 8) or find a uniform argument — the
-  milestone records the choice.
+- **Clifford's theorem, infinite constants** (Thm. 1.6.13): for `k` **infinite** (an
+  `[Infinite k]` hypothesis on the statement), `0 ≤ deg D ≤ 2g − 2` ⟹
+  `2·ℓ(D) ≤ 2 + deg D`. The hypothesis is the proof's (Lemma 1.6.14 chooses a divisor
+  point off finitely many hyperplanes, which needs `k` infinite), not the theorem's:
+  **the route of record for arbitrary `k` is the constant-field-extension reduction**,
+  which is Layer 8's Clifford-export milestone (Thm. 3.6.3(d) transports `ℓ` along
+  `F·k″/F`, and the perfect-field hypothesis there is vacuous for finite `k`). Layer 5
+  proves and uses only the `[Infinite k]` form; the unrestricted theorem is stated,
+  proved, and exported in Layer 8, and any consumer of unrestricted Clifford depends
+  on Layer 8, as the ordering section records.
+- **Finite constant field: the class number, zeta-free** (the inputs a future
+  CurvesOverFiniteFields roadmap consumes, proved here because they are pure
+  Riemann–Roch; Stichtenoth 5.1, stopping strictly before zeta functions). For finite
+  `k = 𝔽_q`, exact constants, in dependency order:
+  1. **finitely many places of each bounded degree** (each place of degree `≤ r` sits
+     over a place of `k(x)` of degree `≤ r` for any fixed `x`, and fibres are finite —
+     Layers 0, 2; equivalently Lemma 5.1.1's counting input);
+  2. **finitely many effective divisors of bounded degree** (a `Finsupp` count from 1);
+  3. **a bounded-degree representative theorem**: fix any divisor `B` with `deg B ≥ 1`
+     and `n` with `n·deg B ≥ g`; then every degree-zero class is `[A − n·B]` with `A`
+     **effective** of degree `n·deg B` (Riemann's theorem gives
+     `ℓ(D + n·B) ≥ deg D + n·deg B + 1 − g ≥ 1`, so the class of `D + n·B` contains an
+     effective divisor);
+  4. **`Finite Cl⁰(F)`** (Prop. 5.1.3), packaged as a `Finite`/`Fintype` instance-level
+     milestone for the degree-zero class group — **the class number** `h_F := #Cl⁰(F)`;
+  5. **the affine bridge**: under Layer 3's exact sequence, finiteness transfers to
+     Mathlib's `ClassGroup R_x` for every affine model (each is a quotient of a
+     `Cl⁰(F)`-extension by the image of the infinite places — state the exact hypotheses
+     at `∞` used), recovering `ClassGroup (ringOfIntegers Fq F)` finiteness in the
+     chosen-generator setting.
+  Acceptance instance: `Cl⁰(𝔽_q(x)) = 0` (so `h = 1`), through the machinery, not by
+  hand.
 - **Local components** (§1.7): `ι_P` and `ω_P(x) := ω(ι_P x)` (Def. 1.7.1);
   `ω(α) = ∑_P ω_P(α_P)` with cofinite vanishing (Prop. 1.7.2) — whose specialization
   `∑_P ω_P(1) = 0` (his (1.45)) is the **abstract residue theorem, valid over arbitrary
@@ -598,7 +608,7 @@ Stichtenoth I.6–I.7.
   `Ω_{k(x)}` with `(η) = −2P_∞` and its local components (Prop. 1.7.4 — the seed for
   Layer 9's `δ(x) = Cotr(η)`). **Completion comparison milestone**: the pin's
   `adicCompletion`/`FiniteAdeleRing` of an affine model receives `A_F` by the natural
-  map with dense image in the `D`-filtration sense — stated so the Wave-2 adelic
+  map with dense image in the `D`-filtration sense — stated so future adelic
   consumers (and any future Tate-style residue theory) can refactor onto completions
   without touching the RR proof.
 
@@ -606,8 +616,11 @@ Stichtenoth I.6–I.7.
 
 Stichtenoth III.1–III.3. `F′/k′` over `F/k`, `[F′ : F] < ∞`.
 
-- **Setup.** Extensions of function fields as pinned (Def. 3.1.1; algebra +
-  compatibility of constant fields); `P′ ∣ P` characterized three ways
+- **Setup.** Extensions of function fields as pinned in the convention table — the
+  full scalar-tower diagram among `k`, `k′`, `F`, `F′` with its two `IsScalarTower`
+  instances, never a bare "algebra plus compatibility" (Def. 3.1.1); the constant-field
+  identification milestones (`k′` is the constant field of `F′`; the tower induces the
+  inclusion `k → k′`); `P′ ∣ P` characterized three ways
   (Prop. 3.1.4: `P ⊆ P′` ⟺ `𝒪_P ⊆ 𝒪_{P′}` ⟺ `v_{P′}|_F = e · v_P`), defining
   `e(P′∣P)` and `f(P′∣P)` (Def. 3.1.5); `f < ∞` ⟺ `[F′ : F] < ∞` and multiplicativity
   in towers (Prop. 3.1.6); each place of `F′` lies over exactly one place of `F`, and
@@ -618,9 +631,17 @@ Stichtenoth III.1–III.3. `F′/k′` over `F/k`, `[F′ : F] < ∞`.
   whether perfectness is genuinely used.
 - **The conorm/pullback.** `Con : Divisor k F →+ Divisor k′ F′`,
   `P ↦ ∑ e(P′∣P) · P′` (Def. 3.1.8, transitive in towers); `Con` of principal is
-  principal (Prop. 3.1.9, inducing `Cl(F) → Cl(F′)`);
-  **`deg (Con D) = ([F′ : F] / [k′ : k]) · deg D`** (Cor. 3.1.14 — the `[k′ : k]`
-  factor is mandatory and a classic error site ⚠).
+  principal (Prop. 3.1.9, inducing `Cl(F) → Cl(F′)`); the degree identity in
+  **cross-multiplied form, `[k′ : k] * deg (Con D) = [F′ : F] * deg D`**
+  (Cor. 3.1.14 — the `[k′ : k]` factor is mandatory and a classic error site ⚠; no
+  natural-number division in the statement, so no divisibility is presupposed). The
+  **geometric degree** — `[k′ : k] ∣ [F′ : F]`, defining `n(F′/F)` with
+  `[F′ : F] = n(F′/F) * [k′ : k]` — is its own milestone **with the hypothesis that `F`
+  and `k′` are linearly disjoint over `k`** (equivalently `[F k′ : F] = [k′ : k]`;
+  automatic for separable `k′/k`, hence over perfect `k` — over imperfect `k` this is
+  exactly what Layer 8's pathologies break, so it is never assumed silently); only
+  after it is the quotient-valued form `deg (Con D) = n(F′/F) · deg D` available as
+  API.
 - **The fundamental identity** `∑_{P′ ∣ P} e(P′∣P) · f(P′∣P) = [F′ : F]`
   (Thm. 3.1.11 — no perfectness consumed): proved by the affine-model reconciliation —
   consume `Ideal.sum_ramification_inertia` over `R_x ⊆ R′_x`, with the bridge lemmas
@@ -634,16 +655,28 @@ Stichtenoth III.1–III.3. `F′/k′` over `F/k`, `[F′ : F] < ∞`.
   Thm. 3.2.6, Cor. 3.2.8 — Thm. 3.2.6 needs no exact-constants hypothesis, per
   Rem. 3.2.7; `S` finite ⟹ PID, Prop. 3.2.10); `𝒪′_P = ` integral closure of `𝒪_P` in
   `F′` with **local integral bases** for separable `F′/F` (Cor. 3.3.5, Thm. 3.3.6:
-  almost every basis is one); **Kummer's theorem** (Thm. 3.3.7, with the explicit
-  `K(x,y)` form Cor. 3.3.8): factoring the minimal polynomial mod `P` reads off places
-  above `P` with their `e`, `f` — the computational workhorse for all worked examples
-  (consume `AdjoinRoot` + `quotientEquiv`-style API).
+  almost every basis is one); **Kummer's theorem, with its hypotheses split as in the
+  source**. Hypotheses of record: `F′ = F(y)` with `y` **integral over `𝒪_P`** and `φ`
+  its minimal polynomial over `F` (integrality, not just algebraicity); factor the
+  reduction `φ̄ = ∏ᵢ γᵢ^{εᵢ}` into distinct monic irreducibles over `F_P`. Conclusion
+  A (Thm. 3.3.7, unconditional): for each `i` a place `Pᵢ′ ∣ P` with `f(Pᵢ′∣P) ≥ deg γᵢ`,
+  pairwise distinct — the factorization **bounds** the splitting but does not determine
+  it. Conclusion B (Cor. 3.3.8, under the **monogenicity hypothesis
+  `𝒪′_P = 𝒪_P[y]`** — equivalently, `P` prime to the conductor of `𝒪_P[y]` in `𝒪′_P`,
+  the "index" condition): the `Pᵢ′` are *all* the places over `P` and
+  `e(Pᵢ′∣P) = εᵢ`, `f(Pᵢ′∣P) = deg γᵢ`. Factoring an arbitrary minimal polynomial mod
+  `P` without the monogenicity hypothesis does **not** determine all `e` and `f`, and no
+  milestone may cite Kummer without saying which conclusion it uses — the computational
+  workhorse for all worked examples (consume `AdjoinRoot` + `quotientEquiv`-style API;
+  reconcile with the pin's `conductor_mul_differentIdeal` conductor vocabulary in
+  Layer 7).
 - **Galois extensions, first pass** (III.7): the Galois action on `{P′ ∣ P}` is
   transitive (Thm. 3.7.1); `e`, `f`, `d` constant over `P` and `e·f·r = [F′ : F]`
   (Cor. 3.7.2); decomposition groups. (The finer inertia/ramification filtration
   appears in Layer 8, scoped; the *local* filtration theory — Herbrand, upper
-  numbering, Hasse–Arf — belongs to [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)
-  roadmap (sibling, in preparation), bridged at completions.)
+  numbering, Hasse–Arf — belongs to the
+  [Local Fields roadmap (PR #2, in preparation)](https://github.com/roed-math/TauCetiRoadmap/pull/2),
+  bridged at completions.)
 
 ### Layer 7: the different and the Hurwitz genus formula
 
@@ -677,12 +710,18 @@ Hurwitz; the different theorem computes the exponents.
   (Cor. 3.4.12 — reconcile with the pin's
   `differentIdeal_eq_differentIdeal_mul_differentIdeal`).
 - **The Hurwitz genus formula** (Thm. 3.4.13 — no perfectness consumed):
-  for `F′/F` finite **separable** with constant fields `k′/k`,
-  `2g′ − 2 = ([F′ : F] / [k′ : k]) · (2g − 2) + deg Diff(F′/F)`;
+  for `F′/F` finite **separable** with constant fields `k′/k`, in the
+  **cross-multiplied form of record** (no division):
+  `[k′ : k] * (2g′ − 2) = [F′ : F] * (2g − 2) + [k′ : k] * deg Diff(F′/F)`;
+  the quotient-valued restatement through the geometric degree `n(F′/F)` is available
+  exactly where Layer 6's integrality milestone applies (same-constant-field case
+  included: there `[k′ : k] = 1` and the formula is the familiar
+  `2g′ − 2 = n(2g − 2) + deg Diff`);
   the `F/k(x)` normalization `2g − 2 = −2[F : k(x)] + deg Diff(F/k(x))` (Cor. 3.4.14,
   via Cotr of Layer 5's `η`). Tame corollary: the inequality form
-  `2g′ − 2 ≥ n(2g − 2) + ∑ (e − 1) deg P′` **with equality ⟺ `F′/F` tame**
-  (Cor. 3.5.6, same-constant-field form); ⚠ wild honesty: the Artin–Schreier worked
+  `2g′ − 2 ≥ n(2g − 2) + ∑ (e − 1) deg P′` (same-constant-field form, `n = [F′ : F]`)
+  **with equality ⟺ `F′/F` tame**
+  (Cor. 3.5.6); ⚠ wild honesty: the Artin–Schreier worked
   example below is the mandatory acceptance test that no tameness assumption has crept
   in. Corollaries: `g′ ≥ g` for same-constant-field separable extensions (Cor. 3.5.7);
   every separable `F/k(x)` of degree > 1 with exact constants ramifies (Cor. 3.5.8);
@@ -707,11 +746,17 @@ one** — this layer states them.
 - **Genus invariance, with its true hypotheses** (Thm. 3.6.3, `k` **perfect** —
   essential): constant extension is unramified (a); **the genus is unchanged** (b);
   degrees are preserved (c); **`ℓ(Con A) = ℓ(A)` with any `k`-basis of `L(A)` staying a
-  basis** (d — also the missing finite-`k` half of Layer 5's Clifford); canonical stays
+  basis** (d); canonical stays
   canonical (e); `Con` is injective on classes (f); residue fields compose as
   `F″_{P″} = F_P · k″` (g). Route to the honest general statement: `F/k`
   **conserved/separably generated** is the intermediate predicate — pin it, relate it to
   the pin's `SeparablyGenerated.lean` existentials, and derive the perfect-`k` case.
+  **Clifford, unrestricted — the Layer 8 export**: for finite `k` (perfect, so
+  Thm. 3.6.3 applies), pass to `F·k̄/k̄` with `k̄` an algebraic closure — (b) and (d)
+  transport `g`, `deg`, and every `ℓ` — and apply Layer 5's `[Infinite k]` Clifford
+  there; then restate **Clifford for arbitrary exact constant fields** (finite and
+  infinite unified) as the exported theorem consumers cite. This is the second half of
+  the split whose first half is Layer 5's `[Infinite k]` milestone.
 - **⚠ The inseparable pathology, stated as a theorem-with-counterexample**: over
   imperfect `k`, an inseparable constant extension can **strictly decrease** the genus —
   the worked example below (`y² = x^p − t` over `𝔽_p(t)`) is stated and proved here
@@ -735,7 +780,8 @@ one** — this layer states them.
   `Pᵢ∣P` tame ⟹ `e(P′∣P) = lcm(e₁, e₂)`); unramified-in-both ⟹ unramified in the
   compositum and in the Galois closure (Cor. 3.9.3); a rational place splitting
   completely in both splits completely in the compositum, with constants staying exact
-  (Cor. 3.9.7) — the tower-builder's toolkit, consumed by Wave 2.
+  (Cor. 3.9.7) — the tower-builder's toolkit a future CurvesOverFiniteFields roadmap
+  consumes.
 - **Inseparable extensions and genus estimates** (III.10–III.11): purely inseparable
   degree-`p` steps have a unique place above each `P` with `e = p`, `f = 1`
   (Lemma 3.10.1); over perfect `k`, **every function field is separably generated**,
@@ -750,8 +796,16 @@ one** — this layer states them.
 ### Layer 9: Kähler differentials, residues, and the comparison
 
 Stichtenoth IV.1–IV.3. The layer that reconciles the formalism of record (Weil) with
-Mathlib's formalism (`KaehlerDifferential`), so that both this roadmap's consumers and
-PR #68's invariant differential speak one language.
+Mathlib's formalism (`KaehlerDifferential`), so that this roadmap's consumers and the
+merged [EllipticCurves](../EllipticCurves/README.md) roadmap's invariant differential
+speak one language. **Dependencies, stated exactly:** the first subsection
+(`dim Ω[F⁄k] = 1`) stands on Layers 0–3 alone; the comparison theorem's map is
+`δ(x) := Cotr_{F/k(x)}(η)`, so the comparison and everything after it **depend on
+Layer 7's cotrace** (and on Layer 5's `η` and local components) — this layer sits
+after the Hurwitz/different lane, and the ordering section says so. (A cotrace-free
+route — defining the Weil functional directly by local residues and proving agreement
+with `Cotr` afterwards — is *not* this roadmap's route; the proof route of record is
+Stichtenoth's.)
 
 - **`Ω[F⁄k]` is one-dimensional.** For `F/k` a function field with a separating element
   `x` (equivalently `F/k` separably generated; over perfect `k` always, by
@@ -783,10 +837,11 @@ PR #68's invariant differential speak one language.
   there over algebraically closed `k`; the arbitrary-`k` abstract form is Layer 5's
   `∑_P ω_P(1) = 0`, and the honest general-`k` residue statement goes through
   Rem. 4.3.7(d) — pin the exact hypothesis on the milestone).
-- **PR #68 compatibility milestone**: for an elliptic `W` over `k`, the invariant
-  differential lives in `Ω[W.FunctionField⁄k]` (their Layer 1); under the comparison,
+- **EllipticCurves compatibility milestone**: for an elliptic `W` over `k`, the
+  invariant differential of the merged [EllipticCurves](../EllipticCurves/README.md)
+  roadmap lives in `Ω[W.FunctionField⁄k]`; under the comparison,
   its Weil-differential divisor is `0` — i.e. the canonical class of a genus-1 function
-  field is trivial — reconciling their concrete `ω_W` with this roadmap's canonical
+  field is trivial — reconciling its concrete `ω_W` with this roadmap's canonical
   class.
 
 ### Layer 10: model classes — elliptic, hyperelliptic, plane curves
@@ -802,29 +857,41 @@ Stichtenoth VI.1–VI.3; Fulton Chs. 5, 8 for the plane-curve computations.
   an abelian group isomorphic to `Cl⁰(F)`** via `P ↦ [P − P₀]`, with
   `P ⊕ Q = R ⟺ P + Q ∼ R + P₀` (Prop. 6.1.6(b), 6.1.7 — the intrinsic group law).
   **Mathlib compatibility milestones** (the general theory meeting
-  `Mathlib/AlgebraicGeometry/EllipticCurve/`):
+  `Mathlib/AlgebraicGeometry/EllipticCurve/`; each is also a named interface of the
+  merged [EllipticCurves](../EllipticCurves/README.md) roadmap, whose Layer 0 leaves
+  the place implementation "to the upstream coordination"):
   (i) `genus k W.toAffine.FunctionField = 1` for `[W.IsElliptic]` (all
   characteristics);
   (ii) `W.toAffine.CoordinateRing` is the integral closure of `k[x]` in the function
   field — hence **`IsDedekindDomain` via Layer 2** (the instance the pin lacks and
-  PR #68 also wants);
-  (iii) the point–place dictionary: `W.toAffine.Point ≃` degree-1 places (PR #68's
-  Layer-0 bridge, supplied here as Prop. 6.1.6's general form);
-  (iv) `Cl⁰(W.FunctionField) ≅ ClassGroup W.CoordinateRing` (Layer 2's bridge
+  the EllipticCurves roadmap also wants);
+  (iii) the point–place dictionary: `W.toAffine.Point ≃` degree-1 places (the
+  EllipticCurves Layer-0 bridge, supplied here as Prop. 6.1.6's general form);
+  (iv) `Cl⁰(W.FunctionField) ≅ ClassGroup W.CoordinateRing` (Layer 3's affine bridge
   specialized to the one-rational-place-at-infinity case) — which, with Mathlib's
-  `Point.toClass` (injective) and PR #68's seeded `toClass_surjective`, closes the
+  `Point.toClass` (injective) and the EllipticCurves roadmap's seeded
+  `toClass_surjective`, closes the
   triangle `E(k) ≅ Cl⁰` **without this roadmap re-proving the group law**.
-- **Hyperelliptic function fields** (VI.2): definition (Def. 6.2.1: `g ≥ 2` with a
-  rational subfield of index 2); the intrinsic characterization `∃ A, deg A = 2 ∧
-  ℓ(A) ≥ 2`, and **every genus-2 function field is hyperelliptic** (Lemma 6.2.2);
-  `F/k(x)` is automatically separable (via Prop. 3.10.2), hence cyclic; char ≠ 2
+- **Hyperelliptic function fields** (VI.2). **Definition of record: `g ≥ 2` together
+  with a rational subfield `k(x) ⊆ F` with `[F : k(x)] = 2` and `F/k(x)`
+  separable** — separability is part of the definition, not a claimed consequence
+  (over the roadmap's arbitrary `k`, an index-2 subfield in characteristic 2 can be
+  inseparable, and no standing hypothesis rules it out; over **perfect** `k` the
+  separability is automatic via Prop. 3.10.2, so there the definition agrees with
+  Stichtenoth's index-2 Def. 6.2.1 — that equivalence is its own milestone, and the
+  inseparable-index-2 case is deliberately outside the model class). `F/k(x)` cyclic
+  of degree 2 (immediate from the definition); the intrinsic characterization
+  `∃ A, deg A = 2 ∧ ℓ(A) ≥ 2` (with the separability hypothesis carried where char
+  `k = 2`), and **every genus-2 function field over perfect `k` is hyperelliptic**
+  (Lemma 6.2.2 — the canonical pencil gives the index-2 subfield; perfectness is what
+  makes it separable, so the hypothesis is stated); char ≠ 2
   models `y² = f(x)`, `f` squarefree of degree `2g+1` or `2g+2`, with the **converse
   genus formula `g = (m−1)/2` (`m` odd) / `(m−2)/2` (`m` even)** and the list of
   ramified places (Prop. 6.2.3 — by Layer 7's RH with the Kummer-cover different;
   char-2 models via the Artin–Schreier calculus, flagged honest); **uniqueness of the
   degree-2 rational subfield** (`[F : k(z)] ≤ g ⟹ k(z) ⊆ k(x)`) and the
   regular-differentials description of it (Prop. 6.2.4). Boundary: models over `ℤ`,
-  Igusa invariants, cluster pictures → Wave-2 HyperellipticCurves.
+  Igusa invariants, cluster pictures → a future HyperellipticCurves roadmap.
 - **Smooth plane curves** (Fulton Chs. 5, 8; Stichtenoth's Appendix B vocabulary): the
   function field of an irreducible plane curve `f(x, y) = 0`; smoothness of the
   projective plane model as the hypothesis of record (stated via the pin's
@@ -838,15 +905,32 @@ Stichtenoth VI.1–VI.3; Fulton Chs. 5, 8 for the plane-curve computations.
   throughout). The Klein quartic (`d = 4`, `g = 3`) instantiated for Layer 11. Nodal
   corrections and general singular plane curves are not Layer-10 deliverables: they need
   the intersection multiplicities the pin lacks and are listed under scope exclusions below.
-- **Kummer and Artin–Schreier covers of `ℙ¹`** (III.7 + VI.3–VI.4): **Kummer**
-  `yⁿ = u` (`char ∤ n`): cyclic of degree `n` with `e = n/r_P`, `d = n/r_P − 1` for
-  `r_P = gcd(n, v_P(u))` and the closed genus formula (Prop. 3.7.3, Cor. 3.7.4;
-  `y² = f` squarefree as Ex. 3.7.6); **Artin–Schreier** `y^p − y = u`: the `m_P`
-  invariant, `d = (p−1)(m_P + 1)`, and the genus formula (Prop. 3.7.8; elementary
-  abelian generalization Prop. 3.7.10) — the two generating example families, each an
-  acceptance test for the tame and wild halves of Layer 7, and the substrate the
-  Wave-2 BelyiMaps and CurvesOverFiniteFields roadmaps cite (Hermitian curves are
-  VI.4/§7.4 instances).
+- **Kummer and Artin–Schreier covers** (III.7 + VI.3–VI.4), **with the hypotheses on
+  the statements, not implied**. **Kummer** `F′ = F(y)`, `yⁿ = u` (Prop. 3.7.3,
+  Cor. 3.7.4; `y² = f` squarefree as Ex. 3.7.6) — hypotheses of record, all four
+  required: (a) `n > 1`; (b) `char k ∤ n` (vacuous in char 0); (c) `k` contains a
+  primitive `n`-th root of unity (this is what makes the extension **Galois with
+  cyclic group `ℤ/n`** — without it `F(y)/F` need not even be normal); (d) the
+  nondegeneracy `u ≠ wᵈ` for every `w ∈ F` and every divisor `d > 1` of `n` (this is
+  what makes `Tⁿ − u` irreducible, so `[F′ : F] = n`; the practical sufficient form —
+  some place has `gcd(v_P(u), n) = 1` — is its own lemma). Only after (a)–(d): the
+  ramification data `e(P′∣P) = n / r_P`, `d(P′∣P) = n / r_P − 1` for
+  `r_P = gcd(n, v_P(u)) > 0`, the exact constant field criterion, and the closed genus
+  formula. **Artin–Schreier** `F′ = F(y)`, `y^p − y = u`, `char k = p > 0`
+  (Prop. 3.7.8; elementary abelian generalization Prop. 3.7.10) — hypotheses of
+  record: the nontriviality `u ∉ {w^p − w ∣ w ∈ F}` (otherwise `T^p − T − u` splits
+  and the "extension" is trivial — this is the degree-`p`-cyclic hypothesis), and the
+  **reduced local invariant `m_P` defined via a maximal representative, never read off
+  an arbitrary one**: for each place `P`, either some substitute `u − (w^p − w)`
+  (`w ∈ F`) is regular at `P` — then `P` is unramified and `m_P := −1` — or every
+  substitute has a pole at `P` and there is one of maximal valuation `−m_P < 0` with
+  `p ∤ m_P` (Stichtenoth's normalization; if `u` itself has a pole of order divisible
+  by `p`, it is **not** in reduced form at `P` and the formula does not apply to it as
+  written). Only then: `d(P′∣P) = (p − 1)(m_P + 1)`, wildness at every ramified place,
+  and the genus formula. These two families are the acceptance tests for the tame and
+  wild halves of Layer 7, and the substrate future BelyiMaps and
+  CurvesOverFiniteFields roadmaps would cite (Hermitian curves are VI.4/§7.4
+  instances).
 
 ### Layer 11: automorphisms and the Hurwitz bound
 
@@ -862,24 +946,45 @@ Hartshorne IV as the written sources of record.
   on places (`v_{σP}(y) = v_P(σ⁻¹y)`, Lemma 3.5.2's shape), on divisors, on `L(D)`, and
   on `Ω_F`; the fixed field `F^G` of a finite `G ≤ Aut(F/k)` is a function field with
   `F/F^G` Galois of group `G` (Artin + Layer 6); non-finiteness at small genus, stated
-  as theorems: `Aut(k(x)/k) ≅ PGL₂(k)` (Stichtenoth Ex. 1.2), and for elliptic `F` the
-  translations `≅ Cl⁰(F)` form an infinite normal subgroup with finite quotient
-  (Ex. 6.14) — so the `g ≥ 2` hypothesis below is visibly necessary.
+  as theorems **with their field hypotheses** — the isomorphism
+  `Aut(k(x)/k) ≅ PGL₂(k)` holds over every `k` (Stichtenoth Ex. 1.2), and witnesses
+  non-finiteness exactly when **`k` is infinite**; for elliptic `F` the translations
+  form a normal subgroup `≅ Cl⁰(F)` with finite quotient (Ex. 6.14), and `Cl⁰(F)` is
+  infinite over **algebraically closed** `k` (the degree-one places are `E(k̄)`) but
+  can be finite otherwise (over finite `k` it *is* finite, Layer 5) — so the `g ≥ 2`
+  hypothesis below is visibly necessary over `k̄`, and no unqualified infinitude is
+  claimed.
 - **Rigidity.** An automorphism fixing `2g + 3` distinct rational places is the
   identity (Ex. 3.17's shape; via the totally-ramified criterion Ex. 3.16) — the
   finiteness engine.
 - **Weierstrass points, made real.** What Layer 5 deferred: over algebraically closed
   `k`, char 0 first — all but finitely many rational places share the generic gap
-  sequence, the exceptions (Weierstrass points) number at least `2g + 2` and at most
-  `g³ − g` for `g ≥ 2` (the Wronskian route; Stichtenoth's Rem. 1.6.9 cites this
-  without proof, so it is built here, not imported).
-- **Finiteness for `g ≥ 2` in the stated regime** — the headline theorem over algebraically
-  closed characteristic-zero `k`:
-  `Aut(F/k̄)` is finite, by rigidity + the action on the finite Weierstrass-point set,
-  with the hyperelliptic case (where the involution fixes every Weierstrass place)
-  handled separately via the unique degree-2 subfield (Prop. 6.2.4 + Ex. 6.11(v)'s shape).
-  General perfect-`k` positive-characteristic finiteness is not a Layer-11 deliverable and
-  is listed under scope exclusions below.
+  sequence `1, …, g`; the exceptions (Weierstrass points), counted by the vanishing of
+  the Wronskian of a basis of `L(W)`, have total weight `g³ − g` for `g ≥ 2`, each
+  point has weight `≤ g(g−1)/2`, so there are between `2g + 2` and `g³ − g` of them —
+  **with the equality case pinned: exactly `2g + 2` Weierstrass points occur iff `F` is
+  hyperelliptic** (every branch place then has the maximal weight `g(g−1)/2`), so a
+  **non-hyperelliptic** `F` has **at least `2g + 3`** Weierstrass points. (The
+  Wronskian route; Stichtenoth's Rem. 1.6.9 cites the counts without proof, so this is
+  built here from Goldschmidt's treatment, not imported.)
+- **Finiteness for `g ≥ 2`, by the exact route** — the headline theorem over
+  algebraically closed characteristic-zero `k`, stated and proved as two cases, with
+  every prerequisite named (finiteness of the *full* group is this milestone;
+  the Hurwitz bound below is a separate statement about an already-finite subgroup):
+  `Aut(F/k̄)` acts on the finite set `𝒲` of Weierstrass points (the gap sequence is
+  `Aut`-invariant).
+  *Non-hyperelliptic case*: `#𝒲 ≥ 2g + 3` (the equality-case count above), every place
+  over `k̄` is rational, so the kernel of `Aut(F/k̄) → Sym 𝒲` fixes `≥ 2g + 3` rational
+  places and is trivial by rigidity; hence `Aut ↪ Sym 𝒲` is finite.
+  *Hyperelliptic case*: the hyperelliptic involution `ι` is central (uniqueness of the
+  degree-2 rational subfield, Prop. 6.2.4), `Aut/⟨ι⟩` embeds into `Aut(k̄(x)/k̄) ≅ PGL₂(k̄)`
+  preserving the `2g + 2 ≥ 6` branch points, an element of `PGL₂` fixing `≥ 3` points
+  of `ℙ¹(k̄)` is the identity, so `Aut/⟨ι⟩ ↪ Sym(branch set)` and `Aut` is finite.
+  Prerequisites consumed: rigidity (above), the Weierstrass-point counts with the
+  hyperelliptic equality case (above, Goldschmidt), Prop. 6.2.4 (Layer 10), `PGL₂`
+  three-point rigidity (Layer 1's `ℙ¹` API). General perfect-`k`
+  positive-characteristic finiteness is not a Layer-11 deliverable and is listed under
+  scope exclusions below.
 - **The Hurwitz `84(g−1)` bound**: for `g ≥ 2` and `char k = 0` (or
   `gcd(|G|, char k) = 1`), a finite `G ≤ Aut(F/k̄)` has `|G| ≤ 84(g−1)` — by
   Riemann–Hurwitz on `F/F^G` and the `(2, 3, 7)` extremal analysis of branch data
@@ -896,53 +1001,73 @@ Hartshorne IV as the written sources of record.
 ### Layer 12: the dictionary — function fields ↔ curves, and the comparison contracts
 
 Stichtenoth Appendix B; Liu Ch. 7; Hartshorne I.6. The definite later layer where this
-roadmap meets the scheme world. Everything below is stated against the pin's
-`AlgebraicGeometry` vocabulary (`Scheme`, `IsIntegral`, `IsProper`,
-`Scheme.functionField`).
+roadmap meets the scheme world, split into sublayers 12A–12E; each lists its exact
+prerequisites, its new definitions, and the theorem-level output the next sublayer
+consumes. Everything is stated against the pin's `AlgebraicGeometry` vocabulary
+(`Scheme`, `IsIntegral`, `IsProper`, `Scheme.functionField`). ⚠ **Regular, not smooth**
+(the merged [EllipticCurves](../EllipticCurves/README.md) roadmap's convention, adopted
+verbatim): over imperfect `k` the regular projective model need not be smooth; smooth =
+regular + geometrically-reduced-fibre hypotheses stated exactly where used
+(`Geometrically/` vocabulary at the pin).
 
-- **From curves to function fields.** For `X` an integral scheme, proper over `k`, of
-  dimension 1 (dimension stated via `topologicalKrullDim`/stalk-Krull-dimension at the
-  pin, with the "dim = trdeg of the function field" bridge a named milestone), regular:
-  `k(X) := X.functionField` is a function field over `k`; closed points ↦ places
-  (`ord_x` via the DVR stalks — consume `ringKrullDim_stalk_eq_coheight` +
-  DVR-characterization TFAE), matching residue fields and degrees. ⚠ Refactor-onto
-  flag: Mathlib master (post-pin) has `AlgebraicGeometry/OrderOfVanishing.lean` and
-  `AlgebraicCycle/Basic.lean` (Giles campaign, §What is in motion) — on the next
-  toolchain bump these milestones are restated against that vocabulary, never against
-  a rival one.
-- **From function fields to curves.** The regular projective model of `F/k`: existence
-  and uniqueness up to isomorphism (route: the place space as the underlying set,
-  charted by the Layer-2 affine models `Spec R_x` glued along localizations — the
-  "abstract curve" of Hartshorne I.6 in scheme clothing); the anti-equivalence
-  {function fields `F/k` + `k`-embeddings} ≃ {regular projective curves + dominant
-  `k`-morphisms}ᵒᵖ. ⚠ **Regular, not smooth** (PR #68's convention, adopted verbatim):
-  over imperfect `k` the regular projective model need not be smooth; smooth = regular +
-  geometrically-reduced-fibre hypotheses stated exactly where used (`Geometrically/`
-  vocabulary at the pin).
-- **The comparison contract with [JacobianChallenge](../JacobianChallenge/README.md)**
-  (its Layers A–B), stated as named milestones on this side so whichever route lands
-  first, the other refactors onto it: under the dictionary, (i) Weil divisors on the
-  regular model ≅ `Divisor k F`, matching degrees; (ii) `H⁰(X, 𝒪_X(D)) ≅ L(D)` (its
-  sheaf `𝒪(D)` vs this roadmap's `L(D)`); (iii) its cohomological genus
-  `dim H¹(X, 𝒪_X)` equals this roadmap's `genus k F` — equivalently `h¹(𝒪(D)) = i(D) =
-  ℓ(W − D)`, so **function-field RR + the dictionary ⟺ its `χ`-form RR + Serre duality**;
-  (iv) the dualizing sheaf `ω_{X/k}` corresponds to the canonical class `W` with
-  `deg ω = 2g − 2` matching. The contract is *this list*; neither roadmap builds the
-  other's side.
-- **The PR #81 interface, discharged fibrewise.** What #81 assumes ("the space-of-sections
-  dimensions for the divisors `n·[0]` on a relative curve"): over a field, this roadmap
-  supplies `ℓ(n·[0]) = n` for `n ≥ 1` on a genus-1 function field with a rational place
-  `[0]` (Layer 5's regime theorem) — stated in #81's vocabulary through the dictionary as
-  `h⁰(E_s, 𝒪(n·[0_s])) = n` fibrewise. The **relative** upgrade (`π_*𝒪(n·[0])` locally
-  free of rank `n`, cohomology-and-base-change) is **JacobianChallenge Layer C territory,
-  not this roadmap's**: the split is recorded here as an explicit hand-off milestone
-  ("fibrewise supplied ← here; relative glue ← JacobianChallenge C; consumer ← #81
-  Layer 1"), so the three roadmaps' claims compose without a gap or an overlap.
-- **The PR #68 comparison contract engine**: the anti-equivalence restricted to elliptic
-  function fields is exactly the tool its Layer 2 comparison contract cites ("the place at
-  `O₁` restricting to the place at `O₂`"); the compatibility milestone here is that this
-  dictionary, specialized to `W.FunctionField`, induces its `Isogeny`-to-scheme-morphism
-  correspondence.
+- **12A — dimension-one schemes, closed points, and orders of vanishing.**
+  *Prerequisites*: Mathlib's `Scheme`, `IsIntegral`, `IsProper`, `IsLocallyNoetherian`,
+  `Scheme.functionField`, `ringKrullDim_stalk_eq_coheight`, the DVR-characterization
+  TFAE; Layer 0's `Place`. *New definitions*: "curve over `k`" := integral scheme,
+  proper over `k`, of dimension 1 (dimension via `topologicalKrullDim`/stalk Krull
+  dimension, with the "dim = trdeg of the function field" bridge a named milestone);
+  `ord_x : k(X)ˣ → ℤ` at a regular closed point via the DVR stalk; the degree of a
+  closed point. *Output consumed by 12B–12D*: for regular `X`,
+  `k(X) := X.functionField` is a function field over `k` and closed points give
+  places, matching residue fields and degrees. ⚠ Refactor-onto flag: Mathlib master
+  (post-pin) has `AlgebraicGeometry/OrderOfVanishing.lean` and
+  `AlgebraicCycle/Basic.lean` (the scheme-side campaign recorded in
+  [PROVENANCE.md](PROVENANCE.md)) — when the repository's Mathlib reaches them, these
+  milestones are restated against that vocabulary, never against a rival one.
+- **12B — the regular proper model, by gluing affine normalizations.**
+  *Prerequisites*: Layer 2's `R_x` (Dedekind, fraction field `F`), Mathlib's `Spec`,
+  gluing of schemes along opens, `Proj` properness or the valuative criterion.
+  *New definitions*: the model `X_F` of `F/k` — underlying data the place space,
+  charted by `Spec R_x ⊔ Spec R_{1/x}` glued along the common localization (the
+  "abstract curve" of Hartshorne I.6 in scheme clothing). *Outputs*: `X_F` is a
+  regular curve over `k` with `k(X_F) ≅ F`; **existence and uniqueness of the regular
+  proper model up to isomorphism**; its closed points are exactly the places of `F`
+  (12A's dictionary is inverse to this construction on points).
+- **12C — morphisms and the anti-equivalence.**
+  *Prerequisites*: 12A–12B; Mathlib's `Scheme.Hom`, dominant morphisms,
+  `Spec`-adjunction API. *New definitions*: none (the content is functorial).
+  *Outputs*: a `k`-embedding `F ↪ F′` of function fields extends uniquely to a finite
+  dominant morphism `X_{F′} → X_F` of regular models; the **anti-equivalence**
+  {function fields `F/k` + `k`-embeddings} ≃ {regular projective curves over `k` +
+  dominant `k`-morphisms}ᵒᵖ. Acceptance instance (the merged
+  [EllipticCurves](../EllipticCurves/README.md) contract): specialized to
+  `W.FunctionField`, the anti-equivalence induces its isogeny-to-scheme-morphism
+  correspondence, and "the place at `O₁` restricting to the place at `O₂`" is the
+  literature comparison its Layer 2 rests on.
+- **12D — divisors and degrees, compared.**
+  *Prerequisites*: 12A–12B; Layer 3's `Divisor k F` and `degree`. *New definitions*:
+  Weil divisors on the regular model (free abelian group on closed points — stated
+  against the Mathlib scheme-side vocabulary of the day, see 12A's flag). *Outputs*:
+  under 12A/12B's point–place dictionary, **Weil divisors on `X_F` ≅ `Divisor k F`**,
+  matching degrees, principal divisors, and linear equivalence — so `Pic`-style class
+  groups agree with `Cl(F)`.
+- **12E — cohomology compared: `H⁰ = L(D)`, the genus, and the canonical class.**
+  *Prerequisites*: 12A–12D; the merged
+  [JacobianChallenge](../JacobianChallenge/README.md) roadmap's Layers A–B (its sheaf
+  `𝒪_X(D)`, coherent cohomology over `k`, `χ`-form Riemann–Roch, Serre duality).
+  *New definitions*: none — this sublayer is exactly the **comparison contract**, stated
+  as named milestones on this side so whichever route lands first, the other refactors
+  onto it: (i) `H⁰(X, 𝒪_X(D)) ≅ L(D)` under 12D's identification; (ii) the
+  cohomological genus `dim H¹(X, 𝒪_X)` equals this roadmap's `genus k F` —
+  equivalently `h¹(𝒪(D)) = i(D) = ℓ(W − D)`, so **function-field RR + the dictionary ⟺
+  the `χ`-form RR + Serre duality**; (iii) the dualizing sheaf `ω_{X/k}` corresponds to
+  the canonical class `W` with `deg ω = 2g − 2` matching. The contract is *this list*;
+  neither roadmap builds the other's side. Everything here is over the field `k`: the
+  **relative** theory (proper-flat pushforwards, cohomology and base change,
+  `π_*𝒪(n·[0])` locally free) is JacobianChallenge Layer-C territory and no milestone
+  of this roadmap. Acceptance instance: for a genus-1 `F` with a rational place `[0]`,
+  the comparison turns Layer 5's ladder `ℓ(n·[0]) = n` into
+  `h⁰(X_F, 𝒪(n·[0])) = n` (`n ≥ 1`).
 ### Scope exclusions and future directions (not deliverables)
 
 Nonspecial-divisor existence refinements and Brill–Noether-style statements; generic
@@ -971,17 +1096,23 @@ definition, wrong degree convention, dropped hypothesis, sign flip, silent tamen
   (`IsFunctionField ℝ (RatFunc ℂ)` holds), `ℓ(0) = 2 ≠ 1` — the example that keeps
   `IsIntegrallyClosedIn` an explicit hypothesis.
 - **A genus-1 cubic = Mathlib's elliptic curve** (Layers 7, 10): for `[W.IsElliptic]`
-  over `k`, `genus k W.toAffine.FunctionField = 1`; `ℓ(n·[O]) = n` for `n ≥ 1` (the #81
-  fibrewise interface at the curve of record); `Cl⁰ ≅ ClassGroup W.CoordinateRing`; and
+  over `k`, `genus k W.toAffine.FunctionField = 1`; `ℓ(n·[O]) = n` for `n ≥ 1`
+  (Layer 5's genus-one ladder at the curve of record);
+  `Cl⁰ ≅ ClassGroup W.CoordinateRing`; and
   over `ℚ` with `y² = x³ − x`: the 2-torsion places, `Diff = ` the four branch places,
   Hurwitz checking `2·1 − 2 = 2·(0 − 2) + 4`.
 - **Hyperelliptic genus 2** (Layers 7, 10): `y² = x⁵ − 1` over `k` with
-  `char k ∉ {2, 5}`: genus 2; the different of `F/k(x)` has degree 6 (the places over
-  the zeros of `x⁵ − 1` — total degree 5, however they split over `k` — plus the one
-  over `∞`), Hurwitz: `2·2 − 2 = 2·(−2) + 6`. The general `g = ⌊(deg f − 1)/2⌋` for
-  squarefree `f`, both parities.
+  `char k ∉ {2, 5}` (the Kummer hypotheses hold: `n = 2 > 1`, `−1 ∈ k` is the primitive
+  square root of unity, and squarefree `x⁵ − 1` is not a square in `k(x)`): genus 2; the
+  different of `F/k(x)` has degree 6 (the places over
+  the zeros of `x⁵ − 1` — total degree 5, regardless of how they split over `k` — plus
+  the one over `∞`), Hurwitz: `2·2 − 2 = 2·(−2) + 6`. The general
+  `g = ⌊(deg f − 1)/2⌋` for squarefree `f`, both parities.
 - **Wild honesty: Artin–Schreier** (Layer 7): `y² − y = x³` over `𝔽₂` (or `y^p − y = x²`
-  over `𝔽_p`): the unique place over `∞` is wildly ramified with `d > e − 1`; the genus
+  over `𝔽_p`, `p` odd) — in both, `u` has a single pole, at `∞`, of order prime to `p`,
+  so `u` is already reduced there (`m_∞ = 3`, resp. `2`) and `u ∉ {w^p − w}` because no
+  substitute clears a prime-to-`p` pole: the nondegeneracy hypotheses hold. The unique
+  place over `∞` is wildly ramified with `d > e − 1`; the genus
   from the conductor computation disagrees with the naive tame count — the acceptance
   test that no `p ∤ e` slipped into Riemann–Hurwitz.
 - **Inseparable constant-extension drop** (Layer 8): the standard
@@ -989,7 +1120,10 @@ definition, wrong degree convention, dropped hypothesis, sign flip, silent tamen
   adjoining `t^{1/p}` — stated as the counterexample theorem guarding Layer 8's
   hypotheses.
 - **Weierstrass gaps at genus 2** (Layer 5): at a Weierstrass place of the `y² = x⁵ − 1`
-  curve, the gap sequence is `{1, 3}`; at a non-Weierstrass rational place it is `{1, 2}`.
+  curve, the gap sequence is `{1, 3}`; at a non-Weierstrass rational place it is `{1, 2}`
+  — over a field where such a place exists: take `k = ℚ(i)` and the place of the point
+  `(0, i)` (`x = 0` is off the branch locus since `0⁵ − 1 ≠ 0`), or any `k` with a
+  rational point off the branch locus.
 - **Klein quartic** (Layers 10–11): `x³y + y³ + x = 0`-model (the affine Klein quartic)
   over `ℚ̄`/any char-0 `k̄`: genus `3 = (4−1)(4−2)/2`, and `#Aut = 168 = 84·(3−1)` — the
   Hurwitz-bound sharpness witness.
@@ -997,17 +1131,24 @@ definition, wrong degree convention, dropped hypothesis, sign flip, silent tamen
 ## Ordering and parallelism
 
 Layers 0–1 are first and sequential (places, then their classification on `k(x)`).
-Layer 2 (affine models) needs Layer 0 only and can run in parallel with Layer 1; its
-divisor-facing milestones activate once Layer 3's types exist. Layer 3 needs Layers 0–2;
+Layer 2 (affine models) needs Layer 0 only and can run in parallel with Layer 1; every
+divisor-level statement lives in Layer 3, so Layers 1 and 2 contain no forward
+references. Layer 3 needs Layers 0–2 (its rational-function-field and affine-bridge
+subsections are exactly where Layers 1–2 meet the divisor types);
 Layer 4 (RR) needs Layer 3 and the repartition vocabulary only — it is the critical path.
-Layer 5 follows Layer 4. Layer 6 (extensions) needs Layers 0–3 but **not** RR, so it can
+Layer 5 follows Layer 4; its Clifford milestone is the `[Infinite k]` form, and the
+unrestricted Clifford is a Layer 8 export. Layer 6 (extensions) needs Layers 0–3 but
+**not** RR, so it can
 proceed in parallel with Layers 4–5; Layer 7 (different/Hurwitz) needs Layers 4 (cotrace),
-5 (the local-component device `η` of Prop. 1.7.4), and 6. Layer 8 (constant extensions) needs Layer 6 and touches Layer 7 only for genus
-statements. Layer 9 (Kähler) needs Layer 4 and is otherwise independent of 6–8; PR #68's
-invariant-differential compatibility should not wait on Hurwitz. Layer 10 (models) needs
+5 (the local-component device `η` of Prop. 1.7.4), and 6. Layer 8 (constant extensions)
+needs Layer 6 and touches Layer 7 only for genus
+statements. Layer 9's first subsection (`dim Ω[F⁄k] = 1`) needs Layers 0–3 only and can
+be drafted early; its comparison theorem consumes Layer 7's cotrace (and Layer 5's `η`),
+so **Layer 9 as a whole follows Layer 7**. Layer 10 (models) needs
 Layers 7 and 9 for its genus computations; Layer 11 needs Layers 5–8 and 10; Layer 12
 needs conceptually everything but its *statements* (the contracts) should be drafted as
-soon as Layer 3 exists, so JacobianChallenge, #68, and #81 can review the interface
+soon as Layer 3 exists, so the JacobianChallenge and EllipticCurves maintainers can
+review the interface
 early. The worked examples are spread across all layers and none is deferrable to the
 end.
 
@@ -1015,11 +1156,11 @@ end.
 
 | Supplier | Supplied milestone | Consumer |
 |---|---|---|
-| This PR, Layers 0–5 | normalized places, residue degrees, `Finsupp` divisors, exact constants, Riemann–Roch, and `ℓ(n[0]) = n` at genus one | Modular Curves PR #81's fibrewise section-dimension input; its relative base-change upgrade remains JacobianChallenge Layer C |
-| This PR, Layers 6–8 | function-field extensions, ramification indices/residue degrees, the different, Riemann–Hurwitz, and lower ramification groups | future CurvesOverFiniteFields and BelyiMaps roadmaps; these are consumers, not prerequisites of this PR |
-| This PR, Layers 9–10 | Kähler/Weil differential comparison and the elliptic function-field/place/class-group dictionary | Elliptic Curves PR #68's named comparison interfaces |
-| This PR, Layer 12 plus merged JacobianChallenge Layers A–B | divisors, `H^0 = L(D)`, equality of cohomological and function-field genus, and dualizing-sheaf/canonical-class comparison | both routes; neither re-proves the other's Riemann–Roch theorem |
-| [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2), ramification-filtration layer | upper numbering, Herbrand, and Hasse–Arf | no theorem in this PR: Layer 8 stops at lower numbering and proves only the completion bridge, so there is no scheduling dependency |
+| This roadmap, Layers 0–5 | normalized places, residue degrees, `Finsupp` divisors, exact constants, Riemann–Roch, and the genus-one ladder `ℓ(n·[0]) = n` | the merged [EllipticCurves](../EllipticCurves/README.md) roadmap's Layer-0 place/divisor interface instantiates the general theory here; the ladder is a reusable consequence with no further current consumer (any relative base-change upgrade is JacobianChallenge Layer-C territory, not this roadmap's) |
+| This roadmap, Layers 6–8 | function-field extensions, ramification indices/residue degrees, the different, Riemann–Hurwitz, and lower ramification groups | future CurvesOverFiniteFields and BelyiMaps roadmaps; these are consumers, not prerequisites of this roadmap |
+| This roadmap, Layers 9–10 | Kähler/Weil differential comparison and the elliptic function-field/place/class-group dictionary | the merged [EllipticCurves](../EllipticCurves/README.md) roadmap's named comparison interfaces |
+| This roadmap, Layer 12 plus merged JacobianChallenge Layers A–B | divisors, `H^0 = L(D)`, equality of cohomological and function-field genus, and dualizing-sheaf/canonical-class comparison | both routes; neither re-proves the other's Riemann–Roch theorem |
+| [Local Fields roadmap (PR #2, in preparation)](https://github.com/roed-math/TauCetiRoadmap/pull/2), ramification-filtration layer | upper numbering, Herbrand, and Hasse–Arf | no theorem in this roadmap: Layer 8 stops at lower numbering and proves only the completion bridge, so there is no scheduling dependency |
 
 The function-field Riemann–Roch chain itself has no sibling-roadmap prerequisite.
 
@@ -1033,7 +1174,8 @@ The function-field Riemann–Roch chain itself has no sibling-roadmap prerequisi
   genus estimates III.11) = Layers 6–8; Ch. IV (differentials, `P`-adic expansions,
   Weil-differential comparison) = Layer 9; Ch. VI (elliptic VI.1, hyperelliptic VI.2,
   Kummer/Artin–Schreier VI.3–VI.4) = Layer 10; Appendix B = Layer 12's vocabulary.
-  (Ch. 5 — zeta — is Wave-2's.)
+  (Ch. 5 — zeta — belongs to a future CurvesOverFiniteFields roadmap; only its
+  zeta-free §5.1 inputs are Layer 5's.)
 - W. Fulton, *Algebraic Curves: An Introduction to Algebraic Geometry*, 2008 ed. — the
   plane-curve route: Ch. 5 (projective plane curves, Bézout, Max Noether), Ch. 8
   (divisors §8.1–8.2, Riemann's theorem §8.3 **with the ordinary-singularities genus
@@ -1063,7 +1205,8 @@ The function-field Riemann–Roch chain itself has no sibling-roadmap prerequisi
   counterexamples of §3.6 (he states none); Layer 8's counterexample provenance.
   *(Library list.)*
 - M. Rosen, *Number Theory in Function Fields*, GTM 210 — the arithmetic consumer's
-  view (Wave-2-facing); cited for the S-integer/class-group bridges of Layer 2.
+  view (facing a future CurvesOverFiniteFields roadmap); cited for the
+  S-integer/class-group bridges of Layer 2.
   *(Library list.)*
 - J.-P. Serre, *Local Fields* — the different and ramification background of Layers
   6–8 (already the LocalFields sibling's primary source; cited here only for the
@@ -1077,88 +1220,51 @@ The function-field Riemann–Roch chain itself has no sibling-roadmap prerequisi
 
 ## Provenance and coordination
 
-The records below state only evidenced status as of 2026-08-01. A missing revision, licence, or
-contact result blocks code adaptation; it does not imply permission or agreement.
+Dated evidence — inspected revisions, licences, open-pull-request lists, and the search
+record — lives in [PROVENANCE.md](PROVENANCE.md), which is not normative. This section
+states the standing division of labor.
 
-- **Project / authors:** `vaca22/riemann-roch-function-fields` / Guanghao Li. **Exact revision or
-  PR:** no immutable repository revision is pinned in this branch; related Mathlib PRs #41729,
-  #41732, #41728, and #41696 identify the upstreaming stack. **Licence:** Apache-2.0. **Overlap:**
-  Layers 0–5 and parts of Layer 10 by the same function-field/adelic route. **Contact /
-  coordination status:** no author-contact outcome is recorded in this repository. **Agreed
-  ownership:** none recorded. **Plan:** no code migration until a revision and coordination
-  outcome are logged; specify Tau Ceti's intrinsic normalized-valuation/`Finsupp` interface, and
-  consume landed Mathlib results or contribute compatibility lemmas upstream. **Refactor trigger:**
-  any listed PR landing or author agreement on a shared interface.
-- **Project / authors:** Mathlib conditional Riemann–Roch and scheme divisors / Raphael Douglas
-  Giles and contributors. **Exact revision or PR:** #41621, #37901, #29774, #38472, #38953,
-  #41198, #41042, #38002, #41317, and #40509. **Licence:** Apache-2.0 (Mathlib). **Overlap:**
-  Layer 12's scheme-side divisors, order of vanishing, and conditional Riemann–Roch contract.
-  **Contact / coordination status:** no direct contact outcome is recorded. **Agreed ownership:**
-  no agreement is recorded; this roadmap assigns the scheme-side carrier to Mathlib and owns only
-  the field-side theory plus comparison. **Plan:** consume the Mathlib namespace and report gaps
-  upstream, never fork it. **Refactor trigger:** the next toolchain bump containing the merged
-  scheme-side APIs.
-- **Project / authors:** `AxelDlv00/LeanAlgebraicGeometry` / repository contributors. **Exact
-  revision or PR:** no immutable revision is pinned. **Licence:** not recorded here. **Overlap:**
-  Picard-scheme/Riemann–Roch ledger work near Layer 12. **Contact / coordination status:** no
-  contact outcome is recorded. **Agreed ownership:** none recorded. **Plan:** citation and
-  statement-shape audit only; no code transfer until revision, licence, and coordination are
-  recorded. **Refactor trigger:** none before those fields are complete.
-- **Project / authors:** Tau Ceti Modular Curves PR #81 and Elliptic Curves PR #68 / C. Birkbeck.
-  **Exact revision or PR:** TauCetiProject/TauCetiRoadmap #81 and #68. **Licence:** roadmap text is
-  under this repository's Apache-2.0 licence. **Overlap:** the fibrewise genus-one section count and
-  elliptic function-field comparison. **Contact / coordination status:** no direct contact outcome
-  is recorded in this branch. **Agreed ownership:** the documents already assign relative
-  cohomology/base change to JacobianChallenge and elliptic arithmetic to #68; author confirmation
-  has not been recorded. **Plan:** provide only the exact Layer 5/10/12 interfaces listed above and
-  request review before those interfaces land. **Refactor trigger:** consumer feedback or a change
-  to either PR's interface.
-
-- **vaca22/riemann-roch-function-fields** (Guanghao Li, Apache-2.0) — the standing
-  obligation of this roadmap. The same function-field route to RR exists there sorry-free
-  with an active Mathlib upstreaming pipe (#41729/#41732/#41728/#41696). Per the root
-  conventions ("coordinate before integrating existing work"), the stance is: (i) this
-  roadmap develops the mathematics **independently in Tau Ceti** (owner decision: Tau Ceti
-  is the destination), *specifying the mathematics, not that code* — nothing here is a
-  file-by-file port, and this section is the only place the repo is treated as a source;
-  (ii) **contact the author before Layers 3–5 start**, on Zulip, cross-linking this
-  roadmap, his repo, and Mathlib #41621, and declaring the function-field lane this
-  roadmap targets — if he prefers joint work or his upstreaming lands first, the affected
-  milestones become comparison-and-consume tasks (same pattern as the LocalFields
-  sibling's ClassFieldTheory obligations); (iii) statement-shape alignment where his
-  conventions and this roadmap's pinned ones agree (places as valuation data, divisors
-  over places, adelic `i(D)`, existential canonical class), and *documented divergence*
-  where they do not — this roadmap pins normalized `ℤᵐ⁰`-valuations and `Finsupp`
-  divisors for Mathlib-vocabulary reasons stated in the conventions table; (iv) his
-  Mathlib PRs, once merged, are consumed like any upstream material (refactor-onto
-  flags on Layers 2–3's divisor-group milestones).
-- **Mathlib scheme-divisor campaign (R. D. Giles)** — Layer 12 must track
-  `AlgebraicGeometry/AlgebraicCycle/*` and `OrderOfVanishing` (already on master) and
-  state its dictionary milestones against them at the next bump; the function-field
-  divisor here is a different (field-level) object, so no namespace collision, but the
-  Layer-12 "Weil divisors on the regular model" side is **his namespace, not ours** —
-  contract statements there consume his types, and any gap found is reported upstream,
-  not forked. Cite #41621 and the open stack on every Layer-12 milestone.
-- **[JacobianChallenge](../JacobianChallenge/README.md)** (merged TauCeti roadmap;
+- **`vaca22/riemann-roch-function-fields`** (Guanghao Li; Apache-2.0): a complete,
+  sorry-free function-field Riemann–Roch by the same Stichtenoth-style route — the
+  largest overlap with this roadmap (Layers 0–5 and parts of 10) — with parts being
+  upstreamed to Mathlib as open pull requests (the list, with the inspected revision,
+  is in [PROVENANCE.md](PROVENANCE.md)). The plan, definite: **this roadmap develops
+  the mathematics independently in Tau Ceti, specifying the mathematics, not that
+  code**. No code is copied or adapted from that repository — the licence would permit
+  copying with attribution, but the project's coordinate-first rule reserves
+  integration for a recorded agreement, and none is recorded — and nothing here waits
+  on it either. Where its open Mathlib pull requests cover ground this roadmap needs
+  — the Dedekind divisor group of
+  [#41729](https://github.com/leanprover-community/mathlib4/pull/41729) is exactly
+  Layer 3's affine dictionary — the milestones here are named and shaped the way those
+  pull requests shape them, so if one lands in the Mathlib the repository builds, ours
+  is deleted and the imports change. API divergence, documented: this roadmap pins
+  normalized `ℤᵐ⁰`-valuations, `Finsupp` divisors, and `IsIntegrallyClosedIn`
+  constants for the Mathlib-vocabulary reasons in the conventions table; that
+  repository's self-contained intrinsic-DVR-subring API differs, and the divergence is
+  deliberate, not accidental.
+- **Mathlib's scheme-divisor and conditional-Riemann–Roch campaign** (R. D. Giles) —
+  Layer 12 tracks `AlgebraicGeometry/AlgebraicCycle/*` and `OrderOfVanishing` (on
+  Mathlib master; pull-request list in [PROVENANCE.md](PROVENANCE.md)) and states its
+  dictionary milestones against them when the repository's Mathlib reaches them; the
+  function-field divisor here is a different (field-level) object, so no namespace
+  collision, but the Layer-12 "Weil divisors on the regular model" side is **Mathlib's
+  namespace, not ours** — contract statements there consume Mathlib's types, and any
+  gap found is a gap, not a fork.
+- **[JacobianChallenge](../JacobianChallenge/README.md)** (merged roadmap;
   Merten's AG formulation). The division of labor is pinned: it builds scheme divisors,
   coherent cohomology, Serre duality, `Pic⁰`, and the Jacobian; this roadmap builds the
-  function-field theory and proves RR adelically; **the Layer-12 comparison contract
-  (four numbered items: divisors, `H⁰ = L(D)`, `g_cohomological = g_functionfield` via
-  `h¹ = i(D)`, dualizing sheaf = canonical class) is the entire interface** — stated
-  here, consumable by both, so the two RRs reconcile instead of duplicating. Its
-  acceptance criterion `dim Jac = g` consumes this roadmap's genus through that
-  contract. Draft the contract statements as soon as Layer 3's types exist (Ordering
-  section) and review them with the JacobianChallenge maintainers.
-- **PR #81 (ModularCurves, C. Birkbeck)** — the named consumer. Its assumed
-  Riemann–Roch interface (quoted in the opening; "the space-of-sections dimensions for
-  the divisors `n·[0]` on a relative curve") is discharged in two named pieces:
-  the **fibrewise dimension count is Layer 5's regime theorem** specialized to genus 1
-  (`ℓ(n·[0]) = n`, stated in #81's vocabulary through Layer 12's dictionary), and the
-  **relative upgrade (pushforward locally free, base change) is explicitly
-  JacobianChallenge-Layer-C territory** — the hand-off is recorded as a Layer-12
-  milestone so the three roadmaps compose without gap or overlap. Talk to the author
-  before Layer 12 lands (the master plan already flags this conversation).
-- **PR #68 (EllipticCurves, C. Birkbeck)** — the sibling instance. Its Layer 0
+  function-field theory and proves RR adelically; **the Layer-12E comparison contract
+  (three numbered items: `H⁰ = L(D)` over 12D's divisor identification,
+  `g_cohomological = g_functionfield` via `h¹ = i(D)`, dualizing sheaf = canonical
+  class) is the entire interface** — stated here, consumable by both, so the two RRs
+  reconcile instead of duplicating. Its acceptance criterion `dim Jac = g` consumes
+  this roadmap's genus through that contract. Draft the contract statements as soon as
+  Layer 3's types exist (Ordering section) and review them with the JacobianChallenge
+  maintainers. The **relative** theory (cohomology and base change) is its Layer C, no
+  part of this roadmap.
+- **[EllipticCurves](../EllipticCurves/README.md)** (merged roadmap) — the sibling
+  instance. Its Layer 0
   deliberately leaves the place/divisor *implementation* "to the upstream coordination";
   this roadmap **is** that coordination point: the conventions table here (normalized
   valuations, `Finsupp` divisors, residue-finrank degrees) is the general theory its
@@ -1170,28 +1276,24 @@ contact result blocks code adaptation; it does not imply permission or agreement
   differential in `Ω[FunctionField⁄K]` reconciled with the trivial canonical class
   (Layer 9). Its "regular, not smooth" convention over imperfect fields is adopted
   verbatim in Layer 12.
-- **PR #47 (ModularForms, C. Birkbeck)** — no interface: its Layer 10 builds the genus
-  of `X(Γ)` analytically (Euler characteristics; its dimension-formula lower bounds are
-  gated on a planned analytic compact-Riemann-surfaces RR, not on this roadmap).
+- **[ModularForms](../ModularForms/README.md)** (merged roadmap) — no interface: its
+  Layer 10 builds the genus of `X(Γ)` analytically, with its own internal
+  compact-Riemann-surfaces Riemann–Roch chain, so it consumes nothing from here.
   Cited so nobody wires a false dependency; the analytic ↔ algebraic genus
   comparison is excluded from Layer 12, gated on GAGA-style work no current
   roadmap owns.
-- **Future Wave-2 consumers** (not dependencies of this PR): **CurvesOverFiniteFields**
-  consumes Layers 0–8 wholesale (its zeta rationality/functional equation are RR
-  corollaries; the `Cl⁰` finiteness over finite `k` and strong approximation are
-  supplied here); **HyperellipticCurves** consumes Layer 10's model class and Layer 7's
-  Hurwitz; **BelyiMaps** consumes Layers 6–7 (ramification, RH) and Layer 12's
-  dictionary; the LMFDB genus/automorphism data semantics (higher-genus section) rest
+- **Future consumers** (not dependencies of this roadmap): a **CurvesOverFiniteFields**
+  roadmap would consume Layers 0–8 wholesale (its zeta rationality/functional equation
+  are RR corollaries; the `Cl⁰` finiteness over finite `k` and strong approximation are
+  supplied here); a **HyperellipticCurves** roadmap, Layer 10's model class and
+  Layer 7's Hurwitz; a **BelyiMaps** roadmap, Layers 6–7 (ramification, RH) and
+  Layer 12's dictionary; higher-genus genus/automorphism data semantics rest
   on Layers 10–11.
-- **Siblings**: [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) owns the *local* ramification
+- **Siblings**: the
+  [Local Fields roadmap (PR #2, in preparation)](https://github.com/roed-math/TauCetiRoadmap/pull/2)
+  owns the *local* ramification
   filtration (lower/upper numbering, Herbrand, Hasse–Arf); this roadmap's Layer 8 keeps
   the function-field-level `G_i` and Hilbert's different formula (Stichtenoth 3.8.7)
   and states the completion bridge once, deferring all filtration technology to that
   roadmap. `Mathlib/RingTheory/LaurentSeries.lean` (de Frutos-Fernández–Nuccio) is the
   local-expansion prior art for Layer 9.
-- **Zulip** (audited 2026-07-30; threads of record listed in §What is in motion): before
-  Layer 0 starts, post in #maths cross-linking this roadmap, vaca22's repo, and Mathlib
-  #41621, declaring the route split (function-field/adelic here; scheme/cohomological
-  in Mathlib's campaign and JacobianChallenge) — and register an intention issue per
-  the root README's claims process. The 2025-12-19 "Riemann-Roch" thread in
-  #Is-there-code-for-X? should be revived with the declaration.

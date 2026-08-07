@@ -16,9 +16,10 @@ no Riemann–Roch. We build that in `TauCeti/`.
 
 Because the pin's vocabulary (valuations into `ℤᵐ⁰`, `Finsupp`, `Submodule`, `finrank`)
 can already *express* the early theory, this file goes further than a bare skeleton: it
-prototypes the Layer-0/3 definitions — `Place` (a normalized discrete valuation trivial
-on the constants), `Divisor` (`Place k F →₀ ℤ`), degree, `riemannRochSpace`,
-`Divisor.dim` (ℓ), `genus` — with real (sorry-free) bodies, and states milestone
+prototypes the Layer-0/3/4 definitions — `Place` (a normalized discrete valuation
+trivial on the constants), `Divisor` (`Place k F →₀ ℤ`), the degree homomorphism,
+`riemannRochSpace`, `Divisor.dim` (ℓ), `genus`, and the repartition space with its
+junk-free filtration `A_F(D)` — with real (sorry-free) bodies, and states milestone
 targets against them with `sorry`, through Riemann's theorem and the **Riemann–Roch
 theorem** itself (existential canonical-divisor form; its honesty is backed by the
 README's uniqueness milestone, Stichtenoth Prop. 1.6.1). The prototypes are aids, not
@@ -26,9 +27,8 @@ the specification: implementors may repackage them (e.g. bundling places differe
 so long as the pinned conventions in `README.md` are respected.
 
 Per the honest-`sorry` rule, milestones whose *statements* need API that does not exist
-at the pin are **not** stated here and live in `README.md` only: the repartition space
-and Weil differentials as objects (Layer 4's proof route — statable but bulky; only RR's
-finrank consequence is stated here), extensions of function fields with `e`/`f`/conorm,
+at the pin are **not** stated here and live in `README.md` only: Weil differentials as
+objects (Layer 4's proof route), extensions of function fields with `e`/`f`/conorm,
 the different divisor and Riemann–Hurwitz (Layers 6–7), constant-field extensions
 (Layer 8), the Kähler comparison (Layer 9), automorphism bounds (Layer 11), and the
 scheme dictionary (Layer 12). As those layers make their types expressible in
@@ -140,20 +140,35 @@ abbrev Divisor : Type v :=
 
 namespace Divisor
 
-/-- **Layer 3, the degree of a divisor**: `deg D = ∑_P D(P) · deg P` (Stichtenoth
-Def. 1.4.1). ⚠ Weighted by the residue degrees `deg P` — the unweighted sum is correct
-only over algebraically closed constants and is never the definition. That `degree` is
-additive (a `→+`) and descends to the class group (via `deg ∘ div = 0`, the product
-formula below) are milestones. -/
-noncomputable def degree (D : Divisor k F) : ℤ :=
-  D.sum fun P n => n * P.degree
+/-- **Layer 3, the degree of a divisor, as the additive homomorphism it is** (the
+pinned convention: `Divisor.degree : Divisor k F →+ ℤ`): `deg D = ∑_P D(P) · deg P`
+(Stichtenoth Def. 1.4.1), packaged with `Finsupp.liftAddHom` so additivity is
+definitional, not a milestone. ⚠ Weighted by the residue degrees `deg P` — the
+unweighted sum is correct only over algebraically closed constants and is never the
+definition. That `degree` descends to the class group (via `deg ∘ div = 0`, the
+product formula below) is a milestone. -/
+noncomputable def degree : Divisor k F →+ ℤ :=
+  Finsupp.liftAddHom fun P => zmultiplesHom ℤ (P.degree : ℤ)
 
-/-- **Layer 3, principal divisors**: `D` is the divisor of a function if `D = div f :=
-∑_P ord_P f · P` for some `f ≠ 0` (Stichtenoth Def. 1.4.2). Stated as a predicate here;
-that the map `div` lands in `Divisor` at all — finiteness of zeros and poles
-(Stichtenoth Cor. 1.3.4) — is a target below. -/
-def IsPrincipal (D : Divisor k F) : Prop :=
-  ∃ f : F, f ≠ 0 ∧ ∀ P : Place k F, D P = P.ord f
+/-- **Layer 3, the principal-divisor homomorphism** `div : Fˣ →+ Divisor k F`
+(additivized: `Additive Fˣ`), `f ↦ ∑_P ord_P f · P` (Stichtenoth Def. 1.4.2). The
+body is a construction target, not a placeholder by choice: producing the `Finsupp`
+*is* the finiteness of zeros and poles (Stichtenoth Cor. 1.3.4, stated below), so the
+definition is discharged together with that milestone. -/
+noncomputable def principalDivisor (hF : IsFunctionField k F) :
+    Additive Fˣ →+ Divisor k F :=
+  sorry
+
+/-- **Layer 3, principal divisors**, defined from the range of `principalDivisor` —
+never a bare existential detached from the homomorphism. -/
+def IsPrincipal (hF : IsFunctionField k F) (D : Divisor k F) : Prop :=
+  D ∈ (principalDivisor hF).range
+
+/-- **Layer 3, the defining property of `principalDivisor`**: its coefficients are the
+orders. (Separated from the construction so consumers can rewrite with it.) -/
+example (hF : IsFunctionField k F) (f : Fˣ) (P : Place k F) :
+    principalDivisor hF (Additive.ofMul f) P = P.ord f :=
+  sorry
 
 end Divisor
 
@@ -185,6 +200,56 @@ is exact. Genus is **defined before** Riemann–Roch, never via `H¹` or differe
 `ℓ(W) = g` and `deg W = 2g − 2` are theorems (Cor. 1.5.16). -/
 noncomputable def genus : ℕ :=
   sSup (Set.range fun D : Divisor k F => (Divisor.degree D + 1 - Divisor.dim D).toNat)
+
+variable (k F) in
+/-- **Layer 4, the repartition (adele) space** `A_F` (Stichtenoth Def. 1.5.2): the
+restricted product — families `a : Place k F → F` with entries in `F` itself (**no
+completions**) that are integral at cofinitely many places. The integrality condition
+is the multiplicative `v_P (a P) ≤ 1`, which is junk-free at zero entries
+(`v_P 0 = 0 ≤ 1`). -/
+noncomputable def repartitionSpace : Submodule k (Place k F → F) where
+  carrier := {a | {P : Place k F | ¬ P.valuation (a P) ≤ 1}.Finite}
+  add_mem' {a b} ha hb := ((ha.union hb).subset fun P hP => by
+    by_contra hc
+    simp only [Set.mem_union, Set.mem_setOf_eq, not_or, not_not] at hc
+    exact hP (le_trans (P.valuation.map_add (a P) (b P)) (max_le hc.1 hc.2)))
+  zero_mem' := by simp
+  smul_mem' c a ha := by
+    rcases eq_or_ne c 0 with rfl | hc
+    · simp
+    · refine ha.subset fun P hP => ?_
+      simp only [Set.mem_setOf_eq, Pi.smul_apply, Algebra.smul_def, map_mul,
+        P.isTrivialOn.eq_one c hc, one_mul] at hP
+      exact hP
+
+/-- **Layer 4, the filtration `A_F(D)`** (Stichtenoth Def. 1.5.3), in the pinned
+**multiplicative junk-free form**: `v_P (a P) ≤ exp (D P)` at every place — exactly the
+`riemannRochSpace` condition, entrywise. ⚠ Never the additive `ord_P (a P) ≥ −D P`:
+its junk value `ord_P 0 = 0` would wrongly exclude zero entries wherever `D P < 0`, so
+that form does not even contain `0`. Here `0 ∈ A_F(D)` definitionally
+(`v_P 0 = 0 ≤ exp _`), and the zero-membership and monotonicity theorems below pin the
+convention so the error cannot reappear during implementation. -/
+noncomputable def adeleFiltration (D : Divisor k F) : Submodule k (Place k F → F) where
+  carrier := {a | ∀ P : Place k F, P.valuation (a P) ≤ WithZero.exp (D P)}
+  add_mem' {a b} ha hb P :=
+    le_trans (P.valuation.map_add (a P) (b P)) (max_le (ha P) (hb P))
+  zero_mem' P := by simp
+  smul_mem' c a ha P := by
+    rcases eq_or_ne c 0 with rfl | hc
+    · simp
+    · simpa only [Pi.smul_apply, Algebra.smul_def, map_mul,
+        P.isTrivialOn.eq_one c hc, one_mul] using ha P
+
+variable (k F) in
+/-- **Layer 3, the degree-zero divisor class group** `Cl⁰(F)`: the kernel of the degree
+homomorphism modulo the principal divisors it contains. (That *every* principal divisor
+has degree zero is the product formula, a theorem below — so `Cl⁰` is stated as the
+quotient by the intersection, which the product formula then identifies with the full
+principal subgroup.) -/
+noncomputable def classGroupZero (hF : IsFunctionField k F) : Type _ :=
+  (Divisor.degree : Divisor k F →+ ℤ).ker ⧸
+    ((Divisor.principalDivisor hF).range.addSubgroupOf
+      (Divisor.degree : Divisor k F →+ ℤ).ker)
 
 /-! ## Layer 0: places -/
 
@@ -258,9 +323,13 @@ example (hF : IsFunctionField k F) (f : F) (hf : f ≠ 0) :
 /-- **Layer 3, the product formula** (Stichtenoth Thm. 1.4.11): principal divisors have
 degree zero — `deg (f)₀ = deg (f)_∞ = [F : k(f)]`, so the degree map descends to the
 divisor class group. Absent from Mathlib for function fields (the number-field
-`ProductFormula` does not apply). -/
-example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (D : Divisor k F)
-    (hD : D.IsPrincipal) : Divisor.degree D = 0 :=
+`ProductFormula` does not apply). ⚠ No exact-constants hypothesis: the statement holds
+for arbitrary constant fields, by normalizing to `F/k̃` (the `k`-degree of a place is
+`[k̃ : k]` times its `k̃`-degree, and `[F : k(f)] = [k̃ : k]·[F : k̃(f)]`) — do not
+impose `IsIntegrallyClosedIn` here just because Layer 3's standing hypothesis
+announces it. -/
+example (hF : IsFunctionField k F) (D : Divisor k F)
+    (hD : D.IsPrincipal hF) : Divisor.degree D = 0 :=
   sorry
 
 /-- **Layer 3, `L(0) = k`** (Stichtenoth Lemma 1.4.7, under exact constants): the only
@@ -270,8 +339,12 @@ example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) :
     riemannRochSpace (0 : Divisor k F) = LinearMap.range (Algebra.linearMap k F) :=
   sorry
 
-/-- **Layer 3, finite-dimensionality of `L(D)`** (Stichtenoth Prop. 1.4.9). -/
-example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (D : Divisor k F) :
+/-- **Layer 3, finite-dimensionality of `L(D)`** (Stichtenoth Prop. 1.4.9).
+⚠ No exact-constants hypothesis: finiteness holds for arbitrary constant fields
+(`k̃/k` is finite, so `k̃`-finite-dimensional implies `k`-finite-dimensional); only the
+sharp bound `ℓ(D) ≤ deg D₊ + 1` needs exact constants (over `ℝ ⊂ ℂ(x)`, `ℓ(0) = 2`
+already beats it). -/
+example (hF : IsFunctionField k F) (D : Divisor k F) :
     FiniteDimensional k (riemannRochSpace D) :=
   sorry
 
@@ -286,6 +359,23 @@ example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) :
   sorry
 
 /-! ## Layers 4–5: Riemann–Roch and consequences -/
+
+/-- **Layer 4, `0 ∈ A_F(D)` for every divisor `D`** — with the pinned multiplicative
+convention this is `Submodule.zero_mem`, and this example proves it (no `sorry`), so
+any reformulation that loses it fails to compile here. -/
+example (D : Divisor k F) : (0 : Place k F → F) ∈ adeleFiltration D :=
+  (adeleFiltration D).zero_mem
+
+/-- **Layer 4, monotonicity of the filtration**: `D ≤ E → A_F(D) ≤ A_F(E)`. -/
+example (D E : Divisor k F) (h : D ≤ E) : adeleFiltration D ≤ adeleFiltration E :=
+  sorry
+
+/-- **Layer 4, the filtration lives in the repartition space**: `A_F(D) ≤ A_F`
+(outside `supp D` the condition reads `v_P (a P) ≤ exp 0 = 1`). With it, `A_F(D)` and
+`A_F(D) + F` (under the diagonal) are `k`-submodules of `A_F` — the subspaces whose
+quotients define `i(D)` and the genus (Stichtenoth Thm. 1.5.4, Cor. 1.5.5). -/
+example (D : Divisor k F) : adeleFiltration D ≤ repartitionSpace k F :=
+  sorry
 
 /-- **Layer 4, the Riemann–Roch theorem** (Stichtenoth Thm. 1.5.15, with
 Cor. 1.5.16): there is a divisor `W` — the canonical divisor, constructed via Weil
@@ -311,13 +401,34 @@ example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (D : Divisor
     (Divisor.dim D : ℤ) = Divisor.degree D + 1 - genus k F :=
   sorry
 
-/-- **Layer 5, Clifford's theorem** (Stichtenoth Thm. 1.6.13): `ℓ(D) ≤ 1 + (deg D)/2`
-in the special range `0 ≤ deg D ≤ 2g − 2`. ⚠ Stichtenoth's proof assumes `k` infinite
-and completes the finite case only via constant-field extension (Thm. 3.6.3(d), Layer
-8) — the README pins how to sequence this. -/
+/-- **Layer 5, Clifford's theorem over infinite constants** (Stichtenoth Thm. 1.6.13):
+`2·ℓ(D) ≤ 2 + deg D` in the special range `0 ≤ deg D ≤ 2g − 2`, **with `[Infinite k]`**
+— the hypothesis Stichtenoth's proof (Lemma 1.6.14) consumes. This is Layer 5's form;
+the unrestricted export is the Layer 8 target below. -/
+example [Infinite k] (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F)
+    (D : Divisor k F)
+    (h0 : 0 ≤ Divisor.degree D) (h2g : Divisor.degree D ≤ 2 * (genus k F : ℤ) - 2) :
+    2 * (Divisor.dim D : ℤ) ≤ 2 + Divisor.degree D :=
+  sorry
+
+/-- **Layer 8, Clifford's theorem unrestricted** — the export for arbitrary exact
+constant fields, no `[Infinite k]`: proved from the Layer 5 form by constant-field
+extension to `F·k̄` (Stichtenoth Thm. 3.6.3(b),(d) transport `g`, `deg`, and `ℓ`;
+the perfectness hypothesis there is vacuous for the finite-`k` case this discharges).
+Depends on Layer 8, as the README's ordering records. -/
 example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (D : Divisor k F)
     (h0 : 0 ≤ Divisor.degree D) (h2g : Divisor.degree D ≤ 2 * (genus k F : ℤ) - 2) :
     2 * (Divisor.dim D : ℤ) ≤ 2 + Divisor.degree D :=
+  sorry
+
+/-- **Layer 5, finiteness of the degree-zero class group over a finite constant
+field** (Stichtenoth Prop. 5.1.3, the zeta-free class-number input): with `k` finite
+and exact constants, `Cl⁰(F)` is finite. The chain (finitely many places of bounded
+degree, finitely many effective divisors of bounded degree, the bounded-degree
+representative via Riemann's theorem) is the README's Layer 5 finite-constant-field
+subsection. -/
+example [Finite k] (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) :
+    Finite (classGroupZero k F hF) :=
   sorry
 
 /-! ## Layers 1 and 10: worked examples as acceptance criteria -/
@@ -340,11 +451,11 @@ constant field is `ℂ`, so `ℓ(0) = 2 ≠ 1` — the example that keeps
 example : Divisor.dim (0 : Divisor ℝ (RatFunc ℂ)) = 2 :=
   sorry
 
-/-- **Layer 5 at genus 1 — the fibrewise content of PR #81's assumed Riemann–Roch
-interface** ("the space-of-sections dimensions for the divisors `n·[0]`"): on a genus-1
-function field with a rational place `[0]`, `ℓ(n·[0]) = n` for `n ≥ 1`. The relative
-(base-scheme) upgrade is JacobianChallenge Layer-C territory; see the README's
-Layer 12. -/
+/-- **Layer 5 at genus 1 — the section-dimension ladder**: on a genus-1 function field
+with a rational place `[0]`, `ℓ(n·[0]) = n` for `n ≥ 1` (the `deg ≥ 2g − 1` regime
+theorem at `g = 1`) — the reusable consequence every Weierstrass-model argument runs
+on, restated at Mathlib's elliptic curves in Layer 10. Any relative (base-scheme)
+upgrade is JacobianChallenge Layer-C territory; see the README's Layer 12E. -/
 example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F) (hg : genus k F = 1)
     (P : Place k F) (hP : P.degree = 1) (n : ℕ) (hn : 1 ≤ n) :
     Divisor.dim (Finsupp.single P (n : ℤ)) = n :=
