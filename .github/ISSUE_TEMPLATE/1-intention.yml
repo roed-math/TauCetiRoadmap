@@ -31,7 +31,6 @@ body:
         - OptimalTransport
         - OrthogonalL2Bases
         - PDE
-        - QuadraticFormInvariants
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers

@@ -1,180 +1,185 @@
 # Roadmap: quadratic forms and cohomological invariants
 
-Mathlib has the *linear algebra* of quadratic forms in real depth: `QuadraticMap` /
-`QuadraticForm`, polar forms, orthogonal bases and diagonalization
-(`QuadraticForm.equivalent_weightedSumSquares`), `Anisotropic`, the radical and the
-EKM-style `QuadraticMap.Nondegenerate`, isometries and `Equivalent`, tensor products,
-the real/complex/algebraically-closed classifications, and a full Clifford-algebra
-directory. It also has quaternion algebras `ℍ[R,c₁,c₂,c₃]` with conjugation and the
-`QuaternionAlgebra.Basis` universal property, and the rank-2 `QuadraticAlgebra R a b`
-with its norm. What it has **none** of is the arithmetic theory of quadratic forms over
-a field: no hyperbolic-plane theory, no Witt decomposition or Witt cancellation, no
-Witt ring, no Pfister forms, no discriminant-and-Hasse-invariant classification, no
-Hilbert symbol, no transfer of forms along a field extension, and no Stiefel–Whitney
-classes (verified at the pin and on master, 2026-08-06; no open PRs state any of
-them). This roadmap builds that arithmetic theory over fields with `2` invertible,
-through its classical high points: the four-fold splitting criterion for quaternion
-algebras, the complete classification of forms over finite extensions of `ℚ_p` by
-`(dim, d, s)`, and Kahn's relative Stiefel–Whitney formula for transferred forms. Its
-last three layers put those invariants into mod-2 Galois cohomology.
+Mathlib has the linear algebra of quadratic forms in depth. It has `QuadraticMap` and
+`QuadraticForm`, polar forms, orthogonal bases, diagonalization
+(`QuadraticForm.equivalent_weightedSumSquares`), `Anisotropic`, the radical, the
+EKM-style `QuadraticMap.Nondegenerate`, isometries, `Equivalent`, tensor products, the
+classifications over `ℝ`, over `ℂ`, and over an algebraically closed field, and a full
+Clifford-algebra directory. It also has the quaternion algebras `ℍ[R,c₁,c₂,c₃]` with
+conjugation and the `QuaternionAlgebra.Basis` universal property, and the rank-2
+`QuadraticAlgebra R a b` with its norm.
 
-Suggested homes, mirroring Mathlib's directory conventions:
+Mathlib has none of the arithmetic theory of quadratic forms over a field. It has no
+hyperbolic-plane theory, no Witt decomposition, no Witt cancellation, no Witt ring, no
+Pfister forms, no classification by discriminant and Hasse invariant, no Hilbert
+symbol, no transfer of forms along a field extension, and no Stiefel-Whitney classes.
+
+This roadmap builds that theory over a field with `2` invertible. The high points are:
+
+- the four-fold splitting criterion for quaternion algebras;
+- the classification of forms over a nonarchimedean local field by `(dim, d, s)`;
+- Kahn's relative Stiefel-Whitney formula for transferred forms.
+
+The last three layers state these invariants in mod-2 Galois cohomology.
+
+## Suggested homes
+
+The homes below mirror Mathlib's directory conventions.
+
 - `TauCeti/LinearAlgebra/QuadraticForm/` for Witt theory, Pfister forms, the classical
-  invariants at the form level, and the Scharlau transfer (Mathlib keeps
-  `QuadraticForm` under `LinearAlgebra/`, so the form theory stays there);
+  invariants at the form level, and the Scharlau transfer. Mathlib keeps
+  `QuadraticForm` under `LinearAlgebra/`, so the form theory stays there.
 - `TauCeti/Algebra/Quaternion/` for the quaternion symbol layer and its Brauer-class
-  packaging (Mathlib's quaternion and Brauer material lives under `Algebra/`);
-- `TauCeti/NumberTheory/Padics/QuadraticForm/` for the Hilbert symbol and the local
-  classification, next to Mathlib's `NumberTheory/Padics/`; statements over a general
-  finite extension of `ℚ_p` move to the home the
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) fixes;
-- `TauCeti/FieldTheory/QuadraticForm/` for the cohomological layers (the Brauer
-  comparison, Stiefel–Whitney classes, Evens–Kahn), next to the landed
-  `TauCeti/FieldTheory/SquareClassGroup.lean` they consume, coordinated with the
-  home [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)
-  fixes for `H^*(G_K, 𝔽₂)`.
+  package. Mathlib keeps its quaternion and Brauer material under `Algebra/`.
+- `TauCeti/NumberTheory/LocalField/QuadraticForm/` for the local-field toolkit, the
+  Hilbert symbol, and the local classification.
+- `TauCeti/FieldTheory/QuadraticForm/` for the cohomological layers, that is the Brauer
+  comparison, Stiefel-Whitney classes, and Evens-Kahn. These sit next to the landed
+  `TauCeti/FieldTheory/SquareClassGroup.lean` that they consume.
 
-**Scope exclusions** (choices, not omissions; separate future roadmaps are welcome):
-the characteristic-2 theory of quadratic and bilinear forms (Arf invariant,
-quasilinear forms; Grove's chapters on characteristic 2 and EKM Part II document how
-different that theory is, and everything here assumes `2` invertible); the deep theory
-of Pfister forms (function-field methods, the Arason–Pfister Hauptsatz, the Milnor
-conjecture and the norm-residue theorem, and any classification statement resting on
-them); and the cohomological invariant theory of Garibaldi–Merkurjev–Serre beyond
-Stiefel–Whitney classes. Pfister forms are defined here in every degree, and the
-elementary generation statements for `I`, `I²`, and `I³` are proved because Layer 5's
-kernel computation needs them (see Layer 4); nothing past that is claimed.
+## Scope
 
-## Standing hypotheses and pinned conventions
+Everything below is work that this roadmap wants. The exclusions are deliberate
+choices, and a separate roadmap for any of them is welcome.
 
-Decide these once; every layer states its results against this table.
+Excluded:
 
-- **Base field.** `K` a field with `[Invertible (2 : K)]`. This is the hypothesis
-  Mathlib's own quadratic-form theory uses (`QuadraticForm/Basis.lean`,
-  `AlgClosed.lean`, the `associated` bilinear form), so we follow it rather than
-  `[NeZero (2 : K)]`; over a field the two are interderivable, and where a layer
-  meets the multiquadratic roadmap's material (stated with `[NeZero (2 : K)]` or
-  `[CharZero K]`) the conversion is part of the interop, not a fork.
-- **Forms and regularity.** A form is a `QuadraticForm K V` (`= QuadraticMap K V K`)
-  with `[FiniteDimensional K V]` where finiteness is needed, carried as an
-  instance, never bundled. Regularity is `QuadraticMap.Nondegenerate Q` (Mathlib's
-  EKM-style predicate, `QuadraticForm/Radical.lean`), converted through
-  `nondegenerate_associated_iff` / `(QuadraticMap.associated Q).SeparatingLeft`
-  when a proof wants the bilinear form (that is the hypothesis Mathlib's
-  `equivalent_weightedSumSquares_units_of_nondegenerate'` takes). Anisotropy is
-  `QuadraticMap.Anisotropic`; "isotropic" in prose always means
-  `¬ Q.Anisotropic` on a nonzero space, never a new predicate.
-- **Equivalence and diagonal forms.** Isometry classes via `QuadraticMap.Equivalent`
-  (`Nonempty (Q₁.IsometryEquiv Q₂)`, which already compares forms on different
-  spaces). The diagonal form `⟨a₁, …, aₙ⟩` is `QuadraticMap.weightedSumSquares K w`
-  with `w : Fin n → K`, unit-valued (`w : Fin n → Kˣ`, coerced) whenever the form is
-  regular. Orthogonal sum of forms on different spaces is `QuadraticMap.prod`;
-  scaling is `a • Q`.
-- **Square classes.** The square-class group is `Kˣ ⧸ Subgroup.square Kˣ`,
-  interoperating with the landed `TauCeti.SquareClassGroup`
-  (`= Additive Kˣ ⧸ (Subgroup.square Kˣ).toAddSubgroup`, an `𝔽₂ = ZMod 2`-vector
-  space). Consume it, do not redefine it. In quotient-free statements "same square
-  class" is spelled `IsSquare (a * b)` for units `a b : Kˣ` (as in
-  `TauCeti.squareClass_eq_zero_iff`), matching the multiquadratic roadmap's
+- the characteristic-2 theory of quadratic and bilinear forms, that is the Arf
+  invariant and quasilinear forms. Grove's chapters on characteristic 2 and EKM Part II
+  record how different that theory is, and every statement here assumes `2` invertible;
+- the deep theory of Pfister forms, that is function-field methods, the Arason-Pfister
+  Hauptsatz, the Milnor conjecture, the norm-residue theorem, and each classification
+  statement that rests on them;
+- the cohomological invariant theory of Garibaldi-Merkurjev-Serre beyond
+  Stiefel-Whitney classes.
+
+Pfister forms are defined here in every degree. The elementary generation statements
+for `I`, `I²`, and `I³` are proved, because Layer 5 consumes them. Nothing past that is
+claimed.
+
+## Standing hypotheses and conventions
+
+Each layer states its results against this table.
+
+- **Base field.** `K` is a field with `[Invertible (2 : K)]`. Mathlib's own
+  quadratic-form theory uses this hypothesis in `QuadraticForm/Basis.lean`, in
+  `AlgClosed.lean`, and for the `associated` bilinear form, so this roadmap follows it
+  rather than `[NeZero (2 : K)]`. Over a field the two hypotheses are interderivable.
+  The multiquadratic roadmap states its material with `[NeZero (2 : K)]` or
+  `[CharZero K]`, and the conversion between the two is part of the interface.
+- **Forms and regularity.** A form is a `QuadraticForm K V`, that is a
+  `QuadraticMap K V K`. Finiteness is `[FiniteDimensional K V]`, carried as an instance
+  and never bundled. Regularity is `QuadraticMap.Nondegenerate Q`, the EKM-style
+  predicate of `QuadraticForm/Radical.lean`. A proof that wants the bilinear form
+  converts through `nondegenerate_associated_iff` or
+  `(QuadraticMap.associated Q).SeparatingLeft`, which is the hypothesis of
+  `equivalent_weightedSumSquares_units_of_nondegenerate'`. Anisotropy is
+  `QuadraticMap.Anisotropic`. The word "isotropic" always means `¬ Q.Anisotropic` on a
+  nonzero space, and is never a new predicate.
+- **Equivalence and diagonal forms.** Isometry classes use `QuadraticMap.Equivalent`,
+  that is `Nonempty (Q₁.IsometryEquiv Q₂)`, which already compares forms on different
+  spaces. The diagonal form `⟨a₁, …, aₙ⟩` is `QuadraticMap.weightedSumSquares K w` with
+  `w : Fin n → K`. For a regular form the weights are units, that is `w : Fin n → Kˣ`
+  coerced into `K`. The orthogonal sum of forms on different spaces is
+  `QuadraticMap.prod`, and scaling is `a • Q`.
+- **Square classes.** The square-class group is `Kˣ ⧸ Subgroup.square Kˣ`. It
+  interoperates with the landed `TauCeti.SquareClassGroup`, which is
+  `Additive Kˣ ⧸ (Subgroup.square Kˣ).toAddSubgroup`, an `𝔽₂ = ZMod 2`-vector space.
+  Consume that file and do not redefine it. In a quotient-free statement, "same square
+  class" is `IsSquare (a * b)` for units `a b : Kˣ`, as in
+  `TauCeti.squareClass_eq_zero_iff`. This matches the multiquadratic roadmap's
   `Finset`-product idiom.
 - **Representation and value sets.** `Represents Q a : Prop` is `∃ v, Q v = a` for
-  `a : K`, and `unitValueSet Q : Set Kˣ` is `{a : Kˣ | Represents Q (a : K)}`, the
-  classical `D(q)` of nonzero represented values. The two are kept apart on purpose:
-  every classification statement below means `D(q)`, and a value set that contains
-  `0` would silently make several of them false.
-- **Discriminant and signed discriminant.** For `q ≅ ⟨a₁, …, aₙ⟩`, the
-  *discriminant* is `d(q) = a₁ ⋯ aₙ` in `Kˣ ⧸ (Kˣ)²` and the **signed
-  discriminant** is `d±(q) = (−1)^{n(n−1)/2} · d(q)`. Two distinct names, never an
-  overloaded one: `discr` and `signedDiscr`. Serre's classification invariant and
-  the Stiefel–Whitney class `w₁` see the *plain* `d`; the Witt-ring isomorphism
-  `I/I² ≅ Kˣ/(Kˣ)²` and the quadratic-extension dictionary see `d±`. The
-  translation `d± = (−1)^{n(n−1)/2} d` is a stated lemma
-  (`signedDiscr_eq_sign_mul_discr`), not folklore, and every conversion in a later
-  proof goes through it.
-- **The symbol is a quaternion algebra first, a group element later.** For
-  `a, b ∈ Kˣ`, the symbol `(a, b)` names the quaternion algebra `ℍ[K, a, b]`
-  (Mathlib's two-parameter notation for `QuaternionAlgebra K a 0 b`: `i² = a`,
-  `j² = b`, `ij = −ji = k`; see `Mathlib/Algebra/Quaternion.lean`). Through Layer 4
-  it is an algebra up to isomorphism and nothing more: "`(a,b) = (c,d)`" is spelled
-  `Nonempty (ℍ[K,a,b] ≃ₐ[K] ℍ[K,c,d])` and "`(a,b) = 1`" is
-  `Nonempty (ℍ[K,a,b] ≃ₐ[K] Matrix (Fin 2) (Fin 2) K)`. Only in Layer 5, once
-  `BrauerGroup K` is a group, does `[(a,b)]` become an element that can be
-  multiplied; only in Layer 6 does the local symbol `(a,b)_K` take values in `{±1}`.
-  No layer multiplies symbols before the layer that supplies the multiplication.
-- **Two Hasse invariants, both named.** `s(q) = ∏_{i<j} (aᵢ, aⱼ)` for
-  `q ≅ ⟨a₁, …, aₙ⟩` (empty product for `n ≤ 1`) is the **Lam/Serre convention**
-  (Lam V.3.17; Serre's `ε` in *A Course in Arithmetic* IV.2.1). It occurs twice in
-  this roadmap with two different codomains, and the names differ accordingly:
-  `hasseInvariant q : BrauerGroup K` in Layer 5, and
-  `localHasse q : ℤˣ` over a finite extension of `ℚ_p` in Layer 6, built from the
-  `{±1}`-valued Hilbert symbol without reference to Layer 5. The theorem that the
-  second is the image of the first under `Br(K)[2] ≃ ℤˣ` is stated at the end of
-  Layer 6 and used nowhere before it; the identification of the two codomains is
-  elementary on the subgroup generated by quaternion classes and, on all of
-  `Br(K)[2]`, is Local Fields PR #2's invariant map read through Layer 7A. Documented
-  translations, each a stated lemma once its target exists:
-  **O'Meara's Hasse symbol** (63:20 context) is
-  `S(q) = ∏_{i≤j} (aᵢ, aⱼ) = s(q) · (d(q), −1)`; the **Witt/Clifford invariant**
-  `c(q)` (the Brauer class of `C(q)` or `C₀(q)` by parity, Lam V.3.12) satisfies
-  Lam V.3.20: `c = s · (−1, d)^{(n−1)(n−2)/2} · (−1,−1)^{(n+1)n(n−1)(n−2)/24}`,
-  and `c = s · (−1,−1)^{m(m−1)/2}` on `I²` with `dim = 2m`. ⚠ Lam records that
-  C. T. C. Wall's published version of this translation is **incorrect** (Lam,
-  p. 120, "Caution"); do not import the formula from secondary sources, cite Lam
-  and prove it once.
-- **Hilbert symbol.** Over a finite extension `K/ℚ_p` (and over `ℝ`),
-  `(a,b)_K = +1` if `b = x² − a y²` has a solution `x, y ∈ K`, and `−1` otherwise.
-  This is a definition, not a consequence of any classification: it needs only the
-  norm equation. It agrees with Serre's solvability form (`z² − ax² − by² = 0` has a
-  nontrivial zero, *A Course in Arithmetic* III.1.1) and with the norm criterion
-  `b ∈ N(K(√a)ˣ)`; the equivalence of the three is the first milestone of Layer 6,
-  and symmetry `(a,b)_K = (b,a)_K` is the second, so that the Serre orientation
-  (`(a,b) = 1` iff `a ∈ N(K(√b)/K)`) and the one used by `gq2`'s B11a are
-  interchangeable from then on. Values live in `ℤˣ = {±1}`; the additive avatar is
-  `ZMod 2` via the unique isomorphism, and the cohomological avatar is
-  `μ₂ ≃ ZMod 2` (Layer 7). One **value dictionary** file states these once, and
-  every later statement picks a side through it. The active Hasse–Minkowski project
-  (see "in motion" below) uses an integer-valued `hilbertSym : k → k → ℤ` that is
-  `0` on zero arguments; ours is total on `Kˣ × Kˣ`, where no such convention is
-  needed, and the comparison lemma to their junk-value convention is part of the
-  coordination, not a redesign.
-- **Steinberg hypotheses.** Wherever `(a, 1−a)` or `(a) ∪ (1−a)` occurs, the
-  statement carries `a : Kˣ` together with `h : (1 : K) − a ≠ 0`, so that `1 − a`
-  has a unit coercion. Never `a : K` with the two exclusions left to the reader.
-- **Pfister forms.** `⟨⟨a⟩⟩ = ⟨1, −a⟩` and `⟨⟨a, b⟩⟩ = ⟨1, −a⟩ ⊗ ⟨1, −b⟩ ≅
-  ⟨1, −a, −b, ab⟩` (the minus-sign convention of Lam Ch. X and
-  Elman–Karpenko–Merkurjev; some older sources use `⟨1, a⟩` factors, flag it).
-  The `n`-fold `⟨⟨a₁, …, aₙ⟩⟩` is the `n`-fold tensor product, via Mathlib's
-  `QuadraticForm` tensor product (`QuadraticForm/TensorProduct.lean`, which already
-  carries the needed `Invertible (2 : R)`).
-- **Transfer.** The Scharlau transfer `s_*(q)` of a form `q` over `L` along a
-  **nonzero `K`-linear functional** `s : L →ₗ[K] K`, for `L/K` finite separable.
-  The default functional is the trace `Algebra.trace K L`, written `Tr_*`; every
-  theorem is stated for general nonzero `s` with the trace as the named instance.
-  Two lemmas make "the" transfer honest and are early targets: the nonzero
-  functionals form a single `Lˣ`-orbit (Layer 9), and
-  `s'_*(q) ≅ s_*(⟨λ⟩ ⊗ q)` when `s' = s ∘ (λ·)`.
-- **Cohomological dictionary** (Layers 7 to 9, consuming the profinite-cohomology
-  roadmap): `Kˢ` is the separable closure and `G_K = Gal(Kˢ/K)`, as PR #1 Layer 8
-  pins them; `H¹(G_K, μ₂) ≅ Kˣ/(Kˣ)²` (Kummer), the class of `a` written `(a)`; the
-  identification of `Br(K)[2]` with `H²(G_K, μ₂)` is *proved* in Layer 7A and is
-  never assumed before it; the total Stiefel–Whitney class of `q ≅ ⟨a₁, …, aₙ⟩` is
-  `w(q) = ∏ᵢ (1 + (aᵢ))` (Delzant); `w₁(q) = (d(q))`, the **plain** discriminant,
-  not `d±`.
-- **Additive against multiplicative, in the cohomological layers.** Cohomology is
-  additive and the Brauer group is a `CommGroup`, so the coefficient modules are
-  `Additive Kˢˣ` and `μ₂ ≅ ZMod 2`, and every Lean-facing statement comparing the two
-  worlds transports through `Additive`: the comparison of Layer 7A is an `≃+` out of
-  `Additive (BrauerGroup K)`, and Layer 8's `w₂`, Clifford, and Hasse identities are
-  equations in `H²`, written additively. Prose keeps the customary multiplicative
-  notation for Brauer classes and `∏` for the Hasse invariant; the transport shows up
-  in the declarations rather than in the sentences.
+  `a : K`. `unitValueSet Q : Set Kˣ` is `{a : Kˣ | Represents Q (a : K)}`, the classical
+  `D(q)` of nonzero represented values. The two are kept apart. Every classification
+  statement below means `D(q)`, and a value set that contains `0` makes several of them
+  false.
+- **Discriminant and signed discriminant.** For `q ≅ ⟨a₁, …, aₙ⟩` the *discriminant* is
+  `d(q) = a₁ ⋯ aₙ` in `Kˣ ⧸ (Kˣ)²`, and the **signed discriminant** is
+  `d±(q) = (−1)^{n(n−1)/2} · d(q)`. The two names are `discr` and `signedDiscr`, and
+  neither name is overloaded. Serre's classification invariant and the Stiefel-Whitney
+  class `w₁` use the plain `d`. The Witt-ring isomorphism `I/I² ≅ Kˣ/(Kˣ)²` and the
+  quadratic-extension dictionary use `d±`. The translation
+  `d± = (−1)^{n(n−1)/2} d` is a stated lemma, `signedDiscr_eq_sign_mul_discr`, and
+  every later proof converts through it.
+- **The symbol is a quaternion algebra first and a group element later.** For
+  `a, b ∈ Kˣ` the symbol `(a, b)` is the quaternion algebra `ℍ[K, a, b]`. This is
+  Mathlib's two-parameter notation for `QuaternionAlgebra K a 0 b`, with `i² = a`,
+  `j² = b`, and `ij = −ji = k`; see `Mathlib/Algebra/Quaternion.lean`. Through Layer 4
+  the symbol is an algebra up to isomorphism. There, `(a,b) = (c,d)` means
+  `Nonempty (ℍ[K,a,b] ≃ₐ[K] ℍ[K,c,d])`, and `(a,b) = 1` means
+  `Nonempty (ℍ[K,a,b] ≃ₐ[K] Matrix (Fin 2) (Fin 2) K)`. In Layer 5, where the Brauer
+  group is a group, `[(a,b)]` becomes an element that can be multiplied. In Layer 6 the
+  local symbol `(a,b)_K` takes values in `{±1}`. No layer multiplies symbols before the
+  layer that supplies the multiplication.
+- **Two Hasse invariants, both named.** For `q ≅ ⟨a₁, …, aₙ⟩`,
+  `s(q) = ∏_{i<j} (aᵢ, aⱼ)`, with the empty product for `n ≤ 1`. This is the Lam and
+  Serre convention, that is Lam V.3.17 and Serre's `ε` in *A Course in Arithmetic*
+  IV.2.1. It occurs twice below with two codomains, and the two names differ:
+  - `hasseInvariant q : BrauerGroup K` in Layer 5;
+  - `localHasse q : ℤˣ` over a nonarchimedean local field in Layer 6, built from the
+    `{±1}`-valued Hilbert symbol and independent of Layer 5.
+
+  The theorem that the second is the image of the first is stated at the end of
+  Layer 6, and no earlier statement uses it. Two translations to other sources are
+  stated as lemmas once their targets exist:
+  - **O'Meara's Hasse symbol**, near 63:20, is
+    `S(q) = ∏_{i≤j} (aᵢ, aⱼ) = s(q) · (d(q), −1)`;
+  - the **Witt-Clifford invariant** `c(q)`, that is the Brauer class of `C(q)` or of
+    `C₀(q)` by parity (Lam V.3.12), satisfies Lam V.3.20:
+    `c = s · (−1, d)^{(n−1)(n−2)/2} · (−1,−1)^{(n+1)n(n−1)(n−2)/24}`, and
+    `c = s · (−1,−1)^{m(m−1)/2}` on `I²` with `dim = 2m`.
+
+  ⚠ Lam records that C. T. C. Wall's published version of the second translation is
+  incorrect (Lam, p. 120, "Caution"). Do not import that formula from a secondary
+  source. Cite Lam and prove it once.
+- **Hilbert symbol.** Over a nonarchimedean local field `K`, and over `ℝ`,
+  `(a,b)_K = +1` when `b = x² − a y²` has a solution `x, y ∈ K`, and `−1` otherwise.
+  This is a definition and not a consequence of a classification, because it needs only
+  the norm equation. It agrees with Serre's solvability form, that is with the statement
+  that `z² − ax² − by² = 0` has a nontrivial zero (*A Course in Arithmetic* III.1.1). It
+  also agrees with the norm criterion `b ∈ N(K(√a)ˣ)`. The equivalence of the three
+  descriptions is the first milestone of Layer 6C, and symmetry `(a,b)_K = (b,a)_K` is
+  the second. After the second, Serre's orientation `(a,b) = 1` iff `a ∈ N(K(√b)/K)` and
+  the orientation of `gq2`'s B11a are interchangeable. Values live in `ℤˣ = {±1}`. The
+  additive avatar is `ZMod 2` through the unique isomorphism, and the cohomological
+  avatar is `μ₂ ≃ ZMod 2` in Layer 7. One value-dictionary file states these
+  identifications once, and every later statement selects a side through that file.
+- **Steinberg hypotheses.** Wherever `(a, 1−a)` or `(a) ∪ (1−a)` occurs, the statement
+  carries `a : Kˣ` together with `h : (1 : K) − a ≠ 0`, so that `1 − a` has a unit
+  coercion. Never write `a : K` and leave the two exclusions to the reader.
+- **Pfister forms.** `⟨⟨a⟩⟩ = ⟨1, −a⟩` and
+  `⟨⟨a, b⟩⟩ = ⟨1, −a⟩ ⊗ ⟨1, −b⟩ ≅ ⟨1, −a, −b, ab⟩`. This is the minus-sign convention of
+  Lam Ch. X and of Elman-Karpenko-Merkurjev. Some older sources use `⟨1, a⟩` factors, so
+  flag the convention at each citation. The `n`-fold `⟨⟨a₁, …, aₙ⟩⟩` is the `n`-fold
+  tensor product, through Mathlib's `QuadraticForm/TensorProduct.lean`, which already
+  carries `Invertible (2 : R)`.
+- **Transfer.** The Scharlau transfer `s_*(q)` of a form `q` over `L` is taken along a
+  nonzero `K`-linear functional `s : L →ₗ[K] K`, for `L/K` finite separable. The default
+  functional is the trace `Algebra.trace K L`, written `Tr_*`. Every theorem is stated
+  for a general nonzero `s`, with the trace as the named instance. Two lemmas make "the"
+  transfer well defined and are early targets: the nonzero functionals form a single
+  `Lˣ`-orbit (Layer 9), and `s'_*(q) ≅ s_*(⟨λ⟩ ⊗ q)` when `s' = s ∘ (λ·)`.
+- **Cohomological dictionary** for Layers 7 to 9. `Kˢ` is the separable closure and
+  `G_K = Gal(Kˢ/K)`. `H¹(G_K, μ₂) ≅ Kˣ/(Kˣ)²` is the Kummer isomorphism, and the class
+  of `a` is written `(a)`. The identification of `Br(K)[2]` with `H²(G_K, μ₂)` is proved
+  in Layer 7A and is never assumed before it. The total Stiefel-Whitney class of
+  `q ≅ ⟨a₁, …, aₙ⟩` is `w(q) = ∏ᵢ (1 + (aᵢ))`, which is Delzant's definition, and
+  `w₁(q) = (d(q))` uses the plain discriminant and not `d±`.
+- **Additive against multiplicative.** Cohomology is additive and the Brauer group is a
+  `CommGroup`. The coefficient modules are therefore `Additive Kˢˣ` and `μ₂ ≅ ZMod 2`,
+  and every Lean statement that compares the two worlds transports through `Additive`.
+  Layer 7A's comparison is an `≃+` out of `Additive (BrauerGroup K)`. Layer 8's `w₂`,
+  Clifford, and Hasse identities are equations in `H²`, written additively. The prose
+  keeps the multiplicative notation for Brauer classes and the product notation for the
+  Hasse invariant. The transport appears in each declaration.
 
 ### The carrier for isometry classes
 
-Layers 3 to 5 all speak of functions on isometry classes, and Layer 4 needs a ring
-whose elements are such classes. Quotienting the isometry relation over arbitrary
-finite-dimensional spaces would force universe and bundling decisions on whoever
-implements it first, so the choice is made here instead.
+Layers 3 to 5 speak of functions on isometry classes, and Layer 4 needs a ring whose
+elements are such classes. A quotient of the isometry relation over arbitrary
+finite-dimensional spaces forces universe and bundling decisions on the first
+implementer. This roadmap therefore fixes the carrier here.
 
 Work with diagonal presentations:
 
@@ -182,262 +187,272 @@ Work with diagonal presentations:
 RegularFormPresentation K := Σ n : ℕ, Fin n → Kˣ
 ```
 
-reading `(n, w)` as `weightedSumSquares K (fun i => (w i : K))`, and put two
-presentations in relation when the forms they present are `QuadraticMap.Equivalent`
-(a relation between forms on different spaces, so presentations of different lengths
-may be related, and in fact only equal lengths ever are). Set
+Read `(n, w)` as `weightedSumSquares K (fun i => (w i : K))`. Two presentations are
+related when the forms they present are `QuadraticMap.Equivalent`. That relation
+compares forms on different spaces, so presentations of different lengths may be
+related, and only equal lengths ever are. Set
 
 ```lean
 RegularFormClass K := Quotient (regularFormSetoid K)
 ```
 
-The milestones this carrier owes the rest of the roadmap:
+The carrier owes the rest of the roadmap the following milestones.
 
-- every regular form on a finite-dimensional space has a class, by diagonalization
+- Every regular form on a finite-dimensional space has a class, by diagonalization
   (`equivalent_weightedSumSquares_units_of_nondegenerate'`), and the class does not
-  depend on the diagonalization chosen;
-- two regular forms are `Equivalent` iff their classes are equal;
-- orthogonal sum and tensor product of presentations descend to `RegularFormClass K`,
-  making it a commutative monoid under each, with the two distributing;
-- dimension, `discr`, `signedDiscr`, and later `hasseInvariant` and `localHasse`
-  descend to it, in each case by the descent principle of Layer 0;
-- the Grothendieck–Witt ring is the Grothendieck group of `(RegularFormClass K, ⊥)`
-  with the multiplication induced by `⊗`, and the Witt ring is its quotient by the
-  ideal generated by the hyperbolic plane.
+  depend on the chosen diagonalization.
+- Two regular forms are `Equivalent` if and only if their classes are equal.
+- Orthogonal sum and tensor product of presentations descend to `RegularFormClass K`.
+  The type is a commutative monoid under each operation, and the two distribute.
+- Dimension, `discr`, `signedDiscr`, and later `hasseInvariant` and `localHasse` descend
+  to it. Each descent is an application of the descent principle of Layer 0.
+- The Grothendieck-Witt ring is the Grothendieck group of `(RegularFormClass K, ⊥)`
+  with the multiplication induced by `⊗`. The Witt ring is its quotient by the ideal
+  generated by the hyperbolic plane.
 
-`QuadraticModuleCat` is the natural alternative and is acceptable as a replacement,
-but only if the roadmap is edited to name it as the carrier and to say how the
-universe of the underlying module is fixed; leaving the choice open is not.
+`QuadraticModuleCat` is the natural alternative carrier. A replacement by it is
+acceptable, provided that this section is edited to name it as the carrier and to say
+how the universe of the underlying module is fixed.
 
-## What Mathlib already has (consume)
+## What this roadmap consumes
 
-All checked at the roadmap pin (`9caeba1000`, 2026-06-03) and rechecked on master.
+### From Mathlib
 
-- **Quadratic forms:** `Mathlib/LinearAlgebra/QuadraticForm/Basic.lean`
-  (`QuadraticMap`, `QuadraticForm`, `polar`, `associated`, `Anisotropic`, `PosDef`,
-  `weightedSumSquares`, `discr'` for forms on `n → R`, matrix representations);
-  `Isometry.lean`, `IsometryEquiv.lean` (`Equivalent`,
-  `equivalent_weightedSumSquares`, `equivalent_weightedSumSquares_units_of_nondegenerate'`;
-  diagonalization is *done*, consume it); `Basis.lean` (`basisRepr`,
-  `exists_orthogonal_basis`); `Prod.lean` (`QuadraticMap.prod`, orthogonal sums);
-  `TensorProduct.lean` (tensor product of forms, with `Invertible (2 : R)`);
-  `Radical.lean` (`QuadraticMap.radical`, `QuadraticMap.Nondegenerate`,
-  `nondegenerate_associated_iff`); `Dual.lean`; `Real.lean`, `Complex.lean`,
-  `Signature.lean`, `AlgClosed.lean` (the classifications over `ℝ`, `ℂ`,
-  algebraically closed fields, the model for our local classification);
-  `QuadraticModuleCat.lean`.
-- **Bilinear forms:** `LinearMap.BilinForm.Nondegenerate`, `SeparatingLeft`,
-  orthogonality (`Mathlib/LinearAlgebra/BilinearForm/*`, `SesquilinearForm/*`).
-- **Quaternion algebras:** `Mathlib/Algebra/Quaternion.lean`, the Bourbaki
-  three-parameter `QuaternionAlgebra R c₁ c₂ c₃` with notations `ℍ[R,c₁,c₂,c₃]`,
-  `ℍ[R,c₁,c₂]` (`= ℍ[R,c₁,0,c₂]`), `ℍ[R]`; conjugation `star` **for the general
-  algebra** with `mul_star_eq_coe : a * star a = ((a * star a).re : ℍ[…])`, so the
-  scalarness of the norm is already there; but `normSq` (as a `MonoidHom`) and the
-  `DivisionRing` instance exist **only for Hamilton's `ℍ[R]`**.
-  `Mathlib/Algebra/QuaternionBasis.lean` has `QuaternionAlgebra.Basis` and
-  `Basis.lift : Basis A c₁ c₂ c₃ ≃ (ℍ[R,c₁,c₂,c₃] →ₐ[R] A)`, the universal
-  property our splitting arguments run through.
-- **Rank-2 algebras:** `Mathlib/Algebra/QuadraticAlgebra/{Defs,Basic,NormDeterminant}.lean`
-  (A. Chambert-Loir): `QuadraticAlgebra R a b` (`ω² = a + bω`), `star`,
-  `norm : QuadraticAlgebra R a b →* R` with
-  `norm z = z.re² + b·z.re·z.im − a·z.im²`, `isUnit_iff_norm_isUnit`, the `Field`
-  instance when `X² − bX − a` has no root, and `norm = det` of multiplication.
-  **`QuadraticAlgebra K a 0` is our vehicle for `K(√a)` and its norm form
-  `x² − ay²`**; do not re-adjoin square roots where this algebra serves.
-  `Mathlib/FieldTheory/KummerExtension.lean` and
-  `TauCeti/FieldTheory/IntermediateField/Quadratic.lean` cover the
-  intermediate-field picture when an ambient field is in play.
-- **Central-simple and Brauer scaffolding** (for Layer 5): `Mathlib/Algebra/Central/*`
-  (`Algebra.IsCentral`, `Algebra.IsCentralSimple`; J. Zhang),
-  `Mathlib/Algebra/BrauerGroup/Defs.lean` (`CSA`, `IsBrauerEquivalent`,
-  `BrauerGroup` as a `Quotient`, **not yet a group**; Y. Xie, J. Zhang),
-  `Mathlib/Algebra/Azumaya/*` (`IsAzumaya`, `AlgHom.mulLeftRight`),
-  `Mathlib/RingTheory/SimpleModule/WedderburnArtin.lean`, `SimpleRing/*`.
-- **Clifford algebras:** `Mathlib/LinearAlgebra/CliffordAlgebra/*` (base change,
-  grading, even subalgebra, equivalences with quaternion algebras in `Equivs.lean`).
-  These supply constructions and equivalences, not the central-simplicity theorems
-  Layer 5's `cliffordInvariant` needs; those are stated there as our own milestones.
-- **Arithmetic fuel for examples:** `Mathlib/NumberTheory/Padics/*` (`ℚ_[p]`,
-  `ℤ_[p]`, `PadicInt.toZModPow`, Hensel's lemma),
-  `Mathlib/NumberTheory/LegendreSymbol/*` (`legendreSym`, `jacobiSym`, quadratic
-  reciprocity, quadratic characters), `Mathlib/FieldTheory/Finite/*`.
-- **Trace forms:** `Algebra.traceForm : BilinForm R S` with
-  `Algebra.traceForm_nondegenerate` for finite separable extensions
-  (`Mathlib/RingTheory/Trace/*`); Layer 9's `Tr_*⟨1⟩` starts here, and the
-  quadratic form of a bilinear form is `LinearMap.BilinMap.toQuadraticMap`.
-- **Discrete group cohomology** (background for Layers 7 to 9's *statements* only):
+- **Quadratic forms.** `Mathlib/LinearAlgebra/QuadraticForm/Basic.lean` supplies
+  `QuadraticMap`, `QuadraticForm`, `polar`, `associated`, `Anisotropic`, `PosDef`,
+  `weightedSumSquares`, `discr'` for forms on `n → R`, and matrix representations.
+  `Isometry.lean` and `IsometryEquiv.lean` supply `Equivalent`,
+  `equivalent_weightedSumSquares`, and
+  `equivalent_weightedSumSquares_units_of_nondegenerate'`; diagonalization is done, so
+  consume it. `Basis.lean` supplies `basisRepr` and `exists_orthogonal_basis`.
+  `Prod.lean` supplies `QuadraticMap.prod`. `TensorProduct.lean` supplies the tensor
+  product of forms, with `Invertible (2 : R)`. `Radical.lean` supplies
+  `QuadraticMap.radical`, `QuadraticMap.Nondegenerate`, and
+  `nondegenerate_associated_iff`. `Dual.lean`, `Real.lean`, `Complex.lean`,
+  `Signature.lean`, `AlgClosed.lean`, and `QuadraticModuleCat.lean` supply the
+  classifications over `ℝ`, over `ℂ`, and over an algebraically closed field, which are
+  the model for the local classification below.
+- **Bilinear forms.** `LinearMap.BilinForm.Nondegenerate`, `SeparatingLeft`, and
+  orthogonality, in `Mathlib/LinearAlgebra/BilinearForm/*` and `SesquilinearForm/*`.
+- **Quaternion algebras.** `Mathlib/Algebra/Quaternion.lean` supplies the Bourbaki
+  three-parameter `QuaternionAlgebra R c₁ c₂ c₃` with the notations `ℍ[R,c₁,c₂,c₃]`,
+  `ℍ[R,c₁,c₂]` (that is `ℍ[R,c₁,0,c₂]`), and `ℍ[R]`. Conjugation `star` exists for the
+  general algebra, together with
+  `mul_star_eq_coe : a * star a = ((a * star a).re : ℍ[…])`, so the scalarness of the
+  norm is available. `normSq` as a `MonoidHom` and the `DivisionRing` instance exist
+  only for Hamilton's `ℍ[R]`. `Mathlib/Algebra/QuaternionBasis.lean` supplies
+  `QuaternionAlgebra.Basis` and
+  `Basis.lift : Basis A c₁ c₂ c₃ ≃ (ℍ[R,c₁,c₂,c₃] →ₐ[R] A)`, which is the universal
+  property that the splitting arguments use.
+- **Rank-2 algebras.** `Mathlib/Algebra/QuadraticAlgebra/` (A. Chambert-Loir) supplies
+  `QuadraticAlgebra R a b` with `ω² = a + bω`, `star`, and
+  `norm : QuadraticAlgebra R a b →* R` with `norm z = z.re² + b·z.re·z.im − a·z.im²`. It
+  also supplies `isUnit_iff_norm_isUnit`, the `Field` instance for the case where
+  `X² − bX − a` has no root, and the identity of `norm` with the determinant of
+  multiplication. `QuadraticAlgebra K a 0` is the vehicle for `K(√a)` and for its norm
+  form `x² − ay²` in this roadmap. Do not adjoin a square root by hand where this
+  algebra serves. `Mathlib/FieldTheory/KummerExtension.lean` and
+  `TauCeti/FieldTheory/IntermediateField/Quadratic.lean` cover the intermediate-field
+  picture when an ambient field is present.
+- **Central simple algebras.** `Mathlib/Algebra/Central/*` supplies `Algebra.IsCentral`
+  and `Algebra.IsCentralSimple`. `Mathlib/Algebra/BrauerGroup/Defs.lean` supplies `CSA`,
+  `IsBrauerEquivalent`, and `BrauerGroup` as a `Quotient`, which carries no group
+  structure. `Mathlib/Algebra/Azumaya/*` supplies `IsAzumaya` and
+  `AlgHom.mulLeftRight`. `Mathlib/RingTheory/SimpleModule/WedderburnArtin.lean` and
+  `SimpleRing/*` supply the Wedderburn theory.
+- **Clifford algebras.** `Mathlib/LinearAlgebra/CliffordAlgebra/*` supplies base change,
+  the grading, the even subalgebra, and the equivalences with quaternion algebras in
+  `Equivs.lean`. It supplies constructions and equivalences, and not the
+  central-simplicity theorems that Layer 5's `cliffordInvariant` needs. Those theorems
+  are milestones of Layer 5.
+- **Local fields.** `Mathlib/NumberTheory/LocalField/Basic.lean` supplies
+  `IsNonarchimedeanLocalField K`, stated for a field with a `ValuativeRel` and a
+  topology. It gives `IsDiscreteValuationRing 𝒪[K]`, `Finite 𝓀[K]`,
+  `ValuativeRel.IsDiscrete K`, and local compactness. `IsDiscreteValuationRing.addVal`
+  supplies the `ℕ∞`-valued valuation of `𝒪[K]`. `Mathlib/NumberTheory/Padics/*`
+  supplies `ℚ_[p]`, `ℤ_[p]`, `PadicInt.toZModPow`, and Hensel's lemma.
+  `Mathlib/RingTheory/Valuation/*` supplies `ValuativeRel`, `𝒪[K]`, `𝓂[K]`, `𝓀[K]`, and
+  the fractional-ideal API in `Mathlib/RingTheory/FractionalIdeal/*`.
+- **Finite fields and characters.** `Mathlib/NumberTheory/LegendreSymbol/*` supplies
+  `legendreSym`, `jacobiSym`, quadratic reciprocity, and quadratic characters.
+  `Mathlib/FieldTheory/Finite/*` supplies the finite-field theory.
+- **Trace forms.** `Algebra.traceForm : BilinForm R S` with
+  `traceForm_nondegenerate` for a finite separable extension, in
+  `Mathlib/RingTheory/Trace/*`. Layer 9's `Tr_*⟨1⟩` starts here, and
+  `LinearMap.BilinMap.toQuadraticMap` turns a bilinear form into a quadratic form.
+- **Discrete group cohomology**, as background for the statements of Layers 7 to 9:
   `Mathlib/RepresentationTheory/Homological/GroupCohomology/{LowDegree,Hilbert90,Shapiro}.lean`.
-  There is **no continuous cohomology at the pin** (master has
-  `RepresentationTheory/Homological/ContCohomology/`); the profinite-cohomology
-  roadmap owns that gap.
 
-## What Tau Ceti already has (consume)
+### From Tau Ceti
 
-This is the first roadmap consuming landed Tau Ceti code; treat these files as
-fixed API, cite them in the consuming files, and route improvements through their
-own review rather than duplicating.
+Treat these landed files as fixed API. Cite them in the consuming files, and route an
+improvement through their own review rather than duplicating them.
 
-- **`TauCeti/FieldTheory/SquareClassGroup.lean`**: `TauCeti.SquareClassGroup K`
-  (an `𝔽₂`-vector space), `squareClass`, `squareClass_eq_zero_iff`,
-  `squareClass_prod`, and `linearIndependent_squareClass_iff` (linear independence
-  = no nonempty subset product is a square). Layer 0's square-class calculus lands
-  *next to this file*, extending it with the multiplicative avatar and the
-  finiteness API rather than shadowing it.
-- **`TauCeti/FieldTheory/IntermediateField/Quadratic.lean`**: quadratic normal
-  forms `a + b√x`, `finrank_adjoin_simple_eq_two_of_sq_mem_notMem`,
-  `isSquare_mul_of_adjoin_simple_eq`, the intermediate-field side of quadratic
-  extensions, used when `K(√a)` must live inside a given ambient field.
-- **`TauCeti/NumberTheory/Multiquadratic/SquareClass/{Basic,Independence}.lean`**:
-  square-class descent in towers (`sqrtTower`, `squareClass_of_sq_mem`); the
-  [multiquadratic roadmap](../Multiquadratic/README.md) owns multi-root towers, we
-  own one quadratic step's *form theory*, and the shared language is the
+- **`TauCeti/FieldTheory/SquareClassGroup.lean`**: `TauCeti.SquareClassGroup K`, an
+  `𝔽₂`-vector space, with `squareClass`, `squareClass_eq_zero_iff`, `squareClass_prod`,
+  and `linearIndependent_squareClass_iff`, that is linear independence as the statement
+  that no nonempty subset product is a square. Layer 0's square-class calculus lands
+  next to this file and extends it with the multiplicative avatar and the finiteness
+  API.
+- **`TauCeti/FieldTheory/IntermediateField/Quadratic.lean`**: the quadratic normal form
+  `a + b√x`, `finrank_adjoin_simple_eq_two_of_sq_mem_notMem`, and
+  `isSquare_mul_of_adjoin_simple_eq`. Layer 6 uses these when `K(√a)` must lie inside a
+  given ambient field.
+- **`TauCeti/NumberTheory/Multiquadratic/SquareClass/{Basic,Independence}.lean}`**:
+  square-class descent in towers, that is `sqrtTower` and `squareClass_of_sq_mem`. The
+  [multiquadratic roadmap](../Multiquadratic/README.md) owns multi-root towers. This
+  roadmap owns the form theory of one quadratic step, and the shared language is the
   square-class group above.
-- **`TauCeti/NumberTheory/LegendreSymbol/SquareClass.lean`**:
-  `legendreSym_mul_sq` and friends, the radicand-normalization API our odd-residue
-  Hilbert-symbol formula (Layer 6) reuses.
+- **`TauCeti/NumberTheory/LegendreSymbol/SquareClass.lean`**: `legendreSym_mul_sq` and
+  the related lemmas, which are the radicand-normalization API that Layer 6's
+  odd-residue-characteristic formula reuses.
 - **`TauCeti/NumberTheory/EffectiveBounds/TraceForm.lean`** and
-  `TauCeti/FieldTheory/Trace`: trace-form diagonalization on square-root bases
-  (`discr_one_elem_eq_of_sq_algebraMap`, trace-vanishing criterion). Layer 9's
-  `Tr_*⟨1⟩ ≅ ⟨2, 2d⟩` for `K(√d)/K` is the form-level restatement; prove it
-  through this API, do not re-derive the trace computations.
+  `TauCeti/FieldTheory/Trace`: trace-form diagonalization on square-root bases, that is
+  `discr_one_elem_eq_of_sq_algebraMap` and the trace-vanishing criterion. Layer 9's
+  `Tr_*⟨1⟩ ≅ ⟨2, 2d⟩` for `K(√d)/K` is the form-level restatement, and is proved through
+  this API.
 
-## What is already in motion elsewhere (cite, follow, do not duplicate)
+### From other roadmaps in this repository
 
-- **Hasse–Minkowski and the Hilbert symbol:**
-  [`mariainesdff/HassePrinciple`](https://github.com/mariainesdff/HassePrinciple)
-  (N. Coppola, M. I. de Frutos-Fernández; Apache-2.0; checked at
-  [`d2802ddce55e`](https://github.com/mariainesdff/HassePrinciple/commit/d2802ddce55ef34045f68c5bf39c0598e7d0e988),
-  2026-07-27)
-  formalizes the Hasse–Minkowski theorem over `ℚ` following Serre: an integer-valued
-  `hilbertSym` on a general field (Serre's solvability definition), the `p = 2`
-  `epsilon`/`omega` residues, `p`-adic squares (`Padics/Squares.lean`), Serre's
-  contiguous-orthogonal-bases chain (`QuadraticForm/Chain.lean`, stated with
-  `[Invertible (2 : k)]`), and the Hasse–Minkowski invariant with the rank-by-rank
-  case analysis. **The coordination requirement in §Provenance must be met before
-  Layer 6 borrows anything from them.** Their target is the global theorem over `ℚ`
-  with `ForMathlib/` files headed upstream; ours is the general-field invariant
-  theory, the local classification over *every* finite extension of `ℚ_p` including
-  the dyadic ones, and the cohomological layers. Adopt their conventions where the
-  objects coincide (Serre's solvability-valued symbol, the contiguity notion for
-  chains), state the comparison lemmas to our `Kˣ × Kˣ` symbol, and flag every
-  Layer 6 milestone that should be refactored onto their files when those land in
-  Mathlib. (Prior art in the same direction: the 2023 Lorentz-Center workshop
-  project on Hasse–Minkowski by A. Best, K. Buzzard, M. Streng, H. Wiersema, and
-  R. Winter.)
-- **Central simple algebras and the Brauer group:** in-tree scaffolding by
-  Y. Xie and J. Zhang (above);
-  [`Whysoserioushah/BrauerGroup`](https://github.com/Whysoserioushah/BrauerGroup)
-  (Apache-2.0; checked at
-  [`283e0df7dc15`](https://github.com/Whysoserioushah/BrauerGroup/commit/283e0df7dc15cd8b469a73fbc763f74637c87147),
-  2026-07-16) stages the full program (Wedderburn, Skolem–Noether, double centralizer,
-  splitting fields, the group structure, `Br(K) ≅ H²(Gal(K̄/K), K̄ˣ)`,
-  `Br(ℝ)`, `Br(𝔽_q)`) with active upstreaming: open PR
-  [#26377](https://github.com/leanprover-community/mathlib4/pull/26377) (open at
-  `13cac7e3b9bb`, updated 2026-07-16) proves that the tensor product of a simple and
-  a central simple algebra is simple, which is the Brauer-multiplication
-  prerequisite. Note the ownership inside this family: general CSA and Brauer theory
-  is the [semisimple-algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)'s,
-  it has landed, and Layer 5 consumes its Layer 4 and Layer 6 milestones by name.
-  Upstream Mathlib PRs are refactor triggers for that roadmap and for this one, not
-  the only route by which either can be implemented.
-- **Quaternion algebras as CSAs:** open PRs
-  [#41536](https://github.com/leanprover-community/mathlib4/pull/41536) (open at
-  `e95984de0341`, updated 2026-07-18; the quaternion directory split),
-  [#41537](https://github.com/leanprover-community/mathlib4/pull/41537) (open at
-  `40983fffa9aa`, updated 2026-07-09; two-sided ideal lemmas), and
-  [#41538](https://github.com/leanprover-community/mathlib4/pull/41538)
-  (Mathias-Stout, J. Springer; open at `86493005d20f`, updated 2026-07-17), which
-  depends on both of the first two and proves that `ℍ[R,a,b,c]` over a field is
-  central simple when `c·(b² + 4a) ≠ 0`, adding
-  `Mathlib/Algebra/Quaternion/CentralSimple.lean`. Layer 5's central-simplicity
-  milestone is stated in that shape and proved here, with a deletion trigger for the
-  day #41538 lands; the statement is needed either way, because
-  `[(a,b)] ∈ BrauerGroup K` does not exist without it. The FLT
-  project carries `IsQuaternionAlgebra F D` (a 4-dimensional central simple algebra,
-  K. Buzzard, `FLT/Mathlib/Algebra/IsQuaternionAlgebra.lean`, "material destined for
-  Mathlib") together with the split-or-division dichotomy for it; Layer 2's abstract
-  characterization milestone is stated so that it can be refactored onto that
-  predicate when it reaches Mathlib.
-- **Reduced norm and trace:** PR
-  [#28970](https://github.com/leanprover-community/mathlib4/pull/28970) (open at
-  `5a2bcb298759`, last updated 2025-11-19). **Informational only.** The quaternion
-  norm form of Layer 2 is built by hand from `star` and `mul_star_eq_coe`, and no
-  milestone in this roadmap uses a general reduced norm or trace, so nothing here
-  waits on it.
-- **Indefinite bilinear forms:** PR
-  [#38194](https://github.com/leanprover-community/mathlib4/pull/38194) (indefinite
-  metrics) touches real signature theory only; no conflict, noted for awareness.
+- The [semisimple-algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)
+  **Layer 4**: the tensor product of two central simple `K`-algebras is central simple,
+  with `finrank K (A ⊗ B) = finrank K A · finrank K B`; and the opposite-algebra package
+  `A ⊗_K Aᵒᵖ ≃ₐ[K] End_K A ≃ₐ[K] M_{finrank K A}(K)`.
+- The same roadmap, **Layer 6**:
+  - the Brauer-triviality prerequisites;
+  - the `CommGroup` structure on `BrauerGroup K`, with multiplication induced by `⊗_K`,
+    identity `[K]`, and inverse `[Aᵒᵖ]`;
+  - the quotient API for `Brauer.CSA_Setoid`;
+  - the theorem that every central simple `K`-algebra is split by a finite separable
+    extension.
+- The [multiquadratic roadmap](../Multiquadratic/README.md) for the square-class
+  language of Layer 0, through the landed files listed above.
+
+Where this roadmap and the semisimple-algebras roadmap name the same fact, the
+semisimple-algebras statement is the statement of record. Nothing here rebuilds
+Wedderburn theory, Skolem-Noether, centralizers, splitting fields, or the index.
+
+### Interfaces this roadmap owns
+
+Three objects that Layers 5 to 9 consume have no Lean type in Mathlib and no landed
+Tau Ceti declaration. Each one is therefore a target of this roadmap, stated as a small
+interface in `Suggested.lean` so that the consuming statements elaborate today.
+
+- **`BrauerSymbol K`**: a commutative group together with the quaternion class map
+  `Kˣ → Kˣ → Br`, its symmetry, its 2-torsion, and its bilinearity. Layer 5 proves that
+  `BrauerGroup K` with `[(a,b)] = ⟦ℍ[K,a,b]⟧` is an instance, once the
+  semisimple-algebras roadmap supplies the group structure.
+- **`LocalFieldToolkit K`**: the normalized valuation `Kˣ →* Multiplicative ℤ`, a
+  uniformizer, and the unit filtration, tied to Mathlib's `𝒪[K]`. Layer 6A proves that a
+  nonarchimedean local field carries such a toolkit.
+- **`Mod2Galois K`**: the groups `H¹(G_K, 𝔽₂)` and `H²(G_K, 𝔽₂)`, the cup product, and
+  the Kummer isomorphism `Kˣ/(Kˣ)² ≃ H¹`, together with restriction, corestriction, and
+  the Evens norm for a finite separable extension. Layers 7 to 9 state their targets
+  against this interface.
+
+Each interface is a record of hypotheses that some later development discharges. A
+development of continuous Galois cohomology, or of local fields, supplies the fields of
+the corresponding structure; the replacement then deletes the structure and substitutes
+the supplied declarations, and no statement of this roadmap is rewritten.
 
 ## What is missing (build here)
 
-Everything below the linear algebra: the **hyperbolic plane** as a studied object
-and the isotropy-versus-splitting dichotomy; **Witt decomposition, cancellation, and
-the Witt index**; **Witt's chain-equivalence theorem**, without which no
-invariant of diagonal tuples is well defined on isometry classes; the **representation
-predicate** and the value-set calculus; the **Witt ring** `W(K)`, the fundamental
-ideal `I(K)`, and **Pfister forms**; the **quaternion symbol layer** with its norm
-form, split-or-division dichotomy, and four-fold splitting criterion; the
-**classical invariants** `dim mod 2`, `d`, `d±`; the **Brauer-valued Hasse and
-Clifford invariants** and the dimension-≤-3 classification; the **Hilbert symbol**
-over finite extensions of `ℚ_p` with the dyadic formulas, bimultiplicativity, and
-nondegeneracy; the **complete local classification** by `(dim, d, s)` with
-`u(K) = 4` and the unique anisotropic quaternary form; the **comparison of the
-Brauer group with `H²`** and the identification of the quaternion class with a
-Kummer cup product; **Stiefel–Whitney classes** of forms with the exact
-`w₂`-versus-Clifford comparison; and the **Scharlau transfer** with **Kahn's
-relative Stiefel–Whitney formula** (Evens–Kahn). None of this exists upstream as
-stated; each object gets its complete basic theory, not only the milestone the
-headline needs.
+Everything below the linear algebra:
 
-`Suggested.lean` pins Lean forms for the design decisions most likely to fork an
-implementation, plus the worked examples. It is illustrative and not exhaustive:
-the README is the definitive document. Brauer-valued and continuous-cohomology
-signatures stay in prose there until the consumed types exist, with the supplier
-named in the surrounding comment.
+- the hyperbolic plane as a studied object, and the dichotomy between isotropy and
+  splitting;
+- Witt decomposition, Witt cancellation, and the Witt index;
+- Witt's chain-equivalence theorem, without which no invariant of diagonal tuples is
+  well defined on isometry classes;
+- the representation predicate and the value-set calculus;
+- the Witt ring `W(K)`, the fundamental ideal `I(K)`, and Pfister forms;
+- the quaternion symbol layer, with its norm form, the split-or-division dichotomy, and
+  the four-fold splitting criterion;
+- the classical invariants `dim mod 2`, `d`, and `d±`;
+- the Brauer-valued Hasse and Clifford invariants, and the classification in dimension
+  at most 3;
+- the local-field toolkit of Layer 6A, that is the normalized valuation, the unit
+  filtration, the square-class count, and the unramified norm group;
+- the quadratic defect, the Hilbert symbol over a nonarchimedean local field with the
+  dyadic case, bimultiplicativity, and nondegeneracy;
+- the local classification by `(dim, d, s)`, with `u(K) = 4` and the unique anisotropic
+  quaternary form;
+- the comparison of the Brauer group with `H²`, and the identification of the quaternion
+  class with a Kummer cup product;
+- Stiefel-Whitney classes of forms, with the exact comparison between `w₂` and the
+  Clifford invariant;
+- the Scharlau transfer, and Kahn's relative Stiefel-Whitney formula.
+
+None of this exists upstream as stated. Each object gets its complete basic theory, and
+not only the milestone that the headline needs.
+
+`Suggested.lean` fixes Lean forms for the design decisions that are most likely to fork
+an implementation, together with the worked examples. It is illustrative and not
+exhaustive, and this README is the definitive document.
 
 ---
 
 ## The build, in layers
 
-The order below is the dependency order. Layers 0 to 6 use no cohomology and only
-Layer 5 uses the Brauer group, with one stated exception: the second half of the
-compatibility theorem that closes Layer 6 reaches forward to Layer 7A and to Local
-Fields PR #2's Layer 5, and nothing consumes it.
+The order below is the dependency order. Each layer lists its direct prerequisites.
+Each prerequisite carries one of four sources:
+
+- **[Mathlib]** for an existing Mathlib declaration;
+- **[Tau Ceti]** for an existing accepted Tau Ceti declaration;
+- **[Layer n]** for an earlier milestone of this roadmap;
+- **[SSA Layer n]** for a named layer of the semisimple-algebras roadmap, which is the
+  only other roadmap in this repository that this one consumes.
+
+Layers 0 to 6 use no cohomology. Only Layer 5 uses the Brauer group. The one exception
+is the second half of the compatibility theorem at the end of Layer 6, which uses
+Layer 7A, and which nothing consumes.
 
 ### Layer 0: square classes, diagonal calculus, and chain equivalence
 
-- **Square-class interop.** Consume `TauCeti.SquareClassGroup`. Add what the
-  invariants need: the multiplicative avatar `Kˣ ⧸ Subgroup.square Kˣ` with the
-  `ZMod 2`-module dictionary to the landed additive one; pushforward along field
-  maps; finiteness transfer (`Nat.card` API), which is the interface through which
-  Layer 6 consumes the local counts.
-- **Representation and value sets.** `Represents Q a` and `unitValueSet Q` as pinned
-  in the convention table, with their basic calculus: `unitValueSet` is closed under
-  multiplication by squares, so it is a union of square classes; `Represents Q 0`
-  holds trivially on a nonzero space, which is why the classification statements use
-  `unitValueSet`; and the **representation criterion** (Lam I.2.3, I.3.5): for a
-  regular `Q` and `a : Kˣ`, `a ∈ unitValueSet Q` iff `Q ⊥ ⟨−a⟩` is isotropic. Every
-  later question about which values `q` represents is answered by turning it into
-  an isotropy question this way.
-- **Binary forms, in normal form.** Two exact theorems, both about units `a b c d`:
+Prerequisites:
+
+- **[Mathlib]** `weightedSumSquares`, `QuadraticMap.Equivalent`,
+  `QuadraticMap.Anisotropic`, `Equiv.Perm`, `Relation.ReflTransGen`;
+- **[Tau Ceti]** `TauCeti.SquareClassGroup` and `TauCeti.squareClass_eq_zero_iff`.
+
+Milestones:
+
+- **Square-class interop.** Consume `TauCeti.SquareClassGroup` and add what the
+  invariants need:
+  - the multiplicative avatar `Kˣ ⧸ Subgroup.square Kˣ`, with the `ZMod 2`-module
+    dictionary to the landed additive one;
+  - pushforward along a field map;
+  - finiteness transfer through the `Nat.card` API, which is the interface that Layer 6
+    consumes.
+- **Representation and value sets.** Define `Represents Q a` and `unitValueSet Q` as
+  fixed in the convention table, with the basic calculus:
+  - `unitValueSet` is closed under multiplication by squares, so it is a union of
+    square classes;
+  - `Represents Q 0` holds on every nonzero space, which is why the classification
+    statements use `unitValueSet`;
+  - the **representation criterion** (Lam I.2.3, I.3.5): for regular `Q` and `a : Kˣ`,
+    `a ∈ unitValueSet Q` if and only if `Q ⊥ ⟨−a⟩` is isotropic.
+
+  Every later question about represented values is turned into an isotropy question
+  through the criterion.
+- **Binary forms in normal form.** Two theorems, both about units `a b c d`:
   - **representation normal form** (Lam I.2.3 (2)):
     `c ∈ unitValueSet ⟨a,b⟩ ↔ ⟨a,b⟩ ≅ ⟨c, abc⟩`. The second coefficient is `abc`
-    because it must have square class `ab/c`, and `ab/c = abc` modulo squares; state
-    both spellings and prove them equal, since the sources use both.
-  - **binary equivalence criterion** (Lam I.5.1): `⟨a,b⟩ ≅ ⟨c,d⟩` iff
+    because its square class must be `ab/c`, and `ab/c = abc` modulo squares. State
+    both spellings and prove them equal, because the sources use both.
+  - **binary equivalence criterion** (Lam I.5.1): `⟨a,b⟩ ≅ ⟨c,d⟩` if and only if
     `IsSquare (a*b*(c*d))` and the two forms represent a common unit.
-- **Chain equivalence.** This is the theorem every diagonal invariant's
-  well-definedness rests on, so it is stated exactly. For `w w' : Fin n → Kˣ`:
+- **Chain equivalence.** Every diagonal invariant rests on this theorem, so the
+  relation is stated exactly. For `w w' : Fin n → Kˣ`:
   - `PermutationStep w w'`: there is `σ : Equiv.Perm (Fin n)` with `w' i = w (σ i)`;
   - `BinaryStep w w'`: there are distinct `i j : Fin n` with `w k = w' k` for
     `k ∉ {i,j}` and `⟨w i, w j⟩ ≅ ⟨w' i, w' j⟩`;
-  - `DiagonalStep w w'` is the disjunction of the two, and
-    `DiagonalChain := Relation.ReflTransGen DiagonalStep`.
+  - `DiagonalStep w w'` is the disjunction of the two;
+  - `DiagonalChain := Relation.ReflTransGen DiagonalStep`.
 
-  (A transposition is already a `BinaryStep`, since `⟨a,b⟩ ≅ ⟨b,a⟩`, so
-  `PermutationStep` is a convenience rather than new generating data; prove that
-  containment as a lemma and keep both, because permutation invariance is the
-  form most downstream proofs actually apply.)
+  A transposition is already a `BinaryStep`, because `⟨a,b⟩ ≅ ⟨b,a⟩`, so
+  `PermutationStep` adds no generating data. Prove that containment as a lemma and keep
+  both relations, because permutation invariance is the form that later proofs apply.
 
   The theorem is the equivalence
 
@@ -445,110 +460,192 @@ Fields PR #2's Layer 5, and nothing consumes it.
   DiagonalChain w w'  ↔  weightedSumSquares w ≅ weightedSumSquares w'
   ```
 
-  whose two directions are of very different weight. Left to right is elementary:
-  each step is an isometry, and isometry is transitive. Right to left is **Witt's
-  chain-equivalence theorem** (Lam I.5.2), and it is the real content. Prove it by
-  whichever route is convenient, and state the comparison with Serre IV Thm 5's
-  contiguous orthogonal bases (`Module.Basis.IsContiguous`, `Chain` in the
-  HassePrinciple development) as a separate theorem, so that development can be
-  consumed rather than duplicated. The contiguous-basis formulation is a comparison
-  target, never an alternative definition of the relation above.
-- **The descent principle**, which is the form every later layer uses: a function
-  `f` on diagonal tuples of units, invariant under `PermutationStep` and under
-  `BinaryStep`, descends uniquely along `Quotient.mk` to a function on
-  `RegularFormClass K` agreeing with `f` on each presentation. State it once, in
-  exactly this shape, and apply it for `discr`, `signedDiscr`, `hasseInvariant`,
-  `localHasse`, and the total Stiefel–Whitney class.
+  The two directions are not equally hard. Left to right is elementary, because each
+  step is an isometry and isometry is transitive. Right to left is **Witt's
+  chain-equivalence theorem** (Lam I.5.2), and it is the difficult direction. Prove it
+  by a convenient route. State the comparison with Serre IV Thm 5 on contiguous
+  orthogonal bases as a separate theorem, so that a development that uses contiguity can
+  be consumed. Contiguity is a comparison target, and never an alternative definition of
+  the relation above.
+- **The descent principle.** A function `f` on diagonal tuples of units that is
+  invariant under `PermutationStep` and under `BinaryStep` descends uniquely along
+  `Quotient.mk` to a function on `RegularFormClass K` that agrees with `f` on each
+  presentation. State it once in exactly this form. Apply it for `discr`,
+  `signedDiscr`, `hasseInvariant`, `localHasse`, and the total Stiefel-Whitney class.
+
+Basic API for the objects introduced here:
+
+- constructors: `RegularFormPresentation`, `regularFormSetoid`, `RegularFormClass`,
+  `Represents`, `unitValueSet`, `PermutationStep`, `BinaryStep`, `DiagonalChain`;
+- examples: `⟨1,1⟩` and `⟨1,−1⟩` over `ℚ`; the single `BinaryStep` from `⟨1,1⟩` to
+  `⟨2,2⟩` over `ℚ`;
+- morphisms: the quotient map from presentations to classes; the descent principle as
+  the universal property;
+- functoriality: pushforward of square classes and of presentations along a field map
+  `K →+* L`, with `discr` and dimension commuting with it;
+- comparison lemmas: `DiagonalChain` against `Equivalent`; `IsSquare (a*b)` against
+  equality in the square-class group; contiguous orthogonal bases against
+  `DiagonalChain`;
+- naturality: the descent principle commutes with pushforward along `K →+* L`;
+- edge cases: rank `0` and rank `1`, where the empty and singleton products appear;
+  `Represents Q 0`, which is not a statement about `unitValueSet`;
+- downstream interfaces: Layers 3, 5, 6, and 8 each obtain a well-defined invariant
+  from the descent principle.
+
+⚠ Nearby false generalization. Equal length and equal discriminant do not give a chain,
+so they do not give an isometry. Over `ℚ`, `⟨1,1⟩` and `⟨−1,−1⟩` have discriminant
+`[1]`, and they are not isometric, because one is positive definite and the other is
+negative definite.
 
 ### Layer 1: hyperbolic planes and Witt theory
 
-- **The hyperbolic plane.** `ℍ_q := ⟨1, −1⟩` (with `2` invertible this is equivalent
-  to the `xy`-form); universality (`ℍ_q` represents every unit); `⟨a, −a⟩ ≅ ℍ_q`; a
-  regular isotropic form splits off a hyperbolic plane (Lam I.3.4); consequently a
-  regular isotropic form is universal.
-- **Witt decomposition** (Lam I.4.1): every form splits as
-  `q ≅ q_t ⊥ (m × ℍ_q) ⊥ q_a` with `q_t` totally isotropic (the zero form on the
-  radical) and `q_a` anisotropic, all three unique up to isometry; the **Witt index**
-  `m` and the **anisotropic part**; for regular `q`, the Witt index is the dimension
-  of any maximal totally isotropic subspace (Lam I.4.4).
-- **Witt cancellation** (Lam I.4.2): `q ⊥ q₁ ≅ q ⊥ q₂ → q₁ ≅ q₂`, proved through
-  hyperplane reflections (Lam I.4.5 to I.4.7).
-- **Reflections and Cartan–Dieudonné** (Lam I.7). For a regular `Q` and a
-  nonisotropic `v` (that is, `Q v ≠ 0`), the **reflection**
-  `τ_v x = x − (polar Q x v / Q v) • v` is an isometry, `τ_v v = −v`, `τ_v` fixes
-  `v^⊥` pointwise, and `τ_v ∘ τ_v = id`. **Cartan–Dieudonné:** every isometry of a
-  regular `n`-dimensional quadratic space is a product of at most `n` reflections,
-  with the identity as the empty product. No low-dimensional exception arises here:
-  the classical counterexample lives in dimension `4` over `𝔽₂`, which our standing
-  hypothesis excludes.
-- **Witt's extension theorem** (Lam I.4.9): an isometry between regular subspaces of
-  a regular space extends to the whole space. Absent from Mathlib in any form, and
-  needed later for the transfer and the local uniqueness arguments.
+Prerequisites:
+
+- **[Mathlib]** `QuadraticMap.prod`, `QuadraticMap.Nondegenerate`, `basisRepr`,
+  `exists_orthogonal_basis`, `Module.finrank`;
+- **[Layer 0]** the representation criterion and the binary normal forms.
+
+Milestones:
+
+- **The hyperbolic plane.** `ℍ_q := ⟨1, −1⟩`, which is equivalent to the `xy`-form
+  because `2` is invertible. Prove that `ℍ_q` represents every unit, that
+  `⟨a, −a⟩ ≅ ℍ_q`, that a regular isotropic form splits off a hyperbolic plane
+  (Lam I.3.4), and, as a consequence, that a regular isotropic form is universal.
+- **Witt decomposition** (Lam I.4.1). Every form splits as
+  `q ≅ q_t ⊥ (m × ℍ_q) ⊥ q_a`, where `q_t` is the zero form on the radical and `q_a` is
+  anisotropic, and all three parts are unique up to isometry. Define the **Witt index**
+  `m` and the **anisotropic part**. For regular `q`, the Witt index is the dimension of
+  a maximal totally isotropic subspace (Lam I.4.4).
+- **Witt cancellation** (Lam I.4.2): `q ⊥ q₁ ≅ q ⊥ q₂ → q₁ ≅ q₂` for regular `q`,
+  proved through hyperplane reflections (Lam I.4.5 to I.4.7). The regularity hypothesis
+  on the cancelled summand is part of the statement.
+- **Reflections and Cartan-Dieudonné** (Lam I.7). For regular `Q` and `v` with
+  `Q v ≠ 0`, the **reflection** is `τ_v x = x − (polar Q x v / Q v) • v`. Prove that
+  `τ_v` is an isometry, that `τ_v v = −v`, that `τ_v` fixes `v^⊥` pointwise, and that
+  `τ_v ∘ τ_v = id`. **Cartan-Dieudonné**: every isometry of a regular `n`-dimensional
+  quadratic space is a product of at most `n` reflections. The identity is the empty
+  product.
+- **Witt's extension theorem** (Lam I.4.9): an isometry between regular subspaces of a
+  regular space extends to the whole space. Mathlib has no form of this theorem, and
+  Layer 6 and Layer 9 both use it.
+
+Basic API:
+
+- constructors: `hyperbolicPlane`, `wittIndex`, `anisotropicPart`, `reflection`;
+- examples: `ℍ_q` over `ℚ`; `⟨1,1⟩` over `ℚ`, which is anisotropic and has Witt index
+  `0`;
+- morphisms: reflections and the isometry group; the extension of an isometry from a
+  subspace;
+- functoriality: the Witt index and the anisotropic part are invariants of
+  `Equivalent`, and both commute with base change along a field map;
+- comparison lemmas: the Witt index against the dimension of a maximal totally
+  isotropic subspace; the `xy`-form against `⟨1,−1⟩`;
+- naturality: `anisotropicPart (q ⊥ r)` against `anisotropicPart q ⊥ anisotropicPart r`
+  in the Witt ring of Layer 4;
+- edge cases: the zero form; a form on the zero space; rank 1, where isotropy fails
+  always;
+- downstream interfaces: Layer 4 needs cancellation for the Witt ring, and Layer 6
+  needs the extension theorem for the local uniqueness arguments.
+
+⚠ Nearby false generalization. Cartan-Dieudonné has a classical counterexample in
+dimension 4 over `𝔽₂`, which the standing hypothesis `Invertible (2 : K)` excludes. Do
+not state the theorem for a general field.
 
 ### Layer 2: quaternion algebras and the four-fold splitting criterion
 
-The route through quaternion algebras, rather than a bare cocycle computation, is
-deliberate: each equivalence proved there is reusable, whereas a cocycle identity
-is not. Nothing in this layer needs central simplicity, and no milestone here
-assumes it.
+The route through quaternion algebras, rather than through a cocycle computation, is
+deliberate. Each equivalence proved here is reusable, and a cocycle identity is not.
+Nothing in this layer needs central simplicity, and no milestone here assumes it.
 
-- **Norm form.** For `a, b ∈ Kˣ`: `Nrd(x) = x · star x` is scalar (Mathlib's
-  `mul_star_eq_coe`); package `x ↦ (x * star x).re` as a `QuadraticForm K ℍ[K,a,b]`
-  and prove `Nrd ≅ ⟨1, −a, −b, ab⟩ = ⟨⟨a, b⟩⟩`, the 2-fold Pfister form; the
-  **pure part** `⟨−a, −b, ab⟩` on the trace-zero subspace; multiplicativity
+Prerequisites:
+
+- **[Mathlib]** `QuaternionAlgebra`, `star`, `mul_star_eq_coe`,
+  `QuaternionAlgebra.Basis` with `Basis.lift`, `QuadraticAlgebra K a 0` with its `norm`,
+  `Matrix (Fin 2) (Fin 2) K`;
+- **[Layer 0]** the binary normal forms;
+- **[Layer 1]** the hyperbolic plane and the splitting of an isotropic form.
+
+Milestones:
+
+- **Norm form.** For `a, b ∈ Kˣ`, `Nrd(x) = x · star x` is scalar, by Mathlib's
+  `mul_star_eq_coe`. Package `x ↦ (x * star x).re` as a `QuadraticForm K ℍ[K,a,b]` and
+  prove `Nrd ≅ ⟨1, −a, −b, ab⟩ = ⟨⟨a, b⟩⟩`, the 2-fold Pfister form. Prove that the
+  **pure part** on the trace-zero subspace is `⟨−a, −b, ab⟩`, and that
   `Nrd(xy) = Nrd(x)·Nrd(y)`.
-- **Split or division.** `ℍ[K,a,b]` is either a division algebra or
-  `≃ₐ[K] Matrix (Fin 2) (Fin 2) K`, according to whether `Nrd` is anisotropic
-  (Lam III.2.2, 2.7). Route: `x ≠ 0` is invertible iff `Nrd(x) ≠ 0` (the
-  `star`-inverse); if `Nrd` is isotropic, run the explicit `M₂(K)`-basis through
-  `QuaternionAlgebra.Basis.lift`. Both halves are elementary computations with the
-  norm form; state the abstract side so that it can be refactored onto FLT's
-  `IsQuaternionAlgebra` when that predicate reaches Mathlib.
-- **Symbol relations at the algebra level** (each an `AlgEquiv`, Lam III.2.11):
-  `(a,b) ≅ (b,a)`; `(a, c²b) ≅ (a,b)` (square-class invariance in each argument);
-  `(a, −a) ≅ M₂(K)`; `(a, b²) ≅ M₂(K)`; `(1, b) ≅ M₂(K)`; and the **Steinberg
-  relation** `(a, 1−a) ≅ M₂(K)` for `a : Kˣ` with `1 − a ≠ 0`.
+- **Split or division** (Lam III.2.2, III.2.7). `ℍ[K,a,b]` is a division algebra, or is
+  isomorphic to `Matrix (Fin 2) (Fin 2) K`, according to whether `Nrd` is anisotropic.
+  Route: `x ≠ 0` is invertible if and only if `Nrd(x) ≠ 0`, by the `star`-inverse; and
+  if `Nrd` is isotropic, then run the explicit `M₂(K)`-basis through
+  `QuaternionAlgebra.Basis.lift`. Both halves are computations with the norm form.
+- **Symbol relations at the algebra level**, each an `AlgEquiv` (Lam III.2.11):
+  `(a,b) ≅ (b,a)`; `(a, c²b) ≅ (a,b)`; `(a, −a) ≅ M₂(K)`; `(a, b²) ≅ M₂(K)`;
+  `(1, b) ≅ M₂(K)`; and the **Steinberg relation** `(a, 1−a) ≅ M₂(K)` for `a : Kˣ` with
+  `1 − a ≠ 0`.
 - **Naturality of quaternion equivalences.** A `K`-algebra equivalence
-  `f : ℍ[K,a,b] ≃ₐ[K] ℍ[K,c,d]` commutes with the canonical involution `star`, hence
-  preserves the reduced trace and reduced norm, maps the trace-zero subspace
-  isomorphically onto the trace-zero subspace, and restricts to an isometry of pure
-  norm forms `⟨−a,−b,ab⟩ ≅ ⟨−c,−d,cd⟩`. Without this, equality of quaternion
-  invariants gives no isometry back, and the dimension-3 classification of Layer 5
-  has no proof.
-- **The four-fold splitting criterion** (the main theorem of the layer, and the shape
-  of `gq2`'s B11a; Lam III.2.7 and III.4.2, Serre III.1.1-1.2,
-  Gille–Szamuely 1.1.9). For `a, b ∈ Kˣ`, the following are equivalent:
-  1. `ℍ[K,a,b]` splits (`≃ₐ[K] Matrix (Fin 2) (Fin 2) K`);
-  2. `b` is a norm from the quadratic algebra `K(√a)`
-     (`∃ z : QuadraticAlgebra K a 0, z.norm = b`);
+  `f : ℍ[K,a,b] ≃ₐ[K] ℍ[K,c,d]` commutes with `star`, preserves the reduced trace and
+  the reduced norm, maps the trace-zero subspace onto the trace-zero subspace, and
+  restricts to an isometry of pure norm forms `⟨−a,−b,ab⟩ ≅ ⟨−c,−d,cd⟩`. Without this
+  milestone, equality of quaternion invariants gives no isometry, and the dimension-3
+  classification of Layer 5 has no proof.
+- **The four-fold splitting criterion**, the main theorem of the layer, and the
+  statement that `gq2`'s B11a uses (Lam III.2.7 and III.4.2, Serre III.1.1-1.2,
+  Gille-Szamuely 1.1.9). For `a, b ∈ Kˣ` the following are equivalent:
+  1. `ℍ[K,a,b]` splits, that is `≃ₐ[K] Matrix (Fin 2) (Fin 2) K`;
+  2. `b` is a norm from the quadratic algebra `K(√a)`, that is
+     `∃ z : QuadraticAlgebra K a 0, z.norm = b`;
   3. `b = x² − ay²` has a solution in `K`;
   4. `⟨1, −a, −b⟩` is isotropic.
 
-  When `a` is a square all four hold, so no nondegeneracy hypothesis on `a` is
-  carried; this matches B11a's "for `a` a square the norm form is universal". A
-  fifth equivalent condition, vanishing of the Kummer cup `(a) ∪ (b)`, is Layer 7,
+  When `a` is a square all four conditions hold, so no hypothesis on `a` is carried.
+  This matches B11a, where the norm form is universal for square `a`. A fifth
+  equivalent condition, the vanishing of the Kummer cup `(a) ∪ (b)`, is Layer 7B, and is
   kept out of here so that Layers 0 to 6 need no cohomology.
-- ⚠ **Bimultiplicativity of the symbol is not provable at this layer.** Over a
-  general field, `(a, bc)` against `(a,b)` and `(a,c)` is a statement about a group
-  law that does not exist yet, and there is no honest `AlgEquiv` formulation of it.
-  Do not substitute an ad hoc statement: it is Layer 5 in `Br(K)` and Layer 6 in
-  `{±1}`, in each case after the codomain is available.
+
+Basic API:
+
+- constructors: `quaternionNormForm`, `pureNormForm`, the splitting predicate;
+- examples: `ℍ[ℚ,−1,−1]`, a division algebra; `ℍ[ℚ,1,b]`, split for every `b`;
+  `ℍ[ℚ_2,2,5]`, a division algebra; `ℍ[ℚ_2,5,5]`, split;
+- morphisms: `AlgEquiv` between quaternion algebras; the induced isometry of pure norm
+  forms;
+- functoriality: base change `ℍ[K,a,b] ⊗_K L ≃ₐ[L] ℍ[L,a,b]`, and the splitting
+  predicate under a field map;
+- comparison lemmas: the four conditions of the criterion against each other;
+  `⟨⟨a,b⟩⟩` against `Nrd`; `QuadraticAlgebra K a 0` against `K(√a)`;
+- naturality: `star` and the reduced norm commute with every `K`-algebra equivalence;
+- edge cases: `a` a square; `b` a square; `a = 1`; the split case, where the norm form
+  is hyperbolic;
+- downstream interfaces: Layer 3's binary quaternion lemma, Layer 4's Pfister theory,
+  Layer 5's Brauer class, and Layer 6C's Hilbert symbol.
+
+⚠ Bimultiplicativity of the symbol is not provable at this layer. Over a general field,
+a comparison of `(a, bc)` with `(a,b)` and `(a,c)` is a statement about a group law that
+does not exist yet, and it has no `AlgEquiv` formulation. Do not substitute an ad hoc
+statement. It is Layer 5 in `Br(K)`, and Layer 6C in `{±1}`, in each case after the
+codomain exists.
 
 ### Layer 3: the classical invariants that need no Brauer group
 
-Everything here is a function of a diagonalization, well defined by Layer 0's descent
-corollary, with values in `ℕ`, `ZMod 2`, or the square-class group. The Hasse
-invariant is **not** in this layer: its codomain is a group of Brauer classes and
-does not exist before Layer 5.
+Everything here is a function of a diagonalization, well defined by the descent
+principle, with values in `ℕ`, in `ZMod 2`, or in the square-class group. The Hasse
+invariant is not in this layer, because its codomain is a group of Brauer classes, which
+Layer 5 supplies.
 
-- **Dimension and dimension mod 2**, with their `Equivalent`-invariance, and the
-  induced ring map to `ZMod 2` used by Layer 4.
-- **Discriminant and signed discriminant** on `RegularFormClass K`: well-definedness
-  through determinants of Gram matrices (Mathlib's `discr'` transported to abstract
-  spaces by `basisRepr`) or, equivalently, by the descent principle applied to
-  `w ↦ ∏ i, w i`. Prove both descriptions agree.
-- **The exact formulas**, for `q` of rank `m` and `r` of rank `n`, all in
-  `Kˣ ⧸ (Kˣ)²`:
+Prerequisites:
+
+- **[Mathlib]** `discr'`, `basisRepr`, `Matrix.det`, `ZMod 2`;
+- **[Layer 0]** the descent principle and the binary equivalence criterion;
+- **[Layer 2]** the symbol relations and the norm form.
+
+Milestones:
+
+- **Dimension and dimension mod 2**, with `Equivalent`-invariance, and the induced ring
+  map to `ZMod 2` that Layer 4 uses.
+- **Discriminant and signed discriminant** on `RegularFormClass K`. Prove
+  well-definedness through determinants of Gram matrices, that is Mathlib's `discr'`
+  transported by `basisRepr`, and also through the descent principle applied to
+  `w ↦ ∏ i, w i`. Prove that the two descriptions agree.
+- **The exact formulas**, for `q` of rank `m` and `r` of rank `n`, in `Kˣ ⧸ (Kˣ)²`:
 
   ```text
   d(q ⊥ r)  = d(q) · d(r)                d±(q ⊥ r)  = (−1)^{mn} · d±(q) · d±(r)
@@ -556,235 +653,359 @@ does not exist before Layer 5.
   d(q ⊗ r)  = d(q)^n · d(r)^m            d±(q ⊗ r)  = (−1)^{mn(mn−1)/2} d(q)^n d(r)^m
   ```
 
-  together with `signedDiscr_eq_sign_mul_discr : d±(q) = (−1)^{m(m−1)/2} · d(q)`,
-  which is the only conversion any later proof is allowed to use. Values on the
-  standard forms: `d±⟨a⟩ = a`, `d±(ℍ_q) = 1`, `d±⟨⟨a,b⟩⟩ = 1`.
+  together with `signedDiscr_eq_sign_mul_discr : d±(q) = (−1)^{m(m−1)/2} · d(q)`, which
+  is the only conversion that a later proof uses. Values on the standard forms:
+  `d±⟨a⟩ = a`, `d±(ℍ_q) = 1`, and `d±⟨⟨a,b⟩⟩ = 1`.
 - **The binary quaternion lemma.** If `⟨a,b⟩ ≅ ⟨c,d⟩` for units `a b c d`, then
-  `ℍ[K,a,b] ≃ₐ[K] ℍ[K,c,d]` (Lam III.2.11 together with Layer 2's norm form). This
-  is the one nontrivial input to the Hasse invariant's well-definedness in Layer 5,
-  and it is proved here, where it costs nothing, so that Layer 5 is a statement
-  about codomains rather than about forms.
-- **Chain induction, prepared.** The two lemmas that Layer 5 and Layer 8 will feed
-  into the descent principle: a function of the shape `w ↦ ∏_{i<j} F (w i) (w j)`
-  into a commutative monoid is `PermutationStep`-invariant as soon as `F` is
-  symmetric, and it is `BinaryStep`-invariant as soon as `F` is bimultiplicative and
-  `F a b = F c d` whenever `⟨a,b⟩ ≅ ⟨c,d⟩`. Stating these for an abstract
-  commutative monoid `M` and an abstract `F : Kˣ → Kˣ → M` lets Layer 5
-  (`M = BrauerGroup K`), Layer 6 (`M = ℤˣ`), and Layer 8 (`M = H²(G_K, 𝔽₂)`,
-  written additively) each invoke one lemma instead of repeating the induction.
+  `ℍ[K,a,b] ≃ₐ[K] ℍ[K,c,d]` (Lam III.2.11 with Layer 2's norm form). This is the one
+  nontrivial input to the well-definedness of the Hasse invariant in Layer 5, and it is
+  proved here, where its codomain is only an isomorphism class of algebras.
+- **Chain induction, prepared.** Two lemmas that Layer 5, Layer 6C, and Layer 8 feed
+  into the descent principle. A function of the form `w ↦ ∏_{i<j} F (w i) (w j)` into a
+  commutative monoid is:
+  - `PermutationStep`-invariant as soon as `F` is symmetric;
+  - `BinaryStep`-invariant as soon as `F` is bimultiplicative and `F a b = F c d`
+    whenever `⟨a,b⟩ ≅ ⟨c,d⟩`.
+
+  State both for an abstract commutative monoid `M` and an abstract `F : Kˣ → Kˣ → M`.
+  Then Layer 5 with `M = BrauerGroup K`, Layer 6C with `M = ℤˣ`, and Layer 8 with
+  `M = H²(G_K, 𝔽₂)` written additively each invoke one lemma instead of repeating the
+  induction.
 - **The invariant dictionary, as documentation.** Record in the file docstring which
-  named invariant each source means: O'Meara's `∏_{i≤j}`, Serre's `ε`, Lam's `s` and
-  `c`, and the ⚠ Wall caution. No definition here, and no formula that mentions a
-  Brauer class.
+  named invariant each source means: O'Meara's `∏_{i≤j}`, Serre's `ε`, Lam's `s`, and
+  Lam's `c`, with the ⚠ Wall caution of the convention table. There is no definition
+  here, and no formula that mentions a Brauer class.
+
+Basic API:
+
+- constructors: `discr`, `signedDiscr`, `dimMod2`;
+- examples: `d±⟨a⟩ = a`; `d±(ℍ_q) = 1`; `d(⟨−1,−1⟩) = [1]`;
+- morphisms: the ring map `RegularFormClass K → ZMod 2` given by dimension;
+- functoriality: `discr` and `signedDiscr` commute with base change along `K →+* L`;
+- comparison lemmas: `signedDiscr_eq_sign_mul_discr`; the Gram-determinant description
+  against the product description;
+- naturality: the two chain-induction lemmas, stated for an abstract monoid, so that
+  each later layer instantiates them;
+- edge cases: rank `0` and rank `1`, where `d± = d`; scaling by a square;
+- downstream interfaces: Layer 4's `I/I² ≅ Kˣ/(Kˣ)²`, Layer 5's Hasse invariant,
+  Layer 6D's classification, and Layer 8's `w₁`.
 
 ### Layer 4: the Witt ring and the fundamental ideal
 
-Still Brauer-free. Everything below is about `RegularFormClass K` and rings built
-from it; the maps into `Br(K)[2]` are Layer 5.
+This layer is free of the Brauer group. Everything below is about `RegularFormClass K`
+and the rings built from it. The maps into `Br(K)[2]` are Layer 5.
+
+Prerequisites:
+
+- **[Mathlib]** `QuadraticForm/TensorProduct.lean`, `Ideal`, `AddMonoidHom`,
+  `Ring.toGrothendieckGroup`-style constructions;
+- **[Layer 1]** Witt decomposition and cancellation;
+- **[Layer 2]** the norm form and the four-fold criterion;
+- **[Layer 3]** the discriminant formulas and the dimension map.
+
+Milestones:
 
 - **`Ŵ(K)` and `W(K)`** (Lam II.1). The commutative monoid `(RegularFormClass K, ⊥)`
-  with the multiplication induced by `⊗` is a commutative semiring; its Grothendieck
-  group is the **Witt–Grothendieck ring** `Ŵ(K)`, and the **Witt ring** `W(K)` is the
-  quotient by the ideal generated by `ℍ_q`. Well-definedness rests exactly on
-  Layers 1 and 2 (cancellation and the tensor product). Every **regular** form's Witt
-  class is represented by its anisotropic part, and two anisotropic regular forms
-  with the same Witt class are isometric (Witt decomposition plus cancellation). The
-  complete basic theory: `W` as a functor under field embeddings, and the
-  dimension-mod-2 ring map `W(K) → ZMod 2`. General torsion theorems for `W(K)` are
-  an explicit scope exclusion.
-- **The fundamental ideal.** `I(K) = ker(W(K) → ZMod 2)`. The generation statements,
-  all elementary and all proved here:
-  - `I` is generated as an ideal (indeed as an additive group) by the 1-fold Pfister
+  with the multiplication induced by `⊗` is a commutative semiring. Its Grothendieck
+  group is the **Witt-Grothendieck ring** `Ŵ(K)`, and the **Witt ring** `W(K)` is the
+  quotient by the ideal generated by `ℍ_q`. Well-definedness rests on Layers 1 and 2,
+  that is on cancellation and on the tensor product. Every regular form's Witt class is
+  represented by its anisotropic part, and two anisotropic regular forms with the same
+  Witt class are isometric, by Witt decomposition and cancellation. Prove the basic
+  theory: `W` as a functor for field embeddings, and the dimension-mod-2 ring map
+  `W(K) → ZMod 2`. General torsion theorems for `W(K)` are excluded.
+- **The fundamental ideal.** `I(K) = ker(W(K) → ZMod 2)`. The generation statements are
+  elementary and are proved here:
+  - `I` is generated as an ideal, and indeed as an additive group, by the 1-fold Pfister
     forms `⟨⟨a⟩⟩ = ⟨1,−a⟩`;
   - `Iⁿ` is generated as an additive group by the `n`-fold Pfister forms
-    `⟨⟨a₁,…,aₙ⟩⟩`, which is immediate from the previous item and the definition of
-    the power of an ideal; state it for general `n` and record `n = 2, 3` as the
-    cases later layers use;
-  - `I/I² ≅ Kˣ/(Kˣ)²` via `d±`, which is where the *signed* discriminant is forced.
-  No statement about `I³/I⁴` or about the higher filtration is claimed.
-- **Pfister forms.** `⟨⟨a₁,…,aₙ⟩⟩` in every degree as the `n`-fold tensor product,
-  with the theory developed for `n ≤ 2`:
-  - `⟨⟨a,b⟩⟩` is the norm form of `ℍ[K,a,b]` (Layer 2);
-  - **round**: for `n ≤ 2`, every `c ∈ unitValueSet ⟨⟨a₁,…,aₙ⟩⟩` is a similarity
-    factor, `c • ⟨⟨a₁,…,aₙ⟩⟩ ≅ ⟨⟨a₁,…,aₙ⟩⟩`;
-  - `⟨⟨a,b⟩⟩` is isotropic iff it is hyperbolic;
-  - `⟨⟨a,b⟩⟩` is hyperbolic iff `ℍ[K,a,b]` splits, which is the four-fold criterion
-    in Witt-ring clothing.
+    `⟨⟨a₁,…,aₙ⟩⟩`, which follows from the previous item and from the definition of a
+    power of an ideal. State it for general `n`, and record `n = 2` and `n = 3` as the
+    cases that later layers use;
+  - `I/I² ≅ Kˣ/(Kˣ)²` through `d±`, which is where the signed discriminant is forced.
 
-  The general theory of `n`-fold Pfister forms (roundness in all degrees, the
-  Arason–Pfister Hauptsatz, function-field methods) is excluded; the three bullets
-  above are exactly what Layers 5 and 8 consume.
+  No statement about `I³/I⁴` or about the higher filtration is claimed.
+- **Pfister forms.** `⟨⟨a₁,…,aₙ⟩⟩` in every degree as the `n`-fold tensor product, with
+  the theory developed for `n ≤ 2`:
+  - `⟨⟨a,b⟩⟩` is the norm form of `ℍ[K,a,b]` (Layer 2);
+  - **round**: for `n ≤ 2`, every `c ∈ unitValueSet ⟨⟨a₁,…,aₙ⟩⟩` is a similarity factor,
+    that is `c • ⟨⟨a₁,…,aₙ⟩⟩ ≅ ⟨⟨a₁,…,aₙ⟩⟩`;
+  - `⟨⟨a,b⟩⟩` is isotropic if and only if it is hyperbolic;
+  - `⟨⟨a,b⟩⟩` is hyperbolic if and only if `ℍ[K,a,b]` splits, which is the four-fold
+    criterion stated in the Witt ring.
+
+  The general theory of `n`-fold Pfister forms, that is roundness in all degrees, the
+  Arason-Pfister Hauptsatz, and function-field methods, is excluded. The four items
+  above are what Layers 5 and 8 consume.
+
+Basic API:
+
+- constructors: `wittGrothendieckRing`, `wittRing`, `fundamentalIdeal`, `pfisterForm`;
+- examples: `W(ℂ) ≅ ZMod 2`; `W(ℝ) ≅ ℤ` through the signature; `⟨⟨1⟩⟩ = ⟨1,−1⟩`, which
+  is zero in `W(K)`;
+- morphisms: `W(K) → W(L)` for a field embedding; the dimension map `W(K) → ZMod 2`;
+  the discriminant map `I/I² → Kˣ/(Kˣ)²`;
+- functoriality: `W` as a functor, with `I` and `Iⁿ` mapped into each other by a field
+  embedding;
+- comparison lemmas: a Witt class against its anisotropic representative; a Pfister form
+  against a quaternion norm form;
+- naturality: the generation of `Iⁿ` by Pfister forms is stable under a field
+  embedding;
+- edge cases: `n = 0`, where `⟨⟨⟩⟩ = ⟨1⟩`; the hyperbolic class, which is zero in
+  `W(K)`; the zero ring case, which does not occur for a field;
+- downstream interfaces: Layer 5's homomorphism `c : I² → Br(K)[2]`, and Layer 8's
+  Stiefel-Whitney classes on `I²`.
+
+⚠ Nearby false statement. Roundness in the form used here is proved only for `n ≤ 2`.
+The unrestricted statement, for every `n`-fold Pfister form, is true but is excluded,
+because the proof needs the Pfister theory that this roadmap excludes. Do not cite the
+excluded general statement in a proof.
 
 ### Layer 5: the Brauer-valued invariants
 
-This is the first layer in which a symbol can be multiplied. It consumes the landed
-[semisimple-algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)
-by name, and those consumed milestones are prerequisites in the ordinary sense: this
-layer cannot be implemented before they are.
+This is the first layer in which a symbol can be multiplied.
 
-From that roadmap's **Layer 4**: the tensor product of two central simple
-`K`-algebras is central simple, with `finrank K (A ⊗ B) = finrank K A · finrank K B`;
-and the opposite-algebra package `A ⊗_K Aᵒᵖ ≃ₐ[K] End_K A ≃ₐ[K] M_{finrank K A}(K)`.
-From its **Layer 6**: the Brauer-triviality prerequisites, the `CommGroup`
-structure on `BrauerGroup K` with multiplication induced by `⊗_K`, identity `[K]`,
-inverse `[Aᵒᵖ]`, and the quotient API for `Brauer.CSA_Setoid`. Where both roadmaps
-name the same fact, the semisimple-algebras statement is the one of record; nothing
-here rebuilds Wedderburn, Skolem–Noether, centralizers, splitting fields, or the
-index.
+Prerequisites:
+
+- **[Mathlib]** `CSA`, `IsBrauerEquivalent`, `BrauerGroup`, `Algebra.IsCentralSimple`,
+  `CliffordAlgebra` with its grading and even subalgebra;
+- **[SSA Layer 4]** the tensor product of two central simple algebras is central simple,
+  with the finrank formula, and the opposite-algebra package;
+- **[SSA Layer 6]** the `CommGroup` structure on `BrauerGroup K` and the quotient API
+  for `Brauer.CSA_Setoid`;
+- **[Layer 2]** the symbol relations and the split-or-division dichotomy;
+- **[Layer 3]** the binary quaternion lemma and the chain-induction lemmas;
+- **[Layer 4]** the generation of `I²` and of `I³` by Pfister forms.
+
+Milestones:
 
 - **Quaternion algebras are central simple.** For `a b : Kˣ` and `2` invertible,
-  `ℍ[K,a,b]` is a central simple `K`-algebra. This is a target here, since
-  `[(a,b)] ∈ BrauerGroup K` is undefined without it. Mathlib PR
-  [#41538](https://github.com/leanprover-community/mathlib4/pull/41538) states the
-  same theorem (with `c·(b² + 4a) ≠ 0`, which our `ℍ[K,a,b] = ℍ[K,a,0,b]` satisfies
-  as `b·4a ≠ 0`), so prove it here in that shape, exposing the same vocabulary and
-  carrying a deletion trigger, and swap ours for the Mathlib declaration when #41538
-  lands.
-- **The quaternion symbol in `Br(K)`.** The class `[(a,b)] := ⟦ℍ[K,a,b]⟧`, and the
-  full API that later layers cite by name:
+  `ℍ[K,a,b]` is a central simple `K`-algebra. This is a target here, because
+  `[(a,b)] ∈ BrauerGroup K` is undefined without it. Mathlib has an open pull request
+  with the same statement, for `ℍ[R,a,b,c]` over a field with `c·(b² + 4a) ≠ 0`, which
+  `ℍ[K,a,b] = ℍ[K,a,0,b]` satisfies because `b·4a ≠ 0`. Prove the theorem here in the
+  same form. Expose the same vocabulary and carry a deletion trigger, so that a later
+  swap is a deletion and an import.
+- **The quaternion symbol in `Br(K)`.** The class `[(a,b)] := ⟦ℍ[K,a,b]⟧`, with the API
+  that later layers cite:
   - symmetry `[(a,b)] = [(b,a)]`;
   - square-class invariance in each argument, `[(a, c²b)] = [(a,b)]`;
   - two-torsion `[(a,b)]² = 1`, from `ℍ[K,a,b]ᵒᵖ ≃ₐ[K] ℍ[K,a,b]` through `star`;
-  - **bilinearity** `[(a, bc)] = [(a,b)]·[(a,c)]` and the same in the first
-    argument, from the algebra relation `(a,b) ⊗ (a,c) ∼ (a,bc)`
-    (Gille–Szamuely 1.5.2 in shape, Lam III.2.11 for the linkage);
-  - `[(a, 1−a)] = 1` for `a : Kˣ` with `1 − a ≠ 0` (Steinberg), and `[(a,−a)] = 1`;
-  - the resulting factorization through square classes, that is, the biadditive map
+  - **bilinearity** `[(a, bc)] = [(a,b)]·[(a,c)]`, and the same in the first argument,
+    from the algebra relation `(a,b) ⊗ (a,c) ∼ (a,bc)` (Gille-Szamuely 1.5.2 for the
+    statement, Lam III.2.11 for the linkage);
+  - `[(a, 1−a)] = 1` for `a : Kˣ` with `1 − a ≠ 0`, and `[(a,−a)] = 1`;
+  - the resulting factorization through square classes, that is the biadditive map
     `Kˣ/(Kˣ)² × Kˣ/(Kˣ)² → Br(K)[2]`.
-- **The Hasse invariant** `hasseInvariant : RegularFormClass K → BrauerGroup K`,
-  `s(⟨a₁,…,aₙ⟩) = ∏_{i<j} [(aᵢ, aⱼ)]` (empty product for `n ≤ 1`). Well-definedness
-  is Layer 3's abstract chain-induction lemma applied with `M = BrauerGroup K` and
-  `F a b = [(a,b)]`: symmetry and bilinearity are the bullet above, and
-  `F a b = F c d` for `⟨a,b⟩ ≅ ⟨c,d⟩` is Layer 3's binary quaternion lemma. Lam
-  V.3.18 is this argument. Then the two exact formulas, for `q` of rank `n` and `r`
-  of rank `m`, writing `s = hasseInvariant` throughout this layer (the local
-  `{±1}`-valued invariant of Layer 6 is always written `localHasse`):
+- **The Hasse invariant** `hasseInvariant : RegularFormClass K → BrauerGroup K`, with
+  `s(⟨a₁,…,aₙ⟩) = ∏_{i<j} [(aᵢ, aⱼ)]` and the empty product for `n ≤ 1`.
+  Well-definedness is Layer 3's chain-induction lemma with `M = BrauerGroup K` and
+  `F a b = [(a,b)]`. Symmetry and bilinearity are the bullet above, and
+  `F a b = F c d` for `⟨a,b⟩ ≅ ⟨c,d⟩` is Layer 3's binary quaternion lemma. Lam V.3.18
+  is this argument. Then the two formulas, for `q` of rank `n` and `r` of rank `m`,
+  writing `s = hasseInvariant`:
 
   ```text
   s(q ⊥ r)  = s(q) · s(r) · [(d(q), d(r))]
   s(λ • q)  = s(q) · [(λ, −1)]^{n(n−1)/2} · [(λ, d(q))]^{n−1}
   ```
 
-  (Lam p. 119 and V.3.16; the second follows from bilinearity and
-  `[(λ,λ)] = [(λ,−1)]`, and it is written out here because every source states it
-  in a different convention.)
-- **Classification in dimension at most three** (Lam V.3.21): two regular forms of
-  the same dimension `≤ 3` are isometric iff they have the same `d` and the same
-  `s`. The proof back from invariants to an isometry runs through Layer 2's
+  (Lam p. 119 and V.3.16. The second formula follows from bilinearity and from
+  `[(λ,λ)] = [(λ,−1)]`, and it is written out because each source states it in a
+  different convention.)
+- **Classification in dimension at most three** (Lam V.3.21). Two regular forms of the
+  same dimension `≤ 3` are isometric if and only if they have the same `d` and the same
+  `s`. The proof from the invariants back to an isometry runs through Layer 2's
   naturality of quaternion equivalences on pure norm forms.
 - **The Clifford invariant.** Mathlib supplies the Clifford algebra, its grading, and
-  its even subalgebra, but not the central-simplicity theorems, so those are
-  milestones here. For a regular `q` on a finite-dimensional space:
-  - if `dim q` is even, `CliffordAlgebra q` is finite-dimensional central simple
+  its even subalgebra, and not the central-simplicity theorems, which are milestones
+  here. For regular `q` on a finite-dimensional space:
+  - if `dim q` is even, then `CliffordAlgebra q` is finite-dimensional central simple
     over `K`;
-  - if `dim q` is odd, the even subalgebra `CliffordAlgebra.even q` is
+  - if `dim q` is odd, then the even subalgebra `CliffordAlgebra.even q` is
     finite-dimensional central simple over `K`;
-  - both constructions are invariant under `Equivalent` (an isometry induces an
-    algebra equivalence, so the Brauer classes agree);
-  - hence `cliffordInvariant q : BrauerGroup K`, the class of whichever of the two
-    algebras the parity selects;
+  - both constructions are invariant under `Equivalent`, because an isometry induces an
+    algebra equivalence, so the Brauer classes agree;
+  - hence `cliffordInvariant q : BrauerGroup K`, the class of the algebra that the
+    parity selects;
   - and the Lam V.3.20 comparison with the Hasse invariant,
-    `c(q) = s(q) · [(−1, d(q))]^{(n−1)(n−2)/2} · [(−1,−1)]^{(n+1)n(n−1)(n−2)/24}`,
-    with the ⚠ Wall caution of the convention table. On `I²`, where `dim = 2m`,
-    this reduces to `c = s · [(−1,−1)]^{m(m−1)/2}`.
-- **The `I²` homomorphism.** Using Layer 4's generation of `I²` by 2-fold Pfister
-  forms, construct the group homomorphism `c : I² → Br(K)[2]` induced by the
-  Clifford invariant, prove it vanishes on `I³` by checking it on Layer 4's 3-fold
-  Pfister generators (Lam V.3.4), and obtain `c̄ : I²/I³ → Br(K)[2]` from the
-  universal property of the quotient. **No injectivity, surjectivity, or
-  classification claim for `c̄` is a milestone of this roadmap.** Injectivity is the
-  Merkurjev theorem, for which no roadmap in this family supplies a proof; it is an
-  explicit scope exclusion, not a promised interface.
+    `c(q) = s(q) · [(−1, d(q))]^{(n−1)(n−2)/2} · [(−1,−1)]^{(n+1)n(n−1)(n−2)/24}`, with
+    the ⚠ Wall caution of the convention table. On `I²`, where `dim = 2m`, the formula
+    reduces to `c = s · [(−1,−1)]^{m(m−1)/2}`.
+- **The `I²` homomorphism.** Using Layer 4's generation of `I²` by 2-fold Pfister forms,
+  construct the group homomorphism `c : I² → Br(K)[2]` induced by the Clifford
+  invariant. Prove that it vanishes on `I³` by checking it on Layer 4's 3-fold Pfister
+  generators (Lam V.3.4), and obtain `c̄ : I²/I³ → Br(K)[2]` from the universal property
+  of the quotient. No injectivity claim, no surjectivity claim, and no classification
+  claim for `c̄` is a milestone here. Injectivity is Merkurjev's theorem, which no
+  roadmap in this family proves, and it is an explicit exclusion rather than a promised
+  interface.
 
-### Layer 6: forms over finite extensions of `ℚ_p`
+Basic API:
 
-Scope, pinned: `K` a finite extension of `ℚ_p`, for every prime `p` including
-`p = 2`. The dyadic case is the point, and it is not a hypothesis swap away from the
-`ℚ_2` case: the number of square classes, the unit filtration, and the explicit
-formulas all depend on `[K : ℚ_2]`. The main theorems below are therefore stated at
-that generality from the start, and Serre's closed formulas and the `8 × 8` table
-are kept as the `K = ℚ_p` acceptance suite. The content of this layer is independent
-of Layer 5; the one theorem relating them is stated at the end, with its own
-prerequisites.
+- constructors: `quaternionClass`, `hasseInvariant`, `cliffordInvariant`, `c̄`;
+- examples: `[(a, −a)] = 1`; `[(1,b)] = 1`; `hasseInvariant ⟨a⟩ = 1`;
+  `hasseInvariant ⟨a,b⟩ = [(a,b)]`;
+- morphisms: the biadditive map `Kˣ/(Kˣ)² × Kˣ/(Kˣ)² → Br(K)[2]`; the homomorphism
+  `c : I² → Br(K)[2]`;
+- functoriality: base change `BrauerGroup K → BrauerGroup L`, with the symbol and the
+  Hasse invariant commuting with it;
+- comparison lemmas: `hasseInvariant` against `cliffordInvariant` (Lam V.3.20);
+  `hasseInvariant` against O'Meara's `∏_{i≤j}` symbol;
+- naturality: the descent of `hasseInvariant` along `Quotient.mk`, and its compatibility
+  with `⊥` and with scaling;
+- edge cases: rank `0` and rank `1`, where `s = 1`; a hyperbolic form; `a` or `b` a
+  square;
+- downstream interfaces: Layer 6C's compatibility theorem, and Layer 8's identity
+  `ι(hasseInvariant q) = w₂(q)`.
 
-Consumed from [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2),
-not restated here:
+### Layer 6: forms over a nonarchimedean local field
 
-- its **Layer 0** local-field package (valuation, ring of integers, uniformizer,
-  residue field, `e` and `f`);
-- its **Layer 1** power classes: `Kˣ/(Kˣ)²` is finite of order `4` when the residue
-  characteristic is odd and of order `2^{N+2}` when `K/ℚ_2` has degree `N`, with
-  `#(ℚ_2ˣ/(ℚ_2ˣ)²) = 8` on the basis `−1, 2, 5` and the deep-square bound
-  `U(K, 2e+1) ⊆ (Kˣ)²` as worked instances there. For odd residue characteristic
-  the four classes are represented by `1, u, π, uπ` where `π` is a uniformizer and
-  `u` is a unit **whose residue is a nonsquare**; that choice of `u` is part of the
-  statement, never left implicit. This roadmap adds only the form-theoretic lemmas
-  it needs on top of that API, and owns no square-class cardinality.
-- its **Layer 2** unramified norms: for `E/K` the unramified quadratic extension,
-  `N_{E/K}(Eˣ) = 𝒪[K]ˣ · (Kˣ)² = {x ∈ Kˣ : v_K(x) is even}`, equivalently every unit
-  is a norm and a uniformizer is not.
+Scope: `K` is a nonarchimedean local field of characteristic `0`, that is a finite
+extension of `ℚ_p`, for every prime `p` including `p = 2`. The dyadic case is included
+throughout, and it is not a hypothesis swap away from the `ℚ_2` case, because the number
+of square classes, the unit filtration, and the explicit formulas all depend on
+`[K : ℚ_2]`. The main theorems are therefore stated at that generality from the start.
+Serre's closed formulas and the `8 × 8` table over `ℚ_2` are the acceptance suite.
 
-#### 6A. The quadratic defect
+The content of this layer is independent of Layer 5. The one theorem that relates them
+is stated at the end of 6C, with its own prerequisites.
 
-Bimultiplicativity is the one hard theorem of Layer 6, and the route pinned for it is
-O'Meara's, which runs on the quadratic defect. The defect therefore gets its own
-statements here instead of appearing as an unexplained step inside a proof. Throughout,
-`e = v_K(2)`, so `e = 0` exactly when the residue characteristic is odd.
+#### 6A. The local-field toolkit
 
-- **The carrier, pinned.** For general `a : Kˣ` the defect is a *fractional* ideal and
-  not an ideal of `𝒪[K]`: when `v_K(a) < 0` every `a − ξ²` has negative valuation. So
-  the object is
+Mathlib supplies the class `IsNonarchimedeanLocalField K` and the objects `𝒪[K]`,
+`𝓂[K]`, and `𝓀[K]`, together with `IsDiscreteValuationRing 𝒪[K]` and `Finite 𝓀[K]`. It
+does not supply the normalized valuation, the unit filtration, or the arithmetic of
+square classes. This sublayer owns them. `Suggested.lean` states them as the fields of a
+`LocalFieldToolkit K` structure, so that later statements elaborate today.
+
+Prerequisites:
+
+- **[Mathlib]** `IsNonarchimedeanLocalField`, `ValuativeRel`, `𝒪[K]`, `𝓂[K]`, `𝓀[K]`,
+  `IsDiscreteValuationRing.addVal`, `ℚ_[p]`, `ℤ_[p]`, `PadicInt.toZModPow`, Hensel's
+  lemma;
+- **[Layer 0]** the square-class calculus and the `Nat.card` finiteness API.
+
+Milestones:
+
+- **The normalized valuation.** `v_K : Kˣ →* Multiplicative ℤ`, surjective, with
+  `v_K(x) ≥ 1` exactly when `x ∈ 𝒪[K]`, together with a uniformizer `π : Kˣ` with
+  `v_K(π) = Multiplicative.ofAdd 1`. Write `v_K(x) : ℤ` for the decoded value. Prove
+  agreement with `IsDiscreteValuationRing.addVal` on `𝒪[K]`.
+- **The unit filtration.** `U(K,i) : Subgroup Kˣ` for `i : ℕ`, with `U(K,0)` the image
+  of `𝒪[K]ˣ` and, for `i ≥ 1`, `U(K,i) = {x ∈ 𝒪[K]ˣ | v_K(x − 1) ≥ i}`. Prove that
+  `U(K,i)` is a decreasing chain of subgroups, that `𝒪[K]ˣ / U(K,1) ≅ 𝓀[K]ˣ`, and that
+  `U(K,i) / U(K,i+1) ≅ 𝓀[K]` as additive groups for `i ≥ 1`.
+- **The local square theorem** (O'Meara 63:1). With `e = v_K(2)`,
+  `U(K, 2e+1) ⊆ (Kˣ)²`. The bound is sharp: `U(K, 2e) ⊄ (Kˣ)²`.
+- **The square-class count.** `Kˣ/(Kˣ)²` is finite. It has order `4` when the residue
+  characteristic is odd, and order `2^{N+2}` when `K/ℚ_2` has degree `N`. For odd
+  residue characteristic, the four classes are represented by `1, u, π, uπ`, where `u`
+  is a unit whose residue is a nonsquare. That choice of `u` is part of the statement
+  and is never left implicit.
+- **The unramified quadratic extension.** `K` has a unique unramified quadratic
+  extension `E`, and
+  `N_{E/K}(Eˣ) = 𝒪[K]ˣ · (Kˣ)² = {x ∈ Kˣ : v_K(x) is even}`. Equivalently, every unit is
+  a norm and a uniformizer is not.
+- **`ℚ_[p]` is a nonarchimedean local field.** Prove `IsValuativeTopology ℚ_[p]`, that
+  is that the valuation topology is the norm topology, and derive
+  `IsNonarchimedeanLocalField ℚ_[p]` for every prime `p`. ⚠ Instance hygiene: `ℚ_[p]`
+  carries a metric `UniformSpace`, and its compatibility with the topological-group
+  uniformity is a lemma rather than an accident. Without the lemma, the `CompleteSpace`
+  instances do not fire. This milestone is what lets the `ℚ_p` acceptance suite below
+  instantiate the general theorems.
+
+Basic API:
+
+- constructors: `LocalFieldToolkit`, `v_K`, `π`, `U(K,·)`, `e = v_K(2)`,
+  `q = Nat.card 𝓀[K]`;
+- examples: `ℚ_[p]` with `π = p`; `ℚ_2`, where `e = 1` and `#(ℚ_2ˣ/(ℚ_2ˣ)²) = 8` on the
+  basis `−1, 2, 5`;
+- morphisms: the inclusion `U(K,i+1) ≤ U(K,i)`; the quotient maps of the filtration;
+- functoriality: for a finite extension `L/K`, `v_L ∘ (algebraMap K L) = e(L/K) · v_K`,
+  and `U(K,i)` maps into `U(L, e(L/K)·i)`;
+- comparison lemmas: `v_K` against `IsDiscreteValuationRing.addVal`; `U(K,i)` against
+  congruence modulo `𝓂[K]^i`; the multiplicative square-class group against
+  `TauCeti.SquareClassGroup`;
+- naturality: the square-class count is stable under an unramified base change of
+  degree `f`, where the count multiplies by `2^{(f−1)N}` in the dyadic case;
+- edge cases: odd residue characteristic, where `e = 0` and `U(K,1) ⊆ (Kˣ)²`; the
+  residue field `𝔽₂`, where `𝓀[K]ˣ` is trivial and `𝒪[K]ˣ = U(K,1)`;
+- downstream interfaces: 6B's defect classification, 6C's symbol computations, and 6D's
+  counting arguments.
+
+⚠ Sharpness of the local square theorem. Over `ℚ_2`, `e = 1` and
+`U(ℚ_2, 2) = 1 + 4ℤ_2` contains `5`, which is not a square. So `2e+1` cannot be lowered
+to `2e`.
+
+#### 6B. The quadratic defect
+
+Bimultiplicativity is the one hard theorem of Layer 6, and the route used for it is
+O'Meara's, which runs on the quadratic defect. The defect therefore has its own
+statements here. Throughout, `e = v_K(2)`, so `e = 0` exactly when the residue
+characteristic is odd.
+
+Prerequisites:
+
+- **[Mathlib]** `FractionalIdeal`, `FractionalIdeal.spanSingleton`, the `Lattice` and
+  `OrderBot` instances on `FractionalIdeal`, `IsFractionRing 𝒪[K] K`;
+- **[Layer 6A]** the normalized valuation, the unit filtration, the local square
+  theorem, and the unramified norm group.
+
+Milestones:
+
+- **The carrier.** For general `a : Kˣ` the defect is a fractional ideal and not an
+  ideal of `𝒪[K]`, because every `a − ξ²` has negative valuation when `v_K(a) < 0`. The
+  object is
 
   ```lean
   quadraticDefect (a : Kˣ) : FractionalIdeal (𝒪[K])⁰ K
   ```
 
-  the largest fractional ideal contained in every `spanSingleton ((a : K) − ξ²)`,
-  `ξ : K`, which is O'Meara's `𝔡(a) = ⋂_{ξ : K} (a − ξ²) · 𝒪[K]` in a type that can
-  hold it. Mathlib's `FractionalIdeal` carries a `Lattice` but no infima of infinite
-  families, so the Lean-facing definition is the greatest-lower-bound property,
+  the largest fractional ideal contained in every `spanSingleton ((a : K) − ξ²)` for
+  `ξ : K`. This is O'Meara's `𝔡(a) = ⋂_{ξ : K} (a − ξ²) · 𝒪[K]` in a type that holds it.
+  Mathlib's `FractionalIdeal` carries a `Lattice` and no infima of infinite families, so
+  the Lean definition is the greatest-lower-bound property:
 
   ```text
   ∀ ξ : K, 𝔡(a) ≤ (a − ξ²) · 𝒪[K]      and
   ∀ 𝔢, (∀ ξ : K, 𝔢 ≤ (a − ξ²) · 𝒪[K]) → 𝔢 ≤ 𝔡(a)
   ```
 
-  with uniqueness by antisymmetry and **existence as the first milestone**: over a
-  discretely valued field the `(a − ξ²) · 𝒪[K]` are totally ordered, so the family has
-  an infimum, and it is `𝓂[K]^{δ(a)}` for `δ(a) = sup_ξ v_K(a − ξ²)` when that
-  supremum is finite and `0` when it is not. Both descriptions are stated. `𝔡` is what
-  the sources say; `δ(a) : ℤ` is what the computations below manipulate.
+  Uniqueness is antisymmetry. Existence is the first milestone. The fractional ideals
+  `(a − ξ²) · 𝒪[K]` are totally ordered, so the family has an infimum. That infimum is
+  `𝓂[K]^{δ(a)}` for `δ(a) = sup_ξ v_K(a − ξ²)` when the supremum is finite, and `0` when
+  it is not. State both descriptions. `𝔡` is the object of the sources, and
+  `δ(a) : ℤ` is the object that the computations below use.
 - **The calculus of the defect**, for `a c : Kˣ`:
-  - `𝔡(a) = 0` iff `a` is a square;
-  - `𝔡(a c²) = (c)² · 𝔡(a)` as fractional ideals, equivalently
-    `δ(a c²) = δ(a) + 2 v_K(c)`, so the parity of `δ` is an invariant of the square
-    class and `𝔡` is one up to squares of principal ideals;
-  - `𝔡(a) ≤ 1`, that is `𝔡(a) ⊆ 𝒪[K]`, when `a ∈ 𝒪[K]ˣ`; so for units the defect is
-    the integral ideal `𝓂[K]^{δ(a)}` and the classification below is a statement about
+  - `𝔡(a) = 0` if and only if `a` is a square;
+  - `𝔡(a c²) = (c)² · 𝔡(a)` as fractional ideals, that is `δ(a c²) = δ(a) + 2 v_K(c)`.
+    So the parity of `δ` is an invariant of the square class, and `𝔡` is an invariant up
+    to squares of principal ideals;
+  - `𝔡(a) ≤ 1`, that is `𝔡(a) ⊆ 𝒪[K]`, when `a ∈ 𝒪[K]ˣ`. So for a unit the defect is
+    the integral ideal `𝓂[K]^{δ(a)}`, and the classification below is a statement about
     ideals of `𝒪[K]`;
   - `𝔡(a) = a · 𝒪[K]` when `v_K(a)` is odd, because then
     `v_K(a − ξ²) = min(v_K(a), 2 v_K(ξ))` for every `ξ`, the two valuations never being
-    equal. This is what lets the case analysis below run on `δ` alone.
+    equal. This is what lets the case analysis below use `δ` alone.
 - **The possible defects of a unit** (O'Meara 63:2, on top of the local square theorem
-  63:1, which is PR #2 Layer 1's `U(K, 2e+1) ⊆ (Kˣ)²`). The defect of `u : 𝒪[K]ˣ` is
-  one of
+  of 6A). The defect of `u : 𝒪[K]ˣ` is one of
 
   ```text
   0,   𝓂[K]^{2e} = 4𝒪[K],   𝓂[K]^{2k+1}  for 0 ≤ k < e
   ```
 
-  a list of length `e + 2`. For odd residue characteristic it reads `{0, 𝒪[K]}` and
-  the statement is Hensel's lemma; over `ℚ_2` it is `{0, 4ℤ_2, 2ℤ_2}`, the defects of
-  `1`, `5`, and `−1`. The dyadic computation below terminates because this list is
-  finite.
-- **The ramification dictionary.** For `a` a nonsquare (so `δ(a)` is an integer),
-  `K(√a)/K` is unramified iff `δ(a)` is even and ramified iff `δ(a)` is odd; a square
-  has `𝔡(a) = 0` and a trivial extension. Among the unit square classes exactly one
-  has `𝔡(u) = 4𝒪[K]`: the class of the `Δ` with `K(√Δ)` the unramified quadratic
-  extension.
+  a list of length `e + 2`. For odd residue characteristic the list is `{0, 𝒪[K]}`, and
+  the statement is Hensel's lemma. Over `ℚ_2` the list is `{0, 4ℤ_2, 2ℤ_2}`, which are
+  the defects of `1`, of `5`, and of `−1`. The dyadic computation below terminates
+  because this list is finite.
+- **The ramification dictionary.** For `a` a nonsquare, so that `δ(a)` is an integer,
+  `K(√a)/K` is unramified if and only if `δ(a)` is even, and is ramified if and only if
+  `δ(a)` is odd. A square has `𝔡(a) = 0` and a trivial extension. Among the unit square
+  classes exactly one has `𝔡(u) = 4𝒪[K]`, namely the class of the `Δ` with `K(√Δ)` the
+  unramified quadratic extension of 6A.
 
-Then the three symbol computations the route needs (O'Meara 63:11 to 63:13), each
-written out rather than named.
+Then the three symbol computations of O'Meara 63:11 to 63:13, each written out.
 
 - **Evaluation against the unramified class.** For `Δ` as above and every `b : Kˣ`,
 
@@ -792,366 +1013,493 @@ written out rather than named.
   (Δ, b)_K = (−1)^{v_K(b)}.
   ```
 
-  This is PR #2 Layer 2's `N_{K(√Δ)/K}(K(√Δ)ˣ) = {x : v_K(x) even}` read through the
-  norm description of the symbol (6B item 1). It is the only closed formula available
-  at this generality, and everything else here is proved against it.
-- **Multiplicativity, in the form it is actually proved: an index theorem.** For
+  This is 6A's `N(K(√Δ)ˣ) = {x : v_K(x) even}` read through the norm description of the
+  symbol, that is 6C item 1. It is the only closed formula available at this
+  generality, and the statements below are proved against it.
+- **Multiplicativity, in the form in which it is proved: an index theorem.** For
   `a : Kˣ` a nonsquare,
 
   ```text
   (Kˣ : N_{K(√a)/K}(K(√a)ˣ)) = 2.
   ```
 
-  Bimultiplicativity follows by pure group theory, and is stated that way: `b ↦ (a,b)_K`
-  is the `{±1}`-valued indicator of the subgroup `N(K(√a)ˣ) ≤ Kˣ`, and the indicator of
-  a subgroup `H ≤ G` is a homomorphism `G → ℤˣ` exactly when `(G : H) ≤ 2`. That lemma
-  carries no arithmetic and belongs with Layer 0's square-class calculus.
-  Multiplicativity in the first argument is then symmetry (6B item 2).
+  Bimultiplicativity then follows by group theory, and it is stated that way. The map
+  `b ↦ (a,b)_K` is the `{±1}`-valued indicator of the subgroup `N(K(√a)ˣ) ≤ Kˣ`, and the
+  indicator of a subgroup `H ≤ G` is a homomorphism `G → ℤˣ` exactly when `(G : H) ≤ 2`.
+  That lemma contains no arithmetic and belongs with Layer 0's square-class calculus.
+  Multiplicativity in the first argument then follows from symmetry, that is 6C item 2.
 
-  The two inequalities are not the same problem. `≥ 2` is the witness list of the next
-  bullet. `≤ 2`, equivalently that a product of two non-norms is a norm, is the
-  theorem, and it is what O'Meara's §63A computation is spent on. Two reductions cut it
-  down, and both are milestones:
-  - `(Kˣ)² ⊆ N(K(√a)ˣ)` and `−a ∈ N(K(√a)ˣ)` (the norm of `√a`), so the norm group is
-    a union of square classes and the index is computed inside the finite group
-    `Kˣ/(Kˣ)²` of PR #2 Layer 1;
-  - normalizing `a` in its square class so that `v_K(a) ∈ {0, 1}`, the unit norms are
-    exactly the units among
+  The two inequalities have different weights. The bound `≥ 2` is the witness list of
+  the next milestone. The bound `≤ 2`, that is the statement that a product of two
+  non-norms is a norm, is the theorem, and O'Meara's §63A computation proves it. Two
+  reductions make it smaller, and both are milestones:
+  - `(Kˣ)² ⊆ N(K(√a)ˣ)` and `−a ∈ N(K(√a)ˣ)`, the second because `−a = N(√a)`. So the
+    norm group is a union of square classes, and the index is computed inside the finite
+    group `Kˣ/(Kˣ)²` of 6A;
+  - after `a` is normalized in its square class so that `v_K(a) ∈ {0, 1}`, the unit
+    norms are exactly the units among
 
     ```text
     u² (1 − a t²)   and   u² (−a) (1 − a t²),      u : 𝒪[K]ˣ,  t : 𝒪[K],
     ```
 
-    the second family being `−a = N(√a)` times the first, and it occurs only for `a` a
-    unit. (`x² − a y²` is a unit only when `min(v_K(x), v_K(y)) = 0`; divide by the
-    square of whichever of `x`, `y` is a unit. For `v_K(a) = 1` the two valuations have
-    different parities, so `v_K(x) = 0` and only the first family survives.) The whole
-    index question is therefore about the unit values of one binary form.
-- **Nondegeneracy**: for `a : Kˣ` a nonsquare there is `b : Kˣ` with `(a,b)_K = −1`.
-  The witness is read off the defect, in the same three cases the index theorem's proof
-  splits into:
+    where the second family is `−a` times the first, and occurs only for `a` a unit.
+    (`x² − a y²` is a unit only when `min(v_K(x), v_K(y)) = 0`. Divide by the square of
+    whichever of `x` and `y` is a unit. For `v_K(a) = 1` the two valuations have
+    different parities, so `v_K(x) = 0` and only the first family survives.) The index
+    question is therefore a question about the unit values of one binary form.
+- **Nondegeneracy.** For `a : Kˣ` a nonsquare there is `b : Kˣ` with `(a,b)_K = −1`. The
+  witness is read off the defect, in the same three cases into which the proof of the
+  index theorem splits.
   1. `v_K(a)` odd: take `b = Δ`, by the evaluation formula and symmetry. The matching
      upper bound is the unit-norm description above, applied to `a = π u`.
   2. `a` a unit with `𝔡(a) = 4𝒪[K]`: take `b = π`, by the evaluation formula again,
-     since `a` is `Δ` up to squares. Here `N(K(√a)ˣ) = {x : v_K(x) even}` on the nose,
-     so this case of the index theorem is closed by PR #2 Layer 2 and needs nothing
-     else.
-  3. `a` a unit with `𝔡(a) = 𝓂[K]^d`, `d` odd, `0 < d < 2e` (empty unless the residue
-     characteristic is `2`): `K(√a)/K` is ramified of discriminant `𝓂[K]^{2e−d+1}`,
-     hence of that conductor exponent, and the statement in the form Layer 6 uses it
-     is
+     because `a` is `Δ` up to squares. Here `N(K(√a)ˣ) = {x : v_K(x) even}` exactly, so
+     6A closes this case of the index theorem.
+  3. `a` a unit with `𝔡(a) = 𝓂[K]^d`, `d` odd, `0 < d < 2e`. This case is empty unless
+     the residue characteristic is `2`. Here `K(√a)/K` is ramified of discriminant
+     `𝓂[K]^{2e−d+1}`, hence of that conductor exponent, and the statement in the form
+     that Layer 6 uses is
 
      ```text
      U(K, 2e−d+1) ⊆ N(K(√a)ˣ)   and   U(K, 2e−d) ⊄ N(K(√a)ˣ),
      ```
 
-     the second half being the witness. Also `1 − a ∈ N(K(√a)ˣ)` has odd valuation `d`
-     (normalize `a = 1 + ε` with `v_K(ε) = d`, which is what `𝔡(a) = 𝓂[K]^d` says),
-     so the norm group is not contained in the even-valuation subgroup and the index
-     is decided by the unit part alone. ⚠ The containment does **not** identify the
-     unit norms with `U(K, 2e−d+1) · (𝒪[K]ˣ)²`: that product can have index `4` or
-     more in `𝒪[K]ˣ` (already for `K = ℚ_2(√2)`, `d = 1`), and it is the gap between
-     the two that the defect computation closes. This case is the dyadic weight of the
+     where the second half is the witness. Also `1 − a ∈ N(K(√a)ˣ)` has odd valuation
+     `d`, after `a` is normalized as `a = 1 + ε` with `v_K(ε) = d`, which is what
+     `𝔡(a) = 𝓂[K]^d` says. So the norm group is not contained in the even-valuation
+     subgroup, and the unit part decides the index. ⚠ The containment does **not**
+     identify the unit norms with `U(K, 2e−d+1) · (𝒪[K]ˣ)²`. That product can have index
+     `4` or more in `𝒪[K]ˣ`, already for `K = ℚ_2(√2)` and `d = 1`. The defect
+     computation closes the difference. This case carries the dyadic content of the
      sublayer.
 
-  Over `ℚ_2` case 3 reads: `a = −1`, `d = 1`, `e = 1`, `U(ℚ_2, 2) = 1 + 4ℤ_2` is
-  contained in the norms (the classes `[1]` and `[5]`, sums of two squares), and `3` is
-  the non-norm that `U(ℚ_2, 1) ⊄ N` promises.
+  Over `ℚ_2` case 3 reads: `a = −1`, `d = 1`, `e = 1`. Then `U(ℚ_2, 2) = 1 + 4ℤ_2` lies
+  in the norms, that is the classes `[1]` and `[5]`, which are sums of two squares, and
+  `3` is the non-norm that `U(ℚ_2, 1) ⊄ N` supplies.
 
-If a later implementer prefers to derive bimultiplicativity from explicit formulas
-instead, that is allowed, but then the formulas must be proved *before*
-bimultiplicativity, at the full finite-extension scope of this layer rather than for
-`ℚ_p`, and the defect sublayer may then be dropped. What is not allowed is keeping a
-proof route whose central object is nowhere a target.
+Basic API:
 
-#### 6B. The Hilbert symbol and the local Hasse invariant
+- constructors: `quadraticDefect`, `δ`, the unramified class `Δ`;
+- examples over `ℚ_2`: `𝔡(1) = 0`, `𝔡(5) = 4ℤ_2`, `𝔡(−1) = 2ℤ_2`;
+- morphisms: none, because `𝔡` is not a homomorphism; see the counterexample below;
+- functoriality: `𝔡` under an unramified base change, where `δ` is unchanged, and under
+  a ramified base change of degree `e'`, where `δ` multiplies by `e'`;
+- comparison lemmas: `𝔡` against `δ`; `𝔡` against the ramification of `K(√a)`; `𝔡`
+  against membership in `U(K,i)`;
+- naturality: `𝔡(a c²) = (c)² 𝔡(a)`, so `𝔡` is defined on square classes up to squares
+  of principal ideals;
+- edge cases: `a` a square, where `𝔡(a) = 0`; `v_K(a)` odd, where `𝔡(a) = a·𝒪[K]`; odd
+  residue characteristic, where the list of unit defects has two entries;
+- downstream interfaces: 6C's bimultiplicativity and nondegeneracy.
 
-- **Definition.** `hilbertSymbol a b : ℤˣ` is `+1` if `∃ x y : K, b = x² − a y²`, and
-  `−1` otherwise, for `a b : Kˣ`. Nothing about quaternion algebras or their
-  classification enters the definition, so nothing later is circular.
-- Then, in this order:
-  1. **agreement with the other two descriptions**: `(a,b)_K = 1` iff `b` is a norm
-     from `K(√a)` iff `z² − ax² − by² = 0` has a nontrivial zero (Layer 2's four-fold
-     criterion, specialized), and square-class invariance in each argument;
-  2. **symmetry** `(a,b)_K = (b,a)_K`, after which the Serre orientation and the
-     B11a orientation are interchangeable;
-  3. the **defect computations** of 6A, ending in the norm-index theorem
-     `(Kˣ : N(K(√a)ˣ)) = 2` for nonsquare `a`;
-  4. **bimultiplicativity** `(a, bc)_K = (a,b)_K · (a,c)_K`, dyadic case included:
-     the index theorem and the indicator lemma of 6A in the second argument,
-     symmetry in the first (O'Meara 63:11 to 63:13, Serre III Thm 2 for `K = ℚ_p`);
-  5. **nondegeneracy**: for nonsquare `a` there is `b` with `(a,b)_K = −1`, with the
-     witnesses 6A lists by defect;
-  6. **the local Hasse invariant** `localHasse q = ∏_{i<j} (aᵢ, aⱼ)_K ∈ ℤˣ` for
-     `q ≅ ⟨a₁,…,aₙ⟩`, well defined by Layer 3's chain-induction lemma with `M = ℤˣ`
-     (symmetry and bilinearity are items 2 and 4; the binary condition
-     `(a,b)_K = (c,d)_K` for `⟨a,b⟩ ≅ ⟨c,d⟩` follows from Layer 3's binary quaternion
-     lemma and item 1), with the same two formulas as in Layer 5, now in `{±1}`;
-  7. **the classification** and its corollaries (6C);
-  8. **compatibility with Layer 5**, in two steps, because the identification of the
-     codomains has two different prices. The elementary step needs nothing outside this
-     roadmap: the subgroup `Q(K) ≤ BrauerGroup K` generated by the quaternion classes
-     is `{1, [D]}` for `D` the quaternion division algebra of 6C, so
-     `ε : Q(K) ≃* ℤˣ` with `ε [D] = −1` is well defined, `hasseInvariant q ∈ Q(K)` for
-     every `q` (it is a product of quaternion classes), and
+⚠ Counterexample to multiplicativity of the defect. Over `ℚ_2`, `𝔡(−1) = 2ℤ_2` and
+`𝔡(5) = 4ℤ_2`, and `−5 ≡ 3 mod 8` gives `𝔡(−5) = 2ℤ_2`, which is not `8ℤ_2`. So `𝔡` is
+not multiplicative, and no proof may assume that it is.
 
-     ```text
-     ε (hasseInvariant q) = localHasse q,
-     ```
+A later implementer may prefer to derive bimultiplicativity from explicit formulas. That
+is allowed under two conditions: the formulas are proved before bimultiplicativity; and
+they are stated at the full local-field scope of this layer, and not only for `ℚ_p`.
+This sublayer may then be dropped. A proof route whose central object is nowhere a
+target is not acceptable.
 
-     termwise from Layer 2's four-fold criterion. The second step identifies `ε` with
-     the local invariant map: `Q(K) = Br(K)[2]`, and `ε` is
-     `inv_K : H²_cont(G_K, Additive Kˢˣ) ≃+ ℚ ⧸ ℤ` restricted to 2-torsion and
-     composed with `ZMod 2 ≃* ℤˣ`. That step consumes **Local Fields PR #2's
-     Layer 5** (the invariant map, which lives on cohomological `Br`) and, to carry
-     `hasseInvariant q` into its domain, **Layer 7A** of this roadmap. Nothing in
-     Layers 0 to 6 consumes either step, which is why Layer 6 can still be built
-     before Layer 5 exists.
-- **Explicit formulas, as the `K = ℚ_p` acceptance suite** (Serre III Thm 1). For odd
-  `p`, writing `a = p^α u` and `b = p^β v`:
-  `(a,b) = (−1)^{αβ ε(p)} (u|p)^β (v|p)^α` with `ε(p) = (p−1)/2 mod 2`, consuming
-  `legendreSym` and `TauCeti/NumberTheory/LegendreSymbol/SquareClass.lean`. For
-  `p = 2`: `(a,b) = (−1)^{ε(u)ε(v) + α ω(v) + β ω(u)}` with `ε(u) = (u−1)/2` and
-  `ω(u) = (u²−1)/8 mod 2`, read off `PadicInt.toZModPow 3` (adopt HassePrinciple's
-  `epsilon`/`omega` once they land). The general odd-residue-characteristic form of
-  the first formula, with the quadratic residue character of `𝓀[K]` in place of the
-  Legendre symbol, is also stated; there is no closed formula of that kind for a
-  general dyadic `K`, which is why 6A carries the dyadic weight.
-- **The `8 × 8` table over `ℚ_2`** on the representatives `{±1, ±5, ±2, ±10}`, as a
-  family of decidable computations, is the test that the dyadic formula is right.
+#### 6C. The Hilbert symbol and the local Hasse invariant
 
-#### 6C. The classification and its corollaries
+Prerequisites:
 
-Two regular forms over `K` are isometric iff `(dim, d, s)` agree, where `d` is the
-**plain** discriminant in `Kˣ/(Kˣ)²` and `s = localHasse` (O'Meara 63:20, Serre IV
-Thm 7). Because the dimension is part of the tuple, `(dim, d±, s)` is an equivalent
-complete invariant and the conversion is `signedDiscr_eq_sign_mul_discr`; the plain
-`d` is the primary one throughout this roadmap.
+- **[Layer 2]** the four-fold splitting criterion;
+- **[Layer 3]** the binary quaternion lemma and the chain-induction lemmas;
+- **[Layer 6A]** the toolkit;
+- **[Layer 6B]** the defect computations.
 
-- **Realization** (O'Meara 63:23, Serre IV Prop 6). A triple `(n, d, s)` with
-  `n ≥ 1`, `d ∈ Kˣ/(Kˣ)²`, `s ∈ {±1}` is realized by a regular form except in
-  exactly two cases: `n = 1` with `s = −1`, and `n = 2` with `d = [−1]` and
-  `s = −1`. Every other triple occurs. (Both exceptions are forced: the empty
-  product gives `s = +1` in dimension 1, and `⟨a,−a⟩` has `s = (a,−a)_K = +1`.)
-- **Isotropy by rank** (Serre IV Thm 6), in the pinned convention:
+Milestones, in this order:
+
+1. **Definition.** `hilbertSymbol a b : ℤˣ` is `+1` when `∃ x y : K, b = x² − a y²`, and
+   `−1` otherwise, for `a b : Kˣ`. Nothing about quaternion algebras or about their
+   classification enters the definition, so nothing later is circular.
+2. **Agreement with the other two descriptions.** `(a,b)_K = 1` if and only if `b` is a
+   norm from `K(√a)`, and if and only if `z² − ax² − by² = 0` has a nontrivial zero.
+   This is Layer 2's four-fold criterion, specialized. Prove square-class invariance in
+   each argument.
+3. **Symmetry** `(a,b)_K = (b,a)_K`. After it, Serre's orientation and B11a's
+   orientation are interchangeable.
+4. **The defect computations** of 6B, ending in the norm-index theorem.
+5. **Bimultiplicativity** `(a, bc)_K = (a,b)_K · (a,c)_K`, with the dyadic case
+   included. It follows from the index theorem and the indicator lemma in the second
+   argument, and from symmetry in the first (O'Meara 63:11 to 63:13; Serre III Thm 2 for
+   `K = ℚ_p`).
+6. **Nondegeneracy.** For a nonsquare `a` there is `b` with `(a,b)_K = −1`, with the
+   witnesses that 6B lists by defect.
+7. **The local Hasse invariant** `localHasse q = ∏_{i<j} (aᵢ, aⱼ)_K ∈ ℤˣ` for
+   `q ≅ ⟨a₁,…,aₙ⟩`. It is well defined by Layer 3's chain-induction lemma with
+   `M = ℤˣ`. Symmetry and bilinearity are items 3 and 5. The binary condition
+   `(a,b)_K = (c,d)_K` for `⟨a,b⟩ ≅ ⟨c,d⟩` follows from Layer 3's binary quaternion
+   lemma and from item 2. The two formulas of Layer 5 hold here in `{±1}`.
+8. **Explicit formulas over `ℚ_p`**, as the acceptance suite (Serre III Thm 1). For odd
+   `p`, and `a = p^α u`, `b = p^β v`:
+   `(a,b) = (−1)^{αβ ε(p)} (u|p)^β (v|p)^α` with `ε(p) = (p−1)/2 mod 2`, which consumes
+   `legendreSym` and `TauCeti/NumberTheory/LegendreSymbol/SquareClass.lean`. For the
+   case `p = 2`, the formula is `(a,b) = (−1)^{ε(u)ε(v) + α ω(v) + β ω(u)}` with
+   `ε(u) = (u−1)/2` and `ω(u) = (u²−1)/8 mod 2`, both read off
+   `PadicInt.toZModPow 3`. Also state the general
+   odd-residue-characteristic formula, with the quadratic residue character of `𝓀[K]` in
+   place of the Legendre symbol. There is no closed formula of that kind for a general
+   dyadic `K`, which is why 6B carries the dyadic content.
+9. **The `8 × 8` table over `ℚ_2`** on the representatives `{±1, ±5, ±2, ±10}`, as a
+   family of decidable computations. The table is the test that the dyadic formula is
+   correct.
+10. **Compatibility with Layer 5**, in two steps, because the identification of the two
+    codomains needs different prerequisites.
+    - The elementary step uses nothing outside this roadmap. The subgroup
+      `Q(K) ≤ BrauerGroup K` generated by the quaternion classes is `{1, [D]}`, where
+      `D` is the quaternion division algebra of 6D. So `ε : Q(K) ≃* ℤˣ` with
+      `ε [D] = −1` is well defined, and `hasseInvariant q ∈ Q(K)` for every `q`, because
+      it is a product of quaternion classes. Then
+
+      ```text
+      ε (hasseInvariant q) = localHasse q,
+      ```
+
+      termwise from Layer 2's four-fold criterion. Prerequisites: **[Layer 5]** and
+      **[Layer 6D]**.
+    - The second step identifies `ε` with the local invariant map. It states that
+      `Q(K) = Br(K)[2]` and that `ε` is the composition of the invariant map
+      `H²(G_K, Additive Kˢˣ) ≃+ ℚ ⧸ ℤ` restricted to 2-torsion with `ZMod 2 ≃* ℤˣ`. Its
+      prerequisites are **[Layer 7A]**, which carries an algebra class into `H²`, and a
+      term of the `Mod2Galois K` interface that supplies the invariant map. Nothing in
+      Layers 0 to 6 consumes either step.
+
+Basic API:
+
+- constructors: `hilbertSymbol`, `localHasse`;
+- examples: `(−1,−1)_{ℚ_2} = −1`; `(−1,−1)_{ℚ_p} = +1` for odd `p`; `(2,5)_{ℚ_2} = −1`;
+  `(5,5)_{ℚ_2} = +1` with the witness `5 = 5² − 5·2²`;
+- morphisms: the biadditive pairing `Kˣ/(Kˣ)² × Kˣ/(Kˣ)² → ℤˣ`;
+- functoriality: the symbol is unchanged when either argument is multiplied by a square,
+  so it is a function on pairs of square classes. Behaviour under a base change `L/K` is
+  not part of this layer;
+- comparison lemmas: the three descriptions of item 2; the symbol against the splitting
+  of `ℍ[K,a,b]`; the symbol against `localHasse` of a binary form;
+- naturality: `localHasse` descends along `Quotient.mk` and satisfies the two Layer 5
+  formulas in `{±1}`;
+- edge cases: `a` or `b` a square, where the value is `+1`; `a = 1`; rank `0` and
+  rank `1`, where `localHasse = 1`;
+- downstream interfaces: 6D's classification, and the compatibility theorem above.
+
+⚠ Nearby false generalization. Bimultiplicativity fails over a general field. Take
+`K = ℚ` and `a = −1`. A positive rational is a sum of two squares only when every prime
+congruent to `3` modulo `4` occurs to an even power. So `3` and `7` are not norms from
+`ℚ(i)`, and `21 = 3·7` is not a norm either. The indicator of the norm group is
+therefore not a homomorphism. The index-2 statement of 6B is the local input that makes
+it one.
+
+#### 6D. The classification and its corollaries
+
+Prerequisites:
+
+- **[Layer 1]** Witt decomposition, cancellation, and the extension theorem;
+- **[Layer 3]** the discriminant;
+- **[Layer 6A]** the square-class count and the unramified norm group;
+- **[Layer 6C]** the Hilbert symbol, bimultiplicativity, nondegeneracy, and
+  `localHasse`.
+
+Milestones:
+
+- **The classification** (O'Meara 63:20, Serre IV Thm 7). Two regular forms over `K` are
+  isometric if and only if `(dim, d, s)` agree, where `d` is the plain discriminant in
+  `Kˣ/(Kˣ)²` and `s = localHasse`. Because the dimension is part of the tuple,
+  `(dim, d±, s)` is an equivalent complete invariant, and the conversion is
+  `signedDiscr_eq_sign_mul_discr`. The plain `d` is the primary invariant of this
+  roadmap.
+- **Realization** (O'Meara 63:23, Serre IV Prop 6). A triple `(n, d, s)` with `n ≥ 1`,
+  `d ∈ Kˣ/(Kˣ)²`, and `s ∈ {±1}` is realized by a regular form, except in exactly two
+  cases: `n = 1` with `s = −1`; and `n = 2` with `d = [−1]` and `s = −1`. Every other
+  triple occurs. Both exceptions are forced, because the empty product gives `s = +1` in
+  dimension 1, and `⟨a,−a⟩` has `s = (a,−a)_K = +1`.
+- **Isotropy by rank** (Serre IV Thm 6), in the fixed convention:
   - rank 1: never isotropic;
-  - rank 2: isotropic iff `d = [−1]`;
-  - rank 3: isotropic iff `s = (−1, −d)_K`;
-  - rank 4: isotropic iff `d ≠ [1]`, or `d = [1]` and `s = (−1,−1)_K`;
+  - rank 2: isotropic if and only if `d = [−1]`;
+  - rank 3: isotropic if and only if `s = (−1, −d)_K`;
+  - rank 4: isotropic if and only if `d ≠ [1]`, or `d = [1]` and `s = (−1,−1)_K`;
   - rank at least 5: always isotropic.
-- **Representation**, as a corollary rather than a vague reference: for regular `q`
-  and `a : Kˣ`, `a ∈ unitValueSet q` iff `q ⊥ ⟨−a⟩` is isotropic (Layer 0), and the
-  right-hand side is decided by the rank list above applied to the invariants of
-  `q ⊥ ⟨−a⟩`, namely
-  `(dim q + 1, −a·d(q), localHasse q · (−a, d(q))_K)`. Spell out the description of
+- **Representation**, as a corollary. For regular `q` and `a : Kˣ`,
+  `a ∈ unitValueSet q` if and only if `q ⊥ ⟨−a⟩` is isotropic, by Layer 0. The
+  right-hand side is decided by the rank list above, applied to the invariants of
+  `q ⊥ ⟨−a⟩`, which are
+  `(dim q + 1, −a·d(q), localHasse q · (−a, d(q))_K)`. Write out the description of
   `unitValueSet q` rank by rank (O'Meara 63:21, Serre IV cor. to Thm 6).
-- **`u(K) = 4`**: every regular form of dimension at least 5 over `K` is isotropic,
-  and there is an anisotropic form of dimension 4 (O'Meara 63:19).
+- **`u(K) = 4`.** Every regular form of dimension at least 5 over `K` is isotropic, and
+  there is an anisotropic form of dimension 4 (O'Meara 63:19).
 - **The anisotropic quaternary form is unique** up to isometry (O'Meara 63:17-18,
-  Serre IV Thm 7 cor.); it is the norm form of the unique quaternion division
-  algebra over `K`, and `⟨1,1,1,1⟩` realizes it when `K = ℚ_2`. Equivalently there
-  are exactly two quaternion algebras over `K` up to isomorphism, which is a
-  *consequence* of the theory here and is never used to define the symbol. It is
-  what makes the two-element group `Q(K)` of the compatibility theorem below
-  available without any cohomology.
-- **The mod-2 duality reading.** PR #2's Layer 8 states the single theorem
-  identifying its local Tate-duality pairing at `n = 2` with the Hilbert symbol
-  defined here (suggested name there:
-  `hilbertSymbol_eq_tateDuality_pairing`). That theorem is stated there and cited
-  here; nondegeneracy is proved independently above, so neither roadmap waits on the
-  other.
+  Serre IV Thm 7 cor.). It is the norm form of the unique quaternion division algebra
+  over `K`, and `⟨1,1,1,1⟩` realizes it when `K = ℚ_2`. Equivalently there are exactly
+  two quaternion algebras over `K` up to isomorphism. That statement is a consequence of
+  the theory here, and it is never used to define the symbol. It is what makes the
+  two-element group `Q(K)` of 6C item 10 available without cohomology.
+
+Basic API:
+
+- constructors: the invariant triple `(dim, d, s)`, and the realization map from triples
+  to classes;
+- examples over `ℚ_2`: `⟨1,1,1,1⟩`, anisotropic; `⟨−1,−1⟩`, which realizes
+  `(2, [1], −1)`;
+- morphisms: the injection of `RegularFormClass K` into the set of admissible triples;
+- functoriality: the triple is computed from `d` and from the symbol, so its behaviour
+  under a base change is whatever 6C proves for those two. This layer claims no further
+  base-change formula;
+- comparison lemmas: `(dim, d, s)` against `(dim, d±, s)`; the isotropy list against the
+  realization list;
+- naturality: the classification is stated on `RegularFormClass K`, so it commutes with
+  the descent principle;
+- edge cases: rank `0`; the two excluded triples; the anisotropic quaternary form;
+- downstream interfaces: the compatibility theorem of 6C, and the local input of the
+  integral-lattice theory that a later roadmap may cite.
+
+⚠ Nearby false generalization. The triple `(dim, d, s)` is not a complete invariant over
+a general field. Over `ℝ` the forms `⟨1,1,1,1⟩` and `⟨−1,−1,−1,−1⟩` both have dimension
+`4`, discriminant `[1]`, and Hasse invariant `+1`, because `(−1,−1)_ℝ = −1` occurs six
+times. They are not isometric. Similarly `u(K) = 4` uses the local hypothesis:
+`u(ℝ) = ∞` and `u(𝔽_q) = 2`.
 
 ### Layer 7: the Brauer group in Galois cohomology
 
-Consumes [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1):
-its Layer 3 for the finite-quotient colimit, its Layer 4 for exact sequences, its
-Layer 7 for cup products, and its Layer 8 (the Galois interface) for Hilbert 90,
-Kummer theory, and the mod-2 Kummer class. Those are their milestones; this layer
-starts where those types exist. It also consumes the landed
-[semisimple-algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)'s
-Layer 6, which supplies the splitting fields the crossed product is built on.
+The comparison of the algebraic Brauer group with `H²` is owned here. It is a piece of
+mathematics, that is the theory of crossed products, and not a formality.
 
-The comparison of the algebraic Brauer group with `H²` is not supplied by any sibling
-roadmap: the semisimple-algebras roadmap builds `BrauerGroup K` as a group of
-algebras and stops, and the profinite-cohomology roadmap builds `H²` and stops. So it
-is owned here, and it is written as its own sublayer with its own boundary, because
-it is a real piece of mathematics (crossed products) and not a formality.
+#### 7A. The mod-2 Galois cohomology interface
 
-#### 7A. The comparison with `H²`
+Mathlib has no continuous cohomology of a profinite group. The cohomological input of
+Layers 7 to 9 is therefore stated as a structure, and every later statement takes a term
+of that structure as a hypothesis. `Suggested.lean` defines it.
 
-- **Construction boundary.** The semisimple-algebras roadmap owns central simple
-  algebras, the algebraic Brauer group, and **splitting fields**: its Layer 6 proves
-  that every central simple `K`-algebra is split by a finite *separable* extension.
-  The profinite-cohomology roadmap owns continuous cochains, `H²`, cup products,
-  restriction and corestriction, the finite-quotient colimit, and Kummer theory. This
-  roadmap owns the crossed-product comparison between them and the quaternion-symbol
-  calculation.
-- **Additive or multiplicative, decided once.** `BrauerGroup K` is a `CommGroup` and
-  group cohomology is additive, with `Kˢˣ` entering as the `G_K`-module
-  `Additive Kˢˣ`. Every declaration of the comparison therefore transports through
-  `Additive`, and the prose below keeps the customary multiplicative notation for
-  Brauer classes as an abbreviation of it.
-- **Milestones.**
-  1. a finite **Galois** splitting field: from Layer 6 of the semisimple-algebras
-     roadmap, `A` is split by a finite separable `L/K`, and its Galois closure `M/K`
-     is finite Galois and splits `A` as well, since an extension of a splitting field
-     splits `A` too. This is stated here rather than waved through, because it is
-     where the crossed-product construction starts;
-  2. the comparison isomorphism
+Prerequisites:
 
-     ```lean
-     Additive (BrauerGroup K) ≃+ H²_cont (G_K) (Additive Kˢˣ)
-     ```
+- **[Mathlib]** `AddCommGroup`, `AddMonoidHom`, `Additive`, `Subgroup.square`;
+- **[Layer 0]** the square-class group.
 
-     by crossed products: a finite Galois `L/K` splitting `A` gives a 2-cocycle,
-     Brauer equivalence corresponds to cohomologous cocycles, and the colimit over `L`
-     (PR #1 Layer 3) gives the continuous `H²` (Gille–Szamuely 4.4, Serre *Local
-     Fields* X). Multiplication of Brauer classes goes to addition of classes, which
-     is what the `≃+` records;
-  3. its degree-two Kummer consequence, the 2-torsion comparison
+Milestones:
 
-     ```lean
-     Br₂ K := MonoidHom.ker (powMonoidHom 2 : BrauerGroup K →* BrauerGroup K)
-     ι : Additive ↥(Br₂ K) ≃+ H²_cont (G_K) (Additive μ₂)
-     ```
+- **`Mod2Galois K`.** A structure with the following fields:
+  - `H1` and `H2`, additive groups, standing for `H¹(G_K, 𝔽₂)` and `H²(G_K, 𝔽₂)`;
+  - `Br`, an additive group, standing for `H²(G_K, Additive Kˢˣ)`;
+  - `cup : H1 →+ H1 →+ H2`, the cup product;
+  - `kummer : Additive (Kˣ ⧸ Subgroup.square Kˣ) ≃+ H1`, the Kummer isomorphism;
+  - `toBr : H2 →+ Br`, injective, with image the 2-torsion of `Br`. This field records
+    the long exact sequence of `1 → μ₂ → Kˢˣ → Kˢˣ → 1` together with Hilbert 90.
+- **`Mod2GaloisTransfer`.** For `L/K` finite separable, a structure with restriction
+  `res : DK.H1 →+ DL.H1`, corestriction `cor₁ : DL.H1 →+ DK.H1` and
+  `cor₂ : DL.H2 →+ DK.H2`, and the Evens norm `evens : DL.H1 → DK.H2`. The Evens norm is
+  a function and not a homomorphism, which is why the expansion in Layer 9 has a
+  corestriction term.
+- **Discharge.** A development of continuous cohomology of profinite groups supplies a
+  term of each structure. That development replaces the structure mechanically: each
+  field becomes the corresponding declaration, and no statement of Layers 7 to 9 is
+  rewritten. Until then, the statements are conditional, in the same way that a
+  statement under a typeclass hypothesis is conditional.
 
-     from PR #1 Layer 4's long exact sequence applied to `1 → μ₂ → Kˢˣ → Kˢˣ → 1`
-     together with Hilbert 90, written `ι : Br(K)[2] ≃ H²(G_K, μ₂)` in prose;
-  4. the identification `ι [(a,b)] = (a) ∪ (b)` of the quaternion class with the cup
-     of the two mod-2 Kummer classes;
-  5. compatibility of the two structures, which is the `≃+` of milestones 2 and 3
-     read on the symbol: `ι` carries the product `[(a,b)] · [(a,c)]` to the sum
-     `(a) ∪ (b) + (a) ∪ (c)`, so Layer 5's bilinearity and Layer 8's additivity are
-     the same statement on two sides.
-- **The cyclic computation, stated rather than implied.** Milestone 4's proof is the
-  one place where a cocycle meets an algebra, so its steps are separate targets: for
-  `L = K(√a)` with `a` a nonsquare, `H²(Gal(L/K), Lˣ) ≃ Kˣ / N_{L/K}(Lˣ)` (the
-  degree-two computation for a cyclic group of order two, from PR #1 Layer 4's
-  low-degree API); under it the inflation of `(a) ∪ (b)` corresponds to the class of
-  `b`; hence `(a) ∪ (b) = 0` iff `b ∈ N_{L/K}(Lˣ)`. The case where `a` is a square is
-  separate and trivial.
+#### 7B. The comparison with `H²`
 
-#### 7B. The symbol as a cup product
+Prerequisites:
 
-- The square-class dictionary `(·) : Kˣ/(Kˣ)² ≃ H¹(G_K, μ₂)` in the cocycle
-  normalization PR #1 Layer 8 pins, with compatibility with
-  `TauCeti.SquareClassGroup` as a stated lemma.
-- **The fifth equivalent condition.** `(a) ∪ (b) = 0` in `H²(G_K, μ₂)` iff the four
-  conditions of Layer 2 hold. Given 7A this is the last step of the cyclic
-  computation plus the four-fold criterion, and it completes B11a's
-  five-fold statement (Serre, *Local Fields* XIV §2 Prop. 4-5;
-  Gille–Szamuely 4.7).
-- Corollaries: `(a) ∪ (1−a) = 0` for `a : Kˣ` with `1 − a ≠ 0` (Steinberg, from
-  Layer 2's algebra splitting); `(a) ∪ (−a) = 0`; and bilinearity of the cup as a
-  restatement of Layer 5's bimultiplicativity. Over a finite extension of `ℚ_p` the
-  specialization is Layer 6's symbol, through 7A's `ι` and Layer 6's compatibility
-  theorem.
+- **[SSA Layer 6]** the `CommGroup` structure on `BrauerGroup K`, and the theorem that
+  every central simple `K`-algebra is split by a finite separable extension;
+- **[Layer 5]** the quaternion class and its bilinearity;
+- **[Layer 7A]** a term of `Mod2Galois K`.
 
-### Layer 8: Stiefel–Whitney classes
+Milestones:
 
-- **Definition** (Delzant; Milnor's `w` in *Algebraic K-theory and quadratic forms*
-  §4): for `q ≅ ⟨a₁, …, aₙ⟩`, the total class
-  `w(q) = ∏ᵢ (1 + (aᵢ)) ∈ H^*(G_K, 𝔽₂)`. Well-definedness is Layer 0's descent
-  corollary again: permutation invariance is clear, and the binary step is the cup
-  identity `(a)(b) = (c)(d)` for `⟨a,b⟩ ≅ ⟨c,d⟩`, which is Layer 7B applied to
-  Layer 0's binary criterion. `w` is multiplicative for `⊥` on classes.
-- `w₀ = 1`; `w₁(q) = (d(q))` with the **plain** discriminant, per the convention
-  table; `w₂` of a diagonal form is `∑_{i<j} (aᵢ)(aⱼ)`, so
-  `ι(hasseInvariant q) = w₂(q)` immediately from 7A, both sides being defined on a
-  diagonalization. The Hasse invariant is a product and `w₂` is a sum: `ι` is the
-  `≃+` of 7A milestone 3, so the Lean statement reads
-  `ι (Additive.ofMul (hasseInvariant q)) = w₂ q`, and the same `Additive.ofMul` sits
-  in front of every Brauer class in the identities below.
-- ⚠ **The comparison with the Clifford invariant, exact.** The trap is that `c(q)`
-  and `s(q)` differ by dimension-dependent terms, so a source that says "`w₂` is the
-  Hasse–Witt invariant" has to be read through the convention table first (Fröhlich
-  and Serre state their trace-form results with `w₂` against the *Witt* invariant,
-  with correction terms of `(2) ∪ (d)` type). Writing
+1. **A finite Galois splitting field.** By SSA Layer 6, `A` is split by a finite
+   separable `L/K`. Its Galois closure `M/K` is finite Galois and splits `A`, because an
+   extension of a splitting field splits `A`. This is stated here rather than assumed,
+   because the crossed-product construction starts from it.
+2. **The comparison isomorphism**
+
+   ```lean
+   Additive (BrauerGroup K) ≃+ D.Br
+   ```
+
+   by crossed products: a finite Galois `L/K` that splits `A` gives a 2-cocycle; Brauer
+   equivalence corresponds to cohomologous cocycles; and the colimit over `L` gives the
+   continuous `H²` (Gille-Szamuely 4.4, Serre *Local Fields* X). Multiplication of
+   Brauer classes goes to addition of cohomology classes, which is what `≃+` records.
+3. **The 2-torsion comparison**
+
+   ```lean
+   Br₂ K := MonoidHom.ker (powMonoidHom 2 : BrauerGroup K →* BrauerGroup K)
+   ι : Additive ↥(Br₂ K) ≃+ D.H2
+   ```
+
+   obtained from milestone 2 and from `D.toBr`, whose image is the 2-torsion of `D.Br`.
+   In prose this is `ι : Br(K)[2] ≃ H²(G_K, μ₂)`.
+4. **The symbol as a cup product.** `ι [(a,b)] = (a) ∪ (b)`, that is
+   `ι [(a,b)] = D.cup (D.kummer [a]) (D.kummer [b])`.
+5. **Compatibility of the two structures.** `ι` carries the product `[(a,b)] · [(a,c)]`
+   to the sum `(a) ∪ (b) + (a) ∪ (c)`. Layer 5's bilinearity and Layer 8's additivity
+   are then the same statement on two sides.
+- **The cyclic computation, stated rather than implied.** The proof of milestone 4 is
+  the one place where a cocycle meets an algebra, so its steps are separate targets. For
+  `L = K(√a)` with `a` a nonsquare, `H²(Gal(L/K), Lˣ) ≃ Kˣ / N_{L/K}(Lˣ)`, which is the
+  degree-two computation for a cyclic group of order two. Under it, the inflation of
+  `(a) ∪ (b)` corresponds to the class of `b`. Hence `(a) ∪ (b) = 0` if and only if
+  `b ∈ N_{L/K}(Lˣ)`. The case where `a` is a square is separate and trivial.
+
+Basic API:
+
+- constructors: `ι`, the crossed-product cocycle, the comparison isomorphism;
+- examples: `ι [(a,−a)] = 0`; `ι [(a, 1−a)] = 0`;
+- morphisms: the comparison isomorphism itself, and its restriction to 2-torsion;
+- functoriality: compatibility with base change along a finite separable `L/K`, that is
+  `ι_L ∘ (base change) = res ∘ ι_K` on 2-torsion;
+- comparison lemmas: the crossed-product class against the cocycle; `ι` against
+  `D.toBr`;
+- naturality: `ι` carries multiplication to addition, which is milestone 5;
+- edge cases: a split algebra, whose class is `0`; `a` a square, where the cyclic
+  computation degenerates;
+- downstream interfaces: Layer 7C's fifth equivalent condition, Layer 8's identity for
+  `w₂`, and the second half of 6C item 10.
+
+#### 7C. The symbol as a cup product
+
+Prerequisites: **[Layer 2]**, **[Layer 7A]**, **[Layer 7B]**.
+
+- The square-class dictionary `(·) : Kˣ/(Kˣ)² ≃ H¹(G_K, μ₂)` is `D.kummer`, with
+  compatibility with `TauCeti.SquareClassGroup` as a stated lemma.
+- **The fifth equivalent condition.** `(a) ∪ (b) = 0` in `H²(G_K, μ₂)` if and only if
+  the four conditions of Layer 2 hold. Given 7B this is the last step of the cyclic
+  computation together with the four-fold criterion, and it completes B11a's five-fold
+  statement (Serre, *Local Fields* XIV §2 Prop. 4-5; Gille-Szamuely 4.7).
+- Corollaries: `(a) ∪ (1−a) = 0` for `a : Kˣ` with `1 − a ≠ 0`, from Layer 2's algebra
+  splitting; `(a) ∪ (−a) = 0`; and bilinearity of the cup product as a restatement of
+  Layer 5's bimultiplicativity. Over a nonarchimedean local field the specialization is
+  Layer 6's symbol, through 7B's `ι` and the compatibility theorem of 6C.
+
+### Layer 8: Stiefel-Whitney classes
+
+Prerequisites:
+
+- **[Layer 0]** the descent principle;
+- **[Layer 3]** the discriminant and the chain-induction lemmas;
+- **[Layer 7A]** a term of `Mod2Galois K`;
+- **[Layer 7B]** and **[Layer 7C]** for the comparison with the Brauer-valued
+  invariants.
+
+Milestones:
+
+- **Definition** (Delzant; Milnor's `w` in *Algebraic K-theory and quadratic forms* §4).
+  For `q ≅ ⟨a₁, …, aₙ⟩`, the total class is `w(q) = ∏ᵢ (1 + (aᵢ))` in `H^*(G_K, 𝔽₂)`.
+  Well-definedness is the descent principle again: permutation invariance is immediate,
+  and the binary step is the cup identity `(a)(b) = (c)(d)` for `⟨a,b⟩ ≅ ⟨c,d⟩`, which
+  is Layer 7C applied to Layer 0's binary criterion. `w` is multiplicative for `⊥` on
+  classes.
+- **Low degrees.** `w₀ = 1`; `w₁(q) = (d(q))` with the plain discriminant; and `w₂` of a
+  diagonal form is `∑_{i<j} (aᵢ)(aⱼ)`. Hence `ι(hasseInvariant q) = w₂(q)`, immediately
+  from 7B, because both sides are defined on a diagonalization. The Hasse invariant is a
+  product and `w₂` is a sum, and `ι` is the `≃+` of 7B milestone 3, so the Lean
+  statement is `ι (Additive.ofMul (hasseInvariant q)) = w₂ q`. The same `Additive.ofMul`
+  occurs in front of each Brauer class below.
+- ⚠ **The comparison with the Clifford invariant, exact.** `c(q)` and `s(q)` differ by
+  dimension-dependent terms, so a source that says "`w₂` is the Hasse-Witt invariant"
+  must be read through the convention table first. Fröhlich and Serre state their
+  trace-form results with `w₂` against the Witt invariant, with correction terms of
+  `(2) ∪ (d)` type. Write
 
   ```text
   A_n = C(n−1, 2) mod 2      B_n = C(n+1, 4) mod 2
   ```
 
-  for binomial coefficients (these are the exponents `(n−1)(n−2)/2` and
-  `(n+1)n(n−1)(n−2)/24` of Lam V.3.20), the milestone is the identity
+  for the binomial coefficients that are the exponents `(n−1)(n−2)/2` and
+  `(n+1)n(n−1)(n−2)/24` of Lam V.3.20. The milestone is the identity
 
   ```text
   ι(c(q)) = w₂(q) + A_n · ((−1) ∪ d(q)) + B_n · ((−1) ∪ (−1))
   ```
 
-  in `H²(G_K, μ₂)`, with `ι` from Layer 7A, `d(q)` the plain discriminant class, and
-  the whole thing written additively. Keep a `docs`-level note mapping the
+  in `H²(G_K, μ₂)`, with `ι` from 7B, with `d(q)` the plain discriminant class, and with
+  the whole identity written additively. Keep a `docs`-level note that maps the
   Fröhlich, Serre, and Kahn statements onto it.
-- **Acceptance examples**, each naming its forms rather than a bare square class
-  (`w₁` and `w₂` are invariants of forms, not of elements): `w(⟨1⟩ⁿ) = 1`;
-  `w(⟨a⟩) = 1 + (a)`, so `w₁ = (a)` and `w₂ = 0`; `w(⟨a,b⟩) = 1 + (a) + (b) + (a)(b)`,
-  so `w₂⟨a,b⟩ = (a) ∪ (b)`; `w(⟨⟨a,b⟩⟩)`; and the table of `w₁, w₂` over `ℚ_2` for
-  the eight forms `⟨a⟩` with `a` running through `{±1, ±5, ±2, ±10}` together with
-  the sixteen binary forms `⟨1, a⟩` and `⟨a, a⟩`.
 
-### Layer 9: transfer and the Evens–Kahn formula
+Basic API:
+
+- constructors: `sw1`, `sw2`, and the total class `w`;
+- examples, each naming its forms rather than a bare square class, because `w₁` and `w₂`
+  are invariants of forms: `w(⟨1⟩ⁿ) = 1`; `w(⟨a⟩) = 1 + (a)`, so `w₁ = (a)` and
+  `w₂ = 0`; `w(⟨a,b⟩) = 1 + (a) + (b) + (a)(b)`, so `w₂⟨a,b⟩ = (a) ∪ (b)`; `w(⟨⟨a,b⟩⟩)`;
+  and the table of `w₁` and `w₂` over `ℚ_2` for the eight forms `⟨a⟩` with `a` in
+  `{±1, ±5, ±2, ±10}`, together with the sixteen binary forms `⟨1, a⟩` and `⟨a, a⟩`;
+- morphisms: `w` as a monoid map from `(RegularFormClass K, ⊥)` to the units of
+  `H^*(G_K, 𝔽₂)`;
+- functoriality: `w` commutes with restriction along a finite separable `L/K`, that is
+  `res (w q) = w (q ⊗_K L)`;
+- comparison lemmas: `w₂` against the image of `hasseInvariant` under `ι`; `w₂` against
+  the image of `cliffordInvariant` under `ι`, which is the displayed identity; `w₁`
+  against `d` and not against `d±`;
+- naturality: the descent of `w` along `Quotient.mk`;
+- edge cases: rank `0`, where `w = 1`; a hyperbolic form; `a` a square, where `(a) = 0`;
+- downstream interfaces: Layer 9's Evens-Kahn formula.
+
+### Layer 9: transfer and the Evens-Kahn formula
+
+Prerequisites:
+
+- **[Mathlib]** `LinearMap.compQuadraticMap'`, `Algebra.trace`, `Algebra.traceForm`,
+  `traceForm_nondegenerate`, `LinearMap.BilinMap.toQuadraticMap`;
+- **[Tau Ceti]** `TauCeti/NumberTheory/EffectiveBounds/TraceForm.lean` and
+  `TauCeti/FieldTheory/Trace`;
+- **[Layer 1]** to **[Layer 4]** for the form theory and the Witt ring;
+- **[Layer 7A]** a term of `Mod2Galois` for `K` and for `L`, and a term of
+  `Mod2GaloisTransfer`;
+- **[Layer 8]** the Stiefel-Whitney classes.
+
+Milestones:
 
 - **Which functional.** For `L/K` finite, the nonzero elements of `Hom_K(L,K)` form a
   torsor under `Lˣ`: `Hom_K(L,K)` is one-dimensional as an `L`-vector space under
-  `(λ · s)(x) = s(λ x)`, so for nonzero `s, s'` there is a unique `λ : Lˣ` with
-  `s'(x) = s(λ x)`. Prove this first; without it the change-of-functional
-  theorem compares only a chosen family of functionals, not every two. For `L/K` finite
-  separable, `Algebra.trace K L ≠ 0` (from `Algebra.traceForm_nondegenerate`), so the
-  trace is a legitimate default.
-- **Scharlau transfer** (Lam VII §1, Scharlau Ch. 2 §5): for finite separable `L/K`,
-  a nonzero `K`-functional `s`, and a form `q` over `L`, the form `s_*(q) = s ∘ q` on
-  the `K`-space underlying the `L`-space of `q`. Milestones:
-  `dim_K s_*(q) = [L:K] · dim_L q`; `s_*(q)` regular for regular `q`; additivity
-  over `⊥`; **Frobenius reciprocity** `s_*(q ⊗ res_{L/K} r) ≅ s_*(q) ⊗ r`; and
-  **change of functional** `(λ · s)_* q ≅ s_*(⟨λ⟩ ⊗ q)`, which with the torsor
-  theorem says exactly how much "the" transfer depends on `s`.
-- **On Witt rings.** `s_*` takes a hyperbolic plane over `L` to a hyperbolic form
-  over `K` (a Lagrangian stays a Lagrangian), hence descends to `W(L) → W(K)`; the
-  descended map is additive and, by Frobenius reciprocity, a `W(K)`-module map. It
-  is **not** a ring homomorphism, and the roadmap says so where it is defined, since
-  that is the usual mistaken expectation.
+  `(λ · s)(x) = s(λ x)`, so for nonzero `s` and `s'` there is a unique `λ : Lˣ` with
+  `s'(x) = s(λ x)`. Prove this first. Without it, the change-of-functional theorem
+  compares only a chosen family of functionals and not every two. For `L/K` finite
+  separable, `Algebra.trace K L ≠ 0` follows from `traceForm_nondegenerate`, so
+  the trace is a legitimate default.
+- **The Scharlau transfer** (Lam VII §1, Scharlau Ch. 2 §5). For `L/K` finite separable,
+  a nonzero `K`-functional `s`, and a form `q` over `L`, the transfer is
+  `s_*(q) = s ∘ q` on the `K`-space underlying the `L`-space of `q`. Milestones:
+  `dim_K s_*(q) = [L:K] · dim_L q`; `s_*(q)` is regular for regular `q`; additivity over
+  `⊥`; **Frobenius reciprocity** `s_*(q ⊗ res_{L/K} r) ≅ s_*(q) ⊗ r`; and **change of
+  functional** `(λ · s)_* q ≅ s_*(⟨λ⟩ ⊗ q)`, which with the torsor theorem says exactly
+  how much the transfer depends on `s`.
+- **On Witt rings.** `s_*` takes a hyperbolic plane over `L` to a hyperbolic form over
+  `K`, because a Lagrangian stays a Lagrangian, so it descends to `W(L) → W(K)`. The
+  descended map is additive, and by Frobenius reciprocity it is a `W(K)`-module map. It
+  is **not** a ring homomorphism, and the file that defines it says so, because that is
+  the usual mistaken expectation.
 - **The trace form.** `Tr_*⟨1⟩` is the quadratic form of `Algebra.traceForm`, and for
-  `L = K(√d)` it is `⟨2, 2d⟩`; prove it through `TauCeti/FieldTheory/Trace`'s
-  diagonalization API rather than re-deriving the trace computations. The twisted
-  forms `Tr_*⟨a⟩`, `a : Lˣ`, are the objects Kahn's theorem evaluates.
-- **The Galois setup for the cohomological half.** Fix a separable closure `Kˢ`
-  containing `L`. Then `G_L = Gal(Kˢ/L)` is an open subgroup of `G_K` of index
-  `[L:K]`, the embedding dictionary is PR #1 Layer 8's, and restriction and
-  corestriction between `H^*(G_K, 𝔽₂)` and `H^*(G_L, 𝔽₂)` are its Layer 5 in low
-  degrees and its Layer 9 in all degrees. State the independence of this
-  identification from the choice of embedding (conjugate embeddings give conjugate
-  subgroups, and the resulting maps on cohomology agree), since Kahn's formula is
-  stated for `L/K` and not for a chosen embedding.
-- **The Evens norm, consumed.** For the general theorem, cite PR #1 Layer 12's
-  **abstract finite-index Evens norm** `N^{Ev} : H^q(U, 𝔽₂) → H^{lq}(G, 𝔽₂)` for an
-  open `U ≤ G` of index `l`, not its index-two graph cocycle: Kahn's Théorème 2 is
-  stated for an arbitrary finite separable `L/K`. It is a function and not an
-  additive homomorphism, which is why the expansion below has a `cor` term. The
-  explicit index-two cocycle and its four identities (restriction, the quadratic
-  expansion, the degree-1 shadow, inflation) are what the quadratic-extension
-  acceptance theorem below consumes, and are the interface PR #1 Layer 12 names for
-  this roadmap. We own neither construction, only their application to forms.
-- **Kahn's relative Stiefel–Whitney formula** (Kahn, *Classes de Stiefel–Whitney de
+  `L = K(√d)` it is `⟨2, 2d⟩`. Prove it through `TauCeti/FieldTheory/Trace`'s
+  diagonalization API rather than by re-deriving the trace computations. The twisted
+  forms `Tr_*⟨a⟩` for `a : Lˣ` are the objects that Kahn's theorem evaluates.
+- **The Galois setup.** Fix a separable closure `Kˢ` that contains `L`. Then
+  `G_L = Gal(Kˢ/L)` is an open subgroup of `G_K` of index `[L:K]`, and restriction,
+  corestriction, and the Evens norm are the fields of `Mod2GaloisTransfer`. State the
+  independence of the identification from the choice of embedding: conjugate embeddings
+  give conjugate subgroups, and the resulting maps on cohomology agree. Kahn's formula
+  is stated for `L/K` and not for a chosen embedding.
+- **Kahn's relative Stiefel-Whitney formula** (Kahn, *Classes de Stiefel-Whitney de
   formes quadratiques et de représentations galoisiennes réelles*, Invent. Math. 78
-  (1984) 223-256, **Théorème 2**; Kozlowski, Proc. AMS 91 (1984) 309-313, Thm 1.1
-  for the homotopy-level transfer; Evens, Trans. AMS 108 (1963) for the norm). For
+  (1984) 223-256, **Théorème 2**; Kozlowski, Proc. AMS 91 (1984) 309-313, Thm 1.1, for
+  the homotopy-level transfer; Evens, Trans. AMS 108 (1963) 54-65, for the norm). For
   `L/K` finite separable and `q` a regular form over `L`,
 
   ```text
   w(Tr_* q) = N^{Ev}(w(q)) · w(Tr_*⟨1⟩)^{rank q}
   ```
 
-  in `H^*(G_K, 𝔽₂)`, stated at the level of quadratic forms over an arbitrary field
-  with `2` invertible (Théorème 2 carries no local hypothesis, and `gq2` §11.2 asks
-  for no paper-specific diagonalization in the foundational statement). The
-  statement needs one clarification, which is a milestone in its own right: `N^{Ev}`
-  is defined on homogeneous classes, so its value on a total class
-  `w = 1 + w₁ + w₂ + …` means the multiplicative extension Evens defines
-  (`N^{Ev}(1 + x) = 1 + cor(x) + … + N^{Ev}(x)` in the notation of PR #1 Layer 12);
-  say which extension is meant and prove the degree-by-degree expansion in the range
-  used. Kahn's **Théorème 3**, the rank-1 case through the induced representation
-  with its `(2, d)` correction, is the stated corollary connecting this to trace
-  forms of `⟨a⟩`.
+  in `H^*(G_K, 𝔽₂)`. The statement is at the level of quadratic forms over an arbitrary
+  field with `2` invertible, because Théorème 2 carries no local hypothesis. The
+  statement needs one clarification, which is a milestone of its own: `N^{Ev}` is
+  defined on homogeneous classes, so its value on a total class `w = 1 + w₁ + w₂ + …`
+  means the multiplicative extension that Evens defines, that is
+  `N^{Ev}(1 + x) = 1 + cor(x) + … + N^{Ev}(x)`. Say which extension is meant, and prove
+  the degree-by-degree expansion in the range used. Kahn's **Théorème 3**, the rank-1
+  case through the induced representation with its `(2, d)` correction, is the stated
+  corollary that connects this to trace forms of `⟨a⟩`.
 - **The degree ≤ 2 expansion, written out.** For `L/K` quadratic, `a : Lˣ`,
   `x = (a) ∈ H¹(G_L, 𝔽₂)`, `t₁ = w₁(Tr_*⟨1⟩)`, and `t₂ = w₂(Tr_*⟨1⟩)`:
 
@@ -1160,273 +1508,180 @@ it is a real piece of mathematics (crossed products) and not a formality.
   w₂(Tr_*⟨a⟩) = t₂ + N^{Ev}(x) + t₁ ∪ cor(x)
   ```
 
-  which is the degree-≤-2 part of `w(Tr_*⟨a⟩) = w(Tr_*⟨1⟩) · (1 + cor x + N^{Ev} x)`
-  and is exactly the shape `gq2`'s B9 consumes. This is a separate named milestone
-  from the general formula.
-- **Finite dyadic specialization, as the final acceptance example.** `K` finite over
-  `ℚ_2`, `L = K(√d)` quadratic, `q = ⟨a⟩`: the low-degree identity above is `gq2`'s
-  `relativeStiefelWhitney_dyadic`, whose left-hand sides are Layer 8's classes of
-  the twisted trace forms `Tr_*⟨a⟩`.
+  which is the degree-≤-2 part of `w(Tr_*⟨a⟩) = w(Tr_*⟨1⟩) · (1 + cor x + N^{Ev} x)`,
+  and is the statement that `gq2`'s B9 consumes. This is a separate named milestone from
+  the general formula.
+- **Finite dyadic specialization**, as the final acceptance example. `K` is a finite
+  extension of `ℚ_2`, `L = K(√d)` is quadratic, and `q = ⟨a⟩`. The low-degree identity
+  above is `gq2`'s `relativeStiefelWhitney_dyadic`, whose left-hand sides are Layer 8's
+  classes of the twisted trace forms `Tr_*⟨a⟩`.
+
+Basic API:
+
+- constructors: `scharlauTransfer`, `traceTransfer`, the induced map `W(L) → W(K)`;
+- examples: `Tr_*⟨1⟩ ≅ ⟨2, 2d⟩` for `K(√d)/K`; the `ℂ/ℝ` computation of the landed
+  effective-bounds file, as the archimedean instance;
+- morphisms: `s_* : W(L) → W(K)`, additive and `W(K)`-linear;
+- functoriality: transitivity `s_* ∘ t_* = (s ∘ t)_*` for a tower `M/L/K`, and
+  compatibility with base change;
+- comparison lemmas: change of functional `(λ · s)_* q ≅ s_*(⟨λ⟩ ⊗ q)`; the torsor
+  theorem; Frobenius reciprocity;
+- naturality: independence of the choice of embedding `L ↪ Kˢ`;
+- edge cases: `L = K`, where the transfer is scaling; `q = 0`; a functional that is not
+  the trace;
+- downstream interfaces: `gq2`'s B9, which consumes the degree-≤-2 expansion.
+
+⚠ Nearby false statements. The transfer is not a ring homomorphism on Witt rings.
+Kahn's Théorème 2 needs `L/K` separable, and the transfer of forms has no such formula
+for an inseparable extension. The Evens norm is not additive, and the corestriction term
+in the expansion above records that failure.
 
 ---
 
-## Worked examples (acceptance criteria, keeping the definitions honest)
+## Worked examples (acceptance criteria)
 
-Discharge these alongside their layers; each catches a vacuous definition or a
+Discharge these together with their layers. Each one catches a vacuous definition or a
 sign error.
 
-- `⟨1,1⟩ ≇ ⟨1,−1⟩` over `ℚ` (one is anisotropic, one is hyperbolic), the smallest
-  non-classification (Layer 1).
-- `ℍ_q = ⟨1,−1⟩` represents every `a ∈ ℚˣ` (Layer 1 universality, with the witness
-  `((a+1)/2)² − ((a−1)/2)² = a`).
-- Chain equivalence in one instance: `⟨1,1⟩ ≅ ⟨2,2⟩` over `ℚ` (both represent `2`,
-  and both have discriminant `1`), exhibited as a single `BinaryStep`, so the
-  descent principle is applied at least once on a form that is not diagonal in the
-  obvious way (Layer 0).
+- `⟨1,1⟩ ≇ ⟨1,−1⟩` over `ℚ`, because one form is anisotropic and the other is the
+  hyperbolic plane. This is the smallest example in which the dimension alone does not
+  classify (Layer 1).
+- `ℍ_q = ⟨1,−1⟩` represents every `a ∈ ℚˣ`, with the witness
+  `((a+1)/2)² − ((a−1)/2)² = a` (Layer 1).
+- Chain equivalence in one instance: `⟨1,1⟩ ≅ ⟨2,2⟩` over `ℚ`, because both forms
+  represent `2` and both have discriminant `1`, exhibited as a single `BinaryStep`
+  (Layer 0).
 - `ℍ[ℚ,−1,−1]` is a division algebra; `ℍ[ℚ,1,b] ≃ₐ M₂(ℚ)` for every `b ∈ ℚˣ`; and
-  `ℍ[ℚ_2,2,5]` is a division algebra while `ℍ[ℚ_2,5,5]` splits (Layer 2, and the
-  two entries of the dyadic table used again below).
-- The four-fold criterion instantiated over `ℚ_2` twice: at `(a,b) = (2,5)`, where
-  all four conditions fail, and at `(a,b) = (5,5)`, where all four hold with the
-  witness `5 = 5² − 5·2²` (Layers 2 and 6; B11a-shaped).
-- `(−1,−1)_{ℚ_2} = −1` and `(−1,−1)_{ℚ_p} = +1` for odd `p`, so Hamilton's
-  quaternions are ramified at `2` and `∞` and nowhere else among these; over `ℝ`,
-  `(−1,−1)_ℝ = −1` through `Quaternion.normSq` positivity (Layer 6, with the `ℝ`
-  case consuming Mathlib's `ℍ[ℝ]`).
-- The full `8 × 8` Hilbert-symbol table over `ℚ_2` on `{±1, ±5, ±2, ±10}` as
-  decidable computations; single entries worth naming: `(2,5) = −1`, `(5,5) = +1`
-  with the witness above, `(2,−1) = +1`, `(−1,−1) = −1` (Layer 6).
+  `ℍ[ℚ_2,2,5]` is a division algebra while `ℍ[ℚ_2,5,5]` splits (Layer 2).
+- The four-fold criterion over `ℚ_2` at two points: at `(a,b) = (2,5)`, where all four
+  conditions fail; and at `(a,b) = (5,5)`, where all four hold with the witness
+  `5 = 5² − 5·2²` (Layers 2 and 6).
+- `(−1,−1)_{ℚ_2} = −1` and `(−1,−1)_{ℚ_p} = +1` for odd `p`, so Hamilton's quaternions
+  are ramified at `2` and at `∞` and nowhere else among these places. Over `ℝ`,
+  `(−1,−1)_ℝ = −1` through `Quaternion.normSq` positivity (Layer 6, with the `ℝ` case
+  consuming Mathlib's `ℍ[ℝ]`).
+- The full `8 × 8` Hilbert-symbol table over `ℚ_2` on `{±1, ±5, ±2, ±10}`, as decidable
+  computations. Single entries worth naming: `(2,5) = −1`; `(5,5) = +1` with the witness
+  above; `(2,−1) = +1`; `(−1,−1) = −1` (Layer 6).
 - Exactly one anisotropic quaternary form over `ℚ_2` up to isometry, realized by
-  `⟨1,1,1,1⟩`; every form of dimension 5 over `ℚ_p` is isotropic (Layer 6).
+  `⟨1,1,1,1⟩`; and every form of dimension 5 over `ℚ_p` is isotropic (Layer 6).
 - The realization exceptions are sharp: no regular form over `ℚ_2` has
   `(n, d, s) = (1, [1], −1)` or `(2, [−1], −1)`, while `(2, [1], −1)` is realized by
   `⟨−1,−1⟩`, whose discriminant is `[1]` and whose Hasse invariant is
-  `(−1,−1)_{ℚ_2} = −1` (Layer 6; the check that the two exclusions in the
-  realization theorem are not an artifact of the convention).
-- `Tr_*⟨1⟩ ≅ ⟨2, 2d⟩` for `ℚ(√d)/ℚ` and for `ℚ_2(√d)/ℚ_2`, recovering
-  `TauCeti/NumberTheory/EffectiveBounds/TraceForm.lean`'s `ℂ/ℝ` computation as the
+  `(−1,−1)_{ℚ_2} = −1` (Layer 6).
+- `Tr_*⟨1⟩ ≅ ⟨2, 2d⟩` for `ℚ(√d)/ℚ` and for `ℚ_2(√d)/ℚ_2`, which recovers the `ℂ/ℝ`
+  computation of `TauCeti/NumberTheory/EffectiveBounds/TraceForm.lean` as the
   archimedean sibling (Layer 9).
-- An Evens–Kahn instance in low degree: `K = ℚ_2`, `L = ℚ_2(√5)` (the unramified
-  quadratic extension), `q = ⟨a⟩`, with both sides of the degree-≤-2 identity
-  computed as `a` runs over the **eight unit square classes** of `L`, that is, over
-  the image of `𝒪[L]ˣ` in `Lˣ/(Lˣ)²`. That image is the kernel of the
-  parity-of-valuation map and has order `8`, while `Lˣ/(Lˣ)²` itself has order `16`
-  (PR #2 Layer 1 with `[L : ℚ_2] = 2`); a uniformizer represents the missing coset
-  and is excluded here on purpose (Layer 9, the final B9-shaped acceptance).
+- An Evens-Kahn instance in low degree: `K = ℚ_2`, `L = ℚ_2(√5)`, the unramified
+  quadratic extension, and `q = ⟨a⟩`, with both sides of the degree-≤-2 identity
+  computed as `a` runs over the eight unit square classes of `L`, that is over the image
+  of `𝒪[L]ˣ` in `Lˣ/(Lˣ)²`. That image is the kernel of the parity-of-valuation map and
+  has order `8`, while `Lˣ/(Lˣ)²` has order `16` by Layer 6A with `[L : ℚ_2] = 2`. A
+  uniformizer represents the missing coset and is excluded here deliberately (Layer 9).
 
-### Consumed-interface checks (no new mathematics here)
+### Consumed-interface checks
 
-These are not milestones of this roadmap. They are one-line confirmations that the
-API we consume says what the later statements assume.
+These are not milestones. They are one-line confirmations that the API this roadmap
+consumes says what the later statements assume.
 
-- `#(ℚ_2ˣ/(ℚ_2ˣ)²) = 8` with basis `−1, 2, 5`, and `#(ℚ_pˣ/(ℚ_pˣ)²) = 4` for odd
-  `p` with representatives `1, u, p, up` for a unit `u` of nonsquare residue
-  (PR #2 Layer 1).
-- Every unit of `ℤ_2` is a norm from `ℚ_2(√5)`, and `2` is not (PR #2 Layer 2).
-- `ℍ[ℝ]` is a division ring (Mathlib), the archimedean instance of the
+- `ℍ[ℝ]` is a division ring, which is Mathlib's, and is the archimedean instance of the
   split-or-division dichotomy.
+- `traceForm_nondegenerate` applies to a finite separable extension, which is
+  what makes the trace a legitimate default functional in Layer 9.
 
 ## Ordering and parallelism
 
-Layers 0 to 4 are cohomology-free **and** Brauer-free, and can be built immediately.
-Within them, Layer 0 comes first, since everything diagonal rests on it; Layers 1 and
-2 are independent of each other; Layer 3 needs both; Layer 4 needs 1 to 3.
+Layers 0 to 4 are free of cohomology and of the Brauer group, and can be built
+immediately. Within them, Layer 0 comes first, because everything diagonal rests on it.
+Layers 1 and 2 are independent of each other. Layer 3 needs both, and Layer 4 needs
+Layers 1 to 3.
 
-Layer 5 is the first layer resting on another roadmap's code: it needs the
-semisimple-algebras roadmap's Layer 4 and Layer 6, since `BrauerGroup K` is a quotient
-and not a group without them, and it needs the quaternion central-simplicity theorem,
-which is proved here in the shape Mathlib #41538 gives it. Its own statements are
-typed only once that group structure is available, so it is sequenced after the
-Brauer-free layers even though nothing in its mathematics is harder.
+Layer 5 is the first layer that rests on another roadmap's code. It needs the
+semisimple-algebras roadmap's Layer 4 and Layer 6, because `BrauerGroup K` is a quotient
+and not a group without them. It also needs the quaternion central-simplicity theorem,
+which is proved here.
 
-Layer 6's own content, 6A to 6C, depends on Layers 0 to 3 and on PR #2's Layers 0
-to 2; it does not depend on Layer 5. The exception is the compatibility theorem that
-closes 6B, and it splits: its elementary half, `ε (hasseInvariant q) = localHasse q`
-for the two-element group of quaternion classes, needs Layer 5 and 6C; its second
-half, identifying `ε` with the local invariant map, needs Layer 7A as well and
-**PR #2's Layer 5**, since the invariant map is defined on `H²(G_K, Kˢˣ)` and 7A is
-what carries an algebra class there. Nothing consumes either half.
+Layer 6 has this internal order: 6A, then 6B, then 6C, then 6D. Its content depends on
+Layers 0 to 3 and on nothing else outside this roadmap. Item 10 of 6C is the exception,
+and it splits:
 
-Layer 7A depends on Layer 5, on the landed semisimple-algebras roadmap's Layer 6 for
-finite separable splitting fields, and on PR #1's Layers 3 (the finite-quotient
-colimit), 4 (exact sequences), 7 (cup products), and 8 (Hilbert 90 and Kummer);
-Layer 7B on 7A and Layer 2. Layer 8 depends on Layer 7. Layer 9 splits: the transfer
-half needs only Layers 1 to 4 and can be built alongside Layer 5, while the
-Evens–Kahn half needs Layer 8 and PR #1's Layer 12.
+- the elementary half needs Layer 5 and 6D;
+- the second half needs Layer 7B as well, together with the invariant map.
 
-In the other direction, PR #2's Layer 8 cites Layer 6's Hilbert symbol in its
-mod-2 duality theorem, and
-[Integral Lattices PR #7](https://github.com/roed-math/TauCetiRoadmap/pull/7)
-consumes Layer 6's local classification and the quaternion dictionary.
+Nothing consumes either half.
 
-The sibling roadmaps this one cites are linked by pull request where their directories
-do not exist yet, and by relative path where they do; the links are updated to relative
-paths as those directories land, together with the "checked on" dates and external PR
-heads recorded below.
+Layer 7A depends on Layer 0 only. Layer 7B depends on Layer 5, on Layer 7A, and on the
+semisimple-algebras roadmap's Layer 6. Layer 7C depends on Layer 2 and on Layer 7B.
+Layer 8 depends on Layer 7. Layer 9 splits: the transfer half needs only Layers 1 to 4
+and can be built together with Layer 5; the Evens-Kahn half needs Layer 8 and the
+transfer interface of Layer 7A.
 
 ## References
 
 - T. Y. Lam, *Introduction to Quadratic Forms over Fields*, GSM 67, AMS (2005),
   PRIMARY. Ch. I (diagonalization I.2, hyperbolic I.3, Witt decomposition and
-  cancellation I.4, chain equivalence I.5.2, reflections I.7), Ch. II (Witt
-  ring, square classes), Ch. III (quaternion algebras and norm forms, III.2.7,
-  III.2.11), Ch. V §3 (Clifford, Witt, and Hasse invariants, V.3.17-3.21, the Wall
-  caution p. 120), Ch. VI (local fields, VI.2), Ch. VII (Scharlau transfer VII.1),
-  Ch. X (Pfister forms).
-- J.-P. Serre, *A Course in Arithmetic*, GTM 7, Springer (1973), PRIMARY for the
-  local theory. Ch. II §3.3 (squares in `ℚ_p`, `ε` and `ω`), Ch. III (Hilbert
-  symbol: III.1.1-1.2, Thm 1 formulas including `p = 2`, Thm 2 nondegeneracy),
-  Ch. IV §2 (the invariants `d` and `ε`; Thm 5 well-definedness, Thm 6 isotropy,
-  Prop 6 realization, Thm 7 classification and the unique anisotropic quaternary
-  corollary).
-- O. T. O'Meara, *Introduction to Quadratic Forms*, Springer (1963; Classics
-  reprint 2000), §63: §63A (the quadratic defect and the local square theorem),
-  63:11-13 (symbol computation, bimultiplicativity, nondegeneracy), 63:16
-  (unramified norms), 63:17-18 (the anisotropic quaternary space), 63:19 (`u = 4`),
-  63:20 (classification), 63:21 (representation), 63:23 (existence). ⚠ Hasse symbol
-  `∏_{i≤j}`, translated per the convention table.
-- O. T. O'Meara, *Quadratic forms over local fields* (1955), the paper antecedent
-  of §63.
-- B. Kahn, *Classes de Stiefel-Whitney de formes quadratiques et de
-  représentations galoisiennes réelles*, Invent. Math. 78 (1984) 223-256,
-  Théorèmes 1-3; B9's source.
-- A. Kozlowski, *The Evens-Kahn formula for the total Stiefel-Whitney class*,
-  Proc. AMS 91 (1984) 309-313, Thm 1.1.
-- L. Evens, *A generalization of the transfer map in the cohomology of groups*,
-  Trans. AMS 108 (1963) 54-65, the norm map (consumed via the profinite-cohomology
-  roadmap).
-- P. Guillot, *The computation of Stiefel-Whitney classes*, Ann. Inst. Fourier 60
-  (2010) 565-606, computational companion for SW classes of representations.
-- J. Milnor, *Algebraic K-theory and quadratic forms*, Invent. Math. 9 (1970)
-  318-344, §4: `w` on square classes and the `I^n`-filtration picture.
-- P. Gille, T. Szamuely, *Central Simple Algebras and Galois Cohomology*, CUP
-  (2nd ed. 2017): 1.1.9 (the four-fold criterion), 1.5 (symbol bilinearity),
-  Ch. 2 and 4.4 (crossed products, cyclic algebras, and `Br(K) ≅ H²`), Ch. 4
-  (cup products and the symbol). The reference of record for Layers 5 and 7.
-- W. Scharlau, *Quadratic and Hermitian Forms*, Springer (1985), Ch. 2 §5
-  (transfer), Ch. 5 (local fields).
-- R. Elman, N. Karpenko, A. Merkurjev, *The Algebraic and Geometric Theory of
-  Quadratic Forms*, AMS Colloq. 56 (2008): II §7 is the source of Mathlib's
-  `Nondegenerate`, and the modern reference for everything in Layers 0 to 4.
+  cancellation I.4, chain equivalence I.5.2, reflections I.7), Ch. II (Witt ring, square
+  classes), Ch. III (quaternion algebras and norm forms, III.2.7, III.2.11), Ch. V §3
+  (Clifford, Witt, and Hasse invariants, V.3.17-3.21, the Wall caution p. 120), Ch. VI
+  (local fields, VI.2), Ch. VII (Scharlau transfer VII.1), Ch. X (Pfister forms).
+- J.-P. Serre, *A Course in Arithmetic*, GTM 7, Springer (1973), PRIMARY for the local
+  theory. Ch. II §3.3 (squares in `ℚ_p`, `ε` and `ω`), Ch. III (Hilbert symbol:
+  III.1.1-1.2, Thm 1 formulas including `p = 2`, Thm 2 nondegeneracy), Ch. IV §2 (the
+  invariants `d` and `ε`; Thm 5 well-definedness, Thm 6 isotropy, Prop 6 realization,
+  Thm 7 classification and the unique anisotropic quaternary corollary).
+- O. T. O'Meara, *Introduction to Quadratic Forms*, Springer (1963; Classics reprint
+  2000), §63: §63A (the quadratic defect and the local square theorem), 63:11-13 (symbol
+  computation, bimultiplicativity, nondegeneracy), 63:16 (unramified norms), 63:17-18
+  (the anisotropic quaternary space), 63:19 (`u = 4`), 63:20 (classification), 63:21
+  (representation), 63:23 (existence). ⚠ O'Meara's Hasse symbol is `∏_{i≤j}`, translated
+  by the convention table.
+- O. T. O'Meara, *Quadratic forms over local fields* (1955), the paper antecedent of
+  §63.
+- B. Kahn, *Classes de Stiefel-Whitney de formes quadratiques et de représentations
+  galoisiennes réelles*, Invent. Math. 78 (1984) 223-256, Théorèmes 1-3; the source of
+  B9.
+- A. Kozlowski, *The Evens-Kahn formula for the total Stiefel-Whitney class*, Proc. AMS
+  91 (1984) 309-313, Thm 1.1.
+- L. Evens, *A generalization of the transfer map in the cohomology of groups*, Trans.
+  AMS 108 (1963) 54-65, the norm map.
+- P. Guillot, *The computation of Stiefel-Whitney classes*, Ann. Inst. Fourier 60 (2010)
+  565-606, a computational companion for Stiefel-Whitney classes of representations.
+- J. Milnor, *Algebraic K-theory and quadratic forms*, Invent. Math. 9 (1970) 318-344,
+  §4: `w` on square classes and the `I^n`-filtration picture.
+- P. Gille, T. Szamuely, *Central Simple Algebras and Galois Cohomology*, CUP (2nd ed.
+  2017): 1.1.9 (the four-fold criterion), 1.5 (symbol bilinearity), Ch. 2 and 4.4
+  (crossed products, cyclic algebras, and `Br(K) ≅ H²`), Ch. 4 (cup products and the
+  symbol). The reference of record for Layers 5 and 7.
+- W. Scharlau, *Quadratic and Hermitian Forms*, Springer (1985), Ch. 2 §5 (transfer),
+  Ch. 5 (local fields).
+- R. Elman, N. Karpenko, A. Merkurjev, *The Algebraic and Geometric Theory of Quadratic
+  Forms*, AMS Colloq. 56 (2008): II §7 is the source of Mathlib's `Nondegenerate`, and
+  the modern reference for Layers 0 to 4.
 - J.-P. Serre, *Local Fields*, GTM 67, Springer (1979): Ch. X (crossed products and
-  `H²`), XIV §2 (the symbol as a cup product and the norm criterion; B11a's
-  citation).
-- L. C. Grove, *Classical Groups and Geometric Algebra*, GSM 39, AMS (2002), cited
-  only for the characteristic-2 exclusion note.
+  `H²`), XIV §2 (the symbol as a cup product and the norm criterion).
+- L. C. Grove, *Classical Groups and Geometric Algebra*, GSM 39, AMS (2002), cited only
+  for the characteristic-2 exclusion note.
 
-## Provenance and coordination
+## Ownership and coordination
 
-**Coordination snapshot (checked 2026-08-06).** No external contact has been made and
-no ownership agreement is claimed: public repositories and pull-request metadata were
-inspected, nothing more. The following conditions must be met before implementation
-crosses a project boundary:
-
-- **Project / authors:** `mariainesdff/HassePrinciple`, Nirvana Coppola, María Inés de
-  Frutos-Fernández, and contributors. **Exact revision:**
-  [`d2802ddce55e`](https://github.com/mariainesdff/HassePrinciple/commit/d2802ddce55ef34045f68c5bf39c0598e7d0e988).
-  **Licence:** Apache-2.0. **Overlap:** chain equivalence, the Hilbert symbol,
-  `p`-adic squares, Hasse–Minkowski invariants. **Contact status:** not contacted.
-  **Agreed ownership:** none recorded. **Plan:** independently
-  state the intrinsic general-field and local-classification milestones; consume
-  their files only after they land in Mathlib or after explicit coordination.
-  **Refactor trigger:** matching `ForMathlib` work lands upstream. **Condition:**
-  before adapting code, proof organization, or project-specific statement shapes,
-  contact the maintainers and record the division of work.
-- **Project / authors:** the Mathlib central-simple and Brauer work: Yunzhou Xie,
-  Joël Zhang, Mathias-Stout, J. Springer, and the contributors to PRs #26377,
-  #41536, #41537, and #41538. **Exact revisions:** all four were open on 2026-08-06
-  at heads `13cac7e3b9bb`, `e95984de0341`, `40983fffa9aa`, and `86493005d20f`
-  respectively; #41538 (quaternion central simplicity) depends on both #41536 and
-  #41537. **Licence:** Mathlib Apache-2.0. **Overlap:** Brauer multiplication, the
-  quaternion directory and API, and quaternion central simplicity.
-  **Contact status:** not contacted. **Agreed ownership:** none recorded
-  externally; within this family the landed semisimple-algebras roadmap owns general
-  CSA and Brauer theory. **Plan:** consume landed Mathlib declarations, and prove the
-  quaternion central-simplicity theorem here in #41538's shape rather than waiting on
-  it. **Refactor trigger:** each cited PR lands. **Condition:** no private duplicate
-  of the Brauer group structure, and our copy of the central-simplicity theorem
-  exposes the same vocabulary as #41538 and carries a deletion trigger, so that the
-  swap is a deletion and an import.
-- **PR [#28970](https://github.com/leanprover-community/mathlib4/pull/28970)**
-  (reduced norm and trace; open at `5a2bcb298759`, last updated 2025-11-19) is
-  **related work, not a prerequisite**. No milestone here uses a general reduced
-  norm or trace: Layer 2 builds the quaternion norm form explicitly from `star`. It
-  is listed so that a later implementer does not duplicate it, and nothing waits on
-  it.
-- **Project / authors:** `Whysoserioushah/BrauerGroup` and contributors. **Exact
-  revision:**
-  [`283e0df7dc15`](https://github.com/Whysoserioushah/BrauerGroup/commit/283e0df7dc15cd8b469a73fbc763f74637c87147).
-  **Licence:** Apache-2.0. **Overlap:** the full Brauer-group program and its
-  upstream staging, including the comparison `Br(K) ≅ H²(Gal(K̄/K), K̄ˣ)` that
-  Layer 7A also states. **Contact status:** not contacted.
-  **Agreed ownership:** none recorded. **Plan:** track and consume upstreamed Mathlib
-  results rather than migrating staging code into Tau Ceti; if their comparison
-  theorem reaches Mathlib first, Layer 7A's milestones 1 and 2 become consumed
-  statements and only milestones 3 to 5 remain ours. **Condition:** no code
-  adaptation or alternate API without recorded coordination.
-
-- **Sibling boundaries.** The
-  [Profinite Cohomology PR #1](https://github.com/roed-math/TauCetiRoadmap/pull/1)
-  owns continuous `H^*`, its Layer 3 finite-quotient colimit, its Layer 4 exact
-  sequences, its Layer 7 cup products, its Layer 8 Galois interface (Hilbert 90,
-  Kummer theory, the mod-2 Kummer class), and its Layer 12 Evens norm (both the
-  index-two cocycle and the abstract finite-index norm; Layer 9 here cites the latter
-  for Kahn's general theorem and the former for the quadratic-extension acceptance
-  theorem); each of its layers is cited by title as well as by number, so that a
-  citation survives a renumbering. This roadmap's Layers 7 to 9 consume those
-  milestones and state only the quadratic-form content, with one exception recorded
-  above: the comparison of `BrauerGroup K` with `H²` is not theirs and is owned here
-  as Layer 7A.
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) owns
-  local-field structure theory, unit filtrations, power classes, unramified norm
-  computations, the invariant map and class formation in its Layer 5, and the mod-2
-  Tate-duality statement in its Layer 8; Layer 6 here consumes all of those and owns
-  the quadratic forms, the Hilbert symbol, the local Hasse invariant, and the
-  classification. No theorem is assigned to both.
-  [Pro-p Groups PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3) has no
-  direct interface with this roadmap. The
-  [semisimple algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)
-  (landed) owns general CSA, Skolem–Noether, Brauer-group theory, and splitting
-  fields in its Layers 4 to 6; Layer 5 here takes exactly the quaternion case, the
-  Clifford case, and the 2-torsion packaging, Layer 7A takes its Layer 6's finite
-  separable splitting field as the input of the crossed product, and where both
-  roadmaps name the same fact the semisimple-algebras statement is the definition of
-  record.
-- **Neighboring Tau Ceti roadmaps.** The
-  [multiquadratic roadmap](../Multiquadratic/README.md) shares Layer 0's
-  square-class language through the landed `SquareClassGroup.lean`, and the
-  `Completed/EffectiveBounds` roadmap contributed the trace-form and
-  unit-square-class files we consume; both interfaces are listed in "What Tau
-  Ceti already has".
-- **External coordination.** HassePrinciple (Coppola, de Frutos-Fernández) and the
-  Mathlib CSA line (Xie, Zhang; Whysoserioushah's staging repository; Mathias-Stout
-  and J. Springer's quaternion PRs) are described in "What is already in motion".
-  Their uncontacted status and the conditions above are the current state; re-run
-  the PR search and update the exact revisions at implementation time.
-- **`gq2-lean` provenance (secondary; improve rather than canonize).** The
-  [`roed-math/gq2-lean`](https://github.com/roed-math/gq2-lean) project
-  (Apache-2.0, same ownership as this roadmap) contains working single-purpose
-  versions of several targets, over dyadic bases only; they are evidence the
-  statements are formalizable and a quarry for proofs, **not** prescriptions of
-  form. Map (gq2 file to layer here): `GQ2/StiefelWhitney.lean` (`swOne`/`swTwo`
-  with proved Delzant well-definedness over finite dyadic `k`) to Layers 0 and 8;
-  `GQ2/TraceForm.lean` (`traceFormOne`/`traceFormTwisted` diagonalizations) to
-  Layer 9; `GQ2/HilbertSymbol*.lean` (the `ℚ_2` symbol via `ε` and `ω` with the
-  necessity and sufficiency case analysis, in effect the `8 × 8` table) to Layer 6;
-  `GQ2/Kummer.lean`, `GQ2/QuadraticAdjoin.lean` (Kummer cocycles, quadratic
-  coordinates) to Layer 7, superseded by the profinite roadmap's API;
-  `GQ2/EvensKahn.lean`, `GQ2/EvensKahnDerived.lean` (the index-2 two-point Evens
-  norm and the derived eq. (111)) to Layer 9; `GQ2/RegularIsometry.lean`,
-  `GQ2/RegularSummand.lean`, `GQ2/TrivialSelfDual.lean` are not migrated (marked
-  presentation-specific). The `gq2` axioms B11a
-  (`hilbertSymbol_normCriterion_finiteDyadic`) and B9
-  (`relativeStiefelWhitney_dyadic`) in `GQ2/Foundations/Axioms.lean` are the
-  intended *final consumers*: B11a follows from Layer 2's four-fold criterion and
-  Layer 7B's cup criterion specialized by Layer 6, and B9 from Layer 9's degree-≤-2
-  expansion specialized to finite dyadic bases. `GQ2/QuadraticFp2.lean` and
-  `GQ2/GaussSigns*.lean` are characteristic-2 and finite-field material, outside
-  this roadmap's scope by the standing exclusion.
-- **License note.** The independent comparison formalization
-  [`davidturturean/gq2-lean-turturean`](https://github.com/davidturturean/gq2-lean-turturean)
-  is GPL-licensed: cite for comparison only; no code transfer into Apache-licensed
-  Tau Ceti without an explicit licensing decision.
+- The [semisimple-algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)
+  owns central simple algebras, Skolem-Noether, the Brauer group, and splitting fields.
+  Layer 5 here takes the quaternion case, the Clifford case, and the 2-torsion package.
+  Layer 7B takes the crossed-product comparison. Where both roadmaps name the same fact,
+  the semisimple-algebras statement is the statement of record.
+- The [multiquadratic roadmap](../Multiquadratic/README.md) owns multi-root towers of
+  quadratic extensions. This roadmap owns the form theory of one quadratic step. The
+  shared language is `TauCeti.SquareClassGroup`.
+- A later roadmap for continuous cohomology of profinite groups supplies terms of the
+  `Mod2Galois` and `Mod2GaloisTransfer` structures of Layer 7A. A later roadmap for
+  local fields supplies a term of the `LocalFieldToolkit` structure of Layer 6A. Neither
+  is a prerequisite of anything here. Each structure is defined and used in this
+  roadmap, and a supplied term replaces the corresponding milestones.
+- Other formalizations cover overlapping ground, in particular a Hasse-Minkowski
+  development over `ℚ` and a staging repository for the Brauer group. This roadmap
+  states its milestones independently. Their revisions, licences, and the conditions for
+  any code adaptation are recorded in [PROVENANCE.md](PROVENANCE.md), which is not
+  normative.
+- The `gq2-lean` project contains working single-purpose versions of several targets
+  over dyadic bases. They are evidence that the statements are formalizable, and not
+  prescriptions of form. The file map is in [PROVENANCE.md](PROVENANCE.md).
