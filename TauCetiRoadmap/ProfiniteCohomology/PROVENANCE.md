@@ -153,3 +153,27 @@ inside `AlgebraicClosure`, and this roadmap uses the separable closure. Migratio
 general statement, with the existing file as evidence that the low-degree bookkeeping is
 manageable, then re-grounding on the canonical comparison. Credit the source in ported files. Its
 `docs/cts-cohomology-gap.md` is the earlier gap analysis that Appendix A updates.
+
+## Appendix C: current sibling-roadmap coordination
+
+Dated, not normative, and deliberately outside the roadmap: the roadmap's exported-interface table
+states only what is agreed, and this records what still has to be agreed with roadmaps that are
+under review. Recorded 2026-08-07.
+
+- **Continuous cohomology has one owner.** The Pro-p Groups roadmap presently carries its own
+  `contH`, `contH1`, `contH2` and cup carrier. Two independently owned continuous-cohomology
+  carriers cannot both be right, so before either roadmap is accepted one of two things must
+  happen: that roadmap replaces its carrier with the declarations of the exported-interface table,
+  or it supplies explicit natural comparison isomorphisms and transports every operation it uses.
+  Until then no claim of composability between the two is made anywhere in the roadmap.
+- **The Evens polarization.** The Quadratic Form Invariants roadmap presently states
+  `evens (x + y) = evens x + evens y + cor2 (cup x y)`, with no conjugation. This roadmap's
+  Layer 13 states `N(α + β) - N(α) - N(β) = cor (α ⌣ (s · β))`, following Kozlowski's Lemma 2.4,
+  with the conjugate class on the right. These are different statements. The conjugated form is
+  the one this roadmap supplies; the two agree only under a theorem nobody has stated, so the
+  downstream interface has to move or that theorem has to be proved and named.
+- **Structure interfaces.** That roadmap also consumes `Mod2GaloisOps` and
+  `Mod2GaloisTransferOps`. This roadmap constructs no terms of those structures. Either they are
+  built from the exported table's declarations in that roadmap, or a transport is stated there;
+  either way the obligation is on the consumer, and the roadmap does not assert that it is already
+  discharged.

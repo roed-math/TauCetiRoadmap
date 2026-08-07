@@ -91,27 +91,20 @@ This list is definitive, not a list of things that might come later.
 ### The canonical carrier
 
 The canonical object is Mathlib's continuous cohomology, and this roadmap does not build a
-competing one. The pin has it:
+competing one. The pinned Mathlib supplies it:
 `continuousCohomology R G n : Action (TopModuleCat R) G ⥤ TopModuleCat R`, in
 `Mathlib/Algebra/Category/ContinuousCohomology/Basic.lean`, with
 `ContinuousCohomology.homogeneousCochains` for the complex it is the homology of,
 `ContinuousCohomology.invariants`, and
 `continuousCohomologyZeroIso : continuousCohomology R G 0 ≅ invariants R G` for the one degree
-Mathlib computes. Mathlib master has since rebuilt the same object on a category it calls
-`TopRep k G` and added functoriality in compatible pairs. So the carrier is available now; the
-functoriality is not.
+Mathlib computes. What it does not supply is functoriality in compatible pairs, and Layer 1
+supplies that. Every canonical-facing statement below is written against `TopRep R G`, an
+abbreviation for the pin's `Action (TopModuleCat R) G`.
 
-Layer 1 builds that functoriality here, in master's shape and under master's names, and every
-canonical-facing statement below is written against `TopRep R G`, a one-line abbreviation for the
-pin's `Action (TopModuleCat R) G`. No milestone in this roadmap waits for a toolchain bump.
-
-The two coefficient categories are equivalent and the two resolutions have the same mathematical
-shape, so the compatibility layer is designed to make a later pin bump a mechanical transport
-rather than a mathematical redesign. It is not a promise of definitional compatibility: the pin's
-`continuousCohomology R G n` is a functor whose coefficient is supplied through `.obj`, master
-applies `continuousCohomology n` to a `TopRep` directly, and master packages the resolution and
-the functoriality under different structures. What is established is the equivalence of the
-categories and the agreement of the constructions, which is what makes the transport mechanical.
+Any other implementation of continuous cohomology replaces this one only after an explicit
+comparison of the coefficient categories and of the resolutions has been proved. Equivalence of
+the categories together with agreement of the constructions makes such a replacement a transport;
+it is not a definitional identity, and nothing here assumes one.
 
 ---
 
@@ -135,22 +128,55 @@ Layer 7 cites that roadmap where it uses the algebraic finite-index theory, and 
 algebraic induction milestones. The theorem joining the two is Layer 7's comparison for open
 subgroups.
 
-### What this roadmap supplies to its consumers
+### The exported interface
 
-These are theorem-level dependencies, not subject-area ones. Each one has a prototype in
-`Suggested.lean`: the equivariance of evaluation that the duality pairings rest on, the
-restriction identity of the index-2 Evens norm, and the mod-2 Kummer class.
+This roadmap owns the continuous cohomology of profinite groups: the carrier, its functoriality,
+the explicit low-degree model, and the comparison between them. Anything downstream that needs a
+continuous cohomology group uses the declarations below rather than a private copy, so that two
+developments cannot drift into two theories that only prose says will agree. A development that
+already carries its own carrier joins this one either by replacing it with these declarations or
+by supplying explicit natural comparison isomorphisms and transporting every operation it uses;
+those are the only two acceptable states.
 
-| Consumer | Milestones supplied here |
-|---|---|
-| Local Fields | Layer 3's explicit/canonical and finite-level comparisons; Layer 5's long exact and five-term sequences; Layer 6's restriction and corestriction; Layer 8's evaluation cup pairings; Layer 9's Kummer isomorphism when the coefficient order is invertible in the field; Layer 10's all-degree package and Layer 11's `cd_p` vocabulary |
-| Pro-p Groups | Layers 2 and 5: `H¹`, `H²` and the five-term sequence for generator and relation ranks; Layer 8's cup products; Layer 10's all-degree package; Layer 11's `cd_p` definitions, monotonicity for closed subgroups, and the prime-to-`p` open-subgroup equality |
-| Quadratic Form Invariants | Layer 8's mod-2 cup products; Layer 9's Kummer isomorphism with `2` invertible; Layer 13's index-2 Evens norm and its four characterizing identities |
-| Global Class Field Theory | Layers 3 to 8: comparison, exactness, change of groups, Shapiro, and cup products, for its profinite and global duality material. Its finite class-formation core is independent of this roadmap |
+What is exported is exactly this, named:
 
-Nothing here depends on an unmerged sibling roadmap. The dependency graph between roadmaps is
-acyclic at roadmap granularity: Pro-p Groups consumes this roadmap, and this roadmap consumes
-nothing from Pro-p Groups.
+| Exported object or theorem | Supplier layer | Declaration | Mathematical type |
+|---|---|---|---|
+| the canonical carrier | 1 | `TopRep`, `continuousCohomology` | `TopRep R G ⥤ TopModuleCat R` |
+| compatible-pair functoriality | 1 | `map`, `map_id`, `map_comp` | `Hⁿ(G, X) ⟶ Hⁿ(H, Y)` for `φ : H →ₜ* G` |
+| restriction, inflation, coefficient maps | 1 | `res`, `infl`, `coeffMap` | morphisms of `TopModuleCat R` |
+| the coefficient dictionary | 1 | `discreteRepEquivSmoothTopRep` | `DiscreteRep R G ≌ SmoothDiscreteTopRep R G` |
+| explicit `H⁰`, `H¹`, `H²` | 2 | `H1`, `H2`, `H1pi`, `H2pi` | quotients of additive subgroups of the cochain spaces |
+| the comparison | 3 | `explicitH0IsoContinuousCohomology`, `explicitH1IsoContinuousCohomology`, `explicitH2IsoContinuousCohomology` | isomorphisms in `TopModuleCat ℤ` |
+| the finite-quotient colimit | 4 | `finiteLevelTransition`, and the colimit theorem | `Hⁱ(G, M) ≅ colim_U Hⁱ(G ⧸ U, M^U)` |
+| the long exact and five-term sequences | 5 | `δ⁰`, `δ¹`, the transgression | connecting maps and exactness |
+| low-degree corestriction | 6 | `cor⁰`, `cor¹`, `cor²` | additive maps on cochains, descending to classes |
+| the six low-degree cups | 8 | the six cup shapes | `H^p(G, M) × H^q(G, N) → H^{p+q}(G, P)`, `p + q ≤ 2` |
+| the Kummer isomorphism | 9 | `kummerIso` | `Kˣ ⧸ (Kˣ)ⁿ ≃* Multiplicative (H¹(AbsoluteGaloisGroup K, KummerCoeff K n))` |
+| all-degree corestriction | 10 | `corestriction` | `Hⁿ(U, res X) ⟶ Hⁿ(G, X)` for open `U` |
+| cohomological dimension | 11 | `cd_p`, `scd_p`, `cd` | `ℕ∞`-valued invariants |
+| the graded cup | 12 | `cup` with its eleven laws | `Hᵐ × Hⁿ → H^{m+n}` |
+| the four index-2 Evens identities | 13 | `evensNorm_res`, `evensNorm_polarization`, `evensNorm_cor_shapiro`, `evensNorm_identity_infl` | identities of classes in `H²(G, 𝔽₂)` |
+
+Two points about that last row, because they are exact and easy to get wrong. The identities are
+statements about **cohomology classes**, not about the graph cochain, and `Suggested.lean` states
+them that way. And the polarization is
+```
+N(α + β) - N(α) - N(β) = cor (α ⌣ (s · β)),
+```
+with the **conjugate** class on the right. Dropping the conjugate gives a different statement, and
+this roadmap does not supply it; a consumer that wants the unconjugated form must prove the two
+equivalent under stated hypotheses.
+
+Once a consuming roadmap is accepted, record the joint contract as a four-column table, consumer
+layer against supplier layer against exact object against declaration name, carried identically in
+both roadmaps. Coordination with roadmaps still under review is recorded in
+[`PROVENANCE.md`](PROVENANCE.md), which is not normative, so that this section states only what is
+actually agreed.
+
+Nothing here depends on another roadmap except the merged
+[`RepresentationTheory/InductionRestriction`](../RepresentationTheory/InductionRestriction/README.md),
+cited in Layer 7.
 
 ---
 
@@ -597,10 +623,8 @@ that is a quasi-isomorphism in the discrete case.
   functions on `Gⁿ`. Mathlib's `ContinuousMap.curry : C(G × G, M) → C(G, C(G, M))` is defined with
   no hypothesis, but its inverse `ContinuousMap.uncurry` needs `[LocallyCompactSpace G]`, and the
   equivalence `Homeomorph.curry` needs local compactness of both factors. So the passage from the
-  canonical description back to functions on `G × G` is exactly a local-compactness statement.
-  Mathlib's own module documentation for `ContCohomology` says the same thing: it names "the usual
-  description of cochains in terms of `n`-ary functions for locally compact groups" as a TODO, and
-  gives avoiding that hypothesis as the reason the homogeneous model was chosen.
+  canonical description back to functions on `G × G` is exactly a local-compactness statement,
+  and avoiding that hypothesis is why the canonical model is homogeneous rather than `n`-ary.
 
   Accordingly this milestone is stated for **profinite `G`**, which is compact Hausdorff and hence
   locally compact, with discrete coefficients. State the compact-open equivalence as an explicit
@@ -638,9 +662,8 @@ needs local compactness of both factors, so the comparison is stated for profini
 compact Hausdorff. The false neighbor is the compact-open exponential law itself,
 `C(G × G, M) ≃ C(G, C(G, M))` for an arbitrary topological group: currying is continuous with no
 hypothesis and the inverse is not, which is exactly why Mathlib carries the local-compactness
-hypothesis on `uncurry` and on `Homeomorph.curry`, and why its own module documentation lists the
-`n`-ary description as a TODO restricted to locally compact groups. What this does **not**
-establish is that the induced map on cohomology fails to be an isomorphism for a general
+hypothesis on `uncurry` and on `Homeomorph.curry`. What this does **not** establish is that the
+induced map on cohomology fails to be an isomorphism for a general
 topological group; no statement here asserts that, and the comparison is claimed only where the
 exponential law holds.
 
@@ -990,17 +1013,33 @@ explicit 1-cochain. State the `(0,q)` case at cochain level and the `(1,1)` case
 `K` a field, `Kˢ = SeparableClosure K`, and `G_K` its Galois group with the Krull topology. This
 layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
 
-- **The group and its coefficient field.** Either define `G_K = Kˢ ≃ₐ[K] Kˢ`, or keep
-  `Field.absoluteGaloisGroup K` and prove that restriction to `Kˢ` is a topological group
-  isomorphism `Field.absoluteGaloisGroup K ≃ₜ* (Kˢ ≃ₐ[K] Kˢ)`, compatibly with the action on `Kˢ`.
+- **The group, fixed once.** `AbsoluteGaloisGroup K = Kˢ ≃ₐ[K] Kˢ`. This is the carrier, not one
+  of two options: every statement in this layer and every interface it exports names it.
+  Mathlib's `Field.absoluteGaloisGroup K` uses the algebraic closure, so a separate milestone
+  proves that restriction to `Kˢ` is a topological group isomorphism
+  `Field.absoluteGaloisGroup K ≃ₜ* AbsoluteGaloisGroup K`, compatibly with the action on `Kˢ`.
   Injectivity is `instSubsingletonAlgHomOfIsPurelyInseparable` together with
   `separableClosure.isPurelyInseparable`; surjectivity is `AlgEquiv.restrictNormalHom_surjective`.
-  Whichever route is taken, the coefficient modules are `(Kˢ)ˣ` and its submodules, so that
-  `H⁰(G_K, (Kˢ)ˣ) = ((Kˢ)ˣ)^{G_K} = Kˣ` on the nose. `G_K` is profinite in the unbundled sense
-  (`CompactSpace`, `TotallyDisconnectedSpace`), by `separableClosure.isGalois` together with the
-  pin's `[IsGalois k K] → CompactSpace Gal(K/k)`. The module `(Kˢ)ˣ` is **discrete**, since every
-  element lies in a finite subextension and so has open stabilizer; so are `μₙ ⊆ (Kˢ)ˣ` and the
-  finite subquotients.
+  `G_K` is profinite in the unbundled sense (`CompactSpace`, `TotallyDisconnectedSpace`), by
+  `separableClosure.isGalois` together with the pin's `[IsGalois k K] → CompactSpace Gal(K/k)`.
+- **The coefficient field and the invariant units.** The coefficient modules are `(Kˢ)ˣ` and its
+  submodules. The module `(Kˢ)ˣ` is **discrete**, since every element lies in a finite
+  subextension and so has open stabilizer; so are `μₙ ⊆ (Kˢ)ˣ` and the finite subquotients.
+  `H⁰(G_K, (Kˢ)ˣ)` is the invariant subgroup `((Kˢ)ˣ)^{G_K}`, which is **not the same type** as
+  `Kˣ`. What exists is a canonical multiplicative equivalence
+  ```
+  baseUnitsEquivInvariants : Kˣ ≃* ((Kˢ)ˣ)^{G_K},
+  ```
+  induced by the algebra map and the fixed-field theorem. Name it, prove it, and use that exact
+  map wherever `Kˣ` is the source of a cohomological construction; do not write the two as equal.
+- **The Kummer coefficient module.** `μₙ` carries the natural `G_K`-action, which is in general
+  nontrivial, and continuous cohomology depends on that action. So the coefficient object is fixed
+  once, as `KummerCoeff K n = Additive μₙ` with the transported action and the discrete topology,
+  and every Kummer statement below is against it. A consumer with its own model of `μₙ` reaches
+  the same theorem through a transport lemma whose hypothesis is a **continuous `G_K`-equivariant**
+  additive equivalence. An identification of `μₙ` as a bare group is not enough: the same abstract
+  cyclic group carrying the trivial action would satisfy it, and the Kummer isomorphism is false
+  there.
 - **The finite-level Galois dictionary.** Finite Galois intermediate fields `K ⊆ L ⊆ Kˢ` correspond
   to open normal subgroups of `G_K`; `G_K ⧸ U` is continuously isomorphic to `Gal(L/K)` for the
   corresponding `L`; `(Kˢ)^U = L`; and these subgroups are cofinal in the system Layer 4 uses.
@@ -1147,10 +1186,8 @@ groups, which is the Pro-p Groups roadmap's and not this one's.
 **Prerequisites.** Mathlib: `ENat`, `AddCommMonoid.primaryComponent`,
 `CategoryTheory.Simple`, `IsSimpleModule`. This roadmap: Layer 10.
 
-For profinite `G` and a prime `p`; NSW III §3 is the source of record. Nothing upstream defines
-`cd`: there is no Mathlib declaration and no PR, and the
-[C1 fields Zulip thread](https://leanprover-community.github.io/archive/stream/116395-maths/topic/C1.20fields.3F.html)
-of August 2025 asked for it and left it open. This layer rests on Layer 10.
+For profinite `G` and a prime `p`; NSW III §3 is the source of record. This layer rests on
+Layer 10.
 
 - **Types and definitions.** The three invariants `cd_p`, `scd_p` and `cd` are valued in `ℕ∞`
   (Mathlib's `ENat`). The first two are infima of `Prop`-valued predicates on `ℕ`, and each
