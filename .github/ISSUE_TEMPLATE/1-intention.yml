@@ -23,10 +23,13 @@ body:
         - ContourIntegration
         - Exchangeability
         - GeometricTopology
+        - GlobalClassFieldTheory
         - HeegaardFloer
         - JacobianChallenge
+        - ModularForms
         - Multiquadratic
         - OneParameterSemigroups
+        - OptimalTransport
         - OrthogonalL2Bases
         - PDE
         - ReductiveGroups
