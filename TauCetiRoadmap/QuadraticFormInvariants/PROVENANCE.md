@@ -12,9 +12,15 @@ implementation time.
 - Roadmap pin: `9caeba1000`, 2026-06-03. Toolchain `leanprover/lean4:v4.31.0-rc1`.
 - The inventory in the README's "From Mathlib" section was checked at the pin and
   rechecked on master on 2026-08-06.
-- Continuous cohomology of a profinite group does not exist at the pin. Mathlib master
-  has `RepresentationTheory/Homological/ContCohomology/`, which computes degree 0. This
-  is why Layer 7A of the roadmap defines its own interface structure.
+- Continuous cohomology exists at the pin, in
+  `Mathlib/Algebra/Category/ContinuousCohomology/Basic.lean`: the functor
+  `continuousCohomology R G n` on `R`-linear representations of a topological group,
+  together with the degree-zero computation. The low-degree calculational API does not
+  exist there: no Kummer isomorphism, no cup product, no restriction or corestriction,
+  and no Evens norm. That is why Layer 7A carries those operations and uses the Mathlib
+  functor as the carrier. Mathlib master also has
+  `RepresentationTheory/Homological/ContCohomology/`, which is a second development of
+  the same subject; compare the two before building on either.
 - `Mathlib/NumberTheory/LocalField/Basic.lean` supplies `IsNonarchimedeanLocalField` at
   the pin. It does not supply a normalized valuation, a unit filtration, or the
   square-class count, which is why Layer 6A owns them.
@@ -33,8 +39,10 @@ local one.
   J. Springer), which depends on the first two and proves that `ℍ[R,a,b,c]` over a field
   is central simple when `c·(b² + 4a) ≠ 0`, adding
   `Mathlib/Algebra/Quaternion/CentralSimple.lean`. All three were open on 2026-08-06, at
-  heads `e95984de0341`, `40983fffa9aa`, and `86493005d20f`. Layer 5 proves the same
-  statement in the same form and carries a deletion trigger.
+  heads `e95984de0341`, `40983fffa9aa`, and `86493005d20f`. Layer 5 states the same
+  theorem intrinsically and proves it. **Migration:** when #41538 lands, delete the local
+  proof, import `Mathlib/Algebra/Quaternion/CentralSimple.lean`, and keep the vocabulary
+  of the `BrauerData` fields unchanged, so that no consuming statement moves.
 - **Brauer multiplication.** Pull request
   [#26377](https://github.com/leanprover-community/mathlib4/pull/26377) (open on
   2026-08-06 at `13cac7e3b9bb`) proves that the tensor product of a simple algebra and a

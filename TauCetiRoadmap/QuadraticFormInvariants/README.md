@@ -51,7 +51,14 @@ Excluded:
   Hauptsatz, the Milnor conjecture, the norm-residue theorem, and each classification
   statement that rests on them;
 - the cohomological invariant theory of Garibaldi-Merkurjev-Serre beyond
-  Stiefel-Whitney classes.
+  Stiefel-Whitney classes;
+- graded mod-2 Galois cohomology in every degree. Layers 7 to 9 work in degrees `1`
+  and `2`, which is what the Brauer comparison, the Hasse and Clifford comparisons, and
+  the Evens-Kahn identity for a quadratic extension need. The total Stiefel-Whitney
+  class, the Evens norm in every degree, and Kahn's Théorème 2 for an arbitrary finite
+  separable extension are therefore excluded. A development of graded continuous
+  cohomology is the natural home for them, and this roadmap's degree-1 and degree-2
+  statements are the special cases it would subsume.
 
 Pfister forms are defined here in every degree. The elementary generation statements
 for `I`, `I²`, and `I³` are proved, because Layer 5 consumes them. Nothing past that is
@@ -163,9 +170,11 @@ Each layer states its results against this table.
 - **Cohomological dictionary** for Layers 7 to 9. `Kˢ` is the separable closure and
   `G_K = Gal(Kˢ/K)`. `H¹(G_K, μ₂) ≅ Kˣ/(Kˣ)²` is the Kummer isomorphism, and the class
   of `a` is written `(a)`. The identification of `Br(K)[2]` with `H²(G_K, μ₂)` is proved
-  in Layer 7A and is never assumed before it. The total Stiefel-Whitney class of
-  `q ≅ ⟨a₁, …, aₙ⟩` is `w(q) = ∏ᵢ (1 + (aᵢ))`, which is Delzant's definition, and
-  `w₁(q) = (d(q))` uses the plain discriminant and not `d±`.
+  in Layer 7B and is never assumed before it. The Stiefel-Whitney classes of
+  `q ≅ ⟨a₁, …, aₙ⟩` in the two degrees this roadmap uses are `w₁(q) = ∑ᵢ (aᵢ)` and
+  `w₂(q) = ∑_{i<j} (aᵢ)(aⱼ)`, which are the degree-1 and degree-2 parts of Delzant's
+  total class `∏ᵢ (1 + (aᵢ))`. Here `w₁(q) = (d(q))` uses the plain discriminant and not
+  `d±`.
 - **Additive against multiplicative.** Cohomology is additive and the Brauer group is a
   `CommGroup`. The coefficient modules are therefore `Additive Kˢˣ` and `μ₂ ≅ ZMod 2`,
   and every Lean statement that compares the two worlds transports through `Additive`.
@@ -280,8 +289,19 @@ how the universe of the underlying module is fixed.
   `traceForm_nondegenerate` for a finite separable extension, in
   `Mathlib/RingTheory/Trace/*`. Layer 9's `Tr_*⟨1⟩` starts here, and
   `LinearMap.BilinMap.toQuadraticMap` turns a bilinear form into a quadratic form.
-- **Discrete group cohomology**, as background for the statements of Layers 7 to 9:
-  `Mathlib/RepresentationTheory/Homological/GroupCohomology/{LowDegree,Hilbert90,Shapiro}.lean`.
+- **Group cohomology.**
+  `Mathlib/RepresentationTheory/Homological/GroupCohomology/{LowDegree,Hilbert90,Shapiro}.lean`
+  supplies the discrete theory.
+  `Mathlib/Algebra/Category/ContinuousCohomology/Basic.lean` supplies
+  `continuousCohomology R G n`, a functor from `R`-linear representations of a
+  topological group on topological modules to topological `R`-modules. That functor is
+  the carrier of Layers 7 to 9. What it does not yet supply, and what those layers
+  therefore own, is the low-degree calculational API: Kummer theory, cup products,
+  restriction, corestriction, and the Evens norm.
+- **Galois groups.** `Mathlib/FieldTheory/SeparableClosure.lean` supplies
+  `SeparableClosure K`, and `Mathlib/FieldTheory/KrullTopology.lean` puts the Krull
+  topology on `L ≃ₐ[K] L` and proves that it is a topological group. Together they give
+  `G_K` as a topological group, which is what `continuousCohomology` consumes.
 
 ### From Tau Ceti
 
@@ -314,10 +334,11 @@ improvement through their own review rather than duplicating them.
 
 ### From other roadmaps in this repository
 
-- The [semisimple-algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)
-  **Layer 4**: the tensor product of two central simple `K`-algebras is central simple,
-  with `finrank K (A ⊗ B) = finrank K A · finrank K B`; and the opposite-algebra package
-  `A ⊗_K Aᵒᵖ ≃ₐ[K] End_K A ≃ₐ[K] M_{finrank K A}(K)`.
+- The [semisimple-algebras
+  roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md) **Layer 4**: the tensor
+  product of two central simple `K`-algebras is central simple, with `finrank K (A ⊗ B)
+  = finrank K A · finrank K B`; and the opposite-algebra package `A ⊗_K Aᵒᵖ ≃ₐ[K] End_K
+  A ≃ₐ[K] M_{finrank K A}(K)`.
 - The same roadmap, **Layer 6**:
   - the Brauer-triviality prerequisites;
   - the `CommGroup` structure on `BrauerGroup K`, with multiplication induced by `⊗_K`,
@@ -332,28 +353,38 @@ Where this roadmap and the semisimple-algebras roadmap name the same fact, the
 semisimple-algebras statement is the statement of record. Nothing here rebuilds
 Wedderburn theory, Skolem-Noether, centralizers, splitting fields, or the index.
 
-### Interfaces this roadmap owns
+### Three incomplete objects, and how they are carried
 
-Three objects that Layers 5 to 9 consume have no Lean type in Mathlib and no landed
-Tau Ceti declaration. Each one is therefore a target of this roadmap, stated as a small
-interface in `Suggested.lean` so that the consuming statements elaborate today.
+Three objects that Layers 5 to 9 consume exist in Mathlib as types, and lack the
+operations that this roadmap uses. Each missing operation is a milestone here, and each
+group of milestones is carried by a structure in `Suggested.lean`, so that the consuming
+statements elaborate today.
 
-- **`BrauerSymbol K`**: a commutative group together with the quaternion class map
-  `Kˣ → Kˣ → Br`, its symmetry, its 2-torsion, and its bilinearity. Layer 5 proves that
-  `BrauerGroup K` with `[(a,b)] = ⟦ℍ[K,a,b]⟧` is an instance, once the
-  semisimple-algebras roadmap supplies the group structure.
-- **`LocalFieldToolkit K`**: the normalized valuation `Kˣ →* Multiplicative ℤ`, a
-  uniformizer, and the unit filtration, tied to Mathlib's `𝒪[K]`. Layer 6A proves that a
-  nonarchimedean local field carries such a toolkit.
-- **`Mod2Galois K`**: the groups `H¹(G_K, 𝔽₂)` and `H²(G_K, 𝔽₂)`, the cup product, and
-  the Kummer isomorphism `Kˣ/(Kˣ)² ≃ H¹`, together with restriction, corestriction, and
-  the Evens norm for a finite separable extension. Layers 7 to 9 state their targets
-  against this interface.
+**The carriers are the intended objects, and only the operations are structure fields.**
+That is what makes a theorem stated for an arbitrary term of a structure a theorem about
+the intended object. A structure whose carrier were an arbitrary group, or an arbitrary
+pair of abelian groups with a pairing, would admit terms for which the theorems below
+are false.
 
-Each interface is a record of hypotheses that some later development discharges. A
-development of continuous Galois cohomology, or of local fields, supplies the fields of
-the corresponding structure; the replacement then deletes the structure and substitutes
-the supplied declarations, and no statement of this roadmap is rewritten.
+- **`BrauerData K`** carries the `CommGroup` structure on Mathlib's `BrauerGroup K`,
+  which the semisimple-algebras roadmap supplies, together with the central simplicity
+  of `ℍ[K,a,b]`, which is a Layer 5 milestone. The quaternion symbol is then *defined*
+  as `[(a,b)] = ⟦ℍ[K,a,b]⟧`, and its symmetry, 2-torsion, bilinearity, and invariance
+  under binary equivalence are theorems of Layer 5 rather than axioms.
+- **`LocalFieldToolkit K`** carries the normalized valuation, a uniformizer, and the
+  unit filtration over Mathlib's `IsNonarchimedeanLocalField`. Its fields determine it:
+  Layer 6A proves that a term exists and that it is unique, so a statement about an
+  arbitrary term is a statement about the canonical one.
+- **`Mod2GaloisOps K`** and **`Mod2GaloisTransferOps`** carry the low-degree operations
+  on `Hⁿ_cont(G_K, 𝔽₂)` and `H²_cont(G_K, Additive Kˢˣ)`. The groups themselves are
+  Mathlib's `continuousCohomology` applied to the absolute Galois group with its Krull
+  topology, so they are not arbitrary carriers. The fields are the cup product, the
+  Kummer isomorphism, the map from the Kummer sequence, restriction, corestriction, and
+  the index-2 Evens norm, together with the laws that Layers 7 to 9 use.
+
+A development of continuous Galois cohomology, or of local fields, supplies these
+operations. The replacement then deletes the structure and substitutes the supplied
+declarations, and no statement of this roadmap is rewritten.
 
 ## What is missing (build here)
 
@@ -372,16 +403,20 @@ Everything below the linear algebra:
 - the Brauer-valued Hasse and Clifford invariants, and the classification in dimension
   at most 3;
 - the local-field toolkit of Layer 6A, that is the normalized valuation, the unit
-  filtration, the square-class count, and the unramified norm group;
+  filtration, the local square theorem, the square-class count, and the unramified norm
+  group;
 - the quadratic defect, the Hilbert symbol over a nonarchimedean local field with the
   dyadic case, bimultiplicativity, and nondegeneracy;
 - the local classification by `(dim, d, s)`, with `u(K) = 4` and the unique anisotropic
   quaternary form;
+- the low-degree API of continuous mod-2 Galois cohomology, that is the Kummer
+  isomorphism, the cup product, restriction, corestriction, and the index-2 Evens norm,
+  over Mathlib's `continuousCohomology`;
 - the comparison of the Brauer group with `H²`, and the identification of the quaternion
   class with a Kummer cup product;
-- Stiefel-Whitney classes of forms, with the exact comparison between `w₂` and the
-  Clifford invariant;
-- the Scharlau transfer, and Kahn's relative Stiefel-Whitney formula.
+- the Stiefel-Whitney classes `w₁` and `w₂` of forms, with the exact comparison between
+  `w₂` and the Clifford invariant;
+- the Scharlau transfer, and the Evens-Kahn identity in degrees 1 and 2.
 
 None of this exists upstream as stated. Each object gets its complete basic theory, and
 not only the milestone that the headline needs.
@@ -471,7 +506,7 @@ Milestones:
   invariant under `PermutationStep` and under `BinaryStep` descends uniquely along
   `Quotient.mk` to a function on `RegularFormClass K` that agrees with `f` on each
   presentation. State it once in exactly this form. Apply it for `discr`,
-  `signedDiscr`, `hasseInvariant`, `localHasse`, and the total Stiefel-Whitney class.
+  `signedDiscr`, `hasseInvariant`, `localHasse`, `w₁`, and `w₂`.
 
 Basic API for the objects introduced here:
 
@@ -537,7 +572,11 @@ Basic API:
 - morphisms: reflections and the isometry group; the extension of an isometry from a
   subspace;
 - functoriality: the Witt index and the anisotropic part are invariants of
-  `Equivalent`, and both commute with base change along a field map;
+  `Equivalent`. Under a field extension the Witt index cannot decrease, and the
+  extension of the anisotropic part need not stay anisotropic. An equality holds only
+  under a stated anisotropy-preservation hypothesis. ⚠ Do not claim that
+  `anisotropicPart` commutes with base change: `⟨1,1⟩` over `ℝ` has Witt index `0`, and
+  over `ℂ` it is hyperbolic with Witt index `1` and zero anisotropic part;
 - comparison lemmas: the Witt index against the dimension of a maximal totally
   isotropic subspace; the `xy`-form against `⟨1,−1⟩`;
 - naturality: `anisotropicPart (q ⊥ r)` against `anisotropicPart q ⊥ anisotropicPart r`
@@ -763,7 +802,11 @@ excluded general statement in a proof.
 
 ### Layer 5: the Brauer-valued invariants
 
-This is the first layer in which a symbol can be multiplied.
+This is the first layer in which a symbol can be multiplied. The carrier is Mathlib's
+`BrauerGroup K`. `BrauerData K` carries the two things Mathlib lacks: the `CommGroup`
+structure, from the semisimple-algebras roadmap, and the central simplicity of
+`ℍ[K,a,b]`, which is the first milestone below. The quaternion symbol is then the class
+of an algebra and not an abstract pairing.
 
 Prerequisites:
 
@@ -780,14 +823,12 @@ Prerequisites:
 Milestones:
 
 - **Quaternion algebras are central simple.** For `a b : Kˣ` and `2` invertible,
-  `ℍ[K,a,b]` is a central simple `K`-algebra. This is a target here, because
-  `[(a,b)] ∈ BrauerGroup K` is undefined without it. Mathlib has an open pull request
-  with the same statement, for `ℍ[R,a,b,c]` over a field with `c·(b² + 4a) ≠ 0`, which
-  `ℍ[K,a,b] = ℍ[K,a,0,b]` satisfies because `b·4a ≠ 0`. Prove the theorem here in the
-  same form. Expose the same vocabulary and carry a deletion trigger, so that a later
-  swap is a deletion and an import.
-- **The quaternion symbol in `Br(K)`.** The class `[(a,b)] := ⟦ℍ[K,a,b]⟧`, with the API
-  that later layers cite:
+  `ℍ[K,a,b]` is central over `K`, is simple, and is finite-dimensional. This is a target
+  here, because `[(a,b)] ∈ BrauerGroup K` is undefined without it. State it for
+  `ℍ[K,a,b,c]` with `c·(b² + 4a) ≠ 0`, the generality in which the proof runs, and note
+  that `ℍ[K,a,b] = ℍ[K,a,0,b]` satisfies the hypothesis because `b·4a ≠ 0`.
+- **The quaternion symbol in `Br(K)`.** The class `[(a,b)] := ⟦ℍ[K,a,b]⟧`, which the
+  three fields of `BrauerData` make well formed, with the API that later layers cite:
   - symmetry `[(a,b)] = [(b,a)]`;
   - square-class invariance in each argument, `[(a, c²b)] = [(a,b)]`;
   - two-torsion `[(a,b)]² = 1`, from `ℍ[K,a,b]ᵒᵖ ≃ₐ[K] ℍ[K,a,b]` through `star`;
@@ -796,7 +837,13 @@ Milestones:
     statement, Lam III.2.11 for the linkage);
   - `[(a, 1−a)] = 1` for `a : Kˣ` with `1 − a ≠ 0`, and `[(a,−a)] = 1`;
   - the resulting factorization through square classes, that is the biadditive map
-    `Kˣ/(Kˣ)² × Kˣ/(Kˣ)² → Br(K)[2]`.
+    `Kˣ/(Kˣ)² × Kˣ/(Kˣ)² → Br(K)[2]`;
+  - **invariance under binary equivalence**: `⟨a,b⟩ ≅ ⟨c,d⟩` gives `[(a,b)] = [(c,d)]`,
+    which is Layer 3's binary quaternion lemma read in `Br(K)`. This is what the descent
+    of the Hasse invariant uses, and it does not follow from symmetry, 2-torsion, and
+    bilinearity alone: a symmetric bilinear pairing on the square-class group can take a
+    nonzero value at `([2],[−1])` and still satisfy those three, while
+    `⟨2,−1⟩ ≅ ⟨1,−2⟩` forces the value `1`.
 - **The Hasse invariant** `hasseInvariant : RegularFormClass K → BrauerGroup K`, with
   `s(⟨a₁,…,aₙ⟩) = ∏_{i<j} [(aᵢ, aⱼ)]` and the empty product for `n ≤ 1`.
   Well-definedness is Layer 3's chain-induction lemma with `M = BrauerGroup K` and
@@ -879,6 +926,12 @@ does not supply the normalized valuation, the unit filtration, or the arithmetic
 square classes. This sublayer owns them. `Suggested.lean` states them as the fields of a
 `LocalFieldToolkit K` structure, so that later statements elaborate today.
 
+The structure is determined by its fields. The valuation is fixed by surjectivity and by
+the description of `𝒪[K]` as the elements of nonnegative valuation, and the filtration
+is fixed by its value at `0` and by the congruence description at each later step.
+Existence and uniqueness of the term are the first two milestones, so a theorem stated
+for an arbitrary term is a theorem about the canonical toolkit.
+
 Prerequisites:
 
 - **[Mathlib]** `IsNonarchimedeanLocalField`, `ValuativeRel`, `𝒪[K]`, `𝓂[K]`, `𝓀[K]`,
@@ -893,9 +946,14 @@ Milestones:
   `v_K(π) = Multiplicative.ofAdd 1`. Write `v_K(x) : ℤ` for the decoded value. Prove
   agreement with `IsDiscreteValuationRing.addVal` on `𝒪[K]`.
 - **The unit filtration.** `U(K,i) : Subgroup Kˣ` for `i : ℕ`, with `U(K,0)` the image
-  of `𝒪[K]ˣ` and, for `i ≥ 1`, `U(K,i) = {x ∈ 𝒪[K]ˣ | v_K(x − 1) ≥ i}`. Prove that
-  `U(K,i)` is a decreasing chain of subgroups, that `𝒪[K]ˣ / U(K,1) ≅ 𝓀[K]ˣ`, and that
-  `U(K,i) / U(K,i+1) ≅ 𝓀[K]` as additive groups for `i ≥ 1`.
+  of `𝒪[K]ˣ` and, for `i ≥ 1`, `U(K,i) = {x ∈ 𝒪[K]ˣ | v_K(x − 1) ≥ i}`. That description
+  is a field of the toolkit and not a consequence, because the later sharpness statement
+  is false without it. Prove that `U(K,i)` is a decreasing chain of subgroups, that
+  `𝒪[K]ˣ / U(K,1) ≅ 𝓀[K]ˣ`, and that `U(K,i) / U(K,i+1) ≅ 𝓀[K]` as additive groups for
+  `i ≥ 1`.
+- **Existence and uniqueness of the toolkit.** A nonarchimedean local field carries a
+  term of `LocalFieldToolkit`, built from `IsDiscreteValuationRing.addVal` on `𝒪[K]` and
+  from the congruence description of the filtration; and any two terms are equal.
 - **The local square theorem** (O'Meara 63:1). With `e = v_K(2)`,
   `U(K, 2e+1) ⊆ (Kˣ)²`. The bound is sharp: `U(K, 2e) ⊄ (Kˣ)²`.
 - **The square-class count.** `Kˣ/(Kˣ)²` is finite. It has order `4` when the residue
@@ -974,9 +1032,18 @@ Milestones:
 
   Uniqueness is antisymmetry. Existence is the first milestone. The fractional ideals
   `(a − ξ²) · 𝒪[K]` are totally ordered, so the family has an infimum. That infimum is
-  `𝓂[K]^{δ(a)}` for `δ(a) = sup_ξ v_K(a − ξ²)` when the supremum is finite, and `0` when
-  it is not. State both descriptions. `𝔡` is the object of the sources, and
-  `δ(a) : ℤ` is the object that the computations below use.
+  `𝓂[K]^{δ(a)}` when the exponent is finite, and `0` when it is not. State both
+  descriptions.
+- **The defect exponent.** `δ(a) = sup_ξ v_K(a − ξ²)` is unbounded exactly on squares,
+  so its type is
+
+  ```lean
+  defectExponent (a : Kˣ) : WithTop ℤ
+  ```
+
+  with `δ(a) = ⊤` if and only if `a` is a square. `𝔡` is the object of the sources, and
+  `δ` is the object that the computations below use. Every statement about the parity of
+  `δ` carries the hypothesis that `a` is not a square, where `δ(a)` is an integer.
 - **The calculus of the defect**, for `a c : Kˣ`:
   - `𝔡(a) = 0` if and only if `a` is a square;
   - `𝔡(a c²) = (c)² · 𝔡(a)` as fractional ideals, that is `δ(a c²) = δ(a) + 2 v_K(c)`.
@@ -1080,13 +1147,16 @@ Then the three symbol computations of O'Meara 63:11 to 63:13, each written out.
 
 Basic API:
 
-- constructors: `quadraticDefect`, `δ`, the unramified class `Δ`;
+- constructors: `quadraticDefect`, `defectExponent`, the unramified class `Δ`;
 - examples over `ℚ_2`: `𝔡(1) = 0`, `𝔡(5) = 4ℤ_2`, `𝔡(−1) = 2ℤ_2`;
 - morphisms: none, because `𝔡` is not a homomorphism; see the counterexample below;
-- functoriality: `𝔡` under an unramified base change, where `δ` is unchanged, and under
-  a ramified base change of degree `e'`, where `δ` multiplies by `e'`;
-- comparison lemmas: `𝔡` against `δ`; `𝔡` against the ramification of `K(√a)`; `𝔡`
-  against membership in `U(K,i)`;
+- functoriality: none is claimed. ⚠ A base change can turn a nonsquare into a square,
+  and then the defect becomes `0` rather than scaling: in `L = K(√Δ)` the element `Δ` is
+  a square, and in a ramified extension containing `√a` so is `a`. Any base-change
+  formula therefore carries the hypothesis that the class stays nonsquare, and the split
+  case is stated separately;
+- comparison lemmas: `𝔡` against `defectExponent`; `𝔡` against the ramification of
+  `K(√a)`; `𝔡` against membership in `U(K,i)`;
 - naturality: `𝔡(a c²) = (c)² 𝔡(a)`, so `𝔡` is defined on square classes up to squares
   of principal ideals;
 - edge cases: `a` a square, where `𝔡(a) = 0`; `v_K(a)` odd, where `𝔡(a) = a·𝒪[K]`; odd
@@ -1097,11 +1167,9 @@ Basic API:
 `𝔡(5) = 4ℤ_2`, and `−5 ≡ 3 mod 8` gives `𝔡(−5) = 2ℤ_2`, which is not `8ℤ_2`. So `𝔡` is
 not multiplicative, and no proof may assume that it is.
 
-A later implementer may prefer to derive bimultiplicativity from explicit formulas. That
-is allowed under two conditions: the formulas are proved before bimultiplicativity; and
-they are stated at the full local-field scope of this layer, and not only for `ℚ_p`.
-This sublayer may then be dropped. A proof route whose central object is nowhere a
-target is not acceptable.
+The quadratic defect is required API and not only a proof device. Its carrier, its
+calculus, and the classification of unit defects are deliverables of this sublayer,
+whatever route a later implementer takes to bimultiplicativity.
 
 #### 6C. The Hilbert symbol and the local Hasse invariant
 
@@ -1148,26 +1216,8 @@ Milestones, in this order:
 9. **The `8 × 8` table over `ℚ_2`** on the representatives `{±1, ±5, ±2, ±10}`, as a
    family of decidable computations. The table is the test that the dyadic formula is
    correct.
-10. **Compatibility with Layer 5**, in two steps, because the identification of the two
-    codomains needs different prerequisites.
-    - The elementary step uses nothing outside this roadmap. The subgroup
-      `Q(K) ≤ BrauerGroup K` generated by the quaternion classes is `{1, [D]}`, where
-      `D` is the quaternion division algebra of 6D. So `ε : Q(K) ≃* ℤˣ` with
-      `ε [D] = −1` is well defined, and `hasseInvariant q ∈ Q(K)` for every `q`, because
-      it is a product of quaternion classes. Then
-
-      ```text
-      ε (hasseInvariant q) = localHasse q,
-      ```
-
-      termwise from Layer 2's four-fold criterion. Prerequisites: **[Layer 5]** and
-      **[Layer 6D]**.
-    - The second step identifies `ε` with the local invariant map. It states that
-      `Q(K) = Br(K)[2]` and that `ε` is the composition of the invariant map
-      `H²(G_K, Additive Kˢˣ) ≃+ ℚ ⧸ ℤ` restricted to 2-torsion with `ZMod 2 ≃* ℤˣ`. Its
-      prerequisites are **[Layer 7A]**, which carries an algebra class into `H²`, and a
-      term of the `Mod2Galois K` interface that supplies the invariant map. Nothing in
-      Layers 0 to 6 consumes either step.
+10. **The two Hasse invariants agree**, which is stated after Layer 6D as sublayer 6E,
+    because it consumes the classification.
 
 Basic API:
 
@@ -1235,7 +1285,7 @@ Milestones:
   over `K`, and `⟨1,1,1,1⟩` realizes it when `K = ℚ_2`. Equivalently there are exactly
   two quaternion algebras over `K` up to isomorphism. That statement is a consequence of
   the theory here, and it is never used to define the symbol. It is what makes the
-  two-element group `Q(K)` of 6C item 10 available without cohomology.
+  two-element group `Q(K)` of 6E available without cohomology.
 
 Basic API:
 
@@ -1252,8 +1302,8 @@ Basic API:
 - naturality: the classification is stated on `RegularFormClass K`, so it commutes with
   the descent principle;
 - edge cases: rank `0`; the two excluded triples; the anisotropic quaternary form;
-- downstream interfaces: the compatibility theorem of 6C, and the local input of the
-  integral-lattice theory that a later roadmap may cite.
+- downstream interfaces: 6E, and the local input of the integral-lattice theory that a
+  later roadmap may cite.
 
 ⚠ Nearby false generalization. The triple `(dim, d, s)` is not a complete invariant over
 a general field. Over `ℝ` the forms `⟨1,1,1,1⟩` and `⟨−1,−1,−1,−1⟩` both have dimension
@@ -1261,41 +1311,81 @@ a general field. Over `ℝ` the forms `⟨1,1,1,1⟩` and `⟨−1,−1,−1,−
 times. They are not isometric. Similarly `u(K) = 4` uses the local hypothesis:
 `u(ℝ) = ∞` and `u(𝔽_q) = 2`.
 
+#### 6E. The two Hasse invariants agree
+
+Prerequisites:
+
+- **[Layer 5]** the quaternion symbol and `hasseInvariant`;
+- **[Layer 6C]** `localHasse`;
+- **[Layer 6D]** the uniqueness of the quaternion division algebra.
+
+Milestone. The subgroup `Q(K) ≤ BrauerGroup K` generated by the quaternion classes is
+`{1, [D]}`, where `D` is the quaternion division algebra of 6D, so the map
+`ε : Q(K) ≃* ℤˣ` with `ε [D] = −1` is well defined. Every `hasseInvariant q` lies in
+`Q(K)`, because it is a product of quaternion classes, and
+
+```text
+ε (hasseInvariant q) = localHasse q
+```
+
+termwise from Layer 2's four-fold criterion. Nothing consumes this theorem: Layer 6C
+builds `localHasse` from the Hilbert symbol alone, and Layer 5 builds `hasseInvariant`
+from the Brauer group alone.
+
+⚠ The further statement that `ε` is the local invariant map of class field theory, that
+is that `Q(K) = Br(K)[2]` and that `ε` is `inv_K` restricted to 2-torsion, is **not** a
+milestone here. It needs the invariant map, which is local class field theory, and no
+development in this repository supplies it. See "Ownership and coordination".
+
 ### Layer 7: the Brauer group in Galois cohomology
 
 The comparison of the algebraic Brauer group with `H²` is owned here. It is a piece of
 mathematics, that is the theory of crossed products, and not a formality.
 
-#### 7A. The mod-2 Galois cohomology interface
+#### 7A. The low-degree operations on mod-2 Galois cohomology
 
-Mathlib has no continuous cohomology of a profinite group. The cohomological input of
-Layers 7 to 9 is therefore stated as a structure, and every later statement takes a term
-of that structure as a hypothesis. `Suggested.lean` defines it.
+The carrier is Mathlib's `continuousCohomology`, applied to the absolute Galois group
+`G_K = Gal(Kˢ/K)` with its Krull topology. Mathlib supplies that functor and the
+degree-zero computation. It does not supply the low-degree calculational API, and this
+sublayer owns it. `Suggested.lean` states the operations as the fields of two structures
+over the canonical carriers, so that later statements elaborate today.
 
 Prerequisites:
 
-- **[Mathlib]** `AddCommGroup`, `AddMonoidHom`, `Additive`, `Subgroup.square`;
+- **[Mathlib]** `continuousCohomology`, `SeparableClosure`, the Krull topology on
+  `L ≃ₐ[K] L` with its topological-group instance, `TopModuleCat`, `Action`;
 - **[Layer 0]** the square-class group.
 
 Milestones:
 
-- **`Mod2Galois K`.** A structure with the following fields:
-  - `H1` and `H2`, additive groups, standing for `H¹(G_K, 𝔽₂)` and `H²(G_K, 𝔽₂)`;
-  - `Br`, an additive group, standing for `H²(G_K, Additive Kˢˣ)`;
-  - `cup : H1 →+ H1 →+ H2`, the cup product;
-  - `kummer : Additive (Kˣ ⧸ Subgroup.square Kˣ) ≃+ H1`, the Kummer isomorphism;
-  - `toBr : H2 →+ Br`, injective, with image the 2-torsion of `Br`. This field records
-    the long exact sequence of `1 → μ₂ → Kˢˣ → Kˢˣ → 1` together with Hilbert 90.
-- **`Mod2GaloisTransfer`.** For `L/K` finite separable, a structure with restriction
-  `res : DK.H1 →+ DL.H1`, corestriction `cor₁ : DL.H1 →+ DK.H1` and
-  `cor₂ : DL.H2 →+ DK.H2`, and the Evens norm `evens : DL.H1 → DK.H2`. The Evens norm is
-  a function and not a homomorphism, which is why the expansion in Layer 9 has a
-  corestriction term.
-- **Discharge.** A development of continuous cohomology of profinite groups supplies a
-  term of each structure. That development replaces the structure mechanically: each
-  field becomes the corresponding declaration, and no statement of Layers 7 to 9 is
-  rewritten. Until then, the statements are conditional, in the same way that a
-  statement under a typeclass hypothesis is conditional.
+- **The coefficient objects.** `𝔽₂` with the trivial action, as an object of
+  `Action (TopModuleCat (ZMod 2)) G_K`; and `Additive Kˢˣ` with the Galois action, as an
+  object of `Action (TopModuleCat ℤ) G_K`. Each needs the discreteness of the module and
+  the continuity of the action.
+- **The groups.** `H¹(G_K, 𝔽₂)` and `H²(G_K, 𝔽₂)` as `continuousCohomology (ZMod 2) G_K`
+  in degrees 1 and 2, and `H²(G_K, Additive Kˢˣ)` as the same functor over `ℤ` in
+  degree 2. These are definitions, not hypotheses.
+- **`Mod2GaloisOps K`**, the operations on those groups:
+  - `cup : H¹ →+ H¹ →+ H²`, the cup product;
+  - `kummer : Additive (Kˣ ⧸ Subgroup.square Kˣ) ≃+ H¹`, the Kummer isomorphism;
+  - `toUnits : H² →+ H²(G_K, Additive Kˢˣ)`, injective, with image the 2-torsion. This
+    field records the long exact sequence of `1 → μ₂ → Kˢˣ → Kˢˣ → 1` together with
+    Hilbert 90.
+- **`Mod2GaloisTransferOps`**, the operations for a finite separable `L/K`, carrying
+  `[FiniteDimensional K L]` and `[Algebra.IsSeparable K L]`:
+  - restriction in degrees 1 and 2, and corestriction in degrees 1 and 2;
+  - `res₁` on a Kummer class is the Kummer class of the image, and `cor₁` on a Kummer
+    class is the Kummer class of the norm;
+  - the projection formula `cor₂(res₁ x ∪ y) = x ∪ cor₁ y`;
+  - the Evens norm `evens : H¹(G_L, 𝔽₂) → H²(G_K, 𝔽₂)` for the index-2 subgroup attached
+    to `L/K`, with its restriction identity and its quadratic failure of additivity
+    `N(x + y) = N x + N y + cor₂(x ∪ y)`. The Evens norm is a function and not a
+    homomorphism, and that failure is what the Layer 9 expansion records;
+  - independence of the choice of embedding `L ↪ Kˢ`: conjugate embeddings give
+    conjugate subgroups, and the resulting maps agree.
+- **Discharge.** A development of continuous cohomology of profinite groups proves these
+  operations over the same carriers. It then replaces each structure field by the
+  corresponding declaration, and no statement of Layers 7 to 9 is rewritten.
 
 #### 7B. The comparison with `H²`
 
@@ -1304,7 +1394,7 @@ Prerequisites:
 - **[SSA Layer 6]** the `CommGroup` structure on `BrauerGroup K`, and the theorem that
   every central simple `K`-algebra is split by a finite separable extension;
 - **[Layer 5]** the quaternion class and its bilinearity;
-- **[Layer 7A]** a term of `Mod2Galois K`.
+- **[Layer 7A]** a term of `Mod2GaloisOps K`.
 
 Milestones:
 
@@ -1312,31 +1402,42 @@ Milestones:
    separable `L/K`. Its Galois closure `M/K` is finite Galois and splits `A`, because an
    extension of a splitting field splits `A`. This is stated here rather than assumed,
    because the crossed-product construction starts from it.
-2. **The comparison isomorphism**
+2. **The crossed-product package**, which is what the comparison is built from, and
+   which is a list of separate targets rather than one step:
+   - the 2-cocycle attached to a finite Galois `L/K` that splits `A`, together with the
+     crossed-product algebra of a 2-cocycle;
+   - Brauer equivalence corresponds to cohomologous cocycles;
+   - multiplication of crossed products corresponds to addition of cocycles;
+   - inflation along `Gal(M/K) ↠ Gal(L/K)` for `L ⊆ M`, so that the classes for
+     different splitting fields are comparable;
+   - the finite-quotient description of `H²_cont(G_K, Additive Kˢˣ)` as the colimit over
+     finite Galois `L/K`;
+   - Hilbert 90 for `L/K` finite Galois, which is what makes the comparison injective.
+
+   (Gille-Szamuely 4.4, Serre *Local Fields* X.)
+3. **The comparison isomorphism**
 
    ```lean
-   Additive (BrauerGroup K) ≃+ D.Br
+   Additive (BrauerGroup K) ≃+ H²_cont (G_K) (Additive Kˢˣ)
    ```
 
-   by crossed products: a finite Galois `L/K` that splits `A` gives a 2-cocycle; Brauer
-   equivalence corresponds to cohomologous cocycles; and the colimit over `L` gives the
-   continuous `H²` (Gille-Szamuely 4.4, Serre *Local Fields* X). Multiplication of
-   Brauer classes goes to addition of cohomology classes, which is what `≃+` records.
-3. **The 2-torsion comparison**
+   assembled from milestone 2. Multiplication of Brauer classes goes to addition of
+   cohomology classes, which is what `≃+` records.
+4. **The 2-torsion comparison**
 
    ```lean
    Br₂ K := MonoidHom.ker (powMonoidHom 2 : BrauerGroup K →* BrauerGroup K)
-   ι : Additive ↥(Br₂ K) ≃+ D.H2
+   ι : Additive ↥(Br₂ K) ≃+ H²_cont (G_K) 𝔽₂
    ```
 
-   obtained from milestone 2 and from `D.toBr`, whose image is the 2-torsion of `D.Br`.
-   In prose this is `ι : Br(K)[2] ≃ H²(G_K, μ₂)`.
-4. **The symbol as a cup product.** `ι [(a,b)] = (a) ∪ (b)`, that is
+   obtained from milestone 3 and from `D.toUnits`, whose image is the 2-torsion. In
+   prose this is `ι : Br(K)[2] ≃ H²(G_K, μ₂)`.
+5. **The symbol as a cup product.** `ι [(a,b)] = (a) ∪ (b)`, that is
    `ι [(a,b)] = D.cup (D.kummer [a]) (D.kummer [b])`.
-5. **Compatibility of the two structures.** `ι` carries the product `[(a,b)] · [(a,c)]`
+6. **Compatibility of the two structures.** `ι` carries the product `[(a,b)] · [(a,c)]`
    to the sum `(a) ∪ (b) + (a) ∪ (c)`. Layer 5's bilinearity and Layer 8's additivity
    are then the same statement on two sides.
-- **The cyclic computation, stated rather than implied.** The proof of milestone 4 is
+- **The cyclic computation, stated rather than implied.** The proof of milestone 5 is
   the one place where a cocycle meets an algebra, so its steps are separate targets. For
   `L = K(√a)` with `a` a nonsquare, `H²(Gal(L/K), Lˣ) ≃ Kˣ / N_{L/K}(Lˣ)`, which is the
   degree-two computation for a cyclic group of order two. Under it, the inflation of
@@ -1351,12 +1452,12 @@ Basic API:
 - functoriality: compatibility with base change along a finite separable `L/K`, that is
   `ι_L ∘ (base change) = res ∘ ι_K` on 2-torsion;
 - comparison lemmas: the crossed-product class against the cocycle; `ι` against
-  `D.toBr`;
-- naturality: `ι` carries multiplication to addition, which is milestone 5;
+  `D.toUnits`;
+- naturality: `ι` carries multiplication to addition, which is milestone 6;
 - edge cases: a split algebra, whose class is `0`; `a` a square, where the cyclic
   computation degenerates;
-- downstream interfaces: Layer 7C's fifth equivalent condition, Layer 8's identity for
-  `w₂`, and the second half of 6C item 10.
+- downstream interfaces: Layer 7C's fifth equivalent condition and Layer 8's identity
+  for `w₂`.
 
 #### 7C. The symbol as a cup product
 
@@ -1371,7 +1472,7 @@ Prerequisites: **[Layer 2]**, **[Layer 7A]**, **[Layer 7B]**.
 - Corollaries: `(a) ∪ (1−a) = 0` for `a : Kˣ` with `1 − a ≠ 0`, from Layer 2's algebra
   splitting; `(a) ∪ (−a) = 0`; and bilinearity of the cup product as a restatement of
   Layer 5's bimultiplicativity. Over a nonarchimedean local field the specialization is
-  Layer 6's symbol, through 7B's `ι` and the compatibility theorem of 6C.
+  Layer 6's symbol, through 7B's `ι` and the comparison of 6E.
 
 ### Layer 8: Stiefel-Whitney classes
 
@@ -1379,24 +1480,31 @@ Prerequisites:
 
 - **[Layer 0]** the descent principle;
 - **[Layer 3]** the discriminant and the chain-induction lemmas;
-- **[Layer 7A]** a term of `Mod2Galois K`;
+- **[Layer 7A]** a term of `Mod2GaloisOps K`;
 - **[Layer 7B]** and **[Layer 7C]** for the comparison with the Brauer-valued
   invariants.
 
+This layer defines `w₁` and `w₂` only. The total class and the higher classes need a
+graded cohomology ring in every degree, which is an exclusion of this roadmap; see
+"Scope".
+
 Milestones:
 
-- **Definition** (Delzant; Milnor's `w` in *Algebraic K-theory and quadratic forms* §4).
-  For `q ≅ ⟨a₁, …, aₙ⟩`, the total class is `w(q) = ∏ᵢ (1 + (aᵢ))` in `H^*(G_K, 𝔽₂)`.
-  Well-definedness is the descent principle again: permutation invariance is immediate,
-  and the binary step is the cup identity `(a)(b) = (c)(d)` for `⟨a,b⟩ ≅ ⟨c,d⟩`, which
-  is Layer 7C applied to Layer 0's binary criterion. `w` is multiplicative for `⊥` on
-  classes.
-- **Low degrees.** `w₀ = 1`; `w₁(q) = (d(q))` with the plain discriminant; and `w₂` of a
-  diagonal form is `∑_{i<j} (aᵢ)(aⱼ)`. Hence `ι(hasseInvariant q) = w₂(q)`, immediately
-  from 7B, because both sides are defined on a diagonalization. The Hasse invariant is a
-  product and `w₂` is a sum, and `ι` is the `≃+` of 7B milestone 3, so the Lean
-  statement is `ι (Additive.ofMul (hasseInvariant q)) = w₂ q`. The same `Additive.ofMul`
-  occurs in front of each Brauer class below.
+- **Definition in degrees 1 and 2** (Delzant; Milnor's `w` in *Algebraic K-theory and
+  quadratic forms* §4). For `q ≅ ⟨a₁, …, aₙ⟩`, `w₁(q) = ∑ᵢ (aᵢ)` and
+  `w₂(q) = ∑_{i<j} (aᵢ)(aⱼ)`. Well-definedness is the descent principle again:
+  permutation invariance is immediate, and the binary step is the cup identity
+  `(a)(b) = (c)(d)` for `⟨a,b⟩ ≅ ⟨c,d⟩`, which is Layer 7C applied to Layer 0's binary
+  criterion.
+- **The two low-degree identities.** `w₁(q) = (d(q))` with the plain discriminant;
+  `w₁(q ⊥ r) = w₁(q) + w₁(r)`; and
+  `w₂(q ⊥ r) = w₂(q) + w₂(r) + w₁(q) ∪ w₁(r)`, which is the degree-2 part of the
+  product formula for a total class, stated degreewise.
+- **`w₂` is the image of the Hasse invariant.** `ι(hasseInvariant q) = w₂(q)`,
+  immediately from 7B, because both sides are defined on a diagonalization. The Hasse
+  invariant is a product and `w₂` is a sum, so the Lean statement is
+  `ι (Additive.ofMul (hasseInvariant q)) = w₂ q`. The same `Additive.ofMul` occurs in
+  front of each Brauer class below.
 - ⚠ **The comparison with the Clifford invariant, exact.** `c(q)` and `s(q)` differ by
   dimension-dependent terms, so a source that says "`w₂` is the Hasse-Witt invariant"
   must be read through the convention table first. Fröhlich and Serre state their
@@ -1420,22 +1528,24 @@ Milestones:
 
 Basic API:
 
-- constructors: `sw1`, `sw2`, and the total class `w`;
+- constructors: `sw1` and `sw2`;
 - examples, each naming its forms rather than a bare square class, because `w₁` and `w₂`
-  are invariants of forms: `w(⟨1⟩ⁿ) = 1`; `w(⟨a⟩) = 1 + (a)`, so `w₁ = (a)` and
-  `w₂ = 0`; `w(⟨a,b⟩) = 1 + (a) + (b) + (a)(b)`, so `w₂⟨a,b⟩ = (a) ∪ (b)`; `w(⟨⟨a,b⟩⟩)`;
-  and the table of `w₁` and `w₂` over `ℚ_2` for the eight forms `⟨a⟩` with `a` in
-  `{±1, ±5, ±2, ±10}`, together with the sixteen binary forms `⟨1, a⟩` and `⟨a, a⟩`;
-- morphisms: `w` as a monoid map from `(RegularFormClass K, ⊥)` to the units of
-  `H^*(G_K, 𝔽₂)`;
-- functoriality: `w` commutes with restriction along a finite separable `L/K`, that is
-  `res (w q) = w (q ⊗_K L)`;
+  are invariants of forms: `w₁(⟨1⟩ⁿ) = 0` and `w₂(⟨1⟩ⁿ) = 0`; `w₁⟨a⟩ = (a)` and
+  `w₂⟨a⟩ = 0`; `w₂⟨a,b⟩ = (a) ∪ (b)`; the values on `⟨⟨a,b⟩⟩`; and the table of `w₁` and
+  `w₂` over `ℚ_2` for the eight forms `⟨a⟩` with `a` in `{±1, ±5, ±2, ±10}`, together
+  with the sixteen binary forms `⟨1, a⟩` and `⟨a, a⟩`;
+- morphisms: `w₁` as an additive map on `(RegularFormClass K, ⊥)`, and `w₂` as the
+  quadratic map whose polarization is the cup product, which is the displayed
+  orthogonal-sum identity;
+- functoriality: `w₁` and `w₂` commute with restriction along a finite separable `L/K`,
+  that is `res (wᵢ q) = wᵢ (q ⊗_K L)`;
 - comparison lemmas: `w₂` against the image of `hasseInvariant` under `ι`; `w₂` against
   the image of `cliffordInvariant` under `ι`, which is the displayed identity; `w₁`
   against `d` and not against `d±`;
-- naturality: the descent of `w` along `Quotient.mk`;
-- edge cases: rank `0`, where `w = 1`; a hyperbolic form; `a` a square, where `(a) = 0`;
-- downstream interfaces: Layer 9's Evens-Kahn formula.
+- naturality: the descent of `w₁` and `w₂` along `Quotient.mk`;
+- edge cases: rank `0`, where both classes vanish; a hyperbolic form; `a` a square,
+  where `(a) = 0`;
+- downstream interfaces: Layer 9's Evens-Kahn identity.
 
 ### Layer 9: transfer and the Evens-Kahn formula
 
@@ -1446,8 +1556,8 @@ Prerequisites:
 - **[Tau Ceti]** `TauCeti/NumberTheory/EffectiveBounds/TraceForm.lean` and
   `TauCeti/FieldTheory/Trace`;
 - **[Layer 1]** to **[Layer 4]** for the form theory and the Witt ring;
-- **[Layer 7A]** a term of `Mod2Galois` for `K` and for `L`, and a term of
-  `Mod2GaloisTransfer`;
+- **[Layer 7A]** a term of `Mod2GaloisOps` for `K` and for `L`, and a term of
+  `Mod2GaloisTransferOps`;
 - **[Layer 8]** the Stiefel-Whitney classes.
 
 Milestones:
@@ -1477,40 +1587,33 @@ Milestones:
   forms `Tr_*⟨a⟩` for `a : Lˣ` are the objects that Kahn's theorem evaluates.
 - **The Galois setup.** Fix a separable closure `Kˢ` that contains `L`. Then
   `G_L = Gal(Kˢ/L)` is an open subgroup of `G_K` of index `[L:K]`, and restriction,
-  corestriction, and the Evens norm are the fields of `Mod2GaloisTransfer`. State the
-  independence of the identification from the choice of embedding: conjugate embeddings
-  give conjugate subgroups, and the resulting maps on cohomology agree. Kahn's formula
-  is stated for `L/K` and not for a chosen embedding.
-- **Kahn's relative Stiefel-Whitney formula** (Kahn, *Classes de Stiefel-Whitney de
+  corestriction, and the Evens norm are the fields of `Mod2GaloisTransferOps`. Their
+  independence of the choice of embedding is a field of that structure: conjugate
+  embeddings give conjugate subgroups, and the resulting maps on cohomology agree. The
+  identity below is stated for `L/K` and not for a chosen embedding.
+- **The Evens-Kahn identity in degrees 1 and 2** (Kahn, *Classes de Stiefel-Whitney de
   formes quadratiques et de représentations galoisiennes réelles*, Invent. Math. 78
-  (1984) 223-256, **Théorème 2**; Kozlowski, Proc. AMS 91 (1984) 309-313, Thm 1.1, for
-  the homotopy-level transfer; Evens, Trans. AMS 108 (1963) 54-65, for the norm). For
-  `L/K` finite separable and `q` a regular form over `L`,
-
-  ```text
-  w(Tr_* q) = N^{Ev}(w(q)) · w(Tr_*⟨1⟩)^{rank q}
-  ```
-
-  in `H^*(G_K, 𝔽₂)`. The statement is at the level of quadratic forms over an arbitrary
-  field with `2` invertible, because Théorème 2 carries no local hypothesis. The
-  statement needs one clarification, which is a milestone of its own: `N^{Ev}` is
-  defined on homogeneous classes, so its value on a total class `w = 1 + w₁ + w₂ + …`
-  means the multiplicative extension that Evens defines, that is
-  `N^{Ev}(1 + x) = 1 + cor(x) + … + N^{Ev}(x)`. Say which extension is meant, and prove
-  the degree-by-degree expansion in the range used. Kahn's **Théorème 3**, the rank-1
-  case through the induced representation with its `(2, d)` correction, is the stated
-  corollary that connects this to trace forms of `⟨a⟩`.
-- **The degree ≤ 2 expansion, written out.** For `L/K` quadratic, `a : Lˣ`,
-  `x = (a) ∈ H¹(G_L, 𝔽₂)`, `t₁ = w₁(Tr_*⟨1⟩)`, and `t₂ = w₂(Tr_*⟨1⟩)`:
+  (1984) 223-256, **Théorème 2**, read in degrees `≤ 2`; Kozlowski, Proc. AMS 91 (1984)
+  309-313, Thm 1.1, for the homotopy-level transfer; Evens, Trans. AMS 108 (1963) 54-65,
+  for the norm). For `L/K` quadratic and separable, `a : Lˣ`, `x = (a) ∈ H¹(G_L, 𝔽₂)`,
+  `t₁ = w₁(Tr_*⟨1⟩)`, and `t₂ = w₂(Tr_*⟨1⟩)`:
 
   ```text
   w₁(Tr_*⟨a⟩) = t₁ + cor(x)
   w₂(Tr_*⟨a⟩) = t₂ + N^{Ev}(x) + t₁ ∪ cor(x)
   ```
 
-  which is the degree-≤-2 part of `w(Tr_*⟨a⟩) = w(Tr_*⟨1⟩) · (1 + cor x + N^{Ev} x)`,
-  and is the statement that `gq2`'s B9 consumes. This is a separate named milestone from
-  the general formula.
+  These are the identities that `gq2`'s B9 consumes. Both sides are Layer 8 classes of
+  presentations, so the statement carries the hypothesis that the two given tuples
+  present `Tr_*⟨1⟩` and `Tr_*⟨a⟩`. The hypotheses `[FiniteDimensional K L]`,
+  `[Algebra.IsSeparable K L]`, and `finrank K L = 2` are part of the statement, and the
+  transfer operations are those attached to `L/K`.
+- ⚠ The total-class form `w(Tr_* q) = N^{Ev}(w(q)) · w(Tr_*⟨1⟩)^{rank q}`, that is
+  Théorème 2 for an arbitrary finite separable `L/K` and an arbitrary `q`, is an
+  exclusion of this roadmap. It needs a graded cohomology ring, an Evens norm in every
+  degree, and the multiplicative extension `N^{Ev}(1 + x) = 1 + cor(x) + … + N^{Ev}(x)`,
+  together with a target in which a class with constant term `1` is invertible. See
+  "Scope".
 - **Finite dyadic specialization**, as the final acceptance example. `K` is a finite
   extension of `ℚ_2`, `L = K(√d)` is quadratic, and `q = ⟨a⟩`. The low-degree identity
   above is `gq2`'s `relativeStiefelWhitney_dyadic`, whose left-hand sides are Layer 8's
@@ -1526,7 +1629,8 @@ Basic API:
   compatibility with base change;
 - comparison lemmas: change of functional `(λ · s)_* q ≅ s_*(⟨λ⟩ ⊗ q)`; the torsor
   theorem; Frobenius reciprocity;
-- naturality: independence of the choice of embedding `L ↪ Kˢ`;
+- naturality: independence of the choice of embedding `L ↪ Kˢ`, which is a field of
+  `Mod2GaloisTransferOps`;
 - edge cases: `L = K`, where the transfer is scaling; `q = 0`; a functional that is not
   the trace;
 - downstream interfaces: `gq2`'s B9, which consumes the degree-≤-2 expansion.
@@ -1601,20 +1705,18 @@ semisimple-algebras roadmap's Layer 4 and Layer 6, because `BrauerGroup K` is a 
 and not a group without them. It also needs the quaternion central-simplicity theorem,
 which is proved here.
 
-Layer 6 has this internal order: 6A, then 6B, then 6C, then 6D. Its content depends on
-Layers 0 to 3 and on nothing else outside this roadmap. Item 10 of 6C is the exception,
-and it splits:
-
-- the elementary half needs Layer 5 and 6D;
-- the second half needs Layer 7B as well, together with the invariant map.
-
-Nothing consumes either half.
+Layer 6 has this internal order: 6A, then 6B, then 6C, then 6D, then 6E. Sublayers 6A
+to 6D depend on Layers 0 to 3 and on nothing else outside this roadmap. Sublayer 6E
+depends on Layer 5 and on 6D, which is why it comes last, and nothing consumes it.
 
 Layer 7A depends on Layer 0 only. Layer 7B depends on Layer 5, on Layer 7A, and on the
 semisimple-algebras roadmap's Layer 6. Layer 7C depends on Layer 2 and on Layer 7B.
 Layer 8 depends on Layer 7. Layer 9 splits: the transfer half needs only Layers 1 to 4
 and can be built together with Layer 5; the Evens-Kahn half needs Layer 8 and the
-transfer interface of Layer 7A.
+transfer operations of Layer 7A.
+
+There is no forward reference in this order. Every statement of a layer uses only
+earlier layers, Mathlib, landed Tau Ceti files, and the semisimple-algebras roadmap.
 
 ## References
 
@@ -1664,19 +1766,28 @@ transfer interface of Layer 7A.
 
 ## Ownership and coordination
 
-- The [semisimple-algebras roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md)
-  owns central simple algebras, Skolem-Noether, the Brauer group, and splitting fields.
-  Layer 5 here takes the quaternion case, the Clifford case, and the 2-torsion package.
-  Layer 7B takes the crossed-product comparison. Where both roadmaps name the same fact,
-  the semisimple-algebras statement is the statement of record.
+- The [semisimple-algebras
+  roadmap](../RepresentationTheory/SemisimpleAlgebras/README.md) owns central simple
+  algebras, Skolem-Noether, the Brauer group, and splitting fields. Layer 5 here takes
+  the quaternion case, the Clifford case, and the 2-torsion package. Layer 7B takes the
+  crossed-product comparison. Where both roadmaps name the same fact, the
+  semisimple-algebras statement is the statement of record.
 - The [multiquadratic roadmap](../Multiquadratic/README.md) owns multi-root towers of
   quadratic extensions. This roadmap owns the form theory of one quadratic step. The
   shared language is `TauCeti.SquareClassGroup`.
-- A later roadmap for continuous cohomology of profinite groups supplies terms of the
-  `Mod2Galois` and `Mod2GaloisTransfer` structures of Layer 7A. A later roadmap for
-  local fields supplies a term of the `LocalFieldToolkit` structure of Layer 6A. Neither
-  is a prerequisite of anything here. Each structure is defined and used in this
-  roadmap, and a supplied term replaces the corresponding milestones.
+- A later roadmap for continuous cohomology of profinite groups proves the operations of
+  `Mod2GaloisOps` and `Mod2GaloisTransferOps` over the same carriers, and a later
+  roadmap for local fields proves the fields of `LocalFieldToolkit`. Neither is a
+  prerequisite of anything here: each structure is defined and used in this roadmap.
+  When such a development lands, the general objects belong to it, and this roadmap
+  keeps the quadratic defect, the Hilbert symbol, the classification, and the Brauer
+  comparison that use them.
+- **Local class field theory is not in scope.** Sublayer 6E identifies the two Hasse
+  invariants through the two-element group of quaternion classes. The further statement
+  that this identification is the local invariant map, that is that `Q(K) = Br(K)[2]`
+  and that `ε` is `inv_K` on 2-torsion, needs the invariant map of local class field
+  theory. No development in this repository supplies it, and no milestone here assumes
+  it.
 - Other formalizations cover overlapping ground, in particular a Hasse-Minkowski
   development over `ℚ` and a staging repository for the Brauer group. This roadmap
   states its milestones independently. Their revisions, licences, and the conditions for
