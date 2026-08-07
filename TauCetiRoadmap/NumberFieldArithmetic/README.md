@@ -10,19 +10,18 @@ ideal with transitivity in towers, an arithmetic-Frobenius API, complete ramific
 infinite places, cyclotomic fields through their splitting law, and adeles with the product
 formula.
 
-Unlike its sibling roadmaps, this one is a completion pass rather than a greenfield
-development. What it produces is a precise gap inventory together with the API shaping that
-turns those strong but disconnected pieces into a usable theory of the **core intrinsic
-arithmetic invariants of a number field, and the relations among them**: degree and signature;
-the discriminant and the primes that ramify; how a prime splits, and its Frobenius class; the
-different and the relative discriminant; integral bases, the index, and monogenicity;
-subfields; units, torsion, and the regulator. An
-[LMFDB number-field page](https://www.lmfdb.org/NumberField/) is the demand-side specification
-for that list: Layer 8 says, datum by datum, which page entries are theorems proved here, which
-are a sibling roadmap's named target, and which are database semantics this roadmap does not
-certify at all. The two main exclusions are the label's `.i` coordinate and the choice of a
-normalized defining polynomial; neither follows from Hermite finiteness, and no claim of full
-page coverage is made anywhere below.
+Unlike its sibling roadmaps, this one completes an existing development rather than starting a
+new one. It says exactly what is missing, and asks for the API that turns those strong but
+disconnected pieces into a usable theory of the **core intrinsic arithmetic invariants of a
+number field, and the relations among them**: degree and signature; the discriminant and the
+primes that ramify; how a prime splits, and its Frobenius class; the different and the relative
+discriminant; integral bases, the index, and monogenicity; subfields; units, torsion, and the
+regulator. An [LMFDB number-field page](https://www.lmfdb.org/NumberField/) is a good statement
+of what that list ought to contain, so Layer 8 goes through such a page datum by datum and says
+which entries are theorems proved here, which are a sibling roadmap's named target, and which
+are database semantics this roadmap does not certify at all. The two main exclusions are the
+label's `.i` coordinate and the choice of a normalized defining polynomial; neither follows
+from Hermite finiteness, and no claim of full page coverage is made anywhere below.
 
 What is absent upstream is not depth but the connections between the pieces. Nothing
 instantiates the Frobenius API for number fields (`Mathlib/RingTheory/Frobenius.lean` has zero
@@ -56,15 +55,19 @@ Layers 1–2.
 
 Two regimes, spelled out, never bundled into a new class.
 
-- **Dedekind-generic regime** (Layers 1–4 wherever the mathematics is not about `ℚ`): Mathlib's
-  AKLB setup, with `A` a Dedekind domain with fraction field `K`, `L/K` a finite (separable
-  where needed) extension, and `B` the integral closure of `A` in `L`, spelled with the pin's
-  own typeclasses (`[IsDedekindDomain A]`, `[IsFractionRing A K]`, `[IsIntegralClosure B A L]`,
-  `[Module.Finite A B]`, `[Module.IsTorsionFree A B]`, `[IsScalarTower A K L]`, …), and residue
-  hypotheses per statement (`[Algebra.IsSeparable (A ⧸ p) (B ⧸ P)]` or `[Finite (A ⧸ p)]`)
-  exactly where the proof needs them. Do **not** assume finite residue fields in statements that
-  hold without them; do not assume separability where the pin's own `sum_ramification_inertia`
-  does without it.
+- **Dedekind-generic regime** (Layers 1–4 wherever the mathematics is not about `ℚ`, and the
+  different-exponent statements of Layer 6): Mathlib's AKLB setup, with `A` a Dedekind domain
+  with fraction field `K`, `L/K` a finite extension, and `B` the integral closure of `A` in `L`,
+  spelled with the pin's own typeclasses (`[IsDedekindDomain A]`, `[IsFractionRing A K]`,
+  `[IsIntegralClosure B A L]`, `[Module.Finite A B]`, `[Module.IsTorsionFree A B]`,
+  `[IsScalarTower A K L]`, …), and residue hypotheses per statement
+  (`[Algebra.IsSeparable (A ⧸ p) (B ⧸ P)]` or `[Finite (A ⧸ p)]`) exactly where the proof needs
+  them. Do **not** assume finite residue fields in statements that hold without them; do not
+  assume separability where the pin's own `sum_ramification_inertia` does without it. ⚠ Where
+  separability of `L/K` itself *is* needed, as in the exact different exponents, say so with
+  `[Algebra.IsSeparable K L]` and keep the fraction fields visible in the signature. A
+  two-Dedekind-ring signature with a finite torsion-free algebra between them cannot express
+  that hypothesis, so it is the wrong shape for those statements however convenient it looks.
 - **Number-field regime** (the LMFDB-facing layers): `[Field K] [NumberField K]` with `𝓞 K`,
   Galois groups as `K ≃ₐ[ℚ] K` (or `L ≃ₐ[K] L`), primes presented as `Q : Ideal (𝓞 K)` with
   instance arguments `[Q.IsPrime]`, `[Q.LiesOver (Ideal.span {(p : ℤ)})]`, `[Fact p.Prime]`,
@@ -89,10 +92,10 @@ oddness hypotheses. Never bake `K = ℚ` into a statement whose proof is uniform
 | Frobenius is a finite-level notion | every Frobenius statement in this roadmap lives in a **finite** Galois extension, or in the quotient `D_v/I_v ≅ Gal(k̄_v/k_v)`. There is no canonical Frobenius element or conjugacy class in `Gal(K̄/K)`: a lift to `D_v` is well defined only up to inertia, and compatible classes in the finite quotients do not assemble into one. Nothing here claims otherwise | Layer 2; §Explicit scope exclusions |
 | infinite places | the canonical element of the order-2 stabilizer at a real place ramifying in `L` is **complex conjugation** (`ComplexEmbedding.IsConj`, `IsCMField.complexConj`), and is never called a Frobenius. `IsRamified`/`IsUnramified` at infinite places are the pin's | `Mathlib/.../InfinitePlace/Ramification.lean`, `CMField.lean` |
 | Artin symbol | `artinSymbol 𝔭 : ConjClasses (L ≃ₐ[K] L)` for a nonzero prime `𝔭 : Ideal (𝓞 K)` unramified in `L`. The element `Frob Q` at a chosen `Q ∣ 𝔭` is well defined (unramified case), and the class depends only on `𝔭`. The rational-prime form for `K = ℚ` is a corollary, not the definition | Layer 2 |
-| ideal-theoretic Artin map | for finite abelian `L/K` with `S` the (finite) set of primes of `𝓞 K` dividing `relDiscr (𝓞 K) (𝓞 L)`, `J^S` is the subgroup of `(FractionalIdeal (𝓞 K)⁰ K)ˣ` of fractional ideals whose support avoids `S`, and `artinHomUnramified : J^S →* (L ≃ₐ[K] L)` sends a prime to its Artin symbol. **Same carrier as [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6)'s `J^{𝔪₀}`**, so that its reciprocity layers consume this map literally. The integral-ideal monoid hom is a corollary of it | Layer 2; PR #6 conventions table |
-| decomposition group | `MulAction.stabilizer G Q`, Mathlib's spelling; **no rival named definition**. Inertia group: `Q.inertia G` (`Ideal.inertia`). Decomposition/inertia *fields*: the pin's `IsDecompositionField`/`IsInertiaField` classes, ⚠ slated for deprecation by mathlib PR [#41591](https://github.com/leanprover-community/mathlib4/pull/41591) in favor of ring-level `Ideal.IsDecompositionRing`/`IsInertiaRing`; follow that direction and flag affected milestones | `Mathlib/RingTheory/Ideal/Pointwise.lean`, `…/NumberTheory/RamificationInertia/HilbertTheory.lean`, PR #41591 |
+| ideal-theoretic Artin map | for finite abelian `L/K` and **an arbitrary finite set `S` of primes of `𝓞 K` containing every prime that ramifies in `L`**, `J^S` is the subgroup of `(FractionalIdeal (𝓞 K)⁰ K)ˣ` of fractional ideals whose support avoids `S`, and `artinHomAway S : J^S →* (L ≃ₐ[K] L)` sends a prime outside `S` to its Artin symbol. `S` is a parameter of the construction, not the ramified set: [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6)'s `J^{𝔪₀}` excludes the support of a modulus, which is usually larger than the ramified set, and **the carrier is the same**, so its reciprocity layers consume this map literally. Taking `S` to be the support of `relDiscr (𝓞 K) (𝓞 L)` is a specialization, and lives in Layer 4 with that ideal. The integral-ideal monoid hom is a corollary | Layer 2 (construction), Layer 4 (discriminant support); PR #6 conventions table |
+| decomposition group | `MulAction.stabilizer G Q`, Mathlib's spelling; **no rival named definition**. Inertia group: `Q.inertia G` (`Ideal.inertia`). Decomposition and inertia *fields*: ⚠ not the pin's `IsDecompositionField`/`IsInertiaField`, which mathlib [#41591](https://github.com/leanprover-community/mathlib4/pull/41591) deprecates, but the ring-level `Ideal.IsDecompositionRing`/`IsInertiaRing` it replaces them with | `Mathlib/RingTheory/Ideal/Pointwise.lean`, `…/NumberTheory/RamificationInertia/HilbertTheory.lean`, mathlib #41591 |
 | ramification groups, indexing | the higher groups are a family `G i` indexed by `i : ℕ`, so `G 0` is inertia; the decomposition group keeps its own name (`MulAction.stabilizer`) and is never written `G (-1)`. Where a statement genuinely needs the `−1` slot, it names the stabilizer explicitly | Layer 6 |
-| `e` and `f` | the pin's `Ideal.ramificationIdx p P` / `Ideal.inertiaDeg p P` (no ring-hom argument at this pin) and their Galois-constant versions `ramificationIdxIn`/`inertiaDegIn`. ⚠ Master swapped the definitions post-pin (`ramificationIdx'`→`ramificationIdx` #41234, `inertiaDeg'`→`inertiaDeg` #41325, 2026-06/07): on bump the unprimed names denote the localization/residue-field definitions. State milestones through characterizations robust to the swap (the agreement lemmas `ramificationIdx'_eq_ramificationIdx`, `inertiaDeg'_eq_inertiaDeg` are the comparison) | pin + mathlib PRs #41234/#41325 |
+| `e` and `f` | `Ideal.ramificationIdx p P` / `Ideal.inertiaDeg p P` (no ring-hom argument at the pin) and their Galois-constant versions `ramificationIdxIn`/`inertiaDegIn`. ⚠ Mathlib redefined both, the unprimed names now denoting the localization and residue-field definitions rather than the `sSup` and quotient-rank ones (#41234, #41325). Milestones are stated through characterizations that hold for either, so that the two agree by `ramificationIdx'_eq_ramificationIdx` and `inertiaDeg'_eq_inertiaDeg` instead of by luck | pin + mathlib #41234/#41325 |
 | splitting type | the multiset `{(e₁,f₁), …, (e_g,f_g)}`; "splits completely" is the count equation `(Ideal.primesOver (span {(p:ℤ)}) (𝓞 K)).ncard = finrank ℚ K` (TauCeti's landed convention, no new predicate); cycle types in `Equiv.Perm.cycleType` vocabulary, ⚠ which **omits fixed points**: partition-valued statements must add the `1`s back explicitly | TauCeti `SplitsCompletely.lean`; Layer 3 |
 | discriminant, absolute | the signed `NumberField.discr K : ℤ`; its sign is a theorem (`NumberField.sign_discr`, Brill), never a convention. `\|discr\|` enters labels; the sign is recoverable from the signature | pin |
 | discriminant, relative | a **new** ideal `relDiscr A B : Ideal A := Ideal.relNorm A (differentIdeal A B)` (Layer 4), never conflated with the signed integer; the reconciliation `relDiscr ℤ (𝓞 K) = span {discr K}` is a named lemma | Layer 4 |
@@ -100,17 +103,17 @@ oddness hypotheses. Never bake `K = ℚ` into a statement whose proof is uniform
 | valuation of an ideal at a prime | `v_P(I) := multiplicity P I` for `P` a nonzero prime of a Dedekind domain, matching the pin's `finprod_heightOneSpectrum_pow_multiplicity` normalization. Every exponent formula in Layers 4–6 is stated in this one normalization, including `v_P(e)` for a natural number `e`, which means the multiplicity of `P` in `span {(e : B)}` | Layers 4, 6 |
 | conductor | the only conductor this roadmap forms is Mathlib's bare-namespace **order conductor** `conductor R x : Ideal S`, used by Kummer–Dedekind, together with the number-field invariant `RingOfIntegers.exponent θ` (root namespace; the `absNorm` of the conductor's contraction). No Artin conductor object, and no general conductor exponent `f_𝔭(χ)`, is defined anywhere in this roadmap | `Mathlib/RingTheory/Conductor.lean`, pin `Ideal/KummerDedekind.lean`; Layers 3, 6 |
 | the power-basis index | `RingOfIntegers.exponent θ` is ⚠ **not** the `ℤ`-module index `[𝓞 K : ℤ[θ]]`; the two have the same prime divisors (a Layer-3 lemma), and only the index satisfies `disc(minpoly θ) = index² · discr K`. To keep the index free of junk values, it is defined on a subtype `IntegralPrimitiveElement K` of integral generators, never by a raw `Nat.card` on all of `𝓞 K` (Layer 3) | Layer 3 |
-| completions at finite places | the pin's `v.adicCompletion K` for `v : HeightOneSpectrum (𝓞 K)`, with `FinitePlace K ≃ HeightOneSpectrum (𝓞 K)`; local-field structure is stated in the `IsNonarchimedeanLocalField`/`ValuativeRel` vocabulary. The class itself is already at the pin (`Mathlib/NumberTheory/LocalField/Basic.lean`, with DVR, finite-residue and completeness instances for abstract local fields), adopted by LocalFields; what is missing is the instance for `v.adicCompletion K`, which is Layer 5's milestone. ⚠ the pin's `adicCompletion` is `Valued`-based while `Valued` is slated for deprecation in favor of `ValuativeRel` (Zulip, Jiedong Jiang, 2026-03-23): Layer 5 states its instances so that the `Valued → ValuativeRel` migration is a refactor, not a re-proof | pin; LocalFields §Provenance |
+| completions at finite places | the pin's `v.adicCompletion K` for `v : HeightOneSpectrum (𝓞 K)`, with `FinitePlace K ≃ HeightOneSpectrum (𝓞 K)`; local-field structure is stated in the `IsNonarchimedeanLocalField`/`ValuativeRel` vocabulary. The class itself is already at the pin (`Mathlib/NumberTheory/LocalField/Basic.lean`, with DVR, finite-residue and completeness instances for abstract local fields), adopted by LocalFields; what is missing is the instance for `v.adicCompletion K`, which is Layer 5's milestone. ⚠ `adicCompletion` is `Valued`-based, and Mathlib is replacing `Valued` by `ValuativeRel` (Zulip, J. Jiang): Layer 5 states its instances through the compatibility layer, so that moving to `ValuativeRel` is a refactor and not a re-proof | pin; LocalFields §Provenance |
 | the completion of an extension | for `w ∣ v`, the algebra structure of `L_w` over `K_v` is the **canonical** one, constructed in Layer 5 as the unique continuous `K_v`-algebra structure compatible with `L/K`. ⚠ The pin's own `Module.Finite K_v L_w` instance instead quantifies over an arbitrary `[Algebra K_v L_w] [ContinuousSMul K_v L_w] [IsScalarTower K K_v L_w]`; no theorem in this roadmap does that, since accepting arbitrary structure would let a statement be about the wrong extension | Layer 5 |
 | absolute values at finite places | the pin's `HeightOneSpectrum.adicAbv`, normalized by `absNorm v.asIdeal`, which **is** LocalFields' `‖x‖ = q^{−v(x)}` normalization; the agreement is a named Layer-5 lemma, and the product formula is the cross-check | pin `Completion/FinitePlace.lean`, `ProductFormula.lean` |
 | LMFDB intrinsic label prefix | `d.r.\|D\|`: degree `d = finrank ℚ K`, `r = nrRealPlaces K`, and `\|D\| = (discr K).natAbs`. These three coordinates are intrinsic theorems. The database index `i` and the canonical defining polynomial are deliberately not part of the API: Hermite finiteness alone supplies neither the LMFDB ordering key nor a completeness/deduplication certificate. A full label such as `2.2.5.1` is used below only as an external name for a field, never as a certified output | Layer 8 |
 
 ## What Mathlib already has (consume)
 
-Verified against the pin `9caeba1000` (2026-06-03); "master:" flags material that landed after
-the pin, to be consumed on the next toolchain bump rather than rebuilt. This section is long
-because the library really is this strong; the point of the inventory is that **none of the
-gaps below it are guesses**.
+Checked against Mathlib at `9caeba1000`, the revision this repository pins; a few declarations
+below are newer than that and are marked "later Mathlib", since a contributor working at the
+pin will not find them. This section is long because the library really is this strong; the
+point of the inventory is that **none of the gaps below it are guesses**.
 
 - **Number fields and rings of integers:** `Mathlib/NumberTheory/NumberField/Basic.lean` has
   `NumberField`, `NumberField.RingOfIntegers` (`𝓞 K`) with `IsDedekindDomain (𝓞 K)`,
@@ -178,9 +181,9 @@ gaps below it are guesses**.
   `IsDecompositionField`/`IsInertiaField` classes with all five degree formulas
   (`rank_left/right`, `rank_decompositionField`). `Unramified.lean`: the comparison
   `Algebra.isUnramifiedAt_iff_of_isDedekindDomain` (`e = 1 ↔ IsUnramifiedAt`, number-ring
-  hypotheses). `Valuation.lean`: `e` against `HeightOneSpectrum` valuations. master:
-  `Mathlib/RingTheory/RamificationInertia/Basic.lean` (#39189, tb65536, 2026-06-08) adds the
-  finite-flat `Σ eᵢfᵢ` formula at ring level.
+  hypotheses). `Valuation.lean`: `e` against `HeightOneSpectrum` valuations. Later Mathlib:
+  `Mathlib/RingTheory/RamificationInertia/Basic.lean` (#39189) adds the finite-flat `Σ eᵢfᵢ`
+  formula at ring level.
 - **Decomposition-group machinery (the real one):** `Mathlib/RingTheory/Ideal/Pointwise.lean`
   has the pointwise `MulSemiringAction` on ideals, `Ideal.inertia_le_stabilizer`, and normality
   of inertia in the stabilizer. `Mathlib/RingTheory/Ideal/Over.lean` has `Ideal.LiesOver`,
@@ -250,9 +253,8 @@ gaps below it are guesses**.
   **`natAbs_discr_eq_absNorm_differentIdeal_mul_natAbs_discr_pow`**
   (`|d_L| = N(𝔡_{L/K})·|d_K|^{[L:K]}`), `discr_dvd_discr`, and
   **`not_dvd_discr_iff_forall_liesOver`** (`p ∤ discr K ↔` all primes over `p` unramified, so
-  ramified ⟺ divides the discriminant, over `ℚ`). master:
-  `not_dvd_discr_iff_isUnramifiedIn` (#40951, xroblot, 2026-06-29) and `Algebra.IsUnramifiedIn`
-  (#41323).
+  ramified ⟺ divides the discriminant, over `ℚ`). Later Mathlib:
+  `not_dvd_discr_iff_isUnramifiedIn` (#40951) and `Algebra.IsUnramifiedIn` (#41323).
 - **Cyclotomic fields:** `Mathlib/NumberTheory/Cyclotomic/` and `NumberField/Cyclotomic/` have
   `IsCyclotomicExtension` with `isGalois`/`isAbelianGalois`, `Rat.finrank = totient`, **the ring
   of integers `ℤ[ζ]`** (`cyclotomicRing_isIntegralClosure`, `adjoinEquivRingOfIntegers`),
@@ -312,94 +314,75 @@ gaps below it are guesses**.
   for Dedekind's theorem (Layer 3). `Mathlib/GroupTheory/DoubleCoset.lean` has
   `DoubleCoset.Quotient`, the carrier for Layer 1's non-Galois splitting law.
 
-### What is in motion elsewhere (refreshed 2026-08-01; coordinate, cite, do not fork)
+### The Mathlib design this roadmap follows
 
-Mathlib is actively consolidating exactly this area, with two authors working in visible
-coordination; every overlapping milestone below carries a refactor-onto flag. (Method note:
-mathlib merges via Bors, so merged PRs read `state: CLOSED` with a `[Merged by Bors]` title, and
-the dates below are Bors merge dates.)
+Mathlib is consolidating exactly this area, and the design of its API here is Mathlib's to
+decide. The work below is cited for that design: build the corresponding Tau Ceti material now,
+using the names and the shapes these declarations use, so that if the same thing lands in
+Mathlib the change here is a deletion plus an import.
 
-- **xroblot's Hilbert-theory wave:** **#41591** remains open at head
-  `9a76f0e50eee06c57a752295f05f00e98ae29ee3` as of 2026-08-01, adding ring-level
-  `Ideal.IsDecompositionRing`/`Ideal.IsInertiaRing` predicates and **deprecating the field-level
-  `IsDecompositionField`/`IsInertiaField` API and its lemmas**; #35808 (splitting in the inertia
-  ring: `f = 1` above, `e` below, unramified over the base); #35991/#36733
-  (decomposition/inertia fields of composita and subfields); #36843 (compositum of unramified
-  extensions is unramified, plus the totally-split version
-  `ramificationIdx_inertiaDeg_sup_eq_one`); #37031 (`ℚ(ζ_m)` is the inertia field of `p` in
-  `ℚ(ζ_{p^k m})`). Merged already: #35802 (2026-06-08, splitting in the decomposition field, five
-  days *after* the pin). Layer 1's corresponding milestones are **comparison-and-consume on
-  landing**, not independent builds.
-- **tb65536's inertia program**: merged are the `ramificationIdx`/`inertiaDeg` **definition
-  swap** (#41234, #41325, plus ~8 switch-over PRs, 2026-06-29 – 07-04; see the conventions
-  table), the `RingTheory/IsGaloisGroup/{Defs,Basic}` + `Invariant/Galois` reorg
-  (#40928/#40942/#41071), low-level `Ideal.inertia` API (#40383 et al.), and
-  `InfinitePlace.mult_mul_finrank` (#41600); open are #40952/#40387/#40757 (inertia-subgroup
-  monotonicity/quotients/smul), **#40955** ("Galois groups are generated by inertia subgroups",
-  via Minkowski, the group-theoretic form of `ℚ` having no unramified extension), #41415
-  (`absoluteGaloisGroup` functoriality), and #41377/#41378/#41368/#41100 (generalization churn on
-  the new definitions).
-- **Adjacent open PRs**: xroblot #41180 (norm congruence at unramified primes), #37023 (coprime
-  discriminants ⇒ linearly disjoint), #40905 (compositum of abelian extensions); fbarroero
-  #40848 (S-integers as localization); kedlaya #41911 (Artin–Schreier).
-- **Null results worth recording** (searched 2026-07-30): **zero** open PRs on the
-  conductor–discriminant formula or any ideal-theoretic conductor; **zero** on different-ideal
-  transitivity beyond what the pin has (`Different.lean` untouched since the pin); **zero**
-  extending `IsArithFrobAt` (no Artin-symbol PR; the only "Artin" hits are Artin–Schreier);
-  **zero** on higher ramification groups; **zero** on certifying a named fundamental unit.
-  Layers 2–7's core builds collide with nothing in flight.
-- **Zulip** (searched via the public archive 2026-07-30; the instance's anonymous REST API is
-  disabled, so this sweep is the archive plus the sibling's audited threads): the
-  decomposition-group-as-stabilizer convention was settled in
+- **Ring-level Hilbert theory** (mathlib
+  [#41591](https://github.com/leanprover-community/mathlib4/pull/41591)) introduces
+  `Ideal.IsDecompositionRing`/`Ideal.IsInertiaRing` and deprecates the field-level
+  `IsDecompositionField`/`IsInertiaField` API. Layer 1's decomposition- and inertia-field
+  milestones are stated at ring level for that reason, and the conventions table records the
+  same direction. The surrounding series covers splitting in the decomposition field (#35802)
+  and in the inertia ring (#35808), decomposition and inertia fields of composita and subfields
+  (#35991, #36733), unramified composita with the totally-split criterion
+  `ramificationIdx_inertiaDeg_sup_eq_one` (#36843), and the inertia field of `p` in
+  `ℚ(ζ_{p^k m})` (#37031).
+- **The `ramificationIdx`/`inertiaDeg` definitions** were replaced by their localization and
+  residue-field versions (#41234, #41325). Milestones here are stated through characterizations
+  that survive the swap, as the conventions table says. The neighboring reorganization moves the
+  `IsGaloisGroup` material into `RingTheory/IsGaloisGroup/` and `Invariant/Galois`
+  (#40928, #40942, #41071) and adds low-level `Ideal.inertia` API (#40383).
+- **Adjacent design to follow:** norm congruence at unramified primes (#41180), coprime
+  discriminants giving linear disjointness (#37023), composita of abelian extensions (#40905),
+  `Algebra.IsUnramifiedIn` (#41323), and "Galois groups are generated by inertia subgroups"
+  (#40955), the group-theoretic form of `ℚ` having no unramified extension.
+- **Nothing in Mathlib covers** the conductor–discriminant formula or any ideal-theoretic
+  conductor, different-ideal transitivity beyond what the pin has, any extension of
+  `IsArithFrobAt` (in particular no Artin symbol), higher ramification groups, or certification
+  of a named fundamental unit. Those are the core builds of Layers 2–7, and they duplicate
+  nothing.
+- **Conventions settled on Zulip.** Decomposition group as `MulAction.stabilizer` was settled in
   [new members > "Working on Frobenius elements"](https://leanprover-community.github.io/archive/stream/113489-new-members/topic/Working.20on.20Frobenius.20elements.html)
-  (M. Karatarakis, with Buzzard/Commelin/Topaz/Lezeau/Wieser/Dillies/Nuccio, 2022-07/08), which
-  is the origin of the `ValuationSubring.decompositionSubgroup` stub; **Chebotarev** is a
-  declared onward goal of PrimeNumberTheoremAnd (Kontorovich–Tao, stream `#PrimeNumberTheorem+`,
-  announced 2024-01), consistent with this roadmap deliberately *not* owning any density
-  statement (→ [L-functions PR #8](https://github.com/roed-math/TauCetiRoadmap/pull/8)); and the
-  `Valued`-deprecation project (J. Jiang, 2026-03-23) with the `ValuativeRel` wave is tracked in
-  the [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) §Provenance and
-  constrains Layer 5's instance statements as noted in the conventions table.
+  (M. Karatarakis, with Buzzard, Commelin, Topaz, Lezeau, Wieser, Dillies and Nuccio), which is
+  also the origin of the `ValuationSubring.decompositionSubgroup` stub. Chebotarev is a declared
+  onward goal of PrimeNumberTheoremAnd (Kontorovich–Tao, `#PrimeNumberTheorem+`), which is why
+  no density statement is owned here (→
+  [L-functions PR #8](https://github.com/roed-math/TauCetiRoadmap/pull/8)). The `Valued`
+  deprecation in favor of `ValuativeRel` (J. Jiang) is tracked in
+  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) §Provenance and
+  constrains how Layer 5 states its instances.
 
 ### Coordination and licence ledger
 
-- **Project / authors:** Mathlib ramification/inertia work, principally the authors and
-  reviewers of the PRs cited above.
-- **Exact revision or PR:** mathlib PR
-  [#41591](https://github.com/leanprover-community/mathlib4/pull/41591), open at
-  `9a76f0e50eee06c57a752295f05f00e98ae29ee3` when refreshed 2026-08-01; the
-  `ramificationIdx`/`inertiaDeg` switch-over series #41234/#41325 is already represented in the
-  current Mathlib API even though the individual Bors PR pages are closed.
+- **Project / authors:** Mathlib ramification and inertia theory, principally the authors and
+  reviewers of the work cited above.
 - **Licence:** Mathlib is Apache-2.0.
-- **Overlap:** decomposition/inertia predicates and the `e`/`f` names in Layers 1–2.
-- **Contact / coordination status:** no new author contact was made during this review pass; the
-  cited public PR discussions are the current coordination record.
-- **Agreed ownership:** Mathlib owns the generic ring-level API; this roadmap owns only the
-  number-field comparisons and the downstream Frobenius packaging.
-- **Plan:** consume the landed Mathlib declarations and contribute missing generic comparison
-  lemmas upstream; do not freeze wrappers around the field-level API while #41591 is open.
-- **Refactor trigger:** re-elaborate Layers 1–2 at the first toolchain bump containing #41591.
+- **Overlap:** decomposition and inertia predicates, and the `e`/`f` names, in Layers 1–2.
+- **Coordination record:** the public Mathlib pull-request discussions cited above.
+- **Ownership:** Mathlib owns the generic ring-level API. This roadmap owns the number-field
+  comparisons and the Frobenius layer built on them, and takes Mathlib's names and design for
+  anything the two have in common.
 
 - **Project / authors:** C. Birkbeck,
   [`CBirkbeck/CertifyingInvariantsNF`](https://github.com/CBirkbeck/CertifyingInvariantsNF).
-- **Exact revision or PR:** `59ae55dbe49840d26d267a86c3e5c8f4a866d169` (2026-06-30), the
-  repository head when refreshed 2026-08-01.
-- **Licence:** no licence is declared in the repository metadata; therefore no code or data is to
-  be copied or adapted without explicit permission.
+- **Licence:** no licence is declared in the repository metadata, so no code or data from it is
+  to be copied or adapted without explicit permission.
 - **Overlap:** certified per-field invariant files and the eventual database-label interface.
-- **Contact / coordination status:** not contacted during this review pass.
-- **Agreed ownership:** none recorded. In particular, this roadmap does not claim the LMFDB
-  ordering/canonical-polynomial layer.
-- **Plan:** prove only the intrinsic `d.r.|D|` prefix here. A later data-index project may add
-  `.i` after its ordering, canonical-polynomial selection, isomorphism deduplication, bounded-list
-  completeness, and position certificate have all been specified and coordinated.
-- **Refactor trigger:** an explicitly licensed, reviewed certification interface with those five
-  ingredients.
+- **Coordination record:** none. The authors have not been contacted.
+- **Ownership:** this roadmap proves only the intrinsic `d.r.|D|` prefix and makes no claim on
+  the LMFDB ordering or canonical-polynomial layer. Adding `.i` needs a certified ordering,
+  canonical-polynomial selection, isomorphism deduplication, bounded-list completeness and a
+  position certificate, together with an explicitly licensed interface to build against; that
+  is a different project's specification, not a milestone deferred from this one.
 
 ## What TauCeti already has (consume)
 
-Audited at `TauCetiProject/TauCeti` HEAD, 2026-07-30. These files were authored under the
-[Multiquadratic](../Multiquadratic/README.md) roadmap (Layers 1–2) and the completed
+These files were authored under the [Multiquadratic](../Multiquadratic/README.md) roadmap
+(Layers 1–2) and the completed
 [EffectiveBounds](../../Completed/EffectiveBounds/README.md) roadmap; this roadmap consumes and
 generalizes them, so that the quadratic statements become instances of the uniform API. One
 narrowly scoped amendment to a landed file is planned and is named as such: Layer 1 publishes a
@@ -481,11 +464,11 @@ Each row is one named milestone crossing a roadmap boundary. Nothing else crosse
 |---|---|---|
 | [PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 0 | local-field structure, the local `e`/`f`, and the `‖x‖ = q^{−v(x)}` normalization | PR #9 Layer 5 |
 | [PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 2 | unramified extensions and the local Frobenius | PR #9 Layer 5 (Frobenius comparison) |
-| [PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 3 | the lower filtration `G_i`, `v_L(𝔡) = Σ_{i≥0}(#G_i − 1)`, tame `v_L(𝔡) = e − 1`, and the wild bound | PR #9 Layer 6 |
+| [PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2) Layer 3 | the lower filtration `G_i`, `v_L(𝔡) = Σ_{i≥0}(#G_i − 1)`, the tame exponent `v_L(𝔡) = e − 1`, and the structure theorem (maximal unramified subextension; totally ramified ⟺ Eisenstein) | PR #9 Layer 6 |
 | PR #9 Layer 3 | the polynomial-side Dedekind theorem: for monic `f : ℤ[X]` and `p ∤ f.discr`, some `σ ∈ (f/ℚ).Gal` whose root action has full cycle type the factor-degree multiset of `f mod p` | [PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10) Layer 5 |
 | PR #9 Layer 7 | the `S_n`-embedding of the Galois closure of a number field | [PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10) |
 | [PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10) | `nTj` transitive-group label semantics and low-degree recognition | PR #9 Layer 8 only |
-| PR #9 Layer 2 | `artinHomUnramified : J^S →* (L ≃ₐ[K] L)` on the fractional ideals prime to the ramified set, in PR #6's `(FractionalIdeal (𝓞 K)⁰ K)ˣ` carrier | [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layers 6–8 |
+| PR #9 Layer 2 | `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)` for an arbitrary finite `S` containing the ramified primes, in PR #6's `(FractionalIdeal (𝓞 K)⁰ K)ˣ` carrier | [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layers 6–8 |
 | PR #9 Layer 5 | `IsNonarchimedeanLocalField (v.adicCompletion K)` with the residue-cardinality and normalization lemmas, and the localization of the different | [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layers 2, 9 |
 | [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layer 1 | the narrow class group `Cl⁺ K` and the surjection `Cl⁺ ↠ Cl` | PR #9 Layer 8 |
 | [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) Layer 9 | the abelian conductor–discriminant formula, used only as a cross-check on the worked examples | PR #9 §Worked examples |
@@ -519,26 +502,27 @@ expressible, its milestones are added to `Suggested.lean` with `sorry`.
 - **Unramified sets of primes, without a new predicate.** Statements about a finite set of primes
   being unramified are written with explicit pointwise quantification over the primes of the set,
   mirroring the pin's archimedean `IsUnramifiedAtInfinitePlaces`. ⚠ Do **not** introduce a Tau
-  Ceti `IsUnramifiedIn` wrapper: master already has `Algebra.IsUnramifiedIn` (#41323), and
-  pointwise statements refactor onto it directly at the next bump, whereas a wrapper would have
-  to be deprecated the day it lands.
+  Ceti `IsUnramifiedIn` wrapper: Mathlib has `Algebra.IsUnramifiedIn` (#41323), and pointwise
+  statements sit directly on top of it, whereas a wrapper would be redundant from the day it is
+  written.
 - **The prime-in-subfield dictionary** (Neukirch I (9.3)/(9.6)): `e` and `f` of `P ∩ Z` and
   `P ∩ T` for the decomposition and inertia fields. `P` is the only prime of `L` over `P ∩ Z`;
   `e(P∩Z/p) = f(P∩Z/p) = 1`; `f(P∩T/P∩Z) = f`, `e(P∩T/P∩Z) = 1`; the inertia field is where `e`
-  concentrates. ⚠ **Refactor-onto flag**: this is exactly xroblot's open wave (#35802 merged
-  post-pin; #35808/#35991/#36733 open) on the ring-level predicates of #41591. State these
-  milestones, and convert them to comparison-and-consume when the wave lands.
+  concentrates. ⚠ State these at ring level, on `Ideal.IsDecompositionRing`/`IsInertiaRing`
+  rather than on the field-level classes, following the Mathlib direction recorded above
+  (#41591, with #35802/#35808/#35991/#36733 the surrounding results).
 - **The double-coset law for non-Galois splitting** (Neukirch I §9 p. 55, the "proof left to the
   reader"; genuinely absent upstream): for `M/K` Galois with group `G`, `L` the fixed field of
-  `H ≤ G`, and `D = MulAction.stabilizer G Q` for a prime `Q` over `p`, the primes of `L` over
-  `p` biject with `DoubleCoset.Quotient H D` via `HσD ↦ σQ ∩ L`; the invariant read-off
+  `H ≤ G`, and `D = MulAction.stabilizer G Q` for a prime `Q` over `p`, a named bijection
+  `DoubleCoset.Quotient H D ≃ primesOver p (𝓞 L)`, together with the theorem that it sends
+  `HσD` to `σQ ∩ L`; the invariant read-off
   `e(𝔮_σ/p)·f(𝔮_σ/p) = |HσD|/|H| = [σDσ⁻¹ : H ∩ σDσ⁻¹]`, refined to
   `e(𝔮_σ/p) = [σIσ⁻¹ : H ∩ σIσ⁻¹]` with `I = Q.inertia G`; and the consistency identity
   `Σ_σ |HσD|/|H| = [L:K]` recovering the fundamental identity.
 - **Totally split ⟺ totally split in the Galois closure** (Neukirch I §9 Ex. 4, via the
   double-coset law), and the compositum statements: `p` totally split in `L₁` and `L₂` ⟺ in
-  `L₁L₂`; `p` unramified in both ⟹ unramified in the compositum. ⚠ **Refactor-onto**: the
-  unramified-compositum half is open PR #36843.
+  `L₁L₂`; `p` unramified in both ⟹ unramified in the compositum. ⚠ Follow mathlib #36843 for the
+  spelling of the unramified-compositum half and its totally-split criterion.
 
 ### Layer 2: Frobenius elements and the Artin symbol, at finite level
 
@@ -576,16 +560,26 @@ everything lives in a finite Galois extension.
   compatibility of `artinSymbol` with `AlgEquiv.restrictNormalHom`.
 - **The abelian collapse and the ideal-theoretic Artin map.** For abelian `L/K` the symbol is a
   single element `((L/K)/𝔭) ∈ Gal(L/K)`. Extend it multiplicatively, in exactly the carrier
-  [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) pinned for `J^{𝔪₀}`: let `S` be the
-  finite set of primes of `𝓞 K` dividing `relDiscr (𝓞 K) (𝓞 L)` (Layer 4 supplies the ideal;
-  `S` finite is Layer 4's finiteness statement), let `J^S ≤ (FractionalIdeal (𝓞 K)⁰ K)ˣ` be the
-  subgroup of fractional ideals whose support avoids `S`, and define
-  `artinHomUnramified : J^S →* (L ≃ₐ[K] L)` by prime factorization and the prime-level symbol.
-  Milestones: well-definedness through unique factorization; the values on primes; the
-  restriction of `artinHomUnramified` to integral ideals as a monoid hom (a corollary, not the
-  primary object); functoriality in `L`. Its reciprocity properties (kernel, surjectivity,
-  factorization through ray class groups) are **not** stated here: PR #6 owns those and consumes
-  this map literally, which is why the carrier is pinned rather than invented.
+  [PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6) pinned for `J^{𝔪₀}`. The excluded
+  set is a parameter: take any finite `S : Finset (HeightOneSpectrum (𝓞 K))` together with the
+  hypothesis that every prime outside `S` is unramified in `L`. Nothing here has to know which
+  primes those are, which is also what PR #6 needs, since its `𝔪₀` support is generally larger
+  than the ramified set. Milestones, in order:
+  1. the carrier `J^S ≤ (FractionalIdeal (𝓞 K)⁰ K)ˣ`, the fractional ideals with zero valuation
+     at every prime of `S`, and its generation by the primes outside `S`;
+  2. the prime-level Artin element outside `S`, from the symbol above and the abelian collapse;
+  3. the multiplicative extension `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)`, well defined
+     through unique factorization;
+  4. its value on a prime ideal;
+  5. functoriality in the extension `L`;
+  6. the restriction to the monoid of integral ideals prime to `S`, as a corollary rather than
+     the primary object.
+
+  Its reciprocity properties (kernel, surjectivity, factorization through ray class groups) are
+  **not** stated here: PR #6 owns those and consumes this map literally, which is why the
+  carrier is pinned rather than invented. The canonical choice `S = ` the support of the
+  relative discriminant is Layer 4's, since it is the relative discriminant that makes that set
+  a `Finset` in the first place.
 - **Computations.** Cyclotomic: `galEquivZMod n K (Frob Q) = ZMod.unitOfCoprime p hp`, the
   element identification the pin stops short of (both halves exist: `apply_of_pow_eq_one` and
   `galEquivZMod_apply_of_pow_eq`). Quadratic: for `K = ℚ(√d)` presented by `θ : 𝓞 K` with
@@ -630,9 +624,8 @@ conversion is the index comparison. Nothing later in the layer may assume it.
   the same-prime-support statement is what makes them interchangeable in hypotheses.
 - **The checkable hypothesis.** Combining the previous two:
   `¬ (p : ℤ) ∣ Polynomial.discr (minpoly ℤ θ) → ¬ p ∣ RingOfIntegers.exponent θ`. This is the
-  implication every polynomial-side statement below uses, and it is stated and proved here rather
-  than assumed. If a bump supplies it directly, cite the upstream name and drop the local proof;
-  do not leave it implicit either way.
+  implication every polynomial-side statement below uses. It is a named theorem, not a step
+  buried in a proof, and not a hypothesis assumed by the statements that need it.
 - **The relative Dedekind–Kummer theorem.** Generalize the pin's `𝓞 K/ℤ` package
   (`primesOverSpanEquivMonicFactorsMod` with `inertiaDeg`/`ramificationIdx` matching) to AKLB:
   for `θ` generating `L/K` and `p` coprime to `conductor A θ`, primes of `B` over `p` correspond
@@ -644,13 +637,22 @@ conversion is the index comparison. Nothing later in the layer may assume it.
   divides by `p` and that has no base-free meaning; a relative version would need a chosen
   uniformizer and explicit localization hypotheses, and is not a milestone here. Let
   `θ : IntegralPrimitiveElement K`, `f = minpoly ℤ θ`, and `p` prime. Write
-  `f mod p = ∏ᵢ φᵢ^{eᵢ}` with the `φᵢ` distinct monic irreducibles of `𝔽_p[X]`, choose monic
-  lifts `Φᵢ : ℤ[X]`, prove that `f − ∏ᵢ Φᵢ^{eᵢ}` has all coefficients divisible by `p`, and set
-  `H := (f − ∏ᵢ Φᵢ^{eᵢ})/p`. Then
+
+  ```text
+  f mod p = ∏ᵢ φᵢ^{eᵢ},   the φᵢ distinct monic irreducibles of 𝔽_p[X],   each eᵢ > 0,
+  ```
+
+  so that the index set is exactly the set of irreducibles occurring in the factorization,
+  choose monic lifts `Φᵢ : ℤ[X]`, prove that `f − ∏ᵢ Φᵢ^{eᵢ}` has all coefficients divisible by
+  `p`, and set `H := (f − ∏ᵢ Φᵢ^{eᵢ})/p`. Then
 
   ```text
   ¬ p ∣ index θ  ↔  ∀ i, eᵢ = 1 ∨ ¬ φᵢ ∣ (H mod p).
   ```
+
+  ⚠ Positivity is a hypothesis of the theorem. An index `i` with `eᵢ = 0` changes neither the
+  factorization nor `H`, but its `φᵢ` would still have to divide `H mod p` for the right-hand
+  side to hold, so the equivalence fails without it.
 
   Milestones: independence of the criterion from the choice of lifts `Φᵢ`; the coefficientwise
   divisibility statement (so that `H` is well defined in `ℤ[X]`); the criterion itself; and the
@@ -715,12 +717,17 @@ runs through a completion is in Layer 6.
   towers, `relDiscr A C = (relDiscr A B)^{[M:L]} · relNorm A (relDiscr B C)` (Neukirch III (2.10),
   from the pin's different-transitivity plus multiplicativity of `relNorm`); localization; the
   ramification criterion `p` ramified in `B` ⟺ `p ∣ relDiscr A B` (Neukirch III (2.12),
-  generalizing the pin's `ℚ`-only `not_dvd_discr_iff_forall_liesOver`); the absolute
+  generalizing the pin's `ℚ`-only `not_dvd_discr_iff_forall_liesOver`); and the absolute
   reconciliation `relDiscr ℤ (𝓞 K) = span {NumberField.discr K}` (against
-  `absNorm_differentIdeal`, with the sign from `sign_discr`); and finiteness of the set of
-  ramified primes, as divisors of a nonzero ideal. That finiteness statement is what Layer 2's
-  `S` and `J^S` are built on, so it is stated in the general-Dedekind form, whose `ℚ`-corollary
-  is one line from the pin but is absent upstream.
+  `absNorm_differentIdeal`, with the sign from `sign_discr`). Stated in the general-Dedekind
+  form; the `ℚ`-corollary is one line from the pin but is absent upstream.
+- **The ramified support, and the Artin map on it.** `ramifiedSupport L/K`, the finite set of
+  primes of `𝓞 K` dividing `relDiscr (𝓞 K) (𝓞 L)`, with its finiteness (divisors of a nonzero
+  ideal of a Dedekind domain) and the characterization that a prime lies outside it exactly
+  when it is unramified in `L`, from the criterion above. This is what makes the ramified set a
+  `Finset`, and specializing Layer 2's `artinHomAway` to it gives the Artin map on the
+  fractional ideals prime to the discriminant, which is the form the classical statement takes.
+  The specialization is a milestone; Layer 2's construction does not depend on it.
 - **Discriminants of bases, connected.** The `Algebra.discr` tower formula
   `disc_{M/K}(compatible bases) = disc_{L/K}^{[M:L]} · N(disc_{M/L})`.
 - **Stickelberger's congruence** `discr K % 4 ∈ {0, 1}`: absent upstream, classical, and
@@ -751,25 +758,44 @@ higher ramification filtration; that dependency is Layer 6's, on their Layer 3.
   (normalized by `absNorm`) equals LocalFields' `‖x‖ = q^{−v(x)}`, cross-checked by the product
   formula. ⚠ `Valued`-versus-`ValuativeRel` migration risk as pinned in the conventions table:
   state the instances through the compatibility layer so the deprecation is a refactor.
-- **The canonical completion of an extension.** For `w : HeightOneSpectrum (𝓞 L)` with
-  `w.asIdeal.LiesOver v.asIdeal`, construct the canonical continuous ring map
-  `K_v → L_w` extending `K → L`, prove it continuous, prove `IsScalarTower K K_v L_w`, and prove
-  that it is the **unique** continuous `K`-algebra map `K_v → L_w`. Every theorem below is stated
-  about this algebra structure. ⚠ The pin's own `Module.Finite K_v L_w` instance takes
-  `[Algebra K_v L_w] [ContinuousSMul K_v L_w] [IsScalarTower K K_v L_w]` as hypotheses; a theorem
-  stated that way is a theorem about an arbitrary compatible structure, and can be about the
-  wrong extension. Re-derive `Module.Finite` for the canonical map, and state the pin's instance
-  as the corollary.
-- **Semi-local structure.** The algebra equivalence
+- **The canonical completion of an extension**, as a named map. For
+  `w : HeightOneSpectrum (𝓞 L)` with `w.asIdeal.LiesOver v.asIdeal`, define
 
   ```text
-  L ⊗[K] K_v  ≃ₐ[K_v]  ∏ (w : {w : HeightOneSpectrum (𝓞 L) // w.asIdeal.LiesOver v.asIdeal}), L_w
+  completionAlgHom v w : K_v →ₐ[K] L_w
   ```
 
-  (Neukirch II (8.3)), with a named equivalence between that index type and
-  `Ideal.primesOver v.asIdeal (𝓞 L)` so both spellings are available. Consequence:
-  **`Σ_{w ∣ v} [L_w : K_v] = [L : K]`**, the finite-place analogue of the pin's archimedean
-  `InfinitePlace.sum_inertiaDeg_eq_finrank`, absent upstream.
+  by continuous extension of `K → L`, and prove: continuity; the compatibility square with
+  `K → L`; **uniqueness** among continuous maps making that square commute; the induced
+  `Algebra K_v L_w` instance together with `IsScalarTower K K_v L_w` and
+  `ContinuousSMul K_v L_w`; and `Module.Finite K_v L_w` for that instance. An existence
+  statement is not enough on its own: everything below is a theorem about this map, so it has
+  to be an object, not a `∃`. ⚠ The pin's own `Module.Finite K_v L_w` instance takes
+  `[Algebra K_v L_w] [ContinuousSMul K_v L_w] [IsScalarTower K K_v L_w]` as hypotheses; a
+  theorem stated that way is a theorem about an arbitrary compatible structure, and can be about
+  the wrong extension. Re-derive `Module.Finite` for the canonical map, and state the pin's
+  instance as the corollary.
+- **Semi-local structure**, as a named equivalence. Write `W v` for the subtype
+  `{w : HeightOneSpectrum (𝓞 L) // w.asIdeal.LiesOver v.asIdeal}`, and define
+
+  ```text
+  semilocalEquiv v : K_v ⊗[K] L  ≃ₐ[K_v]  ∏ (w : W v), L_w
+  ```
+
+  (Neukirch II (8.3)), for the algebra structures of the previous milestone, together with its
+  value on pure tensors,
+
+  ```text
+  semilocalEquiv v (a ⊗ₜ x) w = algebraMap K_v L_w a * algebraMap L L_w x,
+  ```
+
+  which is what pins the equivalence down; a bare `Nonempty (… ≃+* …)` determines nothing that
+  a later compatibility theorem can use. The completion is written on the left of the tensor
+  product so that the `K_v`-algebra structure on the source is Mathlib's
+  `Algebra.TensorProduct.leftAlgebra`; Neukirch writes `L ⊗_K K_v`, which is the same object.
+  Also name the equivalence `W v ≃ Ideal.primesOver v.asIdeal (𝓞 L)` so both spellings are
+  available. Consequence: **`Σ_{w ∣ v} [L_w : K_v] = [L : K]`**, the finite-place analogue of
+  the pin's archimedean `InfinitePlace.sum_inertiaDeg_eq_finrank`, absent upstream.
 - **Norm and trace, with every map written out.** For `x : L`,
 
   ```text
@@ -781,14 +807,25 @@ higher ramification filtration; that dependency is Layer 6's, on their Layer 3.
 - **Invariant matching.** `[L_w : K_v] = e(w ∣ v) · f(w ∣ v)` with `e` and `f` the *global*
   `Ideal.ramificationIdx`/`inertiaDeg` (their local `e·f = n` is LocalFields'; the equality of
   the two factor pairs is this milestone).
-- **The decomposition group is the local Galois group.** Under `IsGalois K L`, the canonical
-  group homomorphism `MulAction.stabilizer (L ≃ₐ[K] L) w.asIdeal → (L_w ≃ₐ[K_v] L_w)` induced by
-  continuity, together with injectivity (density of `L` in `L_w`), surjectivity, and hence the
-  isomorphism (Neukirch II §9). With it: compatibility with the residue maps, and the statement
-  that an `IsArithFrobAt` element of the stabilizer maps to LocalFields' Layer-2 Frobenius. The
-  two conventions already agree by construction; this is the theorem that makes the agreement a
-  fact rather than a hope.
-- **The different localizes.** Using the actual ideal map into the completed integer ring,
+- **The decomposition group is the local Galois group**, again through a named map. Under
+  `IsGalois K L`, continuous extension gives
+
+  ```text
+  decompositionHom v w : MulAction.stabilizer (L ≃ₐ[K] L) w.asIdeal →* (L_w ≃ₐ[K_v] L_w),
+  ```
+
+  and the milestones are its defining property on the dense image of `L`
+  (`decompositionHom v w σ (algebraMap L L_w x) = algebraMap L L_w (σ x)`), injectivity (density
+  of `L` in `L_w`), surjectivity, and the resulting `MulEquiv` (Neukirch II §9). With it:
+  compatibility with the residue maps, and the statement that an `IsArithFrobAt` element of the
+  stabilizer maps to LocalFields' Layer-2 Frobenius. The two conventions agree by construction,
+  and this theorem is what puts that on record. As with the semi-local equivalence, an unnamed
+  `Nonempty (… ≃* …)` would leave the map that Layer 6's comparison theorem transports along
+  undetermined.
+- **The different localizes.** First the algebra structure the statement needs: the canonical
+  map carries `𝓞_{K_v}` into `𝓞_{L_w}`, and the resulting extension is torsion-free, which is
+  what lets `differentIdeal` be formed for it at all. Then, with the actual ideal map into the
+  completed integer ring,
 
   ```text
   (differentIdeal (𝓞 K) (𝓞 L)).map (algebraMap (𝓞 L) (w.adicCompletionIntegers L))
@@ -821,20 +858,36 @@ neither restated nor re-proved here.
   a decreasing chain of normal subgroups of the stabilizer, eventually trivial, with
   `G 0 = Q.inertia` (a reconciliation lemma against the pin's `Ideal.inertia`). ⚠ The
   decomposition group is *not* a member of this family; it keeps its own name, per the
-  conventions table. **The central API of this object is the comparison theorem**: under the
-  Layer-5 isomorphism `MulAction.stabilizer ≃* (L_w ≃ₐ[K_v] L_w)`, `G i` corresponds to the local
-  `G_i` of `L_w/K_v`. Every property of `G i` beyond the definition and this comparison is
+  conventions table. **The central API of this object is the comparison theorem**, and it is an
+  equality of subgroups along Layer 5's named `decompositionHom`, not an abstract isomorphism:
+  the image of `G i` under `decompositionHom v w` is PR #2's local lower ramification group
+  `G_i` of `L_w/K_v`, equivalently `G i` is its preimage. Saying only that the two groups are
+  isomorphic would leave the identification unusable, since every downstream computation moves
+  an element across it. Every property of `G i` beyond the definition and this comparison is
   obtained by transport.
 - **The different-exponent formula.** `v_Q(differentIdeal (𝓞 K) (𝓞 L)) = Σ_{i ≥ 0} (#(G i) − 1)`
   (Serre LF IV §1 Prop. 4), proved by transporting PR #2's local formula through the comparison
   theorem and the different-localization lemma of Layer 5.
-- **Exact tame and wild exponents** (Neukirch III (2.6); the pin has only `P^{e−1} ∣ 𝔡`):
-  `v_P(𝔡) = e − 1` exactly when the extension is tame at `P` (`ringChar (A ⧸ 𝔭) ∤ e`), and in the
-  wild case `e ≤ v_P(𝔡) ≤ e − 1 + v_P(e)`, where `v_P(e)` is the multiplicity of `P` in
-  `span {(e : B)}`, in the same normalization as `v_P(𝔡)`. Route: localize and complete, then
-  quote PR #2 Layer 3's local computation, then descend through Layer 5. A divisibility-only
-  formulation (`P^{e−1+v_P(e)+1} ∤ 𝔡`) is acceptable if the additive ideal valuation turns out to
-  be awkward in Mathlib; state whichever is used and keep it consistent across the layer.
+- **Exact tame and wild exponents** (Neukirch III (2.6), Serre LF III §6 Prop. 13; the pin has
+  only `P^{e−1} ∣ 𝔡`): `v_P(𝔡) = e − 1` exactly when the extension is tame at `P`
+  (`ringChar (A ⧸ 𝔭) ∤ e`), and in the wild case `e ≤ v_P(𝔡) ≤ e − 1 + v_P(e)`, where `v_P(e)`
+  is the multiplicity of `P` in `span {(e : B)}`, in the same normalization as `v_P(𝔡)`.
+  ⚠ Hypotheses. These are theorems about a **finite separable** extension of fraction fields.
+  Without separability the trace form vanishes identically, `differentIdeal` is the zero ideal,
+  and `v_P(𝔡)` is a junk value rather than an exponent. State them either for a finite extension
+  of number fields, where separability is automatic, or in the AKLB form with `A` Dedekind with
+  fraction field `K`, `L/K` finite with `[Algebra.IsSeparable K L]`, and `B` the integral
+  closure of `A` in `L`. A two-ring signature that never mentions the fraction fields cannot
+  express that hypothesis at all, and is not acceptable here. `Suggested.lean` carries the
+  number-field instance; the AKLB form is the milestone.
+  Route: localize and complete, then quote PR #2 Layer 3's tame exponent `v_L(𝔡) = e − 1` and
+  its structure theorem (unramified subextension plus totally-ramified-equals-Eisenstein), then
+  descend through Layer 5. ⚠ The wild upper bound is **not** a PR #2 milestone and is not cited
+  as one: it is proved here from that structure theorem, which makes `𝓞_{L_w}` monogenic over
+  `𝓞_{K_v}`, together with the pin's `conductor_mul_differentIdeal` (`𝔡 = (g′(π))` in the
+  monogenic case) and a valuation count on `g′(π)`. A divisibility-only formulation
+  (`P^{e−1+v_P(e)+1} ∤ 𝔡`) is acceptable if the additive ideal valuation turns out to be awkward
+  in Mathlib; state whichever is used and keep it consistent across the layer.
 - **The permutation-action discriminant exponent formula.** For `L/K` Galois with group `G`,
   `H ≤ G`, `M = L^H`, `Q` a prime of `𝓞 L` over `𝔭`, and `𝔮 = Q ∩ 𝓞 M`:
 
@@ -903,11 +956,24 @@ neither restated nor re-proved here.
     examples use. ⚠ "Mathlib has Dirichlet's unit theorem" is not a proof of index one, and no
     example below may cite it as one;
   - the consequence `regOfFamily ![u] = NumberField.Units.regulator K` from
-    `regOfFamily_div_regulator` with index `1`, and the rank-one evaluation
-    `regulator K = |Real.log (w u)|` for an infinite place `w`, from `regOfFamily_eq_det`.
+    `regOfFamily_div_regulator` with index `1`, and the rank-one evaluation, from
+    `regOfFamily_eq_det`:
+
+    ```text
+    regulator K = w.mult * Real.log (w u)   for any infinite place w with 1 < w u.
+    ```
+
+    ⚠ Do not drop `mult`. In rank one there are exactly two infinite places, and
+    `Σ_w mult w · log (w u) = log |N(u)| = 0` makes the two choices of `w` agree, but a version
+    without `mult` is wrong at every field with a complex place: the regulator of `ℚ(ζ₅)` is
+    `2·log((1+√5)/2)`, not `log((1+√5)/2)`. Mathlib's `logEmbedding` carries `mult` for the same
+    reason.
 
   With those three, an exact regulator value is a computation about one explicit unit, and the
-  worked examples state their units and their generation theorems rather than a decimal.
+  worked examples state their units and their generation theorems rather than a decimal. ⚠ Every
+  such value is an equation between `regulator K` and `Real.log` applied to a **real number**
+  obtained by evaluating a named infinite place at the unit. `Real.log` of an element of `K` or
+  of `𝓞 K` does not typecheck, and writing it that way in prose hides a missing embedding.
 
 ### Layer 8: the intrinsic label prefix and the invariant suite
 
@@ -1023,8 +1089,16 @@ exact. Each entry says which assertions are proved here and which are consumed.
   so `index θ = 1` and `discr K = −23`.
   *Proved here:* signature `(1,1)`; non-Galois with `S₃` Galois closure; no proper subfield;
   `Units.rank = 1` with the explicit unit `u = θ² − θ`, characterized by `θ·(θ² − θ) = −1`, so
-  `u = −θ⁻¹`; `Subgroup.closure {u} ⊔ torsion K = ⊤` by Layer 7's certification, hence
-  `regulator K = Real.log (θ² − θ)` exactly (numerically `≈ 0.2812`, for orientation only).
+  `u = −θ⁻¹`; `Subgroup.closure {u} ⊔ torsion K = ⊤` by Layer 7's certification; and, with `w`
+  the unique real place (`w.mult = 1`, and `1 < w u` since `w u ≈ 1.3247`),
+
+  ```text
+  regulator K = Real.log (w ((u : 𝓞 K) : K))
+  ```
+
+  exactly (numerically `≈ 0.2812`, for orientation only). ⚠ Naming `w` is what makes this a
+  statement: `θ² − θ` is an element of `𝓞 K`, not a real number, and `Real.log` of it is not
+  a well-formed expression.
   Unramified splitting and cycle types, all instances of Layer 3's Dedekind theorem: `2` and `3`
   are inert, cycle type `(3)`; `5` and `7` have type `(1,2)`; `59` splits completely, cycle type
   `(1,1,1)`, that is `Frob = 1`. ⚠ Ramified `23` is listed **separately** and is not a
@@ -1058,10 +1132,9 @@ The layer numbering is a topological order, so any schedule that respects it is 
 extra information is which layers can run at the same time.
 
 - **Layer 1** goes first: it is mostly consume-and-publish, plus the double-coset law.
-- **Layer 2** needs Layer 1's dictionary, and Layer 2's `J^S` needs one statement from Layer 4
-  (finiteness of the ramified set). Either sequence Layer 4's discriminant definition before
-  Layer 2's abelian collapse, or state `S` as an abstract finite set of primes and instantiate it
-  once Layer 4 lands; the first is simpler and is the recommended order.
+- **Layer 2** needs Layer 1's dictionary and nothing else. Its Artin map takes the excluded set
+  `S` as a parameter, so it does not wait on the relative discriminant; Layer 4 specializes `S`
+  to the discriminant support once that ideal exists.
 - **Layer 3** needs Layer 1 (double cosets) and Layer 2 (Frobenius) for the cycle-type theorem.
   Its index material and its relative Dedekind–Kummer half need neither, and can run in parallel
   with Layer 2 from the start.
@@ -1080,10 +1153,8 @@ extra information is which layers can run at the same time.
 - **Layer 8** assembles the rest, and its worked targets discharge alongside the layers that
   enable them; each example above names the layers it uses.
 
-Layers 1–3 can therefore land well before PR #10's material, which only Layer 8 consumes, and
-before PR #2 Layer 3, which only Layer 6 consumes. The xroblot and tb65536 refactor-onto flags in
-Layers 1–2 convert those milestones to comparison-and-consume as the PRs land; check PR state at
-implementation time, not just at roadmap time.
+Layers 1–3 can therefore be built well before PR #10's material, which only Layer 8 consumes,
+and before PR #2 Layer 3, which only Layer 6 consumes.
 
 ## References
 
@@ -1132,13 +1203,12 @@ implementation time, not just at roadmap time.
 
 ## Provenance and coordination
 
-- **Mathlib in motion** (§What is in motion): the xroblot Hilbert-theory wave
-  (#41591/#35808/#35991/#36733/#36843/#37031, with #35802 merged 2026-06-08) and the tb65536
-  inertia program (#40955/#40387/#40952/#40757 open; the `ramificationIdx`/`inertiaDeg`
-  definition swap #41234/#41325 merged 2026-06/07) overlap Layers 1–2's consume-and-publish
-  milestones. Every affected milestone above carries its flag, and the null-result list (no
-  conductor, no Artin-symbol, no different-transitivity, no unit-certification PRs) delimits where
-  this roadmap builds free of collision. Re-audit PR state when each layer starts.
+- **Mathlib** (§The Mathlib design this roadmap follows): the ring-level Hilbert-theory work
+  (#41591 and its series) and the `ramificationIdx`/`inertiaDeg` redefinition (#41234, #41325)
+  fix the shape of Layers 1–2, and those milestones are written to match. Layers 2–7's core
+  builds, on the other hand, correspond to nothing in Mathlib: there is no ideal-theoretic
+  conductor, no Artin symbol, no higher ramification group, and no fundamental-unit
+  certification there.
 - **TauCeti landed files** (§What TauCeti already has): authored under the Multiquadratic and
   EffectiveBounds roadmaps; the consume-and-generalize contract per file is spelled there. One
   landed file is amended: `SplitsCompletely.lean` keeps its general-base form `private`, and
@@ -1160,11 +1230,13 @@ implementation time, not just at roadmap time.
   once in §Cross-roadmap dependencies: their Layer 3 owns the local filtration and the local
   different formulas, and Layer 6 here owns only the comparison and the global corollaries.
 - **[Global Class Field Theory PR #6](https://github.com/roed-math/TauCetiRoadmap/pull/6):**
-  consumes Layer 2's `artinHomUnramified : J^S →* (L ≃ₐ[K] L)` literally, in its own `J^{𝔪₀}`
-  carrier, and consumes Layer 5's local-field instances and different localization. It supplies
-  the narrow class group (its Layer 1) and the abelian conductor–discriminant formula (its
-  Layer 9), the latter used here only as a cross-check on `ℚ(ζ₅)`. No conductor–discriminant
-  statement is a milestone of this roadmap.
+  consumes Layer 2's `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)` literally, in its own `J^{𝔪₀}`
+  carrier. Because `S` is a parameter there, PR #6 instantiates it at the support of its own
+  modulus and does not have to reconcile that with the ramified set. It also consumes Layer 5's
+  local-field instances and the different localization. It supplies the narrow class group (its
+  Layer 1) and the abelian conductor–discriminant formula (its Layer 9), the latter used here
+  only as a cross-check on `ℚ(ζ₅)`. No conductor–discriminant statement is a milestone of this
+  roadmap.
 - **[Polynomial Galois Groups PR #10](https://github.com/roed-math/TauCetiRoadmap/pull/10):**
   consumes Layer 3's Dedekind theorem in `Polynomial.Gal.galActionHom` vocabulary, including the
   reducible case, and Layer 7's `S_n`-embedding; it owns resolvents, transitive-group
@@ -1179,10 +1251,8 @@ implementation time, not just at roadmap time.
   discriminant inequality to an equation, which is a new statement rather than a modification.
 - **FLT / kbuzzard-ClassFieldTheory**: `Mathlib/RingTheory/Frobenius.lean` (A. Yang) is
   FLT-adjacent infrastructure, and the `erd1/LCFT` local-CFT interface normalizes its Artin map
-  at arithmetic Frobenius via `IsArithFrobAt` (see LocalFields §What is in motion). Layer 2's
-  packaging stays translation-compatible with that shape, which the shared `IsArithFrobAt`
-  vocabulary guarantees by construction.
-- **Zulip**: threads audited 2026-07-30 as cited in §What is in motion; the instance's anonymous
-  API is disabled, so decision-critical claims should be re-confirmed in `#maths` when the
-  corresponding layer starts, per the root README's claims process (register an intention before
-  Layers 2, 5 and 6 in particular).
+  at arithmetic Frobenius via `IsArithFrobAt`. Layer 2's packaging stays translation-compatible
+  with that shape, which the shared `IsArithFrobAt` vocabulary guarantees by construction.
+- **Zulip**: the convention threads cited above. Layers 2, 5 and 6 touch the most shared
+  vocabulary, so register an intention for those before starting, per the root README's
+  coordination process.
