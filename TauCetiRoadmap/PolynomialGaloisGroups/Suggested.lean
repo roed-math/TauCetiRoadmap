@@ -1,4 +1,5 @@
 import Mathlib
+import TauCetiRoadmap.PolynomialGaloisGroups.TransitiveGroupData
 
 /-!
 # Galois groups of polynomials: target signatures
@@ -81,37 +82,10 @@ abbrev WreathProduct (D : Type u) [Group D] (ι : Type v) :=
 
 /-! ### The `nTj` data model
 
-A label index is valid by construction, so no unconstrained natural number is ever used as
-one. The counts are those of the transitive-group tables (Butler–McKay for `n ≤ 11`; OEIS
-A002106), and the roadmap's scope stops at degree 11.
+`numTransitiveGroups`, `TransitiveGroupIndex`, and `referenceSubgroup` are in
+`TransitiveGroupData.lean`, together with the frozen generators they are built from. A label
+index is valid by construction, so no unconstrained natural number is ever used as one.
 -/
-
-/-- The number of conjugacy classes of transitive subgroups of `Sₙ`, on the range this
-roadmap covers, and `0` outside it. -/
-def numTransitiveGroups : ℕ → ℕ
-  | 1 => 1
-  | 2 => 1
-  | 3 => 2
-  | 4 => 5
-  | 5 => 5
-  | 6 => 16
-  | 7 => 7
-  | 8 => 50
-  | 9 => 34
-  | 10 => 45
-  | 11 => 8
-  | _ => 0
-
-/-- A valid label index in degree `n`. The index `j` displays as the LMFDB label
-`nT(j+1)`. -/
-abbrev TransitiveGroupIndex (n : ℕ) : Type := Fin (numTransitiveGroups n)
-
-/-- **Layer 6 and 7 reference subgroups.** The `sorry` here marks *data*: the generators come
-from the frozen LMFDB `gps_transitive` export described in `README.md`, whose header records
-the retrieval date, the source, a checksum, and the 1-based to `Fin n` conversion. Nobody is
-expected to reconstruct these from prose. -/
-def referenceSubgroup (n : ℕ) (j : TransitiveGroupIndex n) : Subgroup (Equiv.Perm (Fin n)) :=
-  sorry
 
 /-- **The label predicate.** `G` carries the label `nT(j+1)` when some numbering conjugates
 it onto the reference subgroup. Transitivity of the reference is proved once (below), and a
@@ -143,6 +117,23 @@ def HasFullSymmetricGaloisGroup {F : Type u} [Field F] (f : F[X]) : Prop :=
 
 /-! ### Resolvents -/
 
+/-- **Layer 4, root enumeration.** `x` lists the roots of `f` in `L`, with multiplicity. This
+is the hypothesis under which a coefficient-side resolvent is compared with the root-side
+product. -/
+def IsRootEnumeration {F : Type u} [Field F] {L : Type v} [Field L] [Algebra F L] {n : ℕ}
+    (f : F[X]) (x : Fin n → L) : Prop :=
+  (f.map (algebraMap F L)).roots = Multiset.map x Finset.univ.val
+
+open scoped Classical in
+/-- **Layer 4 prototype.** The orbit resolvent of an invariant `Φ` evaluated at a root vector
+`x`: the product of `X − Ψ(x)` over the orbit of `Φ` under permutation of the variables. Its
+degree is the orbit size `[Sₙ : H]` when the orbit values stay distinct, and for `x`
+enumerating the roots of a monic separable `f` its coefficients descend to `F`. -/
+noncomputable def galResolvent {F : Type u} [Field F] {L : Type v} [Field L] [Algebra F L]
+    {n : ℕ} (Φ : MvPolynomial (Fin n) F) (x : Fin n → L) : L[X] :=
+  ∏ Ψ ∈ Finset.univ.image fun σ : Equiv.Perm (Fin n) => MvPolynomial.rename (⇑σ) Φ,
+    (X - C (MvPolynomial.aeval x Ψ))
+
 /-- **Layer 4, a static resolvent specification.** Library data, written and proved once: an
 invariant together with the subgroup that is *exactly* its stabilizer. A certificate selects
 a registered specification by identifier; it never supplies an invariant alongside an
@@ -154,16 +145,17 @@ structure ResolventSpec (n : ℕ) where
   Φ : MvPolynomial (Fin n) ℤ
   /-- The stabilizer of `Φ` is exactly `H`, not merely contained in it. -/
   stabilizer_eq : ∀ σ : Equiv.Perm (Fin n), MvPolynomial.rename (⇑σ) Φ = Φ ↔ σ ∈ H
-
-open scoped Classical in
-/-- **Layer 4 prototype.** The orbit resolvent of an invariant `Φ` evaluated at a root vector
-`x`: the product of `X − Ψ(x)` over the orbit of `Φ` under permutation of the variables. Its
-degree is the orbit size `[Sₙ : H]` when the orbit values stay distinct, and for `x`
-enumerating the roots of a monic separable `f` its coefficients descend to `F`. -/
-noncomputable def galResolvent {F : Type u} [Field F] {L : Type v} [Field L] [Algebra F L]
-    {n : ℕ} (Φ : MvPolynomial (Fin n) F) (x : Fin n → L) : L[X] :=
-  ∏ Ψ ∈ Finset.univ.image fun σ : Equiv.Perm (Fin n) => MvPolynomial.rename (⇑σ) Φ,
-    (X - C (MvPolynomial.aeval x Ψ))
+  /-- **The coefficient-side resolvent.** An executable function of the coefficients of `f`.
+  This is what a checker computes; the root product below is what it means. -/
+  specialize : ℤ[X] → ℚ[X]
+  /-- `specialize` computes the orbit resolvent. Without this field the checker would have
+  nothing to compare a claimed factorization against. -/
+  specialize_correct :
+    ∀ f : ℤ[X], f.Monic → f.natDegree = n →
+      ∀ x : Fin n → (f.map (Int.castRingHom ℚ)).SplittingField,
+        IsRootEnumeration (f.map (Int.castRingHom ℚ)) x →
+          (specialize f).map (algebraMap ℚ (f.map (Int.castRingHom ℚ)).SplittingField)
+            = galResolvent (MvPolynomial.map (Int.castRingHom ℚ) Φ) x
 
 /-- **Layer 4.** The resolvent cubic of the depressed quartic `X⁴ + pX² + qX + r`, from the
 `D₄`-invariant `x₀x₂ + x₁x₃`. (Named `resolventCubic`, not `resolvent`: in Mathlib
@@ -194,6 +186,74 @@ structure ResolventSeparationEvidence {F : Type u} [Field F] (R : F[X])
   /-- Distinct cosets did not collide at the roots of this particular polynomial. -/
   specializationSeparated : R.Separable
 
+/-! ### Tschirnhaus transforms, on the coefficient side -/
+
+/-- **Layer 4.** The Tschirnhaus transform of `f` by `T`: the monic integral polynomial whose
+roots are `T(α)` for the roots `α` of `f`. It is a resultant in the two variables, so it is a
+function of the coefficients of `f` and `T` alone. -/
+def tschirnhausPolynomial (f T : ℤ[X]) : ℤ[X] :=
+  sorry
+
+/-- **Layer 4.** `T` separates the roots of `f`: it is admissible as a Tschirnhaus transform.
+The checker verifies a Boolean reflection of this before it uses a transformed resolvent. -/
+def TschirnhausAdmissible (f T : ℤ[X]) : Prop :=
+  sorry
+
+/-! ### The registered specifications -/
+
+/-- The number of registered resolvent specifications in each degree. -/
+def numResolventSpecs : ℕ → ℕ
+  | 4 => 1
+  | 5 => 2
+  | _ => 0
+
+/-- A registered specification is named by a bounded index, so an identifier out of range is
+not representable. -/
+abbrev ResolventSpecIndex (n : ℕ) : Type := Fin (numResolventSpecs n)
+
+/-- **Layer 4, the quartic specification.** The `D₄`-invariant `x₀x₂ + x₁x₃`, whose stabilizer
+is exactly `referenceSubgroup 4 2`, the reference for the label `4T3`. Its `specialize` is the
+resolvent cubic. -/
+def quarticD4Spec : ResolventSpec 4 :=
+  sorry
+
+/-- **Layer 4, the quintic specification.** The invariant `quinticF20Invariant`, whose
+stabilizer is exactly `referenceSubgroup 5 2`, the reference for the label `5T3`. -/
+def quinticF20Spec : ResolventSpec 5 :=
+  sorry
+
+/-- **Layer 4, the quintic pair-sum specification**, whose orbit has ten elements. -/
+def quinticPairSumSpec : ResolventSpec 5 :=
+  sorry
+
+/-- The registry. Every resolvent a certificate may name is one of these: index `0` in degree 4
+is `quarticD4Spec`, index `0` in degree 5 is `quinticF20Spec`, and index `1` in degree 5 is
+`quinticPairSumSpec`. In every other degree the index type is empty. -/
+def registeredResolvent (n : ℕ) (i : ResolventSpecIndex n) : ResolventSpec n :=
+  sorry
+
+/-- **Layer 4.** The resolvent sextic of a quintic: the coefficient-side specialization of the
+`F₂₀` specification. -/
+def resolventSextic (f : ℤ[X]) : ℚ[X] :=
+  quinticF20Spec.specialize f
+
+/-! ### Exact irreducibility over `ℚ`
+
+Rabin's test decides irreducibility over `ZMod p`. A resolvent claim carries factors in `ℚ[X]`,
+so it needs its own certificate; the two are not the same check.
+-/
+
+/-- **Layer 8.** A certificate that `g : ℚ[X]` is irreducible: a primitive integral
+representative `h` of `g`, and a prime `p` that does not divide the leading coefficient of `h`,
+such that `h mod p` is irreducible of the same degree. -/
+def ratIrreducibleCheck (g : ℚ[X]) (h : ℤ[X]) (p : ℕ) : Bool :=
+  sorry
+
+/-- Soundness of that certificate. The proof is Rabin's test at `p`, then Gauss's lemma. -/
+theorem ratIrreducibleCheck_sound (g : ℚ[X]) (h : ℤ[X]) (p : ℕ)
+    (hchk : ratIrreducibleCheck g h p = true) : Irreducible g :=
+  sorry
+
 /-! ### The certificate: data, a Boolean check, and a soundness theorem
 
 The three are kept apart on purpose. A caller submits data and never constructs a
@@ -213,56 +273,98 @@ structure DiscriminantClaim where
   /-- Whether `f.discr` is claimed to be a square. -/
   isSquare : Bool
 
-/-- A claimed resolvent computation. `specId` selects a *registered* `ResolventSpec`, so the
-invariant and its exact stabilizer come from proved library data. -/
+/-- **Layer 8, a parity constraint.** A nonsquare discriminant is evidence, and the deduction
+must be able to use it, so the constraint has three values and not two. -/
+inductive ParityConstraint
+  | unconstrained
+  | even
+  | notEven
+  deriving DecidableEq
+
+/-- The exact meaning of each constraint. -/
+def ParityConstraint.Holds (c : ParityConstraint) {n : ℕ}
+    (K : Subgroup (Equiv.Perm (Fin n))) : Prop :=
+  match c with
+  | .unconstrained => True
+  | .even => K ≤ alternatingGroup (Fin n)
+  | .notEven => ¬ K ≤ alternatingGroup (Fin n)
+
+/-- The constraint that a checked discriminant claim delivers. A square discriminant gives
+`even`, and a nonsquare one gives `notEven`; neither is discarded. -/
+def DiscriminantClaim.parity (c : DiscriminantClaim) : ParityConstraint :=
+  if c.isSquare then .even else .notEven
+
+/-- A claimed resolvent computation. `spec` names a registered specification, so the invariant
+and its exact stabilizer come from proved library data. -/
 structure ResolventClaim (n : ℕ) where
-  /-- Index of the registered resolvent specification. -/
-  specId : ℕ
+  /-- Which registered specification was used. -/
+  spec : ResolventSpecIndex n
   /-- An optional Tschirnhaus transform, applied before the resolvent is recomputed. -/
   tschirnhaus : Option (ℤ[X])
   /-- The claimed factors of the specialized resolvent over `ℚ`. -/
   claimedFactors : List (ℚ[X])
+  /-- One irreducibility certificate for each claimed factor. -/
+  factorCertificates : List (ℤ[X] × ℕ)
 
 open scoped Classical in
-/-- **Layer 8, the group-theoretic deduction.** The step from checked constraints to a label
-is its own object, because observing several cycle types gives neither an upper bound nor a
-lower bound on the order. This is the statement a `GroupDeductionCertificate` witnesses: in
-degrees at most 5 it follows from the order-recognition theorems, and in degrees 6 to 11 it
-has to be established for the particular reference subgroup, by a chain in the subgroup
-lattice, by order bounds, or by nested resolvents. -/
-def GroupDeductionValid {n : ℕ} (j : TransitiveGroupIndex n)
-    (exhibitedTypes : List (Multiset ℕ)) (isEven : Bool)
-    (upperBounds : List (Subgroup (Equiv.Perm (Fin n)))) : Prop :=
-  ∀ K : Subgroup (Equiv.Perm (Fin n)),
+/-- **Layer 8, a registered group-theoretic deduction.** The step from checked constraints to a
+label is its own object. An exhibited cycle type proves that its order divides the order of the
+group, so cycle types do give lower bounds; what they do not give is containment in a proper
+subgroup. That is why `parity` and `upperSpecs` are here as well. -/
+structure RegisteredDeduction (n : ℕ) (j : TransitiveGroupIndex n) where
+  /-- Cycle types the certificate must exhibit. -/
+  requiredCycleTypes : List (Multiset ℕ)
+  /-- What the discriminant must show. -/
+  parity : ParityConstraint
+  /-- Registered resolvents that must bound the group above. -/
+  upperSpecs : List (ResolventSpecIndex n)
+  /-- The theorem that makes the deduction sound. -/
+  valid : ∀ K : Subgroup (Equiv.Perm (Fin n)),
     IsPretransitive K (Fin n) →
-    (∀ t ∈ exhibitedTypes, ∃ g ∈ K, fullCycleType g = t) →
-    (isEven = true → K ≤ alternatingGroup (Fin n)) →
-    (∀ H ∈ upperBounds, ∃ σ : Equiv.Perm (Fin n),
-      Subgroup.map (MulAut.conj σ).toMonoidHom K ≤ H) →
+    (∀ t ∈ requiredCycleTypes, ∃ g ∈ K, fullCycleType g = t) →
+    parity.Holds K →
+    (∀ i ∈ upperSpecs, ∃ σ : Equiv.Perm (Fin n),
+      Subgroup.map (MulAut.conj σ).toMonoidHom K ≤ (registeredResolvent n i).H) →
     TransitiveGroupLabel j K
 
-/-- **Layer 8, the certificate.** Everything is data; nothing here is trusted. -/
+/-- The number of registered deductions for each label. -/
+def numDeductions (n : ℕ) (j : TransitiveGroupIndex n) : ℕ :=
+  sorry
+
+/-- A registered deduction is named by a bounded index, as a resolvent specification is. -/
+abbrev DeductionIndex (n : ℕ) (j : TransitiveGroupIndex n) : Type := Fin (numDeductions n j)
+
+/-- The registry of deductions. In degree at most 5 these come from the order-recognition
+theorems of Layer 6; in degrees 6 to 11 each is proved for its own reference subgroup. -/
+def registeredDeduction (n : ℕ) (j : TransitiveGroupIndex n) (d : DeductionIndex n j) :
+    RegisteredDeduction n j :=
+  sorry
+
+/-- **Layer 8, the certificate.** Everything is data; nothing here is trusted. Both identifiers
+are bounded indices, so an identifier that names nothing cannot be written down. -/
 structure GaloisCertificate (f : ℤ[X]) {n : ℕ} (j : TransitiveGroupIndex n) where
   /-- Lower-bound evidence: factorization types at primes not dividing the discriminant. -/
   frobenius : List PrimeFactorizationClaim
-  /-- Upper-bound evidence from the discriminant. -/
+  /-- Evidence from the discriminant, which constrains the parity in both directions. -/
   discriminant : DiscriminantClaim
   /-- Upper-bound evidence from resolvents. -/
   resolvents : List (ResolventClaim n)
   /-- Which registered group-theoretic deduction closes the argument. -/
-  deductionId : ℕ
+  deduction : DeductionIndex n j
 
-/-- **Layer 8, the checker.** A Boolean function of the data. `README.md` lists every
-condition it must verify, including that irreducibility over `ZMod p` is decided by Rabin's
-test rather than by an unexplained kernel computation. The `sorry` marks an implementation
-this roadmap specifies but does not write here. -/
+/-- **Layer 8, the checker.** A Boolean function of the data. `README.md` lists every condition
+it must verify. Irreducibility over `ZMod p` is decided by Rabin's test, and irreducibility over
+`ℚ` by `ratIrreducibleCheck`; the resolvent is recomputed with the `specialize` field of the
+named registered specification. -/
 def GaloisCertificate.check {f : ℤ[X]} {n : ℕ} {j : TransitiveGroupIndex n}
     (_cert : GaloisCertificate f j) : Bool :=
   sorry
 
 /-- **Layer 8, soundness, and only soundness.** If the checker accepts, the label follows,
-unconditionally: no density theorem enters. That every polynomial admits a certificate, and
-that a search for one terminates, are separate questions, and neither is claimed. -/
+unconditionally: no density theorem enters. The proof composes the reflection lemmas for the
+individual checks with `(registeredDeduction n j cert.deduction).valid`. That every polynomial
+admits a certificate, and that a search for one terminates, are separate questions, and neither
+is claimed. -/
 theorem GaloisCertificate.check_sound {f : ℤ[X]} {n : ℕ} {j : TransitiveGroupIndex n}
     (cert : GaloisCertificate f j) (_h : cert.check = true) :
     HasGaloisLabel (f.map (Int.castRingHom ℚ)) j :=
@@ -354,11 +456,23 @@ block–stabilizer correspondence preserves inclusion and the Galois corresponde
 so the composite **reverses** inclusion: it is an order isomorphism onto the order dual, that
 is, an order anti-isomorphism. The two ends check the orientation: `E = F(α)` gives the
 one-point block, and `E = F` gives the whole root set. -/
-example (p : F[X]) (hp : Irreducible p) (hsep : p.Separable) (hdeg : 1 < p.natDegree)
-    (α : p.SplittingField) (hα : α ∈ p.rootSet p.SplittingField) :
-    Nonempty ({B : Set (p.rootSet p.SplittingField) //
+def blocksIntermediateFieldsOrderIso (p : F[X]) (hp : Irreducible p) (hsep : p.Separable)
+    (hdeg : 1 < p.natDegree) (α : p.SplittingField) (hα : α ∈ p.rootSet p.SplittingField) :
+    {B : Set (p.rootSet p.SplittingField) //
         (⟨α, hα⟩ : p.rootSet p.SplittingField) ∈ B ∧ IsBlock p.Gal B} ≃o
-      (Set.Iic (IntermediateField.adjoin F {α}))ᵒᵈ) :=
+      (Set.Iic (IntermediateField.adjoin F {α}))ᵒᵈ :=
+  sorry
+
+open scoped Pointwise in
+/-- A block goes to the fixed field of its setwise stabilizer. -/
+theorem blocksIntermediateFieldsOrderIso_apply (p : F[X]) (hp : Irreducible p)
+    (hsep : p.Separable) (hdeg : 1 < p.natDegree) (α : p.SplittingField)
+    (hα : α ∈ p.rootSet p.SplittingField)
+    (B : {B : Set (p.rootSet p.SplittingField) //
+      (⟨α, hα⟩ : p.rootSet p.SplittingField) ∈ B ∧ IsBlock p.Gal B}) :
+    ((blocksIntermediateFieldsOrderIso p hp hsep hdeg α hα B :
+        (Set.Iic (IntermediateField.adjoin F {α}))ᵒᵈ) : IntermediateField F p.SplittingField)
+      = IntermediateField.fixedField (MulAction.stabilizer p.Gal (B : Set _)) :=
   sorry
 
 /-- **Layer 2, 2-transitivity.** The root action of an irreducible separable `p` of degree
@@ -453,9 +567,25 @@ subgroups between its stabilizer and the whole group. Mathlib has both endpoints
 (`MulAction.BlockMem` is a bounded order, and `isCoatom_stabilizer_iff_preprimitive` is the
 coatom shadow); this is the lattice isomorphism that Layer 2 transports to intermediate
 fields. -/
-example {G : Type u} [Group G] {X : Type v} [MulAction G X] [IsPretransitive G X]
-    (a : X) :
-    Nonempty ({B : Set X // a ∈ B ∧ IsBlock G B} ≃o Set.Icc (stabilizer G a) ⊤) :=
+def blockStabilizerOrderIso {G : Type u} [Group G] {X : Type v} [MulAction G X]
+    [IsPretransitive G X] (a : X) :
+    {B : Set X // a ∈ B ∧ IsBlock G B} ≃o Set.Icc (stabilizer G a) ⊤ :=
+  sorry
+
+open scoped Pointwise in
+/-- The map goes from a block to its setwise stabilizer. This lemma is what pins the
+definition; an equivalence that exists but is not named this way would be useless downstream. -/
+theorem blockStabilizerOrderIso_apply {G : Type u} [Group G] {X : Type v} [MulAction G X]
+    [IsPretransitive G X] (a : X) (B : {B : Set X // a ∈ B ∧ IsBlock G B}) :
+    ((blockStabilizerOrderIso a B : Set.Icc (stabilizer G a) ⊤) : Subgroup G)
+      = stabilizer G (B : Set X) :=
+  sorry
+
+/-- The inverse sends a subgroup to the orbit of `a` under it. -/
+theorem blockStabilizerOrderIso_symm_apply {G : Type u} [Group G] {X : Type v} [MulAction G X]
+    [IsPretransitive G X] (a : X) (H : Set.Icc (stabilizer G a) ⊤) :
+    (((blockStabilizerOrderIso a).symm H : {B : Set X // a ∈ B ∧ IsBlock G B}) : Set X)
+      = MulAction.orbit ((H : Subgroup G)) a :=
   sorry
 
 open scoped Pointwise in
@@ -492,11 +622,11 @@ example {G : Type u} [Group G] {X : Type v} [Finite X] [MulAction G X]
         ∀ x : Fin m × Fin l, (e (g • e.symm x)).1 = σ x.1 :=
   sorry
 
-/-- **Layer 1, Jordan's prime-cycle theorem** (Wielandt 13.9), stated in Mathlib's own
-vocabulary: this is verbatim the `proof_wanted
-alternatingGroup_le_of_isPreprimitive_of_isCycle_mem` of
-`Mathlib/GroupTheory/GroupAction/Jordan.lean`, name and statement alike. -/
-example {α : Type u} [Fintype α] [DecidableEq α] {G : Subgroup (Equiv.Perm α)}
+/-- **Layer 1, Jordan's prime-cycle theorem** (Wielandt 13.9). Mathlib's
+`GroupTheory/GroupAction/Jordan.lean` records the same statement as a `proof_wanted`, so this
+follows its shape. It is a Tau Ceti theorem with a Tau Ceti name, proved here. -/
+theorem alternatingGroup_le_of_isPreprimitive_of_isCycle_mem
+    {α : Type u} [Fintype α] [DecidableEq α] {G : Subgroup (Equiv.Perm α)}
     (hG : IsPreprimitive G α) {p : ℕ} (hp : p.Prime) (hp' : p + 3 ≤ Nat.card α)
     {g : Equiv.Perm α} (hgc : g.IsCycle) (hgp : g.support.card = p) (hg : g ∈ G) :
     alternatingGroup α ≤ G :=
@@ -635,6 +765,42 @@ example (q : ℕ) [Fact q.Prime] {K : Type u} [Field K] [Algebra (ZMod q) K] (α
     (hα : IsIntegral (ZMod q) α) (n : ℕ) (hn : 0 < n) :
     (minpoly (ZMod q) α).natDegree = n ↔
       (α ^ q ^ n = α ∧ ∀ m, 0 < m → m < n → α ^ q ^ m ≠ α) :=
+  sorry
+
+/-! ### The bridge that Dedekind's theorem is assembled from
+
+Layer 5 owns this theorem, so the objects its proof compares must be visible here and not only
+in prose.
+-/
+
+/-- **Layer 5.** The subring of the splitting field generated by the roots of `f`. The
+decomposition group acts on its residue fields, and this is the ring the Frobenius element of
+Mathlib lives over. -/
+def rootOrder (f : ℤ[X]) : Subalgebra ℤ (f.map (Int.castRingHom ℚ)).SplittingField :=
+  sorry
+
+/-- `rootOrder f` is a finite `ℤ`-module for monic `f`, so its quotients by maximal ideals are
+finite fields and `IsArithFrobAt.exists_of_isInvariant` applies. -/
+example (f : ℤ[X]) (hf : f.Monic) : Module.Finite ℤ (rootOrder f) :=
+  sorry
+
+/-- The Galois group acts on `rootOrder f`, and the action is transitive on the maximal ideals
+over a given prime. This is the `Algebra.IsInvariant` hypothesis in Mathlib's vocabulary. -/
+example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] :
+    ∃ 𝔪 : Ideal (rootOrder f), 𝔪.IsMaximal ∧ (p : rootOrder f) ∈ 𝔪 :=
+  sorry
+
+/-- **Layer 5, the root reduction is injective.** For `p ∤ f.discr`, distinct roots of `f` stay
+distinct modulo a maximal ideal over `p`. This is what makes the inertia subgroup trivial, and
+it is the step that uses the root-product formula of Layer 3. -/
+example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr)
+    (𝔪 : Ideal (rootOrder f)) (h𝔪 : 𝔪.IsMaximal) (hp𝔪 : (p : rootOrder f) ∈ 𝔪)
+    (x y : rootOrder f)
+    (hx : (x : (f.map (Int.castRingHom ℚ)).SplittingField) ∈
+      (f.map (Int.castRingHom ℚ)).rootSet (f.map (Int.castRingHom ℚ)).SplittingField)
+    (hy : (y : (f.map (Int.castRingHom ℚ)).SplittingField) ∈
+      (f.map (Int.castRingHom ℚ)).rootSet (f.map (Int.castRingHom ℚ)).SplittingField)
+    (hxy : x - y ∈ 𝔪) : x = y :=
   sorry
 
 /-- **Layer 5, Dedekind's factorization theorem.** Let `f : ℤ[X]` be monic, and let `p` be a

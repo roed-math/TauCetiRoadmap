@@ -104,11 +104,21 @@ developments use Mathlib's `IsArithFrobAt`, which is the shared foundation.
 
 ## Data provenance and licensing
 
-The reference generators are mathematical data. They are exported from the LMFDB
-`gps_transitive` table, and they are cited to their publication, which is the paper of Butler and
-McKay. The export discipline is recorded in the conventions section of the README: retrieval
-date, checksum, the conversion from 1-based cycles to `Fin n`, and a comparison with the
-identifiers of GAP and Magma.
+The reference generators are mathematical data, and they are in this repository. The export is
+`transitive_groups_export.json`, and `TransitiveGroupData.lean` is generated from it. The header
+of that Lean file carries the source, the exact query, the retrieval date, the SHA-256 of the
+export, the conversion from 1-based cycles to `Fin n`, and the row counts. Nothing has to be
+fetched to read or to build the roadmap.
+
+The data is cited to its publication, which is the paper of Butler and McKay. The LMFDB serves
+the same numbering. The comparison with the `TransitiveGroup(n, j)` identifiers of GAP and Magma
+is an external cross-check of the numbering only; no code and no data come from either system.
+
+Every one of the 174 rows was recomputed from its generators alone, and agreed with the columns
+of the export: the order by the Schreier-Sims algorithm, the parity from the signs of the
+generators, transitivity from the orbit of a point, primitivity from the minimal block containing
+each pair of points, and solvability from the derived series, each term being the normal closure
+of the commutators of the generators of the previous one.
 
 Outputs of PARI and GAP were used only to check data. No code from either system was used or
 adapted. Nothing is ported from a source under the GPL. Layer 7 proves the invariants of each
