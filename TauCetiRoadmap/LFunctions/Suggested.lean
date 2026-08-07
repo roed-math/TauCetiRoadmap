@@ -23,14 +23,16 @@ nonvanishing in meromorphic-order form), **Layer 8** (the density predicates and
 over a general base field), and **Layer 9** (Wiener–Ikehara, `ψ_K`, `θ_K`, `π_K`), with
 `sorry`.
 
-Per the honest-`sorry` rule, milestones whose *statements* need API that does not exist at
-the pin are not stated here and live in `README.md` only: the lattice theta transformations
-and the level-`N` frame (Layer 2 — the pin has no dual lattice and no level), Hecke
-L-functions of ray-class characters and of Grossencharacters (Layers 5–6 — the characters
-belong to the global class field theory roadmap), and the public form of Chebotarev over the
-number field arithmetic roadmap's `frobeniusClass`, whose intended signature is written out in
-the docstring of `chebotarev` below. As those types become expressible in `TauCeti/`, add the
-milestones here with `sorry`.
+Three cross-roadmap interfaces are stated here as **compatibility interfaces**, and not left
+as prose: `RayClassCharacter` for Layer 5.1, `Grossencharacter` for Layer 6.1, and
+`FrobeniusInterface` for Layer 8.0. Each is a small structure carrying the operations the
+later milestones use. When the supplying roadmap's declaration exists, the replacement is
+mechanical: delete the structure here, make the name an abbreviation for theirs, and leave
+every statement below unchanged.
+
+Per the honest-`sorry` rule, a milestone whose *statement* needs API that does not exist at
+the pin is not stated here, and lives in `README.md` only. That applies to the lattice theta
+transformations of Layer 2, since the pin has no dual lattice.
 -/
 
 namespace TauCetiRoadmap.LFunctions
@@ -323,11 +325,47 @@ example (c : ClassGroup (𝓞 K)) :
         NumberField.dedekindZeta_residue K / (Nat.card (ClassGroup (𝓞 K)) : ℝ) * x)
       =O[atTop] fun x : ℝ ↦ x ^ (1 - 1 / (Module.finrank ℚ K : ℝ)) := sorry
 
-/-- **Layer 1/3, worked example (`K = ℚ`)**: on the convergence half-plane the Dedekind
+/-- **Layers 1.1 and 3.7, worked example at `K = ℚ`**: on the convergence half-plane the Dedekind
 zeta function of `ℚ` is the Riemann zeta function. ⚠ Off `Re s > 1` the raw `LSeries` is
 a junk value `0`, so this is *false* globally for `dedekindZeta`; only the continued
 object of Layer 3 equals `riemannZeta` everywhere. -/
 example {s : ℂ} (hs : 1 < s.re) : dedekindZeta ℚ s = riemannZeta s := sorry
+
+/-! ## Layer 2: a functional equation with a level -/
+
+/-- **Layer 2.14, a functional equation with a level.** Mathlib's `AbstractFuncEq.lean` handles
+`f (1/x) = ε • x ^ k • g x`. Its own TODO asks for the level form `f (N/x) = c • x ^ k • g x`
+for real `N > 0`, and proposes this name. `Λ_K` has level `|d_K|`, and a Hecke L-function has
+level `|d_K| 𝔑𝔣₀`, so both instantiate it.
+
+⚠ Mathlib's shape changed after the pin: PR #41329 (merged 2026-07-04) replaced the
+`StrongFEPair` structure by a predicate `IsStrongFEPair` on `WeakFEPair`. This structure is
+written against the master shape, so that the reduction theorem below is a theorem about
+`WeakFEPair` in either version. -/
+structure FEPairWithLevel (E : Type*) [NormedAddCommGroup E] [NormedSpace ℂ E] where
+  /-- The level. -/
+  level : ℝ
+  level_pos : 0 < level
+  /-- The two functions. -/
+  f : ℝ → E
+  g : ℝ → E
+  /-- The weight. -/
+  k : ℝ
+  /-- The root number. -/
+  ε : ℂ
+  /-- Constant terms at `0`. -/
+  f₀ : E
+  g₀ : E
+  /-- The functional equation, with the level. -/
+  h_feq : ∀ x : ℝ, 0 < x → f (level / x) = ε • ((x : ℂ) ^ (k : ℂ)) • g x
+
+/-- **Layer 2.14, the reduction to level one.** Rescaling by `√N` sends a level-`N` pair to a
+level-one pair, so Mathlib's machinery applies to it. The deliverable is this theorem together
+with the constants it threads, and not a particular proof of it. -/
+example {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (P : FEPairWithLevel E) :
+    ∃ Q : FEPairWithLevel E, Q.level = 1 ∧
+      (∀ x : ℝ, Q.f x = P.f (Real.sqrt P.level * x)) ∧
+      (∀ x : ℝ, Q.g x = P.g (Real.sqrt P.level * x)) := sorry
 
 /-! ## Layer 3: Dedekind zeta — continuation and functional equation
 
@@ -398,6 +436,58 @@ functions everywhere). -/
 example (F : Type*) [Field F] [NumberField F] [IsCyclotomicExtension {4} ℚ F]
     {s : ℂ} (hs : 1 < s.re) :
     dedekindZeta F s = riemannZeta s * DirichletCharacter.LFunction χ₄C s := sorry
+
+/-! ## Layers 5 and 6: the character interfaces -/
+
+/-- **Layer 5.1, the ray-class character interface (compatibility interface).** The global
+class field theory roadmap, Layers 0 to 3, will own this vocabulary. Until its declarations
+exist, Layers 5.2 to 5.9 are stated over this structure.
+
+⚠ The finite part and the infinite part of the conductor are separate fields, and neither may
+be dropped: the gamma factor of Layer 5.5 reads the infinite part, and the level of Layer 5.7
+reads the finite part.
+
+The replacement is mechanical: delete this structure, make the name an abbreviation for that
+roadmap's Hecke character type, and leave Layers 5.2 to 5.9 unchanged. -/
+structure RayClassCharacter where
+  /-- The character, as an ideal weight in the sense of Layer 7.2. -/
+  weight : IdealWeight K
+  /-- The finite part of the conductor. -/
+  conductor₀ : Ideal (𝓞 K)
+  conductor₀_ne_zero : conductor₀ ≠ ⊥
+  /-- The infinite part of the conductor: the real places where the character is nontrivial on
+  the positive elements. -/
+  conductorInf : Finset (InfinitePlace K)
+  conductorInf_isReal : ∀ v ∈ conductorInf, v.IsReal
+  /-- The bad primes of the weight are exactly the primes dividing the finite conductor. -/
+  bad_eq : weight.bad = {𝔭 : HeightOneSpectrum (𝓞 K) | 𝔭.asIdeal ∣ conductor₀}
+  /-- Finite order, on the ideals where the character does not vanish. ⚠ The quantifier has to
+  exclude the bad primes: there the value is `0`, and `0 ^ m = 1` is false. -/
+  finiteOrder : ∃ m : ℕ, 0 < m ∧ ∀ I : Ideal (𝓞 K), weight.toFun I ≠ 0 → weight.toFun I ^ m = 1
+
+/-- **Layer 6.1, the Grossencharacter interface (compatibility interface).** The global class
+field theory roadmap's infinity-type layer will own this vocabulary.
+
+⚠ The unitary decomposition `χ = χ_unit · ‖·‖^σ` is unique only once `σ` is required to be
+real. With a complex exponent it is ambiguous up to `‖·‖^{it}`, which is why `shift` is a real
+number here. -/
+structure Grossencharacter where
+  /-- The underlying ideal weight. -/
+  weight : IdealWeight K
+  /-- The finite part of the conductor. -/
+  conductor₀ : Ideal (𝓞 K)
+  conductor₀_ne_zero : conductor₀ ≠ ⊥
+  /-- The real exponent of the unitary decomposition. -/
+  shift : ℝ
+  /-- The infinity type: an integer at each infinite place. -/
+  infinityType : InfinitePlace K → ℤ
+  /-- The archimedean parameters `q_v`. -/
+  archimedeanParam : InfinitePlace K → ℝ
+
+-- ⚠ Admissibility — that the archimedean part is trivial on the units — is *not* a field here.
+-- Stating it needs the archimedean character, which the pin cannot express. A `Prop`-typed
+-- field would assert nothing, since `True` satisfies it, so the condition is omitted rather
+-- than named. `README.md` Layer 6.1 states it, and the owning roadmap proves it.
 
 /-! ## Layer 7: Landau's theorem and nonvanishing -/
 
@@ -493,7 +583,7 @@ example (S T : Set (HeightOneSpectrum (𝓞 K))) (δ : ℝ)
     (h : (symmDiff S T).Finite) (hS : HasDirichletDensity K S δ) :
     HasDirichletDensity K T δ := sorry
 
-/-- **Layer 8/9, natural density** for a set of primes of `𝓞 K`, by counting primes of
+/-- **Layers 8A.1 and 9, natural density** for a set of primes of `𝓞 K`, by counting primes of
 bounded norm. -/
 noncomputable def HasNaturalDensity
     (S : Set (HeightOneSpectrum (𝓞 K))) (δ : ℝ) : Prop :=
@@ -512,40 +602,65 @@ example (S : Set (HeightOneSpectrum (𝓞 K))) (δ : ℝ) (h : HasNaturalDensity
 
 section Chebotarev
 
-variable (L : Type*) [Field L] [NumberField L] [Algebra K L] [FiniteDimensional K L]
-variable (G : Type*) [Group G] [Finite G] [MulSemiringAction G (𝓞 L)]
-variable [SMulCommClass G (𝓞 K) (𝓞 L)] [Algebra.IsInvariant (𝓞 K) (𝓞 L) G]
-variable [FaithfulSMul G (𝓞 L)]
+variable (L : Type*) [Field L] [NumberField L] [Algebra K L]
+
+/-- **Layer 8.0, unramifiedness**, as one shared predicate. Every statement of Layer 8 uses
+this and never an ad hoc test against a discriminant. -/
+def IsUnramifiedAt (𝔭 : HeightOneSpectrum (𝓞 K)) : Prop :=
+  Ideal.ramificationIdxIn 𝔭.asIdeal (𝓞 L) = 1
+
+variable [IsGalois K L]
+
+/-- **Layer 8.0, the Frobenius interface (compatibility interface).** The number field
+arithmetic roadmap, Layers 2 and 5, will own this vocabulary. Until its declarations exist,
+Layer 8 is stated over this structure, which carries exactly the operations 8A to 8E use.
+
+The replacement is mechanical: delete this structure, take `frobeniusClass` to be that
+roadmap's declaration of the same name, and leave 8A to 8E unchanged. This roadmap defines no second Frobenius.
+
+⚠ Frobenius here is arithmetic. Layer 8B.1 tests the orientation, and Layer 8B.5 is the
+numerical example that would detect an inverse. -/
+structure FrobeniusInterface where
+  /-- The Frobenius class of an unramified prime. -/
+  frobeniusClass : ∀ 𝔭 : HeightOneSpectrum (𝓞 K), IsUnramifiedAt K L 𝔭 →
+    ConjClasses (L ≃ₐ[K] L)
+  /-- Only finitely many primes ramify. -/
+  unramified_cofinite : {𝔭 : HeightOneSpectrum (𝓞 K) | ¬ IsUnramifiedAt K L 𝔭}.Finite
+  /-- The class is realized by an arithmetic Frobenius over some prime of `L`, in the sense of
+  Mathlib's `IsArithFrobAt` transported along `galRestrict`. This field is what ties the
+  interface to the pin's vocabulary, and it is what a later implementation must prove. -/
+  frobeniusClass_spec : ∀ (𝔭 : HeightOneSpectrum (𝓞 K)) (h : IsUnramifiedAt K L 𝔭) (σ : L ≃ₐ[K] L),
+    σ ∈ (frobeniusClass 𝔭 h).carrier ↔
+      ∃ Q : Ideal (𝓞 L), Q.IsPrime ∧ Q.under (𝓞 K) = 𝔭.asIdeal ∧
+        ∀ x : 𝓞 L, σ • x - x ^ Nat.card (𝓞 K ⧸ 𝔭.asIdeal) ∈ Q
+
+/-- **Layer 8.0, restriction compatibility.** For an intermediate extension `E` with `E/K`
+Galois, the restriction homomorphism carries the class in `L/K` to the class in `E/K`. The
+homomorphism is a parameter here, because the roadmap that will own `frobeniusClass` also
+owns the
+canonical restriction map. -/
+def RestrictionCompatible (F : FrobeniusInterface K L)
+    (E : Type*) [Field E] [NumberField E] [Algebra K E] [IsGalois K E]
+    (FE : FrobeniusInterface K E) (res : (L ≃ₐ[K] L) →* (E ≃ₐ[K] E)) : Prop :=
+  ∀ (𝔭 : HeightOneSpectrum (𝓞 K)) (h : IsUnramifiedAt K L 𝔭) (hE : IsUnramifiedAt K E 𝔭),
+    ConjClasses.map res (F.frobeniusClass 𝔭 h) = FE.frobeniusClass 𝔭 hE
 
 /-- **Layer 8D.5, the Chebotarev density theorem over a general number field.**
 
-The base is an arbitrary `K`, the prime set is cut out over `HeightOneSpectrum (𝓞 K)`, and
-unramifiedness is the shared predicate `ramificationIdxIn = 1` rather than a divisibility
-test against a discriminant. `G` acts faithfully on `𝓞 L` with invariants `𝓞 K`;
-faithfulness is doing real work, since invariance alone lets a group act through a quotient —
-even trivially — and the density claim is then false. With it, `G ≅ Gal(L/K)`, and
-instantiating `G = L ≃ₐ[K] L` through `galRestrict` is part of the milestone.
-
-⚠ The public form of this theorem is over the number field arithmetic roadmap's
-`frobeniusClass`, which does not exist at the pin. Its intended signature, in that roadmap's
-vocabulary, is
-
-```text
-HasDirichletDensity
-  {𝔭 : HeightOneSpectrum (𝓞 K) | UnramifiedIn K L 𝔭.asIdeal ∧ frobeniusClass K L 𝔭.asIdeal = C}
-  (Nat.card C.carrier / Nat.card Gal(L/K))
-```
-
-for `C : ConjClasses Gal(L/K)`. This roadmap creates no rival `frobeniusClass`; when that
-one exists, the statement below is restated over it and the version here becomes the
-abstract-group generalization. -/
-example (σ : G) :
+The base is an arbitrary `K`. The prime set is cut out over `HeightOneSpectrum (𝓞 K)`, and
+unramifiedness is the shared predicate of Layer 8.0. The Frobenius class comes from the
+compatibility interface, so no rival Frobenius is created here. -/
+example (F : FrobeniusInterface K L) (C : ConjClasses (L ≃ₐ[K] L)) :
     HasDirichletDensity K
-      {𝔭 : HeightOneSpectrum (𝓞 K) |
-        Ideal.ramificationIdxIn 𝔭.asIdeal (𝓞 L) = 1 ∧
-        ∃ Q : Ideal (𝓞 L), Q.IsPrime ∧ Q.under (𝓞 K) = 𝔭.asIdeal ∧
-          ∃ τ : G, IsArithFrobAt (𝓞 K) τ Q ∧ IsConj σ τ}
-      ((Nat.card {τ : G // IsConj σ τ} : ℝ) / (Nat.card G : ℝ)) := sorry
+      {𝔭 : HeightOneSpectrum (𝓞 K) | ∃ h : IsUnramifiedAt K L 𝔭, F.frobeniusClass 𝔭 h = C}
+      ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ)) := sorry
+
+/-- **Layer 8D.6, splitting completely**, as a corollary of the theorem above: the primes that
+split completely in `L` have Dirichlet density `1/#Gal(L/K)`. -/
+example (F : FrobeniusInterface K L) :
+    HasDirichletDensity K
+      {𝔭 : HeightOneSpectrum (𝓞 K) | ∃ h : IsUnramifiedAt K L 𝔭, F.frobeniusClass 𝔭 h = 1}
+      (1 / (Nat.card (L ≃ₐ[K] L) : ℝ)) := sorry
 
 end Chebotarev
 
