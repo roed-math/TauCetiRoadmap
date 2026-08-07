@@ -12,7 +12,7 @@ layer nor the roadmap.
 should not be confused. In an `example` it marks a milestone of this roadmap. In a `def` it
 marks data that a frozen export supplies, and not a proof that anybody owes.
 
-The pinned Mathlib is the released version `v4.32.2`. It has:
+The pinned Mathlib has:
 
 * `Polynomial.Gal`, with its faithful action on the roots, transitive for irreducible
   polynomials;

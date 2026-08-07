@@ -94,8 +94,9 @@ No milestone depends on anything else. In particular, no milestone depends on an
 Dated information about the surrounding ecosystem is not part of the specification. It is in
 [PROVENANCE.md](PROVENANCE.md).
 
-The pinned Mathlib version is the one in the repository's `lake-manifest.json`, which is the
-released version `v4.32.2`. Every claim below about what Mathlib has was checked against it.
+"The pinned Mathlib" means the version in the repository's `lake-manifest.json`. Every claim
+below about what Mathlib has was checked against it. `PROVENANCE.md` records the date of that
+check.
 
 ## Conventions
 
@@ -264,7 +265,7 @@ and `check_sound`. `Suggested.lean` fixes their forms.
 
 ## What Mathlib provides
 
-Each item was checked in the pinned Mathlib, version `v4.32.2`.
+Each item was checked in the pinned Mathlib.
 
 - **Galois groups of polynomials.** `Mathlib/FieldTheory/PolynomialGaloisGroup.lean` has
   `Polynomial.Gal`, `galAction`, and `galActionHom`, with `galActionHom_injective` for

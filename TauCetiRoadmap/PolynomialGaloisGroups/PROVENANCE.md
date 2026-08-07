@@ -5,13 +5,16 @@
 and how this material relates to work outside Tau Ceti. Everything here has a date and will go
 out of date. No milestone of the roadmap depends on anything in this file.
 
-Status date: 2026-08-07. Pinned Mathlib: released version `v4.32.2`.
+Status date: 2026-08-07. Pinned Mathlib: `9caeba1000`, the revision named in the repository's
+`lake-manifest.json`.
 
 ## What was checked, and how
 
-Every claim in the README about what Mathlib provides was checked against the pinned version, by
-reading the declaration in the Mathlib source tree. Three claims in an earlier draft were wrong
-at this version, and were corrected:
+Every claim in the README about what Mathlib provides was checked against the pinned revision,
+by reading the declaration in the Mathlib source tree. The same checks were run against the
+current released Mathlib, `v4.32.2`, and gave the same answers, so none of the claims below
+depends on which of the two is in use. Three claims in an earlier draft were wrong at both, and
+were corrected:
 
 - `solvableByRad` is an `IntermediateField`, in the root namespace. It is not a predicate on
   polynomials, and it is not in the `Polynomial` namespace. Solvability by radicals of a

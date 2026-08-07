@@ -4,8 +4,7 @@ defaultTargets = ["TauCetiRoadmap"]
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4"
-# Pinned to a released Mathlib, not to a moving branch, so the build is reproducible.
-rev = "v4.32.2"
+rev = "master"
 
 # Human-owned roadmaps: markdown plus Lean target signatures. `sorry` is allowed here
 # (these are goals, not proofs), so this library builds without `warningAsError`. Glob all

@@ -45,12 +45,6 @@ namespace TauCetiRoadmap.RepresentationTheory.LieHighestWeight
 open scoped Classical DirectSum
 open LieModule LieAlgebra Module
 
-/- The `gl n` statements below use `Matrix (Fin n) (Fin n) K` as a Lie algebra. Mathlib supplies
-that structure through `LieRing.ofAssociativeRing` and `LieAlgebra.ofAssociativeAlgebra`. Those
-are not global instances, because one associative ring can carry more than one Lie structure.
-Enable them for this file, as `Mathlib/Algebra/Lie/OfAssociative.lean` does for its own. -/
-attribute [local instance 100] LieRing.ofAssociativeRing LieAlgebra.ofAssociativeAlgebra
-
 universe u
 
 /-! ## Layer 0: `sl₂` representation theory (the engine)
@@ -462,8 +456,7 @@ noncomputable def kostantMultiplicity (base : (LieAlgebra.IsKilling.rootSystem H
 theorem kostant_multiplicity_formula (base : (LieAlgebra.IsKilling.rootSystem H).Base)
     (lam : Module.Dual K H) (hlam : IsDominantIntegral base lam)
     [FiniteDimensional K (irreducibleQuotient base lam)] (mu : Module.Dual K H) :
-    (formalCharacter (M := irreducibleQuotient base lam)).coeff mu
-      = kostantMultiplicity base lam mu := sorry
+    (formalCharacter (M := irreducibleQuotient base lam)) mu = kostantMultiplicity base lam mu := sorry
 
 /-! #### The decomposition toolkit
 
@@ -684,7 +677,7 @@ is anchored here and computes the lower multiplicities. -/
 theorem freudenthal_top_mult (base : (LieAlgebra.IsKilling.rootSystem H).Base)
     (lam : Module.Dual K H) (hlam : IsDominantIntegral base lam)
     [FiniteDimensional K (irreducibleQuotient base lam)] :
-    (formalCharacter (M := irreducibleQuotient base lam)).coeff lam = 1 := sorry
+    (formalCharacter (M := irreducibleQuotient base lam)) lam = 1 := sorry
 
 /-- The Freudenthal double sum `2 Σ_{α>0} Σ_{j≥1} mult_{μ+jα}(L(λ)) · ⟨μ+jα, α⟩`. The inner sum over
 `j ≥ 1` is finite because `μ + j • α` leaves the (finite) weight set for large `j`, so it ranges over a
@@ -703,7 +696,7 @@ theorem freudenthal_multiplicity_formula (base : (LieAlgebra.IsKilling.rootSyste
     [FiniteDimensional K (irreducibleQuotient base lam)] (mu : Module.Dual K H) :
     (invForm (lam + weylVector base) (lam + weylVector base)
         - invForm (mu + weylVector base) (mu + weylVector base))
-      * ((formalCharacter (M := irreducibleQuotient base lam)).coeff mu : K)
+      * ((formalCharacter (M := irreducibleQuotient base lam)) mu : K)
       = 2 * freudenthalRHS base lam mu := sorry
 
 /-- **A Chevalley system.** Before the presentation theorem one must fix, for each simple root `αᵢ`,
