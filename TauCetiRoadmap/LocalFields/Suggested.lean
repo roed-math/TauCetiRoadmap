@@ -19,12 +19,13 @@ examples reaching into the acceptance criteria of Layers 7–9), stated with `so
 the pinned Mathlib. Per the honest-`sorry` rule, milestones whose *statements* need API that
 does not exist at the pin are **not** stated here and live in `README.md` only: the
 lower/upper ramification filtration and Herbrand functions (Layer 3), the tame quotient and
-its Iwasawa presentation (Layer 4, which needs presented profinite groups), and everything
-cohomological (Layers 5–8: invariant map, class formations, reciprocity, duality, Euler
-characteristic, all consuming PR #1 Profinite Cohomology). Power classes and Layer 8 are
-split into the two regimes of the roadmap's standing hypotheses; `p`-power coefficients in
-equal characteristic are outside the roadmap, and no statement here is to be generalized to
-cover them. The same boundary cuts Layer 7: the existence theorem is a milestone away from
+its Iwasawa presentation (Layer 4, which needs PR #3 Layer 4's `presentedProfiniteGroup`),
+and everything cohomological (Layers 5–8: invariant map, class formations, reciprocity,
+duality, Euler characteristic, all consuming PR #1 Profinite Cohomology). Power classes and
+Layer 8 are split into the two regimes of the roadmap's standing hypotheses; `p`-power
+coefficients in equal characteristic are outside the roadmap, and no statement here is to be
+generalized to cover them. The same boundary cuts Layer 7: the existence theorem is a
+milestone away from
 the residue characteristic for a general local field, and in full only for `K` a finite
 extension of `ℚ_p`, so anything derived from full existence (injectivity of the Artin map,
 the ordinary profinite completion of `Kˣ`) is mixed-characteristic. As later layers make
@@ -231,7 +232,7 @@ theorem teichmuller_section (x : (𝓀[K])ˣ) :
 /-- **Layer 1, the multiplicative decomposition.** A choice of uniformizer splits
 `Kˣ ≅ ℤ × 𝒪[K]ˣ`: every element of `Kˣ` is uniquely `π^n · u` with `u ∈ 𝒪[K]ˣ`. (With the
 Teichmüller milestone this refines to `Kˣ ≅ π^ℤ × μ_{q−1} × U(K,1)`, and `U(K,1)` is pro-`p`,
-the pro-`p` vocabulary being PR #3 Layer 3's.) -/
+the pro-`p` vocabulary being PR #3 Layer 3's `IsProP`.) -/
 example (π : 𝒪[K]) (_hπ : Irreducible π) (x : Kˣ) :
     ∃! p : ℤ × (↥𝒪[K])ˣ, (x : K) = (π : K) ^ p.1 * ((p.2 : ↥𝒪[K]) : K) :=
   sorry
@@ -349,12 +350,14 @@ example : ¬ ∃ x y : ℚ_[2], (-1 : ℚ_[2]) = x ^ 2 + y ^ 2 :=
 
 /-- **Layer 9, the exact rank of the full absolute Galois group:**
 `d(G_F) = [F : ℚ_p] + 2`, stated as leastness of `[F : ℚ_p] + 2` among the cardinalities of
-topologically generating finite sets (`d` itself is PR #3 Layer 3's definition). The upper
-bound is NSW VII §4; the lower bound comes from the rank of the maximal pro-`p` quotient
-together with the Schreier bound, and the equality is Jarden–Shusterman Thm. 2.1.
+topologically generating finite sets (`d` itself is PR #3 Layer 3's
+`topologicalGeneratorRankNat`). The upper bound is NSW VII §4; the lower bound comes from the
+rank of the maximal pro-`p` quotient together with the Schreier bound, and the equality is
+Jarden–Shusterman Thm. 2.1.
 
 ⚠ The familiar `[F : ℚ_p] + 1` count is a statement about the maximal pro-`p` quotient
-`G_F(p)`, which is free pro-`p` of that rank when `μ_p ⊄ F` (PR #3 Layer 11), and never about
+`G_F(p)`, which is free pro-`p` of that rank when `μ_p ⊄ F` (PR #3 Layer 11's
+`topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu`), and never about
 `G_F`: the full group has rank `[F : ℚ_p] + 2` in both cases. The bare finite-generation
 corollary at `F = ℚ_2`, namely generation by 3 elements, is gq2's B1. -/
 example (p : ℕ) [Fact p.Prime] (F : Type*) [Field F] [Algebra ℚ_[p] F]

@@ -43,18 +43,25 @@ it visible, file by file, which part of the theory Mathlib owns and which part w
 This roadmap is one of four coordinated developments. It **consumes** PR
 [#1, Profinite Cohomology](https://github.com/roed-math/TauCetiRoadmap/pull/1): its Layers 0–7
 supply the explicit and canonical comparison maps, finite-quotient colimits, exact sequences,
-restriction and corestriction, Shapiro, and cup products used in Layers 5–8 here, and its Layer 9
-supplies Kummer theory. It consumes PR
-[#3, Pro-p Groups](https://github.com/roed-math/TauCetiRoadmap/pull/3) **Layer 3** for the
-topological rank `d(G)`, the maximal pro-`p` quotient, the Frattini subgroup, the Burnside basis
-theorem, and the Schreier bound `d(U) ≤ 1 + [G : U](d(G) − 1)`, all used in Layers 1, 4, and 9;
-and PR #3 **Layer 11** for the rank of the maximal pro-`p` quotient `G_K(p)`, used only in
-Layer 9. In the other direction, Layers 5, 7, and 8 here supply the invariant map, Kummer and
-local reciprocity, the two regimes of duality, and the Euler characteristic consumed by PR #3
-Layer 11. The resulting order is `LocalFields 0–8 → PR #3 Layer 11 → LocalFields 9`, which is
-acyclic; PR #3 Layer 3 precedes everything here. Layer 8 also supplies the mixed-characteristic
-mod-2 duality statement consumed by PR
-[#4, Quadratic Form Invariants](https://github.com/roed-math/TauCetiRoadmap/pull/4) Layers 6–7.
+restriction and corestriction, and Shapiro; its Layer 8 supplies cup products; and its Layer 9
+supplies Kummer theory, all used in Layers 5–8 here. It consumes PR
+[#3, Pro-p Groups](https://github.com/roed-math/TauCetiRoadmap/pull/3) at four layers: its
+**Layer 2** for profinite Sylow theory, used in Layer 4 here; its **Layer 3** for the pro-`p`
+predicate, the maximal pro-`p` quotient, the Frattini subgroup, the Burnside basis theorem, the
+topological rank `d(G)`, and the Schreier bound `d(U) ≤ 1 + [G : U](d(G) − 1)`, used in
+Layers 1, 4, and 9 here; its **Layer 4** for free profinite groups and their presented
+quotients, used in Layer 4 here; and its **Layer 11** for the rank of the maximal pro-`p`
+quotient `G_K(p)`, used only in Layer 9 here. In the other direction, Layers 5, 7, and 8 here
+supply the Kummer isomorphism with its cup-product square, the Artin map with its cyclotomic
+orientation, the trace isomorphism, the two regimes of duality, and the Euler characteristic
+consumed by PR #3 Layer 11. The resulting order is
+`PR #3 Layers 0–4 → LocalFields 0–8 → PR #3 Layer 11 → LocalFields 9`, which is acyclic. Every
+one of those crossings, in both directions, is a row of the shared layer-DAG table under
+"Ordering and parallelism" below, together with the name both roadmaps use for it; that table
+is maintained identically in the two roadmaps, and nothing passes between them except through
+a row of it. Layer 8 also supplies the mixed-characteristic mod-2 duality statement consumed by
+PR [#4, Quadratic Form Invariants](https://github.com/roed-math/TauCetiRoadmap/pull/4)
+Layers 6–7.
 The neighboring
 [adic-spaces roadmap (PR #80)](https://github.com/TauCetiProject/TauCetiRoadmap/pull/80)
 shares only the `ValuativeRel` substrate: it develops valuation *spectra* and Huber/Tate rings
@@ -361,8 +368,8 @@ expressible, its milestones are added to `Suggested.lean` with `sorry`.
   note, not an API decision.
 - **Structure of `Kˣ`.** The topological isomorphism `Kˣ ≃ ℤ × 𝒪[K]ˣ` attached to a choice of
   uniformizer, and `𝒪[K]ˣ ≃ μ_{q−1} × U(K,1)`; `U(K,1)` is pro-`p`, being the inverse limit of
-  the `p`-groups `U(K,1)/U(K,i)` (the pro-`p` vocabulary is PR #3 Layer 3's); and the torsion
-  subgroup `μ(K)` is finite.
+  the `p`-groups `U(K,1)/U(K,i)`, stated with PR #3 Layer 3's quotient-form predicate
+  `IsProP` rather than a local rephrasing of it; and the torsion subgroup `μ(K)` is finite.
 - **Deep units in mixed characteristic.** For `K/ℚ_p` finite of degree `N` with absolute
   ramification `e`, and for `i : ℕ` satisfying the integer inequality `(p − 1) * i > e`, the
   logarithm is an isomorphism of topological groups `U(K,i) ≃ (𝓂[K]^i, +)`, and hence
@@ -576,8 +583,10 @@ expressible, its milestones are added to `Suggested.lean` with `sorry`.
 - **Wild inertia.** `P_K = Gal(K̄/K^{t})` where `K^{t} = ⋃_{p ∤ m} K^{ur}(π^{1/m})` is the
   maximal tamely ramified extension. `P_K` is the inverse limit of the finite-level `G_1`, a
   closed normal pro-`p` subgroup of `G_K`, and it is the unique maximal such subgroup of `I_K`,
-  that is, its pro-`p` Sylow subgroup. Profinite Sylow theory is PR #3 Layer 2's, consumed here;
-  what is proved here is the identification of that Sylow subgroup with `Gal(K̄/K^t)`.
+  that is, its pro-`p` Sylow subgroup. Profinite Sylow theory is PR #3 Layer 2's, consumed
+  here under its own names (`IsProPSylow`, `exists_isProPSylow`, `IsProP.exists_le_isProPSylow`,
+  `IsProPSylow.eq_of_normal`, `IsProPSylow.map_of_surjective`) and never restated in Galois
+  vocabulary; what is proved here is the identification of that Sylow subgroup with
 - **The tame character and the twist.** `I_K/P_K ≅ lim_{p∤m} μ_m(K̄) = Ẑ^{(p')}(1)` via
   `σ ↦ (σ(π^{1/m})/π^{1/m})_m`, independence of the choices, and `G_K`-equivariance:
   conjugation acts through the cyclotomic action on the right-hand side. ⚠ `Ẑ^{(p')}(1)` is
@@ -587,9 +596,13 @@ expressible, its milestones are added to `Suggested.lean` with `sorry`.
   sequence `1 → Ẑ^{(p')}(1) → G_K^{t} → Ẑ → 1`; a Frobenius lift `σ` and a topological generator
   `τ` of the kernel satisfy `σ τ σ⁻¹ = τ^q`; and `G_K^t` is the profinite group on `σ, τ` with
   that single relation (NSW (7.5.2)/(7.5.3), Iwasawa). State the presentation through its
-  universal property, as a continuous surjection from the free profinite group on two generators
-  whose kernel is the closed normal closure of the relator, consuming PR #3 Layer 4's free
-  profinite groups instead of defining a local copy.
+  universal property, as a continuous surjection from the free profinite group on two
+  generators whose kernel is the closed normal closure of the relator: that is, as
+  `presentedProfiniteGroup (Fin 2) {σ τ σ⁻¹ τ^{−q}}`, with `σ` and `τ` the images of
+  `freeProfiniteGroup.of 0` and `freeProfiniteGroup.of 1`, built on PR #3 Layer 4's
+  `freeProfiniteGroup` and `freeProfiniteGroup.lift`, never on a local copy of either. ⚠ The
+  object needed here is the **profinite** one; PR #3's `presentedProP` of the same layer is
+  its pro-`p` quotient and is a different group.
 - **Translation lemmas.** The geometric-`σ` presentation (`σ ↦ σ⁻¹`), and the finite-level
   compatibility: restricting the sequence to finite tame quotients recovers Layer 3's
   `G_0/G_1`-twist formula. The reciprocity-facing statements ("units land in inertia, a
@@ -612,7 +625,9 @@ proceed **in parallel with** PR #1.
   wanted (otherwise keep the `μ_n`-twist): `Kˣ/(Kˣ)ⁿ ≅ H¹(G_K, μ_n)` via the Kummer cocycle
   `a ↦ (σ ↦ σ(a^{1/n})/a^{1/n})`, from the `n`-th power sequence and Hilbert 90, consuming PR #1
   Layer 9. With Layer 1's cardinality formula for the appropriate regime this computes
-  `#H¹(G_K, μ_n)`.
+  `#H¹(G_K, μ_n)`. This isomorphism is `kummerEquiv`, and the square relating Kummer classes to
+  the cup product is `cup_kummerEquiv`; both names are interfaces, consumed by PR #3 Layer 11
+  and by Layer 8C below, so neither may be restated per use site.
 - **The Herbrand quotient.** `h(G, M) = #H²/#H¹` for finite cyclic `G`, defined on top of
   Mathlib's `FiniteCyclic` periodicity (and restated against `TateCohomology` after the bump):
   multiplicativity in short exact sequences, `h = 1` on finite modules, and the two computations
@@ -711,11 +726,11 @@ swaps one for another is a different theorem.
 2. **The limit isomorphism.** The `θ_{L/K}` are compatible in towers (Layer 6), so their limit
    is an isomorphism of topological groups `(Kˣ)^{norm} ≅ G_K^{ab}`, where the target is
    Mathlib's `absoluteGaloisGroupAbelianization`.
-3. **The Artin map and its normalizations.** `Art_K : Kˣ →* G_K^{ab}` is the composite of
-   `Kˣ → (Kˣ)^{norm}` with the isomorphism of step 2: continuous, with dense image, and with
-   kernel the intersection of all norm groups. ⚠ `Kˣ` is not compact and `Art_K` is not
-   surjective; `Nat.card`-style statements about `G_K^{ab}` are wrong for that reason. Its
-   normalizations are theorems, not definitions:
+3. **The Artin map and its normalizations.** `Art_K : Kˣ →* G_K^{ab}` (the interface name is
+   `artinMap`) is the composite of `Kˣ → (Kˣ)^{norm}` with the isomorphism of step 2:
+   continuous, with dense image, and with kernel the intersection of all norm groups.
+   ⚠ `Kˣ` is not compact and `Art_K` is not surjective; `Nat.card`-style statements about
+   `G_K^{ab}` are wrong for that reason. Its normalizations are theorems, not definitions:
    - `ν_K ∘ Art_K = ι ∘ v_K`, the unramified coordinate, valued in `Ẑ` with `ι : ℤ → Ẑ`;
    - `Art_K(𝒪[K]ˣ)` is the inertia subgroup of `G_K^{ab}`, and `𝒪[K]ˣ ≅ I(G_K^{ab})` (using
      Layer 2's norm computation);
@@ -732,7 +747,11 @@ swaps one for another is a different theorem.
      `N_{K/ℚ_p}` on multiplicative groups) applied to the case `K = ℚ_p`, which is Serre LF
      XIV §7's computation on `ℚ_p(μ_{p^∞})` and gives the corollary
      `χ_cyc(Art_{ℚ_p}(u)) = u⁻¹` for `u ∈ ℤ_pˣ`. An `𝒪[K]ˣ`-valued character with value `u⁻¹`
-     would be a Lubin–Tate character, which this roadmap does not build.
+     would be a Lubin–Tate character, which this roadmap does not build. The interface names
+     are `cyclotomicCharacter_artinMap` for the displayed equation and
+     `cyclotomicCharacter_artinMap_padic` for the `K = ℚ_p` corollary; PR #3 Layer 11's
+     orientation theorem consumes the first, and a citation of the second in its place is a
+     citation of a strictly weaker statement.
    - the geometric translation lemmas `Art^{geo} = Art ∘ inv` and `ν^{geo} = −ν`.
 4. **Norm limitation.** For `L/K` finite but not necessarily Galois, fix `L ⊆ K^{sep}` and put
    `F := L ∩ K^{ab}`. Then `N_{L/K}(Lˣ) = N_{F/K}(Fˣ)`. Equivalently and more usably in Lean:
@@ -827,8 +846,11 @@ modules over every local field" theorem appears.
 
 - **`H²(G_K, μ_n) ≅ ℤ/n`,** assuming `IsUnit (n : 𝒪[K])`. Derive it from `inv_K` and the Kummer
   sequence on `K̄ˣ` (`Br(K)[n]`), compute the finite groups `H^i(G_K, μ_n)` for `i = 0, 1, 2`,
-  and prove vanishing above degree `2`. In PR #1 Layer 8's vocabulary this records
-  `cd_ℓ(G_K) = 2` for primes `ℓ ≠ p`.
+  and prove vanishing above degree `2`. In PR #1 Layer 11's vocabulary this records
+  `cd_ℓ(G_K) = 2` for primes `ℓ ≠ p`. The name is `h2MuEquivZMod_unit`, and the unit
+  hypothesis is in it: ⚠ this statement says nothing at `n = p` in mixed characteristic, where
+  `p` is not a unit in `𝒪[K]`. The `n = p` case is 8B's separate `h2MuEquivZMod_mixed` below,
+  and PR #3 Layer 11 consumes that one.
 - **Duality.** For a finite discrete `G_K`-module `M` killed by such an `n`, put
   `M' = Hom(M, μ_n)` with the conjugation action. The cup pairing
   `H^i(G_K, M') × H^{2−i}(G_K, M) → H²(G_K, μ_n) ≅ ℤ/n` is a perfect pairing of finite groups
@@ -858,15 +880,27 @@ modules over every local field" theorem appears.
 
 #### 8B. Mixed-characteristic `p`-primary theory
 
-- Assume `K/ℚ_p` finite. For every finite discrete `G_K`-module `M`, including `p`-primary ones,
-  choose an exponent `n`; since `char K = 0` the étale dual `M' = Hom(M, μ_n)` is available.
-  Prove the same perfect pairings, the same finiteness, and compatibility across exponents.
-  Record `cd_p(G_K) = 2` as its own statement rather than folding it into an unqualified
+Write `N = [K : ℚ_p]` throughout, as in Layer 9; the letter `d` is reserved for the
+topological rank of PR #3 Layer 3 and is never a degree here.
+
+- **Duality.** Assume `K/ℚ_p` finite. For every finite discrete `G_K`-module `M`, including
+  `p`-primary ones, choose an exponent `n`; since `char K = 0` the étale dual
+  `M' = Hom(M, μ_n)` is available. Prove the same perfect pairings, the same finiteness, and
+  compatibility across exponents. Perfectness in degrees `0, 1, 2` is
+  `tateDualityPairing_perfect_mixed`, which is what PR #3 Layer 11 consumes at `n = p`. Record
+  `cd_p(G_K) = 2` as its own statement rather than folding it into an unqualified
   `cd(G_K) = 2`.
+- **The trace isomorphism.** `H²(G_K, μ_n) ≃ ZMod n` for **every** `n ≥ 1`, not only for `n`
+  prime to the residue characteristic: this is the value object of the pairing above, and it is
+  a milestone of this subsection rather than a corollary of 8A. The name is
+  `h2MuEquivZMod_mixed`. When `μ_p ⊆ K`, a choice of primitive `p`-th root of unity transports
+  it to `H²(G_K, 𝔽_p) ≃ ZMod p`, named `h2FpEquivZMod_of_mu`; the choice is an argument of that
+  statement and not a global convention. Both names are consumed by PR #3 Layer 11.
 - **Euler characteristic.** For every finite `M`,
   `#H⁰(G_K,M) · #H²(G_K,M) / #H¹(G_K,M) = ‖#M‖_K`, in the normalized absolute value of Layer 0
-  and as an equality in `ℚ≥0`. State that form first, then derive the `𝔽_p`-module corollary
-  `dim H¹ = dim H⁰ + dim H² + [K:ℚ_p] · dim M`. This is the statement PR #3 Layer 11 and the
+  and as an equality in `ℚ≥0` (`eulerCharacteristic_mixed`). State that form first, then derive
+  the `𝔽_p`-module corollary `dim H¹ = dim H⁰ + dim H² + N · dim M`
+  (`eulerCharacteristic_finrank_fp`). This is the statement PR #3 Layer 11 and the
   dyadic examples consume.
 
 #### 8C. The mod-2 Hilbert symbol
@@ -893,11 +927,16 @@ must agree.
 
 ### Layer 9: topological finite generation of `G_K`
 
-For `K/ℚ_p` finite of degree `N`. Sequenced after Layers 7 and 8, and after PR #3 Layer 11, which
-computes the rank of the maximal pro-`p` quotient `G_K(p)` from the duality statements of Layer 8.
-The order `LocalFields 0–8 → PR #3 Layer 11 → LocalFields 9` is acyclic. No unqualified
-`scd(G_K) = 2` milestone is used: strict cohomological dimension conventions vary, and that
-slogan is not the statement the argument needs.
+For `K/ℚ_p` finite of degree `N`. Sequenced after Layers 7 and 8, and after PR #3 Layer 11,
+which computes the rank of the maximal pro-`p` quotient `G_K(p)` from the duality statements of
+Layer 8. The order `PR #3 Layers 0–4 → LocalFields 0–8 → PR #3 Layer 11 → LocalFields 9` is
+acyclic, and the shared layer-DAG table below is where both roadmaps record it. The rank
+notation is PR #3 Layer 3's throughout: `d` is `topologicalGeneratorRankNat` and `N` is the
+degree, never the other way round, and the finite-generation half of the theorem is delivered
+in that layer's `IsTopologicallyFinitelyGenerated` shape so that it plugs into PR #3 without a
+comparison lemma. No unqualified `scd(G_K) = 2` milestone is used: strict
+cohomological dimension conventions vary, and that slogan is not the statement the argument
+needs.
 
 - **`H¹`-dimension counts.** `dim_{𝔽_ℓ} H¹(G_K, 𝔽_ℓ)` for every prime `ℓ`: it is
   `N + 1 + dim H⁰(μ_p)` at `ℓ = p` and at most `2` at `ℓ ≠ p` (Kummer, Layer 1's cardinality
@@ -908,10 +947,11 @@ slogan is not the statement the argument needs.
   proof on their own; there is no generic criterion at this generality to appeal to, and the
   arithmetic of `G_K` has to be used.
 - **The tame frame.** `G_K^{t}` is topologically 2-generated (Layer 4) and `P_K` is pro-`p`
-  (Layer 4), so by the pro-`p` Frattini generation criterion of PR #3 Layer 3 (a subset generates
-  a pro-`p` group if and only if it generates its Frattini quotient, together with the relative
-  form for a closed normal pro-`p` subgroup), finite generation of `G_K` reduces to finite
-  generation of the `ℤ_p[[G_K^t]]`-coinvariants of `P_K^{ab}(p)`.
+  (Layer 4), so by PR #3 Layer 3's Burnside generation criterion
+  `topologicallyGenerates_iff_frattiniQuotient` (a subset generates a pro-`p` group
+  topologically if and only if its image generates the Frattini quotient, together with the
+  relative form for a closed normal pro-`p` subgroup), finite generation of `G_K` reduces to
+  finite generation of the `ℤ_p[[G_K^t]]`-coinvariants of `P_K^{ab}(p)`.
 - **The multiplicative-group module.** The reciprocity-side input (NSW VII §4): the
   `ℤ_p`-completion `A(L) = lim Lˣ/(Lˣ)^{p^m} ≅ G_L^{ab}(p)` (Layer 7); the `ℚ_p[G]`-module
   structure `A(L) ⊗ ℚ ≅ ℚ_p[G]^N ⊕ ℚ_p` for `L/K` Galois with group `G` (the deep-unit logarithm
@@ -923,15 +963,18 @@ slogan is not the statement the argument needs.
   d(G_K) = N + 2   for every finite extension K/ℚ_p of degree N,
   ```
 
-  where `d` is the topological rank of PR #3 Layer 3. Upper bound: the relation-module
+  where `d` is PR #3 Layer 3's `topologicalGeneratorRankNat`. Upper bound: the relation-module
   bookkeeping of NSW VII §4 ((7.4.1)), using the free presentation of the tame quotient, the
   degree-`2` vanishing and comparison statements of Layer 8, and lifting along the Frattini
   reduction. Lower bound, in two cases, both consuming PR #3 Layer 11's computation of
-  `d(G_K(p))`:
+  `d(G_K(p))` (`topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu` and its `_of_not_mu`
+  companion, both resting on that layer's
+  `isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP`):
   - if `μ_p ⊆ K`, then `d(G_K) ≥ d(G_K(p)) = N + 2` by monotonicity of `d` under continuous
-    surjections (PR #3 Layer 3);
+    surjections (PR #3 Layer 3's `topologicalGeneratorRank_le_of_surjective`);
   - if `μ_p ⊄ K`, put `L = K(μ_p)` and `m = [L:K]`, which divides `p − 1`. Then `μ_p ⊆ L`, so
-    `d(G_L) ≥ d(G_L(p)) = mN + 2`, while the Schreier bound of PR #3 Layer 3 gives
+    `d(G_L) ≥ d(G_L(p)) = mN + 2`, while the Schreier bound of PR #3 Layer 3
+    (`topologicalGeneratorRankNat_le_of_isOpen`) gives
     `d(G_L) ≤ 1 + m(d(G_K) − 1)`. Hence `m · d(G_K) ≥ m(N + 1) + 1`, and since `d(G_K)` is an
     integer, `d(G_K) ≥ N + 2`.
 
@@ -1006,10 +1049,67 @@ needs Layers 2–3 and Mathlib's discrete group cohomology only, so it can run b
 parallel with PR #1; Layer 5's continuous assembly waits on PR #1 Layers 1–4, its functoriality
 on PR #1 Layers 5–7, and its Kummer theorem on PR #1 Layer 9. Layer 6 follows Layer 5; Layer 7
 follows Layer 6, and its ramification-compatibility milestone also needs Layer 3's Hasse–Arf;
-Layer 8 needs Layers 5 and 7. PR #3 Layer 3 is an early supplier to Layers 1, 4, and 9, and can
-be built at any time. PR #3 Layer 11 consumes Layers 5, 7, and 8 and supplies Layer 9, which is
-therefore last. PR #4 Layers 6–7 consume only 8C. The worked examples are required in their
-assigned layers.
+Layer 8 needs Layers 5 and 7. PR #3 Layers 2, 3, and 4 are early suppliers, to Layer 4 (Sylow
+theory and free profinite groups), Layer 1 and Layer 9 (the pro-`p` predicate, Frattini and
+Burnside theory, rank and the Schreier bound); they depend on nothing here and can be built at
+any time. PR #3 Layer 11 consumes Layers 5, 7, and 8 and supplies Layer 9, which is therefore
+last. PR #4 Layers 6–7 consume only 8C. The worked examples are required in their assigned
+layers.
+
+### Shared layer-DAG table: Local Fields ↔ Pro-`p` Groups
+
+This subsection is the interface record between the Local Fields roadmap
+([PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)) and the Pro-`p` Groups roadmap
+([PR #3](https://github.com/roed-math/TauCetiRoadmap/pull/3)). **It is maintained in both
+roadmaps, and the two copies are identical, wording included**; an edit to either is an edit
+to both. Every crossing between the two developments is a row here, and a statement that is
+not a row is not an interface: neither roadmap may consume the other through prose alone. The
+names are provisional and belong to the supplier, which states the object once; the consumer
+cites the name and never restates the object in its own words, which is what keeps the two
+sides from growing near-duplicate carriers and comparison maps between them.
+
+| Consumer layer | Supplier layer | Exact object or theorem | Agreed provisional name |
+|---|---|---|---|
+| Local Fields Layer 1, structure of `Kˣ` | Pro-`p` Groups Layer 3 | the quotient-form pro-`p` predicate, applied to `U(K,1) = lim_i U(K,1)/U(K,i)` | `IsProP` |
+| Local Fields Layer 4, wild inertia | Pro-`p` Groups Layer 2 | pro-`p` Sylow subgroups of a profinite group: the predicate, existence, the containment of every closed pro-`p` subgroup in one, uniqueness of a normal one, and the image under a continuous surjection. All five are free of Galois vocabulary; identifying the Sylow subgroup of `I_K` with `Gal(K̄/K^t)` is the Local Fields side | `IsProPSylow`, `exists_isProPSylow`, `IsProP.exists_le_isProPSylow`, `IsProPSylow.eq_of_normal`, `IsProPSylow.map_of_surjective` |
+| Local Fields Layer 4, Iwasawa presentation | Pro-`p` Groups Layer 4 | the free **profinite** group on a finite set, its generators and its universal property, together with the quotient by the closed normal closure of a set of relators. This is the shape in which `G_K^t = ⟨σ, τ ∣ στσ⁻¹τ^{−q}⟩` is stated, and it is a profinite object, not the pro-`p` `presentedProP` of the same layer | `freeProfiniteGroup`, `freeProfiniteGroup.of`, `freeProfiniteGroup.lift`, `presentedProfiniteGroup` |
+| Local Fields Layer 9, rank of `G_K` | Pro-`p` Groups Layer 3 | topological finite generation, in exactly the pinned shape `∃ s : Finset G, (Subgroup.closure ↑s).topologicalClosure = ⊤` | `IsTopologicallyFinitelyGenerated` |
+| Local Fields Layer 9, rank of `G_K` | Pro-`p` Groups Layer 3 | the topological rank in its cardinal and natural-number forms, its monotonicity under continuous surjections, the Schreier bound `d(U) ≤ 1 + [G : U](d(G) − 1)` for open `U`, and the Burnside generation criterion for pro-`p` groups (a subset generates topologically iff its image generates the Frattini quotient) | `topologicalGeneratorRank`, `topologicalGeneratorRankNat`, `topologicalGeneratorRank_le_of_surjective`, `topologicalGeneratorRankNat_le_of_isOpen`, `topologicallyGenerates_iff_frattiniQuotient` |
+| Local Fields Layer 9, rank of `G_K` | Pro-`p` Groups Layer 11 | `G_K(p)` as a carrier, its topological finite generation, and its rank in both cases: `N + 1` when `μ_p ⊄ K` (free, Shafarevich) and `N + 2` when `μ_p ⊆ K` (Demushkin) | `absoluteGaloisGroupProP`, `isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP`, `topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu`, `topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu` |
+| Pro-`p` Groups Layer 11, input 1 | Local Fields Layer 8B | the mixed-characteristic Euler characteristic `#H⁰ · #H² / #H¹ = ‖#M‖_K` and its `𝔽_p`-module corollary `dim H¹ = dim H⁰ + dim H² + N · dim M` | `eulerCharacteristic_mixed`, `eulerCharacteristic_finrank_fp` |
+| Pro-`p` Groups Layer 11, input 2 | Local Fields Layer 8B | the trace isomorphism `H²(G_K, μ_n) ≃ ZMod n` for **every** `n ≥ 1` in mixed characteristic, which is the value object of the 8B pairing, together with its transport to `H²(G_K, 𝔽_p)` along a choice of `p`-th root of unity when `μ_p ⊆ K`. ⚠ The 8A statement of the same shape carries `IsUnit (n : 𝒪[K])` and therefore says nothing at `n = p`; citing 8A for this input is the mistake to avoid | `h2MuEquivZMod_mixed`, `h2FpEquivZMod_of_mu` |
+| Pro-`p` Groups Layer 11, input 3 | Local Fields Layer 8B | perfectness of the local Tate duality pairing at `n = p` in mixed characteristic, in degrees `0`, `1`, `2` | `tateDualityPairing_perfect_mixed` |
+| Pro-`p` Groups Layer 11, input 3 | Local Fields Layer 8C | the identification of that pairing at `p = 2` with the classical Hilbert symbol | `hilbertSymbol_eq_tateDuality_pairing` |
+| Pro-`p` Groups Layer 11, input 4 | Local Fields Layer 5 | Kummer theory `Kˣ/(Kˣ)ⁿ ≃ H¹(G_K, μ_n)`, and the square relating Kummer classes to the cup product | `kummerEquiv`, `cup_kummerEquiv` |
+| Pro-`p` Groups Layer 11, input 5 | Local Fields Layer 7 | the Artin map, and the cyclotomic orientation `χ_cyc(Art_K(u)) = N_{K/ℚ_p}(u)⁻¹` for `u ∈ 𝒪[K]ˣ`, with its `K = ℚ_p` corollary `χ_cyc(Art_{ℚ_p}(u)) = u⁻¹`. ⚠ The field norm is part of the statement, not decoration: without it the equation is ill-typed for `K ≠ ℚ_p`, and the `𝒪[K]ˣ`-valued character with value `u⁻¹` is a Lubin–Tate character that neither roadmap builds | `artinMap`, `cyclotomicCharacter_artinMap`, `cyclotomicCharacter_artinMap_padic` |
+
+Throughout the table `N = [K : ℚ_p]` and `p` is the residue characteristic; `K` is a finite
+extension of `ℚ_p` in every row that mentions either.
+
+Reading the table by layer gives the schedule
+
+```text
+Pro-p Groups 0-4  →  Local Fields 0-8  →  Pro-p Groups 11  →  Local Fields 9,
+```
+
+which is acyclic. Pro-`p` Groups Layers 5–10 have no Local Fields edge in either direction, so
+they are unconstrained relative to this order, and Local Fields Layers 0–3 wait only on the
+early pro-`p` foundations. Both roadmaps carry this sentence.
+
+Two conventions hold across the table, because getting either one wrong is what turns an
+acyclic schedule into a circular one or grows a second carrier for an object that already has
+one:
+
+- ⚠ **`N` is the degree `[K : ℚ_p]`; `d` is a topological rank and never a degree.** The two
+  occur in the same sentences (`d(G_K) = N + 2`, and `d(G_K(p))` is `N + 1` or `N + 2`), so
+  neither roadmap writes `d` for the degree, in prose or in a displayed formula.
+- ⚠ **Topological finite generation of `G_K` is not an input to Pro-`p` Groups.** Layer 11
+  proves finite generation of `G_K(p)` from the `H¹` count alone, and Local Fields Layer 9
+  consumes that result. Pro-`p` Groups Layer 8's reconstruction theorem takes
+  `IsTopologicallyFinitelyGenerated` as a *hypothesis*: what it consumes is the predicate,
+  which is Layer 3's, and never the Local Fields theorem that produces an instance of it.
+  Reading that edge the other way would close the cycle
+  `Local Fields 9 → Pro-p Groups 8 → Pro-p Groups 9 → Pro-p Groups 11 → Local Fields 9`.
 
 ## Downstream consumers in gq2
 
