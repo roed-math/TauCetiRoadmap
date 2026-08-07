@@ -485,16 +485,19 @@ expressible, its milestones are added to `Suggested.lean` with `sorry`.
   of the upper filtration to the jumps of the lower one.
   Upper numbering is `G^u := G_{ψ(u)}` (using the real-index groups above), and the two theorems
   that justify it are **Herbrand's theorem** `(G/H)^u = G^u H/H` (Serre LF IV §3) and
-  transitivity `φ_{L/K} = φ_{L'/K} ∘ φ_{L/L'}`. Upper numbering is defined here because Layer 7
-  needs it for reciprocity compatibility and the conductor.
+  transitivity in a tower `M/L/K`, which is `φ_{M/K} = φ_{L/K} ∘ φ_{M/L}` for `φ` and
+  `ψ_{M/K} = ψ_{M/L} ∘ ψ_{L/K}` for `ψ`. State both: inverting a composite reverses it, so the
+  two orders differ, and they differ in practice as soon as one step of the tower is wild.
+  Upper numbering is defined here because Layer 7 needs it for reciprocity compatibility and
+  the conductor.
 - **Herbrand values as unit depths.** `φ` takes non-integral values at integers: in
   `ℚ_2(μ_8)/ℚ_2` below, `φ(2) = 3/2`. Its inverse does not, and that asymmetry is why the norm
   theorems below can be stated at all with unit groups indexed by `ℕ`. Prove that `ψ_{L/K}(n)`
   is a natural number for every `n : ℕ`, and package the proof as a function
   `ψℕ_{L/K} : ℕ → ℕ` with the characterizing lemma `(ψℕ_{L/K} n : ℝ) = ψ_{L/K} n`, together
-  with `ψℕ 0 = 0`, monotonicity, `n ≤ ψℕ n`, and transitivity
-  `ψℕ_{M/K} = ψℕ_{L/K} ∘ ψℕ_{M/L}` in a tower. This is the only conversion
-  from a Herbrand value to a unit depth in the roadmap: every index of `U(K, −)` and
+  with `ψℕ 0 = 0`, monotonicity, `n ≤ ψℕ n`, and transitivity in a tower `M/L/K` in the order
+  inherited from the real-valued statement above, `ψℕ_{M/K} = ψℕ_{M/L} ∘ ψℕ_{L/K}`. This is the
+  only conversion from a Herbrand value to a unit depth in the roadmap: every index of `U(K, −)` and
   `U(L, −)` below is either a literal natural number or a value of `ψℕ`, and `φ` never indexes
   a unit group. The proof is the piecewise formula together with Lagrange: writing `g_i = #G_i`
   and taking `t` to be the largest jump with `φ(t) ≤ n`, one has
@@ -846,9 +849,9 @@ modules over every local field" theorem appears.
   ⚠ Two formulas, with no equality asserted between their right-hand sides. `H¹_ur(K,M)` is
   `M/(Frob − 1)M`, whose order equals that of `M^{G_K}`; the same computation run on `M'`
   answers `#H⁰(K,M')`, a different number in general. At `K = ℚ_2` and `M = ℤ/3` with trivial
-  action, `#H¹_ur(K,M) = 3`, while `M' = μ_3` and `μ_3(ℚ_2) = 1`, so `#H¹_ur(K,M') = 1`. State the degrees, the coefficient
-  dual, and the value group explicitly in the statement rather than in prose (Milne ADT I.2.6,
-  NSW (7.2.15)).
+  action, `#H¹_ur(K,M) = 3`, while `M' = μ_3` and `μ_3(ℚ_2) = 1`, so `#H¹_ur(K,M') = 1`. State
+  the degrees, the coefficient dual, and the value group explicitly in the statement rather
+  than in prose (Milne ADT I.2.6, NSW (7.2.15)).
 - **Euler characteristic.** For finite `M` of order prime to `p`,
   `#H⁰(G_K,M) · #H²(G_K,M) / #H¹(G_K,M) = 1`, which is the specialization of `‖#M‖_K` because
   `#M` is a unit in `𝒪[K]`.
