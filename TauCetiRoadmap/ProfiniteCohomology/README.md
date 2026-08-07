@@ -454,7 +454,9 @@ is a transport and not a redesign.
   and `Hⁿ_cont(G, X) = (continuousCohomology R G n).obj X` as the canonical object of every
   all-degree statement below. Record `homogeneousCochains` as the complex it is the homology of,
   and `continuousCohomologyZeroIso : continuousCohomology R G 0 ≅ invariants R G` as the one
-  degree Mathlib computes. `Suggested.lean` carries all three.
+  degree Mathlib computes. `Suggested.lean` carries all three, and the declaration chain below
+  in full: `resolutionMap`, `cochainsMap`, `cocyclesMap`, `map`, `map_id`, `map_comp`, `res`,
+  `quotientToInvariants`, `infl`, `coeffMap`.
 - **Smooth discrete objects.** `TopRep R G` is wider than the discrete `G`-modules of §3, and
   deliberately so: an object carries one continuous operator per group element, and nothing there
   forces the action to be continuous in the group variable. The pin's module documentation says
