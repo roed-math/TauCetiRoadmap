@@ -25,6 +25,31 @@ its authors, and make the corresponding statement a milestone here.
 - **The Dirichlet density predicate.** Now in Mathlib master, so it is a Mathlib declaration and
   not external. The pin does not have it, so Layer 8A.1 builds it in Mathlib's shape.
 
+## Coordination the specification does not carry
+
+The README states mathematics and nothing else. These are the conversations that should happen
+around it, and none of them is a prerequisite of any milestone.
+
+- **Before Layer 5**, agree the ray-class character interface with the global class field theory
+  roadmap. Milestone 5.1 builds the object this roadmap needs, with every law it uses as a field.
+  When that roadmap is accepted, 5.1 becomes a named adapter to its carrier. Aligning the two
+  vocabularies early makes that adapter short.
+- **Before Layer 6**, the same for the infinity-type carrier and milestone 6.1.
+- **Before Layer 8**, contact the people working on Chebotarev in Lean, listed below. Milestone
+  8.0 builds the Frobenius class, and the number field arithmetic roadmap will eventually own it.
+- **Before Layer 9**, contact PrimeNumberTheoremAnd about Wiener–Ikehara, milestone 9.1.
+- **Milestone 8E has one proof**, the analytic one. The classical second proof runs through Artin
+  reciprocity, and therefore through class field theory, which is not a prerequisite of this
+  roadmap. Once the global class field theory roadmap is accepted, proving 8E both ways and
+  comparing them is the one place where this roadmap's arithmetic-Frobenius convention and that
+  roadmap's reciprocity normalization could be caught disagreeing. That comparison is worth
+  doing, and it is not a milestone here.
+- **The shared table with the integral lattices roadmap** fixes six names. Its `GaussianThetaInterface`
+  has a field for biduality, which is milestone 2.2 of this roadmap and has no row, and no field
+  for Poisson summation, which is milestone 2.6 and does have a row. Layer 2 names both objects,
+  so this roadmap is unaffected either way. Raising it with that roadmap is the way to settle it;
+  neither side should edit a byte-identical table alone.
+
 ## What is in motion elsewhere
 
 Coordinate and cite. Do not fork.
@@ -122,6 +147,19 @@ equation would need it, and the README puts such a treatment out of scope.
 early 2025, with Mathlib bumps only. Its README says most results have reached Mathlib. Still
 unlanded: the `PNT.lean` reduction of asymptotic Dirichlet to Wiener–Ikehara. It is the
 historical provenance of `LSeries/`, `EulerProduct/`, `Nonvanishing.lean`, and `PrimesInAP.lean`.
+
+### A correction worth passing on
+
+Milestone 2.11 of the README used to assert that the analytic dual of `mixedEmbedding K '' I` is
+`mixedEmbedding K '' (I𝔡)⁻¹`. That is false: the trace pairing and the Euclidean inner product on
+the mixed space differ at the complex places. For `K = ℚ(i)` and `I = 𝓞_K` the mixed lattice is
+`ℤ[i] ⊂ ℂ`, which is Euclidean self-dual, while the trace dual is `(1/2)ℤ[i]`. The two are
+related by the map that is the identity on real coordinates and `z ↦ 2 conj z` on complex ones.
+Milestone 2.11 now owns that map.
+
+Any roadmap that realizes an ideal lattice in Euclidean space and compares its dual with a
+bilinear dual meets the same factor. It is worth telling the integral lattices roadmap, whose
+milestone 8D compares an analytic dual with `IntegralLattice.dual`.
 
 ## Coordination ledger
 

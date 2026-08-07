@@ -89,7 +89,7 @@ number field `K`, and recovering the classical object at `K = ℚ` in every case
 - **Artin L-functions and Brauer induction.** Layers 5 and 6 are built at the generality that
   Brauer induction needs. No Artin instance and no induction theorem is built here.
 - **Compact-group equidistribution.** Layer 7.5 proves the nonvanishing that an
-  equidistribution argument needs, and Layer 6.6 proves Hecke's equidistribution of the
+  equidistribution argument needs, and Layer 7.8 proves Hecke's equidistribution of the
   arguments of Gaussian primes. The Weyl criterion for a general compact group is not proved
   here.
 - **Effective constants and error terms.** No density statement and no counting statement here
@@ -186,21 +186,9 @@ consumer cites the name instead of restating the object.
 | L-functions Layer 2, items 10 to 13 | Integral Lattices 1B | the dual lattice of an integral bilinear form, and the vocabulary for it | `IntegralLattice.dual` |
 | L-functions Layer 2, items 10 to 13 | Integral Lattices 8D | the analytic dual of the realization of `L` equals `IntegralLattice.dual` | `IntegralLattice.analyticDual_eq_dual` |
 
-The agreed names belong to the supplier. Layer 2 of this roadmap owns the `ZLattice` names and
-cites the `IntegralLattice` ones.
-
-Both sides carry the crossing in Lean, so neither waits for the other:
-
-- the integral lattices roadmap's `Suggested.lean` has `GaussianThetaInterface n`, whose fields
-  are `dual`, `dual_dual`, `covolume_mul_covolume_dual`, and `theta_one_div`. Layers 2.1, 2.2,
-  2.3, and 2.8 are named so that one term of that structure comes from them;
-- this roadmap's `Suggested.lean` has `IntegralLatticeInterface`, whose fields are `dual` and
-  `analyticDual_eq_dual`. Layers 2.10 and 2.11 are stated over it.
-
-⚠ Two rows of the table need a decision by both roadmaps together, and neither side should
-change the table alone. `GaussianThetaInterface` has a field for biduality, which is Layer 2.2
-and has no row. It has no field for Poisson summation, which is Layer 2.6 and does have a row.
-Layer 2 names both, so either resolution costs nothing here.
+The agreed names belong to the supplier. Layer 2 of this roadmap owns the `ZLattice` names, and
+cites the `IntegralLattice` ones. Milestones 2.1, 2.2, 2.3, and 2.8 are named so that the
+integral lattices roadmap's `GaussianThetaInterface` is produced by them, field for field.
 
 ## Standing hypotheses
 
@@ -462,8 +450,8 @@ The axiomatics of Iwaniec–Kowalski ch. 5, as one structure with separate predi
 - a total representative `Λ : ℂ → ℂ` of the completed function;
 - a finite polar divisor `polarOrder : ℂ →₀ ℕ`.
 
-The representative is total because that is Mathlib's function type. No predicate below reads
-its value at a pole.
+The representative is total because that is Mathlib's function type. Milestone 0.3 makes it
+analytic away from the recorded poles, so it is an ordinary function there.
 
 ⚠ The name states the normalization. The record is analytic-normalized, and it carries no
 motivic weight. An arithmetic-normalized object reaches these predicates only through 0.4.
@@ -483,6 +471,10 @@ Basic API for the record:
 - the downstream interface: the zeros roadmap attaches its growth predicates to this record,
   so no field may be removed without a change there.
 
+⚠ `degree` is the **absolute** degree, computed from the gamma data. For a Hecke L-function
+over `K` that degree is `[K:ℚ]`, not `1`. Milestone 5.9 defines a separate invariant for the
+degree relative to `K`, and never writes it into this field.
+
 *Prerequisites:* Mathlib `LSeries`, `Complex.Gammaℝ`, `Complex.Gammaℂ`, `Finsupp`, `Multiset`.
 
 **0.2 Dirichlet agreement.** `HasDirichletAgreement`: `a 1 = 1`, `0 < degree`, and
@@ -495,25 +487,58 @@ dropped. Off it, `L a` is a junk value.
 They are separate because instances satisfy different subsets, and the model has to record
 which.
 
-- `HasMeromorphicContinuation`: `Meromorphic Λ`, and
-  `meromorphicOrderAt Λ p = −polarOrder p` at each recorded pole, and nonnegative order
-  elsewhere.
-- `HasFunctionalEquation`: `‖ε‖ = 1`, invariance of the polar divisor under `s ↦ 1 − conj s`,
-  and `Λ(s) = ε · Λ^∨(1 − s)` off the two polar loci. With `HasMeromorphicContinuation` this is
-  an equality of punctured germs. It therefore fixes matching principal parts, and it compares
-  no value at a pole.
-- `HasAverageCoefficientBound`: `∑_{n ≤ x} ‖a n‖ = O(x^{1+δ})` for every `δ > 0`. This is the
-  form every instance can prove. Pointwise Ramanujan bounds are specific to an instance and are
-  not part of the model.
+`HasMeromorphicContinuation` has three fields:
 
-Residues and higher principal parts are theorems about an instance. Layer 3.4 requires them for
-the Dedekind zeta function.
+- `Meromorphic Λ`;
+- `meromorphicOrderAt Λ p = −polarOrder p` at each recorded pole;
+- `AnalyticAt ℂ Λ p` at every `p` with `polarOrder p = 0`.
 
-*Prerequisites:* Layer 0.1; Mathlib `Meromorphic`, `meromorphicOrderAt`, `Asymptotics.IsBigO`.
+⚠ The third field is the one that makes the record usable, and the obvious weaker form does
+not do it. `meromorphicOrderAt` and `MeromorphicAt` depend only on the punctured germ, so
+`0 ≤ meromorphicOrderAt Λ p` says nothing about `Λ p`. Changing a genuine continuation at one
+point leaves it meromorphic with every order unchanged. Without analyticity, every statement
+below about a value of `Λ` is a statement about an arbitrary number.
+
+`HasFunctionalEquation` has three fields:
+
+- `‖ε‖ = 1`;
+- invariance of the polar divisor under `s ↦ 1 − conj s`;
+- `Λ(s) = ε · Λ^∨(1 − s)` at every `s` where both `s` and `1 − conj s` are outside the polar
+  divisor. With `HasMeromorphicContinuation` both sides are analytic there, so this is an
+  equality of ordinary values. At a pole, the corresponding statement is equality of principal
+  parts, and it follows from the identity theorem rather than being a field.
+
+`HasAverageCoefficientBound`: `∑_{n ≤ x} ‖a n‖ = O(x^{1+δ})` for every `δ > 0`. This is the
+form every instance can prove. Pointwise Ramanujan bounds are specific to an instance and are
+not part of the model.
+
+Residues and higher principal parts are theorems about an instance. Milestone 3.4 requires them
+for the Dedekind zeta function.
+
+*Prerequisites:* Layer 0.1; Mathlib `Meromorphic`, `meromorphicOrderAt`, `AnalyticAt`,
+`Asymptotics.IsBigO`.
 
 **0.4 The two normalizations, and the translation between them.** A second record
 `ArithmeticLFunctionData` has the same fields, and its functional equation is centered at
-`(w+1)/2` for an integer weight `w`. A structure `NormalizationTranslation` relates a pair:
+`(w+1)/2` for an integer weight `w`. Both records include the conductor power `N^{s/2}` in the
+completed function, which fixes every constant below.
+
+Write `L_ar` and `L_an` for the two Dirichlet series. From `a_an(n) = a_ar(n)/n^{w/2}`,
+
+`L_an(s) = L_ar(s + w/2)`.
+
+Since `Λ_ar(s) = N^{s/2} γ_ar(s) L_ar(s)` and `Λ_an(s) = N^{s/2} γ_an(s) L_an(s)`,
+
+`Λ_ar(s + w/2) = N^{s/2} N^{w/4} γ_ar(s + w/2) L_an(s)`.
+
+So the two completed functions agree after a shift and one constant, and the gamma shifts move
+**up**:
+
+`γ_an(s) = γ_ar(s + w/2)`, that is `μ_an = μ_ar + w/2` and `ν_an = ν_ar + w/2`;
+
+`Λ_an(s) = N^{−w/4} · Λ_ar(s + w/2)`.
+
+The structure `NormalizationTranslation` records exactly those equations:
 
 ```lean
 structure NormalizationTranslation where
@@ -521,35 +546,44 @@ structure NormalizationTranslation where
   analytic   : AnalyticLFunctionData
   weight     : ℤ
   coeff_eq      : ∀ n : ℕ, analytic.a n = arithmetic.a n / (n : ℂ) ^ ((weight : ℂ) / 2)
-  completed_eq  : ∀ s : ℂ, analytic.Λ s = arithmetic.Λ (s + (weight : ℂ) / 2)
-  gammaR_eq     : analytic.gammaR = arithmetic.gammaR.map (· - (weight : ℂ) / 2)
-  gammaC_eq     : analytic.gammaC = arithmetic.gammaC.map (· - (weight : ℂ) / 2)
+  gammaR_eq     : analytic.gammaR = arithmetic.gammaR.map (· + (weight : ℂ) / 2)
+  gammaC_eq     : analytic.gammaC = arithmetic.gammaC.map (· + (weight : ℂ) / 2)
+  completed_eq  : ∀ s : ℂ, analytic.Λ s =
+                    ((arithmetic.conductor : ℕ) : ℂ) ^ (-(weight : ℂ) / 4) *
+                      arithmetic.Λ (s + (weight : ℂ) / 2)
   polarOrder_eq : ∀ p : ℂ, analytic.polarOrder p = arithmetic.polarOrder (p + (weight : ℂ) / 2)
   conductor_eq  : analytic.conductor = arithmetic.conductor
   rootNumber_eq : analytic.rootNumber = arithmetic.rootNumber
 ```
 
-The direction of the shift is fixed as displayed. Four theorems:
+Theorems, all of them stated and proved and not merely asserted to exist:
 
-- degree is invariant;
+- degree is invariant, and so are the conductor, the root number, and the multiplicity of a
+  zero;
 - a translation exists for every arithmetic record, and is unique;
 - the analytic side satisfies 0.2 and 0.3 exactly when the arithmetic side satisfies their
   translates;
-- the multiplicity of a zero is invariant.
+- the **translated functional equation**: the arithmetic equation centered at `(w+1)/2` and the
+  analytic equation centered at `1/2` are equivalent under the translation, with the constant
+  `N^{−w/4}` cancelling on the two sides.
 
-⚠ Test the structure on two instances before using it. At `w = 0`, which is a Dirichlet
-character, every field must reduce to `rfl`. At `w = k − 1`, which is a weight-`k` newform, the
-shift is nonzero for the first time. A wrong sign is invisible before the second test.
+⚠ Two mandatory tests, because a sign error here is invisible until the second one.
+
+- `w = 0`, a Dirichlet character: every equation reduces to the identity, and the constant
+  `N^{−w/4}` is `1`.
+- `w = 11`, the discriminant form `Δ`: the arithmetic gamma factor is `Gammaℂ(s)`, so
+  `ν_ar = 0` and `ν_an = +11/2`. A `−11/2` here would contradict milestone 0.7.
 
 *Prerequisites:* Layers 0.1, 0.2, 0.3.
 
 **0.5 The zeta instance card.** Degree 1, conductor 1, `gammaR = {0}`, `gammaC = 0`, `ε = 1`,
-`Λ = completedRiemannZeta`, and simple poles at `0` and `1`. It satisfies 0.2, 0.3. The
-functional equation is `completedRiemannZeta_one_sub`, read off the polar locus. Every instance
-is complete at the pin, so this card validates the model on the day the model exists.
+`Λ = completedRiemannZeta`, and simple poles at `0` and `1`. It satisfies 0.2 and 0.3, with
+analyticity away from `{0, 1}` from `differentiableAt_completedZeta`. The functional equation is
+`completedRiemannZeta_one_sub`. Every ingredient is complete at the pin, so this card validates
+the model on the day the model exists.
 
 *Prerequisites:* Layers 0.1, 0.2, 0.3; Mathlib `completedRiemannZeta`,
-`completedRiemannZeta_one_sub`, `riemannZeta_residue_one`.
+`completedRiemannZeta_one_sub`, `riemannZeta_residue_one`, `differentiableAt_completedZeta`.
 
 **0.6 The Dirichlet instance card.** For `χ` primitive modulo `N > 1`: degree 1, conductor `N`,
 `gammaR = {0}` or `{1}` by parity, `Λ = N^{s/2} · completedLFunction χ`, and `ε = rootNumber χ`.
@@ -566,9 +600,9 @@ an imprimitive `χ`, where `rootNumber` takes a junk value.
 *Prerequisites:* Layers 0.1, 0.2, 0.3; Mathlib `DirichletCharacter.rootNumber`,
 `IsPrimitive.completedLFunction_one_sub`, `gaussSum_mul_gaussSum_eq_card`.
 
-**0.7 The instance ledger.** Each row is discharged in the layer named.
+**0.7 The instance ledger.** Each row is discharged in the milestone named.
 
-| Instance | Layer |
+| Instance | Milestone |
 |---|---|
 | Riemann zeta | 0.5 |
 | Dirichlet character | 0.6 |
@@ -582,7 +616,8 @@ The newform row is consumed and not built. The [modular forms
 roadmap](../ModularForms/README.md), Layer 7, supplies convergence, the Euler product, the
 completed `Λ_N`, the two-form equation `Λ_N(k − s, f) = i^k Λ_N(s, g)`, entirety, and the
 analytic conductor of Iwaniec–Kowalski (5.7). The milestone here is the card only: degree 2,
-arithmetic conductor `N`, and the translation of 0.4 at `w = k − 1`.
+arithmetic conductor `N`, and the translation of 0.4 at `w = k − 1`. For `Δ` that gives
+analytic `gammaC = {11/2}`, coefficients `τ(n)/n^{11/2}`, and central point `1/2`.
 
 Artin L-functions are not a row. Layers 5 and 6 are built at the generality that Brauer
 induction needs, and a representation-theoretic roadmap owns any Artin instance.
@@ -602,40 +637,58 @@ vocabulary. This layer discharges the TODO in `DedekindZeta.lean`.
 `I` of `𝓞 K` with `Ideal.absNorm I = n`. Mathlib inlines this lambda inside `dedekindZeta` and
 never names it. Prove `dedekindZeta K = LSeries (idealCoeff K)`.
 
-Basic API:
-
-- the value at `0` and at `1`;
-- positivity;
-- `idealCoeff ℚ n = 1` for `n ≠ 0`;
-- the behaviour under a field isomorphism.
+Basic API: the value at `0` and at `1`; positivity; `idealCoeff ℚ n = 1` for `n ≠ 0`; the
+behaviour under a field isomorphism.
 
 *Prerequisites:* Mathlib `NumberField.dedekindZeta`, `Ideal.absNorm`,
 `Ideal.finite_setOf_absNorm_eq`.
 
-**1.2 The weighted norm coefficient.** For `χ` a complex-valued function on nonzero ideals of
-`𝓞 K`, define `idealCoeffOfWeight χ : ℕ → ℂ` by `n ↦ ∑_{𝔑𝔞 = n} χ 𝔞`, and set
-`L(χ, s) = LSeries (idealCoeffOfWeight χ) s`. Every character L-function in this roadmap is
-this series for one `χ`. Summability, the Euler product, and continuation are therefore proved
-once here for a general `χ` under stated hypotheses, and not once per family.
+**1.2 Ideal weights, and the weighted norm coefficient.** An ideal weight is the algebraic
+carrier every character L-function in this roadmap uses:
 
-The convention for bad primes is fixed here and used unchanged in Layers 5, 6, and 8: `χ 𝔭 = 0`
-at a prime `𝔭` of the bad set.
+```lean
+structure IdealWeight (K : Type*) [Field K] [NumberField K] where
+  toFun : Ideal (𝓞 K) → ℂ
+  bad : Set (IsDedekindDomain.HeightOneSpectrum (𝓞 K))
+  bad_finite : bad.Finite
+  map_mul : ∀ I J, toFun (I * J) = toFun I * toFun J
+  norm_eq_one : ∀ 𝔭 ∉ bad, ‖toFun 𝔭.asIdeal‖ = 1
+  eq_zero_bad : ∀ 𝔭 ∈ bad, toFun 𝔭.asIdeal = 0
+```
+
+Define `idealCoeffOfWeight χ : ℕ → ℂ` by `n ↦ ∑_{𝔑𝔞 = n} χ 𝔞`, and set
+`L(χ, s) = LSeries (idealCoeffOfWeight χ) s`. The convention for bad primes is fixed here and
+used unchanged in Layers 5, 6, and 8: `χ 𝔭 = 0` at a prime of the bad set.
 
 Basic API:
 
-- `idealCoeffOfWeight 1 = idealCoeff K`;
-- additivity in `χ`;
-- the value at `n = 1`;
-- the behaviour under multiplication of weights, which is 1.3.
+- the trivial weight, with `idealCoeffOfWeight 1 = idealCoeff K`;
+- the conjugate weight;
+- the **pointwise product** `(χ · ψ)(𝔞) = χ(𝔞) ψ(𝔞)`, with the union of the bad sets;
+- the **ideal convolution** `(χ ⋆ ψ)(𝔞) = ∑_{𝔟𝔠 = 𝔞} χ(𝔟) ψ(𝔠)`, which is a different
+  operation and is the one 1.3 uses;
+- the local restriction `χ` to the powers of one prime, `k ↦ χ(𝔭^k)`, which is what 1.5 uses;
+- restriction to a larger bad set;
+- the value of `idealCoeffOfWeight χ` at `n = 1`.
+
+⚠ The analytic hypothesis these weights need for continuation is not a field of this structure.
+It is `HasCancellation`, milestone 7.1, and keeping the two apart is what stops an analytic
+conclusion from being derived from an algebraic hypothesis.
 
 *Prerequisites:* Layer 1.1; Mathlib `Ideal.absNorm`, `Ideal.finite_setOf_absNorm_eq`.
 
-**1.3 Multiplicativity and Dirichlet convolution.** Three statements. `idealCoeff K` is
-multiplicative, by unique factorization of ideals and the coprime case of the Chinese remainder
-theorem. `idealCoeffOfWeight χ` is multiplicative when `χ` is completely multiplicative on
-ideals. Grouping by norm turns multiplication of ideal weights into Dirichlet convolution `⍟`
-of the coefficient functions. The third statement is what lets Mathlib's convolution API apply
-to objects indexed by ideals.
+**1.3 Multiplicativity, and what grouping by norm does to each product.** Three statements.
+
+- `idealCoeff K` is multiplicative, by unique factorization of ideals and the coprime case of
+  the Chinese remainder theorem.
+- `idealCoeffOfWeight χ` is multiplicative when `χ` is completely multiplicative on ideals.
+- Grouping by norm carries **ideal convolution** to Dirichlet convolution:
+  `idealCoeffOfWeight (χ ⋆ ψ) = idealCoeffOfWeight χ ⍟ idealCoeffOfWeight ψ`.
+
+⚠ Pointwise multiplication of weights does **not** become Dirichlet convolution. Writing
+`a_χ(n) = ∑_{𝔑𝔞 = n} χ(𝔞)`, the identity `a_{χ·ψ} = a_χ ⍟ a_ψ` is false in general, because
+`(a_χ ⍟ a_ψ)(n) = ∑_{𝔑(𝔟𝔠) = n} χ(𝔟) ψ(𝔠)`, which is `a_{χ ⋆ ψ}(n)`. The third statement is
+what lets Mathlib's convolution API apply to objects indexed by ideals, and it is about `⋆`.
 
 *Prerequisites:* Layers 1.1, 1.2; Mathlib `UniqueFactorizationMonoid`, `LSeries.convolution`.
 
@@ -668,10 +721,17 @@ The properties are separate predicates over that structure:
 - constant term `1` at every prime;
 - degree at most `d` at every prime, and exactly `d` off `bad`;
 - `bad` contained in the support of the conductor;
-- the local identity: the power-series coefficients of `(localPolynomial 𝔭)(T)⁻¹` are the
-  values of the coefficient function at the powers of `𝔭`;
-- the global identity: a `HasProd` for `∏_𝔭 (localPolynomial 𝔭 (𝔑𝔭^{-s}))⁻¹` in the half-plane
-  of absolute convergence.
+- the **local identity**, at the level of ideals: for a weight `χ` and each prime `𝔭`, the
+  power-series coefficients of `(localPolynomial 𝔭)(T)⁻¹` are the values `χ(𝔭^k)`;
+- the **global identity**: a `HasProd` for `∏_𝔭 (localPolynomial 𝔭 (𝔑𝔭^{-s}))⁻¹` equal to
+  `LSeries (idealCoeffOfWeight χ) s` in the half-plane of absolute convergence. That theorem is
+  where multiplying the local series and grouping by norm is done.
+
+⚠ The local identity is at the level of **ideals**, not of norms. The norm-grouped coefficient
+`idealCoeffOfWeight χ (𝔑𝔭^k)` is not the coefficient of the local factor at `𝔭`: it collects
+every ideal of that norm. In `ℚ(i)` the prime `5` splits as `𝔭 𝔭̄` with `𝔑𝔭 = 𝔑𝔭̄ = 5`, so
+`idealCoeff K 5 = 2`, while the coefficient of `T` in the local factor `(1 − T)⁻¹` at `𝔭` is
+`1`. That split-prime example is a mandatory test of this milestone.
 
 The determinant realization `P_𝔭(T) = det(1 − Frob_𝔭 T ∣ V^{I_𝔭})`, with arithmetic Frobenius,
 is a stronger predicate on top, for instances that have a Galois representation. It is not part
@@ -679,8 +739,7 @@ of the definition.
 
 Basic API:
 
-- the data for the constant weight `1`, which is the Dedekind zeta case;
-- the data for a ray-class character, from Layer 5.2;
+- the data for the trivial weight, which is the Dedekind zeta case;
 - the product of two such data;
 - the restriction of the data to a larger bad set;
 - the lemma that the degree claim in the docstring follows from the fields.
@@ -690,21 +749,24 @@ primes above a rational prime `p` gives a rational local polynomial of degree at
 That relation is a theorem and a milestone. It is not automorphic induction, and no milestone
 calls it that, because no induction object is built anywhere here.
 
-*Prerequisites:* Layers 0.1, 1.2, 1.4; Local fields roadmap, Layer 2, for the local conductor;
-Mathlib `Polynomial`, `HasProd`.
+*Prerequisites:* Layers 0.1, 1.2, 1.4; Local fields roadmap, Layer 2, for the convention at a
+ramified prime; Mathlib `Polynomial`, `HasProd`.
 
 **1.6 Counting ideals in a class, with an error term.** For a fixed ideal class `𝔎` of `K`,
-`#{I ∈ 𝔎 ∣ 𝔑I ≤ x} = ρ_K x + O(x^{1−1/d})` as `x → ∞`, with `d = [K:ℚ]` and
-`ρ_K = 2^{r₁}(2π)^{r₂}R/(w√|d_K|)`.
+
+`#{I ∈ 𝔎 ∣ 𝔑I ≤ x} = ρ_K x + O(x^{1−1/d})` as `x → ∞`,
+
+with `d = [K:ℚ]` and `ρ_K = 2^{r₁}(2π)^{r₂}R/(w√|d_K|)`.
 
 *Source:* Milne, *Class Field Theory*, VI 2.8, which cites Lang VI §3 Thm 3 for the proof.
 Janusz IV 2.11 to 2.13 is the same statement over `ℤ`.
-*Hypotheses:* the exponent `1 − 1/d` is exact and part of the statement. The implied constant
-depends on `K` and not on `𝔎`. That independence is also part of the statement, and it is what
-makes the sum over classes work.
-*Nearby false statement:* the error term `O(x^{1−1/d})` cannot be improved to `O(x^{1/2})` for
-general `K`. Mathlib's `Ideal.tendsto_norm_le_and_mk_eq_div_atTop` gives the limit with no
-error term, so it does not imply this milestone.
+*Hypotheses:* `1 − 1/d` is the exponent this roadmap requires, and the sources supply it. The
+implied constant depends on `K` and not on `𝔎`. That independence is part of the statement, and
+it is what makes the sum over classes work.
+*Nearby false statement:* Mathlib's `Ideal.tendsto_norm_le_and_mk_eq_div_atTop` gives the limit
+with no error term, so it does not imply this estimate. ⚠ No claim is made that the exponent is
+best possible. Improving it is a generalized divisor problem, and an impossibility statement
+would need an omega theorem, which this roadmap does not have and does not need.
 
 ⚠ This is the hard analytic milestone of the layer. It strengthens Roblot's asymptotics, so
 state it in a form his files could adopt.
@@ -712,63 +774,78 @@ state it in a form his files could adopt.
 *Prerequisites:* Mathlib `Ideal.tendsto_norm_le_and_mk_eq_div_atTop`,
 `NumberField.CanonicalEmbedding.FundamentalCone`, `ZLattice.covolume`.
 
-**1.7 Continuation into the strip.** From 1.6, the partial zeta function `ζ(s, c)` of 1.8, and
-therefore `dedekindZeta K`, extend analytically to `Re s > 1 − 1/d` except for a simple pole at
-`s = 1`. This includes the complex form `(s − 1) ζ_K(s) → dedekindZeta_residue K` along
-`𝓝[≠] 1`, which strengthens Mathlib's one-sided real limit.
+**1.7 Partial zeta functions, on an exact carrier.** Two cases, kept apart, because the sum over
+fibres and the residue differ.
+
+*The ordinary case.* For `c` in `ClassGroup (𝓞 K)`, put
+`ζ(s, c) = ∑_{[𝔞] = c, 𝔞 integral nonzero} 𝔑𝔞^{-s}`. Then `dedekindZeta K = ∑_c ζ(·, c)`, a
+finite sum over `h_K` terms.
+
+*The ray case.* Fix a modulus `𝔪 = 𝔪₀ 𝔪_∞`, and write `J^{𝔪₀}` for the group of fractional
+ideals prime to `𝔪₀` and `P^𝔪` for the subgroup generated by the principal ideals `(α)` with
+`α ≡ 1 mod^× 𝔪`. Let `Q` be a finite quotient of `J^{𝔪₀}` on which `P^𝔪` acts trivially, and
+`q : J^{𝔪₀} → Q` the projection. Put
+`ζ(s, c) = ∑_{q(𝔞) = c, 𝔞 integral and prime to 𝔪₀} 𝔑𝔞^{-s}` for `c : Q`. Then
+
+`∑_{c : Q} ζ(·, c) = ζ_K(s) · ∏_{𝔭 ∣ 𝔪₀} (1 − 𝔑𝔭^{-s})`.
+
+⚠ The right-hand side is not `ζ_K`. The fibres omit every ideal divisible by a prime of `𝔪₀`, so
+the bad Euler factors are removed. The ordinary case is the specialization `𝔪 = 1`, where the
+product is empty.
+
+In both cases, for a character `χ` of `Q`:
+
+- `L(χ, s) = ∑_{c} χ(c) ζ(s, c)`, a finite sum;
+- `ζ(s, c) = (#Q)⁻¹ ∑_χ conj (χ c) L(χ, s)`, by orthogonality of characters. Layer 8 uses this
+  second form.
+
+Basic API: the case `#Q = 1`; the behaviour under a surjection `Q ↠ Q'`; the abscissa of
+`ζ(·, c)`; the set of integral ideals in one fibre.
+
+*Prerequisites:* Layers 1.1, 1.2; Mathlib `ClassGroup`, character orthogonality for a finite
+abelian group.
+
+**1.8 The residue of a partial zeta function.** Each `ζ(s, c)` has a simple pole at `s = 1`, and
+the residue does not depend on `c`:
+
+`Res_{s=1} ζ(·, c) = Res_{s=1} ζ_K · (#Q)⁻¹ · ∏_{𝔭 ∣ 𝔪₀} (1 − 𝔑𝔭^{-1})`.
+
+⚠ Check the specialization before using it. At `𝔪 = 1` and `Q = ClassGroup (𝓞 K)` the product is
+empty and `#Q = h_K`, so the residue is `Res_{s=1} ζ_K / h_K = ρ_K`, the per-class counting
+constant of 1.6, and the `h_K` residues sum to `Res_{s=1} ζ_K`. A formula giving `ρ_K/h_K` here
+would be wrong by a factor of `h_K`.
+
+Consequence: for `χ ≠ 1` the finite sum `L(χ, s) = ∑_c χ(c) ζ(s, c)` is holomorphic at `s = 1`,
+because the equal residues cancel. Milestone 7.3 completes that statement by proving the value
+is nonzero.
+
+*Prerequisites:* Layers 1.6, 1.7.
+
+**1.9 Continuation into the strip.** From 1.6, each `ζ(·, c)` of 1.7, and therefore
+`dedekindZeta K`, extend analytically to `Re s > 1 − 1/d` except for a simple pole at `s = 1`.
+This includes the complex form `(s − 1) ζ_K(s) → Res_{s=1} ζ_K` along `𝓝[≠] 1`, which
+strengthens Mathlib's one-sided real limit.
 
 This strip is all that Layers 7 and 8 need. They therefore do not wait for the functional
 equation.
 
 *Source:* Janusz IV 2.14; Milne VI 2.9 and 2.12.
-*Prerequisites:* Layer 1.6; Mathlib `LSeriesSummable_of_sum_norm_bigO`, `LSeries_eq_mul_integral`,
-`tendsto_sub_one_mul_dedekindZeta_nhdsGT`.
-
-**1.8 Partial zeta functions.** Let `q : J_K → Q` be a finite quotient of the group of
-fractional ideals prime to a modulus. When the modulus is `1` this is the ideal class group.
-Otherwise it is a ray class group. In both cases the quotient is named and not left abstract.
-Define `ζ(s, c) = ∑_{q(𝔞) = c, 𝔞 integral} 𝔑𝔞^{-s}` for `c : Q`. Then:
-
-- `dedekindZeta K = ∑_{c} ζ(·, c)`, a finite sum;
-- `L(χ, s) = ∑_{c} χ(c) ζ(s, c)` for a character `χ` of `Q`, a finite sum;
-- `ζ(s, c) = (#Q)⁻¹ ∑_χ conj (χ c) L(χ, s)`, by orthogonality of characters. Layer 8 uses this
-  third form.
-
-Basic API:
-
-- the case `#Q = 1`;
-- the behaviour under a surjection `Q ↠ Q'`;
-- the abscissa of `ζ(·, c)`;
-- the value of `∑_c ζ(s, c)` at a point of `1 < Re s`.
-
-*Prerequisites:* Layers 1.1, 1.2; Mathlib `ClassGroup`, character orthogonality for a finite
-abelian group.
-
-**1.9 The residue of a partial zeta function.** `ζ(s, c)` has a simple pole at `s = 1` with
-residue `ρ_K/#Q`, independent of `c`. Consequence: for `χ ≠ 1` the function `L(χ, s)` is
-holomorphic at `s = 1`. Layer 7.4 completes that statement by proving the value is nonzero.
-
-*Prerequisites:* Layers 1.6, 1.7, 1.8.
+*Prerequisites:* Layers 1.6, 1.7, 1.8; Mathlib `LSeriesSummable_of_sum_norm_bigO`,
+`LSeries_eq_mul_integral`, `tendsto_sub_one_mul_dedekindZeta_nhdsGT`.
 
 ### Layer 2: lattice Poisson summation, theta transformations, and a level
 
-Analysis with no arithmetic content beyond the lattice vocabulary. Every item is worth having
-on its own. This roadmap owns the general theory; the shared table above states what the
-integral lattices roadmap takes and what it gives.
+Analysis with no arithmetic content until 2.10. Every item is worth having on its own. The
+shared table under *Dependencies* states what the integral lattices roadmap takes and what it
+gives.
 
 **2.1 The analytic dual lattice, `ZLattice.dual`.** For a `ZLattice L` in a finite-dimensional
 real inner-product space `E`, define `Lᵛ = {w ∣ ∀ v ∈ L, ⟪v, w⟫ ∈ ℤ}` and give it its `ZLattice`
 instance. Mathlib's `Submodule.dualSubmodule` is the version with a general bilinear form.
-Name the analytic dual and prove the two agree for the inner product. The shared table above
-fixes the name.
+Name the analytic dual and prove the two agree for the inner product.
 
-Basic API:
-
-- the dual of `ℤⁿ` in `ℝⁿ`;
-- monotonicity, that is `L ≤ M → Mᵛ ≤ Lᵛ`;
-- the dual of a scaled lattice;
-- the dual under a linear equivalence;
-- the dual of a direct sum.
+Basic API: the dual of `ℤⁿ` in `ℝⁿ`; monotonicity, that is `L ≤ M → Mᵛ ≤ Lᵛ`; the dual of a
+scaled lattice; the dual under a linear equivalence; the dual of a direct sum.
 
 *Prerequisites:* Mathlib `ZLattice`, `Submodule.dualSubmodule`, `InnerProductSpace`.
 
@@ -795,18 +872,14 @@ proof of the one-dimensional `Real.tsum_eq_tsum_fourier`, one dimension up.
 `ZLattice.tsum_eq_covolume_inv_mul_tsum_dual`.**
 `∑_{v ∈ L} f v = (ZLattice.covolume L)⁻¹ ∑_{w ∈ Lᵛ} 𝓕f w`, by transporting 2.5 along a basis.
 
-*Hypotheses:* `f` Schwartz is sufficient. The one-dimensional version in Mathlib assumes
-`rpow` decay of `f` and of `𝓕f`, which is weaker; state the Schwartz version and record the
-decay version as a variant.
+*Hypotheses:* `f` Schwartz is sufficient. The one-dimensional version in Mathlib assumes `rpow`
+decay of `f` and of `𝓕f`, which is weaker. State the Schwartz version and record the decay
+version as a variant.
 *Nearby false statement:* the identity fails without a decay hypothesis. Continuity and
 summability of `∑ f v` alone are not enough.
 
-Basic API:
-
-- the case `L = ℤⁿ`;
-- the case of a scaled lattice;
-- the version with a translation, which introduces a character;
-- the version for a Schwartz function on a product.
+Basic API: the case `L = ℤⁿ`; the case of a scaled lattice; the version with a translation,
+which introduces a character; the version for a Schwartz function on a product.
 
 *Prerequisites:* Layers 2.1, 2.3, 2.4, 2.5.
 
@@ -822,18 +895,21 @@ raw matrices.
 **2.8 The Gaussian theta transformation, `ZLattice.gaussianTheta_one_div`.** Define
 `ZLattice.analyticTheta L t = ∑' v : L, Real.exp (−π t ‖v‖²)` and prove
 `Θ_L(1/t) = t^{n/2} (covolume L)⁻¹ Θ_{Lᵛ}(t)` for `t > 0`. The name of the function is fixed
-here too, because the integral lattices roadmap states its own targets in terms of it. Prove also the multi-parameter
-version, with one scale `t_v` per coordinate block. Layer 3.3 integrates that version.
+here too, because the integral lattices roadmap states its own targets in terms of it. Prove
+also the multi-parameter version, with one scale `t_v` per coordinate block, which 3.3
+integrates.
 
 *Source:* Lang XIII §2, where the multi-parameter form reads
 `Θ(c, 𝔞) = (c₁⋯c_N)^{-1/2} Θ(c^{-1}, 𝔞')`.
-*Basic API:
 
-- * convergence for `t > 0`;
+Basic API:
+
+- convergence for `t > 0`;
 - the value at `t = 1` for a self-dual lattice;
 - the behaviour under scaling of `L`;
 - smoothness in `t`;
-- the bound `Θ_L(t) − 1 = O(exp(−c t))` as `t → ∞`, which Layer 3.3 uses to split the Mellin integral.
+- the bound `Θ_L(t) − 1 = O(exp(−c t))` as `t → ∞`, which 3.3 uses to split the Mellin
+  integral.
 
 *Prerequisites:* Layers 2.6, 2.7.
 
@@ -841,58 +917,95 @@ version, with one scale `t_v` per coordinate block. Layer 3.3 integrates that ve
 of degree `m`, `𝓕(P · exp(−π ‖·‖²)) = i^{−m} P · exp(−π ‖·‖²)`. Deduce the transformation of
 `∑_{v ∈ L} P(v) exp(−π t ‖v‖²)`.
 
-Layer 6.3 needs exactly this. A roadmap that stopped at 2.8 would lack it.
+Milestone 6.3 needs exactly this. A roadmap that stopped at 2.8 would lack it.
 
 *Hypotheses:* `P` harmonic is necessary. *Nearby false statement:* for a homogeneous `P` that
-is not harmonic the transform is not a multiple of `P · exp(−π ‖·‖²)`; already `P(x) = x₁² `
+is not harmonic the transform is not a multiple of `P · exp(−π ‖·‖²)`; already `P(x) = x₁²`
 in two variables fails.
 
 *Prerequisites:* Layers 2.6, 2.7; Mathlib harmonic polynomials, or their construction here.
 
 **2.10 A fractional ideal as a lattice.** `mixedEmbedding K '' I` for a fractional ideal `I`,
-as a `ZLattice` in `K ⊗ ℝ`. Its dual vocabulary is `IntegralLattice.dual`, which the integral
-lattices roadmap owns; the shared table above fixes that.
-*Prerequisites:* Mathlib `NumberField.mixedEmbedding`, `ZLattice`; Integral lattices roadmap,
-Layer 1B.
+as a `ZLattice` in the mixed space `ℝ^{r₁} × ℂ^{r₂}`, with the standard real inner product.
+*Prerequisites:* Mathlib `NumberField.mixedEmbedding`, `ZLattice`.
 
-**2.11 The dual is the trace dual.** The analytic dual of `mixedEmbedding K '' I` is
-`mixedEmbedding K '' (I𝔡)⁻¹`, where `𝔡` is the different. This is the one place in the roadmap
-where the different appears. Its comparison with the integral dual is
-`IntegralLattice.analyticDual_eq_dual`, which the integral lattices roadmap owns.
+**2.11 The trace-to-Euclidean map, and the dual of an ideal lattice.** The trace pairing and the
+Euclidean inner product on the mixed space are not the same. The dual of an ideal lattice is
+therefore not the embedded trace dual. Introduce the real-linear map `traceToEuclidean` on the
+mixed space:
+
+- the identity on each real coordinate;
+- `z ↦ 2 · conj z` on each complex coordinate.
+
+Prove the pairing identity
+
+`⟪mixedEmbedding x, traceToEuclidean (mixedEmbedding y)⟫ = Tr_{K/ℚ}(x y)`,
+
+and then the corrected dual theorem: the analytic dual of `mixedEmbedding K '' I` is the image
+under `traceToEuclidean` of `mixedEmbedding K '' (I𝔡)⁻¹`, where `𝔡` is the different. This is
+the one place in the roadmap where the different appears.
+
+⚠ *Nearby false statement:* the analytic dual is **not** `mixedEmbedding K '' (I𝔡)⁻¹` itself.
+Take `K = ℚ(i)` and `I = 𝓞_K`. The mixed lattice is `ℤ[i] ⊂ ℂ`, which is Euclidean self-dual.
+The different is `(2i)`, so the trace dual is `(1/2)ℤ[i]`, which is not `ℤ[i]`. Applying
+`traceToEuclidean`, that is `z ↦ 2 conj z`, sends `(1/2)ℤ[i]` back to `ℤ[i]`, which is the
+Euclidean dual. This calculation is a mandatory test of the milestone.
+
+Also state the determinant of `traceToEuclidean`, which is `2^{r₂}`, and its effect on covolume
+and on the multi-parameter Gaussian of 2.8.
+
 *Prerequisites:* Layers 2.1, 2.10; Mathlib `FractionalIdeal.dual`,
-`RingTheory/DedekindDomain/Different.lean`; Integral lattices roadmap, Layers 1B and 8D.
+`RingTheory/DedekindDomain/Different.lean`, `NumberField.mixedEmbedding`.
 
-**2.12 Its covolume.** `covolume (mixedEmbedding K '' I) = 2^{-r₂} √|d_K| 𝔑(I)`.
-*Prerequisites:* Layers 2.3, 2.10; Mathlib `ZLattice.covolume`, `NumberField.discr`.
+**2.12 The covolume of an ideal lattice.**
+`covolume (mixedEmbedding K '' I) = 2^{-r₂} √|d_K| 𝔑(I)`, and, from 2.3 and the determinant of
+2.11, the covolume of its analytic dual.
+*Prerequisites:* Layers 2.3, 2.10, 2.11; Mathlib `ZLattice.covolume`, `NumberField.discr`.
 
-**2.13 The theta series of an ideal class.** Combine 2.8 with 2.10 to 2.12. Write out the
-multi-parameter transformation with every power of the discriminant and every power of the norm.
-Layer 3.3 integrates this exact statement. ⚠ No constant is left unwritten.
+**2.13 The theta series of an ideal class.** Combine 2.8 with 2.10 to 2.12, using the corrected
+dual of 2.11. Write out the multi-parameter transformation with every power of the
+discriminant, every power of the norm, and every power of `2` produced by `traceToEuclidean`.
+Milestone 3.3 integrates this exact statement. ⚠ No constant is left unwritten.
 *Prerequisites:* Layers 2.8, 2.10, 2.11, 2.12.
 
 **2.14 A functional equation with a level.** Mathlib's `AbstractFuncEq.lean` handles
-`f(1/x) = ε x^k g(x)`. Its TODO asks for the level form `f(N/x) = c • x^k • g(x)` for real
-`N > 0`, and proposes the name `FEPairWithLevel`. Build three things:
+`f(1/x) = (ε · x^k) • g(x)`. Its TODO asks for the level form `f(N/x) = c • x^k • g(x)` for real
+`N > 0`, and proposes the name `FEPairWithLevel`. Build that.
 
-- a structure `FEPairWithLevel`, with the fields of `WeakFEPair` and a level `N`;
-- its completed function, with the functional equation `s ↦ k − s` against level `N`;
-- a theorem reducing it to `WeakFEPair` for the rescaled pair `f(√N ·)`.
+⚠ The structure must carry Mathlib's analytic hypotheses, and not only the symmetry. A shell
+around one equation admits pathological `f` and `g`, and then nothing about continuation,
+residues, or the functional equation follows. The fields are those of `WeakFEPair`, with the level equation `f(N/x) = (ε · x^k) • g(x)` in
+place of `h_feq`:
+
+- the functions `f`, `g`, the weight `k`, the root number `ε`, and the constant terms `f₀`, `g₀`;
+- local integrability of `f` and of `g` on `Ioi 0`;
+- `0 < k` and `ε ≠ 0`;
+- the two decay bounds `(f · − f₀) =O[atTop] (· ^ r)` and `(g · − g₀) =O[atTop] (· ^ r)`, for
+  every real `r`.
+
+The milestone is the rescaling theorem, and its output is a genuine Mathlib object:
+
+- from a `FEPairWithLevel` with level `N`, the rescaled functions `F(x) = f(√N · x)` and
+  `G(x) = g(√N · x)` form a `WeakFEPair` with the same `k`, the same constant terms, and root
+  number `ε · N^{k/2}`;
+- every rescaled hypothesis is proved, not assumed: local integrability, the decay bounds, and
+  the level-one equation `F(1/x) = (ε N^{k/2} · x^k) • G(x)`;
+- when `f₀ = g₀ = 0`, that pair satisfies Mathlib's strong condition, so `Λ` is entire;
+- the completed function of the level pair equals `N^{s/2}` times the completed function of the
+  rescaled pair, and the residues at `s = 0` and `s = k` carry the corresponding powers of `N`,
+  written out;
+- at `N = 1` the rescaling is the identity and the produced object is Mathlib's own, not a
+  second copy.
 
 `Λ_K` has level `|d_K|` and a Hecke L-function has level `|d_K| 𝔑𝔣₀`, so both instantiate it.
 
-Basic API:
-
-- the case `N = 1`, which must give Mathlib's structure back;
-- the residues at `s = 0` and `s = k`, with the level in the constant;
-- the symmetric pair;
-- the entirety criterion.
-
 ⚠ Mathlib's shape changed after the pin. PR #41329, merged 2026-07-04, replaced the
-`StrongFEPair` structure by the predicate `IsStrongFEPair (P : WeakFEPair E) : Prop`. Build
-`FEPairWithLevel` against the master shape, and state the reduction as a theorem to
-`IsStrongFEPair`. At the pin, state the predicate directly and do not import `StrongFEPair`.
+`StrongFEPair` structure by the predicate `IsStrongFEPair (P : WeakFEPair E) : Prop`. State the
+strong conclusion against whichever of the two the project pin has, and against the predicate
+once the pin passes that commit.
 
-*Prerequisites:* Mathlib `WeakFEPair`, `mellin`, `Λ_residue_k`, `Λ_residue_zero`.
+*Prerequisites:* Mathlib `WeakFEPair`, `StrongFEPair`, `mellin`, `Λ_residue_k`,
+`Λ_residue_zero`.
 
 ### Layer 3: the Dedekind zeta function
 
@@ -900,7 +1013,8 @@ Hecke's proof, following Lang XIII §§1–3 and Neukirch VII §5, on Layers 1 a
 the LMFDB's number field pages display.
 
 **3.1 The theta identity, written out.** The identity of 2.13, in the exact form this layer
-integrates: every power of `|d_K|`, every norm `𝔑𝔞`, and every power of `2`.
+integrates: every power of `|d_K|`, every norm `𝔑𝔞`, and every power of `2`, including the
+`2^{r₂}` from `traceToEuclidean`.
 ⚠ No milestone here contains the phrase "the explicit factor". A constant that is not written is
 not specified.
 *Prerequisites:* Layer 2.13.
@@ -908,7 +1022,7 @@ not specified.
 **3.2 The class pairing.** The functional equation permutes ideal classes by
 `𝔎 ↦ 𝔎' := [𝔡]𝔎⁻¹`, where `𝔡` is the different. State this as a typed map
 `dualClass : ClassGroup (𝓞 K) → ClassGroup (𝓞 K)`. Prove it is an involution, and prove trace
-duality induces it through 2.11.
+duality induces it, through the corrected dual of 2.11.
 
 ⚠ It is `[𝔡]𝔎⁻¹` and not `𝔎⁻¹`. Only the sum over classes is self-dual. *Nearby false
 statement:* `dualClass 𝔎 = 𝔎⁻¹` is true for `K = ℚ` and false in general, so a `K = ℚ` test
@@ -923,51 +1037,56 @@ terms that produce the poles, and name both.
 
 *Source:* Lang XIII §3. The measure of the fundamental domain is `2^{r₁+r₂−1} R`, which is the
 regulator Jacobian of Lang p. 258. That computation is the hard point of the layer.
-*Prerequisites:* Layers 1.8, 2.13, 3.1; Mathlib `NumberField.CanonicalEmbedding.FundamentalCone`,
+*Prerequisites:* Layers 1.7, 2.13, 3.1; Mathlib `NumberField.CanonicalEmbedding.FundamentalCone`,
 `mellin`, `NumberField.Units.regulator`.
 
 **3.4 Per-class completion and functional equation.** Set
 `Z(𝔎, s) = |d_K|^{s/2} Gammaℝ(s)^{r₁} Gammaℂ(s)^{r₂} ζ(s, 𝔎)`. Then `Z(𝔎, ·)` is meromorphic on
-`ℂ`, with `meromorphicOrderAt (Z 𝔎) 0 = −1`, `meromorphicOrderAt (Z 𝔎) 1 = −1`, no other poles,
-residues `∓ 2^{r₁+r₂} R/w`, and `Z(𝔎, s) = Z(dualClass 𝔎, 1 − s)`.
+`ℂ` and analytic away from `{0, 1}`, with `meromorphicOrderAt (Z 𝔎) 0 = −1`,
+`meromorphicOrderAt (Z 𝔎) 1 = −1`, residues `∓ 2^{r₁+r₂} R/w`, and
+`Z(𝔎, s) = Z(dualClass 𝔎, 1 − s)`.
 
 The completed constants come out as displayed because `Gammaℝ(1) = 1` and `Gammaℂ(1) = 1/π`,
 which absorb the factor `(2π)^{r₂}/√|d_K|` of the uncompleted residue.
 
 *Source:* Neukirch VII (5.9), (5.10).
-*Prerequisites:* Layers 1.8, 2.14, 3.2, 3.3.
+*Prerequisites:* Layers 1.7, 2.14, 3.2, 3.3.
 
-**3.5 Uniqueness of the continuation.** Two meromorphic functions that agree on `Re s > 1` agree
-on `ℂ ∖ {0, 1}`, by the identity theorem on that connected set. Without this milestone an
-existentially stated continuation determines nothing, so 3.6 and 3.7 are definitions and not
-choices.
+**3.5 Uniqueness of the continuation.** Two functions that agree on `Re s > 1`, are meromorphic
+on `ℂ`, and are analytic on `ℂ ∖ {0, 1}` agree on `ℂ ∖ {0, 1}`, by the identity theorem on that
+connected set.
+
+⚠ The analyticity hypothesis cannot be dropped. Meromorphy alone constrains only punctured
+germs: given a genuine continuation `Z`, change its value at one point `p` outside the
+half-plane and outside `{0, 1}`. The result is still meromorphic with the same orders
+everywhere, and it disagrees with `Z` at `p`. That is why 0.3 has an analyticity field.
+
+Without this milestone an existentially stated continuation determines nothing, so 3.6 and 3.7
+are definitions and not choices.
+
 *Prerequisites:* Mathlib `AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq`, `Meromorphic`.
 
 **3.6 The completed Dedekind zeta function.** `completedDedekindZeta K`, written `Λ_K`, a named
-definition equal to `∑_𝔎 Z(𝔎, ·)`. It is meromorphic, with simple poles at `0` and `1` and
-nowhere else, residues `∓ 2^{r₁+r₂} hR/w`, the functional equation `Λ_K(s) = Λ_K(1 − s)` as an
-equality of meromorphic germs, and
+definition equal to `∑_𝔎 Z(𝔎, ·)`. It is meromorphic, analytic on `ℂ ∖ {0, 1}`, has simple poles
+at `0` and `1` and nowhere else, residues `∓ 2^{r₁+r₂} hR/w`, the functional equation
+`Λ_K(s) = Λ_K(1 − s)` on `ℂ ∖ {0, 1}`, and
 `Λ_K(s) = |d_K|^{s/2} Gammaℝ(s)^{r₁} Gammaℂ(s)^{r₂} ζ_K(s)` on `Re s > 1`. Compatibility with
 `Λ_residue_k` is a theorem.
 
-Basic API:
-
-- the value at `K = ℚ`, which must be `completedRiemannZeta`;
-- the behaviour under a field isomorphism;
-- the self-duality;
-- the relation to `dedekindZetaC` of 3.7.
+Basic API: the value at `K = ℚ`, which must be `completedRiemannZeta`; the behaviour under a
+field isomorphism; the self-duality; the relation to `dedekindZetaC` of 3.7.
 
 *Prerequisites:* Layers 3.4, 3.5.
 
-**3.7 The continued zeta function.** `dedekindZetaC K : ℂ → ℂ`, holomorphic on `ℂ ∖ {1}`, equal
+**3.7 The continued zeta function.** `dedekindZetaC K : ℂ → ℂ`, analytic on `ℂ ∖ {1}`, equal
 to `dedekindZeta K` on `Re s > 1`, with a simple pole at `1` of residue `dedekindZeta_residue K`.
 That residue is now a genuine complex residue, which subsumes Mathlib's one-sided real limit.
 
-Prove `dedekindZetaC ℚ = riemannZeta` everywhere. That equation is why the continued object leaves this layer, and not the raw `LSeries`. It is
-false for `dedekindZeta ℚ`, whose values off the half-plane are the junk value `0`. Coordinate
-the name with the TODO in `DedekindZeta.lean`.
+Prove `dedekindZetaC ℚ = riemannZeta` everywhere. That equation is why the continued object
+leaves this layer, and not the raw `LSeries`. It is false for `dedekindZeta ℚ`, whose values off
+the half-plane are the junk value `0`. Coordinate the name with the TODO in `DedekindZeta.lean`.
 
-*Prerequisites:* Layers 1.7, 3.5, 3.6.
+*Prerequisites:* Layers 1.9, 3.5, 3.6.
 
 **3.8 Exact orders at the trivial zeros.** Give `meromorphicOrderAt (dedekindZetaC K)` at `s = 0`
 and at each `s = −m` as a formula in `r₁`, `r₂`, and the parity of `m`. Derive them from the
@@ -975,7 +1094,8 @@ poles of `Gammaℝ` and `Gammaℂ` and the order arithmetic of `meromorphicOrder
 `s = 0` is `r₁ + r₂ − 1`.
 
 ⚠ These are multiplicities, not existence statements, and they use `meromorphicOrderAt`. A
-pointwise claim `ζ_K(−2) = 0` compares a value that the functional equation does not determine.
+pointwise claim `ζ_K(−2) = 0` is meaningful only because 0.3 makes the representative analytic
+there; state the order in any case, since that is what the functional equation determines.
 
 *Prerequisites:* Layers 3.6, 3.7; Mathlib `Gammaℝ_eq_zero_iff`, `meromorphicOrderAt`.
 
@@ -1031,24 +1151,36 @@ outside its range. For `D < 0` the number `w` of roots of unity is `2` except at
 quadratic field except `ℚ(i)` and `ℚ(√−3)`. A single numerical test will therefore not find the
 error.
 
-*Prerequisites:* Layers 1.7, 4.2.
+*Prerequisites:* Layers 1.9, 4.2.
 
-**4.4 The cyclotomic factorization.** Three readings of "the product over the characters modulo
-`n`" are in use, and they differ. This is the reading meant here. Write `χ*` for the primitive
-character of conductor `f_χ` that induces `χ`. Then
+**4.4 The cyclotomic factorization.** Write `χ*` for the primitive character of conductor `f_χ`
+that induces `χ`. Then
 
-`ζ_{ℚ(ζₙ)}(s) = ∏_{χ mod n} L(χ*, s) · ∏_{χ mod n} ∏_{p ∣ n, p ∤ f_χ} (1 − χ*(p) p^{-s})`,
+`ζ_{ℚ(ζₙ)}(s) = ∏_{χ mod n} L(χ*, s)`,
 
-where the products run over all Dirichlet characters modulo `n`, equivalently over the
-characters of `Gal(ℚ(ζₙ)/ℚ) ≅ (ℤ/n)ˣ`. The second factor is exactly the Euler factors that
-`L(χ, ·)` drops at `p ∣ n` relative to `L(χ*, ·)`.
+the product over all Dirichlet characters modulo `n`, equivalently over the characters of
+`Gal(ℚ(ζₙ)/ℚ) ≅ (ℤ/n)ˣ`. **There is no correction factor.** The primitive L-functions already
+carry exactly the local factors that `ζ_{ℚ(ζₙ)}` has.
+
+The correction appears only if the product is written with the imprimitive level-`n` functions.
+Since `L(χ, s) = L(χ*, s) ∏_{p ∣ n, p ∤ f_χ} (1 − χ*(p) p^{-s})`, that form reads
+
+`ζ_{ℚ(ζₙ)}(s) = ∏_{χ mod n} L(χ, s) · ∏_{χ mod n} ∏_{p ∣ n, p ∤ f_χ} (1 − χ*(p) p^{-s})⁻¹`,
+
+with the product **inverted**. Use one of the two forms and not a mixture.
 
 *Source:* Neukirch VII (5.12).
-*Nearby false statement:* `ζ_{ℚ(ζₙ)}(s) = ∏_χ L(χ*, s)` without the correction is false already
-at `n = 4`.
+*Hypotheses:* `n ≥ 1`; for `n ≡ 2 mod 4` the field `ℚ(ζₙ)` equals `ℚ(ζ_{n/2})` and the character
+group is the one modulo `n/2`, so state which `n` is meant.
+*Nearby false statement:* multiplying the primitive product by
+`∏_χ ∏_{p ∣ n, p ∤ f_χ} (1 − χ*(p) p^{-s})` rather than dividing by it is false already at
+`n = 4`. There the two characters are trivial and `χ₋₄`, both primitive except for the trivial
+one whose primitive form is `ζ`, and the extra factor would give
+`ζ_{ℚ(i)}(s) = ζ(s) L(s, χ₋₄) (1 − 2^{-s})`, contradicting 4.2. The case `n = 4` is a mandatory
+test of this milestone.
 
 This identity is also how `L(1, χ) ≠ 0` is proved over `ℚ` without class field theory, which
-Layer 7.4 cites.
+milestone 7.3 cites.
 
 *Prerequisites:* Layers 1.4, 3.7; Mathlib `LFunction_changeLevel`,
 `intermediateFieldEquivSubgroupChar`, `IsCyclotomicExtension.Rat.galEquivZMod`.
@@ -1063,12 +1195,8 @@ the nonpositive integers are Riemann's, which `HurwitzZetaValues.lean` already h
 
 This milestone discharges the TODO in `HurwitzZetaValues.lean`.
 
-Basic API:
-
-- `B_{k,χ}` for the trivial character, in terms of the ordinary Bernoulli numbers;
-- the recurrence;
-- the value `B_{1,χ}` for odd `χ`;
-- the behaviour under induction from the conductor.
+Basic API: `B_{k,χ}` for the trivial character, in terms of the ordinary Bernoulli numbers; the
+recurrence; the value `B_{1,χ}` for odd `χ`; the behaviour under induction from the conductor.
 
 *Prerequisites:* Mathlib `bernoulli`, `HurwitzZetaValues`, `DirichletCharacter.LFunction`.
 
@@ -1080,92 +1208,114 @@ smallest check that 4.3 and 4.5 agree with something known independently.
 
 The full analytic theory of the L-function of a finite-order Hecke character.
 
-**5.1 The character interface (compatibility interface).** The global class field theory
-roadmap, Layers 0 to 3, will own this vocabulary. Until its declarations exist, define here a
-structure `RayClassCharacter K` carrying:
+**5.1 The ray-class character, constructed here.** The global class field theory roadmap will
+eventually own this vocabulary, and until it is accepted this roadmap builds the object it needs.
+The definition is not a shell: every law the later milestones use is a field, so a term is a
+ray-class character and not an arbitrary assignment of roots of unity to primes.
 
-- the finite part of the conductor, `𝔣₀ : Ideal (𝓞 K)`, nonzero;
-- the infinite part, `𝔣_∞ : Finset (real places of K)`;
-- the induced character on ideals prime to `𝔣₀`, as an `IdealWeight K` in the sense of Layer
-  7.2, with `bad = {𝔭 ∣ 𝔣₀}`;
-- finite order: `∃ m > 0, χ^m = 1`;
-- primitivity: no proper divisor of `𝔣₀` supports a character inducing this one.
+Fix a modulus `𝔪 = 𝔪₀ 𝔪_∞`, with `𝔪₀` a nonzero ideal of `𝓞 K` and `𝔪_∞` a set of real places.
+A `RayClassCharacter K 𝔪` carries:
 
-The later milestones use these operations and no others:
+- an ideal weight `χ` in the sense of 1.2, with `bad = {𝔭 ∣ 𝔭 ∣ 𝔪₀}`;
+- **triviality on the principal congruence subgroup**: `χ((α)) = 1` for every `α` in `𝓞 K` with
+  `α ≡ 1 mod 𝔪₀` and `v(α) > 0` at every `v ∈ 𝔪_∞`. This is the field that makes the weight
+  factor through the ray class group, and it is what 5.6 and 5.7 use;
+- **finite order**: `∃ m > 0`, `χ(𝔞)^m = 1` for every `𝔞` prime to `𝔪₀`. The quantifier excludes
+  the bad primes, where the value is `0`;
+- **primitivity**: no proper divisor `𝔫 ∣ 𝔪₀` supports a character inducing `χ`.
 
-- the value at an ideal;
-- the conductor, with its two parts;
+These operations are milestones, and not prose:
+
 - the conjugate character;
-- the product of two characters;
+- the product of two characters of the same modulus;
 - the trivial character;
-- induction from a divisor of the modulus.
+- induction from a divisor of the modulus;
+- the local component at a real place, which is the sign 5.5 reads.
 
-The replacement is mechanical when the global class field theory roadmap supplies its Hecke
-character type and its conductor. Delete `RayClassCharacter`, make it an abbreviation for that
-type, and keep 5.2 to 5.9 unchanged.
+⚠ The finite part `𝔪₀` and the infinite part `𝔪_∞` are separate data. Neither may be dropped:
+the gamma factor of 5.5 reads `𝔪_∞`, and the level of 5.7 reads `𝔪₀`.
 
-⚠ The finite part and the infinite part are separate fields. Neither may be dropped. The gamma
-factor of 5.5 reads the infinite part, and the level of 5.7 reads the finite part.
+⚠ *Nearby false statement:* an ideal weight of finite order with a finite bad set need not be a
+ray-class character. The group of ideals prime to `𝔪₀` is free, so roots of unity may be assigned
+to its generators arbitrarily. Without the triviality field, Gauss sums and the functional
+equation do not follow, and 5.6 and 5.8 are false for such a term.
 
-*Prerequisites:* Layer 7.2; Mathlib `Ideal`, `NumberField.InfinitePlace`. Eventual owner:
-global class field theory roadmap, Layers 0 to 3.
+When the global class field theory roadmap is accepted, replace this definition by a named
+adapter to its Hecke-character carrier, proving each of the fields above from its API. Every
+statement of 5.2 to 5.9 then stands unchanged.
 
-**5.2 The L-series.** `L(χ, s) = LSeries (idealCoeffOfWeight χ) s`, with the convention
-`χ 𝔞 = 0` when `𝔞` is not coprime to `𝔣₀`. The Euler product is
-`∏_{𝔭 ∤ 𝔣₀} (1 − χ(𝔭)𝔑𝔭^{-s})⁻¹` on `Re s > 1`, the abscissa is `1`, and the `EulerFactorData` of
-Layer 1.5 has `bad = {𝔭 ∣ 𝔣₀}`.
+*Prerequisites:* Layers 1.2, 1.7; Mathlib `Ideal`, `NumberField.InfinitePlace`.
+
+**5.2 The L-series and its Euler-factor data.** `L(χ, s) = LSeries (idealCoeffOfWeight χ) s`,
+with the convention `χ 𝔞 = 0` when `𝔞` is not coprime to `𝔪₀`. The Euler product is
+`∏_{𝔭 ∤ 𝔪₀} (1 − χ(𝔭)𝔑𝔭^{-s})⁻¹` on `Re s > 1`, and the abscissa is `1`. Construct the
+`EulerFactorData` of 1.5 for `χ`, with `localPolynomial 𝔭 = 1 − χ(𝔭) T` and
+`bad = {𝔭 ∣ 𝔪₀}`, and prove the local and global identities of 1.5 for it. That instance lives
+here and not in Layer 1, because it needs the character.
 *Source:* Neukirch VII (8.1).
 *Prerequisites:* Layers 1.2, 1.4, 1.5, 5.1.
 
-**5.3 Continuation into the strip, and the pole.** From Layer 1.8 and Layer 1.7, `L(χ, ·)`
-extends to `Re s > 1 − 1/d`. For `χ ≠ 1` it is holomorphic there, because the residues cancel by
-orthogonality, which is Layer 1.9. For `χ = 1` it has a simple pole at `s = 1`. Write out the
-finitely many Euler factors at `𝔭 ∣ 𝔣₀` that separate `L(1, ·)` from `ζ_K`, in the shape of
-Mathlib's `LFunctionTrivChar_eq_mul_riemannZeta`.
+**5.3 Continuation into the strip, and the pole.** From 1.7 and 1.9, `L(χ, ·)` extends to
+`Re s > 1 − 1/d`. For `χ ≠ 1` it is holomorphic there, because the equal residues of 1.8 cancel.
+For `χ = 1` it has a simple pole at `s = 1`. Write out the finitely many Euler factors at
+`𝔭 ∣ 𝔪₀` that separate `L(1, ·)` from `ζ_K`, in the shape of Mathlib's
+`LFunctionTrivChar_eq_mul_riemannZeta`.
 *Prerequisites:* Layers 1.7, 1.8, 1.9, 5.2.
 
 **5.4 Induction and the imprimitive correction.** For `χ` modulo `𝔪` induced from a primitive
 `χ*` modulo `𝔣₀`,
-`L(χ, s) = L(χ*, s) ∏_{𝔭 ∣ 𝔪, 𝔭 ∤ 𝔣₀} (1 − χ*(𝔭)𝔑𝔭^{-s})`, a finite product written out. The
+`L(χ, s) = L(χ*, s) ∏_{𝔭 ∣ 𝔪₀, 𝔭 ∤ 𝔣₀} (1 − χ*(𝔭)𝔑𝔭^{-s})`, a finite product written out. The
 functional equation is asserted for primitive characters only, as in Mathlib's `IsPrimitive`
 discipline.
 *Prerequisites:* Layers 5.1, 5.2.
 
-**5.5 The archimedean parity data and the gamma factor.** From the infinite part of the
-conductor: `Gammaℝ(s)` at a real place where `χ` is trivial on the positive elements,
-`Gammaℝ(s + 1)` at a real place where it is not, and `Gammaℂ(s)` at each complex place. So
-`gammaR` has `r₁` entries whose shifts are determined by `𝔣_∞`, and `gammaC` has `r₂` entries.
-State which convention on `𝔣_∞` is used, and match it to the interface of 5.1.
+**5.5 The archimedean parity data and the gamma factor.** At a real place `v`, the local
+component of a finite-order character is trivial on the connected subgroup of positive elements.
+Its parity is therefore the single sign `χ_v(−1) ∈ {±1}`. Prove that `χ_v(−1) = −1` holds exactly
+when `v ∈ 𝔪_∞`. Then the gamma factor is `Gammaℝ(s)` at a real place with `χ_v(−1) = 1`,
+`Gammaℝ(s + 1)` at a real place with `χ_v(−1) = −1`, and `Gammaℂ(s)` at each complex place. So
+`gammaR` has `r₁` entries, with `#𝔪_∞` of them equal to `1`, and `gammaC` has `r₂` entries.
+
+⚠ *Nearby false statement:* "the character is nontrivial on the positive elements at `v`" never
+holds for a finite-order character, because `ℝ_{>0}` is connected and divisible. Parity is
+detected at `−1`, and nowhere else.
+
 *Prerequisites:* Layers 0.1, 5.1.
 
 **5.6 Gauss sums.** Define `τ(χ)` for a primitive character and prove `|τ(χ)| = √𝔑(𝔣₀)`.
 
 ⚠ Neukirch's device of ideal numbers, his `K̂^*`, is not canonical. Define the Gauss sum against
-explicit representatives, or against the idele-theoretic data of the interface of 5.1, and prove
-the value does not depend on the choices. The check that this was done correctly is that `W(χ)`
-in 5.8 does not depend on the choices.
+explicit representatives of the ray classes, using the triviality field of 5.1 to prove the value
+does not depend on the choice. The check that this was done correctly is that `W(χ)` in 5.8 does
+not depend on the choices.
 
 *Source:* Neukirch VII (6.4), (7.5).
 *Hypotheses:* `χ` primitive. *Nearby false statement:* for imprimitive `χ` the modulus of the
-Gauss sum is smaller, and the formula `|τ(χ)| = √𝔑(𝔪)` is false.
+Gauss sum is smaller, and `|τ(χ)| = √𝔑(𝔪₀)` is false.
 *Prerequisites:* Layer 5.1.
 
 **5.7 The completed L-function.**
-`Λ(χ, s) = (|d_K| 𝔑𝔣₀)^{s/2} L_∞(χ, s) L(χ, s)`, with `L_∞` the gamma factor of 5.5. It is
-entire for `χ ≠ 1`. Prove also the per-class functional equations, which carry the `[𝔣₀𝔡]`-twist
-exactly as Layer 3.2 carries `[𝔡]`.
+`Λ(χ, s) = (|d_K| 𝔑𝔣₀)^{s/2} L_∞(χ, s) L(χ, s)`, with `L_∞` the gamma factor of 5.5, built as an
+instance of the level frame of 2.14 at level `|d_K| 𝔑𝔣₀`. It is entire for `χ ≠ 1`. Prove also
+the per-class functional equations, which carry the `[𝔣₀𝔡]`-twist exactly as 3.2 carries `[𝔡]`.
 *Source:* the theta method of Layer 2 with `χ`-weights; Neukirch VII §7 (7.6), (7.7).
 *Prerequisites:* Layers 2.13, 2.14, 3.2, 5.2, 5.5, 5.6.
 
 **5.8 The functional equation and the root number.**
-`Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)`, with `W(χ) = τ(χ)/(i^{#𝔣_∞} √𝔑𝔣₀)` written out, and
+`Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)`, with `W(χ) = τ(χ)/(i^{#𝔪_∞} √𝔑𝔣₀)` written out, and
 `‖W(χ)‖ = 1` proved from 5.6.
 *Source:* Neukirch VII (8.5), (8.6), restricted to infinity type `(p, 0)` with `p ∈ {0,1}^{r₁}`.
 *Prerequisites:* Layers 5.6, 5.7.
 
-**5.9 The instance card, and the degree over `ℚ`.** The card has degree `1` over `K`. Its
-realization as an Euler product of degree `[K:ℚ]` over `ℚ` is the grouping theorem of Layer 1.5,
-and the card records both.
+**5.9 The instance card, and the two degrees.** The card of Layer 0 has
+`degree = [K:ℚ]`, because `gammaR` has `r₁` entries and `gammaC` has `r₂`, and that is the degree
+of the L-series over `ℕ`.
+
+⚠ The familiar phrase "a Hecke character has degree one" refers to a different invariant. Define
+it separately, as `relativeDegree = 1`, and never write it into `AnalyticLFunctionData.degree`.
+The relation between the two is the grouping theorem of 1.5: the primes above one rational prime
+`p` combine into a rational local polynomial of degree at most `[K:ℚ]`, which is the absolute
+degree. A record with two values of the same field is not a record.
 
 At `K = ℚ` the construction recovers Mathlib's Dirichlet objects exactly: the two completed
 functions are equal, and not merely the two functional equations. That is an acceptance
@@ -1178,43 +1328,58 @@ criterion.
 The infinite-order theory, which the LMFDB calls Hecke characters. It completes the family of
 degree-one instances over `K`.
 
-**6.1 The infinity-type interface (compatibility interface).** The global class field theory
-roadmap will own this vocabulary in its infinity-type layer. Until then, define here a structure
-`Grossencharacter K` extending the interface of 5.1 with:
+**6.1 The Grossencharacter, constructed here.** As in 5.1, the object is built rather than
+assumed, and every law the later milestones use is a field. A `Grossencharacter K 𝔪` carries the
+data of 5.1 without the finite-order field, together with:
 
-- the unitary decomposition `χ = χ_unit · ‖·‖^{σ}` with `σ` real;
-- the infinity type: an integer `p_v` at each real place, a pair of integers at each complex
-  place, and a real number `q_v` at each infinite place;
-- admissibility: `χ_∞` is trivial on the units;
-- a predicate `IsAlgebraic`, which is the `A₀` subtype.
+- the **unitary decomposition** `χ = χ_unit · ‖·‖^{σ}` with `σ` real, `χ_unit` of absolute value
+  `1` on every ideal prime to `𝔪₀`, and the theorem that `σ` and `χ_unit` are determined by `χ`;
+- the **archimedean local character** `χ_v` at each infinite place. At a real place it is a
+  pair `(p_v, q_v)` with `p_v ∈ {0, 1}` and `q_v` real, giving
+  `χ_v(x) = sgn(x)^{p_v} |x|^{i q_v}`. At a complex place it is a **pair of integers**
+  `(p_v, p̄_v)` together with a real `q_v`, giving `χ_v(z) = z^{-p_v} z̄^{-p̄_v} |z|^{i q_v}`;
+- **admissibility**: `∏_v χ_v(u) = 1` for every unit `u` of `𝓞 K`, which is what makes the
+  archimedean data compatible with the ideal-theoretic weight, and which 6.3 uses;
+- the **compatibility** of `χ` with its archimedean components on principal ideals prime to
+  `𝔪₀`: `χ((α)) = ∏_v χ_v(α)^{-1}`;
+- a predicate `IsAlgebraic`, the `A₀` condition, requiring every `q_v` to vanish.
+
+⚠ The unitary decomposition is unique only because `σ` is required to be **real**. With a complex
+exponent it is ambiguous up to `‖·‖^{it}`.
+
+⚠ *Nearby false statement:* admissibility is not automatic and is not cosmetic. Without it, the
+archimedean data and the ideal weight need not come from one character, and 6.2 to 6.4 fail. A
+structure that omits the field admits terms for which the functional equation is false.
+
+⚠ A single integer at a complex place is not enough. The local character there needs the pair
+`(p_v, p̄_v)`, and the gamma shift of 6.2 is built from both.
 
 *Source:* Neukirch VII (6.11) to (6.14).
-*Hypotheses:* admissibility is a hypothesis here and a theorem in the owning roadmap.
-*Nearby false statement:* the decomposition `χ = χ_unit · ‖·‖^{σ}` is unique only after `σ` is
-required to be real. With complex `σ` it is ambiguous up to `‖·‖^{it}`.
 
-When that roadmap supplies the type, the replacement is mechanical, as in 5.1.
+When the global class field theory roadmap is accepted, replace this definition by a named
+adapter to its infinity-type carrier, proving each field above from its API.
 
-*Prerequisites:* Layer 5.1. Eventual owner: global class field theory roadmap, infinity-type
-layer.
+*Prerequisites:* Layers 1.2, 5.1.
 
-**6.2 The gamma factor from the infinity type.** `L_∞(χ, s) = ∏_v Γ_v(s + (p_v − i q_v))`.
-Translate Neukirch §4's `G(ℂ|ℝ)`-set formalism into `Gammaℝ` and `Gammaℂ` shifts. Spell the
-translation out at each real place and at each complex place. These are the first entries of the
-spectral multisets of Layer 0.1 that are not real.
+**6.2 The gamma factor from the infinity type.** At a real place the shift is `p_v − i q_v`. At a
+complex place the two integers give one `Gammaℂ` factor with shift `max(p_v, p̄_v) − i q_v`, and
+the difference `|p_v − p̄_v|` enters the root number. Write the translation of Neukirch §4's
+`G(ℂ|ℝ)`-set formalism into `Gammaℝ` and `Gammaℂ` shifts out at each real place and at each
+complex place. These are the first entries of the spectral multisets of 0.1 that are not real.
 *Prerequisites:* Layers 0.1, 6.1.
 
-**6.3 The weighted theta series.** From Layer 2.9: the series
+**6.3 The weighted theta series.** From 2.9: the series
 `∑_{x ∈ 𝔞} N(x^p) exp(−π ∑_v t_v |x_v|²)`, its transformation with the constant `W(χ, p̄)`, and
-the Mellin assembly. The harmonic weight is exactly the polynomial of Layer 2.9, which is why
-that milestone is in Layer 2.
+the Mellin assembly. The harmonic weight is exactly the polynomial of 2.9, which is why that
+milestone is in Layer 2. Admissibility, 6.1, is what makes the sum over unit orbits well defined.
 *Source:* Neukirch VII §7, in full generality.
 *Prerequisites:* Layers 2.9, 2.13, 6.1, 6.2.
 
-**6.4 Continuation, poles, and the functional equation.** `Λ(χ, s)` is meromorphic. It is entire
-unless `𝔣 = 1` and `p = 0`, that is unless `χ` is a power of the norm character. In that
-exceptional case the poles are exactly at `s = Tr(−p + iq)/n` and at `s = 1 + Tr(p + iq)/n`.
-The functional equation is `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)` with `‖W(χ)‖ = 1`.
+**6.4 Continuation, poles, and the functional equation.** `Λ(χ, s)` is meromorphic and analytic
+away from its poles. It is entire **unless** `𝔪₀ = 1`, every `p_v = 0`, and `χ` is a power of the
+norm character. In that exceptional case the poles are exactly at `s = Tr(−p + iq)/n` and at
+`s = 1 + Tr(p + iq)/n`. The functional equation is `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)` with
+`‖W(χ)‖ = 1`. The instance card has `degree = [K:ℚ]`, as in 5.9.
 
 ⚠ The classification of the exceptional case is part of the statement. No milestone here writes
 "the exceptional case" without saying which case it is.
@@ -1222,63 +1387,25 @@ The functional equation is `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)` with `‖W(χ)�
 *Source:* Neukirch VII (8.5), (8.6).
 *Prerequisites:* Layers 2.14, 6.2, 6.3.
 
-**6.5 The nonvanishing consequence, packaged.** Layer 7.5 proves `L(χ, 1 + it) ≠ 0` for these
-characters. This milestone packages the form an equidistribution argument needs: nonvanishing for
-the twists `χ ‖·‖^{it}`, uniformly in `t`, with the exceptional case of 6.4 excluded explicitly.
-
-⚠ This is a typed export and not equidistribution. The Weyl criterion for a compact group is out
-of scope.
-
-*Prerequisites:* Layers 6.1, 6.4, 7.5.
-
-**6.6 Hecke's equidistribution of Gaussian primes.** The arguments of the primes of `ℤ[i]` are
-equidistributed in `[0, π/2)`. Prove it by applying 6.5 to the characters `𝔞 ↦ (α/|α|)^{4k}` of
-`ℚ(i)`. This is the only equidistribution statement in the roadmap. It is here because it checks
-that 6.1 to 6.5 can be used.
-*Source:* Lang XV Thm 5.
-*Prerequisites:* Layers 6.1, 6.5.
-
 ### Layer 7: Landau's theorem, the analytic premise, and nonvanishing
 
 The analytic input to every density theorem, proved without class field theory. Layer 8
-therefore does not wait for the global class field theory roadmap. Milestone 7.7 records the
-class-field-theoretic proof as a corollary, and nothing else uses it.
+therefore does not wait for the global class field theory roadmap.
 
-**7.1 Landau's theorem.** A Dirichlet series with nonnegative real coefficients has a
-singularity at its abscissa of absolute convergence. Precisely: no function holomorphic on a
-neighbourhood of that abscissa agrees with the series on the intersection of the neighbourhood
-with the half-plane of convergence.
+**7.1 Landau's theorem, and the analytic premise.** Two items that belong together.
 
-Mathlib's `LSeries.positive_of_differentiable_of_eqOn` is the nearest thing and is weaker.
-Milestones 7.4 and 8A.8 use this theorem.
+*Landau's theorem.* A Dirichlet series with nonnegative real coefficients has a singularity at
+its abscissa of absolute convergence. Precisely: no function holomorphic on a neighbourhood of
+that abscissa agrees with the series on the intersection of the neighbourhood with the half-plane
+of convergence. Mathlib's `LSeries.positive_of_differentiable_of_eqOn` is the nearest thing and
+is weaker.
 
 *Source:* Lang VIII §5; Serre, *A Course in Arithmetic*, VI §2.
 *Hypotheses:* the coefficients are nonnegative reals, and the abscissa is finite.
-*Nearby false statement:* the conclusion fails for complex coefficients. The function
+*Nearby false statement:* the conclusion fails for complex coefficients. The series
 `∑ (−1)^n n^{-s}` has abscissa of absolute convergence `1` and continues to an entire function.
 
-*Prerequisites:* Mathlib `LSeries.abscissaOfAbsConv`, `LSeries.positive`, `AnalyticOnNhd`.
-
-**7.2 Ideal weights, and the analytic premise they need.** The theorems below are wanted for two
-families. The first is the ray-class characters of Layer 5. The second is the Frobenius
-characters `𝔭 ↦ χ(Frob_𝔭)` of an abelian extension, from Layer 8. It is tempting to state them
-for a character of an arbitrary finite quotient of the ideal group. That hypothesis is too weak.
-
-The group of ideals prime to a finite set is free. It therefore has finite quotients whose
-values on primes are arbitrary, and no continuation follows. The analytic content has to be a
-hypothesis. Therefore:
-
-```lean
-structure IdealWeight (K : Type*) [Field K] [NumberField K] where
-  toFun : Ideal (𝓞 K) → ℂ
-  bad : Set (IsDedekindDomain.HeightOneSpectrum (𝓞 K))
-  bad_finite : bad.Finite
-  map_mul : ∀ I J, toFun (I * J) = toFun I * toFun J
-  norm_eq_one : ∀ 𝔭 ∉ bad, ‖toFun 𝔭.asIdeal‖ = 1
-  eq_zero_bad : ∀ 𝔭 ∈ bad, toFun 𝔭.asIdeal = 0
-```
-
-with a separate predicate carrying the estimate:
+*The premise.* For an ideal weight `χ` of 1.2, define
 
 ```lean
 def HasCancellation (χ : IdealWeight K) : Prop :=
@@ -1286,145 +1413,151 @@ def HasCancellation (χ : IdealWeight K) : Prop :=
     =O[atTop] fun X : ℝ ↦ X ^ (1 - 1 / (Module.finrank ℚ K : ℝ))
 ```
 
-that is, `∑_{𝔑𝔞 ≤ X} χ(𝔞) = O(X^{1 − 1/d})` with `d = [K:ℚ]`.
+that is `∑_{𝔑𝔞 ≤ X} χ(𝔞) = O(X^{1 − 1/d})` with `d = [K:ℚ]`. Then `HasCancellation χ` implies
+that `L(χ, ·)` continues holomorphically to `Re s > 1 − 1/d`, by 1.9 applied to the partial sums.
 
-Then `HasCancellation χ` implies that `L(χ, ·)` continues holomorphically to `Re s > 1 − 1/d`,
-by Layer 1.7 applied to the partial sums. Every nonvanishing theorem below takes
-`HasCancellation` as a hypothesis. None derives it from finiteness of a quotient.
+⚠ This hypothesis cannot be replaced by an algebraic one. The group of ideals prime to a finite
+set is free, so it has finite quotients whose values on primes are arbitrary, and finiteness of a
+quotient gives no continuation.
 
-Basic API for `IdealWeight`:
+Basic API: `HasCancellation` is preserved by conjugation and by enlarging the bad set by a finite
+set; the trivial weight does not satisfy it, since `∑_{𝔑𝔞 ≤ X} 1 ∼ ρ_K X`.
 
-- the trivial weight;
-- the conjugate weight;
-- the product of two weights, with the union of the bad sets;
-- the restriction to a larger bad set;
-- the induced `EulerFactorData` of Layer 1.5;
-- the coefficient function `idealCoeffOfWeight`.
+*Prerequisites:* Layers 1.2, 1.9; Mathlib `LSeries.abscissaOfAbsConv`, `AnalyticOnNhd`.
 
-Basic API for `HasCancellation`:
+**7.2 The hypothesis package a nonvanishing proof needs.** The `3-4-1` argument uses `χ`, `χ²`,
+and the conjugate of `χ`, and the argument on `Re s = 1` uses the norm twists `χ ‖·‖^{it}`.
+`HasCancellation χ` alone does not give any of the others. So state the hypotheses once, as a
+package over a **family** rather than a single weight:
 
-- it is preserved by conjugation;
-- it is preserved by enlarging the bad set by a finite set;
-- the trivial weight does not satisfy it, because `∑_{𝔑𝔞 ≤ X} 1 ∼ ρ_K X`.
+```
+CancellingFamily (G : Type*) [Group G] [Fintype G] (w : G → IdealWeight K) : Prop
+```
+requiring: `w` is a homomorphism to pointwise products; `w 1` is the trivial weight;
+`HasCancellation (w g)` for every `g ≠ 1`; and closure of the family under conjugation. Prove in
+addition that `HasCancellation` holds for each norm twist of each member.
 
-*Prerequisites:* Layers 1.2, 1.7.
+Then 7.3 and 7.4 are theorems about a `CancellingFamily`, and are instantiated twice, in 7.5 and
+in 8B.2. A single-weight statement would be false at the advertised generality.
 
-**7.3 The premise, proved for the two families.** Two theorems, one per family.
+*Prerequisites:* Layer 7.1.
 
-- For a nontrivial finite-order ray-class character: from the decomposition of Layer 1.8 into
-  partial zeta functions, and the counting estimate of Layer 1.6 with its error term.
-- For a cyclotomic Frobenius character of `Gal(K(ζ_m)/K)`: from the same counting estimate,
-  applied to the ray classes modulo `m∞`. Layer 8B.1 identifies the Frobenius with the norm
-  residue.
-
-Each is proved before its use. No family is claimed to have the property without such a proof.
-
-*Prerequisites:* Layers 1.6, 1.8, 5.1, 7.2, 8B.1.
-
-**7.4 `L(χ, 1) ≠ 0` for a nontrivial `χ` satisfying `HasCancellation`.**
+**7.3 `L(χ, 1) ≠ 0` for a nontrivial member of a cancelling family.**
 
 *Source:* Lang XV Thm 2, which proves this for Hecke characters with no class number formula and
 no class field theory. Mathlib's `Nonvanishing.lean` has the Dirichlet case.
-*Method:* the `3-4-1` product `L(1)³ L(χ)⁴ L(χ²)` when `χ² ≠ 1`; and for a real `χ` the
-positivity of the coefficients of `ζ_K(s) L(χ, s)`, together with Layer 7.1.
-*Hypotheses:* `χ ≠ 1`, and `HasCancellation χ`.
+*Method:* the `3-4-1` product `L(1)³ L(χ)⁴ L(χ²)` when `χ² ≠ 1`. That product needs `L(χ²,·)`,
+and hence membership of `χ²` in the family. For a real `χ` the method is instead the positivity
+of the coefficients of `ζ_K(s) L(χ, s)`, together with Landau's theorem from 7.1.
+*Hypotheses:* `χ ≠ 1`, and `χ` a member of a `CancellingFamily`.
 *Nearby false statement:* the `3-4-1` argument alone does not cover a real `χ`, because there
-`χ² = 1` and the product degenerates. That case is exactly why Layer 7.1 is needed.
+`χ² = 1` and the product degenerates. That case is exactly why Landau's theorem is needed.
 
-*Prerequisites:* Layers 1.4, 7.1, 7.2, 7.3.
+*Prerequisites:* Layers 1.4, 7.1, 7.2.
 
-**7.5 Nonvanishing on `Re s = 1`, in meromorphic-order form.**
+**7.4 Nonvanishing on `Re s = 1`, in meromorphic-order form.**
 
 ⚠ This is where a pointwise statement is wrong. The trivial character has a pole at `s = 1`, so
-"`L(χ, 1 + it) ≠ 0` for arbitrary `χ`" compares a junk value there. State instead, for the
-continued functions of Layers 1.7 and 5.3:
+"`L(χ, 1 + it) ≠ 0` for arbitrary `χ`" compares a value at a pole. State instead, for the
+continued functions of 1.9 and 5.3:
 
 - `meromorphicOrderAt (dedekindZetaC K) 1 = −1`;
 - `meromorphicOrderAt (dedekindZetaC K) (1 + it) = 0` for `t ≠ 0`;
-- `meromorphicOrderAt (L(χ, ·)) (1 + it) = 0` for every real `t` and every nontrivial
-  finite-order `χ` satisfying `HasCancellation`. For such `χ` the function is holomorphic at
-  `s = 1`, so this is equivalent to `L(χ, 1 + it) ≠ 0`;
+- `meromorphicOrderAt (L(χ, ·)) (1 + it) = 0` for every real `t` and every nontrivial member `χ`
+  of a cancelling family. For such `χ` the function is analytic at `s = 1`, so this is equivalent
+  to `L(χ, 1 + it) ≠ 0`;
 - as a corollary: no member of the family has a zero on `Re s = 1`, and the only pole is the one
   recorded above.
 
 *Source:* Lang XV Thm 3. Mathlib's `LFunction_ne_zero_of_re_eq_one` is the Dirichlet case.
-*Method:* the `3-4-1` inequality of 7.4, at `1 + it`.
-*Hypotheses:* for a Grossencharacter, the twist `χ ‖·‖^{it}` reduces the general case to
-`t = 0`. The exceptional case is exactly the one Layer 6.4 classifies, where `χ` is a power of
-the norm character and the pole returns.
-*Nearby false statement:* "for arbitrary `χ`, `L(χ, 1 + it) ≠ 0`" is false at `χ = 1`, `t = 0`,
-where the value is a junk value rather than a nonzero number.
+*Method:* the `3-4-1` inequality of 7.3, applied to the norm twist at `1 + it`, which is why 7.2
+requires closure under those twists.
+*Nearby false statement:* "for arbitrary `χ`, `L(χ, 1 + it) ≠ 0`" is false at `χ = 1`, `t = 0`.
 
-*Prerequisites:* Layers 1.7, 3.7, 5.3, 7.4.
+*Prerequisites:* Layers 1.9, 3.7, 5.3, 7.2, 7.3.
 
-**7.6 Logarithmic derivatives.** Define the ideal von Mangoldt weight `Λ_K(𝔞)`, equal to
-`log 𝔑𝔭` when `𝔞 = 𝔭^m` for some `m ≥ 1`, and `0` otherwise. Prove
-`−L'/L(χ, s) = LSeries (idealCoeffOfWeight (χ · Λ_K)) s` on `Re s > 1`, in the shape of
-Mathlib's `LSeries_vonMangoldt_eq_deriv_riemannZeta_div`.
+**7.5 The ray-class family satisfies the premise.** The characters of a fixed ray class group,
+with the pointwise product, form a `CancellingFamily`. Cancellation for a nontrivial member
+follows from the decomposition of 1.7 into partial zeta functions and the counting estimate of
+1.6 with its error term. This is the first of the two instantiations, and it makes 7.3 and 7.4
+available for Layer 5's characters.
+*Prerequisites:* Layers 1.6, 1.7, 5.1, 7.2.
 
-Basic API:
+**7.6 Logarithmic derivatives, for a general ideal weight.** Define the ideal von Mangoldt weight
+`Λ_K(𝔞)`, equal to `log 𝔑𝔭` when `𝔞 = 𝔭^m` for some `m ≥ 1`, and `0` otherwise. For any ideal
+weight `χ` of 1.2, prove
+`−L'/L(χ, s) = LSeries (idealCoeffOfWeight (χ · Λ_K)) s` on `Re s > 1`, in the shape of Mathlib's
+`LSeries_vonMangoldt_eq_deriv_riemannZeta_div`. The statement is generic, so it does not depend
+on Layer 5, and it is instantiated for ray-class and for cyclotomic characters where they appear.
 
-- the value at a prime;
-- the value at `1`;
-- nonnegativity of `Λ_K`;
-- the norm-grouped coefficient function;
-- the identity `∑_{𝔞 ∣ 𝔟} Λ_K(𝔞) = log 𝔑𝔟`.
+Basic API: the value at a prime and at `1`; nonnegativity of `Λ_K`; the norm-grouped coefficient
+function; the identity `∑_{𝔞 ∣ 𝔟} Λ_K(𝔞) = log 𝔑𝔟`.
 
-Layers 8 and 9 both use these.
+*Prerequisites:* Layers 1.2, 1.4.
 
-*Prerequisites:* Layers 1.2, 1.4, 5.2.
+**7.7 The nonvanishing consequence for Grossencharacters.** Milestone 7.4, applied to the family
+generated by a Grossencharacter and its norm twists, gives `L(χ ‖·‖^{it}, 1 + iu) ≠ 0`, uniformly
+in `t` and `u`, with the exceptional case of 6.4 excluded explicitly. Package that as the typed
+export an equidistribution argument consumes.
 
-**7.7 The class-field-theoretic proof, as a corollary.** Let `L/K` be the class field. Once the
-global class field theory roadmap supplies reciprocity, `ζ_L = ζ_K ∏_{χ ≠ 1} L(χ, ·)`. Then 7.4
-follows from the order of the pole of `ζ_L` at `s = 1`. Prove it as a consistency check on the
-normalizations of both roadmaps. Nothing else here uses it.
-*Source:* Neukirch VII (13.3); Janusz V 10.2; Milne VIII 7.1.
-*Prerequisites:* Layers 1.7, 7.4; Global class field theory roadmap, its reciprocity layer.
+⚠ This is an export and not equidistribution. The Weyl criterion for a compact group is out of
+scope.
+
+*Prerequisites:* Layers 6.1, 6.4, 7.4.
+
+**7.8 Hecke's equidistribution of Gaussian primes.** The arguments of the primes of `ℤ[i]` are
+equidistributed in `[0, π/2)`. Prove it by applying 7.7 to the characters `𝔞 ↦ (α/|α|)^{4k}` of
+`ℚ(i)`. This is the only equidistribution statement in the roadmap. It is here because it checks
+that 6.1 to 6.4 and 7.7 can be used.
+*Source:* Lang XV Thm 5.
+*Prerequisites:* Layers 6.1, 7.7.
 
 ### Layer 8: prime densities and the Chebotarev density theorem
 
 The main theorem of the roadmap. It is proved without class field theory, by the argument of
-Lenstra–Stevenhagen and of Sharifi Thm 7.2.2. [`PROVENANCE.md`](PROVENANCE.md) records the
-existing Lean developments on that route. It also states the coordination obligation, which
-comes before the code.
+Lenstra–Stevenhagen and of Sharifi Thm 7.2.2.
 
-**8.0 The Frobenius interface (compatibility interface).** The number field arithmetic roadmap,
-Layers 2 and 5, will own this vocabulary. Until its declarations exist, define here, for number
-fields `K ⊆ L` with `L/K` finite Galois:
+**8.0 The Frobenius class, constructed here.** The number field arithmetic roadmap will
+eventually own this vocabulary, and until it is accepted this roadmap builds what it needs, for
+number fields `K ⊆ L` with `L/K` finite Galois:
 
-- `IsUnramifiedAt K L 𝔭 : Prop` for `𝔭 : HeightOneSpectrum (𝓞 K)`, defined as
-  `Ideal.ramificationIdxIn 𝔭.asIdeal (𝓞 L) = 1`;
-- `frobeniusClass K L 𝔭 : ConjClasses (L ≃ₐ[K] L)` for an unramified `𝔭`, defined from Mathlib's
-  `arithFrobAt` and `isConj_arithFrobAt`;
-- the restriction compatibility: for `K ⊆ E ⊆ L` with `L/K` and `E/K` Galois, the image of
-  `frobeniusClass K L 𝔭` under restriction is `frobeniusClass K E 𝔭`;
-- the tower compatibility: for `K ⊆ E ⊆ L` and a prime `𝔓` of `E` over `𝔭`, the relation between
-  `frobeniusClass E L 𝔓` and `frobeniusClass K L 𝔭`. The residue degree of `𝔓` over `𝔭` appears
-  in the exponent.
+- `IsUnramifiedAt K L 𝔭 : Prop` for `𝔭 : HeightOneSpectrum (𝓞 K)`, as
+  `Ideal.ramificationIdxIn 𝔭.asIdeal (𝓞 L) = 1`, together with finiteness of the ramified set;
+- `frobeniusClass K L 𝔭 : ConjClasses (L ≃ₐ[K] L)` for an unramified `𝔭`, **constructed** from
+  Mathlib's `arithFrobAt` and `isConj_arithFrobAt` over `Algebra.IsInvariant`, and not assumed.
+  `Algebra.isInvariant_of_isGalois` supplies the invariance hypothesis;
+- the characterization: `σ` lies in `frobeniusClass K L 𝔭` exactly when there is a prime `Q` of
+  `L` over `𝔭` with `σ • x ≡ x^{𝔑𝔭} mod Q` for every `x`;
+- **restriction compatibility**, stated against Mathlib's canonical restriction homomorphism
+  `AlgEquiv.restrictNormalHom` and not against an arbitrary parameter: for `K ⊆ E ⊆ L` with `E/K`
+  Galois, the image of `frobeniusClass K L 𝔭` is `frobeniusClass K E 𝔭`;
+- **tower compatibility**: for a prime `𝔓` of `E` over `𝔭` of residue degree `f` over `K`,
+  `frobeniusClass E L 𝔓` is the class of the `f`-th power of a Frobenius of `𝔭`;
+- the value at a prime that splits completely, which is the identity class, and the cardinality
+  of the class.
 
-Basic API:
+Milestones 8C and 8D use restriction and tower compatibility directly, so both are fields here
+rather than remarks. ⚠ Frobenius here is arithmetic; 8B.1 tests the orientation.
 
-- the value at a prime that splits completely, which is the identity class;
-- the behaviour under an isomorphism of extensions;
-- the finiteness of the ramified primes;
-- the cardinality `#(frobeniusClass K L 𝔭)`.
-
-When the number field arithmetic roadmap supplies these, the replacement is mechanical: delete
-the definitions here, import theirs, and keep 8A to 8E unchanged. There is no second Frobenius
-in this roadmap.
-
-⚠ Frobenius here is arithmetic. Layer 8B.1 tests the orientation.
+When the number field arithmetic roadmap is accepted, replace these definitions by named adapters
+to its declarations, proving each statement above from its API. Every statement of 8A to 8E then
+stands unchanged.
 
 *Prerequisites:* Mathlib `arithFrobAt`, `IsArithFrobAt`, `isConj_arithFrobAt`,
-`Algebra.IsInvariant`, `Ideal.ramificationIdxIn`. Eventual owner: number field arithmetic
-roadmap, Layers 2 and 5.
+`Algebra.IsInvariant`, `Algebra.isInvariant_of_isGalois`, `Ideal.ramificationIdxIn`,
+`AlgEquiv.restrictNormalHom`.
 
 #### 8A: the density calculus
 
-**8A.1 The three densities.** Define `primeIdealZetaSum S s = ∑' 𝔭 ∈ S, 𝔑𝔭^{-s}` and
+**8A.1 The density notions.** Define `primeIdealZetaSum S s = ∑' 𝔭 ∈ S, 𝔑𝔭^{-s}` and
 `HasDirichletDensity S δ` as the ratio to the sum over all nonzero primes, tending to `δ` along
-`𝓝[>] 1`. Define also `HasUpperDirichletDensity` and `HasLowerDirichletDensity` as the `limsup`
-and the `liminf` of that ratio, `HasNaturalDensity`, and polar density.
+`𝓝[>] 1`. Define also:
+
+- `HasUpperDirichletDensity S δ` and `HasLowerDirichletDensity S δ`, the `limsup` and the
+  `liminf` of that ratio being equal to `δ`;
+- `LowerDirichletDensityAtLeast S c`, meaning `c ≤ liminf` of that ratio. ⚠ This inequality, and
+  not the equality, is what the crossing argument of 8C produces, and 8C.6 is stated with it;
+- `HasNaturalDensity`, and polar density.
 
 ⚠ Mathlib master has `primeIdealZetaSum` and `HasDirichletDensity` in
 `NumberTheory/NumberField/DirichletDensity.lean`, namespace `NumberField.Set`. The pin does not
@@ -1433,27 +1566,30 @@ delete these two definitions and import Mathlib's; every statement below is unch
 
 Basic API:
 
-- the empty set has density `0`;
-- the set of all primes has density `1`;
+- the empty set has density `0`, and the set of all primes has density `1`;
 - density is nonnegative and at most `1`;
-- a set with a density has equal upper and lower density.
+- a set with a density has equal upper and lower density;
+- a density implies the corresponding lower bound.
 
 *Prerequisites:* Mathlib `Ideal.absNorm`, `HeightOneSpectrum`, `Filter.limsup`, `Filter.liminf`.
 
 **8A.2 The denominator.** `primeIdealZetaSum univ s / log((s−1)⁻¹) → 1` as `s → 1⁺`. It follows
-from the simple pole of Layer 1.7 and the logarithm of Layer 1.4. Hence the definition of 8A.1
-is equivalent to Neukirch's, whose denominator is `log((s−1)⁻¹)`. After this theorem no statement
-mentions `log((s−1)⁻¹)`.
-*Prerequisites:* Layers 1.4, 1.7, 8A.1.
+from the simple pole of 1.9 and the logarithm of 1.4. Hence the definition of 8A.1 is equivalent
+to Neukirch's, whose denominator is `log((s−1)⁻¹)`. After this theorem no statement mentions
+`log((s−1)⁻¹)`.
+*Prerequisites:* Layers 1.4, 1.9, 8A.1.
 
-**8A.3 The calculus.** Six statements:
+**8A.3 The calculus.** Seven statements:
 
 - equal upper and lower density gives the density;
-- upper density and lower density are monotone;
+- upper density and lower density are monotone, and so is the lower bound predicate;
 - a finite set has density `0`;
-- a finite symmetric difference changes none of the three densities;
-- a finite disjoint union adds densities;
-- the complement has density `1 − δ`.
+- a finite symmetric difference changes none of the notions;
+- a finite disjoint union adds densities, and adds lower bounds;
+- the complement has density `1 − δ`;
+- **the squeeze**: if the sets `S_1, …, S_r` are pairwise disjoint, their union has density `1`,
+  and `LowerDirichletDensityAtLeast S_i c_i` holds with `∑ c_i = 1`, then each `S_i` has density
+  exactly `c_i`. This is the step 8C.8 uses.
 
 The fourth statement is why the finitely many ramified primes may be removed from any set at no
 cost. Every statement of 8D uses it.
@@ -1473,10 +1609,8 @@ Assume three things:
 - those primes have residue degree `1` over `K`;
 - every prime of `E` in `S` lies over a member of `T`.
 
-Then `HasDirichletDensity S δ` and `HasDirichletDensity T (δ/k)` are equivalent.
-
-This is the lemma that turns a cyclic density into a density for a conjugacy class. It is the
-one place where the bookkeeping between primes of `E` and primes of `K` occurs.
+Then `HasDirichletDensity S δ` and `HasDirichletDensity T (δ/k)` are equivalent, and the same
+holds for the lower bound predicate.
 
 *Hypotheses:* the residue-degree-one hypothesis is needed, because it is what makes
 `𝔑_E 𝔓 = 𝔑_K 𝔭`. *Nearby false statement:* without it the two Dirichlet series have different
@@ -1523,87 +1657,131 @@ onto `Gal(L/K)` for abelian `L/K`.
 
 ⚠ This is arithmetic Frobenius and not geometric. *Nearby false statement:* the formula with
 `ζ_m ↦ ζ_m^{(𝔑𝔭)^{-1}}` proves every later theorem for `C⁻¹` instead of `C`, and no test detects
-it until a numerical example. Layer 8B.5 is that example.
+it until a numerical example. Milestone 8B.5 is that example.
 
 Over `K = ℚ` this is Mathlib's `IsCyclotomicExtension.Rat.galEquivZMod_stabilizer`. Over a
-general `K` it is a milestone, stated through the interface of Layer 8.0.
+general `K` it is a milestone, stated through 8.0.
 
 *Prerequisites:* Layer 8.0; Mathlib `IsCyclotomicExtension.Rat.galEquivZMod`,
 `galEquivZMod_stabilizer`.
 
-**8B.2 Character orthogonality.** For `σ` in `Gal(K(ζ_m)/K)`,
+**8B.2 The cyclotomic family satisfies the premise.** The characters of `Gal(K(ζ_m)/K)`,
+regarded as ideal weights through 8B.1, form a `CancellingFamily` in the sense of 7.2.
+Cancellation for a nontrivial member follows from the counting estimate of 1.6 applied to the ray
+classes modulo `m∞`, using 8B.1 to identify the Frobenius with the norm residue. This is the
+second instantiation of 7.2, and it is placed here rather than in Layer 7 because it needs 8B.1.
+*Prerequisites:* Layers 1.6, 1.7, 7.2, 8B.1.
+
+**8B.3 Character orthogonality.** For `σ` in `Gal(K(ζ_m)/K)`,
 `(#G)⁻¹ ∑_χ conj (χ σ) χ(τ) = if σ = τ then 1 else 0`. Mathlib has the pieces; the milestone is
-the form that 8B.4 uses.
+the form that 8B.5 and 9.7 use.
 *Prerequisites:* Mathlib character orthogonality for a finite abelian group.
 
-**8B.3 The logarithmic comparison.** For `χ` a character of `Gal(K(ζ_m)/K)`, regarded as an ideal
+**8B.4 The logarithmic comparison.** For `χ` a character of `Gal(K(ζ_m)/K)`, regarded as an ideal
 weight through 8B.1, `log L(χ, s) = ∑_{𝔭 ∤ m} χ(Frob_𝔭) 𝔑𝔭^{-s} + O(1)` as `s → 1⁺`. The error
 term is the contribution of the prime powers with `m ≥ 2`, which converges. State that bound as a
 theorem.
-*Prerequisites:* Layers 1.4, 7.2, 8B.1.
+*Prerequisites:* Layers 1.4, 7.6, 8B.1.
 
-**8B.4 The cyclotomic density theorem.** `L(χ, 1) ≠ 0` for `χ ≠ 1`, by Layer 7.4 with the premise
-supplied by Layer 7.3. Together with 8B.2 and 8B.3 this gives: for each `σ ∈ Gal(K(ζ_m)/K)`, the
-set `{𝔭 ∤ m ∣ Frob_𝔭 = σ}` has Dirichlet density `1/[K(ζ_m):K]`.
-*Prerequisites:* Layers 7.3, 7.4, 8A.1, 8B.1, 8B.2, 8B.3.
+**8B.5 The cyclotomic density theorem.** `L(χ, 1) ≠ 0` for `χ ≠ 1`, by 7.3 with the family
+supplied by 8B.2. Together with 8B.3 and 8B.4 this gives: for each `σ ∈ Gal(K(ζ_m)/K)`, the set
+`{𝔭 ∤ m ∣ Frob_𝔭 = σ}` has Dirichlet density `1/[K(ζ_m):K]`.
+*Prerequisites:* Layers 7.3, 8A.1, 8B.1, 8B.2, 8B.3, 8B.4.
 
-**8B.5 Dirichlet's theorem with a density.** The case `K = ℚ`: the primes `p ≡ a (mod q)` have
+**8B.6 Dirichlet's theorem with a density.** The case `K = ℚ`: the primes `p ≡ a (mod q)` have
 Dirichlet density `1/φ(q)`. Mathlib's `Nat.infinite_setOf_prime_and_eq_mod` follows. That it
 follows is an acceptance criterion.
-*Prerequisites:* Layer 8B.4; Mathlib `Nat.infinite_setOf_prime_and_eq_mod`.
+*Prerequisites:* Layer 8B.5; Mathlib `Nat.infinite_setOf_prime_and_eq_mod`.
 
 #### 8C: the abelian case, by crossing with cyclotomic extensions
 
-Let `L/K` be abelian with group `G`, and let `σ ∈ G` have order `f`. The density of
-`{𝔭 ∣ Frob_𝔭 = σ}` is obtained by comparing `L` with an auxiliary cyclotomic extension. Every
-object below is a milestone. None of them is called "the crossing lemma".
+Let `L/K` be abelian with group `G`, and let `σ ∈ G` have order `f`. Every object below is a
+milestone. None of them is called "the crossing lemma".
 
-**8C.1 Admissible auxiliary moduli.** Define: `m` is admissible for `(L/K, σ)` when `m` is
-coprime to the primes that ramify in `L`, `L ∩ K(ζ_m) = K`, and `f ∣ [K(ζ_m):K]`. Prove that
-admissible `m` exist, and that `[K(ζ_m):K]` can be made divisible by any prescribed integer.
-*Prerequisites:* Layer 8.0; Mathlib `IsCyclotomicExtension`.
+**8C.1 The auxiliary primes.** Do not quantify over abstract admissible moduli: construct them.
+For an integer `r ≥ 1`, call a rational prime `q` *auxiliary of level `r`* when
 
-**8C.2 Linear disjointness and the product decomposition.** For admissible `m`, the restriction
-map `Gal(L·K(ζ_m)/K) → Gal(L/K) × Gal(K(ζ_m)/K)` is an isomorphism. The hypothesis
-`L ∩ K(ζ_m) = K` is what this uses.
+- `q` is unramified in `L`;
+- `q ≡ 1 mod f^r`;
+- `K ∩ ℚ(ζ_q) = ℚ`, so that `Gal(K(ζ_q)/K) ≅ (ℤ/q)ˣ` is **cyclic** of order `q − 1`;
+- `L ∩ K(ζ_q) = K`.
+
+Prove that auxiliary primes of every level exist, by Dirichlet's theorem in the progression
+`1 mod f^r` together with the finiteness of the ramified set.
+
+⚠ *Nearby false statement:* "`f` divides `[K(ζ_m):K]`" does not give an element of order
+divisible by `f`. Divisibility of the order of a finite group does not produce such an element
+in general. The cyclicity in the third clause is what does, and it is why the construction uses a
+rational prime `q` rather than an arbitrary modulus.
+
+*Prerequisites:* Layer 8.0; Mathlib `IsCyclotomicExtension`, Dirichlet's theorem.
+
+**8C.2 Linear disjointness and the product decomposition.** For an auxiliary `q`, the restriction
+map `Gal(L·K(ζ_q)/K) → Gal(L/K) × Gal(K(ζ_q)/K)` is an isomorphism. The hypothesis
+`L ∩ K(ζ_q) = K` is what this uses.
 *Prerequisites:* Layer 8C.1; Mathlib `IsGalois`, `IntermediateField`.
 
-**8C.3 Compatibility of Frobenius with restriction.** Let `𝔭` be unramified in the compositum.
-Its Frobenius in `L·K(ζ_m)/K` maps to the pair of its Frobenius elements in `L/K` and in
-`K(ζ_m)/K`.
+**8C.3 Compatibility of Frobenius with restriction.** For `𝔭` unramified in the compositum, the
+Frobenius of `𝔭` in `L·K(ζ_q)/K` maps to the pair of its Frobenius elements in `L/K` and in
+`K(ζ_q)/K`. This is the restriction field of 8.0, applied twice.
 *Prerequisites:* Layers 8.0, 8C.2.
 
-**8C.4 The fixed field is cyclotomic over its base.** Let `τ ∈ Gal(K(ζ_m)/K)` with
-`f ∣ orderOf τ`. Write `M = L·K(ζ_m)` and `E = M^{⟨(σ,τ)⟩}` under the identification of 8C.2.
-Then `⟨(σ,τ)⟩ ∩ Gal(M/K(ζ_m)) = 1`, so `E·K(ζ_m) = M`, and `M/E` is generated by roots of unity.
-Layer 8B therefore applies over `E`.
+**8C.4 The fixed field is cyclotomic over its base.** Let `τ ∈ Gal(K(ζ_q)/K)` with
+`f ∣ orderOf τ`, which exists because that group is cyclic of order `q − 1` and `f ∣ q − 1`.
+Write `M = L·K(ζ_q)` and `E = M^{⟨(σ,τ)⟩}` under the identification of 8C.2. Then
+`⟨(σ,τ)⟩ ∩ Gal(M/K(ζ_q)) = 1`, so `E·K(ζ_q) = M`, and `M/E` is generated by roots of unity.
+Milestone 8B therefore applies over `E`.
 
 ⚠ The hypothesis `f ∣ orderOf τ` is exactly what makes the intersection trivial. *Nearby false
-statement:* without it, `⟨(σ,τ)⟩ ∩ Gal(M/K(ζ_m)) = ⟨(σ^{orderOf τ}, 1)⟩`, which is not trivial,
-and `E·K(ζ_m)` is a proper subfield of `M`.
+statement:* without it, `⟨(σ,τ)⟩ ∩ Gal(M/K(ζ_q)) = ⟨(σ^{orderOf τ}, 1)⟩`, which is not trivial,
+and `E·K(ζ_q)` is a proper subfield of `M`.
 
 *Prerequisites:* Layers 8C.1, 8C.2.
 
-**8C.5 The tagged family of Frobenius fibres.** For each `τ ∈ Gal(K(ζ_m)/K)` with
+**8C.5 The tagged family of Frobenius fibres.** For each `τ ∈ Gal(K(ζ_q)/K)` with
 `f ∣ orderOf τ`, set `S_τ = {𝔭 ∣ Frob_𝔭 = (σ, τ)}` in the compositum. These sets are pairwise
-disjoint as `τ` varies, and each contracts into `{𝔭 ∣ Frob_𝔭 = σ}` in `L/K`. Disjointness is
-what makes the densities add, so it is a stated lemma.
+disjoint as `τ` varies, and each contracts into `{𝔭 ∣ Frob_𝔭 = σ}` in `L/K`. Disjointness is what
+makes the densities add, so it is a stated lemma.
 *Prerequisites:* Layers 8C.2, 8C.3, 8C.4.
 
-**8C.6 The lower bound.** Summing the densities of the sets `S_τ` obtained from 8C.4 and Layer 8B
-gives `HasLowerDirichletDensity {𝔭 ∣ Frob_𝔭 = σ} (κ_m / #G)`, where `κ_m ≤ 1` is the proportion
-of `τ` with `f ∣ orderOf τ`. Only a lower bound follows, which is why Layer 8A.1 has a `liminf`
-predicate.
-*Prerequisites:* Layers 8A.3, 8A.5, 8B.4, 8C.5.
+**8C.6 The lower bound from one auxiliary prime.** Fix an auxiliary `q` and a generator `τ` of
+the cyclic group `Gal(K(ζ_q)/K)`, and let `E` be the fixed field of 8C.4 for the pair `(σ, τ)`.
+Milestone 8B.5 gives the primes of `E` with Frobenius `(σ, τ)` in `M/E` the density
+`1/[M:E] = 1/(q−1)`. Contracting them to `K` through 8A.5, using 8C.3 and 8C.5, gives
 
-**8C.7 The proportion tends to one.** `κ_m → 1` as `m` runs through admissible moduli whose degree
-`[K(ζ_m):K]` is divisible by higher and higher powers. This is a statement about `(ℤ/m)ˣ` and
-nothing else.
-*Prerequisites:* Layer 8C.1.
+`LowerDirichletDensityAtLeast {𝔭 ∣ Frob_𝔭 = σ} c_q`
 
-**8C.8 The abelian theorem.** `HasDirichletDensity {𝔭 ∣ Frob_𝔭 = σ} (1/#G)` for `L/K` abelian. It
-follows from 8C.6, 8C.7, and the fact that the densities over all `σ ∈ G` sum to `1`, so a family
-of lower bounds that sums to `1` forces equality.
+for a constant `c_q` determined by the construction: the number of tagged fibres used, divided
+by `q − 1`, divided by the fibre count of the contraction.
+
+⚠ The predicate is the inequality of 8A.1 and not an equality. The tagged fibres are contained
+in the target set and need not exhaust it, so nothing stronger is available here.
+
+⚠ Computing `c_q` exactly, including which `τ` are used and what the fibre count is, is part of
+this milestone and is where the argument is done. Lenstra–Stevenhagen §3 and Sharifi Thm 7.2.2
+carry it out; the four AINTLIB files named in [`PROVENANCE.md`](PROVENANCE.md) contain a machine
+-checked version of the same computation. Do not record a value for `c_q` here that has not been
+derived.
+
+*Prerequisites:* Layers 8A.3, 8A.5, 8B.5, 8C.3, 8C.4, 8C.5.
+
+**8C.7 The bound approaches `1/#G`.** For every `ε > 0` there is an auxiliary prime `q` with
+`1/#G − ε < c_q`. The statement is about the auxiliary construction alone, and not about `L`:
+once `c_q` is computed in 8C.6, it is an elementary estimate on the cyclic group
+`Gal(K(ζ_q)/K)` and on the fibre count.
+
+⚠ *Nearby false statement:* `c_q = 1/#G` for a single `q` would make 8C.8 immediate and 8C.7
+unnecessary. Do not assume it. A bound that is uniform in `q` but strictly below `1/#G` is also
+not enough, because 8C.8 needs the sum of the bounds over `G` to reach `1`.
+
+*Prerequisites:* Layers 8C.1, 8C.6.
+
+**8C.8 The abelian theorem.** `HasDirichletDensity {𝔭 ∣ Frob_𝔭 = σ} (1/#G)` for `L/K` abelian.
+
+The fibres over the `#G` elements of `G` are pairwise disjoint. Their union is the set of
+unramified primes, which has density `1` by 8A.3. Milestones 8C.6 and 8C.7 give each fibre a
+lower bound approaching `1/#G`, and the squeeze of 8A.3 then forces equality.
+
 *Prerequisites:* Layers 8A.3, 8C.6, 8C.7.
 
 #### 8D: the general case, by fixed fields
@@ -1612,16 +1790,16 @@ Let `L/K` be finite Galois with group `G`, let `σ ∈ G` have order `f`, let `C
 class of `σ`, and let `E = L^{⟨σ⟩}`.
 
 **8D.1 `L/E` is cyclic**, of degree `f`, with group `⟨σ⟩`.
-*Prerequisites:* Mathlib `IsGalois`, Galois correspondence.
+*Prerequisites:* Mathlib `IsGalois`, the Galois correspondence.
 
 **8D.2 Frobenius in `L/K` against Frobenius in `L/E`.** Let `𝔓` be a prime of `E` unramified in
 `L`. State and prove the exact relation between `frobeniusClass E L 𝔓` and
-`frobeniusClass K L (𝔓 ∩ 𝓞_K)`. Use the tower compatibility of Layer 8.0.
+`frobeniusClass K L (𝔓 ∩ 𝓞_K)`, using the tower compatibility of 8.0.
 *Prerequisites:* Layers 8.0, 8D.1.
 
 **8D.3 The relevant primes of `E`.** The set to which 8C is applied is
-`{𝔓 ∣ 𝔓 unramified in L, frobeniusClass E L 𝔓 = {σ}}`. Layer 8A.4 lets it be intersected with the
-primes of `E` of degree one over `K` at no cost. Say once which set is meant.
+`{𝔓 ∣ 𝔓 unramified in L, frobeniusClass E L 𝔓 = {σ}}`. Milestone 8A.4 lets it be intersected
+with the primes of `E` of degree one over `K` at no cost. Say once which set is meant.
 *Prerequisites:* Layers 8A.4, 8D.2.
 
 **8D.4 The fibre count.** Each prime `𝔭` of `K` with `frobeniusClass K L 𝔭 = C` has exactly
@@ -1630,11 +1808,11 @@ primes of `E` of degree one over `K` at no cost. Say once which set is meant.
 
 *Source:* Milne, *Class Field Theory*, VIII 7.4, whose explicit bijections are the plan for the
 proof.
-*Hypotheses:* the number `#G/(#C · f)` is `#C_G(σ)/f`, which is a positive integer because
+*Hypotheses:* the number `#G/(#C · f)` equals `#C_G(σ)/f`, which is a positive integer because
 `⟨σ⟩ ⊆ C_G(σ)`. State it in that form as well, since the integrality is not visible in the first
 form.
 *Nearby false statement:* the count is not `#C·f/#G` and not `1`. A consistency check: with the
-density `1/f` from 8C over `E`, Layer 8A.5 gives `1/f = k · (#C/#G)`, so `k = #G/(#C·f)`.
+density `1/f` from 8C over `E`, milestone 8A.5 gives `1/f = k · (#C/#G)`, so `k = #G/(#C·f)`.
 
 ⚠ This is where the conjugacy class, the two kinds of prime, and the degree-one condition all
 meet. It is the one computation of the layer that needs care.
@@ -1642,7 +1820,7 @@ meet. It is the one computation of the layer that needs care.
 *Prerequisites:* Layers 8.0, 8D.1, 8D.2, 8D.3.
 
 **8D.5 The Chebotarev density theorem.** Apply 8C over `E` to get density `1/f` for the set of
-8D.3. Then apply Layer 8A.5 with `k = #G/(#C · f)`. The result is
+8D.3. Then apply 8A.5 with `k = #G/(#C · f)`. The result is
 
 `HasDirichletDensity {𝔭 ∣ IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = C} (#C/#G)`
 
@@ -1655,24 +1833,24 @@ for an arbitrary number field `K`, not only for `K = ℚ`.
 - the exact-density form of each statement of 8A.8;
 - the density `1/#G` of the primes that split completely in `L`;
 - the splitting densities in a non-Galois extension, through its Galois closure.
+
 *Prerequisites:* Layer 8D.5.
 
 #### 8E: equidistribution in ray classes
 
-Once the global class field theory roadmap supplies ray class groups: the primes are
-Dirichlet-equidistributed among the classes of any `J^𝔪 ⊇ H ⊇ P^𝔪`, with density
-`1/[J^𝔪 : H]`.
+For a modulus `𝔪` and a finite quotient `Q` as in 1.7, the primes prime to `𝔪₀` are
+Dirichlet-equidistributed among the classes of `Q`, with density `1/#Q`.
 
-Prove it twice. The first proof is analytic, from the partial zeta functions of Layer 1.8 and
-Layer 7.4. The second uses 8D.5 and Artin reciprocity. Then prove the two agree class by class.
+The proof is analytic: 1.7 decomposes the partial zeta functions, 1.8 gives the equal residues,
+7.5 gives the family, and 7.3 gives `L(χ, 1) ≠ 0` for each nontrivial character.
 
-That agreement is the check that the arithmetic-Frobenius convention of this roadmap and the
-reciprocity normalization of the other one point the same way. It is the only place where a
-disagreement would be caught.
+⚠ There is one proof here, not two. The classical second proof goes through Artin reciprocity and
+therefore through class field theory, which is not a prerequisite of this roadmap. When the global
+class field theory roadmap is accepted, comparing the two is worth doing, and
+[`PROVENANCE.md`](PROVENANCE.md) records why.
 
-*Source:* Neukirch VII (13.2); Milne VI 4.8 and VIII 7.2.
-*Prerequisites:* Layers 1.8, 7.4, 8D.5; Global class field theory roadmap, its ray-class layer
-and its reciprocity layer.
+*Source:* Neukirch VII (13.2); Milne VI 4.8.
+*Prerequisites:* Layers 1.7, 1.8, 7.3, 7.5, 8A.1.
 
 ### Layer 9: the prime ideal theorem and natural densities
 
@@ -1680,29 +1858,39 @@ Layer 8 gives Dirichlet densities. A Dirichlet density does not imply a natural 
 natural-density form of Chebotarev is a separate theorem with its own proof. This layer supplies
 that proof.
 
-**9.1 Wiener–Ikehara.** If `a : ℕ → ℝ` is nonnegative, if `F(s) = ∑ a n · n^{-s}` converges on
-`Re s > 1`, and if `s ↦ F(s) − κ/(s − 1)` extends continuously to `Re s ≥ 1`, then
-`∑_{n ≤ x} a n ∼ κ x`.
+**9.1 Wiener–Ikehara.** Let `a : ℕ → ℝ` be nonnegative. Assume:
+
+- `∑ a n · n^{-σ}` converges for every real `σ > 1`, so that `F(s) = ∑ a n · n^{-s}` is defined
+  and analytic on `Re s > 1`;
+- there is a function `G`, continuous on `{s ∣ 1 ≤ Re s}`, with `G s = F s − κ/(s − 1)` for every
+  `s` with `Re s > 1`.
+
+Then `∑_{n ≤ x} a n ∼ κ x`.
+
+⚠ Both hypotheses are load-bearing. Without summability, Mathlib's `LSeries` takes a junk value
+where the series diverges, and "F equals the L-series on `Re s > 1`" is satisfied by `F = 0` for a
+rapidly growing nonnegative `a`; the conclusion is then false. And the boundary hypothesis must
+name a separate continuous `G` rather than assert continuity of `s ↦ F s − κ/(s − 1)` on the
+closed half-plane, since at `s = 1` that expression is a junk value on both summands.
 
 This is a milestone of this roadmap and not an import. The hypotheses above are what the rest of
 the layer may assume, and nothing weaker.
 
 *Source:* Lang XV §§2–3 has a complete proof. PrimeNumberTheoremAnd has it as
-`WienerIkeharaTheorem'`, sorry-free; [`PROVENANCE.md`](PROVENANCE.md) records that as prior art
-and states the coordination obligation. Mathlib does not have it, at the pin or on master.
-*Nearby false statement:* the conclusion fails without nonnegativity. It also fails if the
-continuous extension is assumed only on the open half-plane `Re s > 1`.
+`WienerIkeharaTheorem'`, sorry-free. Mathlib does not have it, at the pin or on master.
+*Nearby false statement:* the conclusion fails for signed or complex coefficients. Milestone 9.7
+therefore does not apply this theorem to a character twist.
 
-*Prerequisites:* Mathlib `LSeries`, `Filter.Tendsto`, Fourier analysis on `ℝ`.
+*Prerequisites:* Mathlib `LSeries`, `LSeriesSummable`, `Filter.Tendsto`, Fourier analysis on `ℝ`.
 
 **9.2 The ideal von Mangoldt series.** `−ζ_K'/ζ_K (s) = LSeries (idealCoeffOfWeight Λ_K) s` on
-`Re s > 1`, with `Λ_K` from Layer 7.6.
+`Re s > 1`, with `Λ_K` from 7.6, together with the summability that 9.1 requires.
 *Prerequisites:* Layers 1.4, 7.6.
 
-**9.3 `ψ_K(x) ∼ x`,** where `ψ_K(x) = ∑_{𝔑𝔞 ≤ x} Λ_K(𝔞)`. Apply 9.1 to 9.2 with `κ = 1`. The continuous extension to `Re s ≥ 1` comes from Layer 7.5. The pole of `ζ_K` at `s = 1`
-supplies `κ/(s−1)`. The absence of zeros on `Re s = 1` makes the difference continuous up to the
-line.
-*Prerequisites:* Layers 7.5, 9.1, 9.2.
+**9.3 `ψ_K(x) ∼ x`,** where `ψ_K(x) = ∑_{𝔑𝔞 ≤ x} Λ_K(𝔞)`. Apply 9.1 to 9.2 with `κ = 1`. The
+boundary function `G` comes from 7.4: the pole of `ζ_K` at `s = 1` supplies `κ/(s−1)`, and the
+absence of zeros on `Re s = 1` makes the difference continuous up to the line.
+*Prerequisites:* Layers 7.4, 9.1, 9.2.
 
 **9.4 `θ_K(x) ∼ x`,** where `θ_K(x) = ∑_{𝔑𝔭 ≤ x} log 𝔑𝔭`. The difference `ψ_K − θ_K` is the
 contribution of the prime powers `𝔭^m` with `m ≥ 2`, which is `O(√x log² x)`. Prove that bound.
@@ -1710,7 +1898,7 @@ contribution of the prime powers `𝔭^m` with `m ≥ 2`, which is `O(√x log²
 
 **9.5 Primes of residue degree above one contribute nothing.** The primes with `𝔑𝔭 = p^f` and
 `f ≥ 2` contribute `O(√x log x)` to `θ_K`, so `θ_K` is asymptotically the sum over the
-degree-one primes. This is the counting form of Layer 8A.4.
+degree-one primes. This is the counting form of 8A.4.
 *Prerequisites:* Layer 9.4.
 
 **9.6 The prime ideal theorem.** `π_K(x) ∼ x/log x`, from 9.4 by partial summation.
@@ -1722,36 +1910,75 @@ reproves the rational prime number theorem.
 *Source:* Landau; Lang XV Thm 4.
 *Prerequisites:* Layers 9.4, 9.5; Mathlib `AbelSummation`, `Nat.primeCounting`.
 
-**9.7 The Tauberian asymptotic for a nontrivial character.** For `χ` a nontrivial character of
-`Gal(K(ζ_m)/K)`, regarded as an ideal weight, `∑_{𝔑𝔞 ≤ x} χ(𝔞) Λ_K(𝔞) = o(x)`. Apply 9.1 to
-`−L'/L(χ, ·)` with `κ = 0`; the continuous extension to `Re s ≥ 1` is Layer 7.5 for `χ`.
+**9.7 Counting in a cyclotomic Frobenius fibre.** Fix `m` and `σ ∈ Gal(K(ζ_m)/K)`, and define the
+**nonnegative** coefficient
 
-This is the quantitative form of Layer 8B. The Dirichlet-density statement of Layer 8 is not
-enough for it.
+`a_σ(n) = ∑_{𝔑𝔞 = n, Frob(𝔞) = σ} Λ_K(𝔞)`,
 
-*Prerequisites:* Layers 7.5, 7.6, 9.1.
+the sum over ideals prime to `m` whose Frobenius is `σ`. By orthogonality, 8B.3, its Dirichlet
+series is the finite combination `(#G)⁻¹ ∑_χ conj(χ σ) · (−L'/L)(χ, s)`. The trivial character
+contributes the pole `1/(s−1)`, and each nontrivial character contributes a function continuous
+up to `Re s = 1`, by 7.4 with the family of 8B.2. Apply 9.1 to `a_σ` with `κ = 1/#G`, and then
+remove the prime powers as in 9.4 and 9.5. The result is
 
-**9.8 Counting in a cyclotomic Frobenius fibre.** From 9.7 and orthogonality, Layer 8B.2: for
-each `σ ∈ Gal(K(ζ_m)/K)`, `#{𝔭 ∣ 𝔑𝔭 ≤ x, Frob_𝔭 = σ} ∼ (1/[K(ζ_m):K]) · x/log x`.
-*Prerequisites:* Layers 8B.2, 9.6, 9.7.
+`#{𝔭 ∣ 𝔑𝔭 ≤ x, Frob_𝔭 = σ} ∼ (1/[K(ζ_m):K]) · x/log x`.
 
-**9.9 Natural-density Chebotarev.** Repeat 8C and 8D with 9.8 in place of 8B, that is with
-counting asymptotics in place of lower bounds on Dirichlet densities. The tagged families of 8C.5
-give an asymptotic count for the abelian case. The fibre count of 8D.4 is a multiplication by a
-constant, which transports it. The result is `π_C(x) ∼ (#C/#G) · x/log x`, and
+⚠ Do not apply 9.1 to an individual character twist. The coefficients `χ(𝔞) Λ_K(𝔞)` are signed or
+complex, and 9.1 is a theorem about nonnegative coefficients. The orthogonality step above is what
+makes the coefficients nonnegative before the Tauberian theorem is used.
+
+*Prerequisites:* Layers 7.4, 7.6, 8B.2, 8B.3, 9.1, 9.4, 9.5.
+
+**9.8 The count-side contraction lemma.** The counting analogue of 8A.5: with the hypotheses of
+8A.5, if the primes of `E` in `S` satisfy `#{𝔓 ∈ S ∣ 𝔑𝔓 ≤ x} ∼ c · x/log x`, then
+`#{𝔭 ∈ T ∣ 𝔑𝔭 ≤ x} ∼ (c/k) · x/log x`. The degree-one hypothesis is what identifies the two
+norms, and the error terms transport because `k` is a constant.
+*Prerequisites:* Layers 8A.4, 8A.5, 9.5.
+
+**9.9 The count-side crossing and abelian case.** Repeat 8C.4 to 8C.8 with 9.7 in place of
+8B.5, and with counting asymptotics in place of densities. Three steps:
+
+1. the tagged fibres of 8C.5, counted with 9.7 over the fixed field `E`, give
+   `#{𝔭 ∣ Frob_𝔭 = σ, 𝔑𝔭 ≤ x} ≥ c_q · x/log x · (1 + o(1))` for each auxiliary `q`, with the
+   same constant `c_q` as 8C.6;
+2. milestone 8C.7 makes `c_q` approach `1/#G`;
+3. the `#G` fibres partition the unramified primes, whose total count is `π_K(x) ∼ x/log x` by
+   9.6, so the lower bounds squeeze each fibre to `(1/#G) · x/log x`.
+
+⚠ Name the `o(1)` transport at each step. It is uniform in `x` for a fixed `q`, and the limit in
+`q` is taken after the count, not inside it. Reversing the two limits is the error this milestone
+exists to prevent.
+
+*Prerequisites:* Layers 8C.5, 8C.6, 8C.7, 9.6, 9.7, 9.8.
+
+**9.10 Natural-density Chebotarev.** Apply 9.9 over `E = L^{⟨σ⟩}` and then 9.8 with
+`k = #G/(#C · f)` from 8D.4. The result is `π_C(x) ∼ (#C/#G) · x/log x`, and
 `HasNaturalDensity {𝔭 ∣ frobeniusClass K L 𝔭 = C} (#C/#G)`.
 
 ⚠ This is not a formal consequence of Layer 8. The two arguments share a skeleton and differ in
 what is transported through it. The roadmap asks for both, because neither implies the other.
 
-*Prerequisites:* Layers 8C.5, 8D.4, 8D.5, 9.8.
+*Prerequisites:* Layers 8D.4, 8D.5, 9.8, 9.9.
 
-**9.10 Natural-density equidistribution in ray classes.** The same upgrade applied to 8E.
-*Prerequisites:* Layers 8E, 9.9.
+**9.11 Natural-density equidistribution in ray classes.** The same upgrade applied to 8E, with
+the ray-class family of 7.5 in place of the cyclotomic family.
+*Prerequisites:* Layers 7.5, 8E, 9.7, 9.9.
 
-**9.11 Mertens for `K`.** `∑_{𝔑𝔭 ≤ x} 𝔑𝔭^{-1} = log log x + M_K + o(1)`, and the product form.
-Mathlib's Mertens work over `ℚ` is the model for the statement shapes.
-*Prerequisites:* Layers 9.4, 9.6.
+**9.12 Mertens for `K`.** The two statements
+
+`∑_{𝔑𝔭 ≤ x} 𝔑𝔭^{-1} = log log x + M_K + o(1)` and `∏_{𝔑𝔭 ≤ x} (1 − 𝔑𝔭^{-1})^{-1} ∼ e^{γ} log x`
+
+need more than 9.4 and 9.6, which give only the leading term. The chain is:
+
+1. the logarithmic Euler product near `s = 1`: `log ζ_K(s) = ∑_𝔭 𝔑𝔭^{-s} + H(s)` with `H`
+   analytic on `Re s > 1/2`, from 1.4;
+2. `∑_𝔭 𝔑𝔭^{-s} = log(1/(s−1)) + C_K + o(1)` as `s → 1⁺`, from 1.9 and the analyticity of `H`;
+3. the passage from the Dirichlet-series asymptotic to the partial sum, by 9.4 and partial
+   summation, which is where the constant `M_K` is extracted;
+4. the passage from the sum to the product, by expanding `log(1 − t)⁻¹` and bounding the tail
+   `∑_𝔭 ∑_{m ≥ 2} 𝔑𝔭^{-m}/m`, which converges.
+
+*Prerequisites:* Layers 1.4, 1.9, 9.4, 9.6.
 
 ## Worked examples
 
@@ -1806,59 +2033,87 @@ statements do not.
   has meromorphic order `−1`. A nontrivial quadratic character has order `0` there. And `ζ_K` has
   order `0` at `1 + it` for `t ≠ 0`. Check that no statement of the layer compares a value at a
   pole.
-- **Hecke's equidistribution of Gaussian primes** (Layer 6.6). This test detects an infinity-type
+- **Hecke's equidistribution of Gaussian primes** (Layer 7.8). This test detects an infinity-type
   interface that typechecks and cannot be instantiated.
+- **The split prime in `ℚ(i)`** (Layer 1.5). At `𝔭` above `5`, `idealCoeff K 5 = 2` while the
+  coefficient of `T` in the local factor `(1 − T)⁻¹` at `𝔭` is `1`. This test detects a local
+  Euler-factor predicate that reads the norm-grouped coefficient instead of the value at a power
+  of the prime.
+- **The Euclidean dual of `ℤ[i]`** (Layer 2.11). The mixed lattice of `𝓞_{ℚ(i)}` is `ℤ[i] ⊂ ℂ`,
+  which is Euclidean self-dual. The different is `(2i)`, so the trace dual is `(1/2)ℤ[i]`, and
+  `traceToEuclidean` sends that to `ℤ[i]`. This test detects the claim that the analytic dual is
+  the embedded trace dual, which is false here.
+- **The cyclotomic factorization at `n = 4`** (Layer 4.4). The primitive product is
+  `ζ(s) L(s, χ₋₄)`, with no correction factor, and it agrees with Layer 4.2. This test detects a
+  correction factor with the wrong sign of the exponent.
+- **A residue that sums correctly** (Layer 1.8). At `𝔪 = 1` the `h_K` class partial zeta
+  functions each have residue `ρ_K`, and their residues sum to `Res_{s=1} ζ_K`. This test detects
+  a residue divided by the class number.
+- **The isolated value** (Layers 0.3, 3.5). Take a continuation, change its value at one point
+  away from the poles, and check that the modified function still satisfies every condition of
+  `HasMeromorphicContinuation` except analyticity. This test detects a data model whose
+  representative is unconstrained away from its poles, and it is why 0.3 has an analyticity
+  field.
+- **Wiener–Ikehara needs summability** (Layer 9.1). For a rapidly growing nonnegative `a`,
+  Mathlib's `LSeries a` is the junk value `0` off the region of convergence, so `F = 0` and
+  `κ = 0` satisfy an equality hypothesis while `∑_{n ≤ x} a n` is not `o(x)`. This test detects a
+  Tauberian statement without a convergence hypothesis.
 - **No elliptic-curve card** (Layer 0.7). Check that no continuation predicate and no functional
   equation predicate is asserted for `WeierstrassCurve.LSeries`.
 
 ## Ordering and parallelism
 
-Inside the roadmap:
+The layer numbers are a filing system, not a schedule. Milestone prerequisites are what a
+contributor selects work by, and a few of them cross layers. The graph below is at the milestone
+level, and it is acyclic.
 
-```
-  0 data model ──▶ 1 ideal series ─┬─▶ 2 Poisson, theta ──▶ 3 Dedekind ζ ─┬─▶ 4 special values
-                                   │                                      │
-                                   │                                      └─▶ 5 Hecke L ──▶ 6 Grossencharacters
-                                   │
-                                   └─▶ 7 nonvanishing ──▶ 8 densities ──▶ 9 prime counting
-```
+Within a layer, the milestones are in prerequisite order, so `n.i` never needs `n.j` with
+`j > i`. The edges that leave a layer are these, and there are no others:
 
-Across roadmaps:
+| Edge | From | To | Why |
+|---|---|---|---|
+| a | 1.2 | 7.1 | `HasCancellation` is a predicate on the ideal weight of 1.2 |
+| b | 1.6, 1.7 | 7.5 | the ray-class family's cancellation is the counting estimate |
+| c | 1.6, 1.7 | 8B.2 | the same, for the cyclotomic family |
+| d | 2.13, 2.14 | 3.3, 3.4 | the theta identity and the level frame |
+| e | 2.13, 2.14, 3.2 | 5.7 | the same, with character weights |
+| f | 2.9, 2.13, 2.14 | 6.3, 6.4 | the weighted theta series |
+| g | 3.7 | 4.2, 4.4, 7.4 | statements about the continued zeta function |
+| h | 5.1, 5.3 | 7.4, 7.5 | the ray-class family and its continuation |
+| i | 6.1, 6.4 | 7.7, 7.8 | the Grossencharacter export and the Gaussian-prime example |
+| j | 7.1 to 7.6 | 8A, 8B, 8E | Landau, nonvanishing, and logarithmic derivatives |
+| k | 8.0 | 8A.8, 8B.1, 8C, 8D | the Frobenius class |
+| l | 8B.1 | 8B.2 | the cyclotomic family needs the Frobenius formula |
+| m | 7.4, 7.6, 8B.2, 8B.3 | 9.7 | the Tauberian input for one fibre |
+| n | 8C, 8D | 9.9, 9.10 | the count-side repeat of the crossing and fixed-field steps |
 
-```
-  Local fields, Layer 2 ─────────────▶ 1.5
-  Modular forms, Layer 7 ────────────▶ 0.7
-  Integral lattices, Layer 1 ────────▶ 2.10, 2.11
-  Global class field theory ─────────▶ 5.1, 6.1, 7.7, 8E
-  Number field arithmetic ───────────▶ 8.0
+Two edges deserve comment, because an earlier arrangement of this roadmap had them wrong.
 
-  2.6, 2.7, 2.8 ─────────────────────▶ Integral lattices, Layer 8
-  3, 5, 7 ───────────────────────────▶ the zeros roadmap
-```
+Edge **l** with edge **c** used to be a cycle: the cyclotomic family's cancellation sat in
+Layer 7 and needed 8B.1, while 8B's density theorem needed Layer 7. It is broken by keeping only
+the general hypothesis package in Layer 7, milestone 7.2, and putting each instantiation with the
+family it describes: the ray-class one in 7.5, and the cyclotomic one in 8B.2.
 
-Layers 0 and 1 come first. Layer 1 needs Layer 0 only for the place where the Euler-factor data
-lives, so the two can be built at the same time.
+Edge **i** is why the Grossencharacter nonvanishing and the Gaussian-prime example are
+milestones 7.7 and 7.8, and not milestones of Layer 6. They need 7.4, and Layer 6 does not.
 
-After that the roadmap has three parts that do not depend on each other:
+What can be built at the same time:
 
-- **Functional equation**: 2, then 3, then 5, then 6. Layers 5 and 6 use the compatibility
-  interfaces of 5.1 and 6.1, so they do not wait for the global class field theory roadmap.
-- **Densities**: 7, then 8. These need Layer 1.7 and Layer 1.9 only. Layer 8 uses the
-  compatibility interface of 8.0. Every milestone of Layer 8 except 8E is independent of the
-  global class field theory roadmap.
-- **Special values**: 4, which needs Layer 1 and Mathlib's Dirichlet theory, and Layer 3 for the
-  statements about continued functions.
+- **Layers 0 and 1** come first. Layer 1 needs Layer 0 only for where the Euler-factor data
+  lives, so the two can be built together.
+- **Layer 2** needs nothing after 1.1, and 2.1 to 2.9 need no arithmetic at all. It is the
+  largest piece that one contributor can take on alone.
+- **Layer 4** needs 1.4 and 3.7, and nothing else.
+- **Layers 7.1 to 7.6, then 8** need Layer 1 and Layer 3.7. They do not need the functional
+  equation, and every milestone of Layer 8 is independent of the global class field theory
+  roadmap.
+- **Layer 9** needs 7.4, 7.6, 8B, 8C, and 8D.
 
-Layer 9 needs Layers 7 and 8. The zeros roadmap starts where Layer 9 ends, and needs Layers 3, 5,
-and 7 of this roadmap.
+The zeros roadmap starts where Layer 9 ends. It needs 0.4, 3.6, 5.7, 5.8, 7.4, and 7.6 of this
+roadmap, and nothing else.
 
-The interface with the integral lattices roadmap is the shared table above, under
-*Dependencies*. Nothing crosses between the two roadmaps except through a row of it.
-
-Before writing Layer 5, agree the character interface with the global class field theory
-roadmap.
-Before Layer 8, contact the people working on Chebotarev in Lean. Before Layer 9, contact
-PrimeNumberTheoremAnd. [`PROVENANCE.md`](PROVENANCE.md) says who they are and what they have.
+The interface with the integral lattices roadmap is the shared table under *Dependencies*.
+Nothing crosses between the two roadmaps except through a row of it.
 
 ## References
 

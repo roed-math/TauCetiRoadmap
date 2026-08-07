@@ -107,8 +107,12 @@ structure HasMeromorphicContinuation (d : AnalyticLFunctionData) : Prop where
   meromorphic : Meromorphic d.completed
   exact_pole_order : ∀ p : ℂ, d.polarOrder p ≠ 0 →
     meromorphicOrderAt d.completed p = (- (d.polarOrder p : ℤ) : WithTop ℤ)
-  no_other_poles : ∀ p : ℂ, d.polarOrder p = 0 →
-    0 ≤ meromorphicOrderAt d.completed p
+  /-- ⚠ Analyticity, and not `0 ≤ meromorphicOrderAt`. `MeromorphicAt` and `meromorphicOrderAt`
+  depend only on the punctured germ, so the order condition says nothing about the value at the
+  point: changing a genuine continuation at one point leaves it meromorphic with every order
+  unchanged. Without this field every statement below about a value of `completed` is a
+  statement about an arbitrary number, and the uniqueness milestone 3.5 is false. -/
+  regular_away : ∀ p : ℂ, d.polarOrder p = 0 → AnalyticAt ℂ d.completed p
 
 /-- **Layer 0.3, the meromorphic functional equation.** The polar divisor is invariant under
 `s ↦ 1 - conj s`, and equality is required only off the two polar loci. Together with
@@ -117,6 +121,9 @@ germ and compatible principal part at every pole; no junk value at a pole is com
 structure HasFunctionalEquation (d : AnalyticLFunctionData) : Prop where
   norm_rootNumber : ‖d.rootNumber‖ = 1
   polarOrder_reflect : ∀ s : ℂ, d.polarOrder s = d.polarOrder (reflectedPoint s)
+  /-- Equality at the points where `HasMeromorphicContinuation` makes both sides analytic. At a
+  pole the corresponding statement is equality of principal parts, and it follows from the
+  identity theorem rather than being a field. -/
   eq_away : ∀ s : ℂ, d.polarOrder s = 0 → d.polarOrder (reflectedPoint s) = 0 →
     d.completed s = d.rootNumber * d.dualCompleted (1 - s)
 
@@ -151,10 +158,18 @@ structure NormalizationTranslation where
   weight : ℤ
   coeff_eq : ∀ n : ℕ,
     analytic.coeff n = arithmetic.coeff n / (n : ℂ) ^ ((weight : ℂ) / 2)
+  /-- ⚠ The shifts move **up**. From `coeff_eq` the two Dirichlet series satisfy
+  `L_an s = L_ar (s + w/2)`, and both completed functions include the same conductor power
+  `N^{s/2}`, so `γ_an s = γ_ar (s + w/2)`. A `- w/2` here contradicts the weight-12 example,
+  where an arithmetic `Gammaℂ s` becomes an analytic `Gammaℂ (s + 11/2)`. -/
+  gammaR_eq : analytic.gammaR = arithmetic.gammaR.map fun μ ↦ μ + (weight : ℂ) / 2
+  gammaC_eq : analytic.gammaC = arithmetic.gammaC.map fun ν ↦ ν + (weight : ℂ) / 2
+  /-- ⚠ The constant `N^{-w/4}` is forced by the same computation: expanding
+  `Λ_ar (s + w/2)` produces `N^{s/2} · N^{w/4} · γ_ar (s + w/2) · L_an s`. -/
   completed_eq : ∀ s : ℂ,
-    analytic.completed s = arithmetic.completed (s + (weight : ℂ) / 2)
-  gammaR_eq : analytic.gammaR = arithmetic.gammaR.map fun μ ↦ μ - (weight : ℂ) / 2
-  gammaC_eq : analytic.gammaC = arithmetic.gammaC.map fun ν ↦ ν - (weight : ℂ) / 2
+    analytic.completed s =
+      (((arithmetic.conductor : ℕ) : ℂ) ^ (-(weight : ℂ) / 4)) *
+        arithmetic.completed (s + (weight : ℂ) / 2)
   polarOrder_eq : ∀ p : ℂ,
     analytic.polarOrder p = arithmetic.polarOrder (p + (weight : ℂ) / 2)
   conductor_eq : analytic.conductor = arithmetic.conductor
@@ -241,6 +256,19 @@ structure IdealWeight where
   norm_eq_one : ∀ 𝔭 ∉ bad, ‖toFun 𝔭.asIdeal‖ = 1
   eq_zero_bad : ∀ 𝔭 ∈ bad, toFun 𝔭.asIdeal = 0
 
+/-- **Layer 1.2, ideal convolution.** ⚠ This, and not the pointwise product, is the operation
+that grouping by norm carries to Mathlib's Dirichlet convolution. Writing
+`a_χ n = ∑_{𝔑𝔞 = n} χ 𝔞`, the identity `a_{χ·ψ} = a_χ ⍟ a_ψ` is false in general, because
+`(a_χ ⍟ a_ψ) n = ∑_{𝔑(𝔟𝔠) = n} χ 𝔟 · ψ 𝔠`, which is `a_{χ ⋆ ψ} n`. -/
+noncomputable def idealConvolution (χ ψ : Ideal (𝓞 K) → ℂ) : Ideal (𝓞 K) → ℂ :=
+  fun I ↦ ∑ᶠ p : {p : Ideal (𝓞 K) × Ideal (𝓞 K) // p.1 * p.2 = I}, χ (p : _).1.1 * ψ (p : _).1.2
+
+/-- **Layer 1.3, what grouping by norm does.** Ideal convolution becomes Dirichlet convolution.
+The corresponding statement for the pointwise product is false. -/
+example (χ ψ : Ideal (𝓞 K) → ℂ) :
+    idealCoeffOfWeight K (idealConvolution K χ ψ) =
+      LSeries.convolution (idealCoeffOfWeight K χ) (idealCoeffOfWeight K ψ) := sorry
+
 /-- **Layer 7.2, the analytic premise.** Finiteness of a quotient of the ideal group does
 *not* give analytic continuation: the group of ideals prime to a finite set is free, so it
 has finite quotients whose values on primes are arbitrary. This partial-sum estimate is the
@@ -283,11 +311,15 @@ structure IsOfDegree (E : EulerFactorData K) (d : ℕ) : Prop where
   natDegree_le : ∀ 𝔭, (E.localPolynomial 𝔭).natDegree ≤ d
   natDegree_eq : ∀ 𝔭 ∉ E.bad, (E.localPolynomial 𝔭).natDegree = d
 
-/-- **Layer 1.5, the local coefficient identity**: the reciprocal of the local polynomial is
-the local factor of the Dirichlet series, prime by prime. -/
-def HasLocalCoefficients (E : EulerFactorData K) (a : ℕ → ℂ) : Prop :=
+/-- **Layer 1.5, the local coefficient identity**, at the level of **ideals**.
+
+⚠ The norm-grouped coefficient `idealCoeffOfWeight χ (𝔑𝔭 ^ k)` is *not* the coefficient of the
+local factor at `𝔭`: it collects every ideal of that norm. In `ℚ(i)` the prime `5` splits as
+`𝔭 𝔭̄` with `𝔑𝔭 = 𝔑𝔭̄ = 5`, so `idealCoeff K 5 = 2`, while the coefficient of `T` in the local
+factor `(1 − T)⁻¹` at `𝔭` is `1`. The values used below are `χ (𝔭 ^ k)`. -/
+def HasLocalCoefficients (E : EulerFactorData K) (χ : IdealWeight K) : Prop :=
   ∀ (𝔭 : HeightOneSpectrum (𝓞 K)) (s : ℂ), 1 < s.re →
-    HasSum (fun k : ℕ ↦ a (Ideal.absNorm 𝔭.asIdeal ^ k) *
+    HasSum (fun k : ℕ ↦ χ.toFun (𝔭.asIdeal ^ k) *
         (Ideal.absNorm 𝔭.asIdeal : ℂ) ^ (-(k : ℂ) * s))
       (Polynomial.eval ((Ideal.absNorm 𝔭.asIdeal : ℂ) ^ (-s)) (E.localPolynomial 𝔭))⁻¹
 
@@ -346,26 +378,51 @@ structure FEPairWithLevel (E : Type*) [NormedAddCommGroup E] [NormedSpace ℂ E]
   /-- The level. -/
   level : ℝ
   level_pos : 0 < level
-  /-- The two functions. -/
+  /-- The two functions, as in `WeakFEPair`. -/
   f : ℝ → E
   g : ℝ → E
   /-- The weight. -/
   k : ℝ
   /-- The root number. -/
   ε : ℂ
-  /-- Constant terms at `0`. -/
+  /-- Constant terms at `∞`, as in `WeakFEPair`. -/
   f₀ : E
   g₀ : E
-  /-- The functional equation, with the level. -/
-  h_feq : ∀ x : ℝ, 0 < x → f (level / x) = ε • ((x : ℂ) ^ (k : ℂ)) • g x
+  hf_int : MeasureTheory.LocallyIntegrableOn f (Set.Ioi 0)
+  hg_int : MeasureTheory.LocallyIntegrableOn g (Set.Ioi 0)
+  hk : 0 < k
+  hε : ε ≠ 0
+  /-- The functional equation, with the level in place of `1`. -/
+  h_feq : ∀ x ∈ Set.Ioi (0 : ℝ), f (level / x) = (ε * ((x ^ k : ℝ) : ℂ)) • g x
+  hf_top : ∀ r : ℝ, (fun x ↦ f x - f₀) =O[atTop] fun x : ℝ ↦ x ^ r
+  hg_top : ∀ r : ℝ, (fun x ↦ g x - g₀) =O[atTop] fun x : ℝ ↦ x ^ r
 
-/-- **Layer 2.14, the reduction to level one.** Rescaling by `√N` sends a level-`N` pair to a
-level-one pair, so Mathlib's machinery applies to it. The deliverable is this theorem together
-with the constants it threads, and not a particular proof of it. -/
+/-- **Layer 2.14, the reduction to level one, as a real Mathlib object.** Rescaling by `√N`
+sends a level-`N` pair to a genuine `WeakFEPair`, with the same weight and constant terms and
+root number `ε · N^{k/2}`. Every rescaled hypothesis is part of the conclusion: local
+integrability, the two decay bounds, and the level-one equation.
+
+⚠ The output must be Mathlib's structure and not a second `FEPairWithLevel`. Producing another
+lawless shell would leave the continuation, the residues, and the functional equation
+unavailable, which is the whole reason this milestone exists. -/
 example {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (P : FEPairWithLevel E) :
-    ∃ Q : FEPairWithLevel E, Q.level = 1 ∧
+    ∃ Q : WeakFEPair E,
+      Q.k = P.k ∧ Q.f₀ = P.f₀ ∧ Q.g₀ = P.g₀ ∧
+      Q.ε = P.ε * ((P.level ^ (P.k / 2) : ℝ) : ℂ) ∧
       (∀ x : ℝ, Q.f x = P.f (Real.sqrt P.level * x)) ∧
       (∀ x : ℝ, Q.g x = P.g (Real.sqrt P.level * x)) := sorry
+
+/-- **Layer 2.14, the completed functions differ by a power of the level**, and the residues
+carry the same power. This is what Layers 3.4 and 5.7 actually use. -/
+example {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (P : FEPairWithLevel E)
+    (Q : WeakFEPair E) (hQ : ∀ x : ℝ, Q.f x = P.f (Real.sqrt P.level * x)) :
+    ∃ Λlevel : ℂ → E, ∀ s : ℂ, Λlevel s = ((P.level : ℂ) ^ (s / 2)) • Q.Λ s := sorry
+
+/-- **Layer 2.14, at level one the object is Mathlib's own.** A milestone that produced a second
+copy at `N = 1` would not have reduced anything. -/
+example {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E] (P : FEPairWithLevel E)
+    (h : P.level = 1) :
+    ∃ Q : WeakFEPair E, Q.f = P.f ∧ Q.g = P.g ∧ Q.k = P.k ∧ Q.ε = P.ε := sorry
 
 /-! ## Layer 2: what the integral lattices roadmap supplies -/
 
@@ -389,6 +446,23 @@ structure IntegralLatticeInterface (n : ℕ) where
   `IntegralLattice.analyticDual_eq_dual`. -/
   analyticDual_eq_dual : ∀ Λ : Submodule ℤ (EuclideanSpace ℝ (Fin n)),
     {w : EuclideanSpace ℝ (Fin n) | ∀ v ∈ Λ, ∃ k : ℤ, inner ℝ v w = (k : ℝ)} = (dual Λ : Set _)
+
+/-- **Layer 2.11, the trace-to-Euclidean map.** ⚠ The analytic dual of `mixedEmbedding K '' I`
+is **not** `mixedEmbedding K '' (I𝔡)⁻¹`. The trace pairing and the Euclidean inner product on
+the mixed space differ at the complex places, by a factor of `2` and a conjugation.
+
+The counterexample is `K = ℚ(i)` with `I = 𝓞_K`. The mixed lattice is `ℤ[i] ⊂ ℂ`, which is
+Euclidean self-dual; the different is `(2i)`, so the trace dual is `(1/2)ℤ[i]`, which is not
+`ℤ[i]`. The map below sends `(1/2)ℤ[i]` back to `ℤ[i]`.
+
+The map is the identity on each real coordinate and `z ↦ 2 · conj z` on each complex
+coordinate, and it satisfies
+`⟪mixedEmbedding x, T (mixedEmbedding y)⟫ = Tr_{K/ℚ} (x y)`. Its determinant is `2^{r₂}`, which
+is where the powers of `2` in Layers 2.12, 2.13, and 3.1 come from. -/
+example (ι κ : Type*) [Fintype ι] [Fintype κ] :
+    ∃ T : ((ι → ℝ) × (κ → ℂ)) →ₗ[ℝ] ((ι → ℝ) × (κ → ℂ)),
+      ∀ x : (ι → ℝ) × (κ → ℂ),
+        T x = (x.1, fun w ↦ 2 * (starRingEnd ℂ) (x.2 w)) := sorry
 
 /-- **Layer 2.12, the covolume of a fractional ideal**, stated so that a reader can see which
 constant Layer 3.1 threads: `covolume (mixedEmbedding K '' I) = 2^{-r₂} √|d_K| 𝔑 I`. The
@@ -490,9 +564,21 @@ structure RayClassCharacter where
   conductorInf_isReal : ∀ v ∈ conductorInf, v.IsReal
   /-- The bad primes of the weight are exactly the primes dividing the finite conductor. -/
   bad_eq : weight.bad = {𝔭 : HeightOneSpectrum (𝓞 K) | 𝔭.asIdeal ∣ conductor₀}
+  /-- ⚠ **Triviality on the principal congruence subgroup.** This is the field that makes the
+  weight factor through the ray class group. Without it a term of this structure is only an
+  assignment of roots of unity to the generators of a free group, and the Gauss sum of 5.6 and
+  the functional equation of 5.8 are false for such a term. -/
+  trivial_on_congruence : ∀ α : 𝓞 K, α ≠ 0 → (α - 1 : 𝓞 K) ∈ conductor₀ →
+    (∀ v ∈ conductorInf, 0 < (v.embedding (algebraMap (𝓞 K) K α)).re) →
+      weight.toFun (Ideal.span {α}) = 1
   /-- Finite order, on the ideals where the character does not vanish. ⚠ The quantifier has to
   exclude the bad primes: there the value is `0`, and `0 ^ m = 1` is false. -/
   finiteOrder : ∃ m : ℕ, 0 < m ∧ ∀ I : Ideal (𝓞 K), weight.toFun I ≠ 0 → weight.toFun I ^ m = 1
+  /-- Primitivity: no proper divisor of the finite conductor supports a character inducing this
+  one. Stated as a field because 5.6 and 5.8 hold only for primitive characters. -/
+  primitive : ∀ 𝔫 : Ideal (𝓞 K), 𝔫 ∣ conductor₀ → 𝔫 ≠ conductor₀ →
+    ¬ ∃ ψ : Ideal (𝓞 K) → ℂ,
+        (∀ I, IsCoprime I 𝔫 → ψ I = weight.toFun I) ∧ ∀ 𝔭 ∈ weight.bad, 𝔭.asIdeal ∣ 𝔫
 
 /-- **Layer 6.1, the Grossencharacter interface (compatibility interface).** The global class
 field theory roadmap's infinity-type layer will own this vocabulary.
@@ -506,17 +592,35 @@ structure Grossencharacter where
   /-- The finite part of the conductor. -/
   conductor₀ : Ideal (𝓞 K)
   conductor₀_ne_zero : conductor₀ ≠ ⊥
-  /-- The real exponent of the unitary decomposition. -/
+  /-- The real exponent of the unitary decomposition. ⚠ It has to be real: with a complex
+  exponent the decomposition is ambiguous up to `‖·‖^{it}`. -/
   shift : ℝ
-  /-- The infinity type: an integer at each infinite place. -/
-  infinityType : InfinitePlace K → ℤ
+  /-- The unitary component, of absolute value `1` away from the bad primes. -/
+  unitary : IdealWeight K
+  unitary_norm : ∀ 𝔭 ∉ unitary.bad, ‖unitary.toFun 𝔭.asIdeal‖ = 1
+  /-- The decomposition `χ = χ_unit · ‖·‖^{shift}`. -/
+  decomposition : ∀ I : Ideal (𝓞 K),
+    weight.toFun I = unitary.toFun I * ((Ideal.absNorm I : ℝ) ^ shift : ℝ)
+  /-- The infinity type at each place. ⚠ A complex place needs a **pair** of integers: the local
+  character there is `z ↦ z^{-p} z̄^{-p̄} |z|^{i q}`, and the gamma shift of 6.2 is built from
+  both. One integer per place is not enough. -/
+  infinityType : InfinitePlace K → ℤ × ℤ
+  infinityType_isReal : ∀ v, v.IsReal → (infinityType v).2 = 0
   /-- The archimedean parameters `q_v`. -/
   archimedeanParam : InfinitePlace K → ℝ
-
--- ⚠ Admissibility — that the archimedean part is trivial on the units — is *not* a field here.
--- Stating it needs the archimedean character, which the pin cannot express. A `Prop`-typed
--- field would assert nothing, since `True` satisfies it, so the condition is omitted rather
--- than named. `README.md` Layer 6.1 states it, and the owning roadmap proves it.
+  /-- The local character at an infinite place, from the data above. -/
+  localChar : InfinitePlace K → K → ℂ
+  /-- ⚠ **Admissibility**: the archimedean part is trivial on the units. This is not cosmetic.
+  Without it the archimedean data and the ideal weight need not come from one character, and
+  Layers 6.2 to 6.4 are false for such a term. -/
+  admissible : ∀ u : (𝓞 K)ˣ, ∏ᶠ v : InfinitePlace K,
+    localChar v (algebraMap (𝓞 K) K (u : 𝓞 K)) = 1
+  /-- Compatibility of the ideal weight with the archimedean components on principal ideals. -/
+  compat : ∀ α : 𝓞 K, α ≠ 0 → IsCoprime (Ideal.span {α}) conductor₀ →
+    weight.toFun (Ideal.span {α}) *
+      ∏ᶠ v : InfinitePlace K, localChar v (algebraMap (𝓞 K) K α) = 1
+  /-- The algebraic, or `A₀`, condition. -/
+  IsAlgebraic : Prop := ∀ v, archimedeanParam v = 0
 
 /-! ## Layer 7: Landau's theorem and nonvanishing -/
 
@@ -592,6 +696,24 @@ def HasLowerDirichletDensity (S : Set (HeightOneSpectrum (𝓞 K))) (δ : ℝ) :
   liminf (fun s : ℝ ↦ primeIdealZetaSum K S s /
     primeIdealZetaSum K (Set.univ : Set (HeightOneSpectrum (𝓞 K))) s) (𝓝[>] 1) = δ
 
+/-- **Layer 8A.1, a lower bound on the lower Dirichlet density.** ⚠ This inequality, and not
+`HasLowerDirichletDensity`, is what the crossing argument of 8C produces: the tagged fibres are
+contained in the target set and need not exhaust it. `HasLowerDirichletDensity S δ` asserts an
+equality of the `liminf` with `δ`, which is stronger than the argument gives. -/
+def LowerDirichletDensityAtLeast (S : Set (HeightOneSpectrum (𝓞 K))) (c : ℝ) : Prop :=
+  c ≤ liminf (fun s : ℝ ↦ primeIdealZetaSum K S s /
+    primeIdealZetaSum K (Set.univ : Set (HeightOneSpectrum (𝓞 K))) s) (𝓝[>] 1)
+
+/-- **Layer 8A.3, the squeeze.** Pairwise disjoint sets whose union has density `1`, each with a
+lower bound, and whose lower bounds sum to `1`, all have exactly their bounds as densities. This
+is the step 8C.8 uses, and it is why 8C only ever produces an inequality. -/
+example {ι : Type*} [Fintype ι] (S : ι → Set (HeightOneSpectrum (𝓞 K))) (c : ι → ℝ)
+    (hdisj : Pairwise (Function.onFun Disjoint S))
+    (hunion : HasDirichletDensity K (⋃ i, S i) 1)
+    (hlow : ∀ i, LowerDirichletDensityAtLeast K (S i) (c i))
+    (hsum : ∑ i, c i = 1) :
+    ∀ i, HasDirichletDensity K (S i) (c i) := sorry
+
 /-- **Layer 8A.2, the denominator theorem.** This is what reconciles the definition above
 with Neukirch's, and it is proved once; after it, no statement mentions `log((s−1)⁻¹)`. -/
 example :
@@ -663,16 +785,15 @@ structure FrobeniusInterface where
       ∃ Q : Ideal (𝓞 L), Q.IsPrime ∧ Q.under (𝓞 K) = 𝔭.asIdeal ∧
         ∀ x : 𝓞 L, σ • x - x ^ Nat.card (𝓞 K ⧸ 𝔭.asIdeal) ∈ Q
 
-/-- **Layer 8.0, restriction compatibility.** For an intermediate extension `E` with `E/K`
-Galois, the restriction homomorphism carries the class in `L/K` to the class in `E/K`. The
-homomorphism is a parameter here, because the roadmap that will own `frobeniusClass` also
-owns the
-canonical restriction map. -/
+/-- **Layer 8.0, restriction compatibility**, against Mathlib's canonical restriction
+homomorphism `AlgEquiv.restrictNormalHom`, and not against an arbitrary parameter. Milestones
+8C.3 and 8D.2 use exactly this square, so it is stated here rather than assumed there. -/
 def RestrictionCompatible (F : FrobeniusInterface K L)
-    (E : Type*) [Field E] [NumberField E] [Algebra K E] [IsGalois K E]
-    (FE : FrobeniusInterface K E) (res : (L ≃ₐ[K] L) →* (E ≃ₐ[K] E)) : Prop :=
+    (E : IntermediateField K L) [Normal K E]
+    (FE : FrobeniusInterface K E) : Prop :=
   ∀ (𝔭 : HeightOneSpectrum (𝓞 K)) (h : IsUnramifiedAt K L 𝔭) (hE : IsUnramifiedAt K E 𝔭),
-    ConjClasses.map res (F.frobeniusClass 𝔭 h) = FE.frobeniusClass 𝔭 hE
+    ConjClasses.map (AlgEquiv.restrictNormalHom (F := K) (K₁ := L) E)
+        (F.frobeniusClass 𝔭 h) = FE.frobeniusClass 𝔭 hE
 
 /-- **Layer 8D.5, the Chebotarev density theorem over a general number field.**
 
@@ -712,9 +833,17 @@ example (a : (ZMod 5)ˣ) :
 PrimeNumberTheoremAnd's `WienerIkeharaTheorem'`, absent from Mathlib. Layer 9 either
 integrates that proof with its authors' agreement or proves it here in this shape; either
 way the hypotheses below are what the rest of the layer may assume, and nothing weaker. -/
-example (a : ℕ → ℝ) (F : ℂ → ℂ) (κ : ℝ) (ha : ∀ n, 0 ≤ a n)
+example (a : ℕ → ℝ) (F G : ℂ → ℂ) (κ : ℝ) (ha : ∀ n, 0 ≤ a n)
+    -- ⚠ Summability is a hypothesis. Without it, Mathlib's `LSeries` is the junk value `0`
+    -- where the series diverges, so `hF` is satisfiable by `F = 0` for a rapidly growing
+    -- nonnegative `a`, and the conclusion is then false.
+    (hsum : ∀ s : ℂ, 1 < s.re → LSeriesSummable (fun n ↦ (a n : ℂ)) s)
     (hF : ∀ s : ℂ, 1 < s.re → F s = LSeries (fun n ↦ (a n : ℂ)) s)
-    (hFc : ContinuousOn (fun s : ℂ ↦ F s - κ / (s - 1)) {s : ℂ | 1 ≤ s.re}) :
+    -- ⚠ The boundary hypothesis names a separate continuous `G`. Asserting continuity of
+    -- `s ↦ F s - κ/(s-1)` on the closed half-plane is meaningless at `s = 1`, where both
+    -- summands are junk values.
+    (hG : ContinuousOn G {s : ℂ | 1 ≤ s.re})
+    (hFG : ∀ s : ℂ, 1 < s.re → G s = F s - (κ : ℂ) / (s - 1)) :
     Tendsto (fun x : ℝ ↦ (∑ n ∈ Finset.range ⌊x⌋₊.succ, a n) / x) atTop (𝓝 κ) := sorry
 
 /-- **Layer 9.3, `ψ_K(x) ∼ x`.** -/
@@ -746,16 +875,21 @@ example :
           (x / Real.log x))
       atTop (𝓝 1) := sorry
 
-/-- **Layer 9.7, the Tauberian asymptotic for a nontrivial character**, the quantitative form
-of Layer 8B and the input the natural-density argument runs on. Here `κ = 0`, and the
-continuous extension to `Re s ≥ 1` is Layer 7.5 for `χ`. The Dirichlet-density statement of
-Layer 8 is *not* enough for this. -/
-example (χ : IdealWeight K) (hχ : HasCancellation K χ) :
+/-- **Layer 9.7, the counting asymptotic for one Frobenius fibre.**
+
+⚠ Do not apply Wiener–Ikehara to an individual character twist. The coefficients
+`χ 𝔞 · Λ_K 𝔞` are signed or complex, and 9.1 is a theorem about **nonnegative** coefficients.
+Make the coefficients nonnegative first: for a fixed `σ`, sum the von Mangoldt weight over the
+ideals whose Frobenius is `σ`. Character orthogonality, 8B.3, then writes the Dirichlet series
+of that nonnegative sequence as a finite combination of logarithmic derivatives, where the
+trivial character supplies the pole and each nontrivial one extends continuously to the boundary
+by 7.4. -/
+example (P : Ideal (𝓞 K) → Prop) (c : ℝ) :
     Tendsto
       (fun x : ℝ ↦
-        (∑ᶠ I : {I : Ideal (𝓞 K) // (Ideal.absNorm I : ℝ) ≤ x},
-          (χ.toFun I * idealVonMangoldt K I).re) / x)
-      atTop (𝓝 0) := sorry
+        (∑ᶠ I : {I : Ideal (𝓞 K) // (Ideal.absNorm I : ℝ) ≤ x ∧ P I},
+          (idealVonMangoldt K (I : Ideal (𝓞 K))).re) / x)
+      atTop (𝓝 c) := sorry
 
 /-- **Layer 9.9, natural-density Chebotarev, worked at `ℚ(ζ₅)/ℚ`**: the primes
 `p ≡ a (mod 5)` have natural density `1/4`. ⚠ This is obtained through the counting
