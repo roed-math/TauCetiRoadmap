@@ -76,10 +76,13 @@ example :
 
 /-- **Layer 2, the analytic conductor** of Iwaniec–Kowalski (5.7), from the arithmetic
 conductor and the spectral parameters of the L-functions roadmap's data record. The `+ 3` is
-part of the convention. -/
+part of the convention. Each `Gammaℂ (s + ν)` contributes the pair of shifts `ν, ν + 1` that
+`Gammaℝ_mul_Gammaℝ_add_one` splits it into, not `(‖s + ν‖ + 3) ^ 2`: only the paired form is
+an equality with the modular forms roadmap's `𝔮(f, s)`, whose newform value
+`N · (|s + (k−1)/2| + 3) · (|s + (k+1)/2| + 3)` is this definition at `gammaC = {(k−1)/2}`. -/
 noncomputable def analyticConductor (N : ℕ) (gammaR gammaC : Multiset ℂ) (s : ℂ) : ℝ :=
   (N : ℝ) * (gammaR.map fun μ ↦ ‖s + μ‖ + 3).prod
-    * (gammaC.map fun ν ↦ (‖s + ν‖ + 3) ^ 2).prod
+    * (gammaC.map fun ν ↦ (‖s + ν‖ + 3) * (‖s + ν + 1‖ + 3)).prod
 
 /-- **Layer 2, the conductor grows like `q · |t|^{degree}`.** Stated for the Riemann zeta
 data (`N = 1`, one real gamma factor at shift `0`), where it is a bound on `|t| + 3`. -/
@@ -105,9 +108,14 @@ open strip. -/
 example (ρ : ℂ) (hρ : 0 < MeromorphicOn.divisor completedRiemannZeta Set.univ ρ) :
     0 ≤ ρ.re ∧ ρ.re ≤ 1 := sorry
 
-/-- **Layer 4, Jensen's bound in the form the counting layer uses**: a completed L-function
-of finite order has `O(log(|T| + 3))` zeros in a unit disc at height `T`. Route:
-`AnalyticOnNhd.sum_divisor_le`. -/
+/-- **Layer 4, Jensen's bound in the form the counting layer uses**: an entire function of
+finite order has `O(log(|T| + 3))` zeros in a unit disc at height `T`. Route:
+`AnalyticOnNhd.sum_divisor_le`. ⚠ `completedRiemannZeta₀` is Mathlib's *additive* clearing of
+the poles, `completedRiemannZeta s = completedRiemannZeta₀ s - 1/s - 1/(1 - s)`; it is entire
+of order `1`, which is all this bound needs, but its zeros are **not** those of
+`completedRiemannZeta`. The roadmap's `entireCompletion` is the multiplicative `s(s-1)Λ(s)`,
+whose zeros are `Λ`'s, and every statement about the zeros of `ζ` uses that one. What this
+example pins is the shape of the bound. -/
 example :
     ∃ C : ℝ, ∀ T : ℝ, 1 ≤ T →
       zeroCount completedRiemannZeta₀ (Metric.closedBall (1 / 2 + T * I) 1) ≤
@@ -116,9 +124,25 @@ example :
 /-- **Layer 4, the counting function `N(T)`**: zeros of the completed function with
 `0 < Im ρ ≤ T`, with multiplicity, in the closed critical strip. ⚠ The symmetric count over
 `|Im ρ| ≤ T` is a different quantity; the roadmap keeps them apart and relates them by a
-theorem. -/
+theorem. ⚠ The region is half-open in the imaginary direction, hence not compact, so the
+finiteness that makes this finsum the intended count does **not** come from
+`Function.locallyFinsuppWithin.finiteSupport`: it comes from local finiteness of
+`MeromorphicOn.divisor f Set.univ` on the compact closure, through
+`Function.locallyFinsupp.locallyFiniteSupport` and
+`LocallyFiniteSupport.finite_inter_support_of_isCompact`. A `∑ᶠ` over an infinite support is
+silently `0`, so this is a soundness obligation of every theorem below, not a proof detail. -/
 noncomputable def zeroCountUpTo (f : ℂ → ℂ) (T : ℝ) : ℤ :=
   zeroCount f (Set.Icc (0 : ℝ) 1 ×ℂ Set.Ioc (0 : ℝ) T)
+
+/-- **Layer 4, the unit-height count**, which the box-to-disc reduction proves before any
+contour integral exists: each unit-height box in the critical strip sits inside the disc of
+radius `√2/2` centered on the critical line, so this is one application of
+`AnalyticOnNhd.sum_divisor_le`. Summing `T` of them gives `N(T) = O(T log T)` for `ζ`, the
+strongest counting bound available before Layer 7. -/
+example :
+    (fun T : ℝ ↦ (zeroCountUpTo completedRiemannZeta (T + 1) : ℝ) -
+        (zeroCountUpTo completedRiemannZeta T : ℝ))
+      =O[atTop] Real.log := sorry
 
 /-! ## Layer 6: the zero-free region -/
 
