@@ -45,6 +45,12 @@ namespace TauCetiRoadmap.RepresentationTheory.LieHighestWeight
 open scoped Classical DirectSum
 open LieModule LieAlgebra Module
 
+/- The `gl n` statements below use `Matrix (Fin n) (Fin n) K` as a Lie algebra. Mathlib supplies
+that structure through `LieRing.ofAssociativeRing` and `LieAlgebra.ofAssociativeAlgebra`. Those
+are not global instances, because one associative ring can carry more than one Lie structure.
+Enable them for this file, as `Mathlib/Algebra/Lie/OfAssociative.lean` does for its own. -/
+attribute [local instance 100] LieRing.ofAssociativeRing LieAlgebra.ofAssociativeAlgebra
+
 universe u
 
 /-! ## Layer 0: `sl₂` representation theory (the engine)
