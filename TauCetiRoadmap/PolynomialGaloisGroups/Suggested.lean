@@ -3,32 +3,33 @@ import Mathlib
 /-!
 # Galois groups of polynomials: target signatures
 
-**This file is not the roadmap and is not exhaustive.** The definitive document is
+**This file is not the roadmap, and it is not exhaustive.** The definitive document is
 `README.md`. The statements here suggest Lean forms for particular milestones, so that
-contributors and reviewers converge on names and signatures; discharging all of them
-finishes neither a layer nor the roadmap. `sorry` is allowed in this human-owned roadmap
-library, and it appears here in two roles that should not be confused: in an `example` it
-marks a target of this roadmap, and in a `def` it marks data that a later frozen export
-supplies rather than a proof anybody owes.
+contributors converge on names and signatures. To discharge all of them finishes neither a
+layer nor the roadmap.
 
-Pinned Mathlib (`9caeba1000`, 2026-06-03) has `Polynomial.Gal` with its faithful action on
-roots, transitive for irreducible polynomials; the Chambert-Loir permutation library
-(`IsBlock`, `IsPreprimitive`, multiple transitivity, Jordan's transposition and 3-cycle
-theorems); `Polynomial.discr` in Sylvester form, without the root-product formula; and
-arithmetic Frobenius elements (`IsArithFrobAt`). So nearly everything the roadmap asks for
-is already statable at the pin, and this file spans Layers 0 to 6, 8 and 9.
+`sorry` is allowed in this human-owned roadmap library. It appears here in two roles, which
+should not be confused. In an `example` it marks a milestone of this roadmap. In a `def` it
+marks data that a frozen export supplies, and not a proof that anybody owes.
 
-Two statements below are worth reading carefully before copying their shape elsewhere.
+The pinned Mathlib is the released version `v4.32.2`. It has:
 
-* The Layer 9 target says the Galois image is the **full symmetric group on the distinct
-  roots**, and it says so through surjectivity of `galActionHom` together with separability.
-  Bijectivity alone would not: `X ^ n` has a single distinct root, a trivial Galois group,
-  and a bijection from that group onto the permutations of a one-point set. A well-typed
-  proposition can still encode the wrong mathematics, and this is the example to remember.
-* The Layer 5 Frobenius statement is a **contract with Number Field Arithmetic**, not a
-  target of this roadmap. It is marked at the statement. Pinning its shape here lets the
-  downstream layers elaborate against it; the theorem belongs to the supplier, and a `sorry`
-  here does not stand in for it.
+* `Polynomial.Gal`, with its faithful action on the roots, transitive for irreducible
+  polynomials;
+* the permutation action library of A. Chambert-Loir, with `IsBlock`, `IsPreprimitive`,
+  multiple transitivity, and Jordan's theorems for a transposition and for a 3-cycle;
+* `Polynomial.discr` in Sylvester form, without the root-product formula;
+* arithmetic Frobenius elements, as `IsArithFrobAt`.
+
+Every carrier type of the roadmap therefore elaborates at that version, and this file spans
+Layers 0 to 6, and Layers 8 and 9.
+
+One statement below is worth reading with care before its shape is copied elsewhere. The
+Layer 9 milestone says that the Galois image is the full symmetric group on the distinct
+roots. It says so through surjectivity of `galActionHom`, together with separability.
+Bijectivity alone would not say it. The polynomial `X ^ n` has one distinct root, a trivial
+Galois group, and a bijection from that group onto the permutations of a one-point set. A
+well-typed proposition can still express the wrong mathematics.
 -/
 
 namespace TauCetiRoadmap.PolynomialGaloisGroups
@@ -57,6 +58,26 @@ types are partitions of `n` with their `1`-parts. Every Frobenius or factorizati
 comparison below is stated with `fullCycleType`, never with a bare `cycleType`. -/
 noncomputable def fullCycleType {α : Type u} [Fintype α] (σ : Equiv.Perm α) : Multiset ℕ :=
   σ.cycleType + Multiset.replicate (Fintype.card α - σ.support.card) 1
+
+/-- **Layer 1 carrier.** The action of `Equiv.Perm ι` on the functions `ι → D`, by permutation
+of the coordinates, as a morphism into the automorphism group. The general wreath product is
+built from this action. -/
+def coordPermAut (D : Type u) [Group D] (ι : Type v) : Equiv.Perm ι →* MulAut (ι → D) where
+  toFun σ :=
+    { toFun := fun f => f ∘ σ.symm
+      invFun := fun f => f ∘ σ
+      left_inv := fun f => by funext i; simp
+      right_inv := fun f => by funext i; simp
+      map_mul' := fun _ _ => rfl }
+  map_one' := by ext f i; rfl
+  map_mul' σ τ := by ext f i; rfl
+
+/-- **Layer 1 carrier.** The general permutation wreath product `(ι → D) ⋊ Equiv.Perm ι`.
+Mathlib's `RegularWreathProduct` is the case in which `ι` is `Q` itself, with the translation
+action. The restricted wreath product for a subgroup `Q ≤ Equiv.Perm ι` is the corresponding
+`SemidirectProduct` over `Q`. -/
+abbrev WreathProduct (D : Type u) [Group D] (ι : Type v) :=
+  SemidirectProduct (ι → D) (Equiv.Perm ι) (coordPermAut D ι)
 
 /-! ### The `nTj` data model
 
@@ -422,7 +443,7 @@ example (p q r : ℚ) (hf : Irreducible (X ^ 4 + C p * X ^ 2 + C q * X + C r : �
 
 end GaloisSide
 
-/-! ## Layer 1: the permutation toolkit (pure group theory) -/
+/-! ## Layer 1: permutation groups, blocks, and wreath products -/
 
 section PermutationSide
 
@@ -589,18 +610,46 @@ section Frobenius
 attribute [local instance] Polynomial.Gal.splits_ℚ_ℂ
 
 open scoped Classical in
-/-- **Layer 5, THE CONSUMED INTERFACE.** Dedekind's theorem, supplied by the
-[Number Field Arithmetic roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/9),
-Layer 3. This `sorry` is a **contract with that roadmap, not a target of this one**: for monic
-`f : ℤ[X]` and a prime `p ∤ disc f`, some element of the Galois group realizes the
-factorization type of `f mod p` as its fixed-point-completed cycle type on the roots. Pinning
-the shape here lets the layers below elaborate against it; the theorem belongs to the
-supplier, and this statement is replaced by a reference to its declaration. -/
+open scoped Classical in
+/-- **Layer 5 carrier.** The multiset of degrees of the monic irreducible factors of the
+reduction of `f` modulo `p`. This is the object that Dedekind's theorem compares with a cycle
+type, and the object that a certificate claims. Both sides of the comparison are defined here,
+so no milestone of this roadmap waits on a name that is fixed elsewhere. -/
+noncomputable def factorDegrees (f : ℤ[X]) (p : ℕ) [Fact p.Prime] : Multiset ℕ :=
+  Multiset.map Polynomial.natDegree
+    (UniqueFactorizationMonoid.normalizedFactors (f.map (Int.castRingHom (ZMod p))))
+
+/-- **Layer 5, first step.** For monic `f` and a prime `p` that does not divide `f.discr`, the
+reduction of `f` modulo `p` is separable. The proof is base change of the discriminant, from
+Layer 3, and the criterion `discr ≠ 0 ↔ Separable`. -/
+example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr) :
+    (f.map (Int.castRingHom (ZMod p))).Separable :=
+  sorry
+
+/-- **Layer 5, second step: the input from finite fields.** For an element `α` of an extension
+of `ZMod q`, the degree of the minimal polynomial is the size of the orbit of `α` under
+`x ↦ x ^ q`. This statement mentions no Galois theory over `ℚ`. Together with the reduction of
+the roots, it turns the factor degrees of `f mod p` into the cycle lengths of one
+permutation. -/
+example (q : ℕ) [Fact q.Prime] {K : Type u} [Field K] [Algebra (ZMod q) K] (α : K)
+    (hα : IsIntegral (ZMod q) α) (n : ℕ) (hn : 0 < n) :
+    (minpoly (ZMod q) α).natDegree = n ↔
+      (α ^ q ^ n = α ∧ ∀ m, 0 < m → m < n → α ^ q ^ m ≠ α) :=
+  sorry
+
+/-- **Layer 5, Dedekind's factorization theorem.** Let `f : ℤ[X]` be monic, and let `p` be a
+prime that does not divide `f.discr`. Then some element of the Galois group has, on the roots,
+a fixed-point-completed cycle type equal to the factor degrees of `f mod p`.
+
+This roadmap owns this theorem. Layer 5 of `README.md` gives the proof route: reduction is
+separable, the roots reduce injectively, the decomposition group at a maximal ideal over `p`
+maps onto the Galois group of the residue extension with trivial inertia, and Mathlib's
+`IsArithFrobAt` supplies the element. Ramification theory of number fields is not developed
+here. -/
 example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr) :
     ∃ σ : (f.map (Int.castRingHom ℚ)).Gal,
       fullCycleType (Polynomial.Gal.galActionHom (f.map (Int.castRingHom ℚ)) ℂ σ) =
-        Multiset.map (fun g => g.natDegree)
-          (UniqueFactorizationMonoid.normalizedFactors (f.map (Int.castRingHom (ZMod p)))) :=
+        factorDegrees f p :=
   sorry
 
 /-- **Layer 5, the membership statement run backwards** (worked instance): `x⁴ + 1` has Galois
@@ -615,20 +664,17 @@ group `4T2`): order 4 and not cyclic. Consume the cyclotomic API
 example : Nat.card (X ^ 4 + 1 : ℚ[X]).Gal = 4 ∧ ¬ IsCyclic (X ^ 4 + 1 : ℚ[X]).Gal :=
   sorry
 
-open scoped Classical in
-/-- **Layer 8, the generic theorem behind the Modular Forms acceptance test.** A monic quintic
-that is irreducible modulo one prime not dividing the discriminant, and has factor degrees
-`(2,1,1,1)` modulo another such prime, has full `S₅` Galois group: transitivity plus a
-transposition in prime degree, consuming `Equiv.Perm.subgroup_eq_top_of_swap_mem`. The
-weight-60 instance supplies the coefficients and the two primes 83 and 17 downstream; the
-roadmap states the theorem, not the coefficients. -/
+/-- **Layer 8, the generic quintic theorem.** Let `f` be a monic quintic over `ℤ`, and let `p`
+and `q` be primes that do not divide `f.discr`. Assume that `f mod p` is irreducible, and that
+`f mod q` has factor degrees `(2,1,1,1)`. Then `f` has full `S₅` Galois group. The proof is
+transitivity, plus a transposition, in prime degree; it consumes
+`Equiv.Perm.subgroup_eq_top_of_swap_mem`. A downstream certificate for one explicit quintic
+instantiates this theorem. The roadmap states the theorem, and not the coefficients. -/
 example (f : ℤ[X]) (hf : f.Monic) (hdeg : f.natDegree = 5)
     (p q : ℕ) [Fact p.Prime] [Fact q.Prime]
     (hp : ¬ (p : ℤ) ∣ f.discr) (hq : ¬ (q : ℤ) ∣ f.discr)
     (hirr : Irreducible (f.map (Int.castRingHom (ZMod p))))
-    (htype : Multiset.map (fun g => g.natDegree)
-        (UniqueFactorizationMonoid.normalizedFactors (f.map (Int.castRingHom (ZMod q)))) =
-      {2, 1, 1, 1}) :
+    (htype : factorDegrees f q = {2, 1, 1, 1}) :
     Function.Surjective (Polynomial.Gal.galActionHom (f.map (Int.castRingHom ℚ)) ℂ) :=
   sorry
 
@@ -642,8 +688,9 @@ example : Nat.card (X ^ 5 - X - 1 : ℚ[X]).Gal = 120 :=
 /-! ## Layer 9: `Sₙ` over `ℚ`, and its prerequisites -/
 
 /-- **Layer 9, prerequisite 1.** For every degree there is a monic irreducible polynomial over
-`ZMod 2`. Name the finite-field existence theorem consumed, or make this a target; "choose an
-irreducible polynomial" is not an instruction an implementation agent can act on. -/
+`ZMod 2`. Name the finite-field existence theorem that is used, or prove this statement here.
+"Choose an irreducible polynomial" is not an instruction that an implementation agent can
+follow. -/
 example (d : ℕ) (hd : 1 ≤ d) :
     ∃ g : (ZMod 2)[X], g.Monic ∧ Irreducible g ∧ g.natDegree = d :=
   sorry
