@@ -339,7 +339,7 @@ cited in Layer 7.
 
 ## 4. What Mathlib already has (consume)
 
-All paths at the pin `9caeba1000` (2026-06-03).
+All paths at the Mathlib the repository currently builds.
 
 - **Discrete group cohomology, the model API:**
   `Mathlib/RepresentationTheory/Homological/GroupCohomology/Basic.lean` (`groupCohomology`,
