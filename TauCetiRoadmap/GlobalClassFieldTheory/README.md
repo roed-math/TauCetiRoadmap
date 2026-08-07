@@ -304,7 +304,6 @@ Frobenius. Prove:
 - *Edge cases:* `S` larger than the ramified set, and `L = K`.
 - *Downstream interface:* Layers 6, 7, 8 and 10C use only `artinHom` and items 2 to 4.
 
-
 **I.3. The completion dictionary at a finite place.** For `v : HeightOneSpectrum (𝓞 K)`, the
 completion `v.adicCompletion K` is a nonarchimedean local field. Its residue cardinality is
 `Ideal.absNorm v.asIdeal`. Its normalized valuation restricts to `HeightOneSpectrum.valuation` on
@@ -350,7 +349,6 @@ test with `𝔪∞ ≠ ∅` from the first lemma.
 - *Downstream interface:* Layers 1, 2A, 3 and 7 use only the two components, divisibility, and the
   exponent function.
 
-
 **0.2. Simultaneous approximation.** State: let `v₁, …, v_r` be finite places, `a_i ∈ K` targets,
 `n_i` exponents, and let `ε_w ∈ {±1}` be a sign at each of finitely many real places `w`. Then there
 is one `x ∈ Kˣ` with `ord_{v_i}(x − a_i) ≥ n_i` for every `i` and `sign_w(x) = ε_w` for every chosen
@@ -394,7 +392,6 @@ ultrametric inequality and the sign rules. Do not define `K(𝔪)` through the q
   place outside `𝔪∞`.
 - *Downstream interface:* Layers 1, 2A and 3.
 
-
 **0.5. The elements prime to the finite part.** "Prime to `𝔪₀`" is not a Lean type. Define the
 subgroup `Kˣ_{𝔪₀} := {x : Kˣ | ∀ v ∣ 𝔪₀, ord_v x = 0}` of `Kˣ`. State that it is the unit group of
 the localization of `𝓞 K` away from `𝔪₀`, and prove the two descriptions equal.
@@ -428,7 +425,6 @@ K)` as a named isomorphism, through compatibility with `ClassGroup.mk0`.
 - *Edge cases:* `𝔪₀ = ⊤` with `𝔪∞ = ∅`; a field with no real place; class number one.
 - *Downstream interface:* Layers 3, 7, 8, 9 and 10C use `Cl_𝔪`, its finiteness, and the transition
   maps.
-
 
 **1.3. The moving lemma.** Every class of `ClassGroup R`, for `R` a Dedekind domain, contains an
 integral ideal prime to a fixed nonzero ideal. Deduce the same statement for `Cl_𝔪`. Route: the
@@ -545,7 +541,6 @@ open, and that both are antitone in `𝔪`.
 - *Edge cases:* a complex place, where there is no condition; a real place outside `𝔪∞`, where there
   is no condition.
 - *Downstream interface:* Layers 3, 6 and 7 use `U_𝔪`, `RaySubgroup 𝔪`, openness, and 2A.7.
-
 
 **2A.7. The ray class dictionary.** Prove `C_K ⧸ RaySubgroup 𝔪 ≃* Cl_𝔪 K`. Use the map `x ↦ ∏_{v ∤
 𝔪₀} v^{ord_v(x_v)}` on ideles, and compute the kernel with 1.3 and 0.6. Prove the special case `𝔪 =
@@ -684,7 +679,6 @@ back uses finiteness of `Cl_𝔪 K`, and the compactness of `C_K/D_K`; it is not
 - *Edge cases:* a character with a nonopen kernel, such as `‖·‖^s`; a character trivial on `U_𝔪` for
   the trivial `𝔪`.
 - *Downstream interface:* Layers 9 and 10A, and any later analytic development.
-
 
 **3.2. The finite conductor ideal.** Let `χ` be a continuous quasicharacter. Prove that the local
 component `χ_v` is trivial on `1 + 𝔭_v^n` for `n` large. The reason is that the principal-unit
@@ -1017,7 +1011,6 @@ abelian extensions and their norm groups.
 - *Edge cases:* `L = K`; a subgroup that is of finite index but not open.
 - *Downstream interface:* Layers 8, 9 and 10C.
 
-
 **7.2. Norm limitation.** For an arbitrary finite extension `L/K` inside `K̄`, with `L^{ab}` the
 maximal subextension abelian over `K`, prove `N_{L/K} C_L = N_{L^{ab}/K} C_{L^{ab}}`. Deduce `C_K /
 N_{L/K} C_L ≃* Gal(L/K)^{ab}` for finite Galois `L/K`, by applying 6.4 to `L^{ab}/K`.
@@ -1124,7 +1117,6 @@ what makes the narrow variant confusing.
 - *Naturality:* the splitting law commutes with the isomorphism to the class group.
 - *Edge cases:* `h_K = 1`; a field with no real place, where `H = H⁺`.
 - *Downstream interface:* Layer 10C and the merged Multiquadratic roadmap.
-
 
 **8.2. The narrow Hilbert class field.** Define `H⁺ := K_{((1), all real places)}`. Prove `Gal(H⁺/K)
 ≅ Cl⁺ K`, and that `H⁺` is the maximal finite abelian extension unramified at all finite places,
