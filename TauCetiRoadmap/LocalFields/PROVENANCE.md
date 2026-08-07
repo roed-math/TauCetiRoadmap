@@ -2,20 +2,21 @@
 
 This file is a dated survey of the ecosystem around
 [the local fields roadmap](README.md). It is **not normative**. Nothing recorded here is a
-prerequisite of a milestone. The roadmap states its prerequisites itself, and admits four kinds
+prerequisite of a milestone. The roadmap states its prerequisites itself, and admits three kinds
 only:
 
 - a declaration of the required Mathlib version;
 - an accepted Tau Ceti declaration;
-- an earlier milestone of the roadmap;
-- a named layer of another Tau Ceti roadmap.
+- an earlier milestone of the roadmap.
 
-Two kinds of information are collected here:
+Three kinds of information are collected here:
 
 - the state of Lean work outside Mathlib that covers part of the same mathematics, with the
   conditions that apply to reuse of the code;
 - open Mathlib work and recorded design decisions that the roadmap follows for the shape of its
-  statements.
+  statements;
+- which development is expected to discharge each field of the three hypothesis structures, and
+  the name it currently uses for it.
 
 An open Mathlib pull request is never a reason to wait. Build the object in Tau Ceti now, with
 the name and the shape that the pull request uses. If it lands, delete the Tau Ceti copy and
@@ -39,7 +40,11 @@ project.
   formations, the Herbrand quotient, and abstract reciprocity of Layers 5 and 6.
 - **Status at that revision, abstract half, sorry-free:** Tate cohomology, since upstreamed to
   Mathlib; the `FiniteClassFormation` class with the abstract Tate–Nakayama `reciprocityIso`
-  (`Cohomology/SplittingModule.lean`); the Herbrand-quotient calculus
+  (`Cohomology/SplittingModule.lean`). Layer 5 here defines `FiniteClassFormation` with five
+  fields, and `Nat.card H` as the order of `H²(H, M)`. Comparing the two interfaces field by
+  field is an explicit obligation of that milestone, before their vocabulary is adopted. Check in
+  particular which of `Nat.card H` and `[G : H]` their order field uses: only the first is
+  correct, because `H = 1` refutes the second; the Herbrand-quotient calculus
   (`Cohomology/FiniteCyclic/HerbrandQuotient/`); `localInv` (`Cohomology/LocalInv.lean`); the
   valuation sequence `0 → 𝒪[L]ˣ → Lˣ → ℤ → 0`
   (`IsNonarchimedeanLocalField/ValuationExactSequence.lean`); the canonical
@@ -209,16 +214,58 @@ against its Layer-0 examples, for duplication.
 
 ## Keeping the shared interface table in step
 
-The subsection "Shared layer-DAG table: Local Fields ↔ Pro-`p` Groups" of
-[`README.md`](README.md) also exists in the Pro-`p` Groups roadmap. The two copies are kept
-identical, wording included, so an edit to one is an edit to the other. The names in the table
-are provisional: they belong to the supplier roadmap, and they may change while both roadmaps
-are under review. When a supplier declaration is accepted, the consumer replaces its local
-interface declaration by an import, which leaves every statement that uses the name unchanged.
+The subsection "Interface table: Local Fields and Pro-`p` Groups" of [`README.md`](README.md)
+also exists in the Pro-`p` Groups roadmap. The two copies are kept identical, wording included,
+so an edit to one is an edit to the other. The check is a byte comparison of the two sections,
+from the heading to the next heading of the same level. The version in this repository was taken
+from the Pro-`p` Groups copy on 2026-08-07.
 
-At the date of this file, the two roadmaps are the pull requests
-[#2](https://github.com/roed-math/TauCetiRoadmap/pull/2) and
-[#3](https://github.com/roed-math/TauCetiRoadmap/pull/3) of `roed-math/TauCetiRoadmap`. The
-Profinite Cohomology roadmap is [#1](https://github.com/roed-math/TauCetiRoadmap/pull/1), and the
-Quadratic Form Invariants roadmap is
-[#4](https://github.com/roed-math/TauCetiRoadmap/pull/4).
+The table is a coordination record, and not a dependency. The roadmap needs no row of it to
+start work: a milestone that uses an operation from either side carries that operation as an
+explicit hypothesis, and the table records who is expected to prove it.
+
+## Who is expected to discharge each hypothesis
+
+Checked on 2026-08-07 against the current heads of the sibling pull requests. These roadmaps are
+under review, so nothing below is a prerequisite, and none of the names is fixed.
+
+| structure and field of `Suggested.lean` | expected supplier | its current name |
+|---|---|---|
+| `ProPOps.exists_isProPSylow` and the three other Sylow fields | Pro-`p` Groups Layer 2 | anonymous `example`s; the predicate is `TauCetiRoadmap.ProPGroups.IsProPSylow` |
+| `ProPOps.freeProfiniteGroupLift` | Pro-`p` Groups Layer 4 | anonymous `example`; the object is `TauCetiRoadmap.ProPGroups.freeProfiniteGroup` |
+| `ProPOps.rank_le_of_surjective`, `ProPOps.rank_le_of_isOpen` | Pro-`p` Groups Layer 3 | anonymous `example`s; the rank is `TauCetiRoadmap.ProPGroups.topologicalGeneratorRankNat` |
+| `ProPOps.topologicallyGenerates_iff_frattiniQuotient` | Pro-`p` Groups Layer 3 | anonymous `example`; the Frattini subgroup is `TauCetiRoadmap.ProPGroups.proPFrattini` |
+| the three fields of `ProPRankInputs` | Pro-`p` Groups Layer 11 | fields of `TauCetiRoadmap.ProPGroups.LocalFieldInputs`, and its Demushkin instance |
+| `CohomologyOps.tensorObj`, `CohomologyOps.cup` | Profinite Cohomology Layer 8 | its low-degree cup product |
+| `CohomologyOps.coeff` | Mathlib | `ContinuousCohomology.cochainsMap` at the identity group homomorphism |
+| corestriction, Mackey, Shapiro, the finite-quotient colimit | Profinite Cohomology Layers 4, 6, 7 | these occur in no statement of this roadmap, only in proofs |
+
+Two mismatches with the current heads are recorded, and neither blocks anything here.
+
+- The Pro-`p` Groups head states its Layer 2 and Layer 3 theorems as anonymous `example`s, so
+  there is no declaration name to cite for them yet. The **definitions** do have names, and the
+  copies in `Supplied` have the same bodies, so those transport by `rfl`.
+- The Profinite Cohomology head prototypes a cup product against its own low-degree carrier,
+  while this roadmap uses Mathlib's `continuousCohomology`. A term of `CohomologyOps` therefore
+  needs the comparison between the two carriers, which is that roadmap's Layer 3.
+
+## Ownership, where two roadmaps touch the same mathematics
+
+- The **continuous-cohomology carrier** is Mathlib's `continuousCohomology`. This roadmap states
+  nothing against a private carrier and builds none.
+- The **normalized valuation, the unit filtration, and local square classes** are Layers 0 and 1
+  here, and every later layer of this roadmap rests on them. The position of this roadmap is that
+  it owns them and that a local toolkit elsewhere should consume them, because a second normalized
+  valuation would need a comparison lemma at every use site. The Quadratic Form Invariants roadmap
+  currently declares a `LocalFieldToolkit` that covers part of the same ground. Adopting the
+  objects here is a change to that roadmap, and this one is not blocked by it.
+- The **Hilbert symbol** is stated here by the norm criterion, which is characteristic-free and
+  needs no object from another roadmap. The `{±1}`-valued dictionary, quaternion algebras, the
+  quadratic defect, and the classification of forms are the Quadratic Form Invariants roadmap's.
+  This roadmap defines no quadratic form and no quaternion algebra.
+
+At the date of this file, the roadmaps named above are the pull requests
+[#1](https://github.com/roed-math/TauCetiRoadmap/pull/1),
+[#2](https://github.com/roed-math/TauCetiRoadmap/pull/2),
+[#3](https://github.com/roed-math/TauCetiRoadmap/pull/3), and
+[#4](https://github.com/roed-math/TauCetiRoadmap/pull/4) of `roed-math/TauCetiRoadmap`.
