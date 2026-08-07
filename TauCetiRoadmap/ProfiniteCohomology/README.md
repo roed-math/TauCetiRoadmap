@@ -646,6 +646,14 @@ quasi-isomorphism in the discrete case.
   isomorphism in `TopModuleCat ℤ` between discrete objects, rather than as an additive isomorphism
   after forgetting the topology. Whichever of the two a given statement makes, it must say which:
   an `explicit ≅ continuousCohomology` with the category left unsaid is not a usable statement.
+  ⚠ The explicit side has to be **given** the discrete topology, not left with the one it
+  inherits. `H¹` and `H²` are quotients of subgroups of `G → M` and `G × G → M`, which carry the
+  pointwise topology, and that quotient topology is not discrete for an infinite profinite `G`:
+  with trivial `𝔽₂` coefficients on a product of infinitely many copies of `C₂`, no finite set of
+  evaluations isolates the zero character. Reusing it would make the categorical statement false
+  while leaving the underlying additive statement true, which is the trap. `Suggested.lean`
+  carries the discrete objects as `DiscreteH1` and `DiscreteH2`, with additive equivalences back
+  to the quotients so that computations on representatives stay available.
 - **Transport.** Under these isomorphisms: restriction to restriction, inflation to inflation,
   and coefficient maps to Layer 1's `map`. One transport lemma per operation, carrying the same
   profiniteness hypotheses as the comparison itself. Only the operations that exist by this layer

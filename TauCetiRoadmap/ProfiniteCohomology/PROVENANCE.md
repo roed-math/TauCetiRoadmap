@@ -166,12 +166,12 @@ under review. Recorded 2026-08-07.
   happen: that roadmap replaces its carrier with the declarations of the exported-interface table,
   or it supplies explicit natural comparison isomorphisms and transports every operation it uses.
   Until then no claim of composability between the two is made anywhere in the roadmap.
-- **The Evens polarization.** The Quadratic Form Invariants roadmap presently states
-  `evens (x + y) = evens x + evens y + cor2 (cup x y)`, with no conjugation. This roadmap's
-  Layer 13 states `N(α + β) - N(α) - N(β) = cor (α ⌣ (s · β))`, following Kozlowski's Lemma 2.4,
-  with the conjugate class on the right. These are different statements. The conjugated form is
-  the one this roadmap supplies; the two agree only under a theorem nobody has stated, so the
-  downstream interface has to move or that theorem has to be proved and named.
+- **The Evens polarization: resolved.** The Quadratic Form Invariants roadmap now states its
+  `evens_add` with a `conjClass` factor, which matches the mathematical shape exported here,
+  `N(α + β) - N(α) - N(β) = cor (α ⌣ (s · β))`, following Kozlowski's Lemma 2.4. What remains is
+  carrier transport rather than a mathematical disagreement: the two statements are about classes
+  in two different carriers until the ownership question above is settled. Recorded 2026-08-07;
+  the earlier unconjugated form is no longer present there.
 - **Structure interfaces.** That roadmap also consumes `Mod2GaloisOps` and
   `Mod2GaloisTransferOps`. This roadmap constructs no terms of those structures. Either they are
   built from the exported table's declarations in that roadmap, or a transport is stated there;
