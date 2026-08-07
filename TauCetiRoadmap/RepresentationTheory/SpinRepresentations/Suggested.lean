@@ -39,6 +39,14 @@ namespace TauCetiRoadmap.RepresentationTheory.SpinRepresentations
 open CliffordAlgebra
 open scoped Classical DirectSum Quaternion TensorProduct
 
+/- The statements below use associative algebras as Lie algebras: a Clifford algebra, a matrix
+algebra, and `Module.End`. Mathlib supplies that structure through `LieRing.ofAssociativeRing`,
+`LieAlgebra.ofAssociativeAlgebra`, and `LieRingModule.ofAssociativeModule`. Those are not global
+instances, because one associative ring can carry more than one Lie structure. Enable them for
+this file, as `Mathlib/Algebra/Lie/OfAssociative.lean` does for its own declarations. -/
+attribute [local instance 100] LieRing.ofAssociativeRing LieAlgebra.ofAssociativeAlgebra
+attribute [local instance] LieRingModule.ofAssociativeModule
+
 universe u v
 
 variable {R : Type u} [CommRing R] {M : Type v} [AddCommGroup M] [Module R M]
