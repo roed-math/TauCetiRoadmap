@@ -103,10 +103,15 @@ functoriality is not.
 
 Layer 1 builds that functoriality here, in master's shape and under master's names, and every
 canonical-facing statement below is written against `TopRep R G`, a one-line abbreviation for the
-pin's `Action (TopModuleCat R) G`. No milestone in this roadmap waits for a toolchain bump. When
-the pin moves, `TopRep` becomes Mathlib's own, Layer 1's functoriality file is deleted, and the
-statements that used it point at Mathlib's instead. That is a rename and a deletion, not a
-redesign.
+pin's `Action (TopModuleCat R) G`. No milestone in this roadmap waits for a toolchain bump.
+
+The two coefficient categories are equivalent and the two resolutions have the same mathematical
+shape, so the compatibility layer is designed to make a later pin bump a mechanical transport
+rather than a mathematical redesign. It is not a promise of definitional compatibility: the pin's
+`continuousCohomology R G n` is a functor whose coefficient is supplied through `.obj`, master
+applies `continuousCohomology n` to a `TopRep` directly, and master packages the resolution and
+the functoriality under different structures. What is established is the equivalence of the
+categories and the agreement of the constructions, which is what makes the transport mechanical.
 
 ---
 
@@ -442,22 +447,40 @@ unbundled classes of §3.
 `TopModuleCat`, `ContinuousMonoidHom`. This roadmap: Layer 0.
 
 The pin supplies the carrier and nothing else. This layer supplies the rest of the interface every
-canonical-facing statement below uses, in the shape Mathlib master uses, so that adopting master's
-version later is a rename and a deletion.
+canonical-facing statement below uses, in the shape Mathlib master uses, so that a later pin bump
+is a transport and not a redesign.
 
 - **The carrier, named once.** `TopRep R G` as an abbreviation for `Action (TopModuleCat R) G`,
   and `Hⁿ_cont(G, X) = (continuousCohomology R G n).obj X` as the canonical object of every
   all-degree statement below. Record `homogeneousCochains` as the complex it is the homology of,
   and `continuousCohomologyZeroIso : continuousCohomology R G 0 ≅ invariants R G` as the one
   degree Mathlib computes. `Suggested.lean` carries all three.
-- **The categorical dictionary.** The translation between the unbundled classes of §3 and
-  `TopRep ℤ G`, in the style of the discrete `Rep.ofDistribMulAction`: a discrete `G`-module
-  becomes an object of `TopRep ℤ G`, a `G`-equivariant continuous homomorphism becomes a morphism,
-  and the two translations are inverse on the nose. This is where the statements of Layers 2 to 9
-  meet the canonical API.
+- **Smooth discrete objects.** `TopRep R G` is wider than the discrete `G`-modules of §3, and
+  deliberately so: an object carries one continuous operator per group element, and nothing there
+  forces the action to be continuous in the group variable. The pin's module documentation says
+  exactly this, and Mathlib master keeps the same design. An object of `TopRep ℤ G` whose module
+  happens to be discrete can therefore have non-open point stabilizers, so there is no dictionary
+  between all of `TopRep ℤ G` and the discrete `G`-modules. Define
+  ```
+  IsSmoothDiscrete X  ⟺  X.V is discrete and every {g | X.ρ g x = x} is open,
+  ```
+  which for a discrete module is exactly continuity of the action, and prove the closure
+  properties this roadmap uses: smooth discrete objects are closed under finite products, under
+  subobjects and quotients, and under restriction along a continuous homomorphism.
+- **The categorical dictionary, on that subcategory.** In the style of the discrete
+  `Rep.ofDistribMulAction`: `ofDiscreteModule` sends a discrete `G`-module in the unbundled
+  classes of §3 to an object of `TopRep ℤ G`, and that object is smooth discrete; a
+  `G`-equivariant continuous homomorphism becomes a morphism, and every morphism between objects
+  in the image arises that way; and the two translations are mutually inverse **on the smooth
+  discrete subcategory**, which they exhibit as equivalent to the discrete `G`-modules. Nothing is
+  claimed outside that subcategory. This is where the statements of Layers 2 to 9 meet the
+  canonical API.
   ⚠ Keep every *theorem* of Layers 2 to 9 stated against the unbundled classes wherever possible.
   The bundled forms are interfaces, and mismatches between instances and structures here are the
   main source of unusable statements.
+  ⚠ Every canonical-facing comparison below quantifies over the image of `ofDiscreteModule`, never
+  over an arbitrary `TopRep` object. A statement that forgets this is false, not merely
+  unprovable.
 - **Functoriality in compatible pairs.** For a continuous homomorphism `φ : H →ₜ* G` and a
   morphism `f : Action.res _ φ X ⟶ Y` in `TopRep R H`: the cochain map `cochainsMap φ f`, then
   `cocyclesMap φ f n`, then `map φ f n : Hⁿ_cont(G, X) ⟶ Hⁿ_cont(H, Y)`, with `map_id` and
@@ -474,14 +497,15 @@ version later is a rename and a deletion.
   `map` is additive in `f`. The pin proves the corresponding facts for `invariants` and for the
   cochain functors; these are the same statements one level up.
 
-**API** for the carrier. Constructors: `TopRep.of` from an unbundled continuous
-representation, and the discrete case through the dictionary above. Worked example: the trivial
-representation, `ℤ` and `ZMod n` with trivial action, `(Kˢ)ˣ` for Layer 9. Morphisms: the
-intertwining maps, with their additive and `R`-linear structure. Functoriality: `map` above, in
-both arguments. Comparison lemmas: Layer 3. Naturality: of `map` in `X` and in `Y`, and of the
-three named instances. Edge cases: `n = 0`, the trivial group, and the trivial subgroup, each
-computed. Downstream interfaces: Layers 3, 4, 7, 8, 10 and 12 all state their canonical halves
-against this layer and against nothing else.
+**API** for the carrier. Constructors: `TopRep.of` from an unbundled continuous representation,
+and `ofDiscreteModule` for the discrete case. Worked example: the trivial representation, `ℤ` and
+`ZMod n` with trivial action, `(Kˢ)ˣ` for Layer 9; each checked to be smooth discrete. Morphisms:
+the intertwining maps, with their additive and `R`-linear structure. Functoriality: `map` above,
+in both arguments. Comparison lemmas: Layer 3, quantified over the image of `ofDiscreteModule`.
+Naturality: of `map` in `X` and in `Y`, and of the three named instances. Edge cases: `n = 0`, the
+trivial group, the trivial subgroup, and an object that is discrete but **not** smooth, which
+exists and is the reason the subcategory is named. Downstream interfaces: Layers 3, 4, 7, 8, 10
+and 12 all state their canonical halves against this layer and against nothing else.
 
 ⚠ Do not restate the carrier. If a milestone below needs a property of `continuousCohomology`
 that Mathlib already proves, cite it; this layer adds only what the pin is missing.
@@ -584,9 +608,15 @@ that is a quasi-isomorphism in the discrete case.
   The chain-level correspondence is the classical one: in degree 1,
   `f (g₀, g₁) = g₀ • c (g₀⁻¹ * g₁)` with inverse `c g = f (1, g)`; in degree 2,
   `f (g₀, g₁, g₂) = g₀ • c (g₀⁻¹ * g₁, g₁⁻¹ * g₂)`. Prove it is a chain map in both directions and
-  conclude `Hⁱ_explicit ≅ continuousCohomology i` for `i ≤ 2`, naturally in compatible pairs.
-  A quotient presentation of the canonical side, `ker d` modulo `im d` in `TopModuleCat R`, is
-  part of this milestone.
+  conclude
+  ```
+  Hⁱ_explicit(G, M) ≅ continuousCohomology i (ofDiscreteModule M)   for i ≤ 2,
+  ```
+  naturally in compatible pairs. The canonical side is the image of `M` under Layer 1's
+  dictionary, **not** an arbitrary object of `TopRep`: a general `TopRep` object need not be
+  smooth, and the explicit complex is not a description of its cohomology. A quotient
+  presentation of the canonical side, `ker d` modulo `im d` in `TopModuleCat R`, is part of this
+  milestone.
 - **The category of the comparison.** For compact `G` and discrete `M`, prove that `C(G, M)` is
   discrete in the compact-open topology, hence that every term of the homogeneous cochain complex
   and every subquotient of it is discrete. With that in hand, state the comparison as an
@@ -594,18 +624,23 @@ that is a quasi-isomorphism in the discrete case.
   after forgetting the topology. Whichever of the two a given statement makes, it must say which:
   an `explicit ≅ continuousCohomology` with the category left unsaid is not a usable statement.
 - **Transport.** Under these isomorphisms: restriction to restriction, inflation to inflation,
-  coefficient maps to Layer 1's `map`, corestriction to Layer 10's canonical corestriction, and
-  the explicit cups of Layer 8 to Layer 12's graded cup. Each operation gets exactly one
-  transport lemma, carrying the same profiniteness hypotheses as the comparison itself.
+  and coefficient maps to Layer 1's `map`. One transport lemma per operation, carrying the same
+  profiniteness hypotheses as the comparison itself. Only the operations that exist by this layer
+  are transported here; corestriction is transported in Layer 10 and the cups in Layer 12, each
+  in the layer where both sides are first available.
 
 **Source** for the inhomogeneous-against-canonical comparison. The chain-level correspondence is
 classical and is displayed above; what has to be watched is the hypothesis. `ContinuousMap.curry`
 needs nothing, `ContinuousMap.uncurry` needs `[LocallyCompactSpace Y]`, and `Homeomorph.curry`
 needs local compactness of both factors, so the comparison is stated for profinite `G`, which is
-compact Hausdorff. The false neighbor is the same comparison for an arbitrary topological group:
-the canonical model is defined there, the inhomogeneous one is defined there, and the map between
-them is not an isomorphism, which is the reason Mathlib's own module documentation lists the
-`n`-ary description as a TODO restricted to locally compact groups.
+compact Hausdorff. The false neighbor is the compact-open exponential law itself,
+`C(G × G, M) ≃ C(G, C(G, M))` for an arbitrary topological group: currying is continuous with no
+hypothesis and the inverse is not, which is exactly why Mathlib carries the local-compactness
+hypothesis on `uncurry` and on `Homeomorph.curry`, and why its own module documentation lists the
+`n`-ary description as a TODO restricted to locally compact groups. What this does **not**
+establish is that the induced map on cohomology fails to be an isomorphism for a general
+topological group; no statement here asserts that, and the comparison is claimed only where the
+exponential law holds.
 
 ### Layer 4: the finite-quotient colimit description
 
@@ -664,11 +699,12 @@ colimit, Layer 11's dévissage.
 
 **Source** for the colimit theorem. NSW (1.2.5); Ribes-Zalesskii Cor. 6.5.6(a); Koch Thm. 3.16;
 Serre, *Local Fields* X §3 takes it as the definition. The hypotheses are that `G` is profinite
-and `M` is discrete. Discreteness is essential and compactness is essential in degree `2`
-separately from total disconnectedness: the descent of both variables at once is uniform local
-constancy on `G × G`. The false neighbor is the same statement for a totally disconnected group
-that is not compact, where a continuous 2-cocycle need not be constant on a single
-`gU × hU`.
+and `M` is discrete, and both are used. Discreteness is what makes a continuous cochain locally
+constant. Compactness is used in degree `2` separately from total disconnectedness: descending
+both variables at once is uniform local constancy on `G × G`, and total disconnectedness alone
+does not give it. No counterexample is recorded here, because none is needed to see where each
+hypothesis enters; what a contributor must not do is drop either one and expect the argument to
+survive.
 
 ### Layer 5: exact sequences
 
@@ -719,9 +755,10 @@ section, and Layer 2.
 **Source** for the exactness of the cochain sequences. NSW (1.3.2) for the long exact sequence.
 The hypothesis that cannot be relaxed is that the coefficients are **discrete**: a continuous
 cochain into a discrete `C` is locally constant, so composing with any set-theoretic section of
-`B → C` is still continuous. The false neighbor is the same statement for general topological
-coefficient modules, where no such section exists and there is no long exact sequence; do not
-state this layer beyond discrete coefficients.
+`B → C` is still continuous. For general topological coefficients that argument has nothing to
+stand on, since a set-theoretic section of `B → C` need not be continuous and `Cⁿ(G, B) → Cⁿ(G, C)`
+need not be surjective. This roadmap therefore states the layer for discrete coefficients only and
+asserts nothing about the general case.
 
 **Source** for the five-term sequence. NSW (1.6.7); Ribes-Zalesskii Cor. 7.2.5(a); Koch Thm. 3.14
 gives the degree-`n` form under vanishing below `n`, which Layer 11's dévissage uses. The
@@ -734,7 +771,8 @@ that wider generality and the five-term one does not.
 ### Layer 6: change of groups
 
 **Prerequisites.** Mathlib: `Subgroup.index`, `Subgroup.FiniteIndex`, `OpenSubgroup`,
-`QuotientGroup.mk`, `Quotient.out`. This roadmap: Layer 2.
+`QuotientGroup.mk`, `Quotient.out`. This roadmap: Layer 2, and Layer 5 for the compatibility of
+corestriction with the connecting maps.
 
 For open `U ≤ G`, with `[U.FiniteIndex]` carried explicitly where `G` is not compact; everything
 through the transversal formulas of §3.
@@ -921,11 +959,6 @@ On the explicit model, relative to an equivariant pairing as fixed in §3. Discr
   instances of the six-shape API above, and they are what
   the Local Fields roadmap uses as the underlying
   pairing of local Tate duality.
-- **Transport to the canonical cup.** Identification of the six explicit shapes with Layer 12's
-  graded cup under Layer 3, with the same profiniteness hypotheses. This layer supplies
-  commutativity and associativity in the low-degree range and Layer 12 supplies them in all
-  bidegrees, so the transport lemma is what makes the two agree where both are defined.
-
 **API** for the cup products. Constructors: the six cochain formulas of §3, one per shape. Worked
 example: the `(1,1)` square on `C₂` with `𝔽₂` coefficients is the nontrivial class of
 `H²(C₂, 𝔽₂)`, and its Galois form `[-1] ⌣ [-1] ≠ 0` in `H²(G_ℝ, 𝔽₂)`; both are in
@@ -1028,16 +1061,17 @@ trivial and the isomorphism is with `Hom_cont(G_K, μₙ)`; and `K` separably cl
 vanish. Consumers: the Local Fields and Quadratic Form Invariants roadmaps.
 
 **Source** for the Kummer isomorphism. NSW (6.2.1) and the display after it, with (6.2.2) for the
-pairing form. The hypotheses are `[NeZero n]` and `IsUnit (n : K)`. Two false neighbors, both
-easy to write by accident. First, the same statement over the algebraic closure: for imperfect
-`K` the fixed field of `Aut(K̄/K)` is the purely inseparable closure, so the invariants of `(K̄)ˣ`
-are not `Kˣ` and the left-hand term is wrong; this is why the layer uses `SeparableClosure K`
-throughout. Second, `CharZero K` in place of `IsUnit (n : K)`, which needlessly excludes the finite
-fields of odd characteristic that the `n = 2` applications run on.
+pairing form. The hypotheses are `[NeZero n]` and `IsUnit (n : K)`. The false neighbor is the
+same statement over the algebraic closure: for imperfect `K` the fixed field of `Aut(K̄/K)` is the
+purely inseparable closure, so the invariants of `(K̄)ˣ` are not `Kˣ` and the left-hand term is
+wrong. This is why the layer uses `SeparableClosure K` throughout. Separately, and not a false
+statement but a needlessly narrow one, `CharZero K` in place of `IsUnit (n : K)` is true and
+excludes the finite fields of odd characteristic that the `n = 2` applications run on; state the
+hypothesis that is actually used.
 
 ### Layer 10: continuous cohomology in all degrees
 
-**Prerequisites.** Mathlib: `continuousCohomology`. This roadmap: Layers 1, 3, 4, 6 and 7.
+**Prerequisites.** Mathlib: `continuousCohomology`. This roadmap: Layers 1, 3, 4, 5, 6 and 7.
 
 Everything above except Layer 3's comparison is stated in degrees `0, 1, 2`, because that is where
 explicit cochains are usable. Cohomological dimension, dévissage, the general torsion statements
@@ -1058,12 +1092,26 @@ against the canonical object of Layer 1 throughout.
 - Shapiro's lemma in every degree for closed subgroups, exactness of coinduction, acyclicity of
   `Coind_1^G A` in every positive degree, and dimension shifting
   `Hⁱ⁺¹(G, M) ≅ Hⁱ(G, Coind_1^G M ⧸ M)` for `i ≥ 1`.
-- Corestriction for open subgroups in every degree, preferably defined from the finite-level
-  corestriction through the colimit theorem rather than by an all-degree cochain formula, with
-  `cor ∘ res = (G : U) • id`, transitivity, naturality, compatibility with connecting maps, and
-  the Mackey formula, each in every degree.
-- The comparison theorem: the all-degree corestriction agrees in degrees `0, 1, 2` with Layer 6's
-  explicit transversal formulas.
+- **Corestriction in every degree, through coinduction.** Mathlib has no all-degree cohomological
+  transfer and Layer 6 builds one only in degrees `0, 1, 2`, so this layer builds it, in five
+  milestones rather than one:
+  1. the **trace morphism** `tr_U^G : Coind_U^G (res_U M) → M` for open `U ≤ G`, given by
+     `f ↦ ∑_{gU ∈ G ⧸ U} g • f (g⁻¹)`; the sum is finite because the index is, the value is
+     independent of the coset representatives because `f` is `U`-equivariant, and the result is a
+     morphism of discrete `G`-modules;
+  2. all-degree corestriction as the composite
+     ```
+     Hⁿ(U, res_U M) ≅ Hⁿ(G, Coind_U^G (res_U M)) → Hⁿ(G, M),
+     ```
+     the first map this layer's Shapiro isomorphism and the second the image of `tr_U^G`;
+  3. naturality in `M`, transitivity `cor_V^G = cor_U^G ∘ cor_V^U` for open `V ≤ U ≤ G`,
+     `cor ∘ res = (G : U) • id`, and compatibility with the connecting maps of the long exact
+     sequence, each in every degree;
+  4. the Mackey double-coset formula in every degree;
+  5. agreement in degrees `0, 1, 2` with Layer 6's explicit transversal formulas, under Layer 3.
+  ⚠ The finite index is used in milestone 1 and nowhere else. Do not define the all-degree
+  corestriction by an all-degree cochain formula: the canonical model is built from homogeneous
+  cochains through a coinduction resolution and has no inhomogeneous cochains to write one on.
 - **Annihilation and torsion** (NSW (1.6.1); Brown III (10.1) is the discrete model). For
   profinite `G` and `i ≥ 1`: a class of `Hⁱ(G, M)` annihilated by restriction to an open `U` is
   annihilated by `(G : U)`; every element of `Hⁱ(G, M)` is torsion; and `Hⁱ(G, M) = 0` when `M` is a
@@ -1079,6 +1127,13 @@ Comparison: agreement in degrees `0, 1, 2` with Layers 2, 4, 6 and 7, one lemma 
 Naturality: of the connecting maps and of the colimit isomorphism. Edge cases: `n = 0`, which is
 Layer 1's `continuousCohomologyZeroIso`; the trivial group; and `M` a `ℚ`-vector space, where
 every positive degree vanishes. Consumers: Layer 11 in full, and Layer 12 for the graded product.
+
+**Source** for the all-degree corestriction. Brown, *Cohomology of Groups*, III §9 gives five
+constructions of the transfer, of which the one used here is the coinduced-module construction;
+NSW (1.5.7) is the identity it has to satisfy. The hypothesis is that `U` is open, equivalently of
+finite index in the compact case. The narrow neighbor to avoid is defining it only where an
+inhomogeneous cochain formula is available, which is degrees `0, 1, 2`; the point of this
+construction is that it needs no cochains at all.
 
 **Source** for the torsion statement. NSW (1.6.1); Brown III (10.1) is the discrete model. The
 hypotheses are `G` profinite and `i ≥ 1`. The false neighbor is the same statement in degree `0`,
@@ -1163,32 +1218,59 @@ order of any `G ⧸ U`. Consumers: the Pro-p Groups and Local Fields roadmaps.
 
 **Source** for dévissage. NSW (3.3.2); Koch Def. 5.1 takes the pro-`p` case as the definition. The
 reduction is to **finite** discrete `p`-primary modules and then to the finite simple ones, and
-the finiteness is what the argument needs; the false neighbor is the reduction to arbitrary
-discrete `p`-primary modules, which is not a reduction at all, since that is the definition. The
-inequality `cd_p G ≤ scd_p G ≤ cd_p G + 1` is NSW (3.3.3); its false neighbor is equality, which
-fails.
+the finiteness is what the colimit and dimension-shifting argument needs. The inequality
+`cd_p G ≤ scd_p G ≤ cd_p G + 1` is NSW (3.3.3), and the false neighbor is equality of the two: for
+`G = ℤ_p` one has `cd_p G = 1` and `scd_p G = 2`, so the upper bound is attained and `cd_p` alone
+does not determine `scd_p`.
 
 ### Layer 12: the graded cup product in all degrees
 
-**Prerequisites.** Mathlib: `continuousCohomology`, `CochainComplex`. This roadmap:
-Layers 1 and 8.
+**Prerequisites.** Mathlib: `continuousCohomology`, `CochainComplex`. This roadmap: Layers 1
+and 8, Layer 3 for the agreement with the explicit shapes, and Layer 10 for the projection
+formula.
 
 Layer 8's cups are the low-degree calculational interface; the Evens norm multiplies degrees and
 so needs the product in every bidegree. Everything here is stated against Layer 1's carrier.
 
-- The graded cup product on `continuousCohomology` in every bidegree `(m, n)`, relative to an
-  intertwining pairing with the joint-continuity hypothesis of §3, together with its unit (the
-  class of `1` in `H⁰` for a `G`-ring) and the Leibniz rule `d (a ⌣ b) = da ⌣ b + (-1)^m (a ⌣ db)`.
-  Build it through the coinduction resolution the carrier is defined by.
-- Associativity in all bidegrees, for the four-pairing input of Layer 8 and for a discrete
-  `G`-ring, and graded commutativity in all bidegrees.
-- The characteristic-2 specialization actually consumed by the norm: over `𝔽₂` with trivial action
-  the product is commutative and associative with no signs, and `H^•(G, 𝔽₂) = ⨁ₙ Hⁿ(G, 𝔽₂)` is a
-  graded-commutative `𝔽₂`-algebra. Fix the graded-object notation and API here, so that the degree
-  multiplication `q ↦ l q` in the Evens norm is typeable.
-- Compatibility of the all-bidegree cup with restriction, inflation, and Layer 10's all-degree
-  corestriction (the projection formula in all bidegrees).
-- Agreement with Layer 8's six explicit shapes under Layer 3's comparison.
+This is the hardest multiplicative work in the roadmap and it is eleven milestones, not one.
+"Build it through the coinduction resolution" is a route, not a specification.
+
+1. **The coefficient pairing.** For `X, Y, Z : TopRep R G`, an `R`-bilinear map
+   `X.V →ₗ[R] Y.V →ₗ[R] Z.V` that is jointly continuous and `G`-equivariant,
+   `μ (g • x) (g • y) = g • μ x y`. This is the input type of everything below, and it is the
+   all-degree form of the pairing §3 fixes for the explicit cups.
+2. **The pairing on the resolution.** The recursive pairing on the terms of the coinduction
+   resolution the carrier is built from, taking the `m`-th term against the `n`-th to the
+   `(m + n)`-th, with its equivariance.
+3. **The cochain product.** The induced product on homogeneous cochains in bidegree `(m, n)`.
+4. **The Leibniz identity** `d (a ⌣ b) = da ⌣ b + (-1)^m (a ⌣ db)`, with the sign convention fixed
+   here once and referred to everywhere else.
+5. **Descent** to cocycles and then to cohomology, giving
+   `⌣ : Hᵐ(G, X) × Hⁿ(G, Y) → H^{m+n}(G, Z)`, biadditive in each argument.
+6. **The unit**, the class of `1` in `H⁰` for a discrete `G`-ring, with `1 ⌣ a = a = a ⌣ 1`.
+7. **Associativity**, as an explicit chain homotopy, for the four-pairing input of Layer 8 and for
+   a discrete `G`-ring.
+8. **Graded commutativity**, as an explicit chain homotopy, giving
+   `a ⌣_μ b = (-1)^{mn} (b ⌣_{μᵒᵖ} a)` on classes.
+9. **Restriction and inflation compatibility** in all bidegrees.
+10. **The projection formula** `cor (res a ⌣ b) = a ⌣ cor b` in all bidegrees, with Layer 10's
+    all-degree corestriction.
+11. **Agreement with Layer 8's six explicit shapes** under Layer 3's comparison.
+
+The characteristic-2 specialization the norm consumes falls out of 6 to 8: over `𝔽₂` with trivial
+action there are no signs, so `H^•(G, 𝔽₂) = ⨁ₙ Hⁿ(G, 𝔽₂)` is a graded-commutative `𝔽₂`-algebra.
+Fix the graded-object notation and its API here, so that the degree multiplication `q ↦ l * q` of
+Layer 13 is typeable.
+
+**Source** for the construction. The homogeneous cup product through a resolution is Brown,
+*Cohomology of Groups*, V §3: (3.5) is the cochain-level associativity and (3.6) the commutativity
+homotopy, both stated there for the bar resolution and both transporting to any resolution by the
+comparison theorem of Brown I §7. NSW I §4 states the identities the descended product must
+satisfy: (1.4.1) Leibniz, (1.4.2) naturality, (1.4.3) and (1.4.5) compatibility with `δ`, (1.4.4)
+associativity and graded commutativity. The hypothesis carried throughout is joint continuity of
+the pairing, which is automatic for discrete coefficients and is not automatic in general. The
+false neighbor is graded commutativity at cochain level, which fails for the same reason it fails
+in Layer 8 and is why milestone 8 is a homotopy and not an equality.
 
 **API** for the graded product. Constructors: the cup in each bidegree, and the unit. Worked
 example: `H^•(C₂, 𝔽₂) = 𝔽₂[x]` with `x` in degree `1`, which the Layer 8 `C₂` computation is the
@@ -1201,7 +1283,8 @@ Layer 13, which needs the degree multiplication `q ↦ l * q` to be typeable.
 ### Layer 13: the Evens norm
 
 **Prerequisites.** Mathlib: `RegularWreathProduct`, `Equiv.Perm`, `ZMod`, `OpenSubgroup`.
-This roadmap: Layers 6, 8 and 12.
+This roadmap: Layers 6 and 8 for the explicit index-2 form, and Layers 10 and 12 for the general
+construction.
 
 The multiplicative transfer on `𝔽₂`-cohomology for an open subgroup `U ≤ G` of finite index, in
 the shape the Evens-Kahn formula uses. Trivial `𝔽₂`-action throughout. The explicit half needs
@@ -1361,9 +1444,12 @@ a reversed transition map, a sign slip, a degenerate pairing, an impossible grou
 
 Layer 0 comes first. Layers 1 and 2 are independent of each other and both rest only on Layer 0,
 so the canonical carrier and the explicit complex can be built at the same time. After Layer 2,
-four more pieces are independent of one another and four contributors can work on them at once:
-Layer 3's finite comparison, Layer 5's exactness and long exact sequence, Layer 6's transversal
-calculus, and Layer 8's cup formulas.
+three more pieces are independent of one another and three contributors can work on them at once:
+Layer 3's finite comparison, Layer 5's exactness and long exact sequence, and Layer 6's transversal
+calculus. Layer 8's cups are not among them: their projection formula needs Layer 6 and their
+connecting-map identities need Layer 5.
+
+The table below is the dependency graph, and every `Prerequisites` line above agrees with it.
 
 | Layer | Needs |
 |---|---|
@@ -1373,16 +1459,18 @@ calculus, and Layer 8's cup formulas.
 | 3 comparisons | 1, 2 |
 | 4 finite-quotient colimit | 2, 3 |
 | 5 exact sequences | 2; the five-term sequence also needs 0's continuous sections |
-| 6 change of groups | 2 |
-| 7 coinduction, Shapiro | 0, 2, 6 |
+| 6 change of groups | 2; `cor ∘ δ = δ ∘ cor` also needs 5 |
+| 7 coinduction, Shapiro | 0, 2, 6; the algebraic comparison also needs the merged `RepresentationTheory/InductionRestriction` |
 | 8 cup products | 2; the projection formula needs 6, the connecting-map identities need 5 |
 | 9 Galois interface | 3, 4, 5, 8 |
-| 10 all degrees, additive | 1, and 3, 4, 6, 7, which it generalizes |
+| 10 all degrees, additive | 1, and 3, 4, 5, 6, 7, which it generalizes |
 | 11 cohomological dimension | 10 |
-| 12 all bidegrees, multiplicative | 1, 8 |
-| 13 Evens norm | 6, 8 for the explicit form; 12 for the general construction |
+| 12 all bidegrees, multiplicative | 1, 8; agreement with 8 needs 3, the projection formula needs 10 |
+| 13 Evens norm | 6, 8 for the explicit form; 10 and 12 for the general construction |
 
-Every entry in the right-hand column is a Mathlib declaration or an earlier layer of this roadmap.
+Every entry in the right-hand column is a Mathlib declaration, an earlier layer of this roadmap, or
+a merged roadmap. Every dependency points backwards: no layer above uses a milestone of a later
+one, and an integration theorem is stated in the first layer where both of its sides exist.
 Nothing here needs a pull request, a later toolchain pin, or another repository, so every layer can
 be started at the current pin.
 
