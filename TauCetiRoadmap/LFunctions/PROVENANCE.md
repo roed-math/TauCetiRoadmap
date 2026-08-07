@@ -44,11 +44,13 @@ around it, and none of them is a prerequisite of any milestone.
   comparing them is the one place where this roadmap's arithmetic-Frobenius convention and that
   roadmap's reciprocity normalization could be caught disagreeing. That comparison is worth
   doing, and it is not a milestone here.
-- **The shared table with the integral lattices roadmap** fixes six names. Its `GaussianThetaInterface`
-  has a field for biduality, which is milestone 2.2 of this roadmap and has no row, and no field
-  for Poisson summation, which is milestone 2.6 and does have a row. Layer 2 names both objects,
-  so this roadmap is unaffected either way. Raising it with that roadmap is the way to settle it;
-  neither side should edit a byte-identical table alone.
+- **The shared table with the integral lattices roadmap** fixes six names. An earlier copy
+  disagreed with that roadmap's `GaussianThetaInterface` on two rows. Settled 2026-08-07 in a
+  coordinated edit of both roadmaps: the table carries a biduality row, milestone 2.2 here,
+  and no Poisson-summation row, because that roadmap does not consume Poisson summation;
+  milestone 2.6 stays a target of this roadmap with no row. The carrier of the crossing is
+  that roadmap's bundled analytic lattice. The two copies of the block are byte-identical
+  again as of this edit.
 
 ## What is in motion elsewhere
 

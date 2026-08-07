@@ -102,6 +102,9 @@ number field `K`, and recovering the classical object at `K = ℚ` in every case
 Each item is a theorem of a numbered layer here. Another roadmap consumes it and does not
 rebuild it.
 
+- **The arithmetic-to-analytic normalization translation** (Layer 0.4). A consumer working
+  with completed L-functions in either normalization reads its gamma shifts, its conductor,
+  and its critical line through this translation, and does not restate it.
 - **Poisson summation for a general `ZLattice`, and the Gaussian theta transformation**
   (Layers 2.1 to 2.8). For a `ZLattice L` in a finite-dimensional real inner-product space
   and Schwartz `f`, the statement is
@@ -111,6 +114,8 @@ rebuild it.
   (Layer 3), and **completed Hecke L-functions with `‖W(χ)‖ = 1`** (Layers 5 and 6).
 - **Nonvanishing on `Re s = 1` in meromorphic-order form** (Layer 7.5), with the `3-4-1`
   inequality it rests on (Layer 7.4).
+- **The ideal von Mangoldt weight and the logarithmic-derivative Dirichlet series**
+  (Layer 7.6, with the series identity of Layer 9.2).
 - **The Dirichlet-density calculus** (Layer 8A) and **Chebotarev over a general number field**
   (Layer 8D).
 - **Landau's theorem** (Layer 7.1).
@@ -175,20 +180,27 @@ theory roadmap. The roadmap does not depend on Galois cohomology at all.
 The two roadmaps consume each other at different layers. This table is the whole
 interface, and it is byte-identical in both `README.md` files. Nothing crosses between the
 two roadmaps except through a row of this table. The supplier owns each name, and the
-consumer cites the name instead of restating the object.
+consumer cites the name instead of restating the object. The carrier is the bundled analytic
+lattice: a submodule of a Euclidean space together with its discreteness and its `IsZLattice`
+proof.
 
 | Consumer layer | Supplier layer | Exact object or theorem | Agreed provisional name |
 | --- | --- | --- | --- |
-| Integral Lattices 8D | L-functions Layer 2, item 1 | the analytic dual of a `ZLattice` in a real inner product space | `ZLattice.dual` |
-| Integral Lattices 8D | L-functions Layer 2, item 3 | `covolume L * covolume Lᵛ = 1` | `ZLattice.covolume_mul_covolume_dual` |
-| Integral Lattices 8E | L-functions Layer 2, item 6 | Poisson summation `∑_{v ∈ L} f v = (covolume L)⁻¹ ∑_{w ∈ Lᵛ} 𝓕f w` | `ZLattice.tsum_eq_covolume_inv_mul_tsum_dual` |
-| Integral Lattices 8E | L-functions Layer 2, item 8 | `Θ_L(1/t) = t^{n/2} (covolume L)⁻¹ Θ_{Lᵛ}(t)` for real `t > 0` | `ZLattice.gaussianTheta_one_div` |
+| Integral Lattices 8D | L-functions Layer 2, item 1 | the dual of a bundled analytic lattice, characterized by integrality of the inner products | `ZLattice.dual` |
+| Integral Lattices 8D | L-functions Layer 2, item 2 | biduality `dual (dual Λ) = Λ` | `ZLattice.dual_dual` |
+| Integral Lattices 8D | L-functions Layer 2, item 3 | `covolume Λ * covolume (dual Λ) = 1` | `ZLattice.covolume_mul_covolume_dual` |
+| Integral Lattices 8E | L-functions Layer 2, item 8 | `Θ_Λ(1/t) = t^{n/2} (covolume Λ)⁻¹ Θ_{dual Λ}(t)` for real `t > 0` | `ZLattice.gaussianTheta_one_div` |
 | L-functions Layer 2, items 10 to 13 | Integral Lattices 1B | the dual lattice of an integral bilinear form, and the vocabulary for it | `IntegralLattice.dual` |
 | L-functions Layer 2, items 10 to 13 | Integral Lattices 8D | the analytic dual of the realization of `L` equals `IntegralLattice.dual` | `IntegralLattice.analyticDual_eq_dual` |
 
-The agreed names belong to the supplier. Layer 2 of this roadmap owns the `ZLattice` names, and
-cites the `IntegralLattice` ones. Milestones 2.1, 2.2, 2.3, and 2.8 are named so that the
-integral lattices roadmap's `GaussianThetaInterface` is produced by them, field for field.
+Poisson summation for a lattice is an L-functions target and is not consumed here, so it has
+no row. The dependency is acyclic at item level: L-functions items 1, 2, 3 and 8 use nothing
+from this roadmap; Integral Lattices 8D and 8E use those four items; and L-functions items 10
+to 13 use 1B and 8D.
+
+Layer 2 of this roadmap owns the `ZLattice` names, and cites the `IntegralLattice`
+ones. Milestones 2.1, 2.2, 2.3, and 2.8 are named so that the integral lattices
+roadmap's `GaussianThetaInterface` is produced by them, field for field.
 
 ## Standing hypotheses
 

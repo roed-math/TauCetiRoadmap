@@ -433,9 +433,10 @@ form and its comparison with the analytic dual. Until those declarations exist, 
 layer-DAG table in `README.md`.
 
 The crossing is carried in Lean on both sides. The integral lattices roadmap's `Suggested.lean`
-has `GaussianThetaInterface n`, with fields `dual`, `dual_dual`, `covolume_mul_covolume_dual`,
-and `theta_one_div`; Layers 2.1, 2.2, 2.3, and 2.8 are named so that one term of that structure
-comes from them. Neither roadmap waits for the other.
+has `GaussianThetaInterface n` over its bundled `AnalyticLattice n`, with fields `dual`,
+`mem_dual`, `dual_dual`, `covolume_mul_covolume_dual`, and `gaussianTheta_one_div`; Layers 2.1,
+2.2, 2.3, and 2.8 are named so that one term of that structure comes from them. Neither roadmap
+waits for the other.
 
 The replacement is mechanical: delete this structure, take the two fields to be that roadmap's
 declarations of the same names, and leave Layers 2.10 and 2.11 unchanged. -/
