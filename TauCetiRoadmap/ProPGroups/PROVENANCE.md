@@ -125,7 +125,11 @@ along the isomorphism and removes them.
 ## Ecosystem note on the Mathlib release
 
 At the time of the audit the current Mathlib release was `v4.32.2`, which is later than the
-repository pin. The roadmap is written against the pin. Bumping the pin is a repository-level
-change: at `v4.32.2` the whole repository builds except for two files of another roadmap,
+repository's manifest. The roadmap names no Mathlib version: it is tested against whatever
+Mathlib the repository currently builds, and moving that manifest is a repository-level
+change outside any roadmap. For whoever makes that change: at `v4.32.2` the whole repository
+builds except for two files of another roadmap,
 `TauCetiRoadmap/RepresentationTheory/{LieHighestWeight,SpinRepresentations}/Suggested.lean`,
-because Mathlib no longer provides the `LieRing (Matrix (Fin n) (Fin n) K)` instance.
+because Mathlib no longer provides the `LieRing (Matrix (Fin n) (Fin n) K)` instance, and
+the continuous-cohomology carrier moves to
+`Mathlib/RepresentationTheory/Homological/ContCohomology/` over `TopRep`.

@@ -10,14 +10,14 @@ finishes neither a layer nor the roadmap. `sorry` is allowed in this human-owned
 library: these are goals, not proofs.
 
 This file carries the carrier types, so that the central interface of the roadmap is Lean
-code and not pseudocode. The cohomology is Mathlib's `continuousCohomology`, which the pin
+code and not pseudocode. The cohomology is Mathlib's `continuousCohomology`, which Mathlib
 supplies in every degree; this file adds the explicit description in degrees `0`, `1` and `2`,
 the cup product in bidegree `(1,1)`, and the comparison isomorphisms between the two. The
 Demushkin predicate, the rank and `q` invariants, the prescription property that pins the
 canonical character, and the arithmetic inputs of Layer 11 are all stated against those
 objects.
 
-Everything else the pin supports is here too: the profinite foundations, the supernatural
+Everything else is here too: the profinite foundations, the supernatural
 order and index, Sylow theory, the pro-`p`, Frattini and generation layers, the free pro-`C`
 class formalism, free pro-`p` groups with their universal property, the finite-quotient
 determinacy theorem, the lower `p`-series with its graded pieces, the closed-subgroup theory
@@ -440,14 +440,14 @@ def cocycle₂.mk (c : cocycle₂ R G M) : contH2 R G M := Submodule.Quotient.mk
 
 /-! ### The canonical carrier, from Mathlib
 
-Mathlib defines continuous cohomology in every degree at the pin, in
-`Mathlib/RepresentationTheory/Homological/ContCohomology/`, as the homology of homogeneous
-cochains of a topological representation `TopRep k G`. That object is the carrier of every
-cohomological statement in this roadmap: `cd_p`, the rank interpretations, the Demushkin
-predicate and the Layer 11 inputs all read through it. This roadmap defines no second
-cohomology theory.
+Mathlib defines continuous cohomology in every degree, as `continuousCohomology`, the
+homology of homogeneous cochains of a topological representation. That object is the carrier
+of every cohomological statement in this roadmap: `cd_p`, the rank interpretations, the
+Demushkin predicate and the Layer 11 inputs all read through it. This roadmap defines no
+second cohomology theory, and this file elaborates against the Mathlib the repository
+currently builds.
 
-What Mathlib does not have at the pin is the explicit description in low degrees and the cup
+What Mathlib does not yet have is the explicit description in low degrees and the cup
 product, and those are what the Demushkin predicate and the extension dictionary need. They
 are stated below on cocycles, with comparison isomorphisms to the canonical object as Layer 5
 milestones. -/
@@ -468,17 +468,18 @@ scoped instance : ContinuousAdd (ULift.{u} (ZMod p)) := ⟨continuous_of_discret
 scoped instance : ContinuousSMul (ZMod p) (ULift.{u} (ZMod p)) :=
   ⟨continuous_of_discreteTopology⟩
 
-/-- The trivial `G`-representation on `𝔽_p`, as one of Mathlib's topological
-representations. -/
+/-- The trivial `G`-representation on `𝔽_p`, as an object of Mathlib's category of
+topological representations. -/
 noncomputable def trivialFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
-    [IsTopologicalGroup G] : TopRep.{u} (ZMod p) G :=
-  TopRep.of (ContRepresentation.trivial (ZMod p) G (ULift.{u} (ZMod p)))
+    [IsTopologicalGroup G] : Action (TopModuleCat.{u} (ZMod p)) G where
+  V := TopModuleCat.of (ZMod p) (ULift.{u} (ZMod p))
+  ρ := 1
 
 /-- **`Hⁿ(G, 𝔽_p)`**, against Mathlib's canonical carrier. Every dimension count below is
 about this object. -/
 noncomputable abbrev cohomFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] (n : ℕ) : TopModuleCat.{u} (ZMod p) :=
-  continuousCohomology n (trivialFp p G)
+  (continuousCohomology (ZMod p) G n).obj (trivialFp p G)
 
 /-- **Layer 6, cohomological dimension**, against the canonical carrier. The coefficients
 range over the discrete `p`-primary torsion representations, which here are the
@@ -486,8 +487,8 @@ representations over `ZMod (p ^ r)` for every `r`; testing only the finite ones,
 elementary abelian ones for a pro-`p` group, are the two reduction theorems of Layer 6, and
 not the definition. -/
 def cdLE (p n : ℕ) (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] : Prop :=
-  ∀ m : ℕ, n < m → ∀ r : ℕ, 1 ≤ r → ∀ A : TopRep.{u} (ZMod (p ^ r)) G,
-    Subsingleton (continuousCohomology m A)
+  ∀ m : ℕ, n < m → ∀ r : ℕ, 1 ≤ r → ∀ A : Action (TopModuleCat.{u} (ZMod (p ^ r))) G,
+    Subsingleton ((continuousCohomology (ZMod (p ^ r)) G m).obj A)
 
 end Carrier
 

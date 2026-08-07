@@ -39,11 +39,6 @@ namespace TauCetiRoadmap.RepresentationTheory.SpinRepresentations
 open CliffordAlgebra
 open scoped Classical DirectSum Quaternion TensorProduct
 
--- Mathlib makes the Lie structure of an associative ring a *local* instance, so a file that
--- brackets matrices has to ask for it. See `Mathlib/Algebra/Lie/OfAssociative.lean`.
-attribute [local instance 100] LieRing.ofAssociativeRing LieAlgebra.ofAssociativeAlgebra
-attribute [local instance] LieRingModule.ofAssociativeModule
-
 universe u v
 
 variable {R : Type u} [CommRing R] {M : Type v} [AddCommGroup M] [Module R M]
