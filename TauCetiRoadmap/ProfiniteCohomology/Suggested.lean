@@ -17,32 +17,42 @@ additive package and Layer 11's all-bidegree cup product) have **no Lean prototy
 because their statements cannot yet be written down, and the roadmap's honest-`sorry` rule
 forbids naming a condition one cannot state. They are mandatory roadmap content all the same.
 
-What is prototyped is pin-expressible: the discrete-module openness API and continuous
-sections of profinite quotients (Layer 0), trivial-action `H¹` worked examples through
-`ContinuousAddMonoidHom` (Layer 1), the two topological facts the Layer 2 comparison rests on
-(discreteness of `C(G, M)` and the compact-open exponential law), the strict finite-level
-descent of continuous cocycles and the well-definedness of the transition maps (Layer 3), the
-exactness of discrete cochain lifting (Layer 4), the corestriction transversal calculus for a
-**variable** transversal, with the representative action that general coefficients force
-(Layer 5), the uniform local constancy behind coinduction (Layer 6), two cup-product cocycle
-identities and the `C₂` nontriviality anchor (Layer 7), the profinite Galois group of the
-separable closure and the general-`n` Kummer cocycle (Layer 8), the order-theoretic shape of
-cohomological dimension (Layer 10), and the index-2 Evens graph cocycle with its `C₈` anchor
-(Layer 12).
+What is prototyped is pin-expressible: the discrete-module openness API, the invariant
+coefficients `M^U` with their `G ⧸ U`-action, and continuous sections of profinite quotients
+(Layer 0); trivial-action `H¹` worked examples through `ContinuousAddMonoidHom` (Layer 1); the
+two topological facts the Layer 2 comparison rests on (discreteness of `C(G, M)` and the
+compact-open exponential law); the strict finite-level descent of continuous cocycles and the
+whole transition package of the finite-quotient system, quotient map, coefficient inclusion,
+compatible pair, transition map and its two functor laws (Layer 3); the exactness of discrete
+cochain lifting (Layer 4); the corestriction transversal calculus for a **variable**
+transversal, with the representative action that general coefficients force (Layer 5); the
+uniform local constancy behind coinduction (Layer 6); two cup-product cocycle identities and
+the `C₂` nontriviality anchor (Layer 7); the profinite Galois group of the separable closure,
+the roots of unity and power classes, and the general-`n` Kummer cocycle (Layer 8); the
+order-theoretic wrapper behind cohomological dimension (Layer 10); and the index-2 Evens graph
+cocycle with its `C₈` anchor (Layer 12).
+
+Two descriptions of the coefficients appear, as `README.md` §3 fixes them. Statements about
+explicit cochains are written against the unbundled classes `[AddCommGroup M]
+[DistribMulAction G M]`, with `Invariants U M` for `M^U`; statements about cohomology objects
+and the arrows between them are written against Mathlib's `Rep k G`, with
+`Rep.quotientToInvariants`. Layer 0's categorical dictionary identifies the two.
 
 Cocycle identities are spelled with the pinned Mathlib's own `groupCohomology.IsCocycle₁` and
 `IsCocycle₂` (or their explicit trivial-action forms where no `SMul` instance is available),
 which fixes the conventions of `README.md`.
 -/
 
+universe u
+
 namespace TauCetiRoadmap.ProfiniteCohomology
 
-/-! ### Layer 0: discrete modules and continuous sections -/
+/-! ### Layer 0: discrete modules, invariant coefficients, and continuous sections -/
 
 /-- **Layer 0, discrete modules are smooth.** Over a profinite group (compact, totally
 disconnected, in the unbundled classes of the roadmap's conventions), every element of a
 discrete module is fixed by an open **normal** subgroup: the orbit map factors elementwise
-through a finite quotient, so `M = ⋃_U M^U`. This is what the Layer 3 colimit runs on.
+through a finite quotient, so `M = ⋃_U M^U`. The Layer 3 colimit runs on that union.
 (Consume `stabilizer_isOpen`/`continuousSMul_iff_stabilizer_isOpen` and
 `exist_openNormalSubgroup_sub_open_nhds_of_one`.) -/
 example {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
@@ -50,6 +60,51 @@ example {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Compa
     [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M] (m : M) :
     ∃ U : OpenNormalSubgroup G, ∀ u ∈ U, u • m = m :=
   sorry
+
+/-- **Layer 0, the invariant coefficients `M^U`.** The coefficient system of the finite-level
+tower, as an additive subgroup of `M`. It is written for an arbitrary subgroup; the two
+actions below need `U` normal. -/
+def Invariants {G : Type*} [Group G] (U : Subgroup G) (M : Type*) [AddCommGroup M]
+    [DistribMulAction G M] : AddSubgroup M where
+  carrier := {m | ∀ u ∈ U, u • m = m}
+  add_mem' {a b} ha hb u hu := by
+    simp only [Set.mem_setOf_eq] at *
+    rw [smul_add, ha u hu, hb u hu]
+  zero_mem' u _ := smul_zero u
+  neg_mem' {a} ha u hu := by
+    simp only [Set.mem_setOf_eq] at *
+    rw [smul_neg, ha u hu]
+
+/-- **Layer 0, `G` acts on `M^U` for normal `U`.** The subgroup `M^U` is `G`-stable because
+`u • (g • m) = g • ((g⁻¹ u g) • m)` and `g⁻¹ u g` lies in `U`. -/
+instance {G : Type*} [Group G] {M : Type*} [AddCommGroup M] [DistribMulAction G M]
+    (U : Subgroup G) [U.Normal] : DistribMulAction G (Invariants U M) where
+  smul g m := ⟨g • (m : M), by
+    intro u hu
+    have h : (g⁻¹ * u * g) • (m : M) = m := m.2 _ (Subgroup.Normal.conj_mem' ‹_› u hu g)
+    calc u • g • (m : M) = (u * g) • (m : M) := (mul_smul _ _ _).symm
+      _ = (g * (g⁻¹ * u * g)) • (m : M) := by congr 1; group
+      _ = g • ((g⁻¹ * u * g) • (m : M)) := mul_smul _ _ _
+      _ = g • (m : M) := by rw [h]⟩
+  one_smul m := Subtype.ext (one_smul G (m : M))
+  mul_smul g h m := Subtype.ext (mul_smul g h (m : M))
+  smul_zero g := Subtype.ext (smul_zero g)
+  smul_add g m n := Subtype.ext (smul_add g (m : M) (n : M))
+
+/-- **Layer 0, `U` acts trivially on `M^U`, so the action descends to `G ⧸ U`.** This is the
+action that makes the finite-level cocycle statements of Layer 3 well typed. -/
+instance {G : Type*} [Group G] {M : Type*} [AddCommGroup M] [DistribMulAction G M]
+    (U : Subgroup G) [U.Normal] : MulAction (G ⧸ U) (Invariants U M) :=
+  MulAction.ofEndHom <| QuotientGroup.lift U
+    (MulAction.toEndHom : G →* Function.End (Invariants U M))
+    (fun g hg => funext fun a => Subtype.ext (a.2 g hg))
+
+instance {G : Type*} [Group G] {M : Type*} [AddCommGroup M] [DistribMulAction G M]
+    (U : Subgroup G) [U.Normal] : DistribMulAction (G ⧸ U) (Invariants U M) where
+  smul_zero q := by
+    induction q using QuotientGroup.induction_on with | _ g => exact smul_zero g
+  smul_add q a b := by
+    induction q using QuotientGroup.induction_on with | _ g => exact smul_add g a b
 
 /-- **Layer 0, continuous sections of profinite quotients** (Ribes-Zalesskii Prop. 2.2.2).
 For a **closed** subgroup `H` of a profinite group the projection `G → G ⧸ H` has a
@@ -110,22 +165,22 @@ example {G : Type*} [TopologicalSpace G] [LocallyCompactSpace G] {M : Type*}
     Function.Bijective (ContinuousMap.curry : C(G × G, M) → C(G, C(G, M))) :=
   sorry
 
-/-! ### Layer 3: descent to finite levels -/
+/-! ### Layer 3: descent to finite levels, and the finite-quotient system -/
 
 /-- **Layer 3, continuous 1-cocycles descend strictly.** The degree-1 surjectivity half of
 the colimit theorem `H¹(G, M) ≅ colim_U H¹(G ⧸ U, M^U)`, stated raw and with **no coboundary
 subtracted**: the zero set of a continuous 1-cocycle is an open subgroup, and any open normal
 `U` inside it makes the cocycle right-`U`-invariant (so it factors through `G ⧸ U`) and
-`U`-fixed-valued (so it lands in `M^U`). The conclusion says exactly that the original
-cocycle is the inflation of `F`. The cocycle identity for `F` as a 1-cocycle of `G ⧸ U` on
-`M^U` transports along the factorization once Layer 0 has given `M^U` its `G ⧸ U`-action; a
-coboundary enters only in the injectivity half of the colimit theorem. -/
+`U`-fixed-valued (so it lands in `M^U`). The descended `F` is asked to be a 1-cocycle of
+`G ⧸ U` on `M^U` on the nose, for the action of Layer 0, so that the conclusion says exactly
+that the original cocycle is the inflation of a finite-level cocycle. A coboundary enters
+only in the injectivity half of the colimit theorem. -/
 example {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
     [TotallyDisconnectedSpace G] {M : Type*} [AddCommGroup M] [TopologicalSpace M]
     [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M]
     (f : G → M) (hf : Continuous f) (hcoc : groupCohomology.IsCocycle₁ f) :
-    ∃ (U : OpenNormalSubgroup G) (F : G ⧸ U.toSubgroup → M),
-      (∀ g : G, F (QuotientGroup.mk g) = f g) ∧ ∀ u ∈ U, ∀ x, u • F x = F x :=
+    ∃ (U : OpenNormalSubgroup G) (F : G ⧸ U.toSubgroup → Invariants U.toSubgroup M),
+      groupCohomology.IsCocycle₁ F ∧ ∀ g : G, (F (QuotientGroup.mk g) : M) = f g :=
   sorry
 
 /-- **Layer 3, continuous 2-cocycles descend strictly.** The degree-2 half, by uniform local
@@ -137,23 +192,90 @@ example {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Compa
     [TotallyDisconnectedSpace G] {M : Type*} [AddCommGroup M] [TopologicalSpace M]
     [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M]
     (f : G × G → M) (hf : Continuous f) (hcoc : groupCohomology.IsCocycle₂ f) :
-    ∃ (U : OpenNormalSubgroup G) (F : (G ⧸ U.toSubgroup) × (G ⧸ U.toSubgroup) → M),
-      (∀ g h : G, F (QuotientGroup.mk g, QuotientGroup.mk h) = f (g, h)) ∧
-        ∀ u ∈ U, ∀ x, u • F x = F x :=
+    ∃ (U : OpenNormalSubgroup G)
+      (F : (G ⧸ U.toSubgroup) × (G ⧸ U.toSubgroup) → Invariants U.toSubgroup M),
+      groupCohomology.IsCocycle₂ F ∧
+        ∀ g h : G, (F (QuotientGroup.mk g, QuotientGroup.mk h) : M) = f (g, h) :=
   sorry
 
-/-- **Layer 3, the transition maps of the finite-quotient system.** For open normal `V ≤ U`
-the system's arrow runs from the `U`-level to the `V`-level,
-`Hⁱ(G ⧸ U, M^U) → Hⁱ(G ⧸ V, M^V)`, which is why the index category is
-`(OpenNormalSubgroup G)ᵒᵖ`: Mathlib's `ProfiniteGrp.toFiniteQuotientFunctor` sends `V ≤ U` to
-`G ⧸ V → G ⧸ U`, the other way. The arrow is the compatible pair consisting of that quotient
-homomorphism and the coefficient inclusion `M^U ↪ M^V`, and the statement below is what makes
-that pair well typed: on `M^U` the action of `g` depends only on the class of `g` in `G ⧸ V`
-whenever `V ≤ U`. -/
+/-- **Layer 3, why the coefficient inclusion is equivariant.** For `V ≤ U` the action of `g`
+on `M^U` depends only on the class of `g` in `G ⧸ V`. This is the elementary fact behind
+`invariantsInclusion_equivariant` below, and the reason the pair `(G ⧸ V → G ⧸ U, M^U ↪ M^V)`
+is a compatible pair at all. -/
 example {G : Type*} [Group G] {M : Type*} [AddCommGroup M] [DistribMulAction G M]
     {U V : Subgroup G} (hVU : V ≤ U) (m : M) (hm : ∀ u ∈ U, u • m = m) {g g' : G}
     (hgg' : g⁻¹ * g' ∈ V) : g • m = g' • m :=
   sorry
+
+section FiniteQuotientSystem
+
+open CategoryTheory Representation
+
+variable {k G : Type u} [CommRing k] [Group G] [TopologicalSpace G] (A : Rep k G)
+
+/-- **Layer 3, the group half of the transition pair.** For `V ≤ U` this is the quotient
+homomorphism `G ⧸ V → G ⧸ U`, the direction of Mathlib's
+`ProfiniteGrp.toFiniteQuotientFunctor`. The cohomological transition map built from it runs
+the other way, from the `U`-level to the `V`-level, which is why the index category of the
+system is `(OpenNormalSubgroup G)ᵒᵖ`. -/
+def finiteQuotientMap (U V : OpenNormalSubgroup G) (hVU : V ≤ U) :
+    G ⧸ V.toSubgroup →* G ⧸ U.toSubgroup :=
+  QuotientGroup.map V.toSubgroup U.toSubgroup (MonoidHom.id G) fun _ hx => hVU hx
+
+/-- **Layer 3, `M^U ⊆ M^V` for `V ≤ U`.** Fewer conditions on the smaller subgroup. -/
+theorem invariants_le (U V : OpenNormalSubgroup G) (hVU : V ≤ U) :
+    invariants (A.ρ.comp U.toSubgroup.subtype) ≤ invariants (A.ρ.comp V.toSubgroup.subtype) :=
+  fun _ hm g => hm ⟨g.1, hVU g.2⟩
+
+/-- **Layer 3, the coefficient half of the transition pair,** the inclusion `M^U ↪ M^V`.
+Coefficients are taken on the `Rep` side here, as `Rep.quotientToInvariants`, because that is
+where Mathlib's compatible-pair API for cohomology lives; Layer 0's dictionary identifies this
+object with `Invariants U M` above. -/
+noncomputable def invariantsInclusion (U V : OpenNormalSubgroup G) (hVU : V ≤ U) :
+    invariants (A.ρ.comp U.toSubgroup.subtype) →ₗ[k] invariants (A.ρ.comp V.toSubgroup.subtype) :=
+  Submodule.inclusion (invariants_le A U V hVU)
+
+/-- **Layer 3, equivariance of the coefficient inclusion** after restriction along
+`finiteQuotientMap`: the `G ⧸ U`-action on `M^U`, pulled back to `G ⧸ V`, agrees with the
+`G ⧸ V`-action on `M^V`. Together with `finiteQuotientMap` it makes the pair below well typed. -/
+theorem invariantsInclusion_equivariant (U V : OpenNormalSubgroup G) (hVU : V ≤ U)
+    (x : G ⧸ V.toSubgroup) (m : invariants (A.ρ.comp U.toSubgroup.subtype)) :
+    invariantsInclusion A U V hVU
+        ((A.quotientToInvariants U.toSubgroup).ρ (finiteQuotientMap U V hVU x) m) =
+      (A.quotientToInvariants V.toSubgroup).ρ x (invariantsInclusion A U V hVU m) :=
+  sorry
+
+/-- **Layer 3, the transition pair itself,** assembled from its two halves. -/
+noncomputable def transitionPair (U V : OpenNormalSubgroup G) (hVU : V ≤ U) :
+    Rep.res (finiteQuotientMap U V hVU) (A.quotientToInvariants U.toSubgroup) ⟶
+      A.quotientToInvariants V.toSubgroup :=
+  Rep.ofHom ⟨invariantsInclusion A U V hVU,
+    fun x ↦ LinearMap.ext (invariantsInclusion_equivariant A U V hVU x)⟩
+
+/-- **Layer 3, the transition map of the finite-quotient system,**
+`Hⁱ(G ⧸ U, M^U) → Hⁱ(G ⧸ V, M^V)` for `V ≤ U`, through Mathlib's discrete
+`groupCohomology.map`. The target category is `ModuleCat k`, which for `k = ℤ` is the
+`AddCommGrp` of the roadmap's explicit low-degree statements. -/
+noncomputable def finiteLevelTransition (U V : OpenNormalSubgroup G) (hVU : V ≤ U) (i : ℕ) :
+    groupCohomology (A.quotientToInvariants U.toSubgroup) i ⟶
+      groupCohomology (A.quotientToInvariants V.toSubgroup) i :=
+  groupCohomology.map (finiteQuotientMap U V hVU) (transitionPair A U V hVU) i
+
+/-- **Layer 3, the first functor law.** -/
+theorem finiteLevelTransition_id (U : OpenNormalSubgroup G) (i : ℕ) :
+    finiteLevelTransition A U U le_rfl i = 𝟙 _ :=
+  sorry
+
+/-- **Layer 3, the second functor law,** for `W ≤ V ≤ U`: the transition from the `U`-level to
+the `W`-level is the composite through the `V`-level. With the previous law this says the
+system is a functor on `(OpenNormalSubgroup G)ᵒᵖ`, which the colimit theorem needs. -/
+theorem finiteLevelTransition_comp (U V W : OpenNormalSubgroup G) (hVU : V ≤ U) (hWV : W ≤ V)
+    (i : ℕ) :
+    finiteLevelTransition A U W (hWV.trans hVU) i =
+      finiteLevelTransition A U V hVU i ≫ finiteLevelTransition A V W hWV i :=
+  sorry
+
+end FiniteQuotientSystem
 
 /-! ### Layer 4: exactness of cochains -/
 
@@ -170,46 +292,55 @@ example {X : Type*} [TopologicalSpace X] {B C : Type*} [AddCommGroup B] [AddComm
 
 /-! ### Layer 5: the corestriction transversal calculus -/
 
-/-- **Layer 5, the transversal word.** For a **variable** transversal `t : G ⧸ U → G` the word
-`ℓᵗ_u(γ) = (t u)⁻¹ * γ * t (γ⁻¹ • u)` lands in `U`. The transversal is a variable and not
-`Quotient.out` from the start, because independence of the transversal is a theorem of Layer
-5 and cannot even be stated otherwise. -/
-example {G : Type*} [Group G] (U : Subgroup G) (t : G ⧸ U → G)
-    (ht : ∀ x : G ⧸ U, QuotientGroup.mk (t x) = x) (u : G ⧸ U) (γ : G) :
-    (t u)⁻¹ * γ * t (γ⁻¹ • u) ∈ U :=
+/-- **Layer 5, the transversal word** `ℓᵗ_u(γ) = (t u)⁻¹ * γ * t (γ⁻¹ • u)`, for a
+**variable** transversal `t : G ⧸ U → G`. The transversal is a variable and not `Quotient.out`
+from the start, because independence of the transversal is a theorem of Layer 5 and cannot
+even be stated otherwise. -/
+def lWord {G : Type*} [Group G] (U : Subgroup G) (t : G ⧸ U → G) (u : G ⧸ U) (γ : G) : G :=
+  (t u)⁻¹ * γ * t (γ⁻¹ • u)
+
+/-- **Layer 5, the transversal word lands in `U`.** -/
+theorem lWord_mem {G : Type*} [Group G] (U : Subgroup G) (t : G ⧸ U → G)
+    (ht : ∀ x : G ⧸ U, QuotientGroup.mk (t x) = x) (u : G ⧸ U) (γ : G) : lWord U t u γ ∈ U :=
   sorry
 
 /-- **Layer 5, the transversal 1-cocycle law.** `ℓᵗ_u(γ) * ℓᵗ_{γ⁻¹ • u}(η) = ℓᵗ_u(γ * η)`:
 pure group theory, with no normality, no finite index, and no condition on `t` at all. This
-identity is what makes the degree-2 corestriction sum a cocycle. -/
+identity is why the degree-2 corestriction sum is a cocycle. -/
 example {G : Type*} [Group G] (U : Subgroup G) (t : G ⧸ U → G) (u : G ⧸ U) (γ η : G) :
-    ((t u)⁻¹ * γ * t (γ⁻¹ • u)) * ((t (γ⁻¹ • u))⁻¹ * η * t (η⁻¹ • γ⁻¹ • u)) =
-      (t u)⁻¹ * (γ * η) * t ((γ * η)⁻¹ • u) :=
+    lWord U t u γ * lWord U t (γ⁻¹ • u) η = lWord U t u (γ * η) :=
   sorry
 
 /-- **Layer 5, corestriction in degree 1, with general coefficients.** The corestriction of a
 1-cocycle of `U` is `(cor¹_t f) γ = ∑ u, t u • f (ℓᵗ_u γ)`, and the factor `t u •` is forced:
 the proof rewrites `t u * ℓᵗ_u(γ) = γ * t (γ⁻¹ • u)` and reindexes, and without the action
 the sum is not a cocycle. The `ZMod 2` formulas of `roed-math/gq2-lean` omit the factor only
-because the action there is trivial. `f` is asked to satisfy the 1-cocycle law on `U` alone,
-which is all the corestriction of a class of `H¹(U, M)` depends on. -/
-example {G : Type*} [Group G] {M : Type*} [AddCommGroup M] [DistribMulAction G M]
-    (U : Subgroup G) [Fintype (G ⧸ U)] (t : G ⧸ U → G)
-    (ht : ∀ x : G ⧸ U, QuotientGroup.mk (t x) = x)
-    (f : G → M) (hf : ∀ a ∈ U, ∀ b ∈ U, f (a * b) = a • f b + f a) :
-    groupCohomology.IsCocycle₁ (fun γ : G ↦ ∑ u : G ⧸ U, t u • f ((t u)⁻¹ * γ * t (γ⁻¹ • u))) :=
+because the action there is trivial. The input is a cocycle **on `U`**, since that is all a
+class of `H¹(U, M)` is, and the transversal word is fed to it through its membership proof. -/
+example {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    {M : Type*} [AddCommGroup M] [TopologicalSpace M] [DiscreteTopology M]
+    [DistribMulAction G M] [ContinuousSMul G M]
+    (U : OpenSubgroup G) [Fintype (G ⧸ U.toSubgroup)] (t : G ⧸ U.toSubgroup → G)
+    (ht : ∀ x : G ⧸ U.toSubgroup, QuotientGroup.mk (t x) = x)
+    (f : U.toSubgroup → M) (hf : Continuous f) (hcoc : groupCohomology.IsCocycle₁ f) :
+    groupCohomology.IsCocycle₁
+        (fun γ : G ↦ ∑ u : G ⧸ U.toSubgroup, t u • f ⟨lWord U.toSubgroup t u γ,
+          lWord_mem U.toSubgroup t ht u γ⟩) ∧
+      Continuous (fun γ : G ↦ ∑ u : G ⧸ U.toSubgroup, t u • f ⟨lWord U.toSubgroup t u γ,
+        lWord_mem U.toSubgroup t ht u γ⟩) :=
   sorry
 
 /-- **Layer 5, `cor ∘ res` is the index only after passing to cohomology.** On cochains the
 composite differs from `(G : U) • f` by the coboundary of `c = ∑ u, f (t u)`, so the roadmap
 states `cor ∘ res = (G : U) • id` on `H⁰`, `H¹` and `H²` and never as a cochain identity in
 positive degrees. The analogous degree-2 statement replaces `c` by an explicit continuous
-1-cochain. -/
+1-cochain. Here `f` is a cocycle on all of `G`, since the composite starts by restricting
+it. -/
 example {G : Type*} [Group G] {M : Type*} [AddCommGroup M] [DistribMulAction G M]
     (U : Subgroup G) [Fintype (G ⧸ U)] (t : G ⧸ U → G)
     (ht : ∀ x : G ⧸ U, QuotientGroup.mk (t x) = x)
     (f : G → M) (hf : groupCohomology.IsCocycle₁ f) (γ : G) :
-    ∑ u : G ⧸ U, t u • f ((t u)⁻¹ * γ * t (γ⁻¹ • u)) =
+    ∑ u : G ⧸ U, t u • f (lWord U t u γ) =
       U.index • f γ + (γ • (∑ v : G ⧸ U, f (t v)) - ∑ v : G ⧸ U, f (t v)) :=
   sorry
 
@@ -286,46 +417,77 @@ example (K : Type*) [Field K] :
       Continuous e ∧ Continuous e.symm :=
   sorry
 
+/-- **Layer 8, `μₙ`,** the `n`-th roots of unity in the separable closure, as a subgroup of
+`(Kˢ)ˣ`. It carries the natural, in general nontrivial, action of `G_K`, and it is the
+coefficient module of the Kummer isomorphism. -/
+noncomputable def muN (K : Type*) [Field K] (n : ℕ) : Subgroup (SeparableClosure K)ˣ :=
+  rootsOfUnity n (SeparableClosure K)
+
+/-- **Layer 8, the subgroup of `n`-th powers `(Kˣ)ⁿ ≤ Kˣ`.** -/
+def powerSubgroup (K : Type*) [Field K] (n : ℕ) : Subgroup Kˣ :=
+  (powMonoidHom n : Kˣ →* Kˣ).range
+
+/-- **Layer 8, the group of power classes `Kˣ ⧸ (Kˣ)ⁿ`,** the left-hand side of the Kummer
+isomorphism. -/
+abbrev powerClassQuotient (K : Type*) [Field K] (n : ℕ) : Type _ :=
+  Kˣ ⧸ powerSubgroup K n
+
+-- The action of `Gal(Kˢ/K)` on `(Kˢ)ˣ` is found by instance search, but not within the
+-- default budget for a type this deep.
+set_option synthInstance.maxHeartbeats 40000 in
 /-- **Layer 8, the Kummer cocycle for general `n`.** Assume `n` invertible in `K`. For
 `a ∈ Kˣ` with a chosen `n`-th root `r` in the separable closure (which exists because
 `Xⁿ - a` is separable when `n` is invertible, and `SeparableClosure K` is separably closed),
-the map `κ_a(g) = g r / r` takes values in `μₙ`, is a **multiplicative** 1-cocycle for the
-natural, in general nontrivial, action of `G_K` on `μₙ`, and is locally constant for the
-Krull topology because the stabilizer of `r` is open. Its class is the image of `a` under the
-connecting map of `1 → μₙ → (Kˢ)ˣ → (Kˢ)ˣ → 1`, and the resulting map induces the Kummer
-isomorphism `Kˣ ⧸ (Kˣ)ⁿ ≅ H¹(G_K, μₙ)`. -/
+the map `κ_a(g) = g r / r` takes its values in `μₙ`, is a **multiplicative** 1-cocycle, and is
+locally constant for the Krull topology because the stabilizer of `r` is open. Its class is
+the image of `a` under the connecting map of `1 → μₙ → (Kˢ)ˣ → (Kˢ)ˣ → 1`, and the resulting
+map induces the Kummer isomorphism `Kˣ ⧸ (Kˣ)ⁿ ≅ H¹(G_K, μₙ)`. That last sentence is a
+mandatory `README.md` milestone rather than a statement here: the class-level signature needs
+Layer 1's explicit `H¹`, and inventing a placeholder for it would assert nothing. -/
 example (K : Type*) [Field K] (n : ℕ) [NeZero n] (hn : IsUnit (n : K)) (a : Kˣ)
-    (r : SeparableClosure K)
-    (hr : r ^ n = algebraMap K (SeparableClosure K) (a : K)) :
-    (∀ g : SeparableClosure K ≃ₐ[K] SeparableClosure K, (g r / r) ^ n = 1) ∧
-      (∀ g h : SeparableClosure K ≃ₐ[K] SeparableClosure K,
-        (g * h) r / r = g (h r / r) * (g r / r)) ∧
-      IsLocallyConstant (fun g : SeparableClosure K ≃ₐ[K] SeparableClosure K ↦ g r / r) :=
+    (r : (SeparableClosure K)ˣ)
+    (hr : (r : SeparableClosure K) ^ n = algebraMap K (SeparableClosure K) (a : K)) :
+    ∃ κ : (SeparableClosure K ≃ₐ[K] SeparableClosure K) → muN K n,
+      (∀ g, (κ g : (SeparableClosure K)ˣ) = g • r / r) ∧
+        groupCohomology.IsMulCocycle₁ (fun g ↦ (κ g : (SeparableClosure K)ˣ)) ∧
+        IsLocallyConstant κ :=
   sorry
 
+set_option synthInstance.maxHeartbeats 40000 in
 /-- **Layer 8, the Kummer class does not depend on the chosen root.** Two `n`-th roots of the
-same `a` differ by an element of `μₙ`, and the two cocycles differ by the coboundary of that
-element. Without this the connecting map is not well defined on `Kˣ`. -/
-example (K : Type*) [Field K] (n : ℕ) [NeZero n] (a : Kˣ) (r r' : SeparableClosure K)
-    (hr : r ^ n = algebraMap K (SeparableClosure K) (a : K))
-    (hr' : r' ^ n = algebraMap K (SeparableClosure K) (a : K)) :
-    ∃ ζ : SeparableClosure K, ζ ^ n = 1 ∧ r' = ζ * r ∧
+same `a` differ by an `n`-th root of unity, and the two cocycles differ by the coboundary of
+that root of unity. Without this the connecting map is not well defined on `Kˣ`. The factor
+`ζ` is typed as an element of `μₙ`, not as a field element that happens to satisfy
+`ζ ^ n = 1`. -/
+example (K : Type*) [Field K] (n : ℕ) [NeZero n] (a : Kˣ) (r r' : (SeparableClosure K)ˣ)
+    (hr : (r : SeparableClosure K) ^ n = algebraMap K (SeparableClosure K) (a : K))
+    (hr' : (r' : SeparableClosure K) ^ n = algebraMap K (SeparableClosure K) (a : K)) :
+    ∃ ζ : muN K n, (r' : (SeparableClosure K)ˣ) = (ζ : (SeparableClosure K)ˣ) * r ∧
       ∀ g : SeparableClosure K ≃ₐ[K] SeparableClosure K,
-        g r' / r' = (g ζ / ζ) * (g r / r) :=
+        g • r' / r' =
+          (g • (ζ : (SeparableClosure K)ˣ) / (ζ : (SeparableClosure K)ˣ)) * (g • r / r) :=
   sorry
 
 /-! ### Layer 10: cohomological dimension -/
 
-/-- **Layer 10, the shape of `cd_p`.** The roadmap defines cohomological dimension from a
-`Prop`-valued predicate `CohomologicalDimensionLE p G n` on `n : ℕ` and only then takes an
-infimum, with codomain `ℕ∞` so that "infinite cohomological dimension" is `⊤` rather than an
-absent value. The order-theoretic content of that definition, and the reason it deserves to
-be made once, is the statement below: for an upward-closed predicate the infimum in `ℕ∞`
-inverts the predicate, and the empty case gives `⊤` because `sInf ∅ = ⊤`. Instantiating `P`
-at the vanishing predicate of Layer 9 gives `cd_p G ≤ n ↔ CohomologicalDimensionLE p G n`,
-and the same shape serves `cd` and `scd_p`. -/
-example (P : ℕ → Prop) (hP : ∀ m n : ℕ, m ≤ n → P m → P n) (n : ℕ) :
-    sInf {m : ℕ∞ | ∃ k : ℕ, m = (k : ℕ∞) ∧ P k} ≤ (n : ℕ∞) ↔ P n :=
+/-- **Layer 10, the least bound of a predicate on `ℕ`, in `ℕ∞`.** The roadmap defines
+cohomological dimension from a `Prop`-valued predicate on `ℕ` and only then takes an infimum,
+with codomain `ℕ∞` so that "infinite cohomological dimension" is `⊤` rather than an absent
+value. All four of `CohomologicalDimensionLE`, `StrictCohomologicalDimensionLE`, `cd_p` and
+`scd_p` are stated against Layer 9's `Hⁿ`, hence E0; the order-theoretic wrapper is not, and
+it is made once here rather than three times inline. -/
+noncomputable def leastENatBound (P : ℕ → Prop) : ℕ∞ :=
+  sInf {m : ℕ∞ | ∃ n : ℕ, m = (n : ℕ∞) ∧ P n}
+
+/-- **Layer 10, the characterization for an upward-closed predicate.** Instantiating `P` at
+the vanishing predicate of Layer 9 gives `cd_p G ≤ n ↔ CohomologicalDimensionLE p G n`, and
+the same shape serves `cd` and `scd_p`. -/
+theorem leastENatBound_le_iff (P : ℕ → Prop) (hP : ∀ m n : ℕ, m ≤ n → P m → P n) (n : ℕ) :
+    leastENatBound P ≤ (n : ℕ∞) ↔ P n :=
+  sorry
+
+/-- **Layer 10, the empty case.** No bound at all gives `⊤`, since `sInf ∅ = ⊤` in `ℕ∞`. -/
+theorem leastENatBound_eq_top (P : ℕ → Prop) (hP : ∀ n : ℕ, ¬ P n) : leastENatBound P = ⊤ :=
   sorry
 
 /-! ### Layer 12: the Evens norm at index 2 -/
