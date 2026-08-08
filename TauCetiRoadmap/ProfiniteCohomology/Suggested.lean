@@ -24,9 +24,17 @@ The two central interfaces are prototyped here rather than described. Layer 1's 
 `resolutionMap`, `cochainsMap`, `cocyclesMap`, `map`, `map_id`, `map_comp`, `res`,
 `quotientToInvariants`, `infl` and `coeffMap`, together with `IsSmoothDiscrete` and the
 dictionary `ofDiscreteModule`. Layer 2's explicit theory is `C1`, `C2`, `d0`, `d1`, `Z1`, `Z2`,
-`B1`, `B2`, `H1`, `H2` and the two class maps. With those in place Layer 3's four comparison
+`B1`, `B2`, `H0`, `H1`, `H2` and the two class maps. With those in place Layer 3's comparison
 isomorphisms and Layer 9's class-level `kummerMap` and `kummerIso` are statable, and they are
 stated.
+
+Every operation the roadmap exports is named in all three low degrees where it exists in all three,
+and every comparison between the explicit model and the canonical object is named as well, so that
+a consumer never has to prove that two of these declarations agree. That is `explicitRes0/1/2`,
+`explicitInfl1/2`, `explicitCoeff0/1/2`, `explicitCor0/1/2`, `explicitDelta0/1`, the six cups
+`explicitCup00/01/10/02/11/20`, and the comparisons `explicitIso_map`, `explicitIso_res`,
+`explicitIso_infl`, `explicitIso_coeffMap`, `explicitIso_delta0/1`, `explicitIso_cor0`,
+`explicitIso_cor`, `explicitIso_cor2`, `explicitIso_cup` and `explicitIso_kummerMap`.
 
 Every law below is an equation between named maps. A law about restriction names `res`, one about
 corestriction names `corestriction` or its relative form `corestrictionLe`, and one comparing the
@@ -36,18 +44,22 @@ quantified over an arbitrary morphism is not a weaker statement about the intend
 different and false statement about every morphism. The maps carried for that reason are
 `ofDiscreteModuleMap`, `ofDiscreteModuleQuotient`, `ofDiscreteModulePair`,
 `ofDiscreteModulePairing`, `quotientToInvariantsι`, `explicitMap1`, `explicitInfl1`,
-`explicitCor1`, `explicitCup11`, `cochainClass`, `resLe`, `corestrictionLe`, `conjOpenSubgroup`,
+`explicitCor1`, `explicitCup11`, `explicitConj1`, `explicitFiniteQuotientComparison1`, `delta`,
+`transgression`, `cochainClass`, `resLe`, `corestrictionLe`, `conjOpenSubgroup`,
 `conjMapOf`, `mackeyTerm`, `powerClassMap`, `powerClassNorm`, `kummerRes`, `kummerCor`,
-`f2Pairing`, `cupFamily`, `quotientOpenSubgroup`, `trivialF2Quotient`, `trivialF2Infl`,
-`trivialF2InflSub`, `evensNormLe`, `evensDoubleCosetFactor`, `evensConj`, `homClass` and
-`graphClass`.
+`kummerMapCanonical`, `f2Pairing`, `cupFamily`, `quotientOpenSubgroup`, `trivialF2Quotient`,
+`trivialF2Infl`, `trivialF2InflSub`, `evensNormLe`, `evensDoubleCosetFactor`, `evensConj`,
+`homClass` and `graphClass`.
 
-Two hypotheses are carried as **data** rather than left implicit, because the constructions do not
-exist without them. `CosetTransversal U` bundles a section of `G → G ⧸ U` with the proof that it is
-one: for an arbitrary function the Schreier factors need not lie in `U`, so the monomial
+Three hypotheses are carried as **data** rather than left implicit, because the constructions do
+not exist without them. `CosetTransversal U` bundles a section of `G → G ⧸ U` with the proof that
+it is one: for an arbitrary function the Schreier factors need not lie in `U`, so the monomial
 homomorphism has no target. `IndexTwoDatum U` bundles `(G : U) = 2` with a choice of `s ∉ U`: for an
 arbitrary open subgroup and an arbitrary `s`, conjugation by `s` need not preserve `U` and the graph
-cochain need not be a cocycle.
+cochain need not be a cocycle. `DiscreteShortExact G A B C` bundles a short exact sequence of
+discrete `G`-modules with its two maps: the connecting maps, their exactness, their naturality and
+the corestriction compatibility are all statements about the same sequence, and each of them has to
+name the same two coefficient maps.
 
 Degree 1 of the index-two form is stated on **cochains**, not on classes. `evensB1` and `evensBs`
 are not cocycles: for `G = C₄ = ⟨σ⟩`, `U = ⟨σ²⟩`, `s = σ` and `α ≠ 0`, the values of `evensB1` at
@@ -55,19 +67,22 @@ are not cocycles: for `G = C₄ = ⟨σ⟩`, `U = ⟨σ²⟩`, `s = σ` and `α 
 and only the sum is given a class.
 
 Also prototyped: the discrete-module openness API, the invariant coefficients `M^U` with their
-`G ⧸ U`-action, the internal hom with its evaluation pairing, and continuous sections of profinite
-quotients (Layer 0); trivial-action `H¹` worked examples through `ContinuousAddMonoidHom` and the
-two topological facts the Layer 3 comparison rests on (Layers 2 and 3); the strict finite-level
-descent of continuous cocycles and the whole transition package of the finite-quotient system
-(Layer 4); the exactness of discrete cochain lifting (Layer 5); the corestriction transversal
-calculus for a **variable** transversal, with the representative action that general coefficients
-force (Layer 6); the coinduced module, the uniform local constancy behind it, and the trace
-morphism all-degree corestriction is built from (Layers 7 and 10); two cup-product cocycle
-identities and the `C₂` nontriviality anchor (Layer 8); the profinite Galois group of the
-separable closure, the roots of unity and power classes, and the general-`n` Kummer cocycle
-(Layer 9); the order-theoretic wrapper behind cohomological dimension (Layer 11); the coefficient
-pairing and the bidegree cup (Layer 12); and the index-2 Evens graph cocycle with its `C₈` anchor
-(Layer 13).
+`G ⧸ U`-action, the internal hom with its evaluation pairing `evalPairing`, and continuous sections
+of profinite quotients (Layer 0); trivial-action `H¹` worked examples through
+`ContinuousAddMonoidHom` and the two topological facts the Layer 3 comparison rests on (Layers 2
+and 3); the strict finite-level descent of continuous cocycles, the whole transition package of the
+finite-quotient system, and the colimit theorem as universality of the named comparison cocone
+(Layer 4); the exactness of discrete cochain lifting, the two connecting maps with the eight
+exactness nodes, and the transgression with the five-term sequence (Layer 5); the corestriction
+transversal calculus for a **variable** transversal, with the representative action that general
+coefficients force (Layer 6); the coinduced module, the uniform local constancy behind it, and the
+trace morphism all-degree corestriction is built from (Layers 7 and 10); two cup-product cocycle
+identities, the six low-degree shapes and the `C₂` nontriviality anchor (Layer 8); the profinite
+Galois group of the separable closure, the roots of unity and power classes, and the general-`n`
+Kummer cocycle (Layer 9); the order-theoretic wrapper `leastENatBound`, the two vanishing
+predicates and the three invariants `cd_p`, `scd_p`, `cd` with their two dévissage reductions
+(Layer 11); the coefficient pairing and the bidegree cup (Layer 12); and the index-2 Evens graph
+cocycle with its `C₄` and `C₈` anchors (Layer 13).
 
 Two descriptions of the coefficients appear, as `README.md` §3 fixes them. Statements about
 explicit cochains are written against the unbundled classes `[AddCommGroup M]
@@ -81,7 +96,7 @@ Cocycle identities are spelled with the pinned Mathlib's own `groupCohomology.Is
 which fixes the conventions of `README.md`.
 -/
 
-universe u
+universe u v
 
 namespace TauCetiRoadmap.ProfiniteCohomology
 
@@ -167,13 +182,20 @@ def homAction {G : Type*} [Group G] {M N : Type*} [AddCommGroup M] [AddCommGroup
     [DistribMulAction G M] [DistribMulAction G N] (g : G) (φ : M →+ N) : M →+ N :=
   (DistribSMul.toAddMonoidHom N g).comp (φ.comp (DistribSMul.toAddMonoidHom M g⁻¹))
 
+/-- **Layer 0, the evaluation pairing.** The biadditive map `(M →+ N) →+ M →+ N` sending `φ` and
+`m` to `φ m`, which is the pairing the duality package of Layer 8 feeds to the cup products. It is
+named rather than written inline at each use, because the duality pairings of Layer 8 and of the
+Local Fields roadmap are instances of the six-shape cup API **at this pairing** and at no other. -/
+def evalPairing (M N : Type*) [AddCommGroup M] [AddCommGroup N] : (M →+ N) →+ M →+ N :=
+  AddMonoidHom.id (M →+ N)
+
 /-- **Layer 0, evaluation is equivariant.** The statement that makes the duality cup pairings of
 Layer 8 well typed, and the one the Local Fields roadmap names when it states local Tate duality.
 It is proved rather than assumed, because it is what fixes the sign of the conjugation action. -/
-example {G : Type*} [Group G] {M N : Type*} [AddCommGroup M] [AddCommGroup N]
-    [DistribMulAction G M] [DistribMulAction G N] (g : G) (φ : M →+ N) (m : M) :
-    homAction g φ (g • m) = g • φ m := by
-  simp [homAction, inv_smul_smul]
+theorem evalPairing_equivariant {G : Type*} [Group G] (M N : Type*) [AddCommGroup M]
+    [AddCommGroup N] [DistribMulAction G M] [DistribMulAction G N] (g : G) (φ : M →+ N) (m : M) :
+    evalPairing M N (homAction g φ) (g • m) = g • evalPairing M N φ m := by
+  simp [evalPairing, homAction, inv_smul_smul]
 
 /-! ### Layer 1: the canonical carrier and its functoriality -/
 
@@ -181,9 +203,14 @@ open CategoryTheory in
 /-- **Layer 1, the canonical carrier.** `TopRep R G` is Mathlib's name for this category. At the
 pin it is `Action (TopModuleCat R) G`, and `continuousCohomology R G n` is a functor out of it.
 Every canonical-facing statement in the roadmap is written against this abbreviation, so that
-adopting Mathlib's `TopRep` later is a rename. -/
-abbrev TopRep (R : Type u) [CommRing R] [TopologicalSpace R]
-    (G : Type u) [Group G] [TopologicalSpace G] : Type (u + 1) :=
+adopting Mathlib's `TopRep` later is a rename.
+
+The coefficient ring lives in its own universe `v` and the modules in the group's universe `u`,
+as Mathlib's `TopModuleCat.{u} R` allows. Pinning the two together would make a small ring such as
+`ZMod n : Type 0` unusable over a group in a higher universe, which is exactly the instantiation
+the arithmetic consumers of this interface need. -/
+abbrev TopRep (R : Type v) [CommRing R] [TopologicalSpace R]
+    (G : Type u) [Group G] [TopologicalSpace G] :=
   Action (TopModuleCat.{u} R) G
 
 open CategoryTheory in
@@ -192,7 +219,7 @@ operator per group element and nothing there forces the action to be continuous 
 variable, so an object whose module is discrete can still have non-open stabilizers. The
 dictionary of `README.md` Layer 1 is an equivalence with **this** subcategory and not with all of
 `TopRep`, and every canonical-facing comparison below quantifies over it. -/
-structure IsSmoothDiscrete (R : Type u) [CommRing R] [TopologicalSpace R]
+structure IsSmoothDiscrete (R : Type v) [CommRing R] [TopologicalSpace R]
     {G : Type u} [Group G] [TopologicalSpace G] (X : TopRep R G) : Prop where
   /-- the underlying module is discrete -/
   discreteTopology : DiscreteTopology X.V
@@ -203,7 +230,7 @@ section Carrier
 
 open CategoryTheory
 
-variable (R : Type u) [CommRing R] [TopologicalSpace R]
+variable (R : Type v) [CommRing R] [TopologicalSpace R]
   {G H K : Type u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
   [Group H] [TopologicalSpace H] [IsTopologicalGroup H]
   [Group K] [TopologicalSpace K] [IsTopologicalGroup K]
@@ -351,7 +378,7 @@ section CoefficientEquivalence
 
 open CategoryTheory
 
-variable (R : Type u) [CommRing R] [TopologicalSpace R]
+variable (R : Type v) [CommRing R] [TopologicalSpace R]
   (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
 
 /-- **Layer 1, the smooth discrete full subcategory.** The half of `TopRep` the dictionary is an
@@ -486,6 +513,12 @@ theorem B1_le_Z1 : B1 G M ≤ Z1 G M := sorry
 /-- **Layer 2, `d ∘ d = 0` in degree 2.** -/
 theorem B2_le_Z2 : B2 G M ≤ Z2 G M := sorry
 
+/-- **Layer 2, `H⁰ = M^G`.** Degree 0 is the invariant subgroup itself and not a quotient, as
+`README.md` §3 fixes. It carries a name of its own because the low-degree corestriction, the
+connecting maps and the `(0, q)` and `(q, 0)` cup shapes all need a degree-0 carrier to be stated
+against. -/
+abbrev H0 : AddSubgroup M := Invariants (⊤ : Subgroup G) M
+
 /-- **Layer 2, `H¹ = Z¹/B¹`.** -/
 abbrev H1 := (Z1 G M) ⧸ ((B1 G M).addSubgroupOf (Z1 G M))
 
@@ -523,6 +556,34 @@ noncomputable def discreteH1Equiv : DiscreteH1 G M ≃+ H1 G M := AddEquiv.refl 
 /-- The degree-2 counterpart. -/
 noncomputable def discreteH2Equiv : DiscreteH2 G M ≃+ H2 G M := AddEquiv.refl _
 
+/-- **Layer 2, the conjugation action on `H¹(N, M)` for normal `N`.** The compatible pair
+(conjugation by `g`, the action of `g`) pulls a class of `H¹(N, M)` back to a class of
+`H¹(N, M)`, and this is that map. The five-term sequence of Layer 5 is stated against its
+invariants, so the map is named before those invariants can be. -/
+noncomputable def explicitConj1 (N : Subgroup G) [N.Normal] (g : G) : H1 N M →+ H1 N M :=
+  sorry
+
+/-- **Layer 2, inner automorphisms act trivially** (Milne, ADT Prop. 0.15). This is exactly what
+makes the conjugation action of `G` on `H¹(N, M)` descend to `G ⧸ N`; without it the invariants
+below are the invariants of an action that is not well defined on the quotient. -/
+theorem explicitConj1_eq_id_of_mem (N : Subgroup G) [N.Normal] (g : G) (hg : g ∈ N) :
+    explicitConj1 G M N g = AddMonoidHom.id (H1 N M) :=
+  sorry
+
+/-- **Layer 5, the `G ⧸ N`-invariants of `H¹(N, M)`,** the third term of the five-term sequence.
+By `explicitConj1_eq_id_of_mem` the conditions for `g` and for `g * n` with `n ∈ N` agree, so
+quantifying over `G` and over `G ⧸ N` cuts out the same subgroup; `G` is used because that is the
+form the cochain computations produce. -/
+def H1ConjInvariants (N : Subgroup G) [N.Normal] : AddSubgroup (H1 N M) where
+  carrier := {x | ∀ g : G, explicitConj1 G M N g x = x}
+  add_mem' {a b} ha hb g := by
+    simp only [Set.mem_setOf_eq] at *
+    rw [map_add, ha g, hb g]
+  zero_mem' g := map_zero _
+  neg_mem' {a} ha g := by
+    simp only [Set.mem_setOf_eq] at *
+    rw [map_neg, ha g]
+
 end ExplicitComplex
 
 
@@ -550,6 +611,12 @@ variable (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
   (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
   [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M]
 
+/-- **Layer 3, degree 0 against Mathlib's discrete group cohomology.** The degree Mathlib computes
+outright, and the one the finite-level dictionary is checked at first. -/
+noncomputable def explicitH0IsoGroupCohomology [DiscreteTopology G] [SMulCommClass G ℤ M] :
+    H0 G M ≃+ (groupCohomology (Rep.ofDistribMulAction ℤ G M) 0) :=
+  sorry
+
 /-- **Layer 3, degree 1 against Mathlib's discrete group cohomology.** Every continuity condition
 is vacuous for a discrete group, so this identifies subquotients of the same function space.
 Layer 4 uses it at every finite level. -/
@@ -565,7 +632,7 @@ noncomputable def explicitH2IsoGroupCohomology [DiscreteTopology G] [SMulCommCla
 /-- **Layer 3, `H⁰` as an object of `TopModuleCat ℤ`.** `H⁰` is a subgroup of the discrete `M`, so
 it is discrete already and needs no separate synonym. -/
 noncomputable def explicitH0Obj : TopModuleCat.{0} ℤ :=
-  TopModuleCat.of ℤ (Invariants (⊤ : Subgroup G) M)
+  TopModuleCat.of ℤ (H0 G M)
 
 /-- **Layer 3, `H¹` as an object of `TopModuleCat ℤ`,** built from the **discrete** object. -/
 noncomputable def explicitH1Obj : TopModuleCat.{0} ℤ := TopModuleCat.of ℤ (DiscreteH1 G M)
@@ -580,15 +647,37 @@ noncomputable def ofDiscreteModuleRes (S : Subgroup G) :
     (Action.res _ S.subtype).obj (ofDiscreteModule G M) ≅ ofDiscreteModule S M :=
   sorry
 
+/-- **Layer 2, restriction on the explicit model in degree 0,** the inclusion `M^G ⊆ M^S`. -/
+noncomputable def explicitRes0 (S : Subgroup G) : H0 G M →+ H0 S M := sorry
+
 /-- **Layer 2, restriction on the explicit model,** the instance of the compatible-pair pullback
 at the inclusion of a subgroup. -/
 noncomputable def explicitRes1 (S : Subgroup G) : H1 G M →+ H1 S M := sorry
+
+/-- **Layer 2, restriction on the explicit model in degree 2.** -/
+noncomputable def explicitRes2 (S : Subgroup G) : H2 G M →+ H2 S M := sorry
+
+/-- **Layer 2, a coefficient map on the explicit model in degree 0,** the restriction of `f` to the
+invariants. The three degrees are named separately because the long exact sequence of Layer 5 is an
+exactness statement about all three at once. -/
+noncomputable def explicitCoeff0 (N : Type) [AddCommGroup N] [TopologicalSpace N]
+    [IsTopologicalAddGroup N] [DiscreteTopology N] [DistribMulAction G N] [ContinuousSMul G N]
+    (f : M →+ N) (hf : Continuous f) (hequiv : ∀ (g : G) (m : M), f (g • m) = g • f m) :
+    H0 G M →+ H0 G N :=
+  sorry
 
 /-- **Layer 2, a coefficient map on the explicit model.** -/
 noncomputable def explicitCoeff1 (N : Type) [AddCommGroup N] [TopologicalSpace N]
     [IsTopologicalAddGroup N] [DiscreteTopology N] [DistribMulAction G N] [ContinuousSMul G N]
     (f : M →+ N) (hf : Continuous f) (hequiv : ∀ (g : G) (m : M), f (g • m) = g • f m) :
     H1 G M →+ H1 G N :=
+  sorry
+
+/-- **Layer 2, a coefficient map on the explicit model in degree 2.** -/
+noncomputable def explicitCoeff2 (N : Type) [AddCommGroup N] [TopologicalSpace N]
+    [IsTopologicalAddGroup N] [DiscreteTopology N] [DistribMulAction G N] [ContinuousSMul G N]
+    (f : M →+ N) (hf : Continuous f) (hequiv : ∀ (g : G) (m : M), f (g • m) = g • f m) :
+    H2 G M →+ H2 G N :=
   sorry
 
 /-- **Layer 3, degree 0 against the canonical object,** in `TopModuleCat ℤ`. The pin computes this
@@ -708,10 +797,28 @@ noncomputable def explicitInfl1 (N : Subgroup G) [N.Normal]
     H1 (G ⧸ N) (Invariants N M) →+ H1 G M :=
   sorry
 
+/-- **Layer 2, inflation on the explicit model in degree 2.** The last map of Layer 5's five-term
+sequence, so it is a target in its own right and not a degree the degree-1 statement covers. -/
+noncomputable def explicitInfl2 (N : Subgroup G) [N.Normal]
+    [IsTopologicalGroup (G ⧸ N)] [ContinuousSMul (G ⧸ N) (Invariants N M)] :
+    H2 (G ⧸ N) (Invariants N M) →+ H2 G M :=
+  sorry
+
+/-- **Layer 6, corestriction on the explicit model in degree 0,** the norm
+`cor⁰ m = ∑ u, t u • m` at `t = Quotient.out`. -/
+noncomputable def explicitCor0 (U : OpenSubgroup G) : H0 U.toSubgroup M →+ H0 G M :=
+  sorry
+
 /-- **Layer 6, corestriction on the explicit model in degree 1,** the `t = Quotient.out`
 specialization of the transversal formula of `README.md` §3. The subgroup is **open**, which is
 what makes the transversal finite. -/
 noncomputable def explicitCor1 (U : OpenSubgroup G) : H1 U.toSubgroup M →+ H1 G M :=
+  sorry
+
+/-- **Layer 6, corestriction on the explicit model in degree 2,** the `t = Quotient.out`
+specialization of `(cor²_t f) (γ, η) = ∑ u, t u • f (ℓᵗ_u γ, ℓᵗ_{γ⁻¹ • u} η)`. The two nested
+transversal words are what make this a separate target from degree 1. -/
+noncomputable def explicitCor2 (U : OpenSubgroup G) : H2 U.toSubgroup M →+ H2 G M :=
   sorry
 
 /-- **Layer 3, transport of inflation.** Stated in the same shape as restriction, with the
@@ -841,6 +948,62 @@ theorem finiteLevelTransition_comp (U V W : OpenNormalSubgroup G) (hVU : V ≤ U
 
 end FiniteQuotientSystem
 
+section FiniteQuotientColimit
+
+open CategoryTheory
+
+variable (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+  [TotallyDisconnectedSpace G]
+  (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+  [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M]
+
+/-- **Layer 4, the finite-quotient system in degree 1,** as a functor on
+`(OpenNormalSubgroup G)ᵒᵖ`. The index category is the opposite one because the transition maps run
+from the `U`-level to the `V`-level for `V ≤ U`, against the direction of
+`ProfiniteGrp.toFiniteQuotientFunctor`. Its arrows are `finiteLevelTransition`, and
+`finiteLevelTransition_id` and `finiteLevelTransition_comp` are the two functor laws. The
+coefficients are an explicit binder here because the functor's target category does not mention
+them, and the system does. -/
+noncomputable def explicitFiniteQuotientSystem1 (G : Type) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+    [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M] :
+    (OpenNormalSubgroup G)ᵒᵖ ⥤ AddCommGrpCat.{0} :=
+  sorry
+
+/-- **Layer 4, the value of the finite-quotient system,** which is what makes the colimit statement
+below a statement about `Hⁱ(G ⧸ U, M^U)` rather than about an unnamed functor. -/
+theorem explicitFiniteQuotientSystem1_obj (U : OpenNormalSubgroup G) :
+    (explicitFiniteQuotientSystem1 G M).obj (Opposite.op U) =
+      AddCommGrpCat.of (H1 (G ⧸ U.toSubgroup) (Invariants U.toSubgroup M)) :=
+  sorry
+
+/-- **Layer 4, the comparison maps into `H¹(G, M)`,** inflation along `G → G ⧸ U` followed by the
+coefficient inclusion `M^U ↪ M`, assembled into the leg family of a cocone. They are named because
+the colimit statement is that **these** maps are universal, not that some isomorphism exists. -/
+noncomputable def explicitFiniteQuotientComparison1 :
+    explicitFiniteQuotientSystem1 G M ⟶
+      (Functor.const ((OpenNormalSubgroup G)ᵒᵖ)).obj (AddCommGrpCat.of (H1 G M)) :=
+  sorry
+
+/-- **Layer 4, the comparison cocone,** whose point is `H¹(G, M)` itself. -/
+noncomputable def explicitFiniteQuotientCocone1 :
+    Limits.Cocone (explicitFiniteQuotientSystem1 G M) where
+  pt := AddCommGrpCat.of (H1 G M)
+  ι := explicitFiniteQuotientComparison1 G M
+
+/-- **Layer 4, the colimit theorem** `H¹(G, M) ≅ colim_U H¹(G ⧸ U, M^U)`, in the form that says the
+comparison cocone is universal. Degrees 0 and 2 have the same shape, with `H0` and `H2` in place of
+`H1`; degree 2 is where `CompactSpace` is genuinely used, because descending both variables at once
+is uniform local constancy on `G × G`. Surjectivity of the comparison is strict: a continuous
+cocycle is itself inflated from a finite level, with no coboundary subtracted, and a coboundary
+enters only in the injectivity half. -/
+noncomputable def explicitFiniteQuotientColimit1 :
+    Limits.IsColimit (explicitFiniteQuotientCocone1 G M) :=
+  sorry
+
+end FiniteQuotientColimit
+
 /-! ### Layer 5: exactness of cochains -/
 
 /-- **Layer 5, discrete cochain lifting.** The reason short exact sequences of *discrete*
@@ -853,6 +1016,265 @@ example {X : Type*} [TopologicalSpace X] {B C : Type*} [AddCommGroup B] [AddComm
     (p : B →+ C) (hp : Function.Surjective p) (f : X → C) (hf : Continuous f) :
     ∃ g : X → B, Continuous g ∧ p ∘ g = f :=
   sorry
+
+/-- **Layer 5, a short exact sequence of discrete `G`-modules,** the input of the long exact
+sequence. The data is carried in a structure rather than as loose hypotheses because every
+statement of this layer, and the corestriction compatibility of Layer 6, takes the same sequence
+and has to name the same two maps. Discreteness of all three modules is part of the type: it is
+what makes the cochain sequences exact, and `README.md` Layer 5 records that it cannot be
+relaxed. -/
+structure DiscreteShortExact (G : Type) [Group G] [TopologicalSpace G]
+    (A : Type) [AddCommGroup A] [TopologicalSpace A] [DiscreteTopology A] [DistribMulAction G A]
+    (B : Type) [AddCommGroup B] [TopologicalSpace B] [DiscreteTopology B] [DistribMulAction G B]
+    (C : Type) [AddCommGroup C] [TopologicalSpace C] [DiscreteTopology C]
+    [DistribMulAction G C] where
+  /-- the inclusion -/
+  incl : A →+ B
+  /-- the projection -/
+  proj : B →+ C
+  /-- the inclusion is continuous -/
+  incl_continuous : Continuous incl
+  /-- the projection is continuous -/
+  proj_continuous : Continuous proj
+  /-- the inclusion is equivariant -/
+  incl_equivariant : ∀ (g : G) (a : A), incl (g • a) = g • incl a
+  /-- the projection is equivariant -/
+  proj_equivariant : ∀ (g : G) (b : B), proj (g • b) = g • proj b
+  /-- exactness on the left -/
+  incl_injective : Function.Injective incl
+  /-- exactness on the right -/
+  proj_surjective : Function.Surjective proj
+  /-- exactness in the middle -/
+  exact_middle : ∀ b : B, proj b = 0 ↔ ∃ a : A, incl a = b
+
+section LowDegreeExactSequence
+
+open CategoryTheory
+
+variable (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+  (A : Type) [AddCommGroup A] [TopologicalSpace A] [IsTopologicalAddGroup A]
+  [DiscreteTopology A] [DistribMulAction G A] [ContinuousSMul G A]
+  (B : Type) [AddCommGroup B] [TopologicalSpace B] [IsTopologicalAddGroup B]
+  [DiscreteTopology B] [DistribMulAction G B] [ContinuousSMul G B]
+  (C : Type) [AddCommGroup C] [TopologicalSpace C] [IsTopologicalAddGroup C]
+  [DiscreteTopology C] [DistribMulAction G C] [ContinuousSMul G C]
+
+/-- **Layer 5, a short exact sequence restricts to a subgroup.** The restriction is the same two
+maps, so this has a real body; it is named because the naturality of the connecting maps under
+restriction and the corestriction compatibility below both need the restricted sequence and must
+name the same one. -/
+def DiscreteShortExact.restrict (S : DiscreteShortExact G A B C) (T : Subgroup G) :
+    DiscreteShortExact T A B C where
+  incl := S.incl
+  proj := S.proj
+  incl_continuous := S.incl_continuous
+  proj_continuous := S.proj_continuous
+  incl_equivariant t a := S.incl_equivariant (t : G) a
+  proj_equivariant t b := S.proj_equivariant (t : G) b
+  incl_injective := S.incl_injective
+  proj_surjective := S.proj_surjective
+  exact_middle := S.exact_middle
+
+/-- **Layer 5, the connecting map `δ⁰ : H⁰(G, C) → H¹(G, A)`.** Choose a preimage in `B` of an
+invariant of `C` and apply `d⁰`; the result lands in `A` because the class of the preimage in `C`
+is invariant. -/
+noncomputable def explicitDelta0 (S : DiscreteShortExact G A B C) : H0 G C →+ H1 G A :=
+  sorry
+
+/-- **Layer 5, `δ⁰` on representatives,** mirroring the pin's `δ₀_apply` so that the discrete and
+the continuous theories are used identically. The cochain `a` is determined by `b` because `incl`
+is injective, so this pins the normalization rather than merely permitting one. -/
+theorem explicitDelta0_apply (S : DiscreteShortExact G A B C) (c : H0 G C) (b : B)
+    (hb : S.proj b = (c : C)) (a : G → A) (ha : ∀ g : G, S.incl (a g) = g • b - b)
+    (hmem : a ∈ Z1 G A) :
+    explicitDelta0 G A B C S c = H1pi G A ⟨a, hmem⟩ :=
+  sorry
+
+/-- **Layer 5, the connecting map `δ¹ : H¹(G, C) → H²(G, A)`.** -/
+noncomputable def explicitDelta1 (S : DiscreteShortExact G A B C) : H1 G C →+ H2 G A :=
+  sorry
+
+/-- **Layer 5, `δ¹` on representatives,** mirroring the pin's `δ₁_apply`. The 1-cochain `e` is a
+continuous lift of the cocycle `f`, which exists by the cochain-lifting statement above, and `d¹ e`
+takes its values in the image of `A`. -/
+theorem explicitDelta1_apply (S : DiscreteShortExact G A B C) (f : Z1 G C)
+    (e : G → B) (he : Continuous e) (hef : ∀ g : G, S.proj (e g) = (f : G → C) g)
+    (a : G × G → A) (ha : ∀ q : G × G, S.incl (a q) = d1 G B e q) (hmem : a ∈ Z2 G A) :
+    explicitDelta1 G A B C S (H1pi G C f) = H2pi G A ⟨a, hmem⟩ :=
+  sorry
+
+/-- **Layer 5, exactness at `H⁰(G, A)`,** the first of the eight nodes (NSW (1.3.2)). -/
+theorem explicitLongExact_H0A (S : DiscreteShortExact G A B C) :
+    Function.Injective (explicitCoeff0 G A B S.incl S.incl_continuous S.incl_equivariant) :=
+  sorry
+
+/-- **Layer 5, exactness at `H⁰(G, B)`.** -/
+theorem explicitLongExact_H0B (S : DiscreteShortExact G A B C) :
+    (explicitCoeff0 G A B S.incl S.incl_continuous S.incl_equivariant).range =
+      (explicitCoeff0 G B C S.proj S.proj_continuous S.proj_equivariant).ker :=
+  sorry
+
+/-- **Layer 5, exactness at `H⁰(G, C)`,** where `δ⁰` leaves. -/
+theorem explicitLongExact_H0C (S : DiscreteShortExact G A B C) :
+    (explicitCoeff0 G B C S.proj S.proj_continuous S.proj_equivariant).range =
+      (explicitDelta0 G A B C S).ker :=
+  sorry
+
+/-- **Layer 5, exactness at `H¹(G, A)`,** where `δ⁰` lands. -/
+theorem explicitLongExact_H1A (S : DiscreteShortExact G A B C) :
+    (explicitDelta0 G A B C S).range =
+      (explicitCoeff1 G A B S.incl S.incl_continuous S.incl_equivariant).ker :=
+  sorry
+
+/-- **Layer 5, exactness at `H¹(G, B)`.** -/
+theorem explicitLongExact_H1B (S : DiscreteShortExact G A B C) :
+    (explicitCoeff1 G A B S.incl S.incl_continuous S.incl_equivariant).range =
+      (explicitCoeff1 G B C S.proj S.proj_continuous S.proj_equivariant).ker :=
+  sorry
+
+/-- **Layer 5, exactness at `H¹(G, C)`,** where `δ¹` leaves. -/
+theorem explicitLongExact_H1C (S : DiscreteShortExact G A B C) :
+    (explicitCoeff1 G B C S.proj S.proj_continuous S.proj_equivariant).range =
+      (explicitDelta1 G A B C S).ker :=
+  sorry
+
+/-- **Layer 5, exactness at `H²(G, A)`,** where `δ¹` lands. -/
+theorem explicitLongExact_H2A (S : DiscreteShortExact G A B C) :
+    (explicitDelta1 G A B C S).range =
+      (explicitCoeff2 G A B S.incl S.incl_continuous S.incl_equivariant).ker :=
+  sorry
+
+/-- **Layer 5, exactness at `H²(G, B)`,** the eighth and last node. -/
+theorem explicitLongExact_H2B (S : DiscreteShortExact G A B C) :
+    (explicitCoeff2 G A B S.incl S.incl_continuous S.incl_equivariant).range =
+      (explicitCoeff2 G B C S.proj S.proj_continuous S.proj_equivariant).ker :=
+  sorry
+
+/-- **Layer 5, restriction commutes with `δ⁰`.** -/
+theorem explicitDelta0_res (S : DiscreteShortExact G A B C) (T : Subgroup G) (x : H0 G C) :
+    explicitRes1 G A T (explicitDelta0 G A B C S x) =
+      explicitDelta0 T A B C (S.restrict G A B C T) (explicitRes0 G C T x) :=
+  sorry
+
+/-- **Layer 5, restriction commutes with `δ¹`.** -/
+theorem explicitDelta1_res (S : DiscreteShortExact G A B C) (T : Subgroup G) (x : H1 G C) :
+    explicitRes2 G A T (explicitDelta1 G A B C S x) =
+      explicitDelta1 T A B C (S.restrict G A B C T) (explicitRes1 G C T x) :=
+  sorry
+
+/-- **Layer 6, corestriction commutes with `δ⁰`** (NSW (1.5.2)). The sequence on `U` is the
+restriction of the sequence on `G`, so both sides name the same two coefficient maps. -/
+theorem explicitCor_delta0 (S : DiscreteShortExact G A B C) (U : OpenSubgroup G)
+    (x : H0 U.toSubgroup C) :
+    explicitCor1 G A U
+        (explicitDelta0 U.toSubgroup A B C (S.restrict G A B C U.toSubgroup) x) =
+      explicitDelta0 G A B C S (explicitCor0 G C U x) :=
+  sorry
+
+/-- **Layer 6, corestriction commutes with `δ¹`.** -/
+theorem explicitCor_delta1 (S : DiscreteShortExact G A B C) (U : OpenSubgroup G)
+    (y : H1 U.toSubgroup C) :
+    explicitCor2 G A U
+        (explicitDelta1 U.toSubgroup A B C (S.restrict G A B C U.toSubgroup) y) =
+      explicitDelta1 G A B C S (explicitCor1 G C U y) :=
+  sorry
+
+/-- **Layer 10, the connecting map of the long exact sequence in every degree,** against the
+canonical object. Layer 5 builds degrees 0 and 1 on the explicit model; this is the all-degree
+map they agree with, and the two agreements below are what stop a consumer from having to prove
+that two connecting maps coincide. -/
+noncomputable def delta [CompactSpace G] [TotallyDisconnectedSpace G]
+    (S : DiscreteShortExact G A B C) (n : ℕ) :
+    (continuousCohomology ℤ G n).obj (ofDiscreteModule G C) ⟶
+      (continuousCohomology ℤ G (n + 1)).obj (ofDiscreteModule G A) :=
+  sorry
+
+/-- **Layer 3, the explicit and canonical connecting maps agree in degree 0.** -/
+theorem explicitIso_delta0 [CompactSpace G] [TotallyDisconnectedSpace G]
+    (S : DiscreteShortExact G A B C) (x : H0 G C) :
+    (delta G A B C S 0).hom ((explicitH0IsoContinuousCohomology G C).hom.hom x) =
+      (explicitH1IsoContinuousCohomology G A).hom.hom
+        (explicitDelta0 G A B C S x : DiscreteH1 G A) :=
+  sorry
+
+/-- **Layer 3, the explicit and canonical connecting maps agree in degree 1.** -/
+theorem explicitIso_delta1 [CompactSpace G] [TotallyDisconnectedSpace G]
+    (S : DiscreteShortExact G A B C) (x : DiscreteH1 G C) :
+    (delta G A B C S 1).hom ((explicitH1IsoContinuousCohomology G C).hom.hom x) =
+      (explicitH2IsoContinuousCohomology G A).hom.hom
+        (explicitDelta1 G A B C S (discreteH1Equiv G C x) : DiscreteH2 G A) :=
+  sorry
+
+end LowDegreeExactSequence
+
+section FiveTermSequence
+
+variable (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+  (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+  [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M]
+  (N : Subgroup G) [N.Normal] [IsTopologicalGroup (G ⧸ N)]
+  [ContinuousSMul (G ⧸ N) (Invariants N M)]
+
+/-- **Layer 5, inflation is injective in degree 1,** the left end of the inflation-restriction
+sequence. Valid for an arbitrary topological group with discrete coefficients. -/
+theorem explicitInfl1_injective : Function.Injective (explicitInfl1 G M N) :=
+  sorry
+
+/-- **Layer 5, the inflation-restriction sequence** `0 → H¹(G ⧸ N, M^N) → H¹(G, M) → H¹(N, M)`,
+with the pin's discrete `H1InfRes_exact` as the model. This three-term statement keeps the wider
+generality; the five-term extension below does not. -/
+theorem explicitInfRes_exact :
+    (explicitInfl1 G M N).range = (explicitRes1 G M N).ker :=
+  sorry
+
+/-- **Layer 5, the image of restriction is `G ⧸ N`-invariant.** -/
+theorem explicitRes1_mem_conjInvariants (x : H1 G M) :
+    explicitRes1 G M N x ∈ H1ConjInvariants G M N :=
+  sorry
+
+/-- **Layer 5, restriction as a map into the invariants,** the third arrow of the five-term
+sequence. It has a real body once the previous statement is available. -/
+noncomputable def explicitResConj1 : H1 G M →+ H1ConjInvariants G M N :=
+  AddMonoidHom.codRestrict (explicitRes1 G M N) _ (explicitRes1_mem_conjInvariants G M N)
+
+/-- **Layer 5, the transgression** `tg : H¹(N, M)^{G ⧸ N} → H²(G ⧸ N, M^N)`, defined by lifting a
+cocycle on `N` through a **continuous section** of `G → G ⧸ N` supplied by Layer 0 and
+differentiating, and independent of the section chosen as an identity of classes. Profiniteness of
+`G` and closedness of `N` are genuine hypotheses: the section is what they provide and what fails
+for an arbitrary topological group. -/
+noncomputable def transgression [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hN : IsClosed (N : Set G)) :
+    H1ConjInvariants G M N →+ H2 (G ⧸ N) (Invariants N M) :=
+  sorry
+
+/-- **Layer 5, the five-term sequence is exact at `H¹(N, M)^{G ⧸ N}`** (NSW (1.6.7)). -/
+theorem fiveTerm_exact_H1N [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hN : IsClosed (N : Set G)) :
+    (explicitResConj1 G M N).range = (transgression G M N hN).ker :=
+  sorry
+
+/-- **Layer 5, the five-term sequence is exact at `H²(G ⧸ N, M^N)`.** With
+`explicitInfl1_injective`, `explicitInfRes_exact` and the previous statement this is exactness of
+`0 → H¹(G⧸N, M^N) → H¹(G, M) → H¹(N, M)^{G⧸N} → H²(G⧸N, M^N) → H²(G, M)` at every node. -/
+theorem fiveTerm_exact_H2Q [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hN : IsClosed (N : Set G)) :
+    (transgression G M N hN).range = (explicitInfl2 G M N).ker :=
+  sorry
+
+/-- **Layer 5, the transgression against restriction on the left,** one of its two
+compatibilities. -/
+theorem transgression_comp_res [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hN : IsClosed (N : Set G)) (x : H1 G M) :
+    transgression G M N hN (explicitResConj1 G M N x) = 0 :=
+  sorry
+
+/-- **Layer 5, the transgression against inflation on the right,** the other one. -/
+theorem explicitInfl2_transgression [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hN : IsClosed (N : Set G)) (y : H1ConjInvariants G M N) :
+    explicitInfl2 G M N (transgression G M N hN y) = 0 :=
+  sorry
+
+end FiveTermSequence
 
 /-! ### Layer 6: the corestriction transversal calculus -/
 
@@ -878,8 +1300,8 @@ example {G : Type*} [Group G] (U : Subgroup G) (t : G ⧸ U → G) (u : G ⧸ U)
 /-- **Layer 6, corestriction in degree 1, with general coefficients.** The corestriction of a
 1-cocycle of `U` is `(cor¹_t f) γ = ∑ u, t u • f (ℓᵗ_u γ)`, and the factor `t u •` is forced:
 the proof rewrites `t u * ℓᵗ_u(γ) = γ * t (γ⁻¹ • u)` and reindexes, and without the action
-the sum is not a cocycle. The `ZMod 2` formulas of `roed-math/gq2-lean` omit the factor only
-because the action there is trivial. The input is a cocycle **on `U`**, since that is all a
+the sum is not a cocycle. A trivial-action formula that omits the factor is correct for trivial
+coefficients and wrong in general. The input is a cocycle **on `U`**, since that is all a
 class of `H¹(U, M)` is, and the transversal word is fed to it through its membership proof. -/
 example {G : Type*} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
     {M : Type*} [AddCommGroup M] [TopologicalSpace M] [DiscreteTopology M]
@@ -941,7 +1363,7 @@ section AllDegreeCorestriction
 
 open CategoryTheory
 
-variable (R : Type u) [CommRing R] [TopologicalSpace R]
+variable (R : Type v) [CommRing R] [TopologicalSpace R]
   {G : Type u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
   [CompactSpace G] [TotallyDisconnectedSpace G]
 
@@ -1111,9 +1533,25 @@ theorem corestriction_comp_res (U : OpenSubgroup G) (X : TopRep R G)
 end AllDegreeCorestriction
 
 /-- **Layers 3 and 10, milestone 5: agreement of the all-degree corestriction with Layer 6's
-explicit transversal formula,** in degree 1, as a commuting square. The degree-0 and degree-2
-statements have the same shape. This carries its own binders because the explicit model of Layer 2
-lives in `Type` while the all-degree section is universe polymorphic. -/
+explicit transversal formula, in degree 0.** The degree-0 member of the three-statement family
+`explicitIso_cor0`, `explicitIso_cor`, `explicitIso_cor2`. These carry their own binders because
+the explicit model of Layer 2 lives in `Type` while the all-degree section is universe
+polymorphic. -/
+theorem explicitIso_cor0 (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [CompactSpace G] [TotallyDisconnectedSpace G]
+    (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+    [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M]
+    (U : OpenSubgroup G) [CompactSpace U.toSubgroup] [TotallyDisconnectedSpace U.toSubgroup]
+    (x : H0 U.toSubgroup M) :
+    (corestriction ℤ U (ofDiscreteModule G M) (ofDiscreteModule_isSmoothDiscrete G M) 0).hom
+        (((continuousCohomology ℤ U.toSubgroup 0).map
+            (ofDiscreteModuleRes G M U.toSubgroup).inv).hom
+          ((explicitH0IsoContinuousCohomology U.toSubgroup M).hom.hom x)) =
+      (explicitH0IsoContinuousCohomology G M).hom.hom (explicitCor0 G M U x) :=
+  sorry
+
+/-- **Layers 3 and 10, milestone 5: agreement of the all-degree corestriction with Layer 6's
+explicit transversal formula, in degree 1,** as a commuting square. -/
 theorem explicitIso_cor (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
     [CompactSpace G] [TotallyDisconnectedSpace G]
     (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
@@ -1126,6 +1564,23 @@ theorem explicitIso_cor (G : Type) [Group G] [TopologicalSpace G] [IsTopological
           ((explicitH1IsoContinuousCohomology U.toSubgroup M).hom.hom x)) =
       (explicitH1IsoContinuousCohomology G M).hom.hom
         (explicitCor1 G M U (discreteH1Equiv U.toSubgroup M x) : DiscreteH1 G M) :=
+  sorry
+
+/-- **Layers 3 and 10, milestone 5: agreement of the all-degree corestriction with Layer 6's
+explicit transversal formula, in degree 2,** where the transversal formula has two nested
+transversal words. -/
+theorem explicitIso_cor2 (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [CompactSpace G] [TotallyDisconnectedSpace G]
+    (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+    [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M]
+    (U : OpenSubgroup G) [CompactSpace U.toSubgroup] [TotallyDisconnectedSpace U.toSubgroup]
+    (x : DiscreteH2 U.toSubgroup M) :
+    (corestriction ℤ U (ofDiscreteModule G M) (ofDiscreteModule_isSmoothDiscrete G M) 2).hom
+        (((continuousCohomology ℤ U.toSubgroup 2).map
+            (ofDiscreteModuleRes G M U.toSubgroup).inv).hom
+          ((explicitH2IsoContinuousCohomology U.toSubgroup M).hom.hom x)) =
+      (explicitH2IsoContinuousCohomology G M).hom.hom
+        (explicitCor2 G M U (discreteH2Equiv U.toSubgroup M x) : DiscreteH2 G M) :=
   sorry
 
 /-! ### Layer 8: cup products in low degrees -/
@@ -1167,7 +1622,8 @@ example {G : Type*} [Group G]
 `(g, h) ↦ g · h` under the identification `C₂ = Multiplicative (ZMod 2)`, is **not** a
 trivial-action coboundary `(g, h) ↦ ψ h - ψ (g * h) + ψ g`. It is the test case for a
 degenerate pairing: it gives `H¹(C₂, 𝔽₂) ⌣ H¹(C₂, 𝔽₂) ≠ 0`, the `G_ℝ` Kummer computation
-`[-1] ⌣ [-1] ≠ 0`, and every B11a-shaped nondegeneracy downstream. -/
+`[-1] ⌣ [-1] ≠ 0`, and every nondegeneracy statement about the mod-2 Kummer pairing
+downstream. -/
 example :
     ¬ ∃ ψ : Multiplicative (ZMod 2) → ZMod 2, ∀ g h : Multiplicative (ZMod 2),
         Multiplicative.toAdd g * Multiplicative.toAdd h = ψ h - ψ (g * h) + ψ g :=
@@ -1390,6 +1846,36 @@ theorem kummerIso_norm (hn : IsUnit (n : K)) (L : Type*) [Field L] [Algebra K L]
 
 end KummerClass
 
+section KummerComparison
+
+open CategoryTheory
+
+variable (K : Type) [Field K] (n : ℕ) [NeZero n]
+  [CompactSpace (AbsoluteGaloisGroup K)] [TotallyDisconnectedSpace (AbsoluteGaloisGroup K)]
+  [ContinuousSMul (AbsoluteGaloisGroup K) (KummerCoeff K n)]
+
+set_option synthInstance.maxHeartbeats 80000 in
+/-- **Layer 9, the Kummer class against the canonical object.** `kummerMap` lands in the explicit
+`H¹` of Layer 2; this is the same construction against Layer 1's carrier, so that a consumer
+working in all degrees never has to move between the two by hand. -/
+noncomputable def kummerMapCanonical (hn : IsUnit (n : K)) :
+    Kˣ →* Multiplicative ((continuousCohomology ℤ (AbsoluteGaloisGroup K) 1).obj
+      (ofDiscreteModule (AbsoluteGaloisGroup K) (KummerCoeff K n))) :=
+  sorry
+
+set_option synthInstance.maxHeartbeats 80000 in
+/-- **Layers 3 and 9, the explicit and canonical Kummer classes agree.** Both maps are named, so
+the statement is that these two agree and not that some isomorphism carries one to something. This
+is what makes `kummerIso` usable against the all-degree theory without a private transport. -/
+theorem explicitIso_kummerMap (hn : IsUnit (n : K)) (a : Kˣ) :
+    Multiplicative.toAdd (kummerMapCanonical K n hn a) =
+      (explicitH1IsoContinuousCohomology (AbsoluteGaloisGroup K) (KummerCoeff K n)).hom.hom
+        (Multiplicative.toAdd (kummerMap K n hn a) :
+          DiscreteH1 (AbsoluteGaloisGroup K) (KummerCoeff K n)) :=
+  sorry
+
+end KummerComparison
+
 /-! ### Layer 11: cohomological dimension -/
 
 /-- **Layer 11, the least bound of a predicate on `ℕ`, in `ℕ∞`.** The roadmap defines
@@ -1412,13 +1898,134 @@ theorem leastENatBound_le_iff (P : ℕ → Prop) (hP : ∀ m n : ℕ, m ≤ n �
 theorem leastENatBound_eq_top (P : ℕ → Prop) (hP : ∀ n : ℕ, ¬ P n) : leastENatBound P = ⊤ :=
   sorry
 
+section CohomologicalDimension
+
+open CategoryTheory
+
+/-- **Layer 11, `p`-primary torsion coefficients.** Every element is annihilated by a power of `p`,
+which is Mathlib's `AddCommGroup.primaryComponent` read as a condition on the whole module. The
+coefficients of the ordinary dimension are these and **not** the ones of bounded exponent: the
+reduction to bounded exponent is a theorem below, proved through the filtered-colimit compatibility
+of Layer 10, and taking it as the definition would state a different invariant. -/
+def IsPPrimaryTorsion (p : ℕ) [Fact p.Prime] (M : Type*) [AddCommGroup M] : Prop :=
+  ∀ m : M, m ∈ AddCommGroup.primaryComponent M p
+
+variable (p : ℕ) [hp : Fact p.Prime] (G : Type) [Group G] [TopologicalSpace G]
+  [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+
+/-- **Layer 11, the ordinary vanishing predicate.** `Hⁱ(G, M)` vanishes above `n` for every
+discrete `p`-primary torsion `M`. `Hⁱ` is Layer 10's, so this rests on Layer 10 and on nothing
+below it. -/
+def CohomologicalDimensionLE (n : ℕ) : Prop :=
+  ∀ (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+    [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M],
+    IsPPrimaryTorsion p M → ∀ i : ℕ, n < i →
+      Limits.IsZero ((continuousCohomology ℤ G i).obj (ofDiscreteModule G M))
+
+include hp in
+/-- **Layer 11, the strict vanishing predicate.** The two predicates differ in both places at
+once: the ordinary one asks the whole of `Hⁱ` to vanish for `p`-primary coefficients, the strict
+one allows arbitrary discrete coefficients and asks only the `p`-primary part of `Hⁱ` to vanish.
+Swapping either half gives the wrong invariant, and dropping `p` from the second gives one that
+does not depend on `p` at all. -/
+def StrictCohomologicalDimensionLE (n : ℕ) : Prop :=
+  ∀ (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+    [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M],
+    ∀ i : ℕ, n < i →
+      AddCommGroup.primaryComponent
+        ((continuousCohomology ℤ G i).obj (ofDiscreteModule G M)) p = ⊥
+
+/-- **Layer 11, `cd_p`.** The infimum in `ℕ∞` of the naturals satisfying the ordinary predicate,
+so that infinite cohomological dimension is `⊤` rather than an absent value. -/
+noncomputable def cd_p : ℕ∞ :=
+  leastENatBound (CohomologicalDimensionLE p G)
+
+/-- **Layer 11, `scd_p`.** -/
+noncomputable def scd_p : ℕ∞ :=
+  leastENatBound (StrictCohomologicalDimensionLE p G)
+
+/-- **Layer 11, `cd G = ⨆ p, cd_p G`,** over primes. -/
+noncomputable def cd : ℕ∞ :=
+  ⨆ q : Nat.Primes, letI : Fact q.1.Prime := ⟨q.2⟩; cd_p q.1 G
+
+/-- **Layer 11, `cd_p G ≤ n ↔ CohomologicalDimensionLE p G n`,** the reason the predicate is named
+in its own right rather than folded into the infimum. -/
+theorem cd_p_le_iff (n : ℕ) : cd_p p G ≤ (n : ℕ∞) ↔ CohomologicalDimensionLE p G n :=
+  sorry
+
+/-- **Layer 11, the same characterization for `scd_p`.** -/
+theorem scd_p_le_iff (n : ℕ) : scd_p p G ≤ (n : ℕ∞) ↔ StrictCohomologicalDimensionLE p G n :=
+  sorry
+
+/-- **Layer 11, the second interface for ordinary dimension** (NSW (3.3.1)): vanishing of the
+`p`-primary component of `Hⁱ(G, M)` for every discrete **torsion** `M`. It is one torsion
+hypothesis away from the strict predicate, which is why all three statements are kept apart. -/
+theorem cohomologicalDimensionLE_iff_torsion (n : ℕ) :
+    CohomologicalDimensionLE p G n ↔
+      ∀ (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+        [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M],
+        AddMonoid.IsTorsion M → ∀ i : ℕ, n < i →
+          AddCommGroup.primaryComponent
+            ((continuousCohomology ℤ G i).obj (ofDiscreteModule G M)) p = ⊥ :=
+  sorry
+
+/-- **Layer 11, dévissage to finite `p`-primary coefficients** (NSW (3.3.2)). It is enough to test
+the single degree `n + 1` on **finite** discrete `p`-primary modules: Layer 10's colimit reduces an
+arbitrary `p`-primary module to its finite submodules, and dimension shifting reduces the higher
+degrees to that one. -/
+theorem cd_p_le_iff_finite_pPrimary (n : ℕ) :
+    cd_p p G ≤ (n : ℕ∞) ↔
+      ∀ (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+        [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M] [Finite M],
+        IsPPrimaryTorsion p M →
+          Limits.IsZero ((continuousCohomology ℤ G (n + 1)).obj (ofDiscreteModule G M)) :=
+  sorry
+
+/-- **Layer 11, dévissage to coefficients of bounded exponent.** Testing only the modules killed by
+a single power of `p` is enough, because an arbitrary `p`-primary module is the filtered colimit of
+its `pᵏ`-torsion submodules and Layer 10's cohomology commutes with those colimits. This is the
+reduction a consumer working with `𝔽_p`-coefficients needs, and it is a theorem here rather than
+the definition of `cd_p`. -/
+theorem cd_p_le_iff_boundedExponent (n : ℕ) :
+    cd_p p G ≤ (n : ℕ∞) ↔
+      ∀ (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+        [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M],
+        (∃ k : ℕ, ∀ m : M, (p ^ k) • m = 0) → ∀ i : ℕ, n < i →
+          Limits.IsZero ((continuousCohomology ℤ G i).obj (ofDiscreteModule G M)) :=
+  sorry
+
+/-- **Layer 11, `cd_p ≤ scd_p`** (NSW (3.3.3)). -/
+theorem cd_p_le_scd_p : cd_p p G ≤ scd_p p G :=
+  sorry
+
+/-- **Layer 11, `scd_p ≤ cd_p + 1`** (NSW (3.3.3)), including the case `cd_p G = ⊤`, where
+`⊤ + 1 = ⊤` and the inequality still has to hold. Equality of the two is the false neighbor: for
+`ℤ_p` one has `cd_p = 1` and `scd_p = 2`. -/
+theorem scd_p_le_cd_p_add_one : scd_p p G ≤ cd_p p G + 1 :=
+  sorry
+
+/-- **Layer 11, monotonicity in a closed subgroup** (NSW (3.3.5), Ribes-Zalesskii Thm. 7.3.1). -/
+theorem cd_p_le_of_isClosed (H : Subgroup G) (hH : IsClosed (H : Set G))
+    [CompactSpace H] [TotallyDisconnectedSpace H] :
+    cd_p p H ≤ cd_p p G :=
+  sorry
+
+/-- **Layer 11, equality for an open subgroup of index prime to `p`,** from Layer 10's
+`cor ∘ res = (G : U) • id`. -/
+theorem cd_p_eq_of_index_not_dvd (U : OpenSubgroup G) (hU : ¬ p ∣ U.toSubgroup.index)
+    [CompactSpace U.toSubgroup] [TotallyDisconnectedSpace U.toSubgroup] :
+    cd_p p U.toSubgroup = cd_p p G :=
+  sorry
+
+end CohomologicalDimension
+
 /-! ### Layer 12: the graded cup product in all degrees -/
 
 section GradedCup
 
 open CategoryTheory
 
-variable {R : Type u} [CommRing R] [TopologicalSpace R]
+variable {R : Type v} [CommRing R] [TopologicalSpace R]
   {G : Type u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
 
 /-- **Layer 12, milestone 1: the coefficient pairing.** The input type of the whole layer: an
@@ -1562,6 +2169,18 @@ theorem cup_infl (N : Subgroup G) [N.Normal] [IsTopologicalGroup (G ⧸ N)] (P :
       cup P m n ((infl R N X m).hom a) ((infl R N Y n).hom b) :=
   sorry
 
+/-- **Layer 12, milestone 9: naturality in the coefficients** (NSW (1.4.2)). The two pairings are
+tied together by the three coefficient morphisms, which is what makes this a statement about a
+determined pair of cups rather than about two unrelated ones. -/
+theorem cup_coeffMap (P : TopPairing X Y Z) {X' Y' Z' : TopRep R G} (P' : TopPairing X' Y' Z')
+    (f : X ⟶ X') (g : Y ⟶ Y') (h : Z ⟶ Z')
+    (hcompat : ∀ (x : X.V) (y : Y.V), h.hom.hom (P.bil x y) = P'.bil (f.hom.hom x) (g.hom.hom y))
+    (m n : ℕ) (a : (continuousCohomology R G m).obj X)
+    (b : (continuousCohomology R G n).obj Y) :
+    (coeffMap R h (m + n)).hom (cup P m n a b) =
+      cup P' m n ((coeffMap R f m).hom a) ((coeffMap R g n).hom b) :=
+  sorry
+
 /-- **Layer 12, milestone 10: the projection formula,** with Layer 10's corestriction. -/
 theorem cup_projection [CompactSpace G] [TotallyDisconnectedSpace G] (U : OpenSubgroup G)
     (hY : IsSmoothDiscrete R Y) (hZ : IsSmoothDiscrete R Z)
@@ -1577,6 +2196,18 @@ theorem cup_projection [CompactSpace G] [TotallyDisconnectedSpace G] (U : OpenSu
         (cup Pres m n ((res R U.toSubgroup X m).hom a) b) =
       cup P m n a ((corestriction R U Y hY n).hom b) :=
   sorry
+
+/-- **Layer 12, the coefficient ring and the group live in independent universes.** The arithmetic
+consumers of this interface pair a small ring, `ZMod n` in `Type 0`, with a Galois group in an
+arbitrary universe, so `TopRep` keeps the two apart. This example records that the mixed
+instantiation elaborates, so that a signature change tying them together again is caught here
+rather than downstream. -/
+noncomputable example (G' : Type u) [Group G'] [TopologicalSpace G'] [IsTopologicalGroup G']
+    (X' Y' Z' : TopRep (ZMod 2) G') (P : TopPairing X' Y' Z') (m n : ℕ)
+    (a : (continuousCohomology (ZMod 2) G' m).obj X')
+    (b : (continuousCohomology (ZMod 2) G' n).obj Y') :
+    (continuousCohomology (ZMod 2) G' (m + n)).obj Z' :=
+  cup P m n a b
 
 end GradedCup
 
@@ -1601,12 +2232,55 @@ noncomputable def ofDiscreteModulePairing (μ : M →+ N →+ P)
     TopPairing (ofDiscreteModule G M) (ofDiscreteModule G N) (ofDiscreteModule G P) :=
   sorry
 
+/-- **Layer 8, the `(0,0)` cup product on the explicit model,** `m ⌣ n = μ m n`, which for
+invariant `m` and `n` is invariant. The first of the six low-degree shapes; all six are named,
+because the associativity instances of `README.md` Layer 8 use each of them and a family that
+omits one cannot type its own statements. -/
+noncomputable def explicitCup00 (μ : M →+ N →+ P)
+    (hμ : Continuous fun p : M × N => μ p.1 p.2)
+    (hequiv : ∀ (g : G) (m : M) (x : N), μ (g • m) (g • x) = g • μ m x) :
+    H0 G M →+ H0 G N →+ H0 G P :=
+  sorry
+
+/-- **Layer 8, the `(0,1)` cup product on the explicit model,** `(m ⌣ b) g = μ m (b g)`. -/
+noncomputable def explicitCup01 (μ : M →+ N →+ P)
+    (hμ : Continuous fun p : M × N => μ p.1 p.2)
+    (hequiv : ∀ (g : G) (m : M) (x : N), μ (g • m) (g • x) = g • μ m x) :
+    H0 G M →+ H1 G N →+ H1 G P :=
+  sorry
+
+/-- **Layer 8, the `(1,0)` cup product on the explicit model,** `(a ⌣ n) g = μ (a g) (g • n)`. The
+factor `g •` is what the associativity instance `(1,1,0)` needs on its right-hand side, and is why
+this shape is not the `(0,1)` one read backwards. -/
+noncomputable def explicitCup10 (μ : M →+ N →+ P)
+    (hμ : Continuous fun p : M × N => μ p.1 p.2)
+    (hequiv : ∀ (g : G) (m : M) (x : N), μ (g • m) (g • x) = g • μ m x) :
+    H1 G M →+ H0 G N →+ H1 G P :=
+  sorry
+
+/-- **Layer 8, the `(0,2)` cup product on the explicit model,** `(m ⌣ b) (g, h) = μ m (b (g, h))`. -/
+noncomputable def explicitCup02 (μ : M →+ N →+ P)
+    (hμ : Continuous fun p : M × N => μ p.1 p.2)
+    (hequiv : ∀ (g : G) (m : M) (x : N), μ (g • m) (g • x) = g • μ m x) :
+    H0 G M →+ H2 G N →+ H2 G P :=
+  sorry
+
 /-- **Layer 8, the `(1,1)` cup product on the explicit model,** at class level: the descent of the
 cochain formula `(a ⌣ b)(g, h) = μ (a g) (g • b h)` of `README.md` §3. -/
 noncomputable def explicitCup11 (μ : M →+ N →+ P)
     (hμ : Continuous fun p : M × N => μ p.1 p.2)
     (hequiv : ∀ (g : G) (m : M) (x : N), μ (g • m) (g • x) = g • μ m x) :
     H1 G M →+ H1 G N →+ H2 G P :=
+  sorry
+
+/-- **Layer 8, the `(2,0)` cup product on the explicit model,**
+`(a ⌣ n) (g, h) = μ (a (g, h)) ((g * h) • n)`. The last of the six shapes; no explicit cup goes
+above total degree 2, and a product of total degree 3 belongs to Layer 12's all-bidegree
+package. -/
+noncomputable def explicitCup20 (μ : M →+ N →+ P)
+    (hμ : Continuous fun p : M × N => μ p.1 p.2)
+    (hequiv : ∀ (g : G) (m : M) (x : N), μ (g • m) (g • x) = g • μ m x) :
+    H2 G M →+ H0 G N →+ H2 G P :=
   sorry
 
 /-- **Layer 12, milestone 11: agreement with Layer 8's six explicit shapes** under Layer 3. The
@@ -1733,6 +2407,23 @@ theorem evensGraphCochain_isCocycle (hU : U.toSubgroup.index = 2) (hs : s ∉ U)
             evensGraphCochain U.toSubgroup s α (g, h) =
           evensGraphCochain U.toSubgroup s α (h, j) +
             evensGraphCochain U.toSubgroup s α (g, h * j) :=
+  sorry
+
+/-- **Layer 13, acceptance check: the two Shapiro components are not cocycles, and their sum is.**
+Evaluated at `(s, s)`: `b₁ (s * s) = α (s²)` and `b_s (s * s) = α (s²)`, while `b₁ s + b₁ s` and
+`b_s s + b_s s` are both `0`, so neither component is a homomorphism as soon as `α (s²) ≠ 0`. The
+sum passes the same test, which is why only the sum is given a class. The smallest instance is
+`G = C₄ = ⟨σ⟩` with `U = ⟨σ²⟩`, `s = σ` and `α ≠ 0`, where the values of `b₁` at `1, σ, σ², σ³`
+are `0, 1, 1, 0`. Giving `b₁` and `b_s` classes of their own is a type error dressed as a
+statement, and this is the computation that catches it. -/
+example (hU : U.toSubgroup.index = 2) (hs : s ∉ U) (hs2 : s * s ∈ U)
+    (hα : Multiplicative.toAdd (α ⟨s * s, hs2⟩) ≠ 0) :
+    evensB1 U.toSubgroup s α (s * s) ≠
+        evensB1 U.toSubgroup s α s + evensB1 U.toSubgroup s α s ∧
+      evensBs U.toSubgroup s α (s * s) ≠
+        evensBs U.toSubgroup s α s + evensBs U.toSubgroup s α s ∧
+      evensCorCochain U.toSubgroup s α (s * s) =
+        evensCorCochain U.toSubgroup s α s + evensCorCochain U.toSubgroup s α s :=
   sorry
 
 /-- **Layer 13, the class does not depend on the chosen `s`.** Two elements outside an

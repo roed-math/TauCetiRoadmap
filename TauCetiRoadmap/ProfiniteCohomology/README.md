@@ -137,24 +137,38 @@ already carries its own carrier joins this one either by replacing it with these
 by supplying explicit natural comparison isomorphisms and transporting every operation it uses;
 those are the only two acceptable states.
 
-What is exported is exactly this, named:
+What is exported is exactly this, named. Every entry in the declaration column is a Lean
+identifier: either one this roadmap builds, carried with its signature in `Suggested.lean`, or one
+Mathlib already supplies, which here is only `continuousCohomology`. A description such as "the
+colimit theorem" or "the six cup shapes" is not a citable export, and no row contains one.
 
 | Exported object or theorem | Supplier layer | Declaration | Mathematical type |
 |---|---|---|---|
 | the canonical carrier | 1 | `TopRep`, `continuousCohomology` | `TopRep R G ⥤ TopModuleCat R` |
 | compatible-pair functoriality | 1 | `map`, `map_id`, `map_comp` | `Hⁿ(G, X) ⟶ Hⁿ(H, Y)` for `φ : H →ₜ* G` |
 | restriction, inflation, coefficient maps | 1 | `res`, `infl`, `coeffMap` | morphisms of `TopModuleCat R` |
-| the coefficient dictionary | 1 | `discreteRepEquivSmoothTopRep` | `DiscreteRep R G ≌ SmoothDiscreteTopRep R G` |
-| explicit `H⁰`, `H¹`, `H²` | 2 | `H1`, `H2`, `H1pi`, `H2pi` | quotients of additive subgroups of the cochain spaces |
-| the comparison | 3 | `explicitH0IsoContinuousCohomology`, `explicitH1IsoContinuousCohomology`, `explicitH2IsoContinuousCohomology` | isomorphisms in `TopModuleCat ℤ` |
-| the finite-quotient colimit | 4 | `finiteLevelTransition`, and the colimit theorem | `Hⁱ(G, M) ≅ colim_U Hⁱ(G ⧸ U, M^U)` |
-| the long exact and five-term sequences | 5 | `δ⁰`, `δ¹`, the transgression | connecting maps and exactness |
-| low-degree corestriction | 6 | `cor⁰`, `cor¹`, `cor²` | additive maps on cochains, descending to classes |
-| the six low-degree cups | 8 | the six cup shapes | `H^p(G, M) × H^q(G, N) → H^{p+q}(G, P)`, `p + q ≤ 2` |
-| the Kummer isomorphism | 9 | `kummerIso` | `Kˣ ⧸ (Kˣ)ⁿ ≃* Multiplicative (H¹(AbsoluteGaloisGroup K, KummerCoeff K n))` |
-| all-degree corestriction | 10 | `corestriction` | `Hⁿ(U, res X) ⟶ Hⁿ(G, X)` for open `U` |
-| cohomological dimension | 11 | `cd_p`, `scd_p`, `cd` | `ℕ∞`-valued invariants |
-| the graded cup | 12 | `cup` with its eleven laws | `Hᵐ × Hⁿ → H^{m+n}` |
+| the coefficient dictionary | 1 | `ofDiscreteModule`, `IsSmoothDiscrete`, `SmoothDiscreteTopRep`, `discreteRepEquivSmoothTopRep` | `DiscreteRep R G ≌ SmoothDiscreteTopRep R G` |
+| explicit `H⁰`, `H¹`, `H²` | 2 | `H0`, `H1`, `H2`, `H1pi`, `H2pi`, `DiscreteH1`, `DiscreteH2` | `M^G`, and quotients of additive subgroups of the cochain spaces |
+| explicit low-degree functoriality | 2 | `explicitMap1`, `explicitRes0`, `explicitRes1`, `explicitRes2`, `explicitInfl1`, `explicitInfl2`, `explicitCoeff0`, `explicitCoeff1`, `explicitCoeff2`, `explicitConj1`, `explicitConj1_eq_id_of_mem` | additive maps between the explicit groups |
+| the comparison in degrees 0, 1, 2 | 3 | `explicitH0IsoContinuousCohomology`, `explicitH1IsoContinuousCohomology`, `explicitH2IsoContinuousCohomology` | isomorphisms in `TopModuleCat ℤ` |
+| the comparison with discrete `groupCohomology` | 3 | `explicitH0IsoGroupCohomology`, `explicitH1IsoGroupCohomology`, `explicitH2IsoGroupCohomology` | additive equivalences with `groupCohomology (Rep.ofDistribMulAction ℤ G M) i` |
+| naturality of the comparison | 3 | `explicitIso_map`, `explicitIso_res`, `explicitIso_infl`, `explicitIso_coeffMap` | commuting squares in compatible pairs |
+| the finite-quotient system | 4 | `finiteQuotientMap`, `invariantsInclusion`, `invariantsInclusion_equivariant`, `transitionPair`, `finiteLevelTransition`, `finiteLevelTransition_id`, `finiteLevelTransition_comp` | a functor on `(OpenNormalSubgroup G)ᵒᵖ` |
+| the finite-quotient colimit | 4 | `explicitFiniteQuotientSystem1`, `explicitFiniteQuotientSystem1_obj`, `explicitFiniteQuotientComparison1`, `explicitFiniteQuotientCocone1`, `explicitFiniteQuotientColimit1` | `Hⁱ(G, M) ≅ colim_U Hⁱ(G ⧸ U, M^U)` in `AddCommGrpCat` |
+| the long exact sequence in low degrees | 5 | `DiscreteShortExact`, `DiscreteShortExact.restrict`, `explicitDelta0`, `explicitDelta0_apply`, `explicitDelta1`, `explicitDelta1_apply`, `explicitLongExact_H0A`, `explicitLongExact_H0B`, `explicitLongExact_H0C`, `explicitLongExact_H1A`, `explicitLongExact_H1B`, `explicitLongExact_H1C`, `explicitLongExact_H2A`, `explicitLongExact_H2B`, `explicitDelta0_res`, `explicitDelta1_res` | connecting maps and exactness at eight nodes |
+| the five-term sequence | 5 | `H1ConjInvariants`, `explicitInfl1_injective`, `explicitInfRes_exact`, `explicitRes1_mem_conjInvariants`, `explicitResConj1`, `transgression`, `fiveTerm_exact_H1N`, `fiveTerm_exact_H2Q`, `transgression_comp_res`, `explicitInfl2_transgression` | `0 → H¹(G⧸N, M^N) → H¹(G, M) → H¹(N, M)^{G⧸N} → H²(G⧸N, M^N) → H²(G, M)` |
+| the all-degree connecting map | 10 | `delta`, `explicitIso_delta0`, `explicitIso_delta1` | `Hⁿ(G, C) ⟶ Hⁿ⁺¹(G, A)`, agreeing with `explicitDelta0`, `explicitDelta1` |
+| low-degree corestriction | 6 | `lWord`, `lWord_mem`, `explicitCor0`, `explicitCor1`, `explicitCor2`, `explicitCor_delta0`, `explicitCor_delta1` | additive maps on cochains, descending to classes |
+| all-degree corestriction | 10 | `corestriction`, `corestrictionLe`, `corestriction_naturality`, `corestriction_trans`, `corestriction_comp_res`, `mackeyTerm`, `corestriction_mackey` | `Hⁿ(U, res X) ⟶ Hⁿ(G, X)` for open `U` |
+| agreement of the two corestrictions | 10 | `explicitIso_cor0`, `explicitIso_cor`, `explicitIso_cor2` | commuting squares in degrees 0, 1, 2 |
+| Shapiro and coinduction | 7 | `Coind`, `coindTopRep`, `coindFunctor`, `coindFunctor_preservesEpimorphisms`, `coindFunctor_preservesMonomorphisms`, `shapiroIso`, `coindTrace` | `Hⁿ(G, Coind_H^G A) ≅ Hⁿ(H, A)` for closed `H` |
+| the six low-degree cups | 8 | `explicitCup00`, `explicitCup01`, `explicitCup10`, `explicitCup02`, `explicitCup11`, `explicitCup20` | `H^p(G, M) × H^q(G, N) → H^{p+q}(G, P)`, `p + q ≤ 2` |
+| the graded cup | 12 | `TopPairing`, `cupCochain`, `cupCochain_leibniz`, `cup`, `cup_add_left`, `cup_add_right`, `cup_one_left`, `cup_one_right`, `cup_assoc`, `cup_gradedComm`, `cup_res`, `cup_infl`, `cup_coeffMap`, `cup_projection` | `Hᵐ × Hⁿ → H^{m+n}` |
+| agreement of the two cups | 12 | `ofDiscreteModulePairing`, `explicitIso_cup` | commuting square in bidegree `(1,1)` |
+| the evaluation pairing for duality | 0, 12 | `homAction`, `evalPairing`, `evalPairing_equivariant`, `TopPairing`, `ofDiscreteModulePairing`, `cup`, `cup_add_left`, `cup_add_right` | `Hⁱ(G, M →+ N) × H^{2-i}(G, M) → H²(G, N)` |
+| the Kummer isomorphism | 9 | `AbsoluteGaloisGroup`, `KummerCoeff`, `powerClassQuotient`, `kummerMap`, `kummerIso`, `kummerIsoTransport`, `kummerIso_res`, `kummerIso_norm`, `kummerMapCanonical`, `explicitIso_kummerMap` | `Kˣ ⧸ (Kˣ)ⁿ ≃* Multiplicative (H¹(AbsoluteGaloisGroup K, KummerCoeff K n))` |
+| cohomological dimension | 11 | `IsPPrimaryTorsion`, `CohomologicalDimensionLE`, `StrictCohomologicalDimensionLE`, `cd_p`, `scd_p`, `cd`, `cd_p_le_iff`, `scd_p_le_iff`, `cohomologicalDimensionLE_iff_torsion`, `cd_p_le_iff_finite_pPrimary`, `cd_p_le_iff_boundedExponent`, `cd_p_le_scd_p`, `scd_p_le_cd_p_add_one`, `cd_p_le_of_isClosed`, `cd_p_eq_of_index_not_dvd` | `ℕ∞`-valued invariants |
+| the Evens norm | 13 | `evensNorm`, `evensNormIndexTwo`, `evensGraphCochain`, `graphClass`, `evensConj`, `evensNorm_eq_graphClass` | `H^q(U, 𝔽₂) → H^{l q}(G, 𝔽₂)` for open `U` of index `l` |
 | the four index-2 Evens identities | 13 | `evensNorm_res`, `evensNorm_polarization`, `evensNorm_cor_shapiro`, `evensNorm_identity_infl` | identities of classes in `H²(G, 𝔽₂)` |
 
 Two points about that last row, because they are exact and easy to get wrong. The identities are
@@ -166,6 +180,29 @@ N(α + β) - N(α) - N(β) = cor (α ⌣ (s · β)),
 with the **conjugate** class on the right. Dropping the conjugate gives a different statement, and
 this roadmap does not supply it; a consumer that wants the unconjugated form must prove the two
 equivalent under stated hypotheses.
+
+### The comparisons carry the operations, not only the groups
+
+Exporting an isomorphism of underlying groups in each of degrees `0, 1, 2` is not enough, and a
+roadmap that stopped there would leave every consumer to prove for itself that the explicit
+corestriction is the canonical one. So the equations saying that the degree-`0`, `1` and `2`
+comparisons carry **each exported operation** to its counterpart are milestones of this roadmap in
+their own right, listed in the layer where both sides first exist:
+
+| Operation | Comparison milestone | Layer |
+|---|---|---|
+| compatible pairs | `explicitIso_map` | 3 |
+| restriction | `explicitIso_res` | 3 |
+| inflation | `explicitIso_infl` | 3 |
+| coefficient maps | `explicitIso_coeffMap` | 3 |
+| connecting maps | `explicitIso_delta0`, `explicitIso_delta1` | 5 with 10 |
+| corestriction | `explicitIso_cor0`, `explicitIso_cor`, `explicitIso_cor2` | 10 |
+| cup products | `explicitIso_cup` | 12 |
+| Kummer classes | `explicitIso_kummerMap` | 9 |
+| the Evens norm | `evensNorm_eq_graphClass` | 13 |
+
+No downstream development is asked to prove that two of this roadmap's constructions agree. Where
+two constructions of the same operation exist here, the identification is a target here.
 
 A joint contract with a consuming roadmap is recorded as a four-column table, consumer layer
 against supplier layer against exact object against declaration name, carried identically in both
@@ -301,7 +338,7 @@ cited in Layer 7.
   `invariantsInclusion` with its equivariance lemma; the pair they assemble to and the map it
   induces on cohomology are `transitionPair` and `finiteLevelTransition`. The comparison map to
   `Hⁱ(G, M)` is inflation along `G → G ⧸ U` followed by the coefficient inclusion `M^U ↪ M`. The
-  colimit is taken in `AddCommGrp` for the explicit low-degree statement and in `TopModuleCat ℤ`
+  colimit is taken in `AddCommGrpCat` for the explicit low-degree statement and in `TopModuleCat ℤ`
   for the canonical all-degree statement of Layer 10.
 - **Shapiro's direction.** Coinduction is the right adjoint, and Shapiro's lemma reads
   `Hⁿ(G, Coind_H^G A) ≅ Hⁿ(H, A)`, the direction of the pin's discrete `groupCohomology.coindIso`.
@@ -393,8 +430,10 @@ All paths at the Mathlib the repository currently builds.
   Kummer theory: `autEquivRootsOfUnity`, `autEquivZmod`).
 - **Order and torsion vocabulary for Layer 11:** `ℕ∞` (`ENat`, which is `WithTop ℕ`) as a
   `CompleteLinearOrder`;
-  `CommMonoid.primaryComponent` and `AddCommMonoid.primaryComponent`
-  (`Mathlib/GroupTheory/Torsion.lean`); `IsSimpleModule`; `CategoryTheory.Simple`.
+  `CommGroup.primaryComponent` and `AddCommGroup.primaryComponent`, with the submonoid forms
+  `CommMonoid.primaryComponent` and `AddCommMonoid.primaryComponent` they extend
+  (`Mathlib/GroupTheory/Torsion.lean`); `AddMonoid.IsTorsion`; `IsSimpleModule`;
+  `CategoryTheory.Simple`.
 
 ---
 
@@ -557,21 +596,28 @@ group to a torsion-free group is trivial.
 `IsCocycle₁`, `IsCocycle₂`, `groupCohomology.cochainsMap`, `ContinuousMap`,
 `ContinuousMonoidHom`. This roadmap: Layer 0.
 
-- **The complex.** `C¹, C², Z¹, Z², B¹, B²`, `H⁰, H¹, H²` as fixed in §3, with `d ∘ d = 0`, the
+- **The complex.** `C1`, `C2`, `Z1`, `Z2`, `B1`, `B2`, `H0`, `H1`, `H2` as fixed in §3, with
+  `d ∘ d = 0` (`B1_le_Z1`, `B2_le_Z2`), the class maps `H1pi` and `H2pi`, the
   membership lemmas in the exact `IsCocycle₁/₂` shapes, the evaluation lemmas (`Z¹` vanishes at
   `1`, the inverse formula, the degree-2 normalizations), and the trivial-action
   characterizations: `B¹ = ⊥`, `H¹` additively isomorphic to the continuous homomorphisms
-  `G →ₜ* M`, and `H⁰ = M`.
+  `G →ₜ* M`, and `H⁰ = M`. Degree 0 is `H0 G M = M^G`, an additive subgroup and not a quotient.
 - **Compatible-pair functoriality.** The pullback `Hⁱ(G, M) → Hⁱ(H, N)` of §3, on cochains,
-  cocycles and cohomology, with the identity and composition laws. This is the continuous twin of
+  cocycles and cohomology, with the identity and composition laws, as `explicitMap1` in degree 1
+  and its degree-0 and degree-2 counterparts. This is the continuous twin of
   Mathlib's `groupCohomology.cochainsMap` package, named to align with Layer 1's
   `ContinuousCohomology.cochainsMap`.
-- **The three instances.** Restriction `res : Hⁱ(G, M) → Hⁱ(H, M)` for any subgroup with the
-  subspace topology; inflation `inf : Hⁱ(G ⧸ N, M^N) → Hⁱ(G, M)` for closed normal `N`; and
-  coefficient maps along `G`-equivariant continuous homomorphisms. Composition laws mixing the
-  three: `res ∘ inf`, and coefficient naturality of both.
+- **The three instances, in all three degrees.** Restriction `explicitRes0`, `explicitRes1`,
+  `explicitRes2` for any subgroup with the subspace topology; inflation `explicitInfl1` and
+  `explicitInfl2` for closed normal `N`, with the invariants as coefficients; and coefficient maps
+  `explicitCoeff0`, `explicitCoeff1`, `explicitCoeff2` along `G`-equivariant continuous
+  homomorphisms. Composition laws mixing the three: `res ∘ inf`, and coefficient naturality of
+  both. Degree 2 of inflation is not a variant of degree 1: it is the last map of Layer 5's
+  five-term sequence, and degree 0 and degree 2 of the coefficient maps are three of the eight
+  nodes of Layer 5's long exact sequence.
 - **Conjugation.** The compatible pair (conjugation by `g`, action of `g`) induces an action of
-  `G` on `Hⁱ(N, M)` for closed normal `N`, and **inner automorphisms act trivially on `Hⁱ(G, M)`**,
+  `G` on `Hⁱ(N, M)` for closed normal `N`, which is `explicitConj1` in degree 1, and **inner
+  automorphisms act trivially on `Hⁱ(G, M)`** (`explicitConj1_eq_id_of_mem`),
   by an explicit chain homotopy in degrees `≤ 2`. Without it the `G ⧸ N`-action on `Hⁱ(N, M)` is
   not well defined, and Layer 5's five-term sequence needs that action.
   ⚠ The degree-2 homotopy has many terms and is easy to get wrong. Write it once for the
@@ -607,7 +653,9 @@ quasi-isomorphism in the discrete case.
 
 - **Continuous against discrete.** For `G` with the discrete topology (finite `G` being the case
   Layer 4 uses) and any discrete `G`-module `M`: `Hⁱ_explicit(G, M) ≅ groupCohomology` in degrees
-  `0, 1, 2`, through the pin's `cocycles₁/₂` and `IsCocycle₁/₂`. Every continuity condition is
+  `0, 1, 2`, through the pin's `cocycles₁/₂` and `IsCocycle₁/₂`, as
+  `explicitH0IsoGroupCohomology`, `explicitH1IsoGroupCohomology` and
+  `explicitH2IsoGroupCohomology`. Every continuity condition is
   vacuous, so this identifies subquotients of the same function spaces. Layer 4 uses it at every
   finite level.
   ⚠ Mathlib's `groupCohomology` is `k`-linear over `Rep k G` while the explicit theory is
@@ -652,11 +700,15 @@ quasi-isomorphism in the discrete case.
   while leaving the underlying additive statement true, which is the trap. `Suggested.lean`
   carries the discrete objects as `DiscreteH1` and `DiscreteH2`, with additive equivalences back
   to the quotients so that computations on representatives stay available.
-- **Transport.** Under these isomorphisms: restriction to restriction, inflation to inflation,
-  and coefficient maps to Layer 1's `map`. One transport lemma per operation, carrying the same
+- **Transport.** Under these isomorphisms: compatible pairs to Layer 1's `map`
+  (`explicitIso_map`), restriction to restriction (`explicitIso_res`), inflation to inflation
+  (`explicitIso_infl`), and coefficient maps to `coeffMap` (`explicitIso_coeffMap`). One transport
+  lemma per operation, each an equation between two named maps, carrying the same
   profiniteness hypotheses as the comparison itself. Only the operations that exist by this layer
-  are transported here; corestriction is transported in Layer 10 and the cups in Layer 12, each
-  in the layer where both sides are first available.
+  are transported here; the connecting maps are transported in Layer 5 against Layer 10's `delta`,
+  corestriction in Layer 10, the Kummer class in Layer 9 and the cups in Layer 12, each
+  in the layer where both sides are first available. The table in §2 lists all of them, and every
+  entry on it is a milestone.
 
 **Source** for the inhomogeneous-against-canonical comparison. The chain-level correspondence is
 classical and is displayed above; what has to be watched is the hypothesis. `ContinuousMap.curry`
@@ -673,7 +725,7 @@ exponential law holds.
 ### Layer 4: the finite-quotient colimit description
 
 **Prerequisites.** Mathlib: `OpenNormalSubgroup`, `ProfiniteGrp.toFiniteQuotientFunctor`,
-`Rep.quotientToInvariants`, `groupCohomology.map`, `AddCommGrp`. This roadmap: Layers 2 and 3.
+`Rep.quotientToInvariants`, `groupCohomology.map`, `AddCommGrpCat`. This roadmap: Layers 2 and 3.
 
 For profinite `G` and discrete `M`; the theorem most computations use (NSW (1.2.5),
 Ribes-Zalesskii Cor. 6.5.6(a), Koch Thm. 3.16; Serre, *Local Fields* X §3 takes it as the
@@ -695,8 +747,14 @@ Ribes-Zalesskii Cor. 6.5.6(a), Koch Thm. 3.16; Serre, *Local Fields* X §3 takes
   system in `M`. The construction must typecheck against
   `ProfiniteGrp.toFiniteQuotientFunctor`, whose arrows go the other way, which is the reason for
   the opposite category.
-- **The colimit theorem.** `Hⁱ(G, M) ≅ colim_U Hⁱ(G ⧸ U, M^U)` in `AddCommGrp`, for `i = 0, 1, 2`
-  on the explicit model. Surjectivity is a strict statement: a continuous 1-cocycle is *itself*
+- **The colimit theorem.** `Hⁱ(G, M) ≅ colim_U Hⁱ(G ⧸ U, M^U)` in `AddCommGrpCat`, for `i = 0, 1, 2`
+  on the explicit model. It is stated as universality of the **named** comparison cocone rather
+  than as a bare isomorphism, since a bare isomorphism does not say that the comparison maps are
+  the ones that induce it: the system is `explicitFiniteQuotientSystem1` with its value pinned by
+  `explicitFiniteQuotientSystem1_obj`, its legs are `explicitFiniteQuotientComparison1`, the cocone
+  they assemble to is `explicitFiniteQuotientCocone1`, and the theorem is
+  `explicitFiniteQuotientColimit1`. Degrees 0 and 2 have the same shape.
+  Surjectivity is a strict statement: a continuous 1-cocycle is *itself*
   inflated from a finite level, with no coboundary subtracted, because its zero set is an open
   subgroup and any open normal subgroup inside it makes the cocycle both right-invariant and
   invariant-valued. In degree 2, uniform local constancy on the compact space `G × G` descends
@@ -748,25 +806,45 @@ section, and Layer 2.
   ⚠ This is the one place where discreteness of the coefficients cannot be relaxed. For general
   topological modules there is no such section and no long exact sequence; do not state this layer
   beyond discrete coefficients.
+- **The short exact sequence as data.** `DiscreteShortExact G A B C` carries the two maps of
+  `0 → A → B → C → 0` with their continuity, equivariance and exactness. Every statement of this
+  layer, and the corestriction compatibility of Layer 6, is about the same sequence and has to name
+  the same two coefficient maps, so the sequence is an object and not a list of side conditions.
+  `DiscreteShortExact.restrict` restricts it to a subgroup, which is what the naturality statements
+  below are stated against.
 - **The long exact sequence** through degree 2 (NSW (1.3.2)): explicit connecting maps
-  `δ⁰ : H⁰(G, C) → H¹(G, A)` (choose a preimage, apply `d⁰`) and `δ¹ : H¹(G, C) → H²(G, A)`, their
-  well-definedness, exactness at the eight nodes from `H⁰(G, A)` to `H²(G, B)`, and naturality both
+  `explicitDelta0 : H⁰(G, C) → H¹(G, A)` (choose a preimage, apply `d⁰`) and
+  `explicitDelta1 : H¹(G, C) → H²(G, A)`, their
+  well-definedness, their descriptions on representatives (`explicitDelta0_apply`,
+  `explicitDelta1_apply`), exactness at the eight nodes from `H⁰(G, A)` to `H²(G, B)`
+  (`explicitLongExact_H0A`, `explicitLongExact_H0B`, `explicitLongExact_H0C`,
+  `explicitLongExact_H1A`, `explicitLongExact_H1B`, `explicitLongExact_H1C`,
+  `explicitLongExact_H2A`, `explicitLongExact_H2B`), and naturality both
   in morphisms of short exact sequences and in compatible pairs, so that restriction and inflation
-  commute with `δ`. Mirror the pin's `δ₀_apply`/`δ₁_apply` interface so that the discrete and
-  continuous theories are used identically. The all-degree sequence is a Layer 10 milestone.
+  commute with `δ`; restriction is `explicitDelta0_res` and `explicitDelta1_res`. Mirror the pin's
+  `δ₀_apply`/`δ₁_apply` interface so that the discrete and
+  continuous theories are used identically. The all-degree sequence is a Layer 10 milestone, and
+  the two connecting maps agree with its `delta` by `explicitIso_delta0` and `explicitIso_delta1`,
+  which are milestones of this layer and not of the consumer's.
 - **Inflation-restriction.** The exact sequence `0 → H¹(G ⧸ N, M^N) → H¹(G, M) → H¹(N, M)` for
   closed normal `N`, by a direct cochain argument, with the pin's discrete `H1InfRes_exact` as the
-  model. Valid for an arbitrary topological group with discrete coefficients.
+  model: `explicitInfl1_injective` and `explicitInfRes_exact`. Valid for an arbitrary topological
+  group with discrete coefficients.
 - **The five-term sequence, for profinite `G` and closed normal `N`** (NSW (1.6.7),
   Ribes-Zalesskii Cor. 7.2.5(a); Koch Thm. 3.14 gives the degree-`n` form under vanishing below
-  `n`, which Layer 11's dévissage uses). The pieces are: `G ⧸ N`-invariance of the image of
-  restriction, using Layer 2's conjugation action; the transgression
+  `n`, which Layer 11's dévissage uses). The pieces are: the invariants `H1ConjInvariants` of
+  Layer 2's conjugation action; `G ⧸ N`-invariance of the image of
+  restriction (`explicitRes1_mem_conjInvariants`) and the resulting map `explicitResConj1`; the
+  `transgression`
   `tg : H¹(N, M)^{G ⧸ N} → H²(G ⧸ N, M^N)`, defined by lifting a cocycle on `N` through a
   **continuous section** of `G → G ⧸ N` supplied by Layer 0 and differentiating; independence of
-  the chosen section, as an identity of classes; and exactness of
+  the chosen section, as an identity of classes; its two compatibilities
+  `transgression_comp_res` and `explicitInfl2_transgression`; and exactness of
   ```
-  0 → H¹(G⧸N, M^N) → H¹(G, M) → H¹(N, M)^{G⧸N} → H²(G⧸N, M^N) → H²(G, M).
+  0 → H¹(G⧸N, M^N) → H¹(G, M) → H¹(N, M)^{G⧸N} → H²(G⧸N, M^N) → H²(G, M)
   ```
+  at its four nodes, which is `explicitInfl1_injective`, `explicitInfRes_exact`,
+  `fiveTerm_exact_H1N` and `fiveTerm_exact_H2Q`.
   ⚠ Profiniteness is a genuine hypothesis here, not a convenience: extending a continuous cocycle
   off a closed subgroup, or building one from a section, is exactly what Layer 0's section theorem
   provides and what fails for an arbitrary topological group. The three-term inflation-restriction
@@ -815,13 +893,17 @@ through the transversal formulas of §3.
   `t u •`; a
   version of the argument that does not is wrong. Then: change of transversal, as an explicit
   coboundary identity between the two cochains, and the resulting independence on cohomology. Only
-  after all of that, define the public `cor` as the `t = Quotient.out` specialization.
+  after all of that, define the public `explicitCor0`, `explicitCor1` and `explicitCor2` as the
+  `t = Quotient.out` specializations. All three degrees are exported, and all three agree with
+  Layer 10's all-degree `corestriction` by `explicitIso_cor0`, `explicitIso_cor` and
+  `explicitIso_cor2`.
   ⚠ Prove independence as a change-of-transversal coboundary identity, not by re-deriving the map
   abstractly. Downstream computations use the formula, so the formula is the definition.
 - **The identities.** `cor ∘ res = (G : U) • id` on `H⁰, H¹, H²` (NSW (1.5.7); Serre, *Local
   Fields* VII §7 Prop. 6; Koch Thm. 3.10), with the two explicit cochain-level correction terms of
-  §3 as named lemmas; naturality in coefficient maps; compatibility with connecting maps
-  (`cor ∘ δ = δ ∘ cor`, NSW (1.5.2)); and transitivity `cor_V^G = cor_U^G ∘ cor_V^U` for open
+  §3 as named lemmas; naturality in coefficient maps; compatibility with the connecting maps of
+  Layer 5 (`cor ∘ δ = δ ∘ cor`, NSW (1.5.2)), which is `explicitCor_delta0` and
+  `explicitCor_delta1`; and transitivity `cor_V^G = cor_U^G ∘ cor_V^U` for open
   `V ≤ U ≤ G`.
 - **The Mackey double-coset formula** (NSW (1.5.6)). For open `U, V ≤ G`,
   ```
@@ -928,7 +1010,10 @@ On the explicit model, relative to an equivariant pairing as fixed in §3. Discr
 - **The six low-degree shapes.** `⌣ : H^p(G, M) × H^q(G, N) → H^{p+q}(G, P)` for the six pairs
   `(p, q)` of §3 with `p + q ≤ 2`, each with: the cochain formula, cocycle cup cocycle is a cocycle,
   descent through coboundaries, and biadditivity by construction. The family is closed: every
-  operation used in an associativity or commutativity statement below is one of these six.
+  operation used in an associativity or commutativity statement below is one of these six. Each is
+  a declaration of its own, `explicitCup00`, `explicitCup01`, `explicitCup10`, `explicitCup02`,
+  `explicitCup11` and `explicitCup20`, so that a consumer names the shape it uses rather than a
+  bidegree of Layer 12's graded product.
 - **Associativity.** Typing both sides needs four `G`-equivariant biadditive pairings and one
   coefficient identity. Given `μ₁ : A →+ B →+ D`, `μ₂ : D →+ C →+ E`, `ν₁ : B →+ C →+ F` and
   `ν₂ : A →+ F →+ E` with `μ₂ (μ₁ a b) c = ν₂ a (ν₁ b c)` for all `a, b, c`, and classes of degrees
@@ -981,11 +1066,15 @@ On the explicit model, relative to an equivariant pairing as fixed in §3. Discr
   `β : Hⁿ(G, 𝔽₂) → Hⁿ⁺¹(G, 𝔽₂)` attached to `0 → ℤ/2 → ℤ/4 → ℤ/2 → 0` with its ring structure,
   with `β ∘ β = 0` and `β (x ⌣ y) = β x ⌣ y + x ⌣ β y` in the degrees where both sides are
   defined. No generic derivation formula is stated without those hypotheses.
-- **The duality pairings.** For finite discrete `M`, the evaluation pairing of Layer 0 composed
-  with the cups gives `Hⁱ(G, Hom(M, N)) × H²⁻ⁱ(G, M) → H²(G, N)` for `i = 0, 1, 2`. These are
+- **The duality pairings.** For finite discrete `M`, the evaluation pairing `evalPairing` of
+  Layer 0, with its equivariance `evalPairing_equivariant` and the conjugation action `homAction`,
+  composed with the cups gives `Hⁱ(G, M →+ N) × H²⁻ⁱ(G, M) → H²(G, N)` for `i = 0, 1, 2`. These are
   instances of the six-shape API above, and they are what
   the Local Fields roadmap uses as the underlying
-  pairing of local Tate duality.
+  pairing of local Tate duality. A consumer building that pairing against the canonical object
+  names `evalPairing`, feeds it to `ofDiscreteModulePairing` to get a `TopPairing`, and takes `cup`
+  with `cup_add_left` and `cup_add_right` for biadditivity; those are the whole of what it needs
+  from here, and it constructs no pairing of its own.
 **API** for the cup products. Constructors: the six cochain formulas of §3, one per shape. Worked
 example: the `(1,1)` square on `C₂` with `𝔽₂` coefficients is the nontrivial class of
 `H²(C₂, 𝔽₂)`, and its Galois form `[-1] ⌣ [-1] ≠ 0` in `H²(G_ℝ, 𝔽₂)`; both are in
@@ -1071,15 +1160,23 @@ layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
      for a chosen `n`-th root `α` of `a` in `Kˢ`, `δ⁰(a)` is the class of `g ↦ g α / α`.
   5. Independence of the choice of root: two roots differ by an element of `μₙ`, and the two
      cocycles differ by the corresponding coboundary.
-  6. Multiplicativity of `δ⁰`, its kernel `(Kˣ)ⁿ`, and its surjectivity (Hilbert 90).
-  7. The resulting isomorphism `Kˣ ⧸ (Kˣ)ⁿ ≅ H¹(G_K, μₙ)` (NSW, the display after (6.2.1), and
-     (6.2.2) for the pairing form).
+  6. Multiplicativity of `δ⁰`, its kernel `(Kˣ)ⁿ`, and its surjectivity (Hilbert 90); the class
+     map itself is `kummerMap`.
+  7. The resulting isomorphism `kummerIso : Kˣ ⧸ (Kˣ)ⁿ ≅ H¹(G_K, μₙ)` (NSW, the display after
+     (6.2.1), and (6.2.2) for the pairing form), with `kummerIsoTransport` for a consumer carrying
+     its own model of `μₙ` through a continuous `G_K`-equivariant identification.
+  8. The same class map against the canonical object, `kummerMapCanonical`, and its agreement with
+     the explicit one under Layer 3, `explicitIso_kummerMap`. Both maps are named, so a consumer
+     that works in all degrees moves between the two by citing this theorem rather than by
+     transporting the isomorphism itself.
 - **Functoriality in the field**, stated as two commuting squares rather than as naturality in `K`,
   which is not a statement without a chosen embedding of separable closures. For a **finite
   separable** extension `L/K` together with a `K`-embedding `L ↪ Kˢ`, which makes `Kˢ` a separable
   closure of `L` as well and `G_L = Gal(Kˢ/L)` an open subgroup of `G_K`:
-  - restriction `H¹(G_K, μₙ) → H¹(G_L, μₙ)` corresponds to `Kˣ ⧸ (Kˣ)ⁿ → Lˣ ⧸ (Lˣ)ⁿ`;
-  - corestriction `H¹(G_L, μₙ) → H¹(G_K, μₙ)` corresponds to the norm `N_{L/K}`.
+  - restriction `H¹(G_K, μₙ) → H¹(G_L, μₙ)` corresponds to `Kˣ ⧸ (Kˣ)ⁿ → Lˣ ⧸ (Lˣ)ⁿ`, that is
+    `kummerIso_res` against `powerClassMap`;
+  - corestriction `H¹(G_L, μₙ) → H¹(G_K, μₙ)` corresponds to the norm `N_{L/K}`, that is
+    `kummerIso_norm` against `powerClassNorm`.
 
   Both squares include the finiteness and separability hypotheses and the chosen embedding
   explicitly. These are the compatibilities that
@@ -1088,8 +1185,9 @@ layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
 - **The mod-2 specialization.** Under `h2 : IsUnit (2 : K)`, with `μ₂ = {±1} ⊆ K` carrying the
   trivial action and `𝔽₂ = ZMod 2` written additively: the Kummer class `[a] ∈ H¹(G_K, 𝔽₂)` with
   cocycle `g ↦ 0` if `g √a = √a` and `1` otherwise, the square-class isomorphism
-  `Kˣ ⧸ (Kˣ)² ≃ H¹(G_K, 𝔽₂)`, and the `𝔽₂`-valued pairing `[a] ⌣ [b]`. These are the objects the
-  `gq2` interfaces `kummerClassK` and B11a are written in.
+  `Kˣ ⧸ (Kˣ)² ≃ H¹(G_K, 𝔽₂)`, and the `𝔽₂`-valued pairing `[a] ⌣ [b]`. This is the specialization
+  of `kummerIso` at `n = 2` and the trivial action, and it is what the quadratic-form consumers
+  name.
   ⚠ Do not assume `CharZero`. The hypothesis is `IsUnit (n : K)` with `[NeZero n]`, so finite
   fields of odd characteristic remain in scope for `n = 2`.
 
@@ -1130,8 +1228,9 @@ against the canonical object of Layer 1 throughout.
   `(OpenNormalSubgroup G)ᵒᵖ`, agreeing with Layer 4 in degrees `0, 1, 2`.
 - Compatibility with filtered colimits of discrete coefficients in every degree, in the form the
   dévissage of Layer 11 uses.
-- The long exact sequence in every degree for a short exact sequence of discrete modules, with the
-  connecting maps agreeing with Layer 5's in low degrees.
+- The long exact sequence in every degree for a `DiscreteShortExact` sequence, with the connecting
+  map `delta` and its agreement with Layer 5's `explicitDelta0` and `explicitDelta1` in low degrees
+  (`explicitIso_delta0`, `explicitIso_delta1`).
 - Shapiro's lemma in every degree for closed subgroups, exactness of coinduction, acyclicity of
   `Coind_1^G A` in every positive degree, and dimension shifting
   `Hⁱ⁺¹(G, M) ≅ Hⁱ(G, Coind_1^G M ⧸ M)` for `i ≥ 1`.
@@ -1147,11 +1246,13 @@ against the canonical object of Layer 1 throughout.
      Hⁿ(U, res_U M) ≅ Hⁿ(G, Coind_U^G (res_U M)) → Hⁿ(G, M),
      ```
      the first map this layer's Shapiro isomorphism and the second the image of `tr_U^G`;
-  3. naturality in `M`, transitivity `cor_V^G = cor_U^G ∘ cor_V^U` for open `V ≤ U ≤ G`,
-     `cor ∘ res = (G : U) • id`, and compatibility with the connecting maps of the long exact
-     sequence, each in every degree;
-  4. the Mackey double-coset formula in every degree;
-  5. agreement in degrees `0, 1, 2` with Layer 6's explicit transversal formulas, under Layer 3.
+  3. naturality in `M` (`corestriction_naturality`), transitivity `cor_V^G = cor_U^G ∘ cor_V^U`
+     for open `V ≤ U ≤ G` (`corestriction_trans`, through the relative `corestrictionLe`),
+     `cor ∘ res = (G : U) • id` (`corestriction_comp_res`), and compatibility with the connecting
+     maps of the long exact sequence, each in every degree;
+  4. the Mackey double-coset formula in every degree (`mackeyTerm`, `corestriction_mackey`);
+  5. agreement in degrees `0, 1, 2` with Layer 6's explicit transversal formulas, under Layer 3:
+     `explicitIso_cor0`, `explicitIso_cor`, `explicitIso_cor2`, one per degree.
   ⚠ The finite index is used in milestone 1 and nowhere else. Do not define the all-degree
   corestriction by an all-degree cochain formula: the canonical model is built from homogeneous
   cochains through a coinduction resolution and has no inhomogeneous cochains to write one on.
@@ -1185,7 +1286,7 @@ groups, which is the Pro-p Groups roadmap's and not this one's.
 
 ### Layer 11: cohomological dimension
 
-**Prerequisites.** Mathlib: `ENat`, `AddCommMonoid.primaryComponent`,
+**Prerequisites.** Mathlib: `ENat`, `AddCommGroup.primaryComponent`,
 `CategoryTheory.Simple`, `IsSimpleModule`. This roadmap: Layer 10.
 
 For profinite `G` and a prime `p`; NSW III §3 is the source of record. This layer rests on
@@ -1199,17 +1300,29 @@ Layer 10.
   `Suggested.lean`, which sends a predicate on `ℕ` to the infimum in `ℕ∞` of the naturals
   satisfying it, and to `⊤` when none does.
   ```lean
-  CohomologicalDimensionLE (p : ℕ) (G : Type*) (n : ℕ) : Prop :=
+  IsPPrimaryTorsion (p : ℕ) [Fact p.Prime] (M : Type*) : Prop :=
+    ∀ m : M, m ∈ AddCommGroup.primaryComponent M p
+
+  CohomologicalDimensionLE (p : ℕ) [Fact p.Prime] (G : Type) (n : ℕ) : Prop :=
     ∀ M, IsPPrimaryTorsion p M → ∀ i : ℕ, n < i → Hⁱ(G, M) = 0
 
-  StrictCohomologicalDimensionLE (p : ℕ) (G : Type*) (n : ℕ) : Prop :=
+  StrictCohomologicalDimensionLE (p : ℕ) [Fact p.Prime] (G : Type) (n : ℕ) : Prop :=
     ∀ M, ∀ i : ℕ, n < i → (Hⁱ(G, M)).primaryComponent p = ⊥
 
-  cd_p  (p : ℕ) (G : Type*) : ℕ∞ := leastENatBound (CohomologicalDimensionLE p G)
-  scd_p (p : ℕ) (G : Type*) : ℕ∞ := leastENatBound (StrictCohomologicalDimensionLE p G)
+  cd_p  (p : ℕ) [Fact p.Prime] (G : Type) : ℕ∞ := leastENatBound (CohomologicalDimensionLE p G)
+  scd_p (p : ℕ) [Fact p.Prime] (G : Type) : ℕ∞ := leastENatBound (StrictCohomologicalDimensionLE p G)
   ```
-  So `cd_p G ≤ n ↔ CohomologicalDimensionLE p G n`, and `cd_p G = ⊤` exactly when no bound holds;
-  likewise for `scd_p`. Finally `cd G = ⨆ p, cd_p G` in `ℕ∞`, over primes `p`.
+  So `cd_p G ≤ n ↔ CohomologicalDimensionLE p G n` (`cd_p_le_iff`), and `cd_p G = ⊤` exactly when no
+  bound holds; likewise for `scd_p` (`scd_p_le_iff`). Finally `cd G = ⨆ p, cd_p G` in `ℕ∞`, over
+  primes `p`. The primality of `p` is carried as `[Fact p.Prime]` on all four, since `p`-primary is
+  only the intended notion for a prime, and a consumer instantiating these names supplies that
+  instance.
+
+  In the headers `M` ranges over **arbitrary** discrete `G`-modules in the unbundled classes of §3,
+  subject only to the stated primary-torsion condition. Restricting the ordinary predicate to
+  coefficients of bounded exponent would define a different invariant by fiat; that the two agree
+  is `cd_p_le_iff_boundedExponent` below, a theorem proved through Layer 10's compatibility with
+  filtered colimits.
 
   The ordinary and the strict predicate differ in both places at once, and swapping either half
   gives the wrong invariant. Ordinary dimension asks the whole of `Hⁱ` to vanish, but only for
@@ -1217,26 +1330,38 @@ Layer 10.
   asks only the `p`-primary part of `Hⁱ` to vanish. In particular `scd_p` still depends on `p`:
   defining it by vanishing of all of `Hⁱ(G, M)` for all discrete `M` would drop `p` from the
   statement. Here `p`-primary means every element is annihilated by a power of `p`
-  (`AddCommMonoid.primaryComponent`, which also supplies `.primaryComponent p` above). Also state
+  (`AddCommGroup.primaryComponent`, which also supplies `.primaryComponent p` above). Also state
   and prove the equivalence of `CohomologicalDimensionLE` with the other common interface for
   *ordinary* dimension, vanishing of the `p`-primary component of `Hⁱ(G, M)` for every discrete
-  **torsion** `M`, so that both may be used; NSW (3.3.1) states the latter. That second interface
+  **torsion** `M`, so that both may be used; NSW (3.3.1) states the latter and
+  `cohomologicalDimensionLE_iff_torsion` is the theorem. That second interface
   is one torsion hypothesis away from the strict predicate, so keep the three statements apart.
-- **Dévissage** (NSW (3.3.2)). `CohomologicalDimensionLE p G n` follows from vanishing of
-  `Hⁿ⁺¹(G, M)` for every **finite** discrete `p`-primary `M`, by Layer 10's colimit, long exact
-  sequence and dimension shifting; and then from vanishing for every finite **simple** such `M`.
-  "Simple" is spelled as follows: a finite discrete `p`-primary `G`-module `M` is simple if it is
-  nontrivial, `p • M = 0`, and, for one (equivalently any) open normal `U` acting trivially on `M`,
-  the corresponding object of `Rep (ZMod p) (G ⧸ U)` is `CategoryTheory.Simple`. Prove the
-  independence of `U` as part of the milestone, and include all finiteness hypotheses in the
-  reduction theorem. For `G` pro-`p` the single module `𝔽_p` suffices (NSW (3.3.2) final clause;
+- **Dévissage** (NSW (3.3.2)), in three reductions, each stated as an equivalence with
+  `cd_p p G ≤ n` so that it can be used in both directions:
+  1. `cd_p_le_iff_boundedExponent`: it is enough to test the modules killed by a single power of
+     `p`, because an arbitrary `p`-primary module is the filtered colimit of its `pᵏ`-torsion
+     submodules and Layer 10's cohomology commutes with those colimits;
+  2. `cd_p_le_iff_finite_pPrimary`: it is enough to test the single degree `n + 1` on **finite**
+     discrete `p`-primary modules, by Layer 10's colimit, long exact sequence and dimension
+     shifting;
+  3. the same test on the finite **simple** such modules. "Simple" is spelled as follows: a finite
+     discrete `p`-primary `G`-module `M` is simple if it is
+     nontrivial, `p • M = 0`, and, for one (equivalently any) open normal `U` acting trivially on
+     `M`, the corresponding object of `Rep (ZMod p) (G ⧸ U)` is `CategoryTheory.Simple`. Prove the
+     independence of `U` as part of the milestone, and include all finiteness hypotheses in the
+     reduction theorem.
+
+  For `G` pro-`p` the single module `𝔽_p` suffices (NSW (3.3.2) final clause;
   Koch Def. 5.1 takes that as the definition); that refinement lives in
   the Pro-p Groups roadmap, built on this layer.
 - **Subgroups.** Three theorems:
-  1. `cd_p H ≤ cd_p G` for closed `H ≤ G`, by coinduction and Shapiro for the cofinal open case
-     and then the limit argument (NSW (3.3.5), Ribes-Zalesskii Thm. 7.3.1);
-  2. equality when `H` is open of index prime to `p`, from Layer 10's `cor ∘ res`;
-  3. `cd_p G ≤ scd_p G ≤ cd_p G + 1` (NSW (3.3.3)). State all three as inequalities in `ℕ∞`,
+  1. `cd_p_le_of_isClosed`, that is `cd_p H ≤ cd_p G` for closed `H ≤ G`, by coinduction and
+     Shapiro for the cofinal open case and then the limit argument (NSW (3.3.5), Ribes-Zalesskii
+     Thm. 7.3.1);
+  2. `cd_p_eq_of_index_not_dvd`, equality when `H` is open of index prime to `p`, from Layer 10's
+     `cor ∘ res`;
+  3. `cd_p_le_scd_p` and `scd_p_le_cd_p_add_one`, that is `cd_p G ≤ scd_p G ≤ cd_p G + 1`
+     (NSW (3.3.3)). State all three as inequalities in `ℕ∞`,
      including the case `cd_p G = ⊤`, where `⊤ + 1 = ⊤`.
 - **First values.** `cd_p G = 0` if and only if `Hⁱ(G, M) = 0` in positive degrees for every
   `p`-primary `M`; `cd_p Ẑ = 1` for every `p` (the worked example in §6); and `H²(Ẑ, M) = 0` for
@@ -1276,27 +1401,34 @@ so needs the product in every bidegree. Everything here is stated against Layer 
 This is the hardest multiplicative work in the roadmap and it is eleven milestones, not one.
 "Build it through the coinduction resolution" is a route, not a specification.
 
-1. **The coefficient pairing.** For `X, Y, Z : TopRep R G`, an `R`-bilinear map
+1. **The coefficient pairing** `TopPairing`. For `X, Y, Z : TopRep R G`, an `R`-bilinear map
    `X.V →ₗ[R] Y.V →ₗ[R] Z.V` that is jointly continuous and `G`-equivariant,
    `μ (g • x) (g • y) = g • μ x y`. This is the input type of everything below, and it is the
-   all-degree form of the pairing §3 fixes for the explicit cups.
+   all-degree form of the pairing §3 fixes for the explicit cups. `ofDiscreteModulePairing` builds
+   one from a biadditive equivariant map of discrete modules, which is how a consumer supplies a
+   pairing without constructing a `TopPairing` by hand.
 2. **The pairing on the resolution.** The recursive pairing on the terms of the coinduction
    resolution the carrier is built from, taking the `m`-th term against the `n`-th to the
    `(m + n)`-th, with its equivariance.
-3. **The cochain product.** The induced product on homogeneous cochains in bidegree `(m, n)`.
-4. **The Leibniz identity** `d (a ⌣ b) = da ⌣ b + (-1)^m (a ⌣ db)`, with the sign convention fixed
-   here once and referred to everywhere else.
+3. **The cochain product** `cupCochain`. The induced product on homogeneous cochains in bidegree
+   `(m, n)`.
+4. **The Leibniz identity** `cupCochain_leibniz`, `d (a ⌣ b) = da ⌣ b + (-1)^m (a ⌣ db)`, with the
+   sign convention fixed here once and referred to everywhere else.
 5. **Descent** to cocycles and then to cohomology, giving
-   `⌣ : Hᵐ(G, X) × Hⁿ(G, Y) → H^{m+n}(G, Z)`, biadditive in each argument.
-6. **The unit**, the class of `1` in `H⁰` for a discrete `G`-ring, with `1 ⌣ a = a = a ⌣ 1`.
-7. **Associativity**, as an explicit chain homotopy, for the four-pairing input of Layer 8 and for
-   a discrete `G`-ring.
-8. **Graded commutativity**, as an explicit chain homotopy, giving
+   `cup : Hᵐ(G, X) × Hⁿ(G, Y) → H^{m+n}(G, Z)`, biadditive in each argument (`cup_add_left`,
+   `cup_add_right`).
+6. **The unit**, the class of `1` in `H⁰` for a discrete `G`-ring, with `1 ⌣ a = a = a ⌣ 1`
+   (`cup_one_left`, `cup_one_right`).
+7. **Associativity** `cup_assoc`, as an explicit chain homotopy, for the four-pairing input of
+   Layer 8 and for a discrete `G`-ring.
+8. **Graded commutativity** `cup_gradedComm`, as an explicit chain homotopy, giving
    `a ⌣_μ b = (-1)^{mn} (b ⌣_{μᵒᵖ} a)` on classes.
-9. **Restriction and inflation compatibility** in all bidegrees.
-10. **The projection formula** `cor (res a ⌣ b) = a ⌣ cor b` in all bidegrees, with Layer 10's
-    all-degree corestriction.
-11. **Agreement with Layer 8's six explicit shapes** under Layer 3's comparison.
+9. **Restriction, inflation and coefficient compatibility** in all bidegrees: `cup_res`,
+   `cup_infl`, `cup_coeffMap`.
+10. **The projection formula** `cup_projection`, `cor (res a ⌣ b) = a ⌣ cor b` in all bidegrees,
+    with Layer 10's all-degree corestriction.
+11. **Agreement with Layer 8's six explicit shapes** under Layer 3's comparison, of which
+    `explicitIso_cup` is the `(1,1)` case and the other five have the same form.
 
 The characteristic-2 specialization the norm consumes falls out of 6 to 8: over `𝔽₂` with trivial
 action there are no signs, so `H^•(G, 𝔽₂) = ⨁ₙ Hⁿ(G, 𝔽₂)` is a graded-commutative `𝔽₂`-algebra.
@@ -1342,18 +1474,25 @@ Layer 12.
   ν_α (γ, η) = b₁ γ · b₁ η + b₁ η · b_s η       otherwise,
   ```
   its continuity and its 2-cocycle identity, and the resulting class
-  `N^{Ev}(α) ∈ H²(G, 𝔽₂)`. Independence of the choice of `s`, as an explicit coboundary.
+  `N^{Ev}(α) ∈ H²(G, 𝔽₂)`. In `Suggested.lean` these are `evensExtend`, `evensB1`, `evensBs`,
+  `evensCorCochain`, `evensGraphCochain` with its cocycle theorem, and the class `graphClass`,
+  which the general norm's index-2 specialization `evensNormIndexTwo` agrees with by
+  `evensNorm_eq_graphClass`. Independence of the choice of `s`, as an explicit coboundary.
   ⚠ `b₁` and `b_s` are **cochains and not cocycles**, so neither has a class in `H¹(G, 𝔽₂)`. For
   `G = C₄ = ⟨σ⟩`, `U = ⟨σ²⟩` and `α ≠ 0`, the values of `b₁` at `1, σ, σ², σ³` are `0, 1, 1, 0`,
   so `b₁(σ · σ) = 1` while `b₁(σ) + b₁(σ) = 0`. Only the sum is a cocycle, so identity 3 below is
   an equation about the sum, and giving the two components separate classes is a type error
-  dressed as a statement.
+  dressed as a statement. §6 carries that computation as an acceptance check.
 - **The four characterizing identities**, which are what Evens-Kahn uses (Kozlowski Lemma 2.4 in
   cohomological form):
-  1. `res_U N^{Ev}(α) = α ⌣ (s · α)`, the cup with the conjugate class;
-  2. `N^{Ev}(α + β) - N^{Ev}(α) - N^{Ev}(β) = cor (α ⌣ (s · β))`, with Layer 6's corestriction;
-  3. `cor¹ α = b₁ + b_s`, agreeing with Layer 6's transversal formula at the transversal `{1, s}`;
-  4. compatibility with inflation.
+  1. `evensNorm_res`, `res_U N^{Ev}(α) = α ⌣ (s · α)`, the cup with the conjugate class, which is
+     `evensConj`;
+  2. `evensNorm_polarization`,
+     `N^{Ev}(α + β) - N^{Ev}(α) - N^{Ev}(β) = cor (α ⌣ (s · β))`, with Layer 6's corestriction and
+     again the **conjugate** class;
+  3. `evensNorm_cor_shapiro`, `cor¹ α = b₁ + b_s`, agreeing with Layer 6's transversal formula at
+     the transversal `{1, s}`;
+  4. `evensNorm_identity_infl`, compatibility with inflation.
 
   These four are all that
   the Quadratic Form Invariants roadmap's
@@ -1439,7 +1578,8 @@ all-degree mod-2 form is the one built here.
 ## 6. Worked examples (acceptance criteria)
 
 Discharge these alongside the layers. Each catches a specific classic mistake: a vacuous quotient,
-a reversed transition map, a sign slip, a degenerate pairing, an impossible group.
+a reversed transition map, a sign slip, a degenerate pairing, a cochain mistaken for a cocycle, an
+impossible group.
 
 - **`H¹(ℤ_p, ℤ/pᵏ)` and `H¹(ℤ_p, ℤ)`** (Layer 2; in `Suggested.lean`). For the profinite additive
   group `ℤ_p`, evaluation at `1` is a bijection from the continuous additive homomorphisms
@@ -1466,9 +1606,19 @@ a reversed transition map, a sign slip, a degenerate pairing, an impossible grou
   `H²(C₂, 𝔽₂)`; the raw non-coboundary statement is in `Suggested.lean`. In Galois form: for
   `K = ℝ`, so that `G_ℝ = Gal(ℂ/ℝ) ≅ C₂`, `[-1] ⌣ [-1] ≠ 0` in `H²(G_ℝ, 𝔽₂)`. This is the
   smallest instance of the Kummer cup detecting a non-norm (`-1` is not a norm from `ℂ`), and it
-  is the test case that catches a degenerate pairing in the B11a-shaped statements downstream.
+  is the test case that catches a degenerate pairing. It is also the Kummer normalization checked
+  over a field with a **finite** Galois group, which is the case where the whole computation can be
+  carried out by hand.
 - **Kummer over `ℚ`** (Layer 9): `H¹(G_ℚ, 𝔽₂) ≅ ℚˣ ⧸ (ℚˣ)²`, with `[a]` the explicit square-root
-  cocycle.
+  cocycle. This is the same normalization over a genuinely **profinite** Galois group, so the two
+  Kummer examples together test that the finite computation and the profinite statement agree.
+- **The `C₄` non-cocycle check** (Layer 13): for `G = C₄ = ⟨σ⟩`, `U = ⟨σ²⟩`, `s = σ` and `α ≠ 0`,
+  the values of the Shapiro component `b₁` at `1, σ, σ², σ³` are `0, 1, 1, 0`, so
+  `b₁(σ · σ) = 1` while `b₁(σ) + b₁(σ) = 0`, and the same failure holds for `b_s`. Neither
+  component is a cocycle and neither has a class; only the sum `b₁ + b_s` is, and the sum passes
+  the same test. `Suggested.lean` carries all three checks together. This is what stops identity 3
+  of Layer 13 from being written as an equation between two separate classes, which is a type error
+  dressed as a statement.
 - **The index-2 Evens anchor** (Layer 13): for `G = C₄ ⊇ U = C₂` and `α ≠ 0`, `N^{Ev}(α)`
   restricts to the nontrivial class on `U`, so `N^{Ev}(α) ≠ 0` in `H²(C₄, 𝔽₂) ≅ 𝔽₂`. Read off the
   extension: a class in `H²(C₄, 𝔽₂)` with trivial coefficients classifies a **central** extension
