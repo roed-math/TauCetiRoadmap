@@ -19,8 +19,9 @@ its statements and gains a comparison isomorphism, or deletes a local definition
   description in degree 0 only. A second line of work,
   `Mathlib/RepresentationTheory/Homological/ContCohomology/`, appears in release `v4.32.2`
   (R. Hill, A. Yang, E. Xie; PRs #41144 and #41309). Neither has explicit `H¹` or `H²` or a
-  cup product; Layer 5 owns those and states the comparison. If the two lines are unified
-  upstream, the comparison milestone is restated against the survivor.
+  cup product; the Profinite Cohomology roadmap owns those and states the comparisons, and
+  this roadmap consumes them through the contract table in `README.md`. If the two lines are
+  unified upstream, those comparison milestones are restated against the survivor.
 - Cup products for continuous cohomology exist in the FLT staging repository
   (`FLT/Mathlib/.../ContCohomology/CupProduct.lean`, E. Xie, FLT#1098, 2026-07-10), and not
   in Mathlib.
@@ -68,8 +69,11 @@ generators, is prescriptive.
 - `GQ2/Orientation.lean` and the axiom `B3c` in `GQ2/Foundations/Axioms.lean` → the Layer 11
   instance for `ℚ₂`. That axiom bundles the values of Labute Thm 4, the identification of
   the dualizing character with the cyclotomic one, and a marked-isomorphism normalization.
-  Layers 7, 9 and 11 make the first two into theorems. The third, that is the choice of
-  marked generators `A, S, Y`, stays in `gq2`.
+  Layers 7, 9 and 11 now make all three into theorems: the roadmap's `D₀` is a presented group
+  whose marked generators `d0A`, `d0S`, `d0Y` and standard orientation
+  `standardD0Orientation` are named declarations, and
+  `absoluteGaloisGroupProP_two_ratPadic_marked` is the normalized statement. The particular
+  fixed generator names of `gq2` stay in `gq2`.
 - `GQ2/Roe/Labute/{TwoCentralTower,Levelwise,StageLemma,SpanFoundation,GradedLie/*,Assembly}.lean`
   and `GQ2/Reconstruction.lean` → Layer 8. This is the completed single-instance rank-3
   classification at `q = 2`: the lower 2-central tower with openness and cofinality,
@@ -98,6 +102,16 @@ generators, is prescriptive.
   declaration by declaration and contact the author before any reuse. Independent
   development with citation is the default, and no milestone depends on the outcome.
 
+## Consumer map, non-normative (2026-08-08)
+
+This table maps an external consumer's labels to the generic Tau Ceti declarations that carry
+the mathematics. It is a reading aid and **not** a prerequisite: no milestone of `README.md`
+mentions these labels, and none depends on this table.
+
+| External consumer label | Generic Tau Ceti theorem |
+|---|---|
+| B3c | the normalized marked `G_ℚ₂(2) ≃ D₀` theorem with cyclotomic orientation, Layer 11 `absoluteGaloisGroupProP_two_ratPadic_marked`, together with the marked generators `d0A`, `d0S`, `d0Y` and the standard orientation `standardD0Orientation` with its values `(-1, 1, (-3)⁻¹)` and its uniqueness |
+
 ## Coordination
 
 The `ProfiniteGrp` line in Mathlib is the work of Nailin Guan, Yuyang Zhao and Jujian Zhang,
@@ -117,10 +131,12 @@ until each supplier lands its declaration. Compare the two blocks whenever eithe
 changes: extract the block from each file, from the heading to the sentence before the next
 heading, and compare the two hashes.
 
-The same applies to the local carriers. When the Profinite Cohomology roadmap or Mathlib
-supplies a carrier and the comparison isomorphism of Layer 5 is proved, the local
-definitions in `Suggested.lean` become redundant, and a contributor rewrites the consumers
-along the isomorphism and removes them.
+On 2026-08-08 the cohomological substrate was consolidated: the explicit low-degree cochain
+definitions that this roadmap once carried (`contH0`, `contH1`, `contH2`, `cupCocycle`,
+`TrivMod` and their comparison examples) were removed, and every consumer was rewritten
+against the Profinite Cohomology declarations. The local `cdLE` was removed in the same pass in
+favour of `ProfiniteCohomology.cd_p`. What remains here is the coefficient object this roadmap
+computes with (`trivialFp`, `cohomFp`, `fpPairing`, `cupFp`), which is not a second carrier.
 
 ## Ecosystem note on the Mathlib release
 

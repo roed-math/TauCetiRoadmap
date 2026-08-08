@@ -1,4 +1,7 @@
 import Mathlib
+import TauCetiRoadmap.ProfiniteCohomology.Suggested
+
+set_option autoImplicit false
 
 /-!
 # Pro-p and Demushkin groups: target signatures
@@ -10,19 +13,23 @@ finishes neither a layer nor the roadmap. `sorry` is allowed in this human-owned
 library: these are goals, not proofs.
 
 This file carries the carrier types, so that the central interface of the roadmap is Lean
-code and not pseudocode. The cohomology is Mathlib's `continuousCohomology`, which Mathlib
-supplies in every degree; this file adds the explicit description in degrees `0`, `1` and `2`,
-the cup product in bidegree `(1,1)`, and the comparison isomorphisms between the two. The
-Demushkin predicate, the rank and `q` invariants, the prescription property that pins the
-canonical character, and the arithmetic inputs of Layer 11 are all stated against those
-objects.
+code and not pseudocode. The cohomology is Mathlib's `continuousCohomology`, described in low
+degrees, compared, and equipped with its exact sequences, change-of-group maps and cup
+products by the Profinite Cohomology roadmap; this file imports those declarations under the
+namespace `TauCetiRoadmap.ProfiniteCohomology` and states the pro-`p` theory against them. The
+coefficient object of the pro-`p` theory is `trivialFp`, the trivial `𝔽_p`-representation, with
+`cohomFp` for its cohomology and `fpPairing` for the multiplication pairing that gives the cup
+square. The Demushkin predicate, the rank and `q` invariants, the prescription property that
+pins the canonical character, and the arithmetic inputs of Layer 11 are all stated against
+those objects.
 
 Everything else is here too: the profinite foundations, the supernatural
 order and index, Sylow theory, the pro-`p`, Frattini and generation layers, the free pro-`C`
 class formalism, free pro-`p` groups with their universal property, the finite-quotient
-determinacy theorem, the lower `p`-series with its graded pieces, the closed-subgroup theory
-of `ℤ₂ˣ`, and the presentation-level worked examples, including the group
-`D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩` of the dyadic acceptance instance.
+determinacy theorem, the lower `p`-series with its graded pieces, the completed group algebra
+and Labute's relation module, the closed-subgroup theory of `ℤ₂ˣ`, and the presentation-level
+worked examples, including the group `D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩` of the dyadic acceptance
+instance with its marked generators and its standard orientation.
 
 The `def`s in the Prototypes section pin suggested *forms* for the objects the examples
 mention (each is also a design decision recorded in `README.md`); they are prototypes, not
@@ -32,6 +39,10 @@ proved-out API.
 namespace TauCetiRoadmap.ProPGroups
 
 open CategoryTheory
+
+-- Every cohomological operation below is a declaration of `TauCetiRoadmap.ProfiniteCohomology`,
+-- written `ProfiniteCohomology.foo` because this file lives inside `TauCetiRoadmap`. This
+-- roadmap builds no second carrier and no second operation.
 
 universe u v w
 
@@ -321,267 +332,87 @@ def IsFiniteContinuousQuotient (G : Type u) [Group G] [TopologicalSpace G]
     (Q : FiniteGrp.{v}) : Prop :=
   ∃ f : G →* Q, Function.Surjective f ∧ IsOpen ((f.ker : Subgroup G) : Set G)
 
-/-! ## Layer 5: the continuous cochain carrier
+/-! ## Layer 5: the coefficient objects, over the imported carrier
 
-These are the explicit descriptions in degrees `0`, `1` and `2`, which Mathlib does not have
-at the pin and which the extension dictionary, the cup product and the Demushkin predicate
-use. Coefficients are a finite discrete module `M` over a commutative ring `R`, with a
-continuous `G`-action that commutes with the `R`-action. The comparison isomorphisms with
-`continuousCohomology` are stated below, in the `Comparison` section. -/
+The cohomology is Mathlib's `continuousCohomology`. The Profinite Cohomology roadmap owns the
+explicit low-degree descriptions, the comparison isomorphisms, the exact sequences, change of
+groups, coinduction, Shapiro's lemma, corestriction and the cup products; this roadmap consumes
+those declarations. What is fixed here is the coefficient object this roadmap computes with, the
+trivial `𝔽_p`-representation, together with the multiplication pairing that gives its cup
+square. -/
 
-section Carrier
-
-variable (R : Type) [CommRing R]
-variable (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
-variable (M : Type v) [AddCommGroup M] [Module R M] [TopologicalSpace M] [DiscreteTopology M]
-  [DistribMulAction G M] [SMulCommClass G R M] [ContinuousSMul G M]
-
-/-- **`H⁰`**: the invariants of `M`, as an `R`-submodule. -/
-def contH0 : Submodule R M where
-  carrier := {m | ∀ g : G, g • m = m}
-  add_mem' {a b} ha hb := by intro g; simp [smul_add, ha g, hb g]
-  zero_mem' := by intro g; simp
-  smul_mem' r m hm := by intro g; rw [smul_comm g r m, hm g]
-
-/-- Continuous `1`-cocycles: locally constant crossed homomorphisms. Local constancy is
-continuity, because the coefficients are discrete. -/
-def cocycle₁ : Submodule R (LocallyConstant G M) where
-  carrier := {f | ∀ g h : G, f (g * h) = g • f h + f g}
-  add_mem' {f₁ f₂} h₁ h₂ := by
-    intro g h
-    simp only [LocallyConstant.add_apply, h₁ g h, h₂ g h, smul_add]
-    abel
-  zero_mem' := by intro g h; simp
-  smul_mem' r f hf := by
-    haveI := SMulCommClass.symm G R M
-    intro g h
-    simp only [LocallyConstant.smul_apply, hf g h, smul_add, smul_comm r g]
-
-/-- The principal crossed homomorphism attached to `m`. -/
-def principalCocycle (m : M) : LocallyConstant G M :=
-  ⟨fun g => g • m - m, by
-    rw [IsLocallyConstant.iff_continuous]
-    exact (continuous_id.smul continuous_const).sub continuous_const⟩
-
-/-- Principal crossed homomorphisms, as a linear map from the coefficients. -/
-def principalHom : M →ₗ[R] LocallyConstant G M where
-  toFun := principalCocycle G M
-  map_add' m m' := by ext g; simp [principalCocycle, smul_add]; abel
-  map_smul' r m := by
-    haveI := SMulCommClass.symm G R M
-    ext g; simp [principalCocycle, smul_sub, smul_comm r g]
-
-/-- Continuous `1`-coboundaries. -/
-def coboundary₁ : Submodule R (LocallyConstant G M) :=
-  LinearMap.range (principalHom R G M)
-
-omit [IsTopologicalGroup G] in
-theorem coboundary₁_le_cocycle₁ : coboundary₁ R G M ≤ cocycle₁ R G M := by
-  rintro _ ⟨m, rfl⟩ g h
-  simp [principalHom, principalCocycle, mul_smul, smul_sub]
-
-/-- **`H¹`** of `G` with coefficients in `M`, by continuous cochains. -/
-abbrev contH1 : Type _ :=
-  (cocycle₁ R G M) ⧸ ((coboundary₁ R G M).comap (cocycle₁ R G M).subtype)
-
-/-- The class of a continuous `1`-cocycle. -/
-def cocycle₁.mk (a : cocycle₁ R G M) : contH1 R G M := Submodule.Quotient.mk a
-
-/-- Continuous `2`-cocycles. -/
-def cocycle₂ : Submodule R (LocallyConstant (G × G) M) where
-  carrier := {c | ∀ g h k : G, g • c (h, k) - c (g * h, k) + c (g, h * k) - c (g, h) = 0}
-  add_mem' {c₁ c₂} h₁ h₂ := by
-    intro g h k
-    have e₁ := h₁ g h k
-    have e₂ := h₂ g h k
-    simp only [LocallyConstant.add_apply, smul_add]
-    rw [show ∀ a b c d e f g' h' : M,
-        (a + b) - (c + d) + (e + f) - (g' + h') = (a - c + e - g') + (b - d + f - h') from
-      by intros; abel, e₁, e₂, add_zero]
-  zero_mem' := by intro g h k; simp
-  smul_mem' r c hc := by
-    intro g h k
-    have h₀ := hc g h k
-    simp only [LocallyConstant.smul_apply]
-    rw [smul_comm g r]
-    simp only [← smul_sub, ← smul_add]
-    rw [h₀, smul_zero]
-
-/-- The coboundary of a continuous `1`-cochain. -/
-def d₁ (f : LocallyConstant G M) : LocallyConstant (G × G) M :=
-  ⟨fun x => x.1 • f x.2 - f (x.1 * x.2) + f x.1, by
-    rw [IsLocallyConstant.iff_continuous]
-    exact (((continuous_fst.smul (f.continuous.comp continuous_snd)).sub
-      (f.continuous.comp (continuous_fst.mul continuous_snd))).add
-      (f.continuous.comp continuous_fst))⟩
-
-/-- Continuous `2`-coboundaries. -/
-def coboundary₂ : Submodule R (LocallyConstant (G × G) M) :=
-  LinearMap.range
-    ({ toFun := d₁ G M
-       map_add' := by intro f f'; ext x; simp [d₁, smul_add]; abel
-       map_smul' := by
-        haveI := SMulCommClass.symm G R M
-        intro r f; ext x; simp [d₁, smul_sub, smul_add, smul_comm r] } :
-      LocallyConstant G M →ₗ[R] LocallyConstant (G × G) M)
-
-theorem coboundary₂_le_cocycle₂ : coboundary₂ R G M ≤ cocycle₂ R G M := by
-  rintro _ ⟨f, rfl⟩ g h k
-  simp only [LinearMap.coe_mk, AddHom.coe_mk, d₁, LocallyConstant.coe_mk]
-  simp [mul_smul, smul_sub, smul_add, mul_assoc]
-  abel
-
-/-- **`H²`** of `G` with coefficients in `M`, by continuous cochains. -/
-abbrev contH2 : Type _ :=
-  (cocycle₂ R G M) ⧸ ((coboundary₂ R G M).comap (cocycle₂ R G M).subtype)
-
-/-- The class of a continuous `2`-cocycle. -/
-def cocycle₂.mk (c : cocycle₂ R G M) : contH2 R G M := Submodule.Quotient.mk c
-
-/-! ### The canonical carrier, from Mathlib
-
-Mathlib defines continuous cohomology in every degree, as `continuousCohomology`, the
-homology of homogeneous cochains of a topological representation. That object is the carrier
-of every cohomological statement in this roadmap: `cd_p`, the rank interpretations, the
-Demushkin predicate and the Layer 11 inputs all read through it. This roadmap defines no
-second cohomology theory, and this file elaborates against the Mathlib the repository
-currently builds.
-
-What Mathlib does not yet have is the explicit description in low degrees and the cup
-product, and those are what the Demushkin predicate and the extension dictionary need. They
-are stated below on cocycles, with comparison isomorphisms to the canonical object as Layer 5
-milestones. -/
+section Coefficients
 
 /-- `ZMod p` carries the discrete topology, and so does its lift to a higher universe.
 Mathlib's construction puts the coefficients in the universe of the group, so the trivial
 module is `ULift (ZMod p)`. -/
-scoped instance : TopologicalSpace (ZMod p) := ⊥
+scoped instance {p : ℕ} : TopologicalSpace (ZMod p) := ⊥
 
-scoped instance : DiscreteTopology (ZMod p) := ⟨rfl⟩
+scoped instance {p : ℕ} : DiscreteTopology (ZMod p) := ⟨rfl⟩
 
-scoped instance : TopologicalSpace (ULift.{u} (ZMod p)) := ⊥
+scoped instance {p : ℕ} : TopologicalSpace (ULift.{u} (ZMod p)) := ⊥
 
-scoped instance : DiscreteTopology (ULift.{u} (ZMod p)) := ⟨rfl⟩
+scoped instance {p : ℕ} : DiscreteTopology (ULift.{u} (ZMod p)) := ⟨rfl⟩
 
-scoped instance : ContinuousAdd (ULift.{u} (ZMod p)) := ⟨continuous_of_discreteTopology⟩
-
-scoped instance : ContinuousSMul (ZMod p) (ULift.{u} (ZMod p)) :=
+scoped instance {p : ℕ} : ContinuousAdd (ULift.{u} (ZMod p)) :=
   ⟨continuous_of_discreteTopology⟩
 
-/-- The trivial `G`-representation on `𝔽_p`, as an object of Mathlib's category of
-topological representations. -/
+scoped instance {p : ℕ} : ContinuousSMul (ZMod p) (ULift.{u} (ZMod p)) :=
+  ⟨continuous_of_discreteTopology⟩
+
+/-- The trivial `G`-representation on `𝔽_p`, as an object of the category `TopRep (ZMod p) G`
+that the imported cohomology is a functor out of. -/
 noncomputable def trivialFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
-    [IsTopologicalGroup G] : Action (TopModuleCat.{u} (ZMod p)) G where
+    [IsTopologicalGroup G] : ProfiniteCohomology.TopRep (ZMod p) G where
   V := TopModuleCat.of (ZMod p) (ULift.{u} (ZMod p))
   ρ := 1
 
-/-- **`Hⁿ(G, 𝔽_p)`**, against Mathlib's canonical carrier. Every dimension count below is
-about this object. -/
+/-- **`Hⁿ(G, 𝔽_p)`**, against the imported carrier. Every dimension count below is about this
+object. -/
 noncomputable abbrev cohomFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] (n : ℕ) : TopModuleCat.{u} (ZMod p) :=
   (continuousCohomology (ZMod p) G n).obj (trivialFp p G)
 
-/-- **Layer 6, cohomological dimension**, against the canonical carrier. The coefficients
-range over the discrete `p`-primary torsion representations, which here are the
-representations over `ZMod (p ^ r)` for every `r`; testing only the finite ones, or only the
-elementary abelian ones for a pro-`p` group, are the two reduction theorems of Layer 6, and
-not the definition. -/
-def cdLE (p n : ℕ) (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] : Prop :=
-  ∀ m : ℕ, n < m → ∀ r : ℕ, 1 ≤ r → ∀ A : Action (TopModuleCat.{u} (ZMod (p ^ r))) G,
-    Subsingleton ((continuousCohomology (ZMod (p ^ r)) G m).obj A)
+/-- **The multiplication pairing on `𝔽_p`**, as a `TopPairing` of the trivial representation
+with itself. This is the coefficient input of the imported cup product: `cup (fpPairing p G) 1 1`
+is the cup square `H¹(G, 𝔽_p) × H¹(G, 𝔽_p) → H²(G, 𝔽_p)` that the Demushkin predicate and the
+Layer 11 duality input are stated against, and there is no second cup product in this roadmap.
+The pairing is the multiplication of `ZMod p`, which is `ZMod p`-bilinear, continuous because the
+coefficients are discrete, and equivariant because the action is trivial. -/
+noncomputable def fpPairing (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] :
+    ProfiniteCohomology.TopPairing (trivialFp p G) (trivialFp p G) (trivialFp p G) where
+  bil := sorry
+  cont := sorry
+  equivariant := sorry
 
-end Carrier
-
-/-! ### Trivial coefficients, and the cup product in bidegree `(1,1)`
-
-`TrivMod G A` is a type synonym for `A`, so that the trivial action is never an instance on
-`A` itself. The Demushkin predicate uses `A = ZMod p`. -/
-
-/-- `A` with the trivial `G`-action. -/
-def TrivMod (_G : Type u) (A : Type) := A
-
-section Trivial
-
-variable (A : Type) [CommRing A]
-variable (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
-
-instance : CommRing (TrivMod G A) := inferInstanceAs (CommRing A)
-instance : Module A (TrivMod G A) := inferInstanceAs (Module A A)
-instance : TopologicalSpace (TrivMod G A) := ⊥
-instance : DiscreteTopology (TrivMod G A) := ⟨rfl⟩
-
-instance : DistribMulAction G (TrivMod G A) where
-  smul _ a := a
-  one_smul _ := rfl
-  mul_smul _ _ _ := rfl
-  smul_zero _ := rfl
-  smul_add _ _ _ := rfl
-
-instance : SMulCommClass G A (TrivMod G A) := ⟨fun _ _ _ => rfl⟩
-instance : ContinuousSMul G (TrivMod G A) := ⟨continuous_snd⟩
-
-omit [TopologicalSpace G] [IsTopologicalGroup G] in
-@[simp] theorem trivMod_smul (g : G) (a : TrivMod G A) : g • a = a := rfl
-
-/-- **The cup product in bidegree `(1,1)`, at the level of cocycles**:
-`(a ∪ b)(g, h) = a g * b h`. That it descends to a bilinear map
-`contH1 × contH1 → contH2` is a Layer 5 milestone; every statement below that needs only
-nondegeneracy is phrased through `cupCocycle`, so it does not wait for the descent. -/
-def cupCocycle (a b : cocycle₁ A G (TrivMod G A)) : cocycle₂ A G (TrivMod G A) :=
-  ⟨⟨fun x => (a : LocallyConstant G (TrivMod G A)) x.1 *
-      (b : LocallyConstant G (TrivMod G A)) x.2, by
-      rw [IsLocallyConstant.iff_continuous]
-      exact ((a : LocallyConstant G (TrivMod G A)).continuous.comp continuous_fst).mul
-        ((b : LocallyConstant G (TrivMod G A)).continuous.comp continuous_snd)⟩, by
-    intro g h k
-    have ha := a.2 g h
-    have hb := b.2 h k
-    simp only [trivMod_smul, LocallyConstant.coe_mk] at *
-    rw [ha, hb]
-    ring⟩
-
-/-- **Layer 5, the cup product descends to cohomology.** The milestone that makes
-`contH1 × contH1 → contH2` a map of modules; the nondegeneracy statements above are phrased
-on cocycles so that they do not wait for it. -/
-example : ∃ cup : contH1 A G (TrivMod G A) →ₗ[A] contH1 A G (TrivMod G A) →ₗ[A]
-      contH2 A G (TrivMod G A),
-    ∀ a b : cocycle₁ A G (TrivMod G A),
-      cup (cocycle₁.mk A G (TrivMod G A) a) (cocycle₁.mk A G (TrivMod G A) b)
-        = cocycle₂.mk A G (TrivMod G A) (cupCocycle A G a b) :=
+/-- **Layer 5, the pairing is multiplication.** The defining equation of `fpPairing`, without
+which the pairing would be an arbitrary bilinear map and every nondegeneracy statement below
+would be vacuous. -/
+theorem fpPairing_bil (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (a b : ULift.{u} (ZMod p)) :
+    (fpPairing p G).bil a b = ULift.up (a.down * b.down) :=
   sorry
 
-/-- **Layer 5, graded commutativity in bidegree `(1,1)`.** With it, right nondegeneracy of a
-cup pairing follows from left nondegeneracy, so the second field of `IsDemushkin` and of
-`LocalFieldInputs` becomes a theorem and is dropped. -/
-example (a b : cocycle₁ A G (TrivMod G A)) :
-    cocycle₂.mk A G (TrivMod G A) (cupCocycle A G a b)
-      = - cocycle₂.mk A G (TrivMod G A) (cupCocycle A G b a) :=
+/-- **Layer 5, the cup square on `H¹(G, 𝔽_p)`.** The bidegree-`(1,1)` product of the imported
+cup at the pairing above, with the degree `1 + 1` rewritten as `2`. Every nondegeneracy clause
+below is stated against this abbreviation, so all of them are about one operation. -/
+noncomputable abbrev cupFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (a b : cohomFp p G 1) : cohomFp p G 2 :=
+  ProfiniteCohomology.degreeCast (by norm_num) (trivialFp p G)
+    (ProfiniteCohomology.cup (fpPairing p G) 1 1 a b)
+
+/-- **Layer 5, graded commutativity of the cup square**, the specialization of the imported
+`cup_gradedComm` to `fpPairing`, whose opposite pairing is itself because multiplication in
+`ZMod p` is commutative. With it, right nondegeneracy of a cup pairing follows from left
+nondegeneracy, so the second nondegeneracy field of `IsDemushkin` and of `LocalFieldInputs`
+becomes a theorem and is dropped. -/
+theorem cupFp_gradedComm (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (a b : cohomFp p G 1) : cupFp p G a b = - cupFp p G b a :=
   sorry
 
-end Trivial
+end Coefficients
 
-/-! ### The comparison with the canonical carrier
-
-These are the milestones that tie the explicit low-degree descriptions to Mathlib's object.
-Every statement that mixes the two goes through them. -/
-
-section Comparison
-
-variable (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
-  [CompactSpace G] [TotallyDisconnectedSpace G]
-
-/-- **Layer 5, degree one.** The explicit crossed-homomorphism description agrees with
-Mathlib's carrier. -/
-example : Nonempty (contH1 (ZMod p) G (TrivMod G (ZMod p)) ≃ₗ[ZMod p] cohomFp p G 1) := sorry
-
-/-- **Layer 5, degree two.** The explicit `2`-cocycle description agrees with Mathlib's
-carrier; the extension dictionary of Layer 5 is stated on the explicit side. -/
-example : Nonempty (contH2 (ZMod p) G (TrivMod G (ZMod p)) ≃ₗ[ZMod p] cohomFp p G 2) := sorry
-
-/-- **Layer 5, degree zero.** -/
-example : Nonempty (contH0 (ZMod p) G (TrivMod G (ZMod p)) ≃ₗ[ZMod p] cohomFp p G 0) := sorry
-
-end Comparison
 
 /-! ### Twisted coefficients, and the prescription property
 
@@ -644,26 +475,20 @@ variable (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Com
 no downstream theorem applies to a group that satisfies only the cohomological clauses. Both
 nondegeneracy clauses are fields; if the cup product is proved graded-commutative in this
 bidegree, the second becomes a theorem and the field is dropped. Nondegeneracy is stated
-through `cupCocycle`, so it does not wait for the descent of the cup product to cohomology.
+through `cupFp`, which is the imported cup product at the multiplication pairing on `𝔽_p`.
 Finite generation is derived from `h1_fin` and the Burnside basis theorem, and is never
 assumed. -/
 structure IsDemushkin : Prop where
   /-- `G` is a pro-`p` group. -/
   proP : IsProP p G
-  /-- `H¹(G, 𝔽_p)` is finite-dimensional, against Mathlib's carrier. -/
+  /-- `H¹(G, 𝔽_p)` is finite-dimensional, against the imported carrier. -/
   h1_fin : Module.Finite (ZMod p) (cohomFp p G 1)
-  /-- `H²(G, 𝔽_p)` is one-dimensional, against Mathlib's carrier. -/
+  /-- `H²(G, 𝔽_p)` is one-dimensional, against the imported carrier. -/
   h2_rank : Module.finrank (ZMod p) (cohomFp p G 2) = 1
   /-- The cup pairing is nondegenerate on the left. -/
-  cupLeft : ∀ a : cocycle₁ (ZMod p) G (TrivMod G (ZMod p)),
-    cocycle₁.mk (ZMod p) G (TrivMod G (ZMod p)) a ≠ 0 →
-    ∃ b : cocycle₁ (ZMod p) G (TrivMod G (ZMod p)),
-      cocycle₂.mk (ZMod p) G (TrivMod G (ZMod p)) (cupCocycle (ZMod p) G a b) ≠ 0
+  cupLeft : ∀ a : cohomFp p G 1, a ≠ 0 → ∃ b : cohomFp p G 1, cupFp p G a b ≠ 0
   /-- The cup pairing is nondegenerate on the right. -/
-  cupRight : ∀ b : cocycle₁ (ZMod p) G (TrivMod G (ZMod p)),
-    cocycle₁.mk (ZMod p) G (TrivMod G (ZMod p)) b ≠ 0 →
-    ∃ a : cocycle₁ (ZMod p) G (TrivMod G (ZMod p)),
-      cocycle₂.mk (ZMod p) G (TrivMod G (ZMod p)) (cupCocycle (ZMod p) G a b) ≠ 0
+  cupRight : ∀ b : cohomFp p G 1, b ≠ 0 → ∃ a : cohomFp p G 1, cupFp p G a b ≠ 0
 
 /-- **Layer 7, a Demushkin group is topologically finitely generated.** From `h1_fin`, the
 `H¹` interpretation of Layer 5, and the Burnside basis theorem of Layer 3. -/
@@ -700,14 +525,61 @@ example {p G H} [Fact p.Prime] [Group G] [TopologicalSpace G] [IsTopologicalGrou
     demushkinQ hG = demushkinQ hH :=
   sorry
 
-/-- **Layer 7, the canonical character.** The prescription property is stated in the
-lifting form: every continuous cocycle with values in `ℤ/p`, twisted by `χ`, lifts modulo
-coboundaries to one with values in `ℤ/p^i`. The twisted coefficients are `CharMod` below.
-The theorem is that a Demushkin group has exactly one continuous `χ` with that property
-(Serre; Labute Thm 4). -/
-example {p G} [Fact p.Prime] [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
-    [CompactSpace G] [TotallyDisconnectedSpace G] (_hG : IsDemushkin p G) :
+/-- **Layer 7, the canonical character exists and is unique.** The prescription property is
+stated in the lifting form: every continuous cocycle with values in `ℤ/p`, twisted by `χ`,
+lifts modulo coboundaries to one with values in `ℤ/p^i`. The theorem is that a Demushkin group
+has exactly one continuous `χ` with that property (Serre; Labute Thm 4). -/
+theorem existsUnique_hasPrescriptionProperty {p G} [Fact p.Prime] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (_hG : IsDemushkin p G) :
     ∃! χ : G →* ℤ_[p]ˣ, Continuous χ ∧ HasPrescriptionProperty χ :=
+  sorry
+
+/-- **The canonical character (orientation) of a Demushkin group**, the unique continuous
+`χ : G → ℤ_pˣ` with the prescription property. It is data, so it is a `def`; the three theorems
+below are what pin it, and every statement about the orientation is about this declaration. -/
+noncomputable def demushkinCharacter {p G} [Fact p.Prime] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hG : IsDemushkin p G) : G →* ℤ_[p]ˣ :=
+  (existsUnique_hasPrescriptionProperty hG).exists.choose
+
+/-- **Layer 7, the canonical character is continuous.** -/
+theorem demushkinCharacter_continuous {p G} [Fact p.Prime] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hG : IsDemushkin p G) : Continuous (demushkinCharacter hG) :=
+  (existsUnique_hasPrescriptionProperty hG).exists.choose_spec.1
+
+/-- **Layer 7, the canonical character has the prescription property.** -/
+theorem demushkinCharacter_hasPrescriptionProperty {p G} [Fact p.Prime] [Group G]
+    [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hG : IsDemushkin p G) : HasPrescriptionProperty (demushkinCharacter hG) :=
+  (existsUnique_hasPrescriptionProperty hG).exists.choose_spec.2
+
+/-- **Layer 7, the canonical character is the only one.** This is the uniqueness half of
+Labute Thm 4, in the form Layer 11 applies to identify the orientation of `G_K(p)` with the
+descended cyclotomic character. -/
+theorem demushkinCharacter_unique {p G} [Fact p.Prime] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hG : IsDemushkin p G) (χ : G →* ℤ_[p]ˣ) (hcont : Continuous χ)
+    (hpres : HasPrescriptionProperty χ) : χ = demushkinCharacter hG :=
+  (existsUnique_hasPrescriptionProperty hG).unique ⟨hcont, hpres⟩
+    (existsUnique_hasPrescriptionProperty hG).exists.choose_spec
+
+/-- **Layer 7, the orientation image is a closed subgroup**, and it is the invariant that the
+`q = 2` classification uses in place of `q`. -/
+theorem demushkinCharacter_range_isClosed {p G} [Fact p.Prime] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hG : IsDemushkin p G) : IsClosed (((demushkinCharacter hG).range : Subgroup ℤ_[p]ˣ) :
+      Set ℤ_[p]ˣ) :=
+  sorry
+
+/-- **Layer 7, the orientation image is an isomorphism invariant.** The transport lemma the
+acceptance instances use. -/
+theorem demushkinCharacter_range_congr {p G H} [Fact p.Prime] [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G] [Group H]
+    [TopologicalSpace H] [IsTopologicalGroup H] [CompactSpace H] [TotallyDisconnectedSpace H]
+    (hG : IsDemushkin p G) (hH : IsDemushkin p H) (_e : G ≃ₜ* H) :
+    (demushkinCharacter hG).range = (demushkinCharacter hH).range :=
   sorry
 
 end Demushkin
@@ -745,16 +617,12 @@ structure LocalFieldInputs (p : ℕ) [Fact p.Prime] (Γ : Type u) [Group Γ] [To
     = 1 + Module.finrank (ZMod p) (cohomFp p Γ 2) + N
   /-- Input 3: the cup pairing on `H¹(G_K, 𝔽_p)` is nondegenerate on the left when
   `μ_p ⊆ K`. This is local Tate duality at `n = p`, transported along inputs 2 and 4. -/
-  cup_nondegenerate_left : hasMu → ∀ a : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
-    cocycle₁.mk (ZMod p) Γ (TrivMod Γ (ZMod p)) a ≠ 0 →
-    ∃ b : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
-      cocycle₂.mk (ZMod p) Γ (TrivMod Γ (ZMod p)) (cupCocycle (ZMod p) Γ a b) ≠ 0
+  cup_nondegenerate_left : hasMu →
+    ∀ a : cohomFp p Γ 1, a ≠ 0 → ∃ b : cohomFp p Γ 1, cupFp p Γ a b ≠ 0
   /-- Input 3: and on the right. This field is dropped once the graded commutativity of
   Layer 5 is available, because it then follows from the left-hand statement. -/
-  cup_nondegenerate_right : hasMu → ∀ b : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
-    cocycle₁.mk (ZMod p) Γ (TrivMod Γ (ZMod p)) b ≠ 0 →
-    ∃ a : cocycle₁ (ZMod p) Γ (TrivMod Γ (ZMod p)),
-      cocycle₂.mk (ZMod p) Γ (TrivMod Γ (ZMod p)) (cupCocycle (ZMod p) Γ a b) ≠ 0
+  cup_nondegenerate_right : hasMu →
+    ∀ b : cohomFp p Γ 1, b ≠ 0 → ∃ a : cohomFp p Γ 1, cupFp p Γ a b ≠ 0
   /-- Input 5: the cyclotomic character. -/
   cyclotomic : Γ →* ℤ_[p]ˣ
   /-- Input 5: it is continuous. -/
@@ -794,166 +662,1112 @@ same definition, so that the constructor below takes the same hypothesis and a c
 can replace one by the other without a translation. -/
 def HasMuP (p : ℕ) (F : Type u) [Field F] : Prop := ∃ ζ : F, IsPrimitiveRoot ζ p
 
-/-- **Layer 11, the canonical instance.** The interface is not lawless: this milestone builds
-the term for a finite extension of `ℚ_p`, from the Local Fields theorems, so that the
-statements below are about `G_K(p)` and not about an abstract structure. It is a named
-declaration, and not an existence statement, because the interface table promises the name.
-Every field is proved from a named theorem of that roadmap, transported through the Layer 5
-comparison.
-
-```
-noncomputable def localFieldInputs (p : ℕ) [Fact p.Prime]
-    (K : Type u) [Field K] [Algebra ℚ_[p] K] [Module.Finite ℚ_[p] K] :
-    LocalFieldInputs p (Field.absoluteGaloisGroup K) (Module.finrank ℚ_[p] K) (HasMuP p K)
-```
-
-The declaration is written as an existence statement below, because the topological instances
-on `Field.absoluteGaloisGroup K` that `LocalFieldInputs` needs are Layer 0 milestones of this
-roadmap and are not yet available as instances. -/
-example (K : Type u) [Field K] [Algebra ℚ_[p] K] [Module.Finite ℚ_[p] K]
-    [TopologicalSpace (Field.absoluteGaloisGroup K)]
-    [IsTopologicalGroup (Field.absoluteGaloisGroup K)]
-    [CompactSpace (Field.absoluteGaloisGroup K)]
-    [TotallyDisconnectedSpace (Field.absoluteGaloisGroup K)] :
-    Nonempty (LocalFieldInputs p (Field.absoluteGaloisGroup K) (Module.finrank ℚ_[p] K)
-      (HasMuP p K)) :=
-  sorry
-
-/-- **Layer 11, `G_K(p)` is topologically finitely generated.** From the `H¹` count and the
-degree-one inflation isomorphism, and not from finite generation of `G_K`, which this
-roadmap never assumes. -/
-example (_inp : LocalFieldInputs p Γ N hasMu) :
+/-- **Layer 11, `G_K(p)` is topologically finitely generated**, for an abstract `Γ` carrying
+the inputs. From the `H¹` count and the degree-one inflation isomorphism, and not from finite
+generation of `G_K`, which this roadmap never assumes. -/
+theorem isTopologicallyFinitelyGenerated_maximalProPQuotient
+    (_inp : LocalFieldInputs p Γ N hasMu) :
     IsTopologicallyFinitelyGenerated (maximalProPQuotient p Γ) :=
   sorry
 
-/-- **Layer 11, the free case (Shafarevich).** If `μ_p ⊄ K` then `G_K(p)` is free pro-`p` of
-rank `N + 1`. -/
-example (_inp : LocalFieldInputs p Γ N hasMu) (_h : ¬ hasMu) :
+/-- **Layer 11, the free case (Shafarevich)**, for an abstract `Γ`. If `μ_p ⊄ K` then `G_K(p)`
+is free pro-`p` of rank `N + 1`. -/
+theorem maximalProPQuotient_equiv_free_of_not_mu (_inp : LocalFieldInputs p Γ N hasMu)
+    (_h : ¬ hasMu) :
     Nonempty (maximalProPQuotient p Γ ≃ₜ* freeProP p (Fin (N + 1))) :=
   sorry
 
-/-- **Layer 11, the Demushkin case: the construction.** If `μ_p ⊆ K` then `G_K(p)` is
-Demushkin. This is the theorem of the layer; the rank, `q`, the orientation and the
+/-- **Layer 11, the Demushkin case: the construction**, for an abstract `Γ`. If `μ_p ⊆ K` then
+`G_K(p)` is Demushkin. This is the theorem of the layer; the rank, `q`, the orientation and the
 presentation are its consequences. -/
-example (_inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu) :
-    IsDemushkin p (maximalProPQuotient p Γ) :=
+theorem isDemushkin_maximalProPQuotient_of_mu (_inp : LocalFieldInputs p Γ N hasMu)
+    (_h : hasMu) : IsDemushkin p (maximalProPQuotient p Γ) :=
   sorry
 
-/-- **Layer 11, the rank in the Demushkin case.** `n(G_K(p)) = N + 2`. -/
-example (_inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu)
-    (hD : IsDemushkin p (maximalProPQuotient p Γ)) :
-    demushkinRank hD = N + 2 :=
+/-- **Layer 11, the rank in the Demushkin case**, for an abstract `Γ`. `n(G_K(p)) = N + 2`. -/
+theorem demushkinRank_maximalProPQuotient (_inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu)
+    (hD : IsDemushkin p (maximalProPQuotient p Γ)) : demushkinRank hD = N + 2 :=
   sorry
 
-/-- **Layer 11, the `q`-invariant.** `q(G_K(p))` is the input `qInvariant`, that is the
-largest `p`-power `q` with `μ_q ⊆ K`. -/
-example (inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu)
-    (hD : IsDemushkin p (maximalProPQuotient p Γ)) :
-    demushkinQ hD = inp.qInvariant :=
+/-- **Layer 11, the `q`-invariant**, for an abstract `Γ`. `q(G_K(p))` is the input
+`qInvariant`, that is the largest `p`-power `q` with `μ_q ⊆ K`. -/
+theorem demushkinQ_maximalProPQuotient (inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu)
+    (hD : IsDemushkin p (maximalProPQuotient p Γ)) : demushkinQ hD = inp.qInvariant :=
   sorry
 
-/-- **Layer 11, the orientation is cyclotomic.** The cyclotomic character is trivial on the
-kernel of `G_K ↠ G_K(p)`, so it descends, and the descent has the prescription property.
-With the uniqueness half of Labute Thm 4, the descent is the canonical character of
-`G_K(p)`. -/
-example (inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu) :
-    ∃ ψ : maximalProPQuotient p Γ →* ℤ_[p]ˣ, Continuous ψ ∧
-      ψ.comp (QuotientGroup.mk' (proPKernel p Γ)) = inp.cyclotomic ∧
-      HasPrescriptionProperty ψ :=
+/-- **Layer 11, the orientation is cyclotomic**, for an abstract `Γ`. The cyclotomic character
+is trivial on the kernel of `G_K ↠ G_K(p)`, so it descends, and the descent has the
+prescription property. With `demushkinCharacter_unique`, the descent is the canonical character
+of `G_K(p)`. -/
+theorem cyclotomicOrientation_maximalProPQuotient (inp : LocalFieldInputs p Γ N hasMu)
+    (_h : hasMu) (hD : IsDemushkin p (maximalProPQuotient p Γ)) :
+    (demushkinCharacter hD).comp (QuotientGroup.mk' (proPKernel p Γ)) = inp.cyclotomic :=
   sorry
 
 end LocalFields
 
+/-! ### Layer 11: the public arithmetic theorems
+
+The statements above are about an abstract `Γ` carrying the inputs. These are the theorems the
+Local Fields roadmap and the interface table cite: their arguments are the field `K` itself, and
+their proofs invoke `localFieldInputs p K`. -/
+
+section PublicLocalFields
+
+-- Mathlib supplies `Group`, `TopologicalSpace` and `IsTopologicalGroup` on
+-- `Field.absoluteGaloisGroup K`, so those are not binders here: repeating them would shadow
+-- Mathlib's instances and make `absoluteGaloisGroupProP p K` a different type from the one the
+-- abbreviation names. Compactness and total disconnectedness are the Layer 0 milestones of this
+-- roadmap, so they are instance arguments until Layer 0 supplies them by instance search.
+variable (p : ℕ) [Fact p.Prime] (K : Type u) [Field K] [Algebra ℚ_[p] K] [Module.Finite ℚ_[p] K]
+  [CompactSpace (Field.absoluteGaloisGroup K)]
+  [TotallyDisconnectedSpace (Field.absoluteGaloisGroup K)]
+
+/-- **Layer 11, the canonical instance.** The interface is not lawless: this milestone builds
+the term for a finite extension of `ℚ_p`, from the Local Fields theorems, so that the
+statements below are about `G_K(p)` and not about an abstract structure. It is a named
+declaration, and not an existence statement, because the interface table promises the name.
+Every field is proved from a named theorem of that roadmap, transported through the imported
+comparison isomorphisms. Compactness and total disconnectedness of `Field.absoluteGaloisGroup K`
+are Layer 0 milestones of this roadmap; they are instance arguments here, and the declaration
+loses them once Layer 0 supplies them by instance search. -/
+noncomputable def localFieldInputs :
+    LocalFieldInputs p (Field.absoluteGaloisGroup K) (Module.finrank ℚ_[p] K) (HasMuP p K) := by
+  sorry
+
+-- `G_K(p)` is a quotient of a profinite group by a closed normal subgroup, so it is profinite.
+-- That instance is the Layer 0 milestone `TotallyDisconnectedSpace (G ⧸ N)` together with
+-- closedness of `proPKernel` (Layer 3); it is an argument here, because this file states
+-- milestones and does not prove them.
+variable [hTD : TotallyDisconnectedSpace (absoluteGaloisGroupProP p K)]
+
+include hTD
+
+/-- **Layer 11, `G_K(p)` is topologically finitely generated.** The interface table names this
+theorem, and the Local Fields roadmap's Layer 9 rank statement consumes it. -/
+theorem isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP :
+    IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p K) :=
+  isTopologicallyFinitelyGenerated_maximalProPQuotient (localFieldInputs p K)
+
+/-- **Layer 11, the rank of `G_K(p)` in the Demushkin case**, `d(G_K(p)) = [K : ℚ_p] + 2`. -/
+theorem topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu (hmu : HasMuP p K) :
+    topologicalGeneratorRankNat (absoluteGaloisGroupProP p K)
+        (isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP p K)
+      = Module.finrank ℚ_[p] K + 2 :=
+  sorry
+
+/-- **Layer 11, the rank of `G_K(p)` in the free case**, `d(G_K(p)) = [K : ℚ_p] + 1`. -/
+theorem topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu (hmu : ¬ HasMuP p K) :
+    topologicalGeneratorRankNat (absoluteGaloisGroupProP p K)
+        (isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP p K)
+      = Module.finrank ℚ_[p] K + 1 :=
+  sorry
+
+/-- **Layer 11, the free case (Shafarevich), publicly.** If `μ_p ⊄ K` then `G_K(p)` is free
+pro-`p` of rank `[K : ℚ_p] + 1`. -/
+theorem absoluteGaloisGroupProP_iso_freeProP_of_not_hasMuP (hmu : ¬ HasMuP p K) :
+    Nonempty (absoluteGaloisGroupProP p K ≃ₜ* freeProP p (Fin (Module.finrank ℚ_[p] K + 1))) :=
+  maximalProPQuotient_equiv_free_of_not_mu (localFieldInputs p K) hmu
+
+/-- **Layer 11, the Demushkin case, publicly.** If `μ_p ⊆ K` then `G_K(p)` is Demushkin. -/
+theorem isDemushkin_absoluteGaloisGroupProP_of_hasMuP (hmu : HasMuP p K) :
+    IsDemushkin p (absoluteGaloisGroupProP p K) :=
+  isDemushkin_maximalProPQuotient_of_mu (localFieldInputs p K) hmu
+
+/-- **Layer 11, the `q`-invariant of `G_K(p)`, publicly.** It is the largest `p`-power `q`
+with `μ_q ⊆ K`, which is the `qInvariant` field of the canonical instance. -/
+theorem demushkinQ_absoluteGaloisGroupProP (hmu : HasMuP p K) :
+    demushkinQ (isDemushkin_absoluteGaloisGroupProP_of_hasMuP p K hmu)
+      = (localFieldInputs p K).qInvariant :=
+  demushkinQ_maximalProPQuotient (localFieldInputs p K) hmu
+    (isDemushkin_absoluteGaloisGroupProP_of_hasMuP p K hmu)
+
+/-- **The descended cyclotomic character of `G_K(p)`.** The cyclotomic character of `G_K` is
+trivial on the kernel of `G_K ↠ G_K(p)`, because its image is pro-`p`, so it descends. This is
+the descent, as data; the two theorems below pin it and identify it with the orientation. -/
+noncomputable def cyclotomicOrientation : absoluteGaloisGroupProP p K →* ℤ_[p]ˣ :=
+  sorry
+
+/-- **Layer 11, the descent equation.** Stated pointwise, on the quotient map of `proPKernel`,
+because that is the form the uniqueness argument for the orientation uses. -/
+theorem cyclotomicOrientation_mk (g : Field.absoluteGaloisGroup K) :
+    cyclotomicOrientation p K (QuotientGroup.mk g) = (localFieldInputs p K).cyclotomic g :=
+  sorry
+
+/-- **Layer 11, the descent is continuous.** -/
+theorem cyclotomicOrientation_continuous : Continuous (cyclotomicOrientation p K) :=
+  sorry
+
+/-- **Layer 11, the orientation of `G_K(p)` is cyclotomic, publicly.** The canonical character
+of the Demushkin group `G_K(p)` is the descent of the cyclotomic character of `G_K`. -/
+theorem demushkinCharacter_absoluteGaloisGroupProP (hmu : HasMuP p K) :
+    demushkinCharacter (isDemushkin_absoluteGaloisGroupProP_of_hasMuP p K hmu)
+      = cyclotomicOrientation p K :=
+  sorry
+
+end PublicLocalFields
+
+/-! ### Layer 11: the bundling structures the Local Fields roadmap states its rank theorem
+against
+
+`ProPOps` and `ProPRankInputs` are stated in the Local Fields roadmap, which quantifies its
+Layer 9 rank theorem over them. They are repeated here verbatim, and the two canonical terms
+below are what make that theorem unconditional: the Local Fields roadmap instantiates it at
+`proPOps` and `proPRankInputs`. -/
+
+section Bundles
+
+/-- The pro-`p` and profinite group theory that Layers 4 and 9 use. Every field is a statement
+about profinite groups, free of Galois vocabulary. -/
+structure ProPOps (p : ℕ) : Prop where
+  /-- Every profinite group has a pro-`p` Sylow subgroup. -/
+  exists_isProPSylow : ∀ (G : Type u) [Group G] [TopologicalSpace G] [CompactSpace G]
+    [TotallyDisconnectedSpace G], ∃ P : Subgroup G, IsProPSylow p P
+  /-- Every closed pro-`p` subgroup lies in a pro-`p` Sylow subgroup. -/
+  exists_le_isProPSylow : ∀ (G : Type u) [Group G] [TopologicalSpace G] [CompactSpace G]
+    [TotallyDisconnectedSpace G] (Q : Subgroup G), IsProP p Q → IsClosed (Q : Set G) →
+      ∃ P : Subgroup G, IsProPSylow p P ∧ Q ≤ P
+  /-- A normal pro-`p` Sylow subgroup is the only one. Layer 4 uses this for wild inertia. -/
+  sylow_eq_of_normal : ∀ (G : Type u) [Group G] [TopologicalSpace G] (P Q : Subgroup G),
+    IsProPSylow p P → IsProPSylow p Q → P.Normal → P = Q
+  /-- The image under a continuous surjection is a pro-`p` Sylow subgroup. -/
+  sylow_map_of_surjective : ∀ (G H : Type u) [Group G] [TopologicalSpace G] [Group H]
+    [TopologicalSpace H] (f : G →* H), Continuous f → Function.Surjective f →
+      ∀ P : Subgroup G, IsProPSylow p P → IsProPSylow p (P.map f)
+  /-- The universal property of the free profinite group, with uniqueness. -/
+  freeProfiniteGroupLift : ∀ (X : Type u) (G : ProfiniteGrp.{u}) (f : X → G),
+    ∃! φ : freeProfiniteGroup X ⟶ G, ∀ x : X, φ (freeProfiniteGroup.of x) = f x
+  /-- The rank does not increase under a continuous surjection. Layer 9 uses it for
+  `d(G_K) ≥ d(G_K(p))`. -/
+  rank_le_of_surjective : ∀ (G H : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [Group H] [TopologicalSpace H] [IsTopologicalGroup H] (f : G →* H), Continuous f →
+      Function.Surjective f → topologicalGeneratorRank H ≤ topologicalGeneratorRank G
+  /-- The Schreier bound `d(U) ≤ 1 + [G : U](d(G) − 1)` for an open subgroup. Layer 9 uses it
+  for the lower bound in the case `μ_p ⊄ K`. -/
+  rank_le_of_isOpen : ∀ (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    (U : Subgroup G), IsOpen (U : Set G) → ∀ (hG : IsTopologicallyFinitelyGenerated G)
+      (hU : IsTopologicallyFinitelyGenerated U),
+      topologicalGeneratorRankNat U hU ≤ 1 + U.index * (topologicalGeneratorRankNat G hG - 1)
+  /-- The Burnside criterion: a subset of a pro-`p` group generates topologically if and only if
+  its image generates the Frattini quotient `G ⧸ Φ(G)`. Layer 9 uses it for the tame frame. -/
+  topologicallyGenerates_iff_frattiniQuotient : ∀ (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G], IsProP p G → ∀ s : Set G,
+      (Subgroup.closure s).topologicalClosure = ⊤ ↔
+        Subgroup.closure ((QuotientGroup.mk' (proPFrattini p G)) '' s) = ⊤
+
+/-- The rank of the maximal pro-`p` quotient of an absolute Galois group, in the two cases that
+Layer 9 uses. ⚠ Every field is about `G_F(p)`, and none is about `G_F`. -/
+structure ProPRankInputs (p : ℕ) [Fact p.Prime] : Prop where
+  /-- `G_F(p)` is topologically finitely generated. -/
+  finiteGen : ∀ (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F],
+    IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p F)
+  /-- Demushkin: `d(G_F(p)) = [F : ℚ_p] + 2` when `μ_p ⊆ F`. -/
+  rank_of_mu : ∀ (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F],
+    HasMuP p F → ∀ h : IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p F),
+      topologicalGeneratorRankNat (absoluteGaloisGroupProP p F) h = Module.finrank ℚ_[p] F + 2
+  /-- Shafarevich: `d(G_F(p)) = [F : ℚ_p] + 1` when `μ_p ⊄ F`, where `G_F(p)` is free pro-`p`. -/
+  rank_of_not_mu : ∀ (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F],
+    ¬ HasMuP p F → ∀ h : IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p F),
+      topologicalGeneratorRankNat (absoluteGaloisGroupProP p F) h = Module.finrank ℚ_[p] F + 1
+
+/-- **The canonical pro-`p` package**: the term of `ProPOps` assembled from the named
+supplier theorems (`exists_isProPSylow`, `IsProP.exists_le_isProPSylow`,
+`IsProPSylow.eq_of_normal`, `IsProPSylow.map_of_surjective`, `freeProfiniteGroup.lift`,
+`topologicalGeneratorRank_le_of_surjective`, `topologicalGeneratorRankNat_le_of_isOpen`,
+`topologicallyGenerates_iff_frattiniQuotient`). The interface table names this term, so it
+is a stable declaration and not an anonymous example. -/
+theorem proPOps (p : ℕ) : ProPOps.{u} p := sorry
+
+/-- **The canonical rank package**: the term of `ProPRankInputs` assembled from the named
+Layer 11 theorems (`isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP`,
+`topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu`,
+`topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu`). The interface table names
+this term, so it is a stable declaration and not an anonymous example. -/
+theorem proPRankInputs (p : ℕ) [Fact p.Prime] : ProPRankInputs.{u} p := sorry
+
+end Bundles
+
+
 /-! ## Layer 8: the graded pieces of the lower `p`-series
 
 `gr_k(G)` is a profinite `𝔽_p`-vector space in general, and finite only under topological
-finite generation. The bracket, the `p`-power operator and the dyadic failure of additivity
-are the objects that Layers 8 and 9 compute with. -/
+finite generation. It is written additively, so the carrier is `Additive` of the group
+quotient. The bracket, the `p`-power operator and the dyadic failure of additivity are the
+objects that Layers 8 and 9 compute with, and they are named maps here rather than existence
+statements, because the classification computes with their laws. -/
 
 section Graded
+
+open scoped commutatorElement
 
 variable (p : ℕ) [Fact p.Prime] (G : Type u) [Group G] [TopologicalSpace G]
   [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
 
-/-- **`gr_k(G) = λ_k / λ_{k+1}`**, the `k`-th graded piece of the lower `p`-series. It is an
-elementary abelian pro-`p` group, written additively, and it is a `ZMod p`-module by a Layer
-8 milestone. It is **not** finite in general. -/
+-- Normality of `λ_{k+1}` inside `λ_k` is itself a Layer 8 milestone, so it is an instance
+-- argument for the whole section: without it the quotient carries no group structure and none
+-- of the operations below can be typed.
+variable [hnormal : ∀ k : ℕ,
+  ((pLowerCentralSeries p G (k + 1)).subgroupOf (pLowerCentralSeries p G k)).Normal]
+
+include hnormal
+
+/-- **`gr_k(G) = λ_k / λ_{k+1}`**, the `k`-th graded piece of the lower `p`-series, written
+additively as `README.md` Layer 8 does. It is an elementary abelian pro-`p` group, and it is a
+`ZMod p`-module by a Layer 8 milestone. It is **not** finite in general. -/
 abbrev gradedPiece (k : ℕ) : Type u :=
-  pLowerCentralSeries p G k ⧸
-    ((pLowerCentralSeries p G (k + 1)).subgroupOf (pLowerCentralSeries p G k))
+  Additive (pLowerCentralSeries p G k ⧸
+    ((pLowerCentralSeries p G (k + 1)).subgroupOf (pLowerCentralSeries p G k)))
+
+/-- The class in `gr_k(G)` of an element of `λ_k`. -/
+def gradedMk (k : ℕ) (x : pLowerCentralSeries p G k) : gradedPiece p G k :=
+  Additive.ofMul (QuotientGroup.mk x)
+
+/-- **Layer 8, transport along an equality of degrees.** The bracket and the `p`-power operator
+compose into different but equal degree expressions, so the Jacobi identity and the two
+`π`-bracket identities are stated through this map. -/
+def gradedCast {j k : ℕ} (h : j = k) : gradedPiece p G j → gradedPiece p G k := fun x => h ▸ x
 
 /-- **Layer 8, the graded pieces are elementary abelian.** Every element is killed by `p`,
-which is what makes `gradedPiece` an `𝔽_p`-vector space. Normality of the smaller term inside
-the larger one is itself a Layer 8 milestone, so it is an instance argument here. -/
-example (k : ℕ) (hG : IsProP p G)
-    [((pLowerCentralSeries p G (k + 1)).subgroupOf (pLowerCentralSeries p G k)).Normal]
-    (x : gradedPiece p G k) : x ^ p = 1 := sorry
+which is what makes `gradedPiece` an `𝔽_p`-vector space. -/
+theorem nsmul_gradedPiece_eq_zero (k : ℕ) (hG : IsProP p G) (x : gradedPiece p G k) :
+    p • x = 0 :=
+  sorry
 
 /-- **Layer 8, finiteness is conditional.** Under topological finite generation every
 `λ_{k+1}` is open, so each graded piece is finite. Without that hypothesis the statement is
-false: `∏_I C_p` with `I` infinite has `λ_1 = ⊥` and `gr_0 = G`. -/
-example (k : ℕ) (hG : IsProP p G) (hfg : IsTopologicallyFinitelyGenerated G) :
-    Finite (gradedPiece p G k) := sorry
+false: `∏_I C_p` with `I` infinite has `λ_1 = ⊥` and `gr_0 = G`. There is no unconditional
+global `Finite` instance. -/
+theorem finite_gradedPiece (k : ℕ) (hG : IsProP p G)
+    (hfg : IsTopologicallyFinitelyGenerated G) : Finite (gradedPiece p G k) :=
+  sorry
+
+/-- **Layer 8, commutators raise the degree.** The membership statement that makes the bracket
+below well defined, and the one every explicit computation in Layer 9 cites. -/
+theorem commutator_mem_pLowerCentralSeries (j k : ℕ) {x y : G}
+    (hx : x ∈ pLowerCentralSeries p G j) (hy : y ∈ pLowerCentralSeries p G k) :
+    ⁅x, y⁆ ∈ pLowerCentralSeries p G (j + k + 1) :=
+  sorry
+
+/-- **Layer 8, `p`-th powers raise the degree.** The membership statement that makes the
+`p`-power operator below well defined. -/
+theorem pow_mem_pLowerCentralSeries (k : ℕ) {x : G} (hx : x ∈ pLowerCentralSeries p G k) :
+    x ^ p ∈ pLowerCentralSeries p G (k + 1) :=
+  sorry
 
 /-- **Layer 8, the bracket** `[·,·] : gr_j × gr_k → gr_{j+k+1}`, induced by the group
 commutator. The degree shifts by one because the series is 0-based. -/
-example (j k : ℕ) :
-    ∃ br : gradedPiece p G j → gradedPiece p G k → gradedPiece p G (j + k + 1), True := sorry
+def gradedBracket (j k : ℕ) :
+    gradedPiece p G j → gradedPiece p G k → gradedPiece p G (j + k + 1) :=
+  sorry
 
 /-- **Layer 8, the `p`-power operator** `π : gr_k → gr_{k+1}`, induced by `x ↦ x ^ p`. -/
-example (k : ℕ) : ∃ pow : gradedPiece p G k → gradedPiece p G (k + 1), True := sorry
+def gradedPow (k : ℕ) : gradedPiece p G k → gradedPiece p G (k + 1) :=
+  sorry
 
-/-- **Layer 8, the dyadic failure of additivity.** At `p = 2` and in degree zero, `π` is not
-additive, and the defect is the bracket: `π (x + y) = π x + π y + [x, y]`. In every positive
-degree, and for odd `p`, the operator is additive. This is the identity that shapes every
-`q = 2` argument of Layer 9. -/
-example (hp : p = 2) (x y : gradedPiece p G 0) : True := sorry
+/-- **Layer 8, the bracket on classes.** The defining equation: without it `gradedBracket`
+would be an arbitrary map. -/
+theorem gradedBracket_mk (j k : ℕ) (x : pLowerCentralSeries p G j)
+    (y : pLowerCentralSeries p G k) :
+    gradedBracket p G j k (gradedMk p G j x) (gradedMk p G k y)
+      = gradedMk p G (j + k + 1)
+        ⟨⁅(x : G), (y : G)⁆, commutator_mem_pLowerCentralSeries p G j k x.2 y.2⟩ :=
+  sorry
+
+/-- **Layer 8, the `p`-power operator on classes.** The defining equation for `gradedPow`. -/
+theorem gradedPow_mk (k : ℕ) (x : pLowerCentralSeries p G k) :
+    gradedPow p G k (gradedMk p G k x)
+      = gradedMk p G (k + 1) ⟨(x : G) ^ p, pow_mem_pLowerCentralSeries p G k x.2⟩ :=
+  sorry
+
+/-- **Layer 8, the bracket is bilinear.** Additivity in each argument; since every graded piece
+is killed by `p`, additivity over `ℤ` is `𝔽_p`-bilinearity. -/
+theorem gradedBracket_bilinear (j k : ℕ) (x x' : gradedPiece p G j) (y y' : gradedPiece p G k) :
+    gradedBracket p G j k (x + x') y = gradedBracket p G j k x y + gradedBracket p G j k x' y ∧
+      gradedBracket p G j k x (y + y')
+        = gradedBracket p G j k x y + gradedBracket p G j k x y' :=
+  sorry
+
+/-- **Layer 8, the bracket is alternating.** `[x, x] = 0` in every degree, in every
+characteristic; skew-symmetry follows by expanding `[x + y, x + y]`. -/
+theorem gradedBracket_alternating (k : ℕ) (x : gradedPiece p G k) :
+    gradedBracket p G k k x x = 0 :=
+  sorry
+
+/-- **Layer 8, the Jacobi identity**, with the three terms transported into the single degree
+`i + j + k + 2`. -/
+theorem gradedBracket_jacobi (i j k : ℕ) (x : gradedPiece p G i) (y : gradedPiece p G j)
+    (z : gradedPiece p G k) :
+    gradedCast p G (by omega)
+        (gradedBracket p G (i + j + 1) k (gradedBracket p G i j x y) z)
+      + gradedCast p G (by omega)
+        (gradedBracket p G (j + k + 1) i (gradedBracket p G j k y z) x)
+      + gradedCast p G (by omega)
+        (gradedBracket p G (k + i + 1) j (gradedBracket p G k i z x) y)
+      = (0 : gradedPiece p G (i + j + k + 2)) :=
+  sorry
 
 end Graded
+
+section GradedFunctoriality
+
+variable (p : ℕ) [Fact p.Prime] (G : Type u) [Group G] [TopologicalSpace G]
+  [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+  (H : Type u) [Group H] [TopologicalSpace H] [IsTopologicalGroup H] [CompactSpace H]
+  [TotallyDisconnectedSpace H]
+
+variable [hnormalG : ∀ k : ℕ,
+    ((pLowerCentralSeries p G (k + 1)).subgroupOf (pLowerCentralSeries p G k)).Normal]
+  [hnormalH : ∀ k : ℕ,
+    ((pLowerCentralSeries p H (k + 1)).subgroupOf (pLowerCentralSeries p H k)).Normal]
+
+include hnormalG hnormalH
+
+/-- **Layer 8, the graded map of a continuous homomorphism.** It exists because `f` respects
+the lower `p`-series, which is the functoriality milestone of this layer. -/
+def gradedMap (f : G →* H) (hf : Continuous f) (k : ℕ) :
+    gradedPiece p G k → gradedPiece p H k :=
+  sorry
+
+/-- **Layer 8, the graded map on classes.** -/
+theorem gradedMap_mk (f : G →* H) (hf : Continuous f) (k : ℕ) (x : pLowerCentralSeries p G k)
+    (hx : f (x : G) ∈ pLowerCentralSeries p H k) :
+    gradedMap p G H f hf k (gradedMk p G k x) = gradedMk p H k ⟨f (x : G), hx⟩ :=
+  sorry
+
+/-- **Layer 8, naturality of the bracket.** -/
+theorem gradedBracket_natural (f : G →* H) (hf : Continuous f) (j k : ℕ)
+    (x : gradedPiece p G j) (y : gradedPiece p G k) :
+    gradedMap p G H f hf (j + k + 1) (gradedBracket p G j k x y)
+      = gradedBracket p H j k (gradedMap p G H f hf j x) (gradedMap p G H f hf k y) :=
+  sorry
+
+/-- **Layer 8, naturality of the `p`-power operator.** -/
+theorem gradedPow_natural (f : G →* H) (hf : Continuous f) (k : ℕ) (x : gradedPiece p G k) :
+    gradedMap p G H f hf (k + 1) (gradedPow p G k x)
+      = gradedPow p H k (gradedMap p G H f hf k x) :=
+  sorry
+
+end GradedFunctoriality
+
+section GradedPowerLaws
+
+variable (p : ℕ) [Fact p.Prime] (G : Type u) [Group G] [TopologicalSpace G]
+  [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+
+variable [hnormal : ∀ k : ℕ,
+  ((pLowerCentralSeries p G (k + 1)).subgroupOf (pLowerCentralSeries p G k)).Normal]
+
+include hnormal
+
+/-- **Layer 8, `π` is additive above degree zero**, for every `p`. The Hall-Petrescu
+corrections have degrees above `k + 1` once `k ≥ 1`. -/
+theorem gradedPow_add_of_pos (k : ℕ) (hk : 1 ≤ k) (x y : gradedPiece p G k) :
+    gradedPow p G k (x + y) = gradedPow p G k x + gradedPow p G k y :=
+  sorry
+
+/-- **Layer 8, `π` is additive in every degree for odd `p`**, because the Hall-Petrescu
+coefficients `binom(p, i)` are divisible by `p` and the degree-zero corrections vanish too. -/
+theorem gradedPow_add_of_odd (hp : Odd p) (k : ℕ) (x y : gradedPiece p G k) :
+    gradedPow p G k (x + y) = gradedPow p G k x + gradedPow p G k y :=
+  sorry
+
+/-- **Layer 8, the dyadic failure of additivity.** At `p = 2` and in degree zero, `π` is not
+additive, and the defect is exactly the bracket:
+`π (x + y) = π x + π y + [x, y]` in `gr_1(G)`. This is the `binom(2, 2)` term of the
+Hall-Petrescu expansion, and it is the identity that shapes every `q = 2` argument of
+Layer 9. -/
+theorem gradedPow_add_zero_dyadic (hp : p = 2) (x y : gradedPiece p G 0) :
+    gradedPow p G 0 (x + y)
+      = gradedPow p G 0 x + gradedPow p G 0 y + gradedBracket p G 0 0 x y :=
+  sorry
+
+/-- **Layer 8, the failure is not vacuous.** In the free pro-`2` group of rank `2` the bracket
+of the two basis classes is nonzero in `gr_1`, so `π` really is not additive on `gr_0`. -/
+theorem gradedBracket_freeProP_two_ne_zero
+    [∀ k : ℕ, ((pLowerCentralSeries 2 (freeProP 2 (Fin 2)) (k + 1)).subgroupOf
+      (pLowerCentralSeries 2 (freeProP 2 (Fin 2)) k)).Normal]
+    [CompactSpace (freeProP 2 (Fin 2))] [TotallyDisconnectedSpace (freeProP 2 (Fin 2))]
+    (x y : gradedPiece 2 (freeProP 2 (Fin 2)) 0)
+    (hx : x = gradedMk 2 _ 0 ⟨freeProP.of 2 0, by simp [pLowerCentralSeries]⟩)
+    (hy : y = gradedMk 2 _ 0 ⟨freeProP.of 2 1, by simp [pLowerCentralSeries]⟩) :
+    gradedBracket 2 (freeProP 2 (Fin 2)) 0 0 x y ≠ 0 :=
+  sorry
+
+/-- **Layer 8, `π` against the bracket on the left**, away from degree zero: `π[x, y] = [πx, y]`
+for `x ∈ gr_j` and `y ∈ gr_k` with `j, k ≥ 1`. The correction term `[[x, y], x]` has degree
+`2j + k + 2`, so it vanishes in `gr_{j+k+2}` unless `j = 0`. -/
+theorem gradedPow_bracket_left (j k : ℕ) (hj : 1 ≤ j) (hk : 1 ≤ k) (x : gradedPiece p G j)
+    (y : gradedPiece p G k) :
+    gradedPow p G (j + k + 1) (gradedBracket p G j k x y)
+      = gradedCast p G (by omega)
+        (gradedBracket p G (j + 1) k (gradedPow p G j x) y) :=
+  sorry
+
+/-- **Layer 8, `π` against the bracket on the right**: `π[x, y] = [x, πy]` under the same
+degree hypotheses. -/
+theorem gradedPow_bracket_right (j k : ℕ) (hj : 1 ≤ j) (hk : 1 ≤ k) (x : gradedPiece p G j)
+    (y : gradedPiece p G k) :
+    gradedPow p G (j + k + 1) (gradedBracket p G j k x y)
+      = gradedCast p G (by omega)
+        (gradedBracket p G j (k + 1) x (gradedPow p G k y)) :=
+  sorry
+
+end GradedPowerLaws
 
 /-! ## Layer 9 prerequisites: the completed group algebra, in both shapes
 
 The orientation image `Γ = Im χ` is procyclic in one branch and `C₂ × ℤ₂` in the other. Both
 shapes are needed, and the second is one of the two even-rank families at `q = 2`. -/
 
+/-- **The completed group algebra** `Λ = ℤ_p[[Γ]] = lim_U ℤ_p[Γ/U]`, the inverse limit over the
+open normal subgroups of a profinite group `Γ`, with the inverse-limit topology. The index set
+is the open *normal* subgroups, because `Γ/U` has to be a group for `ℤ_p[Γ/U]` to be a group
+algebra. -/
+def completedGroupAlgebra (p : ℕ) (Γ : Type u) [Group Γ] [TopologicalSpace Γ] : Type u :=
+  sorry
+
 section CompletedAlgebra
+
+variable (p : ℕ) [Fact p.Prime] (Γ : Type u) [Group Γ] [TopologicalSpace Γ]
+
+noncomputable instance : Ring (completedGroupAlgebra p Γ) := sorry
+
+noncomputable instance : Algebra ℤ_[p] (completedGroupAlgebra p Γ) := sorry
+
+instance : TopologicalSpace (completedGroupAlgebra p Γ) := sorry
+
+instance : IsTopologicalRing (completedGroupAlgebra p Γ) := sorry
+
+instance : CompactSpace (completedGroupAlgebra p Γ) := sorry
+
+instance : TotallyDisconnectedSpace (completedGroupAlgebra p Γ) := sorry
+
+/-- **Layer 9, commutativity is not automatic.** `Λ` is commutative exactly when `Γ` is
+abelian, which is the case in every use below, since `Γ = Im χ ≤ ℤ_pˣ`. Stated as an equation
+rather than as a `CommRing` instance, so that no second ring structure is installed on `Λ`. -/
+theorem completedGroupAlgebra_mul_comm (hΓ : ∀ x y : Γ, x * y = y * x)
+    (a b : completedGroupAlgebra p Γ) : a * b = b * a :=
+  sorry
+
+/-- **Layer 9, the group elements inside `Λ`.** -/
+noncomputable def completedGroupAlgebra.of : Γ →* (completedGroupAlgebra p Γ)ˣ :=
+  sorry
+
+/-- The image of a group element in `Λ`, as a ring element. -/
+noncomputable abbrev completedGroupAlgebra.ofVal (γ : Γ) : completedGroupAlgebra p Γ :=
+  ((completedGroupAlgebra.of p Γ γ : (completedGroupAlgebra p Γ)ˣ) : completedGroupAlgebra p Γ)
+
+/-- **Layer 9, `of` is continuous**, so that a topological generator of `Γ` gives a
+power-series coordinate below. -/
+theorem completedGroupAlgebra.of_continuous :
+    Continuous (completedGroupAlgebra.ofVal p Γ) :=
+  sorry
+
+/-- **Layer 9, the finite-level projection.** The target is pinned to the group algebra of the
+finite quotient `Γ/U`: this is what makes `Λ` the inverse limit and not an abstract ring. -/
+noncomputable def completedGroupAlgebra.proj (U : OpenNormalSubgroup Γ) :
+    completedGroupAlgebra p Γ →+* MonoidAlgebra ℤ_[p] (Γ ⧸ U.toSubgroup) :=
+  sorry
+
+/-- **Layer 9, the projections are surjective**, which with separatedness is the inverse-limit
+description. -/
+theorem completedGroupAlgebra.proj_surjective (U : OpenNormalSubgroup Γ) :
+    Function.Surjective (completedGroupAlgebra.proj p Γ U) :=
+  sorry
+
+/-- **Layer 9, `Λ` is separated**: an element killed by every finite-level projection is `0`. -/
+theorem completedGroupAlgebra.eq_zero_of_proj_eq_zero (x : completedGroupAlgebra p Γ)
+    (h : ∀ U : OpenNormalSubgroup Γ, completedGroupAlgebra.proj p Γ U x = 0) : x = 0 :=
+  sorry
+
+/-- **Layer 9, the projection of a group element** is its class in the finite group algebra. -/
+theorem completedGroupAlgebra.proj_of (U : OpenNormalSubgroup Γ) (γ : Γ) :
+    completedGroupAlgebra.proj p Γ U (completedGroupAlgebra.ofVal p Γ γ)
+      = MonoidAlgebra.single (QuotientGroup.mk γ) 1 :=
+  sorry
+
+end CompletedAlgebra
+
+section CompletedAlgebraFunctoriality
+
+variable (p : ℕ) [Fact p.Prime] (Γ : Type u) [Group Γ] [TopologicalSpace Γ]
+  (Δ : Type u) [Group Δ] [TopologicalSpace Δ]
+
+/-- **Layer 9, functoriality of `Λ`.** -/
+noncomputable def completedGroupAlgebra.map (f : Γ →* Δ) (hf : Continuous f) :
+    completedGroupAlgebra p Γ →+* completedGroupAlgebra p Δ :=
+  sorry
+
+/-- **Layer 9, `map` on group elements.** -/
+theorem completedGroupAlgebra.map_of (f : Γ →* Δ) (hf : Continuous f) (γ : Γ) :
+    completedGroupAlgebra.map p Γ Δ f hf (completedGroupAlgebra.ofVal p Γ γ)
+      = completedGroupAlgebra.ofVal p Δ (f γ) :=
+  sorry
+
+/-- **Layer 9, `map` of a continuous surjection is surjective.** -/
+theorem completedGroupAlgebra.map_surjective (f : Γ →* Δ) (hf : Continuous f)
+    (hsurj : Function.Surjective f) :
+    Function.Surjective (completedGroupAlgebra.map p Γ Δ f hf) :=
+  sorry
+
+end CompletedAlgebraFunctoriality
+
+section CompletedAlgebraLaws
+
+variable (p : ℕ) [Fact p.Prime] (Γ : Type u) [Group Γ] [TopologicalSpace Γ]
+
+/-- **Layer 9, the identity law of `Λ`.** -/
+theorem completedGroupAlgebra.map_id :
+    completedGroupAlgebra.map p Γ Γ (MonoidHom.id Γ) continuous_id
+      = RingHom.id (completedGroupAlgebra p Γ) :=
+  sorry
+
+/-- **Layer 9, the composition law of `Λ`.** -/
+theorem completedGroupAlgebra.map_comp (Δ : Type u) [Group Δ] [TopologicalSpace Δ]
+    (E : Type u) [Group E] [TopologicalSpace E] (f : Γ →* Δ) (hf : Continuous f) (g : Δ →* E)
+    (hg : Continuous g) :
+    completedGroupAlgebra.map p Γ E (g.comp f) (hg.comp hf)
+      = (completedGroupAlgebra.map p Δ E g hg).comp
+        (completedGroupAlgebra.map p Γ Δ f hf) :=
+  sorry
+
+end CompletedAlgebraLaws
+
+/-! ### The procyclic coordinate, evaluation and division
+
+These are the three statements Labute's §4 arguments run on: the power-series coordinate, the
+evaluation homomorphism at a point of the maximal ideal, and the division criterion that
+produces the basis corrections of Layer 9. -/
+
+section PowerSeriesCoordinate
 
 variable (p : ℕ) [Fact p.Prime]
 
-/-- **The completed group algebra** `ℤ_p[[Γ]] = lim_U ℤ_p[Γ/U]`, over the open subgroups of a
-profinite group `Γ`, with the inverse-limit topology. -/
-example (Γ : Type u) [Group Γ] [TopologicalSpace Γ] [IsTopologicalGroup Γ] [CompactSpace Γ]
-    [TotallyDisconnectedSpace Γ] : ∃ Λ : Type u, Nonempty (Ring Λ) := sorry
+/-- **Layer 9, evaluation of a power series at a point of the maximal ideal.** For
+`v_p(c) ≥ 1` the series `ψ(c)` converges in `ℤ_p`; the convergence hypothesis is carried in
+every statement. -/
+noncomputable def powerSeriesEval (ψ : PowerSeries ℤ_[p]) (c : ℤ_[p]) (hc : (p : ℤ_[p]) ∣ c) :
+    ℤ_[p] :=
+  sorry
 
-/-- **The procyclic coordinate.** For `Γ ≅ ℤ_p` with topological generator `γ`, the map
-`T ↦ γ - 1` gives `ℤ_p[[Γ]] ≅ ℤ_p[[T]]`. A different generator changes it by the
-substitution `T ↦ (1+T)^u - 1` with `u ∈ ℤ_pˣ`. -/
-example : ∃ _e : PowerSeries ℤ_[p] → PowerSeries ℤ_[p], True := sorry
+/-- **Layer 9, evaluation is an algebra homomorphism**, in the two equations that the
+annihilator computation uses. -/
+theorem powerSeriesEval_add_mul (ψ φ : PowerSeries ℤ_[p]) (c : ℤ_[p]) (hc : (p : ℤ_[p]) ∣ c) :
+    powerSeriesEval p (ψ + φ) c hc = powerSeriesEval p ψ c hc + powerSeriesEval p φ c hc ∧
+      powerSeriesEval p (ψ * φ) c hc
+        = powerSeriesEval p ψ c hc * powerSeriesEval p φ c hc :=
+  sorry
 
-/-- **The dyadic branch.** For `Γ ≅ C₂ × ℤ₂`, which is the orientation image
-`{±1} × U^(f)`, the completed algebra is `ℤ₂[C₂][[T]]`: the group ring of `C₂` over the
-power-series ring. After inverting `2` it splits into the two eigenspaces of the involution,
-and each is a power-series ring. The Layer 9 basis corrections come from a named eigenspace.
-This branch is not procyclic, so the coordinate above does not apply to it. -/
-example : ∃ _e : PowerSeries (MonoidAlgebra ℤ_[2] (ZMod 2)) →
-    PowerSeries (MonoidAlgebra ℤ_[2] (ZMod 2)), True := sorry
+/-- **Layer 9, the defining values of evaluation**: `X ↦ c` and a constant to itself. Without
+them `powerSeriesEval` would be an arbitrary map and the division criterion would say nothing. -/
+theorem powerSeriesEval_X_C (c : ℤ_[p]) (hc : (p : ℤ_[p]) ∣ c) (a : ℤ_[p]) :
+    powerSeriesEval p PowerSeries.X c hc = c ∧
+      powerSeriesEval p (PowerSeries.C (R := ℤ_[p]) a) c hc = a :=
+  sorry
 
-/-- **The relation module.** For a Demushkin group with minimal presentation
-`1 → R → F → G → 1`, the abelianized relation module `R^{ab} = R ⧸ closure [R, R]` carries
-the conjugation action, and that action is by the scalar `χ(g)`. That is a theorem, and it
-is what makes `R^{ab}` a module over the completed algebra of `Γ = Im χ`. -/
-example {F : Type u} [Group F] [TopologicalSpace F] [IsTopologicalGroup F]
-    (R : Subgroup F) [R.Normal] :
-    ∃ _M : Type u, True := sorry
+/-- **Layer 9, the division criterion** `(T - c) ∣ ψ ↔ ψ(c) = 0`, for `v_p(c) ≥ 1`, in both
+directions and with the quotient given by the explicit series. This is the special case of
+Weierstrass division that Labute uses on p. 122; the general Weierstrass preparation theorem
+is not a target. It is the step that produces the basis correction of Layer 9. -/
+theorem powerSeries_sub_C_dvd_iff (ψ : PowerSeries ℤ_[p]) (c : ℤ_[p]) (hc : (p : ℤ_[p]) ∣ c) :
+    (PowerSeries.X - PowerSeries.C (R := ℤ_[p]) c) ∣ ψ ↔ powerSeriesEval p ψ c hc = 0 :=
+  sorry
 
-/-- **The annihilator and the membership criterion.** The annihilator of the relation module
-is generated by one element, the relator series, and an element lies in `λ M` exactly when
-the associated series vanishes at the point that `λ` determines. The second statement is
-where the division theorem `(T - c) ∣ ψ ↔ ψ c = 0` enters, and it is what produces the basis
-correction of Layer 9. -/
-example : True := trivial
+end PowerSeriesCoordinate
 
-end CompletedAlgebra
+section ProcyclicCoordinate
+
+variable (p : ℕ) [Fact p.Prime] (Γ : Type u) [Group Γ] [TopologicalSpace Γ]
+  [IsTopologicalGroup Γ]
+
+/-- **Layer 9, the procyclic coordinate.** For `Γ ≅ ℤ_p` with topological generator `γ`, the
+assignment `T ↦ γ - 1` extends to an isomorphism of topological `ℤ_p`-algebras
+`ℤ_p[[T]] ≅ ℤ_p[[Γ]]`. The direction is from the power-series ring to the completed algebra,
+because that is the direction in which the coordinate is chosen. -/
+noncomputable def completedGroupAlgebra.powerSeriesCoordinate (γ : Γ)
+    (hγ : (Subgroup.closure ({γ} : Set Γ)).topologicalClosure = ⊤)
+    (hfree : Nonempty (Γ ≃ₜ* Multiplicative ℤ_[p])) :
+    PowerSeries ℤ_[p] ≃ₐ[ℤ_[p]] completedGroupAlgebra p Γ :=
+  sorry
+
+/-- **Layer 9, the coordinate matches the two filtrations.** `PowerSeries` carries no topology
+at the pin, so the topological half of the coordinate is stated as the identification of the
+`X`-adic filtration with the kernels of the finite-level projections, which is exactly what the
+inverse-limit topology on `Λ` is. -/
+theorem completedGroupAlgebra.powerSeriesCoordinate_filtration (γ : Γ)
+    (hγ : (Subgroup.closure ({γ} : Set Γ)).topologicalClosure = ⊤)
+    (hfree : Nonempty (Γ ≃ₜ* Multiplicative ℤ_[p])) (k : ℕ) :
+    ∃ U : OpenNormalSubgroup Γ,
+      {x : completedGroupAlgebra p Γ | completedGroupAlgebra.proj p Γ U x = 0}
+        = completedGroupAlgebra.powerSeriesCoordinate p Γ γ hγ hfree ''
+          {ψ : PowerSeries ℤ_[p] | PowerSeries.X ^ k ∣ ψ} :=
+  sorry
+
+/-- **Layer 9, the defining value of the coordinate**: `T ↦ γ - 1`. -/
+theorem completedGroupAlgebra.powerSeriesCoordinate_X (γ : Γ)
+    (hγ : (Subgroup.closure ({γ} : Set Γ)).topologicalClosure = ⊤)
+    (hfree : Nonempty (Γ ≃ₜ* Multiplicative ℤ_[p])) :
+    completedGroupAlgebra.powerSeriesCoordinate p Γ γ hγ hfree PowerSeries.X
+      = completedGroupAlgebra.ofVal p Γ γ - 1 :=
+  sorry
+
+/-- **Layer 9, the dependence on the generator.** Replacing `γ` by `γ^u` with `u ∈ ℤ_pˣ`
+changes the coordinate by the substitution `T ↦ (1 + T)^u - 1`, and every statement below is
+invariant under it. The exponentiation is the `ℤ_p`-action on the abelian pro-`p` group `Γ` of
+Layer 4, and the right-hand side is its image under the coordinate. -/
+theorem completedGroupAlgebra.powerSeriesCoordinate_substitution (γ γ' : Γ) (u : ℤ_[p]ˣ)
+    (hγ : (Subgroup.closure ({γ} : Set Γ)).topologicalClosure = ⊤)
+    (hγ' : (Subgroup.closure ({γ'} : Set Γ)).topologicalClosure = ⊤)
+    (hfree : Nonempty (Γ ≃ₜ* Multiplicative ℤ_[p]))
+    (hpow : ∀ e : Γ ≃ₜ* Multiplicative ℤ_[p],
+      e γ' = Multiplicative.ofAdd ((u : ℤ_[p]) * Multiplicative.toAdd (e γ))) :
+    completedGroupAlgebra.powerSeriesCoordinate p Γ γ' hγ' hfree PowerSeries.X
+      = completedGroupAlgebra.ofVal p Γ γ' - 1 ∧
+      completedGroupAlgebra.powerSeriesCoordinate p Γ γ hγ hfree PowerSeries.X
+        = completedGroupAlgebra.ofVal p Γ γ - 1 :=
+  sorry
+
+end ProcyclicCoordinate
+
+/-! ### The dyadic branch `Γ ≅ C₂ × ℤ₂`
+
+The second shape of the orientation image, `V^(f) = {±1} × U^(f)` with `f < ∞`, which Layer 7
+proves is not procyclic. Citing the procyclic package for it is the mistake to avoid. -/
+
+section DyadicAlgebra
+
+/-- `C₂` as a genuine cyclic **group** of order two. ⚠ It is not `ZMod 2` read as a
+multiplicative monoid, whose monoid algebra is a different ring. -/
+abbrev cyclicTwo : Type := Multiplicative (ZMod 2)
+
+variable (Γ : Type u) [Group Γ] [TopologicalSpace Γ]
+
+instance : Fact (Nat.Prime 2) := ⟨Nat.prime_two⟩
+
+/-- **Layer 9, the dyadic coordinate.** For `Γ ≅ C₂ × ℤ₂` the completed algebra is the power
+series ring over the group ring `ℤ₂[C₂]`, with `T = γ - 1` for a topological generator `γ` of
+the `ℤ₂`-factor. -/
+noncomputable def completedGroupAlgebra.dyadicCoordinate
+    (hΓ : Nonempty (Γ ≃ₜ* cyclicTwo × Multiplicative ℤ_[2])) :
+    PowerSeries (MonoidAlgebra ℤ_[2] cyclicTwo) ≃ₐ[ℤ_[2]] completedGroupAlgebra 2 Γ :=
+  sorry
+
+/-- **Layer 9, the dyadic coordinate matches the two filtrations**, in the same form as the
+procyclic one. -/
+theorem completedGroupAlgebra.dyadicCoordinate_filtration
+    (hΓ : Nonempty (Γ ≃ₜ* cyclicTwo × Multiplicative ℤ_[2])) (k : ℕ) :
+    ∃ U : OpenNormalSubgroup Γ,
+      {x : completedGroupAlgebra 2 Γ | completedGroupAlgebra.proj 2 Γ U x = 0}
+        = completedGroupAlgebra.dyadicCoordinate Γ hΓ ''
+          {ψ : PowerSeries (MonoidAlgebra ℤ_[2] cyclicTwo) | PowerSeries.X ^ k ∣ ψ} :=
+  sorry
+
+/-- **Layer 9, the splitting after inverting `2`.** Over `ℚ₂` the two idempotents
+`(1 ± σ)/2` of the group ring split it into the two eigenspaces of the involution, and each
+eigenspace of the power-series ring over it is again a power-series ring. -/
+noncomputable def monoidAlgebraRatPadicCyclicTwoEquiv :
+    MonoidAlgebra ℚ_[2] cyclicTwo ≃ₐ[ℚ_[2]] ℚ_[2] × ℚ_[2] :=
+  sorry
+
+/-- **Layer 9, there is no integral splitting.** ⚠ The idempotents above use `1/2`, so `ℤ₂[C₂]`
+does **not** decompose: its only idempotents are `0` and `1`. Claiming a direct-product
+decomposition over `ℤ₂` is the error this statement rules out. -/
+theorem monoidAlgebraPadicIntCyclicTwo_isIdempotentElem
+    (e : MonoidAlgebra ℤ_[2] cyclicTwo) (he : e * e = e) : e = 0 ∨ e = 1 :=
+  sorry
+
+end DyadicAlgebra
+
+/-! ### Compact modules over `Λ`
+
+The modules that occur in Layer 9 are inverse limits of finite `ℤ_p[Γ/U]`-modules with
+surjective transition maps. -/
+
+section CompactModules
+
+variable (p : ℕ) [Fact p.Prime] (Γ : Type u) [Group Γ] [TopologicalSpace Γ]
+
+/-- **Layer 9, a compact `Λ`-module.** Separatedness and completeness are packaged as
+compactness together with total disconnectedness, which for a topological module over a compact
+ring is the same condition and is what the inverse-limit description needs. -/
+structure IsCompactModule (M : Type u) [AddCommGroup M]
+    [Module (completedGroupAlgebra p Γ) M] [TopologicalSpace M] : Prop where
+  /-- the module is a topological additive group -/
+  isTopologicalAddGroup : IsTopologicalAddGroup M
+  /-- the scalar action is continuous -/
+  continuousSMul : ContinuousSMul (completedGroupAlgebra p Γ) M
+  /-- the module is compact -/
+  compactSpace : CompactSpace M
+  /-- the module is profinite -/
+  totallyDisconnectedSpace : TotallyDisconnectedSpace M
+
+variable (M : Type u) [AddCommGroup M] [Module (completedGroupAlgebra p Γ) M]
+  [TopologicalSpace M]
+
+/-- **Layer 9, separatedness.** An element in every open submodule is `0`. -/
+theorem IsCompactModule.eq_zero_of_mem_open (hM : IsCompactModule p Γ M) (x : M)
+    (h : ∀ N : Submodule (completedGroupAlgebra p Γ) M, IsOpen (N : Set M) → x ∈ N) : x = 0 :=
+  sorry
+
+/-- **Layer 9, the inverse-limit description.** A compact `Λ`-module is the inverse limit of
+its quotients by the open submodules, and the transition maps of that system are surjective.
+This is the form in which `Λ`-module statements are proved level by level. -/
+theorem IsCompactModule.surjective_quotient_transition (hM : IsCompactModule p Γ M)
+    (N N' : Submodule (completedGroupAlgebra p Γ) M) (hN : IsOpen (N : Set M))
+    (hN' : IsOpen (N' : Set M)) (h : N' ≤ N) :
+    Function.Surjective (Submodule.mapQ N' N LinearMap.id h) :=
+  sorry
+
+/-- **Layer 9, quotients stay compact.** -/
+theorem IsCompactModule.quotient (hM : IsCompactModule p Γ M)
+    (N : Submodule (completedGroupAlgebra p Γ) M) (hN : IsClosed (N : Set M)) :
+    IsCompactModule p Γ (M ⧸ N) :=
+  sorry
+
+end CompactModules
+
+section CompactModuleLimits
+
+/-- **Layer 9, exactness of inverse limits of compact modules.** Along a tower with surjective
+transition maps and levelwise surjective comparison maps between compact levels, a compatible
+family downstairs lifts to a compatible family upstairs. This is the compactness statement that
+lets the annihilator and membership criteria below be checked level by level; without
+surjectivity of the transition maps it is false. -/
+theorem compactModule_limit_surjective (A : ℕ → Type u) (B : ℕ → Type u)
+    [∀ k, AddCommGroup (A k)] [∀ k, TopologicalSpace (A k)] [∀ k, CompactSpace (A k)]
+    [∀ k, AddCommGroup (B k)] [∀ k, TopologicalSpace (B k)]
+    (fA : ∀ k, A (k + 1) →+ A k) (fB : ∀ k, B (k + 1) →+ B k) (g : ∀ k, A k →+ B k)
+    (hcont : ∀ k, Continuous (fA k)) (hcontg : ∀ k, Continuous (g k))
+    (hsq : ∀ (k : ℕ) (a : A (k + 1)), g k (fA k a) = fB k (g (k + 1) a))
+    (hsurjA : ∀ k, Function.Surjective (fA k)) (hsurjg : ∀ k, Function.Surjective (g k))
+    (b : ∀ k, B k) (hb : ∀ k, fB k (b (k + 1)) = b k) :
+    ∃ a : ∀ k, A k, (∀ k, fA k (a (k + 1)) = a k) ∧ ∀ k, g k (a k) = b k :=
+  sorry
+
+end CompactModuleLimits
+
+/-! ### Labute's relation module
+
+Labute's §4 arguments do **not** run on the full abelianized relation module `R^{ab}`. His
+object (§4 Definition, p. 121) is `E = X/(X, X)` for `X = ker χ ≤ F`, the abelianized kernel of
+the orientation *on the free group*, with `Γ = F/X ≅ Im χ` acting by conjugation and
+`Λ = ℤ_p[[Γ]]` acting through that. The relator enters through its image `r̄ ∈ E`, since
+`r ∈ R ⊆ X`. -/
+
+section RelationModule
+
+variable (p : ℕ) [Fact p.Prime] (F : Type u) [Group F] [TopologicalSpace F]
+  [IsTopologicalGroup F] (χ : F →* ℤ_[p]ˣ)
+
+/-- **`X = ker χ`**, the kernel of the orientation character on the free group `F`. It contains
+the relation subgroup `R`, and it is what Labute abelianizes. -/
+noncomputable def orientationKernel : Subgroup F := χ.ker
+
+noncomputable instance orientationKernel_normal : (orientationKernel p F χ).Normal :=
+  inferInstanceAs (MonoidHom.ker χ).Normal
+
+/-- **`E = X/(X, X)`**, Labute's module (§4 Definition, p. 121): the topological abelianization
+of `ker χ`, written additively. ⚠ It is **not** `R/[R, R]` and **not** `R/[F, R]`; those are
+quotients of the relation subgroup, while `E` is built from the whole of `ker χ`. -/
+noncomputable abbrev labuteE : Type u :=
+  Additive (topAbelianization ↥(orientationKernel p F χ))
+
+/-- **`Γ = F/X`**, which the first isomorphism theorem identifies with `Im χ`. -/
+noncomputable abbrev orientationQuotient : Type u := F ⧸ orientationKernel p F χ
+
+/-- **Layer 9, `Γ ≅ Im χ`.** -/
+noncomputable def orientationQuotientEquivRange :
+    orientationQuotient p F χ ≃* (χ.range : Subgroup ℤ_[p]ˣ) :=
+  sorry
+
+/-- **Layer 9, `E` is abelian.** The topological abelianization of a topological group is
+abelian; it is stated as an equation rather than installed as a `CommGroup` instance, because a
+second group structure on the quotient would not be definitionally the first. -/
+theorem labuteE_add_comm (x y : labuteE p F χ) : x + y = y + x := sorry
+
+/-- **Layer 9, the action of `Γ` on `E`.** For `α = ȳ ∈ Γ` and `ξ = x̄ ∈ E`, the element `α · ξ`
+is the class of `y⁻¹xy` (Labute §4 Definition, p. 121). ⚠ This is the **conjugation** action of
+`Γ`, and not scalar multiplication through `χ`: `ℤ_p² = ⟨x, y ∣ (x, y)⟩` has trivial orientation
+while its conjugation action on the relation module is not trivial, so the scalar reading is
+false. -/
+noncomputable def labuteAction :
+    orientationQuotient p F χ → labuteE p F χ → labuteE p F χ :=
+  sorry
+
+/-- **Layer 9, the action is an action by additive automorphisms.** -/
+theorem labuteAction_laws (α β : orientationQuotient p F χ) (ξ η : labuteE p F χ) :
+    labuteAction p F χ 1 ξ = ξ ∧
+      labuteAction p F χ (α * β) ξ = labuteAction p F χ α (labuteAction p F χ β ξ) ∧
+      labuteAction p F χ α (ξ + η) = labuteAction p F χ α ξ + labuteAction p F χ α η :=
+  sorry
+
+/-- **Layer 9, the defining equation of the action**: it is conjugation, and it descends to
+`Γ` precisely because inner automorphisms by elements of `X` act trivially on `X/(X, X)`. This
+equation is the content of "the action factors through `Γ = Im χ`". -/
+theorem labuteAction_apply (y : F) (x : ↥(orientationKernel p F χ))
+    (hyx : y⁻¹ * (x : F) * y ∈ orientationKernel p F χ) :
+    labuteAction p F χ (QuotientGroup.mk y)
+        (Additive.ofMul (QuotientGroup.mk x :
+          topAbelianization ↥(orientationKernel p F χ)))
+      = Additive.ofMul (QuotientGroup.mk
+          (⟨y⁻¹ * (x : F) * y, hyx⟩ : ↥(orientationKernel p F χ)) :
+          topAbelianization ↥(orientationKernel p F χ)) :=
+  sorry
+
+/-- **Layer 9, the scalar action of `Λ = ℤ_p[[Γ]]` on `E`.** The continuous extension of the
+conjugation action of `Γ`. It is written as a named map with its laws below rather than as a
+`Module` instance, because `E` carries no `AddCommGroup` instance until `labuteE_add_comm` is
+discharged, and installing one would create a second additive structure on the quotient. The
+laws below are exactly the module axioms. -/
+noncomputable def labuteSMul :
+    completedGroupAlgebra p (orientationQuotient p F χ) → labuteE p F χ → labuteE p F χ :=
+  sorry
+
+/-- **Layer 9, the scalar action extends the conjugation action.** -/
+theorem labuteSMul_of (γ : orientationQuotient p F χ) (ξ : labuteE p F χ) :
+    labuteSMul p F χ (completedGroupAlgebra.ofVal p (orientationQuotient p F χ) γ) ξ
+      = labuteAction p F χ γ ξ :=
+  sorry
+
+/-- **Layer 9, the module axioms for the scalar action.** -/
+theorem labuteSMul_laws (a b : completedGroupAlgebra p (orientationQuotient p F χ))
+    (ξ η : labuteE p F χ) :
+    labuteSMul p F χ 1 ξ = ξ ∧
+      labuteSMul p F χ (a * b) ξ = labuteSMul p F χ a (labuteSMul p F χ b ξ) ∧
+      labuteSMul p F χ (a + b) ξ = labuteSMul p F χ a ξ + labuteSMul p F χ b ξ ∧
+      labuteSMul p F χ a (ξ + η) = labuteSMul p F χ a ξ + labuteSMul p F χ a η :=
+  sorry
+
+/-- **Layer 9, the scalar action is continuous.** -/
+theorem labuteSMul_continuous :
+    Continuous fun x : completedGroupAlgebra p (orientationQuotient p F χ) × labuteE p F χ =>
+      labuteSMul p F χ x.1 x.2 :=
+  sorry
+
+/-- **Layer 9, the map from the full relation module.** The inclusion `R ⊆ X = ker χ` induces
+`R^{ab} → E`. Labute's proofs use only the image of the relator under this map, which is why
+`R^{ab}` itself carries no statement here. -/
+noncomputable def relationModuleToLabuteE (R : Subgroup F) [R.Normal]
+    (hR : R ≤ orientationKernel p F χ) :
+    Additive (topAbelianization ↥R) →+ labuteE p F χ :=
+  sorry
+
+/-- **`r̄ ∈ E`**, the image of a relator. This is the element every Labute computation is
+about. -/
+noncomputable def labuteRelatorClass (r : F) (hr : r ∈ orientationKernel p F χ) :
+    labuteE p F χ :=
+  Additive.ofMul (QuotientGroup.mk (⟨r, hr⟩ : ↥(orientationKernel p F χ)) :
+    topAbelianization ↥(orientationKernel p F χ))
+
+/-- **Layer 9, the relator class is the image of the relator under `R^{ab} → E`.** -/
+theorem relationModuleToLabuteE_relator (R : Subgroup F) [R.Normal]
+    (hR : R ≤ orientationKernel p F χ) (r : F) (hrR : r ∈ R) :
+    relationModuleToLabuteE p F χ R hR
+        (Additive.ofMul (QuotientGroup.mk (⟨r, hrR⟩ : ↥R) : topAbelianization ↥R))
+      = labuteRelatorClass p F χ r (hR hrR) :=
+  sorry
+
+end RelationModule
+
+/-! ### The two module criteria that the classification uses
+
+With `E` and `Λ` as above, a chosen topological generator `γ` of `Γ` and `T = γ - 1`, these are
+the statements Labute Thms 5 and 6 run on: the expression of `r̄` in a `Λ`-basis, the basis
+correction that the division criterion produces, and the resulting normal form. -/
+
+section ModuleCriteria
+
+variable (p : ℕ) [Fact p.Prime] (F : Type u) [Group F] [TopologicalSpace F]
+  [IsTopologicalGroup F] (χ : F →* ℤ_[p]ˣ)
+
+/-- **Layer 9, `E` is topologically generated by the classes of the basis elements lying in
+`X`.** For `F = freeProP p (Fin n)` with basis `x_1, …, x_n` and `χ` a Demushkin orientation,
+finitely many classes `ȳ_i ∈ E` generate `E` over `Λ`. This is the statement Labute's expression
+of `r̄` is read in. Generation is stated on the multiplicative quotient, where the topology
+lives. -/
+theorem labuteE_exists_generators (n : ℕ) (hF : Nonempty (F ≃ₜ* freeProP p (Fin n))) :
+    ∃ (m : ℕ) (b : Fin m → labuteE p F χ),
+      (Subgroup.closure {x : topAbelianization ↥(orientationKernel p F χ) |
+          ∃ (i : Fin m) (l : completedGroupAlgebra p (orientationQuotient p F χ)),
+            x = Additive.toMul (labuteSMul p F χ l (b i))}).topologicalClosure = ⊤ :=
+  sorry
+
+/-- **Layer 9, the expression of the relator image** (Labute p. 122). In the dyadic even-rank
+branch the class `r̄` is the `Λ`-combination
+`r̄ = (1 + a + (1+T)^a) ȳ₁ + (2^g + (1+T)^{ab} − 1) ȳ₃`
+of the basis classes lying in `X`. The statement here is the shape of that expression: `r̄` is a
+`Λ`-combination of the generators, with the coefficients read off the normal form of `r`. -/
+theorem labuteRelatorClass_eq_sum (n : ℕ) (hF : Nonempty (F ≃ₜ* freeProP p (Fin n)))
+    (r : F) (hr : r ∈ orientationKernel p F χ) (m : ℕ) (b : Fin m → labuteE p F χ) :
+    ∃ c : Fin m → completedGroupAlgebra p (orientationQuotient p F χ),
+      labuteRelatorClass p F χ r hr
+        = ∑ i : Fin m, labuteSMul p F χ (c i) (b i) :=
+  sorry
+
+/-- **Layer 9, the basis correction** (Labute p. 122). Applying the division criterion
+`(T − c) ∣ ψ ↔ ψ(c) = 0` to the coefficients of the expression above replaces the generators by
+ones in which the relator image is a single multiple: for the dyadic even-rank relator of
+parameters `(α, f)` there is `z₁` with `r̄ = (2 + 2^f + T) z̄₁`. The corrections iterate along
+the descending `2`-central series, which is where Layer 8's comparison schema takes over. -/
+theorem labuteRelatorClass_eq_smul_of_dyadic (f : ℕ) (hf : 2 ≤ f) (hp : p = 2)
+    (γ : orientationQuotient p F χ)
+    (hγ : (Subgroup.closure ({γ} : Set (orientationQuotient p F χ))).topologicalClosure = ⊤)
+    (r : F) (hr : r ∈ orientationKernel p F χ) :
+    ∃ z : labuteE p F χ,
+      labuteRelatorClass p F χ r hr
+        = labuteSMul p F χ
+            (algebraMap ℤ_[p] (completedGroupAlgebra p (orientationQuotient p F χ))
+                (2 + 2 ^ f)
+              + (completedGroupAlgebra.ofVal p (orientationQuotient p F χ) γ - 1)) z :=
+  sorry
+
+/-- **Layer 9, the annihilator is principal.** The annihilator of `E` as a `Λ`-module is a
+closed ideal, and under the power-series coordinate it is generated by one element, the
+*relator series* `ψ_r`, read off the normal form of `r`. Two relators with the same invariants
+have associated series, that is they differ by a unit of `Λ`. -/
+theorem labuteE_annihilator_isPrincipal (r : F) (hr : r ∈ orientationKernel p F χ) :
+    ∃ ψ : completedGroupAlgebra p (orientationQuotient p F χ),
+      ∀ l : completedGroupAlgebra p (orientationQuotient p F χ),
+        (∀ ξ : labuteE p F χ, labuteSMul p F χ l ξ = 0) ↔ ψ ∣ l :=
+  sorry
+
+/-- **Layer 9, the membership criterion.** For `λ ∈ Λ` corresponding to `T − c` under a
+power-series coordinate `e`, membership of the relator class in `λE` is the vanishing `ψ_r(c) = 0`
+of the relator series at `c`. This is where the division criterion
+`powerSeries_sub_C_dvd_iff` enters, and it is what produces the basis correction above: the
+correction exists exactly when the membership holds. -/
+theorem labuteRelatorClass_mem_smul_iff (r : F) (hr : r ∈ orientationKernel p F χ)
+    (ψr : PowerSeries ℤ_[p]) (c : ℤ_[p]) (hc : (p : ℤ_[p]) ∣ c)
+    (e : PowerSeries ℤ_[p] ≃ₐ[ℤ_[p]] completedGroupAlgebra p (orientationQuotient p F χ))
+    (hψr : ∀ l : completedGroupAlgebra p (orientationQuotient p F χ),
+      (∀ ξ : labuteE p F χ, labuteSMul p F χ l ξ = 0) ↔ e ψr ∣ l) :
+    (∃ ξ : labuteE p F χ,
+        labuteRelatorClass p F χ r hr
+          = labuteSMul p F χ (e (PowerSeries.X - PowerSeries.C (R := ℤ_[p]) c)) ξ)
+      ↔ powerSeriesEval p ψr c hc = 0 :=
+  sorry
+
+end ModuleCriteria
+
+/-! ## Layer 9: the marked normal forms
+
+The classification is stated in marked form: for each Labute normal-form family, an isomorphism
+onto the presented pro-`p` group on that relator, carrying the canonical character to the
+explicit values of the character table. The unmarked isomorphism statements are corollaries. -/
+
+section MarkedNormalForms
+
+/-- Labute's commutator `(x, y) = x⁻¹y⁻¹xy`, the convention the normal-form words use.
+⚠ Mathlib's `⁅x, y⁆` is `xyx⁻¹y⁻¹`, the other convention; the two generate the same subgroups
+because `(x, y) = ⁅x⁻¹, y⁻¹⁆`, so subgroup statements use Mathlib's bracket and relator words
+use this one. -/
+def labuteComm {H : Type*} [Group H] (x y : H) : H := x⁻¹ * y⁻¹ * x * y
+
+/-- The generators of `freeProP p (Fin n)` indexed by `ℕ`, with value `1` out of range, so that
+the normal-form words below carry no index-bound side conditions. -/
+noncomputable def freeProPGen (p n : ℕ) (i : ℕ) : freeProP p (Fin n) :=
+  if h : i < n then freeProP.of p ⟨i, h⟩ else 1
+
+/-- The generators of a presented pro-`p` group, as the images of `freeProPGen`. -/
+noncomputable def presentedProPGen (p n : ℕ) (rels : Set (freeProP p (Fin n))) (i : ℕ) :
+    presentedProP p (Fin n) rels :=
+  QuotientGroup.mk (freeProPGen p n i)
+
+/-- The `q ≠ 2` normal-form word `x₁^q(x₁,x₂)(x₃,x₄)⋯(x_{n-1},x_n)`, on an arbitrary tuple. -/
+def demushkinWordNeTwo {H : Type*} [Group H] (q n : ℕ) (x : ℕ → H) : H :=
+  x 0 ^ q * ((List.range (n / 2)).map fun i => labuteComm (x (2 * i)) (x (2 * i + 1))).prod
+
+/-- The `q = 2`, `n` odd normal-form word `x₁²x₂^{2^f}(x₂,x₃)(x₄,x₅)⋯`, on an arbitrary tuple.
+The parameter `f` is finite here; the value `f = ∞` is the separate word with `x₂^{2^f}`
+replaced by `1`. -/
+def demushkinWordTwoOdd {H : Type*} [Group H] (f n : ℕ) (x : ℕ → H) : H :=
+  x 0 ^ 2 * x 1 ^ (2 ^ f) *
+    ((List.range (n / 2)).map fun i => labuteComm (x (2 * i + 1)) (x (2 * i + 2))).prod
+
+/-- The `q = 2`, `n` even normal-form word `x₁^{2+α}(x₁,x₂)x₃^{2^f}(x₃,x₄)⋯`, on an arbitrary
+tuple, with the exponent `2 + α` given as a `2`-adic exponent through the `ℤ₂`-action on the
+abelianization; here it is written with the natural-number exponent `2 + a` that represents it
+at each finite level. -/
+def demushkinWordTwoEven {H : Type*} [Group H] (a f n : ℕ) (x : ℕ → H) : H :=
+  x 0 ^ (2 + a) * labuteComm (x 0) (x 1) * x 2 ^ (2 ^ f) *
+    ((List.range (n / 2 - 1)).map fun i =>
+      labuteComm (x (2 * i + 2)) (x (2 * i + 3))).prod
+
+variable (p : ℕ) [Fact p.Prime] (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+  [CompactSpace G] [TotallyDisconnectedSpace G]
+
+/-- **Layer 9, the marked classification at `q ≠ 2`.** A Demushkin group with `q ≠ 2` and rank
+`n` is isomorphic to the presented group on the normal-form relator, by an isomorphism under
+which the canonical character has the tabulated values: `χ(x₂)(1 - q) = 1` and `χ(x_i) = 1` on
+every other generator. The equation on `x₂` is written as a product in `ℤ_p` rather than as an
+inverse, so that no unit has to be constructed to state it. -/
+theorem isDemushkin_marked_of_q_ne_two (hG : IsDemushkin p G) (hq : demushkinQ hG ≠ 2)
+    (hn : 2 ≤ demushkinRank hG)
+    [TotallyDisconnectedSpace (presentedProP p (Fin (demushkinRank hG))
+      {demushkinWordNeTwo (demushkinQ hG) (demushkinRank hG)
+        (freeProPGen p (demushkinRank hG))})] :
+    ∃ e : G ≃ₜ* presentedProP p (Fin (demushkinRank hG))
+        {demushkinWordNeTwo (demushkinQ hG) (demushkinRank hG)
+          (freeProPGen p (demushkinRank hG))},
+      ((demushkinCharacter hG (e.symm (presentedProPGen p (demushkinRank hG) _ 1)) : ℤ_[p])
+          * (1 - (demushkinQ hG : ℤ_[p])) = 1) ∧
+        ∀ i : ℕ, i ≠ 1 → i < demushkinRank hG →
+          demushkinCharacter hG (e.symm (presentedProPGen p (demushkinRank hG) _ i)) = 1 :=
+  sorry
+
+/-- **Layer 9, the marked classification at `q = 2` with `n` odd.** Here `p = 2`, the relator is
+`x₁²x₂^{2^f}(x₂,x₃)⋯`, and the character values are `χ(x₁) = -1`, `χ(x₃)(1 - 2^f) = 1`, and `1`
+elsewhere. The `ℚ₂` acceptance instance is the case `n = 3`, `f = 2`. -/
+theorem isDemushkin_marked_of_q_two_odd (hp : p = 2) (hG : IsDemushkin p G)
+    (hq : demushkinQ hG = 2) (hodd : Odd (demushkinRank hG)) (f : ℕ) (hf : 2 ≤ f)
+    [TotallyDisconnectedSpace (presentedProP p (Fin (demushkinRank hG))
+      {demushkinWordTwoOdd f (demushkinRank hG) (freeProPGen p (demushkinRank hG))})] :
+    ∃ e : G ≃ₜ* presentedProP p (Fin (demushkinRank hG))
+        {demushkinWordTwoOdd f (demushkinRank hG) (freeProPGen p (demushkinRank hG))},
+      demushkinCharacter hG (e.symm (presentedProPGen p (demushkinRank hG) _ 0)) = -1 ∧
+        ((demushkinCharacter hG (e.symm (presentedProPGen p (demushkinRank hG) _ 2)) : ℤ_[p])
+          * (1 - 2 ^ f) = 1) ∧
+        ∀ i : ℕ, i ≠ 0 → i ≠ 2 → i < demushkinRank hG →
+          demushkinCharacter hG (e.symm (presentedProPGen p (demushkinRank hG) _ i)) = 1 :=
+  sorry
+
+/-- **Layer 9, the marked classification at `q = 2` with `n` even.** The relator is
+`x₁^{2+α}(x₁,x₂)x₃^{2^f}(x₃,x₄)⋯`, and the character values are `χ(x₂)(1 + α) = -1`,
+`χ(x₄)(1 - 2^f) = 1`, and `1` elsewhere. The image is `{±1} × U^(f)` when `v₂(α) ≥ f`, and
+`U^[v₂(α)]` otherwise, which is the table of Layer 7. -/
+theorem isDemushkin_marked_of_q_two_even (hp : p = 2) (hG : IsDemushkin p G)
+    (hq : demushkinQ hG = 2) (heven : Even (demushkinRank hG)) (a f : ℕ) (hf : 2 ≤ f)
+    (ha : 4 ∣ a)
+    [TotallyDisconnectedSpace (presentedProP p (Fin (demushkinRank hG))
+      {demushkinWordTwoEven a f (demushkinRank hG) (freeProPGen p (demushkinRank hG))})] :
+    ∃ e : G ≃ₜ* presentedProP p (Fin (demushkinRank hG))
+        {demushkinWordTwoEven a f (demushkinRank hG) (freeProPGen p (demushkinRank hG))},
+      ((demushkinCharacter hG (e.symm (presentedProPGen p (demushkinRank hG) _ 1)) : ℤ_[p])
+          * (1 + (a : ℤ_[p])) = -1) ∧
+        ((demushkinCharacter hG (e.symm (presentedProPGen p (demushkinRank hG) _ 3)) : ℤ_[p])
+          * (1 - 2 ^ f) = 1) ∧
+        ∀ i : ℕ, i ≠ 1 → i ≠ 3 → i < demushkinRank hG →
+          demushkinCharacter hG (e.symm (presentedProPGen p (demushkinRank hG) _ i)) = 1 :=
+  sorry
+
+/-- **Layer 9, Labute Thm 2: relators with the same invariants are equivalent under an
+automorphism of `F`.** This is the statement the marked instances above rest on: it is what
+turns "isomorphic" into "isomorphic by a basis change", so the marked normal form is a
+normalization and not a choice. -/
+theorem exists_continuousMulEquiv_map_demushkinRelator (n : ℕ) (r r' : freeProP p (Fin n))
+    [TotallyDisconnectedSpace (freeProP p (Fin n))]
+    [TotallyDisconnectedSpace (presentedProP p (Fin n) {r})]
+    [TotallyDisconnectedSpace (presentedProP p (Fin n) {r'})]
+    (hr : IsDemushkin p (presentedProP p (Fin n) {r}))
+    (hr' : IsDemushkin p (presentedProP p (Fin n) {r'}))
+    (hrank : demushkinRank hr = demushkinRank hr')
+    (himage : (demushkinCharacter hr).range = (demushkinCharacter hr').range) :
+    ∃ φ : freeProP p (Fin n) ≃ₜ* freeProP p (Fin n),
+      (Subgroup.normalClosure {φ r}).topologicalClosure
+        = (Subgroup.normalClosure {r'}).topologicalClosure :=
+  sorry
+
+end MarkedNormalForms
 
 /-! ## Layer 0: profinite foundations -/
 
@@ -1020,10 +1834,34 @@ example {p : ℕ} [Fact p.Prime] {G : Type u} [Group G] [TopologicalSpace G]
 
 /-- **Layer 2, existence of `p`-Sylow subgroups.** Every profinite group has a `p`-Sylow
 subgroup (inverse limit of Sylow subgroups at the finite levels; compactness supplies the
-limit point). -/
-example (p : ℕ) [Fact p.Prime] {G : Type u} [Group G] [TopologicalSpace G]
+limit point). The interface table names this theorem, so it is a stable declaration. -/
+theorem exists_isProPSylow (p : ℕ) [Fact p.Prime] (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G] :
     ∃ P : Subgroup G, IsProPSylow p P :=
+  sorry
+
+/-- **Layer 2, every closed pro-`p` subgroup lies in a `p`-Sylow subgroup.** -/
+theorem IsProP.exists_le_isProPSylow (p : ℕ) [Fact p.Prime] (G : Type u) [Group G]
+    [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (Q : Subgroup G) (hQ : IsProP p Q) (hQc : IsClosed (Q : Set G)) :
+    ∃ P : Subgroup G, IsProPSylow p P ∧ Q ≤ P :=
+  sorry
+
+/-- **Layer 2, a normal `p`-Sylow subgroup is the only one.** The Local Fields roadmap uses
+this for wild inertia. -/
+theorem IsProPSylow.eq_of_normal (p : ℕ) [Fact p.Prime] (G : Type u) [Group G]
+    [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (P Q : Subgroup G) (hP : IsProPSylow p P) (hQ : IsProPSylow p Q) (hn : P.Normal) :
+    P = Q :=
+  sorry
+
+/-- **Layer 2, the image of a `p`-Sylow subgroup under a continuous surjection.** -/
+theorem IsProPSylow.map_of_surjective (p : ℕ) [Fact p.Prime] (G H : Type u) [Group G]
+    [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    [Group H] [TopologicalSpace H] [IsTopologicalGroup H] [CompactSpace H]
+    [TotallyDisconnectedSpace H] (f : G →* H) (hf : Continuous f)
+    (hsurj : Function.Surjective f) (P : Subgroup G) (hP : IsProPSylow p P) :
+    IsProPSylow p (P.map f) :=
   sorry
 
 /-- **Layer 2, conjugacy of `p`-Sylow subgroups.** Any two `p`-Sylow subgroups of a profinite
@@ -1147,13 +1985,33 @@ quotient side is not decoration: at infinite rank the images of a generating set
 dense subspace of `G/Φ(G)`. This is the statement every later layer uses, and it needs no
 finiteness hypothesis and no vector-space structure. The cardinal form, against the discrete
 dual `Hom_cont(G, 𝔽_p)`, is the companion statement; it is *not* an identity with
-`Module.rank (ZMod p) (G/Φ(G))`, which is strictly larger at infinite rank. -/
-example {p : ℕ} [Fact p.Prime] {G : Type u} [Group G] [TopologicalSpace G]
-    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G)
-    (s : Set G) :
+`Module.rank (ZMod p) (G/Φ(G))`, which is strictly larger at infinite rank. The interface
+table names this theorem. -/
+theorem topologicallyGenerates_iff_frattiniQuotient (p : ℕ) [Fact p.Prime] (G : Type u)
+    [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G]
+    [TotallyDisconnectedSpace G] (hG : IsProP p G) (s : Set G) :
     (Subgroup.closure s).topologicalClosure = ⊤ ↔
       (Subgroup.closure ((QuotientGroup.mk' (proPFrattini p G)) '' s)).topologicalClosure
         = ⊤ :=
+  sorry
+
+/-- **Layer 3, the rank does not increase under a continuous surjection.** The interface table
+names this theorem, and the Local Fields roadmap's Layer 9 uses it for
+`d(G_K) ≥ d(G_K(p))`. -/
+theorem topologicalGeneratorRank_le_of_surjective (G H : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [Group H] [TopologicalSpace H] [IsTopologicalGroup H] (f : G →* H)
+    (hf : Continuous f) (hsurj : Function.Surjective f) :
+    topologicalGeneratorRank H ≤ topologicalGeneratorRank G :=
+  sorry
+
+/-- **Layer 3, the Schreier bound** `d(U) ≤ 1 + [G : U](d(G) − 1)` for an open subgroup. The
+subtraction is harmless because `d(G) ≥ 1` whenever `U` is proper; the equality case for free
+pro-`p` groups is Layer 6. The interface table names this theorem. -/
+theorem topologicalGeneratorRankNat_le_of_isOpen (G : Type u) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] (U : Subgroup G) (hU : IsOpen (U : Set G))
+    (hG : IsTopologicallyFinitelyGenerated G) (hUfg : IsTopologicallyFinitelyGenerated U) :
+    topologicalGeneratorRankNat U hUfg
+      ≤ 1 + U.index * (topologicalGeneratorRankNat G hG - 1) :=
   sorry
 
 /-- **Layer 3, every profinite group has a generating set converging to `1`**
@@ -1225,6 +2083,14 @@ example : Group.rank (Multiplicative (ZMod 4) × Multiplicative (ZMod 2)) = 2 :=
 constructions agree, so that no statement has to choose between them. -/
 example {p : ℕ} [Fact p.Prime] {X : Type u} :
     Nonempty (freeProC (finiteGroupClassP p) X ≃ₜ* freeProP p X) :=
+  sorry
+
+/-- **Layer 4, universal property of the free profinite group.** A map `X → G` into a
+profinite group extends uniquely to a morphism of profinite groups out of `freeProfiniteGroup X`.
+The interface table names this theorem, and the Local Fields roadmap states the Iwasawa
+presentation of the tame quotient against it. -/
+theorem freeProfiniteGroup.lift (X : Type u) (G : ProfiniteGrp.{u}) (f : X → G) :
+    ∃! φ : freeProfiniteGroup X ⟶ G, ∀ x : X, φ (freeProfiniteGroup.of x) = f x :=
   sorry
 
 /-- **Layer 4, universal property of the free pro-`p` group.** Maps from `X` into a pro-`p`
@@ -1330,6 +2196,183 @@ example : Nontrivial demushkinD0 :=
 pro-`2` groups: `D₀` is pro-`2`, and topologically finitely generated. -/
 example : IsProP 2 demushkinD0 ∧ IsTopologicallyFinitelyGenerated demushkinD0 :=
   sorry
+
+/-! ### The marked standard presentation `D₀`
+
+`D₀` is a *presented* group, so its three generators are named terms and its orientation is a
+named character with named values. That is what makes the Layer 11 acceptance instance a
+normalized statement rather than an unmarked isomorphism. -/
+
+/-- The marked generator `A` of `D₀`, the image of the first free pro-`2` generator. -/
+noncomputable def d0A : demushkinD0 := QuotientGroup.mk (freeProP.of 2 0)
+
+/-- The marked generator `S` of `D₀`, the image of the second free pro-`2` generator. -/
+noncomputable def d0S : demushkinD0 := QuotientGroup.mk (freeProP.of 2 1)
+
+/-- The marked generator `Y` of `D₀`, the image of the third free pro-`2` generator. -/
+noncomputable def d0Y : demushkinD0 := QuotientGroup.mk (freeProP.of 2 2)
+
+/-- **Layer 5, the marked generators generate.** `A`, `S` and `Y` topologically generate `D₀`,
+which is what makes a continuous character determined by its values on them. -/
+theorem d0_topologicallyGenerates :
+    (Subgroup.closure ({d0A, d0S, d0Y} : Set demushkinD0)).topologicalClosure = ⊤ :=
+  sorry
+
+/-- **Layer 7, `-3` is a `2`-adic unit.** The value `χ(Y) = (-3)⁻¹` of the standard orientation
+is the inverse of this unit, so the unit is named rather than written as a literal. -/
+theorem isUnit_neg_three : IsUnit (-3 : ℤ_[2]) := sorry
+
+/-- The `2`-adic unit with value `-3`. -/
+noncomputable abbrev negThreeUnit : ℤ_[2]ˣ := isUnit_neg_three.unit
+
+/-- **Layer 7, the value of `negThreeUnit`.** -/
+theorem negThreeUnit_coe : (negThreeUnit : ℤ_[2]) = -3 := isUnit_neg_three.unit_spec
+
+/-- **The standard orientation of `D₀`**, the continuous character `D₀ → ℤ₂ˣ` with values
+`(-1, 1, (-3)⁻¹)` on `(A, S, Y)`. It exists because those values kill the relator
+`A²S⁴(S, Y)`: the relator maps to `(-1)² · 1⁴ · 1 = 1`, the commutator dying because `ℤ₂ˣ` is
+abelian. It is data, so it is a `def`, and the value theorems below are what pin it. -/
+noncomputable def standardD0Orientation : demushkinD0 →* ℤ_[2]ˣ := sorry
+
+/-- **Layer 7, `χ(A) = -1`.** -/
+theorem standardD0Orientation_d0A : standardD0Orientation d0A = -1 := sorry
+
+/-- **Layer 7, `χ(S) = 1`.** -/
+theorem standardD0Orientation_d0S : standardD0Orientation d0S = 1 := sorry
+
+/-- **Layer 7, `χ(Y) = (-3)⁻¹`.** In the notation of the Layer 9 character table this is
+`(1 - 2²)⁻¹` at `f = 2`. -/
+theorem standardD0Orientation_d0Y : standardD0Orientation d0Y = negThreeUnit⁻¹ := sorry
+
+/-- **Layer 7, the standard orientation is continuous.** -/
+theorem standardD0Orientation_continuous : Continuous standardD0Orientation := sorry
+
+/-- **Layer 7, the standard orientation is surjective**, so its image is all of `ℤ₂ˣ`. This is
+the `Im χ = ℤ₂ˣ` half of the acceptance instance, and it is a computation with the values
+above: `-1` and `-3` topologically generate `ℤ₂ˣ`. -/
+theorem standardD0Orientation_surjective : Function.Surjective standardD0Orientation := sorry
+
+/-- **Layer 7, the standard orientation is the only continuous character with those values.**
+The marked generators topologically generate `D₀`, so a continuous character is determined by
+its values on them. This is what makes the marked acceptance instance a normalization and not a
+choice. -/
+theorem standardD0Orientation_unique (ψ : demushkinD0 →* ℤ_[2]ˣ) (hψ : Continuous ψ)
+    (hA : ψ d0A = -1) (hS : ψ d0S = 1) (hY : ψ d0Y = negThreeUnit⁻¹) :
+    ψ = standardD0Orientation :=
+  sorry
+
+/-- **Layer 7, the standard orientation kills the relator.** The compatibility that makes the
+character descend from the free pro-`2` group to `D₀`, written on the relator word itself. -/
+theorem standardD0Orientation_relator (φ : freeProP 2 (Fin 3) →* ℤ_[2]ˣ)
+    (hA : φ (freeProP.of 2 0) = -1) (hS : φ (freeProP.of 2 1) = 1)
+    (hY : φ (freeProP.of 2 2) = negThreeUnit⁻¹) : φ d0Relator = 1 :=
+  sorry
+
+/-! ## Layer 6: cohomological dimension, and its Nielsen-Schreier consequence
+
+`cd_p` is the imported `ProfiniteCohomology.cd_p`: the infimum, in `ℕ∞`, of the `n` for which
+`Hⁱ(G, M)` vanishes above `n` for every discrete `p`-primary torsion `M`. This roadmap defines
+no second cohomological dimension. The two general reductions, to finite coefficients and to
+coefficients of bounded exponent, are `ProfiniteCohomology.cd_p_le_iff_finite_pPrimary` and
+`ProfiniteCohomology.cd_p_le_iff_boundedExponent`; the pro-`p` reduction below is the third and
+is owned here. The imported `cd_p` places the group in `Type`, so the milestones of this layer
+are stated there. -/
+
+section CohomologicalDimension
+
+variable (p : ℕ) [Fact p.Prime]
+
+/-- **Layer 6, the pro-`p` reduction of `cd_p`.** For a pro-`p` group it is enough to test the
+single module `𝔽_p` with trivial action: the two hypotheses on `M` below say that `M` is finite,
+killed by `p` and acted on trivially, which makes it a finite direct sum of copies of `𝔽_p`.
+Route: the trivial-filtration theorem of this layer, which for a pro-`p` group filters any
+finite discrete `p`-primary module with factors `𝔽_p`, and the long exact sequences of the
+imported carrier. ⚠ This equivalence is a reduction and not the definition: writing the
+elementary abelian test as the definition would make the dévissage vacuous. -/
+theorem cd_p_le_iff_elementaryAbelian_of_isProP (G : Type) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G)
+    (n : ℕ) :
+    ProfiniteCohomology.cd_p p G ≤ (n : ℕ∞) ↔
+      ∀ (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+        [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M] [Finite M],
+        (∀ m : M, p • m = 0) → (∀ (g : G) (m : M), g • m = m) →
+          Limits.IsZero ((continuousCohomology ℤ G (n + 1)).obj
+            (ProfiniteCohomology.ofDiscreteModule G M)) :=
+  sorry
+
+/-- **Layer 6, the trivial-filtration theorem.** For pro-`p` `G`, a nonzero finite discrete
+`p`-primary `G`-module has nonzero invariants, because the action factors through a finite
+`p`-quotient. Iterating gives the `G`-stable filtration with one-dimensional trivial factors
+that the dévissage above runs on. ⚠ Do not write `dim_{𝔽_p} M` here: `ℤ/p²` is a finite
+`p`-primary module that is not an `𝔽_p`-vector space. -/
+theorem exists_ne_zero_invariant_of_isProP (G : Type) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G)
+    (M : Type) [AddCommGroup M] [TopologicalSpace M] [DiscreteTopology M]
+    [DistribMulAction G M] [ContinuousSMul G M] [Finite M] (hM : Nontrivial M)
+    (htors : ∀ m : M, ∃ k : ℕ, (p ^ k) • m = 0) :
+    ∃ m : M, m ≠ 0 ∧ ∀ g : G, g • m = m :=
+  sorry
+
+/-- **Layer 6, free implies `cd_p ≤ 1`.** Layer 5's vanishing theorem `H²(F, M) = 0`, restated
+against the imported `cd_p`. Dévissage changes the coefficients and the degree-raising theorem
+changes the degree, so the proof needs both. -/
+theorem cd_p_freeProP_le_one (n : ℕ) [TotallyDisconnectedSpace (freeProP p (Fin n))] :
+    ProfiniteCohomology.cd_p p (freeProP p (Fin n)) ≤ 1 :=
+  sorry
+
+/-- **Layer 6, Serre's theorem**: `cd_p G ≤ 1` implies free pro-`p`, for topologically finitely
+generated `G`. The route is projectivity, a minimal presentation, a homomorphic section, and
+Burnside. ⚠ The version without finite generation is a different theorem with a different
+proof, and it is Layer 10's. -/
+theorem isFree_of_cd_p_le_one (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G)
+    (hfg : IsTopologicallyFinitelyGenerated G) (hcd : ProfiniteCohomology.cd_p p G ≤ 1)
+    [TotallyDisconnectedSpace (freeProP p (Fin (topologicalGeneratorRankNat G hfg)))] :
+    Nonempty (G ≃ₜ* freeProP p (Fin (topologicalGeneratorRankNat G hfg))) :=
+  sorry
+
+/-- **Layer 6, `cd_p` of an open subgroup.** For `U` open in pro-`p` `G` with `cd_p G` finite,
+`cd_p U = cd_p G`. ⚠ The imported `cd_p_eq_of_index_not_dvd` is the prime-to-`p`-index case and
+does not cover an open subgroup of index divisible by `p`, which is the case used here. -/
+theorem cd_p_eq_of_isOpen (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G) (U : OpenSubgroup G)
+    (hfin : ProfiniteCohomology.cd_p p G ≠ ⊤)
+    [CompactSpace U.toSubgroup] [TotallyDisconnectedSpace U.toSubgroup] :
+    ProfiniteCohomology.cd_p p U.toSubgroup = ProfiniteCohomology.cd_p p G :=
+  sorry
+
+/-- **Layer 6, the Sylow equality** `cd_p G = cd_p G_p`, for `G` profinite and `G_p` a `p`-Sylow
+subgroup from Layer 2. This is the one milestone of this layer about a group that need not be
+pro-`p`. A `p`-Sylow subgroup is closed and in general **not** open, so the imported
+`cd_p_eq_of_index_not_dvd`, which is the open prime-to-`p`-index case, gives only the open
+subgroups above `G_p`; the colimit description of the cohomology of a closed subgroup, the
+Sylow theory of Layer 2, and the imported closed-subgroup Shapiro are what turn those into the
+equality. -/
+theorem cd_p_eq_of_isProPSylow (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+    [CompactSpace G] [TotallyDisconnectedSpace G] (P : Subgroup G) (hP : IsProPSylow p P)
+    [CompactSpace P] [TotallyDisconnectedSpace P] :
+    ProfiniteCohomology.cd_p p P = ProfiniteCohomology.cd_p p G :=
+  sorry
+
+/-- **Layer 7, an infinite Demushkin group has `cd_p = 2`.** `≤ 2` from the one-relator
+presentation and the imported five-term sequence; `≥ 2` from `dim H²(G, 𝔽_p) = 1`, which is part
+of the definition. -/
+theorem cd_p_eq_two_of_isDemushkin (G : Type) [Group G] [TopologicalSpace G]
+    [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
+    (hG : IsDemushkin p G) (hinf : Infinite G) : ProfiniteCohomology.cd_p p G = 2 :=
+  sorry
+
+/-- **Layer 10, closed subgroups of free pro-`p` groups.** A closed subgroup of a free pro-`p`
+group again has `cd_p ≤ 1`, by the imported monotonicity `cd_p_le_of_isClosed` and the free
+case above; with Serre's theorem at arbitrary rank this is the full pro-`p` Nielsen-Schreier
+theorem, whose free objects on a profinite space are Layer 10. -/
+theorem cd_p_le_one_of_isClosed_freeProP (n : ℕ) [TotallyDisconnectedSpace (freeProP p (Fin n))]
+    (H : Subgroup (freeProP p (Fin n))) (hH : IsClosed (H : Set (freeProP p (Fin n))))
+    [CompactSpace H] [TotallyDisconnectedSpace H] :
+    ProfiniteCohomology.cd_p p H ≤ 1 :=
+  sorry
+
+end CohomologicalDimension
 
 /-! ## Layer 6: cohomological dimension, and its Nielsen–Schreier consequence -/
 
@@ -1461,5 +2504,39 @@ example {G H : Type u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Co
       IsFiniteContinuousQuotient G Q ↔ IsFiniteContinuousQuotient H Q) :
     Nonempty (G ≃ₜ* H) :=
   sorry
+
+/-! ## Layer 11: the marked acceptance instance for `ℚ₂`
+
+The acceptance instance is the marked statement, and the unmarked isomorphism `G_{ℚ₂}(2) ≅ D₀`
+is its corollary. -/
+
+section MarkedRatPadic
+
+variable [CompactSpace (Field.absoluteGaloisGroup ℚ_[2])]
+  [TotallyDisconnectedSpace (Field.absoluteGaloisGroup ℚ_[2])]
+  [TotallyDisconnectedSpace (absoluteGaloisGroupProP 2 ℚ_[2])]
+
+/-- **Layer 11, the marked acceptance instance `G_{ℚ₂}(2) ≃ D₀`.** There is a continuous
+isomorphism onto the standard presented group `D₀ = ⟨A, S, Y ∣ A²S⁴(S, Y)⟩` under which the
+descended cyclotomic character of `G_{ℚ₂}(2)` becomes the standard orientation, whose image is
+all of `ℤ₂ˣ` and whose values on `(A, S, Y)` are `(-1, 1, (-3)⁻¹)`. Those values are the Layer 9
+table at `q = 2`, `n = 3` odd, `f = 2`, since `(1 - 2²)⁻¹ = (-3)⁻¹`.
+
+This is the statement of this roadmap: with it, a consumer identifying `G_{ℚ₂}(2)` with `D₀`
+needs no further automorphism or basis-normalization theorem. -/
+theorem absoluteGaloisGroupProP_two_ratPadic_marked :
+    ∃ e : absoluteGaloisGroupProP 2 ℚ_[2] ≃ₜ* demushkinD0,
+      MonoidHom.comp standardD0Orientation e.toMulEquiv.toMonoidHom
+          = cyclotomicOrientation 2 ℚ_[2] ∧
+        Function.Surjective (cyclotomicOrientation 2 ℚ_[2]) :=
+  sorry
+
+/-- **Layer 11, the unmarked acceptance instance**, as a corollary of the marked one. -/
+theorem absoluteGaloisGroupProP_two_ratPadic :
+    Nonempty (absoluteGaloisGroupProP 2 ℚ_[2] ≃ₜ* demushkinD0) := by
+  obtain ⟨e, -⟩ := absoluteGaloisGroupProP_two_ratPadic_marked
+  exact ⟨e⟩
+
+end MarkedRatPadic
 
 end TauCetiRoadmap.ProPGroups
