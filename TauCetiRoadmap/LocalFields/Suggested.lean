@@ -1,4 +1,5 @@
 import Mathlib
+import TauCetiRoadmap.ProfiniteCohomology.Suggested
 
 /-!
 # Local fields, ramification, and local class field theory: target signatures
@@ -26,23 +27,36 @@ mixed-characteristic.
 
 Definitions with a `sorry` body (`normalizedValuation`, `ramificationIndex`,
 `inertiaDegree`, `teichmuller`, `unitFiltration`, `muNRep`, `tateDual`, `artinMap`,
-`hilbertSymbol`) are suggested *names and types* for objects **this roadmap** builds, together
-with the characteristic lemmas that fix them. They are placeholders for data whose type is
-expressible now, and never for a condition we cannot state.
+`unramifiedCoordinate`, `kummerCupPairing`, `tateEvaluationPairing`, `tateH`, `tateCup`,
+`tateMap`) are suggested *names and types* for objects **this roadmap** builds, together with the
+characteristic lemmas that fix them. They are placeholders for data whose type is expressible
+now, and never for a condition we cannot state.
+
+## The cohomology of a profinite group comes from one supplier
+
+Continuous cohomology, its functoriality, its cup product, corestriction, Shapiro, the
+finite-quotient colimit, and Kummer theory over a general field are the accepted Profinite
+Cohomology roadmap's, and this file imports
+`TauCetiRoadmap.ProfiniteCohomology.Suggested` and cites its declarations by name. There is no
+second carrier and no second cup product here: `GalRep` and `H` below are abbreviations of
+`ProfiniteCohomology.TopRep` and of Mathlib's `continuousCohomology`, and every product is
+`ProfiniteCohomology.cup` applied to a `ProfiniteCohomology.TopPairing` that this roadmap
+constructs.
+
+The two arithmetic pairings are named objects of this roadmap, `kummerCupPairing` and
+`tateEvaluationPairing`, and never arguments of the theorems that use them: a `TopPairing`
+carries bilinearity, joint continuity, and Galois equivariance in its fields, so a named term is
+what makes the symbol and the duality statements say something about the arithmetic pairing
+rather than about every family of maps of the same type.
 
 ## Operations that this roadmap does not own
 
-Namespace `Supplied` collects the cohomology of a profinite group and the group theory of
-pro-`p` groups. Its predicates and carriers are definitions, with the bodies that the supplying
-development gives them, so the two are definitionally equal and a statement here transports to
-the supplier's name by `rfl`. Its theorems are the fields of `ProPOps`, `ProPRankInputs`, and
-`CohomologyOps`, and every statement below that needs one takes it as an argument. Nothing here
-postulates an operation that another development owns: a theorem with such an argument asserts
-an implication, and an axiom would assert more.
-
-An operation is a field of one of those structures exactly when it occurs in a **statement**
-here. Corestriction, Mackey, Shapiro, and the finite-quotient colimit occur only inside proofs,
-so they are recorded in `README.md` and are not fields.
+Namespace `Supplied` collects the group theory of pro-`p` groups. Its predicates and carriers are
+definitions, with the bodies that the supplying development gives them, so the two are
+definitionally equal and a statement here transports to the supplier's name by `rfl`. Its
+theorems are the fields of `ProPOps` and `ProPRankInputs`; the supplier constructs the canonical
+terms `Supplied.proPOps` and `Supplied.proPRankInputs`, and the rank theorem of Layer 9 is stated
+unconditionally by instantiation at them.
 -/
 
 namespace TauCetiRoadmap.LocalFields
@@ -346,29 +360,29 @@ example (M : IntermediateField ℚ_[2] (AlgebraicClosure ℚ_[2]))
       ∃ a b : ℚ_[2], (x : ℚ_[2]) = a ^ 2 - 5 * b ^ 2 :=
   sorry
 
-/-- **Layer 8 acceptance, the Hilbert-symbol entry `(−1,−1)_2 = −1`.** `−1` is not a sum of
-two squares in `ℚ_2`: through the Kummer identification, the mod-2 duality pairing is the
-classical Hilbert symbol (the named theorem shared with the QuadraticFormInvariants roadmap),
-and it is nontrivial at `(−1, −1)`. -/
+/-- **Layer 8 acceptance, the dyadic norm equation at `(−1, −1)`.** `−1` is not a sum of two
+squares in `ℚ_2`, equivalently `−1` is not a norm from `ℚ_2(√−1)`. This is field arithmetic over
+`ℚ_2` and needs no cohomology; it is the input that makes the duality pairing of Layer 8B
+nontrivial at `n = 2`, and the classical symbol that records it is the Quadratic Form Invariants
+roadmap's. -/
 example : ¬ ∃ x y : ℚ_[2], (-1 : ℚ_[2]) = x ^ 2 + y ^ 2 :=
   sorry
 
 /-! ## Operations that this roadmap does not own
 
-Two developments carry operations that this roadmap uses and should not build a second time:
-cohomology of a profinite group, and the group theory of pro-`p` groups. Nothing below
-postulates one of them. The predicates and the carriers are **definitions**, with the bodies
-that the supplying development gives them, so the two are definitionally equal and a statement
-here transports to the supplier's name by `rfl`. The **theorems** are collected into three
-structures, and every statement in the last section that needs one takes it as an argument.
+One development carries operations that this roadmap uses and should not build a second time:
+the group theory of pro-`p` groups. (The cohomology of a profinite group is the second, and it is
+imported and cited by name, so it needs no bundling structure here.) Nothing below postulates a
+pro-`p` theorem. The predicates and the carriers are **definitions**, with the bodies that the
+supplying development gives them, so the two are definitionally equal and a statement here
+transports to the supplier's name by `rfl`. The **theorems** are collected into the two
+structures `ProPOps` and `ProPRankInputs`, and the supplier constructs the canonical terms
+`proPOps` and `proPRankInputs` from its named theorems.
 
-A theorem with such an argument is an honest theorem, and not an axiom: it asserts an
-implication whose proof needs nothing outside Mathlib and the earlier milestones. A `sorry`
-that postulates an object owned elsewhere would assert more than that.
-
-An operation is a field of a structure exactly when it occurs in a **statement** here.
-Corestriction, Mackey, Shapiro, and the finite-quotient colimit occur only inside proofs, so
-they are recorded in `README.md` as proof obligations and are not fields. -/
+A theorem stated against those structures is an honest theorem, and not an axiom: it asserts an
+implication whose proof needs nothing outside Mathlib and the earlier milestones. The public
+Layer 9 rank theorem is not left in that conditional form; it is the instantiation of
+`rank_absoluteGaloisGroup_of_inputs` at the two canonical terms. -/
 
 namespace Supplied
 
@@ -520,36 +534,42 @@ structure ProPRankInputs (p : ℕ) [Fact p.Prime] : Prop where
     ¬ HasMuP p F → ∀ h : IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p F),
       topologicalGeneratorRankNat (absoluteGaloisGroupProP p F) h = Module.finrank ℚ_[p] F + 1
 
-/-! ### The cohomology carrier
+/-- **The canonical pro-`p` package**: the term of `ProPOps` assembled from the named
+supplier theorems (`exists_isProPSylow`, `IsProP.exists_le_isProPSylow`,
+`IsProPSylow.eq_of_normal`, `IsProPSylow.map_of_surjective`, `freeProfiniteGroup.lift`,
+`topologicalGeneratorRank_le_of_surjective`, `topologicalGeneratorRankNat_le_of_isOpen`,
+`topologicallyGenerates_iff_frattiniQuotient`). The interface table names this term, so it
+is a stable declaration and not an anonymous example. -/
+theorem proPOps (p : ℕ) : ProPOps.{u} p := sorry
 
-The carrier is Mathlib's `continuousCohomology`, on bundled topological representations of
-`G_F`, which carry the discrete topology and the continuous action that the coefficients
-must have. Only the cup product and the coefficient functoriality are hypotheses. -/
+/-- **The canonical rank package**: the term of `ProPRankInputs` assembled from the named
+Layer 11 theorems (`isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP`,
+`topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu`,
+`topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu`). The interface table names
+this term, so it is a stable declaration and not an anonymous example. -/
+theorem proPRankInputs (p : ℕ) [Fact p.Prime] : ProPRankInputs.{u} p := sorry
 
-/-- Coefficients for `G_F`, bundled: a topological `ZMod n`-representation. -/
+end Supplied
+
+/-! ## The cohomology carrier, and the supplier declarations that act on it
+
+The carrier is Mathlib's `continuousCohomology` on the objects of
+`TauCetiRoadmap.ProfiniteCohomology.TopRep`, which carry the discrete topology and the continuous
+action that the coefficients must have. `GalRep` and `H` are abbreviations, and not a second
+implementation: `GalRep n F` unfolds to `ProfiniteCohomology.TopRep (ZMod n) G_F`, whose ring
+universe is independent of the group universe, and `H` unfolds to the value of the Mathlib
+functor. The operations on them are `ProfiniteCohomology.cup`, `ProfiniteCohomology.coeffMap`,
+`ProfiniteCohomology.res`, `ProfiniteCohomology.infl`, `ProfiniteCohomology.corestriction`,
+`ProfiniteCohomology.shapiroIso`, and `ProfiniteCohomology.explicitFiniteQuotientColimit1`. -/
+
+/-- Coefficients for `G_F`, bundled: a topological `ZMod n`-representation, in the supplier's
+carrier. -/
 abbrev GalRep (n : ℕ) (F : Type u) [Field F] : Type (u + 1) :=
-  Action (TopModuleCat.{u} (ZMod n)) (Field.absoluteGaloisGroup F)
+  ProfiniteCohomology.TopRep (ZMod n) (Field.absoluteGaloisGroup F)
 
 /-- `Hⁱ(G_F, A)`, the continuous cohomology of Mathlib. This roadmap uses no other carrier. -/
 noncomputable abbrev H (n : ℕ) (F : Type u) [Field F] (i : ℕ) (A : GalRep n F) : Type _ :=
   (continuousCohomology (ZMod n) (Field.absoluteGaloisGroup F) i).obj A
-
-/-- The cup product, with the coefficient object of its target as data. ⚠ The target of a cup
-product of two classes with coefficients in `A` and `B` is `A ⊗ B`, and never `A` again. That is
-why `tensorObj` is a field: naming it is what stops a statement from asserting a coefficient
-identification that does not exist. -/
-structure CohomologyOps (n : ℕ) (F : Type u) [Field F] where
-  /-- The coefficient object `A ⊗ B` of a cup product. -/
-  tensorObj : GalRep n F → GalRep n F → GalRep n F
-  /-- Cup product, in the degrees this roadmap uses. The degree of the target is an argument
-  together with its defining equation, so no degree arithmetic is hidden in a coercion. -/
-  cup : ∀ (A B : GalRep n F) (i j k : ℕ), i + j = k →
-    H n F i A →+ H n F j B →+ H n F k (tensorObj A B)
-  /-- The map induced on cohomology by a morphism of coefficient objects. It is a field so
-  that the statements below need no detour through the cochain complex. -/
-  coeff : ∀ {A B : GalRep n F}, (A ⟶ B) → ∀ i : ℕ, H n F i A →+ H n F i B
-
-end Supplied
 
 /-! ## Objects and statements that this roadmap owns
 
@@ -571,24 +591,71 @@ def muNRep (n : ℕ) (F : Type u) [Field F] : GalRep n F := sorry
 /-- The Tate dual `A' = Hom(A, μ_n)`, with the conjugation action. -/
 def tateDual {n : ℕ} {F : Type u} [Field F] (_A : GalRep n F) : GalRep n F := sorry
 
-/-- **Layer 5, `kummerClass`**: the image of `a` in `H¹(G_F, μ_n)`. -/
+/-! ### Layer 4 and Layer 5: the two transports that carry the supplier's Kummer theory here
+
+`ProfiniteCohomology.kummerMapCanonical` and `ProfiniteCohomology.kummerIso` are stated over
+`ProfiniteCohomology.AbsoluteGaloisGroup F`, which is `SeparableClosure F ≃ₐ[F] SeparableClosure F`,
+with coefficients the `ℤ`-linear `ProfiniteCohomology.KummerCoeff F n`. The pinned conventions of
+this roadmap use `Field.absoluteGaloisGroup F` and the `ZMod n`-linear `muNRep n F`. Neither pair
+is the same Lean object, so the consumption goes through two named transports, and both are
+milestones here. -/
+
+/-- **Layer 4, the Galois-group transport.** `Field.absoluteGaloisGroup F` is the automorphisms of
+the algebraic closure and `ProfiniteCohomology.AbsoluteGaloisGroup F` is the automorphisms of the
+separable closure; restriction is an isomorphism of topological groups. ⚠ For an imperfect field of
+equal characteristic the fixed field of the first acting on the algebraic closure is the purely
+inseparable closure, so the comparison is a theorem and not a definitional identity. -/
+noncomputable def absoluteGaloisGroupComparison (F : Type u) [Field F] :
+    Field.absoluteGaloisGroup F ≃ₜ* ProfiniteCohomology.AbsoluteGaloisGroup F :=
+  sorry
+
+/-- **Layer 5, the coefficient dictionary.** `ProfiniteCohomology.KummerCoeff F n` is `μ_n(Fˢ)`
+written additively as a discrete `ℤ`-module; `muNRep n F` is the same group as a topological
+`ZMod n`-module. The dictionary is the additive equivalence between them, and the two lemmas
+below are what make it usable: without continuity and equivariance it would not feed
+`ProfiniteCohomology.kummerIsoTransport`. -/
+noncomputable def muNRepCoeffDictionary (n : ℕ) (F : Type u) [Field F] :
+    ProfiniteCohomology.KummerCoeff F n ≃+ (muNRep n F).V :=
+  sorry
+
+/-- **Layer 5.** The coefficient dictionary is continuous. Both sides are discrete, so this is the
+statement that the underlying map is one of discrete spaces and not an accident of the carrier. -/
+theorem muNRepCoeffDictionary_continuous (n : ℕ) (F : Type u) [Field F] :
+    Continuous (muNRepCoeffDictionary n F) :=
+  sorry
+
+/-- **Layer 5.** The coefficient dictionary is equivariant, along the Galois-group transport. This
+is the hypothesis that a plain group equivalence lacks, and it is what
+`ProfiniteCohomology.kummerIsoTransport` consumes. -/
+theorem muNRepCoeffDictionary_equivariant (n : ℕ) (F : Type u) [Field F]
+    (g : Field.absoluteGaloisGroup F) (x : ProfiniteCohomology.KummerCoeff F n) :
+    muNRepCoeffDictionary n F (absoluteGaloisGroupComparison F g • x)
+      = ((muNRep n F).ρ g).hom (muNRepCoeffDictionary n F x) :=
+  sorry
+
+/-- **Layer 5, `kummerClass`**: the image of `a` in `H¹(G_F, μ_n)`. It is
+`ProfiniteCohomology.kummerMapCanonical` read through `absoluteGaloisGroupComparison` and
+`muNRepCoeffDictionary`, and not a second Kummer cocycle. -/
 def kummerClass (n : ℕ) (F : Type u) [Field F] (_a : Fˣ) : H n F 1 (muNRep n F) :=
   sorry
 
 /-- **Layer 5, `kummerEquiv`, regime 1.** For `n` invertible in `𝒪[K]`, the Kummer map is an
-isomorphism of **groups**, after the multiplicative quotient is written additively. A bare
-equivalence of types would not support the cup-product square below. -/
-theorem kummerEquiv_unit (n : ℕ) (_hn : n ≠ 0) (_hn' : IsUnit (n : ↥𝒪[K])) :
-    Nonempty (Additive (Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range) ≃+
-      H n K 1 (muNRep n K)) :=
+isomorphism of **groups**, after the multiplicative quotient is written additively. This is
+`ProfiniteCohomology.kummerIso` transported along the two milestones above; the hypothesis
+`IsUnit (n : ↥𝒪[K])` implies the supplier's `IsUnit (n : K)`, which is the hypothesis its
+statement carries. A bare equivalence of types would not support the cup-product square below,
+and a `Nonempty` would not be the isomorphism the API promises. -/
+noncomputable def kummerEquiv_unit (n : ℕ) (_hn : n ≠ 0) (_hn' : IsUnit (n : ↥𝒪[K])) :
+    Additive (Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range) ≃+ H n K 1 (muNRep n K) :=
   sorry
 
 /-- **Layer 5, `kummerEquiv`, regime 2.** For `K/ℚ_p` finite the same isomorphism holds for
-every `n ≠ 0`, including `n = p`. It does not follow from the regime-1 statement. -/
-theorem kummerEquiv_mixed (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [Algebra ℚ_[p] F]
-    [Module.Finite ℚ_[p] F] (n : ℕ) (_hn : n ≠ 0) :
-    Nonempty (Additive (Fˣ ⧸ (powMonoidHom n : Fˣ →* Fˣ).range) ≃+
-      H n F 1 (muNRep n F)) :=
+every `n ≠ 0`, including `n = p`, where `n` is still invertible in the **field**, so the supplier's
+`ProfiniteCohomology.kummerIso` applies and the arithmetic content is the finiteness of the power
+classes. It does not follow from the regime-1 statement. -/
+noncomputable def kummerEquiv_mixed (p : ℕ) [Fact p.Prime] (F : Type u) [Field F]
+    [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F] (n : ℕ) (_hn : n ≠ 0) :
+    Additive (Fˣ ⧸ (powMonoidHom n : Fˣ →* Fˣ).range) ≃+ H n F 1 (muNRep n F) :=
   sorry
 
 /-- **Layer 8A, `h2MuEquivZMod_unit`**, the trace isomorphism away from the residue
@@ -619,46 +686,76 @@ theorem h2FpEquivZMod_of_mu (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [Val
     Nonempty (H p F 2 T ≃+ ZMod p) :=
   sorry
 
-/-- The local symbol at exponent `n`, assembled from three named pieces: a cup product, a
-morphism `μ_n ⊗ μ_n ⟶ μ_n` of coefficient objects, and a trace isomorphism. ⚠ The middle
-argument is where a choice hides. Multiplication of roots of unity is not biadditive, so there
-is no canonical morphism `μ_n ⊗ μ_n ⟶ μ_n` for general `n`; a primitive `n`-th root of unity
-produces one, and at `n = 2` the morphism is canonical because `μ_2 ≅ ZMod 2` needs no
-choice. -/
-noncomputable def localSymbol {n : ℕ} {F : Type u} [Field F] (ops : CohomologyOps n F)
-    (sq : ops.tensorObj (muNRep n F) (muNRep n F) ⟶ muNRep n F)
+/-- **Layer 5, `kummerCupPairing`**, the coefficient pairing `μ_n × μ_n → μ_n` attached to a
+chosen primitive `n`-th root of unity. ⚠ This is where a choice hides. Multiplication of roots of
+unity is not biadditive, so there is no canonical pairing of `μ_n` with itself into `μ_n` for
+general `n`; a primitive `n`-th root of unity produces one through `μ_n ≅ ZMod n`, and `ζ` is
+therefore an argument of the object and of every arithmetic statement about it. At `n = 2` the
+pairing is canonical, because `μ_2 ≅ ZMod 2` needs no choice.
+
+A `ProfiniteCohomology.TopPairing` carries `bil`, `cont`, and `equivariant` in its fields, so
+constructing this term is exactly the milestone: bilinearity over `ZMod n`, joint continuity, and
+`G_F`-equivariance of `μ_n × μ_n → μ_n`. -/
+noncomputable def kummerCupPairing {n : ℕ} {F : Type u} [Field F] (ζ : F)
+    (_hζ : IsPrimitiveRoot ζ n) :
+    ProfiniteCohomology.TopPairing (muNRep n F) (muNRep n F) (muNRep n F) :=
+  sorry
+
+/-- **Layer 8, `tateEvaluationPairing`**, the coefficient pairing of local duality: evaluation
+`A' × A → μ_n` on `A' = Hom(A, μ_n)`. Its `equivariant` field is the statement that evaluation
+intertwines the conjugation action on `A'` with the action on `A`, which is what makes the cup
+product below land in `H²(G_F, μ_n)`; the supplier's `evalPairing`, `evalPairing_equivariant`, and
+`homAction` are the general-shape ingredients this specializes. -/
+noncomputable def tateEvaluationPairing {n : ℕ} {F : Type u} [Field F] (A : GalRep n F) :
+    ProfiniteCohomology.TopPairing (tateDual A) A (muNRep n F) :=
+  sorry
+
+/-- The local symbol at exponent `n`: cup product with a coefficient pairing of `μ_n` with itself
+into `μ_n`, followed by a trace isomorphism. The product is `ProfiniteCohomology.cup`, and the
+degree of its target is `1 + 1`, carried to `2` by `ProfiniteCohomology.degreeCast`.
+
+This helper stays polymorphic in the pairing because its own content is formal: every statement
+below that is *arithmetic* is stated at the named `kummerCupPairing ζ hζ`. -/
+noncomputable def localSymbol {n : ℕ} {F : Type u} [Field F]
+    (P : ProfiniteCohomology.TopPairing (muNRep n F) (muNRep n F) (muNRep n F))
     (tr : H n F 2 (muNRep n F) ≃+ ZMod n) (x y : H n F 1 (muNRep n F)) : ZMod n :=
-  tr (ops.coeff sq 2 (ops.cup _ _ 1 1 2 rfl x y))
+  tr (ProfiniteCohomology.degreeCast (by norm_num) (muNRep n F)
+    (ProfiniteCohomology.cup P 1 1 x y))
 
 /-- **Layer 5, `cup_kummerEquiv`, part one: bilinearity.** The symbol is additive in each
-variable, which says that it is multiplicative in each argument of `Kˣ`. -/
-theorem localSymbol_kummerClass_mul (ops : CohomologyOps n K)
-    (sq : ops.tensorObj (muNRep n K) (muNRep n K) ⟶ muNRep n K)
+variable, which says that it is multiplicative in each argument of `Kˣ`. This one is formal, and
+holds for every coefficient pairing, because it is `ProfiniteCohomology.cup_add_left` and
+`ProfiniteCohomology.cup_add_right` read through the trace; so the pairing stays universally
+quantified here and only here. -/
+theorem localSymbol_kummerClass_mul
+    (P : ProfiniteCohomology.TopPairing (muNRep n K) (muNRep n K) (muNRep n K))
     (tr : H n K 2 (muNRep n K) ≃+ ZMod n)
     (_hn : n ≠ 0) (_hn' : IsUnit (n : ↥𝒪[K])) (a a' b : Kˣ) :
-    localSymbol ops sq tr (kummerClass n K (a * a')) (kummerClass n K b)
-      = localSymbol ops sq tr (kummerClass n K a) (kummerClass n K b)
-        + localSymbol ops sq tr (kummerClass n K a') (kummerClass n K b) :=
+    localSymbol P tr (kummerClass n K (a * a')) (kummerClass n K b)
+      = localSymbol P tr (kummerClass n K a) (kummerClass n K b)
+        + localSymbol P tr (kummerClass n K a') (kummerClass n K b) :=
   sorry
 
 /-- **Layer 5, `cup_kummerEquiv`, part two: the Steinberg relation.** The symbol vanishes on
-`(a, 1 − a)`. With bilinearity this fixes the normalization, and it is the relation that the
-norm criterion of Layer 8C specializes at `n = 2`. -/
-theorem localSymbol_kummerClass_steinberg (ops : CohomologyOps n K)
-    (sq : ops.tensorObj (muNRep n K) (muNRep n K) ⟶ muNRep n K)
+`(a, 1 − a)`. With bilinearity this fixes the normalization. ⚠ This is arithmetic and not formal,
+so it is stated at the named pairing `kummerCupPairing ζ hζ`: the zero pairing satisfies the
+bilinearity above and would satisfy any universally quantified form of this statement without
+saying anything about roots of unity. -/
+theorem localSymbol_kummerClass_steinberg (ζ : K) (hζ : IsPrimitiveRoot ζ n)
     (tr : H n K 2 (muNRep n K) ≃+ ZMod n)
     (_hn : n ≠ 0) (_hn' : IsUnit (n : ↥𝒪[K])) (a b : Kˣ) (_hab : (a : K) + (b : K) = 1) :
-    localSymbol ops sq tr (kummerClass n K a) (kummerClass n K b) = 0 :=
+    localSymbol (kummerCupPairing ζ hζ) tr (kummerClass n K a) (kummerClass n K b) = 0 :=
   sorry
 
-/-- **Layer 8, the duality pairing**, as the actual map `(x, y) ↦ inv(x ⌣ y)`. The coefficient
-map is **evaluation** `A' ⊗ A ⟶ μ_n`, which is equivariant and biadditive; it is an argument,
-so no statement below asserts a coefficient identification that does not exist. -/
-noncomputable def tateDualityPairing {n : ℕ} {F : Type u} [Field F] (ops : CohomologyOps n F)
-    (A : GalRep n F) (ev : ops.tensorObj (tateDual A) A ⟶ muNRep n F)
+/-- **Layer 8, the duality pairing**, as the actual map `(x, y) ↦ inv(x ⌣ y)`, at the named
+evaluation pairing. ⚠ There is no pairing argument: a family of coefficient maps of the right type
+includes the zero map, and perfectness of the zero pairing is false, so the evaluation pairing is
+named inside the definition. -/
+noncomputable def tateDualityPairing {n : ℕ} {F : Type u} [Field F] (A : GalRep n F)
     (tr : H n F 2 (muNRep n F) ≃+ ZMod n) (i j : ℕ) (hij : i + j = 2)
     (x : H n F i (tateDual A)) (y : H n F j A) : ZMod n :=
-  tr (ops.coeff ev 2 (ops.cup _ _ i j 2 hij x y))
+  tr (ProfiniteCohomology.degreeCast hij (muNRep n F)
+    (ProfiniteCohomology.cup (tateEvaluationPairing A) i j x y))
 
 /-- **Layer 8, finiteness.** Every cohomology group in degrees `0`, `1`, `2` of a finite
 discrete module is finite. The Euler-characteristic statement below depends on this, because
@@ -675,14 +772,13 @@ other factor is represented. The coefficients are killed by `n`, because they ar
 `ZMod n`-module, and they are finite and discrete. -/
 theorem tateDualityPairing_perfect_mixed (p : ℕ) [Fact p.Prime] (F : Type u) [Field F]
     [ValuativeRel F] [TopologicalSpace F] [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F]
-    [Module.Finite ℚ_[p] F] (n : ℕ) (_hn : n ≠ 0) (ops : CohomologyOps n F) (A : GalRep n F)
-    (ev : ops.tensorObj (tateDual A) A ⟶ muNRep n F)
+    [Module.Finite ℚ_[p] F] (n : ℕ) (_hn : n ≠ 0) (A : GalRep n F)
     (tr : H n F 2 (muNRep n F) ≃+ ZMod n) (_hA : Finite A.V) (_hdisc : DiscreteTopology A.V)
     (i j : ℕ) (hij : i + j = 2) :
     (∀ x : H n F i (tateDual A),
-        (∀ y : H n F j A, tateDualityPairing ops A ev tr i j hij x y = 0) → x = 0) ∧
+        (∀ y : H n F j A, tateDualityPairing A tr i j hij x y = 0) → x = 0) ∧
       (∀ φ : H n F j A →+ ZMod n, ∃ x : H n F i (tateDual A),
-        ∀ y : H n F j A, tateDualityPairing ops A ev tr i j hij x y = φ y) :=
+        ∀ y : H n F j A, tateDualityPairing A tr i j hij x y = φ y) :=
   sorry
 
 /-- **Layer 8B, `eulerCharacteristic_mixed`.** With finiteness available,
@@ -713,6 +809,47 @@ arbitrary field. Continuous, with dense image, and with kernel the intersection 
 groups. ⚠ It is not surjective, so it supports no `Nat.card` statement about its target. -/
 noncomputable def artinMap : Kˣ →* Field.absoluteGaloisGroupAbelianization K := sorry
 
+/-- **Layer 7, the geometric normalization.** One definition, and not a second convention: it is
+`Art_K` precomposed with inversion, so the two differ by exactly the translation lemma below. -/
+noncomputable def geometricArtinMap : Kˣ →* Field.absoluteGaloisGroupAbelianization K where
+  toFun x := artinMap K x⁻¹
+  map_one' := by simp
+  map_mul' x y := by simp [mul_comm]
+
+/-- **Layer 7, `Ẑ`**, the target of the unramified coordinate: the profinite completion of `ℤ`,
+written multiplicatively. ⚠ It is never `ℤ`. A continuous homomorphism from the compact group
+`G_K^{ab}` to the discrete group `ℤ` is trivial, so the `ℤ`-valued form of the normalization is
+inconsistent and not merely inconvenient. -/
+noncomputable abbrev ZHat : Type :=
+  ProfiniteGrp.profiniteCompletion.obj (GrpCat.of (Multiplicative ℤ))
+
+/-- **Layer 7, `ι : ℤ → Ẑ`**, the completion map, in the additive-integer coordinate that the
+normalization statements read. -/
+noncomputable def zhatOfInt (m : ℤ) : ZHat :=
+  ProfiniteGrp.ProfiniteCompletion.etaFn (GrpCat.of (Multiplicative ℤ)) (Multiplicative.ofAdd m)
+
+/-- **Layer 7, `unramifiedCoordinate`**, the map `ν_K : G_K^{ab} →* Ẑ` normalized by
+`ν_K(Frob) = 1` at the **arithmetic** Frobenius. Its defining property is the first normalization
+theorem below. -/
+noncomputable def unramifiedCoordinate :
+    Field.absoluteGaloisGroupAbelianization K →* ZHat :=
+  sorry
+
+/-- **Layer 7, the unramified normalization**: `ν_K ∘ Art_K = ι ∘ v_K`. This is the equation that
+fixes both `artinMap` and `unramifiedCoordinate`, and it is what makes uniformizers go to
+arithmetic Frobenius. -/
+theorem unramifiedCoordinate_artinMap (x : Kˣ) :
+    unramifiedCoordinate K (artinMap K x)
+      = ProfiniteGrp.ProfiniteCompletion.etaFn (GrpCat.of (Multiplicative ℤ))
+          (normalizedValuation K x) :=
+  sorry
+
+/-- **Layer 7, the geometric translation lemma**: `ν^{geo} = −ν`, written multiplicatively. -/
+theorem unramifiedCoordinate_geometricArtinMap (x : Kˣ) :
+    unramifiedCoordinate K (geometricArtinMap K x)
+      = (unramifiedCoordinate K (artinMap K x))⁻¹ :=
+  sorry
+
 /-- **Layer 7, `cyclotomicCharacter_artinMap`**, the general form, with the field norm. For
 `K/ℚ_p` finite and `u` a unit, `χ_cyc(Art_K(u)) = N_{K/ℚ_p}(u)⁻¹`. ⚠ Without the norm the
 equation is ill-typed for `K ≠ ℚ_p`, so the `ℚ_p` corollary does not replace it. -/
@@ -726,33 +863,69 @@ theorem cyclotomicCharacter_artinMap (p : ℕ) [Fact p.Prime] (F : Type u) [Fiel
       = (Units.map (Algebra.norm ℚ_[p] : F →* ℚ_[p]) u)⁻¹ :=
   sorry
 
-/-- **Layer 8C, `tateDualityPairing_eq_normCriterion`.** At `n = 2` the coefficient morphism
-`μ_2 ⊗ μ_2 ⟶ μ_2` is canonical, so the symbol needs no chosen root of unity. Read through the
-Kummer identification on each factor, it vanishes exactly on the pairs `(a, b)` with `a` a norm
-from `K(√b)`. The right-hand side is a statement about `F` alone, so this theorem needs nothing
-from another development. -/
-theorem tateDualityPairing_eq_normCriterion (F : Type u) [Field F] [ValuativeRel F]
-    [TopologicalSpace F] [IsNonarchimedeanLocalField F] (_h2 : IsUnit (2 : ↥𝒪[F]))
-    (ops : CohomologyOps 2 F) (sq : ops.tensorObj (muNRep 2 F) (muNRep 2 F) ⟶ muNRep 2 F)
-    (tr : H 2 F 2 (muNRep 2 F) ≃+ ZMod 2) (a b : Fˣ)
-    (M : IntermediateField F (AlgebraicClosure F))
-    (_hM : M = IntermediateField.adjoin F
-      {x : AlgebraicClosure F | x ^ 2 = algebraMap F (AlgebraicClosure F) (b : F)}) :
-    localSymbol ops sq tr (kummerClass 2 F a) (kummerClass 2 F b) = 0 ↔
-      a ∈ (Units.map (Algebra.norm F : M →* F)).range :=
+/-- **Layer 7, `cyclotomicCharacter_artinMap_padic`**, the corollary at `K = ℚ_p`, where the field
+norm is the identity and both sides live in `ℤ_pˣ`. ⚠ A character with values in `𝒪[K]ˣ` and value
+`u⁻¹` for a general `K` would be a Lubin–Tate character, which this roadmap does not build. -/
+theorem cyclotomicCharacter_artinMap_padic (p : ℕ) [Fact p.Prime]
+    [IsNonarchimedeanLocalField ℚ_[p]] (u : ℤ_[p]ˣ) (σ : Field.absoluteGaloisGroup ℚ_[p])
+    (_hσ : (QuotientGroup.mk σ : Field.absoluteGaloisGroupAbelianization ℚ_[p])
+      = artinMap ℚ_[p] (Units.map (algebraMap ℤ_[p] ℚ_[p]).toMonoidHom u)) :
+    cyclotomicCharacter (AlgebraicClosure ℚ_[p]) p σ.toRingEquiv = u⁻¹ :=
   sorry
 
-/-- **Layer 8C, `hilbertSymbol_eq_tateDuality_pairing`**, the `{±1}`-valued form. It is the
-theorem above composed with the dictionary between `ZMod 2` and `{±1} ⊆ ℤˣ`. -/
-noncomputable def hilbertSymbol (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] (_a _b : Fˣ) : ℤˣ := sorry
+/-! ### Layer 7 worked examples: the `ℚ_2` normalizations
 
-theorem hilbertSymbol_eq_tateDuality_pairing (F : Type u) [Field F] [ValuativeRel F]
-    [TopologicalSpace F] [IsNonarchimedeanLocalField F] (_h2 : IsUnit (2 : ↥𝒪[F]))
-    (ops : CohomologyOps 2 F) (sq : ops.tensorObj (muNRep 2 F) (muNRep 2 F) ⟶ muNRep 2 F)
-    (tr : H 2 F 2 (muNRep 2 F) ≃+ ZMod 2) (a b : Fˣ) :
-    hilbertSymbol F a b = 1 ↔
-      localSymbol ops sq tr (kummerClass 2 F a) (kummerClass 2 F b) = 0 :=
+Six consequences of the two normalization theorems above, at `K = ℚ_2`, where the field norm
+`N_{K/ℚ_p}` is the identity. They are the regression tests for the sign of the unramified
+coordinate and for the direction of the cyclotomic orientation, and each is stated against the
+named `artinMap`, `unramifiedCoordinate`, and `geometricArtinMap`. The
+`IsNonarchimedeanLocalField ℚ_[2]` instance they carry is the first milestone of Layer 0; it is a
+hypothesis here only because the pin does not yet supply it. -/
+
+/-- **Layer 7 acceptance, the arithmetic unramified coordinate of `Art(2)` is `1`.** The
+uniformizer goes to arithmetic Frobenius, whose coordinate is `1`. -/
+example [IsNonarchimedeanLocalField ℚ_[2]] :
+    unramifiedCoordinate ℚ_[2] (artinMap ℚ_[2] (Units.mk0 (2 : ℚ_[2]) (by norm_num)))
+      = zhatOfInt 1 :=
+  sorry
+
+/-- **Layer 7 acceptance, the geometric coordinate of `Art(2)` is `−1`.** This is the same
+computation in the other normalization, and it is the one that catches a dropped inverse. -/
+example [IsNonarchimedeanLocalField ℚ_[2]] :
+    unramifiedCoordinate ℚ_[2] (geometricArtinMap ℚ_[2] (Units.mk0 (2 : ℚ_[2]) (by norm_num)))
+      = zhatOfInt (-1) :=
+  sorry
+
+/-- **Layer 7 acceptance, a unit has unramified coordinate `0`.** Equivalently `Art(u)` lies in
+the inertia subgroup for every `u ∈ ℤ_2ˣ`. -/
+example [IsNonarchimedeanLocalField ℚ_[2]] (u : ℚ_[2]ˣ) (_hu : valuation ℚ_[2] (u : ℚ_[2]) = 1) :
+    unramifiedCoordinate ℚ_[2] (artinMap ℚ_[2] u) = 1 :=
+  sorry
+
+/-- **Layer 7 acceptance, `χ_cyc(Art(−1)) = −1`.** -/
+example [IsNonarchimedeanLocalField ℚ_[2]] (σ : Field.absoluteGaloisGroup ℚ_[2])
+    (_hσ : (QuotientGroup.mk σ : Field.absoluteGaloisGroupAbelianization ℚ_[2])
+      = artinMap ℚ_[2] (Units.map (algebraMap ℤ_[2] ℚ_[2]).toMonoidHom (-1))) :
+    cyclotomicCharacter (AlgebraicClosure ℚ_[2]) 2 σ.toRingEquiv = -1 :=
+  sorry
+
+/-- **Layer 7 acceptance, `χ_cyc(Art(−3)) = (−3)⁻¹`.** The class of `−3` is the class of `5` in
+`ℚ_2ˣ/(ℚ_2ˣ)²`, and this is the entry of the table that fixes the direction of the orientation:
+the value is the **inverse**, and not the unit itself. -/
+example [IsNonarchimedeanLocalField ℚ_[2]] (v : ℤ_[2]ˣ) (_hv : (v : ℤ_[2]) = -3)
+    (σ : Field.absoluteGaloisGroup ℚ_[2])
+    (_hσ : (QuotientGroup.mk σ : Field.absoluteGaloisGroupAbelianization ℚ_[2])
+      = artinMap ℚ_[2] (Units.map (algebraMap ℤ_[2] ℚ_[2]).toMonoidHom v)) :
+    cyclotomicCharacter (AlgebraicClosure ℚ_[2]) 2 σ.toRingEquiv = v⁻¹ :=
+  sorry
+
+/-- **Layer 7 acceptance, `χ_cyc(Art(2)) = 1`.** The uniformizer acts trivially on `μ_{2^∞}`. ⚠ It
+is not an instance of `cyclotomicCharacter_artinMap`, whose hypothesis is that the argument is a
+unit; it is the complementary half of the normalization. -/
+example [IsNonarchimedeanLocalField ℚ_[2]] (σ : Field.absoluteGaloisGroup ℚ_[2])
+    (_hσ : (QuotientGroup.mk σ : Field.absoluteGaloisGroupAbelianization ℚ_[2])
+      = artinMap ℚ_[2] (Units.mk0 (2 : ℚ_[2]) (by norm_num))) :
+    cyclotomicCharacter (AlgebraicClosure ℚ_[2]) 2 σ.toRingEquiv = 1 :=
   sorry
 
 /-! ### Layer 6: the Tate cup product and Tate–Nakayama
@@ -774,6 +947,21 @@ noncomputable def tateH {H : Type} [Group H] [Fintype H] (M : Rep ℤ H) (r : �
 
 noncomputable instance {H : Type} [Group H] [Fintype H] (M : Rep ℤ H) (r : ℤ) :
     AddCommGroup (tateH M r) :=
+  sorry
+
+/-- **Layer 5, `tateMap`**, coefficient functoriality of the Tate carrier in every integer degree.
+Every law below that would otherwise say "there is some additive equivalence" says instead that
+*this* map, applied to a named morphism of coefficients, does the job. -/
+noncomputable def tateMap {A B : Rep ℤ G} (f : A ⟶ B) (r : ℤ) : tateH A r →+ tateH B r :=
+  sorry
+
+/-- **Layer 5.** `tateMap` is the identity on the identity. -/
+theorem tateMap_id (A : Rep ℤ G) (r : ℤ) : tateMap (𝟙 A) r = AddMonoidHom.id _ :=
+  sorry
+
+/-- **Layer 5.** `tateMap` is functorial. -/
+theorem tateMap_comp {A B C : Rep ℤ G} (f : A ⟶ B) (g : B ⟶ C) (r : ℤ) :
+    tateMap (f ≫ g) r = (tateMap g r).comp (tateMap f r) :=
   sorry
 
 /-- **Layer 5, `FiniteClassFormation`.** The interface, defined before any instance of it, so
@@ -819,6 +1007,45 @@ structure FiniteClassFormation (M : Rep ℤ G) where
     (x : tateH (Rep.res H.subtype M) 2),
     cor H H' h (res H H' h x) = ((H'.subgroupOf H).index : ℤ) • x
 
+/-- **Layer 5, restriction of a class formation to a subgroup.** The five fields of `H ≤ G`
+restrict to the five fields of `H' ≤ H`, so a class formation on `G` is one on every subgroup. -/
+noncomputable def FiniteClassFormation.restrict {M : Rep ℤ G} (_fcf : FiniteClassFormation M)
+    (H : Subgroup G) [Fintype H] : FiniteClassFormation (Rep.res H.subtype M) :=
+  sorry
+
+/-- The top subgroup of a finite group is finite. Named, because `fcf.cls ⊤` and the transport
+below both need it. -/
+noncomputable instance instFintypeTopSubgroup : Fintype (⊤ : Subgroup G) := Fintype.ofFinite _
+
+/-- **Layer 5, the top-subgroup transport.** `Rep.res (⊤ : Subgroup G).subtype M` and `M` are
+representations of two different Lean groups, so their Tate cohomologies are related by a named
+equivalence and not by an equality. -/
+noncomputable def tateHTopEquiv (M : Rep ℤ G) (r : ℤ) :
+    tateH (Rep.res (⊤ : Subgroup G).subtype M) r ≃+ tateH M r :=
+  sorry
+
+/-- **Layer 5, the transport in a tower.** For `H' ≤ H ≤ G`, restricting twice and restricting
+once along the image agree, up to this named equivalence. -/
+noncomputable def tateHTowerEquiv (M : Rep ℤ G) (H : Subgroup G) [Fintype H] (H' : Subgroup H)
+    [Fintype H'] [Fintype (H'.map H.subtype)] (r : ℤ) :
+    tateH (Rep.res H'.subtype (Rep.res H.subtype M)) r
+      ≃+ tateH (Rep.res (H'.map H.subtype).subtype M) r :=
+  sorry
+
+/-- **Layer 5, the distinguished class of the whole group,** transported to `M` itself. This is
+the class that the top-group form of Tate–Nakayama and finite-level reciprocity use, and it is
+`fcf.cls ⊤` and nothing else. -/
+noncomputable def FiniteClassFormation.topClass {M : Rep ℤ G} (fcf : FiniteClassFormation M) :
+    tateH M 2 :=
+  tateHTopEquiv M 2 (fcf.cls ⊤)
+
+/-- **Layer 5, tower compatibility of the distinguished classes.** The class that the restricted
+formation assigns to `H' ≤ H` is the class that `fcf` assigns to the image of `H'` in `G`. -/
+theorem FiniteClassFormation.restrict_cls {M : Rep ℤ G} (fcf : FiniteClassFormation M)
+    (H : Subgroup G) [Fintype H] (H' : Subgroup H) [Fintype H'] [Fintype (H'.map H.subtype)] :
+    tateHTowerEquiv M H H' 2 ((fcf.restrict H).cls H') = fcf.cls (H'.map H.subtype) :=
+  sorry
+
 /-- **Layer 6**, the Tate cup product in all integer bidegrees. The target degree is an argument
 together with its defining equation, so that no statement below has to compare `(r + s) + t` with
 `r + (s + t)`, which are equal in `ℤ` by a theorem and not by `rfl`.
@@ -829,85 +1056,280 @@ noncomputable def tateCup (A B : Rep ℤ G) (r s t : ℤ) (_h : r + s = t) :
     tateH A r →+ tateH B s →+ tateH (A ⊗ B) t :=
   sorry
 
-/-- Associativity, through the associator of the coefficients. -/
+/-- **Layer 6, associativity**, through `tateMap` of the canonical associator of `Rep ℤ G`. ⚠ "There
+is an additive equivalence carrying one side to the other" is too weak to be the cup-product law:
+it does not say which equivalence, and the associator is the only one that makes the statement a
+theorem about coefficients. -/
 theorem tateCup_assoc (A B C : Rep ℤ G) (r s t w : ℤ) (h : r + s + t = w)
     (x : tateH A r) (y : tateH B s) (z : tateH C t) :
-    ∃ e : tateH ((A ⊗ B) ⊗ C) w ≃+ tateH (A ⊗ (B ⊗ C)) w,
-      e (tateCup (A ⊗ B) C (r + s) t w h (tateCup A B r s (r + s) rfl x y) z)
-        = tateCup A (B ⊗ C) r (s + t) w (by omega) x (tateCup B C s t (s + t) rfl y z) :=
+    tateMap (α_ A B C).hom w
+        (tateCup (A ⊗ B) C (r + s) t w h (tateCup A B r s (r + s) rfl x y) z)
+      = tateCup A (B ⊗ C) r (s + t) w (by omega) x (tateCup B C s t (s + t) rfl y z) :=
   sorry
 
-/-- Graded commutativity, through the braiding of the coefficients. -/
+/-- **Layer 6, graded commutativity**, through `tateMap` of the canonical braiding of `Rep ℤ G`,
+with the Koszul sign `(−1)^{rs}`. -/
 theorem tateCup_comm (A B : Rep ℤ G) (r s t : ℤ) (h : r + s = t) (h' : s + r = t)
     (x : tateH A r) (y : tateH B s) :
-    ∃ e : tateH (B ⊗ A) t ≃+ tateH (A ⊗ B) t,
-      e (tateCup B A s r t h' y x)
-        = ((-1 : ℤ) ^ (r * s).natAbs) • tateCup A B r s t h x y :=
+    tateMap (β_ B A).hom t (tateCup B A s r t h' y x)
+      = ((-1 : ℤ) ^ (r * s).natAbs) • tateCup A B r s t h x y :=
   sorry
 
-/-- Agreement with an ordinary cup product in non-negative degrees, stated against a comparison
-map from group cohomology to Tate cohomology. Both the ordinary cup product and the comparison
-are arguments, because this roadmap owns neither. -/
+/-- **Layer 6, the ordinary cup product of a finite group**, on Mathlib's `groupCohomology`.
+Mathlib has none, and the Profinite Cohomology roadmap's `cup` is on the continuous carrier, so
+this is a milestone here; `ordinaryCup_explicitCup11` below is what stops it from being a second,
+unrelated product. -/
+noncomputable def ordinaryCup (A B : Rep ℤ G) (m k : ℕ) :
+    groupCohomology A m →+ groupCohomology B k →+ groupCohomology (A ⊗ B) (m + k) :=
+  sorry
+
+/-- **Layer 6, `ordinaryToTate`**, the comparison from ordinary to Tate cohomology in
+non-negative degrees. It is a named map and never a parameter: with an arbitrary map of this type,
+`0` would satisfy every comparison statement below. -/
+noncomputable def ordinaryToTate (A : Rep ℤ G) (n : ℕ) : groupCohomology A n →+ tateH A (n : ℤ) :=
+  sorry
+
+/-- **Layer 6.** `ordinaryToTate` is natural in the coefficients, against `tateMap` and Mathlib's
+`groupCohomology.map` at the identity of the group. -/
+theorem tateMap_ordinaryToTate {A B : Rep ℤ G} (f : A ⟶ B) (n : ℕ) (x : groupCohomology A n) :
+    tateMap f (n : ℤ) (ordinaryToTate A n x)
+      = ordinaryToTate B n ((groupCohomology.map (MonoidHom.id G) f n).hom x) :=
+  sorry
+
+/-- **Layer 6, agreement with the ordinary cup product in non-negative degrees.** Both the product
+and the comparison are the named declarations above, so the zero map is not a model of this
+statement. -/
 theorem tateCup_agrees_ordinary (A B : Rep ℤ G) (i j : ℕ)
-    (ordinary : ∀ (X Y : Rep ℤ G) (m k : ℕ),
-      groupCohomology X m →+ groupCohomology Y k →+ groupCohomology (X ⊗ Y) (m + k))
-    (cmp : ∀ (X : Rep ℤ G) (m : ℕ), groupCohomology X m →+ tateH X (m : ℤ))
     (x : groupCohomology A i) (y : groupCohomology B j) :
-    cmp (A ⊗ B) (i + j) (ordinary A B i j x y)
+    ordinaryToTate (A ⊗ B) (i + j) (ordinaryCup A B i j x y)
       = tateCup A B (i : ℤ) (j : ℤ) ((i + j : ℕ) : ℤ) (by push_cast; ring)
-          (cmp A i x) (cmp B j y) :=
+          (ordinaryToTate A i x) (ordinaryToTate B j y) :=
+  sorry
+
+/-- **Layer 6, restriction on the Tate carrier**, in every integer degree. -/
+noncomputable def tateRes (M : Rep ℤ G) (H : Subgroup G) [Fintype H] (r : ℤ) :
+    tateH M r →+ tateH (Rep.res H.subtype M) r :=
+  sorry
+
+/-- **Layer 6, corestriction on the Tate carrier**, in every integer degree. ⚠ Mathlib has no
+corestriction for group cohomology; the corestriction of `GroupHomology/Functoriality.lean` is a
+map for group *homology*, which is a different map. -/
+noncomputable def tateCor (M : Rep ℤ G) (H : Subgroup G) [Fintype H] (r : ℤ) :
+    tateH (Rep.res H.subtype M) r →+ tateH M r :=
+  sorry
+
+/-- **Layer 6.** `cor ∘ res` is multiplication by the index. -/
+theorem tateCor_comp_tateRes (M : Rep ℤ G) (H : Subgroup G) [Fintype H] (r : ℤ) (x : tateH M r) :
+    tateCor M H r (tateRes M H r x) = (H.index : ℤ) • x :=
+  sorry
+
+/-- **Layer 6, the projection formula** `cor (res x ⌣ y) = x ⌣ cor y`, which is what makes the
+pair `(tateRes, tateCor)` interact with `tateCup` rather than merely coexist with it. -/
+theorem tateCup_projection (A B : Rep ℤ G) (H : Subgroup G) [Fintype H] (r s t : ℤ)
+    (h : r + s = t) (x : tateH A r) (y : tateH (Rep.res H.subtype B) s) :
+    tateCor (A ⊗ B) H t
+        (tateCup (Rep.res H.subtype A) (Rep.res H.subtype B) r s t h (tateRes A H r x) y)
+      = tateCup A B r s t h x (tateCor B H s y) :=
+  sorry
+
+/-- **Layer 6.** `tateMap` commutes with restriction. -/
+theorem tateMap_tateRes {A B : Rep ℤ G} (f : A ⟶ B) (H : Subgroup G) [Fintype H] (r : ℤ)
+    (x : tateH A r) :
+    tateMap ((Rep.resFunctor H.subtype).map f) r (tateRes A H r x)
+      = tateRes B H r (tateMap f r x) :=
+  sorry
+
+/-- **Layer 6, inflation on the Tate carrier**, in degrees `≥ 1`. ⚠ The restriction to positive
+degrees is part of the statement: in degree `0` and below, inflation from the quotient is not
+defined on Tate cohomology, because `Ĥ⁰` is a quotient by the norm and not the invariants. -/
+noncomputable def tateInfl (M : Rep ℤ G) (N : Subgroup G) [N.Normal] [Fintype (G ⧸ N)] (n : ℕ)
+    (_hn : 1 ≤ n) : tateH (M.quotientToInvariants N) (n : ℤ) →+ tateH M (n : ℤ) :=
+  sorry
+
+/-- **Layer 6, inflation on ordinary cohomology.** Mathlib's `groupCohomology.map` at the
+projection `G ⟶ G ⧸ N` and the inclusion of the `N`-invariants, named once so that the
+compatibility below is a statement about two named maps. This one has a body and no `sorry`. -/
+noncomputable def ordinaryInfl (M : Rep ℤ G) (N : Subgroup G) [N.Normal] (n : ℕ) :
+    groupCohomology (M.quotientToInvariants N) n →+ groupCohomology M n :=
+  letI : Module ℤ M.V := M.hV2
+  letI : Module ℤ (M.quotientToInvariants N).V := (M.quotientToInvariants N).hV2
+  (groupCohomology.map (QuotientGroup.mk' N)
+    (Rep.ofHom (M.ρ.quotientToInvariants_lift N)) n).hom.toAddMonoidHom
+
+/-- **Layer 6.** Inflation on the Tate carrier is the inflation of ordinary cohomology, read
+through `ordinaryToTate` on both sides. This is what ties `tateInfl` to Mathlib's finite-level
+inflation instead of leaving it a map of the right type. -/
+theorem tateInfl_ordinaryToTate (M : Rep ℤ G) (N : Subgroup G) [N.Normal] [Fintype (G ⧸ N)]
+    (n : ℕ) (hn : 1 ≤ n) (x : groupCohomology (M.quotientToInvariants N) n) :
+    tateInfl M N n hn (ordinaryToTate (M.quotientToInvariants N) n x)
+      = ordinaryToTate M n (ordinaryInfl M N n x) :=
+  sorry
+
+/-- **Layer 6, the comparison with group homology in negative degrees**, `Ĥ^{−n−1}(G, M) ≅ H_n(G, M)`
+for `n ≥ 1`. This is the half of the Tate carrier that the ordinary theory does not see. -/
+noncomputable def tateHNegEquivGroupHomology (M : Rep ℤ G) (n : ℕ) (_hn : 1 ≤ n) :
+    tateH M (-(n : ℤ) - 1) ≃+ groupHomology M n :=
+  sorry
+
+/-- **Layer 6, the Schur-multiplier instance** of the comparison above: `Ĥ^{−3}(G, ℤ) ≅ H₂(G, ℤ)`.
+Named, because it is the instance downstream statements about the Schur multiplier cite. -/
+noncomputable def tateHNegThreeEquivSchurMultiplier (G : Type) [Group G] [Fintype G] :
+    tateH (Rep.trivial ℤ G ℤ) (-3) ≃+ groupHomology (Rep.trivial ℤ G ℤ) 2 :=
+  sorry
+
+/-- **Layer 6, periodicity for a finite cyclic group**: `Ĥ^r(G, M) ≅ Ĥ^{r+2}(G, M)` for every
+integer `r`. This is what makes the Herbrand quotient below well defined in all degrees. -/
+noncomputable def tatePeriodicity (M : Rep ℤ G) (_hG : IsCyclic G) (r : ℤ) :
+    tateH M r ≃+ tateH M (r + 2) :=
+  sorry
+
+/-- **Layer 6, the Sylow injection.** Restriction to a pro-`p` Sylow subgroup is injective on the
+`p`-primary component, written pointwise so that no `p`-primary-component object is needed: an
+element killed by a power of `p` whose restriction vanishes is zero. The proof is
+`tateCor_comp_tateRes` together with the index of a Sylow subgroup being prime to `p`. -/
+theorem eq_zero_of_tateRes_sylow_eq_zero (p : ℕ) [Fact p.Prime] (M : Rep ℤ G) (P : Sylow p G)
+    [Fintype (P : Subgroup G)] (r : ℤ) (x : tateH M r) (k : ℕ) (_hx : (p ^ k : ℤ) • x = 0)
+    (_hres : tateRes M (P : Subgroup G) r x = 0) :
+    x = 0 :=
+  sorry
+
+/-- **Layer 5, the Herbrand quotient** of a finite cyclic group, `#Ĥ⁰ / #Ĥ¹`. This is a real
+definition and not a placeholder; the milestones are the laws about it. ⚠ `Nat.card` is `0` on an
+infinite type, so every statement about the value carries the finiteness it needs. -/
+noncomputable def herbrandQuotient (M : Rep ℤ G) : ℚ :=
+  (Nat.card (tateH M 0) : ℚ) / (Nat.card (tateH M 1) : ℚ)
+
+/-- **Layer 5, invariance of the Herbrand quotient** under an equivariant map with finite kernel
+and finite cokernel. This is the form the two local computations use, and it is what makes the
+lattice argument work: an open `G`-stable sublattice of `𝒪[L]` differs from `𝒪[L]` by finite
+kernel and cokernel, so the two quotients agree. -/
+theorem herbrandQuotient_of_finite_ker_coker {M N : Rep ℤ G} (_hG : IsCyclic G) (f : M ⟶ N)
+    (_hker : Finite (CategoryTheory.Limits.kernel f).V)
+    (_hcoker : Finite (CategoryTheory.Limits.cokernel f).V) :
+    herbrandQuotient M = herbrandQuotient N :=
   sorry
 
 /-- **Layer 6**, cup product with a distinguished class of `Ĥ²`, in every integer degree,
-**defined from** `tateCup` and never independently of it. This is the map that Tate–Nakayama
-inverts. -/
-noncomputable def tateCupSigma (M : Rep ℤ G) (σ : tateH M 2) (r : ℤ)
-    (iso : ∀ s : ℤ, tateH (M ⊗ Rep.trivial ℤ G ℤ) s ≃+ tateH M s) :
+**defined from** `tateCup` and never independently of it, and with the coefficient identification
+`M ⊗ ℤ ≅ M` supplied by `tateMap` of the canonical right unitor of `Rep ℤ G` rather than by a
+quantified family of equivalences. This is the map that Tate–Nakayama inverts. -/
+noncomputable def tateCupSigma (M : Rep ℤ G) (cls : tateH M 2) (r : ℤ) :
     tateH (Rep.trivial ℤ G ℤ) r →+ tateH M (2 + r) where
-  toFun x := iso (2 + r) (tateCup M (Rep.trivial ℤ G ℤ) 2 r (2 + r) rfl σ x)
+  toFun x := tateMap (ρ_ M).hom (2 + r) (tateCup M (Rep.trivial ℤ G ℤ) 2 r (2 + r) rfl cls x)
   map_zero' := by simp
   map_add' x y := by simp
 
-/-- **Layer 6, Tate–Nakayama.** Cup product with the distinguished class of a finite class
-formation is an isomorphism in every integer degree. ⚠ The statement is about the map above, and
-not about the existence of some isomorphism of the same shape. -/
-theorem tateNakayama (M : Rep ℤ G) (_fcf : FiniteClassFormation M) (σ : tateH M 2)
-    (r : ℤ) (iso : ∀ s : ℤ, tateH (M ⊗ Rep.trivial ℤ G ℤ) s ≃+ tateH M s) :
-    Function.Bijective (tateCupSigma M σ r iso) :=
+/-- **Layer 6, Tate–Nakayama**, subgroup-wise. Cup product with the distinguished class **of the
+class formation** is an isomorphism in every integer degree, for every subgroup. ⚠ There is no
+free class parameter: at `σ = 0` the map is zero, so a statement quantified over an arbitrary
+class of `Ĥ²` is false. The class is `fcf.cls H`, and the class-formation argument is used. -/
+theorem tateNakayama (M : Rep ℤ G) (fcf : FiniteClassFormation M) (H : Subgroup G) [Fintype H]
+    (r : ℤ) :
+    Function.Bijective (tateCupSigma (Rep.res H.subtype M) (fcf.cls H) r) :=
+  sorry
+
+/-- **Layer 6, the top-group corollary**, at the transported distinguished class of the whole
+group. This is the form that finite-level reciprocity cites, at `r = −2`. -/
+theorem tateNakayama_top (M : Rep ℤ G) (fcf : FiniteClassFormation M) (r : ℤ) :
+    Function.Bijective (tateCupSigma M fcf.topClass r) :=
+  sorry
+
+/-- **Layer 6, the trivial `ℚ/ℤ`-module**, the value object of finite-group Tate duality. -/
+noncomputable def tateQZ (G : Type) [Group G] [Fintype G] : Rep ℤ G :=
+  Rep.trivial ℤ G (ℚ ⧸ AddSubgroup.zmultiples (1 : ℚ))
+
+/-- **Layer 6, the Pontryagin dual** `A^D = Hom(A, ℚ/ℤ)` with the contragredient action. -/
+noncomputable def tatePontryaginDual (A : Rep ℤ G) : Rep ℤ G :=
+  sorry
+
+/-- **Layer 6, the evaluation morphism** `A ⊗ A^D ⟶ ℚ/ℤ`, whose equivariance is what makes the
+duality pairing land in `Ĥ^{−1}(G, ℚ/ℤ)`. -/
+noncomputable def tateEvaluation (A : Rep ℤ G) : A ⊗ tatePontryaginDual A ⟶ tateQZ G :=
+  sorry
+
+/-- **Layer 6, the value isomorphism** `Ĥ^{−1}(G, ℚ/ℤ) ≅ ZMod (Nat.card G)`. -/
+noncomputable def tateValueEquiv (G : Type) [Group G] [Fintype G] :
+    tateH (tateQZ G) (-1) ≃+ ZMod (Nat.card G) :=
   sorry
 
 /-- **Layer 6, duality for Tate cohomology of a finite group.** Cup product against the dual
 `A^D = Hom(A, ℚ/ℤ)` is a perfect pairing of finite groups, in every integer degree with
-`r + s = −1`. Here `QZ` is the trivial module `ℚ/ℤ`, `_ev` is the evaluation `A ⊗ A^D ⟶ ℚ/ℤ`,
-`evStar` is the map it induces on `Ĥ^{−1}`, and `val` is the identification
-`Ĥ^{−1}(G, ℚ/ℤ) ≅ ZMod (Nat.card G)`. Perfectness is written without bundling: no left kernel,
-and every additive functional represented.
+`r + s = −1`. Perfectness is written without bundling: no left kernel, and every additive
+functional represented.
+
+⚠ The statement quantifies only over `A` and the two degrees. The dual, the evaluation morphism,
+and the value isomorphism are the named canonical objects above; with an arbitrary evaluation the
+zero map would be a countermodel.
 
 This theorem uses no class formation, and its home is the class-formation directory of Layer 6.
 ⚠ Layer 8 does not obtain local duality from it by a formal step: the local dual is
 `Hom(M, μ_n)`, and the two agree only when the field contains `μ_n`. -/
-theorem tateDuality_finiteGroup (A AD QZ : Rep ℤ G) (r s : ℤ) (h : r + s = -1)
-    (_ev : A ⊗ AD ⟶ QZ)
-    (evStar : tateH (A ⊗ AD) (-1) →+ tateH QZ (-1))
-    (val : tateH QZ (-1) ≃+ ZMod (Nat.card G))
-    (_hfinA : Finite (tateH A r)) (_hfinAD : Finite (tateH AD s)) :
+theorem tateDuality_finiteGroup (A : Rep ℤ G) (r s : ℤ) (h : r + s = -1)
+    (_hfinA : Finite (tateH A r)) (_hfinAD : Finite (tateH (tatePontryaginDual A) s)) :
     (∀ x : tateH A r,
-        (∀ y, val (evStar (tateCup A AD r s (-1) h x y)) = 0) → x = 0) ∧
-      (∀ φ : tateH AD s →+ ZMod (Nat.card G), ∃ x : tateH A r,
-        ∀ y, val (evStar (tateCup A AD r s (-1) h x y)) = φ y) :=
+        (∀ y : tateH (tatePontryaginDual A) s,
+          tateValueEquiv G (tateMap (tateEvaluation A) (-1)
+            (tateCup A (tatePontryaginDual A) r s (-1) h x y)) = 0) → x = 0) ∧
+      (∀ φ : tateH (tatePontryaginDual A) s →+ ZMod (Nat.card G), ∃ x : tateH A r,
+        ∀ y : tateH (tatePontryaginDual A) s,
+          tateValueEquiv G (tateMap (tateEvaluation A) (-1)
+            (tateCup A (tatePontryaginDual A) r s (-1) h x y)) = φ y) :=
   sorry
 
-/-- **Layer 9, the exact rank of the full absolute Galois group:** `d(G_F) = [F : ℚ_p] + 2`,
-stated as leastness of `[F : ℚ_p] + 2` among the cardinalities of topologically generating
-finite sets. The upper bound is NSW VII §4. The lower bound uses the rank of the maximal pro-`p`
-quotient, which is `ProPRankInputs`, together with the Schreier bound of `ProPOps`; the equality
-is Jarden–Shusterman Thm. 2.1.
+/-! ### Layer 6: the comparison of the ordinary cup product with the supplier's
+
+`ordinaryCup` is on Mathlib's `groupCohomology` of a finite group, and
+`ProfiniteCohomology.explicitCup11` is on the supplier's explicit low-degree model of a profinite
+group. Giving the finite group its discrete topology makes both available, and the theorem below
+is the statement that they are the same product. Without it the roadmap would carry a second,
+unrelated cup product. -/
+
+section OrdinaryCupComparison
+
+variable (G) [TopologicalSpace G] [IsTopologicalGroup G] [DiscreteTopology G]
+  (M N P : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+  [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M] [SMulCommClass G ℤ M]
+  [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N]
+  [DiscreteTopology N] [DistribMulAction G N] [ContinuousSMul G N] [SMulCommClass G ℤ N]
+  [AddCommGroup P] [TopologicalSpace P] [IsTopologicalAddGroup P]
+  [DiscreteTopology P] [DistribMulAction G P] [ContinuousSMul G P] [SMulCommClass G ℤ P]
+
+/-- **Layer 6, the coefficient pairing of `Rep ℤ G` induced by an equivariant biadditive map.**
+The `Rep`-level counterpart of `ProfiniteCohomology.ofDiscreteModulePairing`, so that the two
+sides of the comparison below carry the same coefficient datum and neither is arbitrary. -/
+noncomputable def repPairingOfDistribMulAction (μ : M →+ N →+ P)
+    (_hequiv : ∀ (g : G) (a : M) (b : N), μ (g • a) (g • b) = g • μ a b) :
+    Rep.ofDistribMulAction ℤ G M ⊗ Rep.ofDistribMulAction ℤ G N ⟶ Rep.ofDistribMulAction ℤ G P :=
+  sorry
+
+/-- **Layer 6, `ordinaryCup` is the supplier's cup product.** In bidegree `(1,1)`, under the
+supplier's Layer 3 comparisons `explicitH1IsoGroupCohomology` and `explicitH2IsoGroupCohomology`,
+`ordinaryCup` followed by the coefficient pairing is `ProfiniteCohomology.explicitCup11`. With
+`ProfiniteCohomology.explicitIso_cup` this also identifies it with the all-degree
+`ProfiniteCohomology.cup`. -/
+theorem ordinaryCup_explicitCup11 (μ : M →+ N →+ P)
+    (hμ : Continuous fun q : M × N => μ q.1 q.2)
+    (hequiv : ∀ (g : G) (a : M) (b : N), μ (g • a) (g • b) = g • μ a b)
+    (x : ProfiniteCohomology.H1 G M) (y : ProfiniteCohomology.H1 G N) :
+    (groupCohomology.map (MonoidHom.id G) (repPairingOfDistribMulAction G M N P μ hequiv) 2).hom
+        (ordinaryCup _ _ 1 1 (ProfiniteCohomology.explicitH1IsoGroupCohomology G M x)
+          (ProfiniteCohomology.explicitH1IsoGroupCohomology G N y))
+      = ProfiniteCohomology.explicitH2IsoGroupCohomology G P
+          (ProfiniteCohomology.explicitCup11 G M N P μ hμ hequiv x y) :=
+  sorry
+
+end OrdinaryCupComparison
+
+/-- **Layer 9, the exact rank of the full absolute Galois group, against the two bundles:**
+`d(G_F) = [F : ℚ_p] + 2`, stated as leastness of `[F : ℚ_p] + 2` among the cardinalities of
+topologically generating finite sets. The upper bound is NSW VII §4. The lower bound uses the rank
+of the maximal pro-`p` quotient, which is `ProPRankInputs`, together with the Schreier bound of
+`ProPOps`; the equality is Jarden–Shusterman Thm. 2.1.
 
 ⚠ The familiar `[F : ℚ_p] + 1` count is a statement about `G_F(p)`, which is free pro-`p` of
 that rank when `μ_p ⊄ F`, and never about `G_F`: the full group has rank `[F : ℚ_p] + 2` in both
-cases. The finite-generation corollary at `F = ℚ_2`, namely generation by 3 elements, is the
-label `B1` of the downstream table. -/
-theorem rank_absoluteGaloisGroup (p : ℕ) [Fact p.Prime] (_ops : ProPOps.{u} p)
+cases. -/
+theorem rank_absoluteGaloisGroup_of_inputs (p : ℕ) [Fact p.Prime] (_ops : ProPOps.{u} p)
     (_inp : ProPRankInputs.{u} p) (F : Type u) [Field F] [Algebra ℚ_[p] F]
     [Module.Finite ℚ_[p] F] :
     IsLeast
@@ -915,6 +1337,20 @@ theorem rank_absoluteGaloisGroup (p : ℕ) [Fact p.Prime] (_ops : ProPOps.{u} p)
         (Subgroup.closure (s : Set (Field.absoluteGaloisGroup F))).topologicalClosure = ⊤}
       (Module.finrank ℚ_[p] F + 2) :=
   sorry
+
+/-- **Layer 9, the exact rank of the full absolute Galois group.** The public form: no structure
+arguments, obtained from the theorem above by instantiation at the canonical terms
+`Supplied.proPOps` and `Supplied.proPRankInputs` that the pro-`p` supplier constructs. This proof
+is a term and not a `sorry`, so the advertised unconditional theorem is exactly as strong as the
+conditional one plus those two terms, and no downstream consumer is left holding a structure for
+which nothing constructs an instance. -/
+theorem rank_absoluteGaloisGroup (p : ℕ) [Fact p.Prime] (F : Type u) [Field F] [Algebra ℚ_[p] F]
+    [Module.Finite ℚ_[p] F] :
+    IsLeast
+      {m : ℕ | ∃ s : Finset (Field.absoluteGaloisGroup F), s.card = m ∧
+        (Subgroup.closure (s : Set (Field.absoluteGaloisGroup F))).topologicalClosure = ⊤}
+      (Module.finrank ℚ_[p] F + 2) :=
+  rank_absoluteGaloisGroup_of_inputs p (Supplied.proPOps.{u} p) (Supplied.proPRankInputs.{u} p) F
 
 end Deliverables
 

@@ -7,16 +7,18 @@ only:
 
 - a declaration of the required Mathlib version;
 - an accepted Tau Ceti declaration;
-- an earlier milestone of the roadmap.
+- an earlier milestone of the roadmap;
+- an exact named declaration of the accepted Profinite Cohomology roadmap.
 
-Three kinds of information are collected here:
+Four kinds of information are collected here:
 
 - the state of Lean work outside Mathlib that covers part of the same mathematics, with the
   conditions that apply to reuse of the code;
 - open Mathlib work and recorded design decisions that the roadmap follows for the shape of its
   statements;
-- which development is expected to discharge each field of the three hypothesis structures, and
-  the name it currently uses for it.
+- which development is expected to discharge each field of the two pro-`p` hypothesis structures,
+  and the name it currently uses for it;
+- a dated consumer map, for a particular formalization that consumes the late layers.
 
 An open Mathlib pull request is never a reason to wait. Build the object in Tau Ceti now, with
 the name and the shape that the pull request uses. If it lands, delete the Tau Ceti copy and
@@ -115,12 +117,13 @@ María Inés de Frutos-Fernández and Filippo A. E. Nuccio, arXiv:2310.01998.
 Licence GPL-3.0. This is an audit and comparison source only. The licence is not compatible with
 reuse of code in Tau Ceti.
 
-### The `p = 2` formalization behind the downstream table
+### The `p = 2` formalization behind the consumer map
 
-The consumer labels `B1`, `B5`, `B6`, `B7`, `B10`, and `B11a` in the roadmap are acceptance
+The labels `B1`, `B5`, `B6`, `B7`, `B10`, and `B11a` of the consumer map below are acceptance
 targets of `gq2-lean` (Apache-2.0, `github.com/roed-math/gq2-lean`), in
-`GQ2/Foundations/Axioms.lean`. Files there that are worth adapting, and that must never be
-treated as prescriptive, where they match the intrinsic statements:
+`GQ2/Foundations/Axioms.lean`. They appear nowhere in the roadmap itself. Files there that are
+worth adapting, and that must never be treated as prescriptive, where they match the intrinsic
+statements:
 
 - `UnitFiltration*.lean`, `UnitNormIndex.lean`, and `TeichmullerLift.lean`, for Layer 1;
 - `UnramifiedBridge.lean`, `UnramifiedModel.lean`, `UnramifiedNorm.lean`, and `Zhat.lean`, for
@@ -130,10 +133,11 @@ treated as prescriptive, where they match the intrinsic statements:
 - `Reciprocity.lean`, for the statement forms of Layer 7;
 - `TateDuality.lean` and `EulerCharacteristic.lean`, for the statement forms of Layer 8.
 
-Three encoding decisions there are repaired in the roadmap, and not inherited: duality for each
+Four encoding decisions there are repaired in the roadmap, and not inherited: duality for each
 `n` without compatibility across `n`, which Layer 8 names as a milestone; the unnormalized
-invariant map, whose normalization Layer 5 fixes; and the geometric `ν_ur` as the primary
-convention, which is a translation lemma here.
+invariant map, whose normalization Layer 5 fixes; the geometric `ν_ur` as the primary convention,
+which is a translation lemma here; and the packaging of the dyadic norm criterion with the
+cohomological pairing, which the roadmap splits along the ownership boundary of sublayer 8C.
 
 ## Open Mathlib work
 
@@ -218,51 +222,81 @@ The subsection "Interface table: Local Fields and Pro-`p` Groups" of [`README.md
 also exists in the Pro-`p` Groups roadmap. The two copies are kept identical, wording included,
 so an edit to one is an edit to the other. The check is a byte comparison of the two sections,
 from the heading to the next heading of the same level. The version in this repository was taken
-from the Pro-`p` Groups copy on 2026-08-07.
+Both copies were last edited together on 2026-08-08.
 
 The table is a coordination record, and not a dependency. The roadmap needs no row of it to
 start work: a milestone that uses an operation from either side carries that operation as an
-explicit hypothesis, and the table records who is expected to prove it.
+explicit hypothesis, and the table records who is expected to prove it. The two rows naming
+`proPOps` and `proPRankInputs` are the exception in one direction only: the Layer 9 rank theorem
+is stated unconditionally by instantiation at those terms, so the Pro-`p` Groups roadmap has to
+produce them under those names.
 
-## Who is expected to discharge each hypothesis
+## The Profinite Cohomology dependency
 
-Checked on 2026-08-07 against the current heads of the sibling pull requests. These roadmaps are
-under review, so nothing below is a prerequisite, and none of the names is fixed.
+Recorded on 2026-08-08. This one is **not** a hypothesis and not a coordination record: the
+Profinite Cohomology roadmap is accepted, this roadmap imports
+`TauCetiRoadmap.ProfiniteCohomology.Suggested`, and its exact declarations are normative
+prerequisites, listed in the section "The Profinite Cohomology contract" of
+[`README.md`](README.md). There is no `CohomologyOps` structure and no cohomology hypothesis
+argument anywhere in this roadmap. Two named transports carry the supplier's Galois group and
+Kummer coefficients into this roadmap's vocabulary, `absoluteGaloisGroupComparison` and
+`muNRepCoeffDictionary`, and both are milestones here, in Layers 4 and 5.
+
+## Who is expected to discharge each pro-`p` hypothesis
+
+Checked on 2026-08-08 against the current head of the sibling Pro-`p` Groups roadmap. That roadmap
+is under review, so nothing below is a prerequisite, and none of the names is fixed.
 
 | structure and field of `Suggested.lean` | expected supplier | its current name |
 |---|---|---|
-| `ProPOps.exists_isProPSylow` and the three other Sylow fields | Pro-`p` Groups Layer 2 | anonymous `example`s; the predicate is `TauCetiRoadmap.ProPGroups.IsProPSylow` |
-| `ProPOps.freeProfiniteGroupLift` | Pro-`p` Groups Layer 4 | anonymous `example`; the object is `TauCetiRoadmap.ProPGroups.freeProfiniteGroup` |
-| `ProPOps.rank_le_of_surjective`, `ProPOps.rank_le_of_isOpen` | Pro-`p` Groups Layer 3 | anonymous `example`s; the rank is `TauCetiRoadmap.ProPGroups.topologicalGeneratorRankNat` |
-| `ProPOps.topologicallyGenerates_iff_frattiniQuotient` | Pro-`p` Groups Layer 3 | anonymous `example`; the Frattini subgroup is `TauCetiRoadmap.ProPGroups.proPFrattini` |
-| the three fields of `ProPRankInputs` | Pro-`p` Groups Layer 11 | fields of `TauCetiRoadmap.ProPGroups.LocalFieldInputs`, and its Demushkin instance |
-| `CohomologyOps.tensorObj`, `CohomologyOps.cup` | Profinite Cohomology Layer 8 | its low-degree cup product |
-| `CohomologyOps.coeff` | Mathlib | `ContinuousCohomology.cochainsMap` at the identity group homomorphism |
-| corestriction, Mackey, Shapiro, the finite-quotient colimit | Profinite Cohomology Layers 4, 6, 7 | these occur in no statement of this roadmap, only in proofs |
+| `ProPOps.exists_isProPSylow` and the three other Sylow fields | Pro-`p` Groups Layer 2 | `exists_isProPSylow`, `IsProP.exists_le_isProPSylow`, `IsProPSylow.eq_of_normal`, `IsProPSylow.map_of_surjective`; the predicate is `TauCetiRoadmap.ProPGroups.IsProPSylow` |
+| `ProPOps.freeProfiniteGroupLift` | Pro-`p` Groups Layer 4 | `freeProfiniteGroup.lift`; the object is `TauCetiRoadmap.ProPGroups.freeProfiniteGroup` |
+| `ProPOps.rank_le_of_surjective`, `ProPOps.rank_le_of_isOpen` | Pro-`p` Groups Layer 3 | `topologicalGeneratorRank_le_of_surjective`, `topologicalGeneratorRankNat_le_of_isOpen` |
+| `ProPOps.topologicallyGenerates_iff_frattiniQuotient` | Pro-`p` Groups Layer 3 | `topologicallyGenerates_iff_frattiniQuotient`; the Frattini subgroup is `TauCetiRoadmap.ProPGroups.proPFrattini` |
+| the three fields of `ProPRankInputs` | Pro-`p` Groups Layer 11 | `isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP`, `topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu`, `topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu` |
+| the canonical terms `Supplied.proPOps`, `Supplied.proPRankInputs` | Pro-`p` Groups Layers 2 to 4 and Layer 11 | the same two names in the Pro-`p` Groups roadmap, which assembles them from the theorems above |
 
-Two mismatches with the current heads are recorded, and neither blocks anything here.
+The canonical terms are what make the Layer 9 rank theorem unconditional: `rank_absoluteGaloisGroup`
+is `rank_absoluteGaloisGroup_of_inputs` applied to them, with a real term and no `sorry`.
 
-- The Pro-`p` Groups head states its Layer 2 and Layer 3 theorems as anonymous `example`s, so
-  there is no declaration name to cite for them yet. The **definitions** do have names, and the
-  copies in `Supplied` have the same bodies, so those transport by `rfl`.
-- The Profinite Cohomology head prototypes a cup product against its own low-degree carrier,
-  while this roadmap uses Mathlib's `continuousCohomology`. A term of `CohomologyOps` therefore
-  needs the comparison between the two carriers, which is that roadmap's Layer 3.
+## Consumer map, for the `p = 2` formalization of `G_{ℚ_2}`
+
+Dated 2026-08-08 and **not normative**. The roadmap specifies generic declarations; this table
+records how one consuming formalization's acceptance labels land on them, so that the layers of
+[`README.md`](README.md) can be read without those labels. Nothing here is a prerequisite, and no
+milestone is organized around a label.
+
+| consumer label | declaration or milestone here |
+|---|---|
+| B1 | the exact rank and finite-generation theorem `rank_absoluteGaloisGroup` of Layer 9, specialized to `K = ℚ_2`, where it gives generation by 3 elements |
+| B5 | the reciprocity and normalization package of Layer 7: `artinMap`, `unramifiedCoordinate`, `unramifiedCoordinate_artinMap`, `geometricArtinMap`, `cyclotomicCharacter_artinMap`, `cyclotomicCharacter_artinMap_padic` |
+| B6 | local Tate duality of Layer 8B, `tateDualityPairing` and `tateDualityPairing_perfect_mixed`, through the Profinite Cohomology operations `cup`, `coeffMap`, and `shapiroIso` |
+| B7 | the Euler characteristic of Layer 8B, `eulerCharacteristic_mixed` and `eulerCharacteristic_finrank_fp` |
+| B10 | the tame quotient of Layer 4, with the orientation statements of Layer 7 |
+| B11a | the Kummer-cup/norm-equation theorem of the Quadratic Form Invariants roadmap. This roadmap supplies the pairing and its perfectness, and states no comparison with the classical symbol |
 
 ## Ownership, where two roadmaps touch the same mathematics
 
-- The **continuous-cohomology carrier** is Mathlib's `continuousCohomology`. This roadmap states
-  nothing against a private carrier and builds none.
+- The **continuous-cohomology carrier** is Mathlib's `continuousCohomology`, on the objects of
+  `TauCetiRoadmap.ProfiniteCohomology.TopRep`. This roadmap states nothing against a private
+  carrier, builds none, and carries no second cup product.
+- **Tate cohomology of a finite group** is this roadmap's, in Layers 5 and 6, and it is the full
+  basic theory and not only what local reciprocity needs. A development that wants finite-group
+  Tate cohomology, including the Global Class Field Theory roadmap, consumes these declarations
+  rather than building a second carrier.
 - The **normalized valuation, the unit filtration, and local square classes** are Layers 0 and 1
   here, and every later layer of this roadmap rests on them. The position of this roadmap is that
   it owns them and that a local toolkit elsewhere should consume them, because a second normalized
   valuation would need a comparison lemma at every use site. The Quadratic Form Invariants roadmap
   currently declares a `LocalFieldToolkit` that covers part of the same ground. Adopting the
   objects here is a change to that roadmap, and this one is not blocked by it.
-- The **Hilbert symbol** is stated here by the norm criterion, which is characteristic-free and
-  needs no object from another roadmap. The `{±1}`-valued dictionary, quaternion algebras, the
-  quadratic defect, and the classification of forms are the Quadratic Form Invariants roadmap's.
-  This roadmap defines no quadratic form and no quaternion algebra.
+- The **Hilbert symbol** is the Quadratic Form Invariants roadmap's, in both halves: the
+  norm-criterion description of the mod-2 pairing, and its identification with the `{±1}`-valued
+  classical symbol. That roadmap states the criterion over an arbitrary field in which `2` is
+  invertible, which is the right generality, and identifies it with the classical symbol over a
+  nonarchimedean local field. What this roadmap keeps at `n = 2` is what it owns at every `n`: the
+  duality pairing, its perfectness, and the invariant map. It states no comparison with the symbol,
+  and defines no quadratic form, no quaternion algebra, and no quadratic defect.
 
 At the date of this file, the roadmaps named above are the pull requests
 [#1](https://github.com/roed-math/TauCetiRoadmap/pull/1),
