@@ -28,3 +28,4 @@ import TauCetiRoadmap.ConformalMapping.Suggested
 import TauCetiRoadmap.OrthogonalL2Bases.Suggested
 import TauCetiRoadmap.OptimalTransport.Suggested
 import TauCetiRoadmap.ProPGroups.Suggested
+import TauCetiRoadmap.ProfiniteCohomology.Suggested
