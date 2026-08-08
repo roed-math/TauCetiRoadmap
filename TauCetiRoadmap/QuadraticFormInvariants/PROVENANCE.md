@@ -17,13 +17,15 @@ implementation time.
   `continuousCohomology R G n` on `R`-linear representations of a topological group,
   together with the degree-zero computation. The low-degree calculational API does not
   exist there: no Kummer isomorphism, no cup product, no restriction or corestriction,
-  and no Evens norm. That is why Layer 7A carries those operations and uses the Mathlib
-  functor as the carrier. Mathlib master also has
+  and no Evens norm. The profinite-cohomology roadmap builds that API on the Mathlib
+  functor, and Layer 7A consumes it from there rather than from Mathlib. Mathlib master
+  also has
   `RepresentationTheory/Homological/ContCohomology/`, which is a second development of
   the same subject; compare the two before building on either.
 - `Mathlib/NumberTheory/LocalField/Basic.lean` supplies `IsNonarchimedeanLocalField` at
   the pin. It does not supply a normalized valuation, a unit filtration, or the
-  square-class count, which is why Layer 6A owns them.
+  square-class count. The local-fields roadmap builds them on that class, and Layer 6A
+  consumes them from there.
 
 ## Related Mathlib work
 
@@ -131,59 +133,57 @@ Map from `gq2` file to layer here:
 - `GQ2/QuadraticFp2.lean` and `GQ2/GaussSigns*.lean` are characteristic-2 and
   finite-field material, which the standing exclusion of the README puts outside scope.
 
-The `gq2` axioms B11a (`hilbertSymbol_normCriterion_finiteDyadic`) and B9
-(`relativeStiefelWhitney_dyadic`) in `GQ2/Foundations/Axioms.lean` are the intended
-final consumers. B11a follows from Layer 2's four-fold criterion and from Layer 7C's cup
-criterion specialized by Layer 6. B9 follows from Layer 9's degree-≤-2 expansion
-specialized to a finite dyadic base.
+### Consumer map, dated 2026-08-08
 
-## Neighbouring Tau Ceti roadmaps
+**Not normative.** The README specifies generic declarations and is organized around the
+mathematics, not around any consumer's acceptance labels. This table records how one
+consuming formalization's labels land on those declarations, so that the layers of
+[README.md](README.md) can be read without the labels. Nothing here is a prerequisite of
+any milestone, and no milestone is organized around a label.
 
-Two roadmaps in preparation cover, in greater generality, ground that this roadmap
-defines for itself in Layer 6A and Layer 7A. This section records the relation, and no
-milestone of the README depends on it.
-
-- A **local fields** roadmap covers the normalized valuation, the unit filtration, local
-  square classes, unramified extensions, and norm groups, for local fields in general.
-  Layer 6A here defines exactly the pieces that the quadratic defect, the Hilbert
-  symbol, and the local classification consume.
-- A **profinite cohomology** roadmap covers continuous cohomology in all degrees, with
-  cup products, Kummer theory, restriction, corestriction, and the Evens norm. Layer 7A
-  here defines the degree-1 and degree-2 operations that the Brauer comparison, the
-  Stiefel-Whitney classes, and the Evens-Kahn identity consume.
-
-**Sequencing.** The maintainer's decision is that the two roadmaps above are accepted
-first, and that Layer 6A and Layer 7A of this roadmap are then rewritten to consume
-their declarations rather than to define their own. Until that happens this roadmap is
-dependency-closed on Mathlib, the landed Tau Ceti files, and the accepted
-semisimple-algebras roadmap, and it states the definitions it needs.
-
-The migration is close to a rename, because both developments sit on the same Mathlib
-carriers. The table records the current names on each side, at the branch heads
-inspected on 2026-08-07.
-
-| Defined here (Layer 6A, 7A) | Supplier declaration |
+| consumer label | declaration or milestone here |
 |---|---|
-| `normalizedValuation` | Local Fields `normalizedValuation` |
-| `normalizedValuation_surjective` | Local Fields `normalizedValuation_surjective` |
-| `mem_integer_iff_zero_le` | Local Fields `normalizedValuation_eq_one_iff` |
-| `unitFiltration` | Local Fields `unitFiltration` |
-| `mem_unitFiltration_zero` | Local Fields `mem_unitFiltration_zero` |
-| `mem_unitFiltration_succ` | Local Fields `mem_unitFiltration_succ_valuation` |
-| `unitFiltration_antitone` | Local Fields `unitFiltration_antitone` |
-| `hilbertSymbol` (Layer 6C) | the same norm-criterion symbol; Local Fields Layer 8C owns the identification with the Tate-duality pairing, `hilbertSymbol_eq_tateDuality_pairing`, and this roadmap does not restate it |
-| `H1`, `H2` | Profinite Cohomology `H1`, `H2`, with `explicitH1IsoContinuousCohomology` and `explicitH2IsoContinuousCohomology` |
-| `cup11` | Profinite Cohomology `cup11` |
-| `kummerIso` | Profinite Cohomology `kummerIso` at `n = 2` |
-| `res1`, `res2` | Profinite Cohomology `res` |
-| `evensIndexTwo` | Profinite Cohomology's index-2 Evens class, from `evensGraphCochain` |
+| B9 | the form-level relative Stiefel-Whitney theorem of Layer 9, `relativeStiefelWhitney_quadraticExtension`, stated on the isometry classes of `Tr_*⟨1⟩` and `Tr_*⟨a⟩` with the canonical `w₁`, `w₂`, corestriction, cup and index-two Evens norm; its calculational corollary on diagonal tuples is `relativeStiefelWhitney_quadraticExtension_diagonal`, and the finite dyadic base is a specialization of either |
+| B11a | the Kummer-cup/norm-equation theorem of Layer 7C, `cup_kummerClass_eq_zero_iff`, over any field in which `2` is invertible, together with its four companion descriptions, of which the `{±1}`-valued one is `cup_kummerClass_eq_zero_iff_hilbertSymbol` at Layer 6C's `hilbertSymbol` over a nonarchimedean local field |
 
-The rows on the local-field side agree in name and in type already. The rows on the
-cohomological side need the comparison isomorphisms above, because that roadmap builds
-the low-degree groups explicitly and compares them with Mathlib's functor, while this
-roadmap uses the functor directly. Two milestones are not in either supplier and stay
-here: the coefficient bridge `mu2EquivZMod2`, and the index-two Evens laws in the
-conjugate form that Layer 9 uses.
+Both rows are theorems about quadratic forms, quaternion algebras and Galois cohomology
+with every consumer name removed, which is why they belong here and not outside the
+repository. The dyadic case is not a separate statement in either row: Layer 7C's theorem
+carries no hypothesis on the residue characteristic, and Layer 9's carries none beyond
+separability and degree two.
+
+## Supplying Tau Ceti roadmaps
+
+This section is a dated record, not a specification: the normative statement of what this
+roadmap consumes is the contract table in [README.md](README.md), which names every
+supplier declaration exactly.
+
+Two roadmaps in this repository supply material that this one used to define for itself.
+
+- The **[local-fields roadmap](../LocalFields/README.md)** owns the normalized valuation,
+  the unit filtration, local power and square classes, unramified extensions, norm
+  groups, local duality, and the invariant map. Layer 6A consumes them.
+- The **[profinite-cohomology roadmap](../ProfiniteCohomology/README.md)** owns continuous
+  cohomology in all degrees, with cup products, Kummer theory, restriction,
+  corestriction, and the Evens norm. Layer 7A consumes them.
+
+Where a supplier owns a milestone but exports no target signature for it, this roadmap
+states the specialized shape its own layers consume, as a theorem about the supplier's
+objects rather than as a second definition. Those, at the heads inspected on 2026-08-08,
+are: the local square theorem `U(K, 2e+1) ⊆ (Kˣ)²` in its sharp general form; the
+square-class counts in the `4 · q^e` shape Layer 6D consumes; the unramified norm group
+phrased through the norm equation `b = x² − Δ y²`; and the filtration quotients, which
+6A cites rather than restates. If the local-fields roadmap later names any of them, the
+local statement is deleted and the contract table gains a declaration.
+
+Two objects are this roadmap's because neither supplier names them: `IsUniformizer` in
+its valuation form, and `absoluteRamificationIndex` as the decoded `v_K(2)`. Two more are
+this roadmap's because they are specific to `μ₂` or to the multiplicative group:
+`mu2EquivZMod2` with the triviality of the Galois action on `μ₂`, and the coefficient
+object `Additive Kˢˣ` with `h2MuToUnits`. The adapters that carry the profinite-cohomology
+roadmap's subgroup-indexed operations to a finite separable extension are likewise this
+roadmap's, because the supplier's operations are indexed by a subgroup and the passage
+from a field embedding to that subgroup is arithmetic rather than cohomological.
 
 ## Licence note
 

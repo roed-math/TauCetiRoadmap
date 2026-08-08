@@ -1,4 +1,5 @@
 import Mathlib
+import TauCetiRoadmap.LocalFields.Suggested
 import TauCetiRoadmap.RepresentationTheory.SemisimpleAlgebras.Suggested
 
 /-!
@@ -57,6 +58,8 @@ open scoped Quaternion
 
 universe u v
 
+section FormTheory
+
 variable {K : Type u} [Field K]
 
 /-! ## Layer 0: the carrier for isometry classes
@@ -89,12 +92,36 @@ forms, presented diagonally. Layer 3's invariants are functions on this type, an
 Layer 4's Witt-Grothendieck ring is built from its two monoid structures. -/
 abbrev RegularFormClass (K : Type u) [Field K] : Type u := Quotient (regularFormSetoid K)
 
-/-- **Layer 0, every regular form has a class.** Diagonalization
-(`equivalent_weightedSumSquares_units_of_nondegenerate'`) gives the presentation. The
-content of the milestone is that the class does not depend on the diagonalization. -/
-example [Invertible (2 : K)] {V : Type v} [AddCommGroup V] [Module K V]
-    [FiniteDimensional K V] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) :
+/-- **Layer 0, every regular form has a presentation.** Diagonalization
+(`equivalent_weightedSumSquares_units_of_nondegenerate'`) supplies one. -/
+theorem exists_presentedForm_equivalent [Invertible (2 : K)] {V : Type v} [AddCommGroup V]
+    [Module K V] [FiniteDimensional K V] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) :
     ∃ p : RegularFormPresentation K, Q.Equivalent (presentedForm p) :=
+  sorry
+
+/-- **Layer 0, the class of a regular form.** The content of the milestone is that the class
+does not depend on the diagonalization chosen to compute it, which is `formClass_mk` below.
+This is what lets every invariant of Layers 3, 5, 6 and 8 be applied to a form rather than to
+a presentation, and it is what Layer 9's form-level Stiefel-Whitney theorem is stated
+through. -/
+noncomputable def formClass [Invertible (2 : K)] {V : Type v} [AddCommGroup V] [Module K V]
+    [FiniteDimensional K V] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) :
+    RegularFormClass K :=
+  Quotient.mk _ (exists_presentedForm_equivalent Q hQ).choose
+
+/-- **Layer 0, the class is computed by any diagonalization.** -/
+theorem formClass_mk [Invertible (2 : K)] {V : Type v} [AddCommGroup V] [Module K V]
+    [FiniteDimensional K V] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate)
+    (p : RegularFormPresentation K) (hp : Q.Equivalent (presentedForm p)) :
+    formClass Q hQ = Quotient.mk _ p :=
+  sorry
+
+/-- **Layer 0, two regular forms are isometric exactly when their classes agree.** -/
+theorem formClass_eq_iff [Invertible (2 : K)] {V W : Type v} [AddCommGroup V] [Module K V]
+    [FiniteDimensional K V] [AddCommGroup W] [Module K W] [FiniteDimensional K W]
+    (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) (R : QuadraticForm K W)
+    (hR : R.Nondegenerate) :
+    formClass Q hQ = formClass R hR ↔ Q.Equivalent R :=
   sorry
 
 /-! ## Layer 0: chain equivalence and the descent principle -/
@@ -484,78 +511,55 @@ theorem cliffordHomI2_eq_zero [Invertible (2 : K)] (x : ↥(fundamentalIdeal K ^
     cliffordHomI2 x = 0 :=
   sorry
 
-/-! ## Layer 6A: the local-field toolkit
+/-! ## Layer 6A: consuming the Local Fields substrate
 
-Mathlib's `IsNonarchimedeanLocalField` supplies `𝒪[K]`, `𝓂[K]`, `𝓀[K]`, the discrete
-valuation ring structure, and finiteness of the residue field. It supplies no normalized
-valuation, no unit filtration, and no square-class arithmetic. Those are named canonical
-definitions here, each with the theorems that characterize it. A uniformizer is a choice
-satisfying a predicate, and is never stored as data. -/
+The general arithmetic of a nonarchimedean local field belongs to the
+[Local Fields roadmap](../LocalFields/README.md), and this sublayer consumes it rather than
+building a second copy. The normalized valuation is
+`TauCetiRoadmap.LocalFields.normalizedValuation` and the unit filtration is
+`TauCetiRoadmap.LocalFields.unitFiltration`; both are opened by name below, and no valuation
+and no filtration is defined here.
+
+What remains is the quadratic-form-facing arithmetic, stated against those objects: the
+uniformizer predicate in its valuation form together with the lemma comparing it with the
+supplier's `Irreducible` convention, the absolute ramification index as the decoded `v_K(2)`,
+the sharp local square theorem, the square-class counts in the `4·q^e` shape that 6D consumes,
+and the unramified norm description in the shape 6C consumes. Each of the last three carries a
+remark naming the Local Fields milestone it rests on. -/
 
 section LocalField
 
 open scoped ValuativeRel
+open TauCetiRoadmap.LocalFields (normalizedValuation unitFiltration)
 
 variable (K)
 variable [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
 
-/-- **Layer 6A, the normalized valuation** `v_K : Kˣ →* Multiplicative ℤ`. -/
-noncomputable def normalizedValuation : Kˣ →* Multiplicative ℤ :=
-  sorry
-
-/-- The value group is all of `ℤ`. -/
-theorem normalizedValuation_surjective : Function.Surjective (normalizedValuation K) :=
-  sorry
-
-/-- Nonnegative valuation describes the ring of integers. Units have value `0`. -/
-theorem mem_integer_iff_zero_le (x : Kˣ) :
-    0 ≤ Multiplicative.toAdd (normalizedValuation K x) ↔ (x : K) ∈ 𝒪[K] :=
-  sorry
-
-/-- Agreement with Mathlib's additive valuation on the discrete valuation ring `𝒪[K]`. -/
-theorem normalizedValuation_eq_addVal (x : Kˣ) (hx : (x : K) ∈ 𝒪[K]) (y : 𝒪[K])
-    (hy : (y : K) = (x : K)) :
-    (IsDiscreteValuationRing.addVal 𝒪[K] y : ℕ∞) =
-      (Multiplicative.toAdd (normalizedValuation K x)).toNat :=
-  sorry
-
 variable {K}
 
-/-- **Layer 6A, a uniformizer** is an element of valuation one. It is a choice, so it is a
-predicate and not a field of a package. -/
+/-- **Layer 6A, a uniformizer** is an element of valuation one, said with the supplier's
+valuation. It is a choice, so it is a predicate and not a field of a package: over `ℚ_2` both
+`2` and `−2` have valuation one. -/
 def IsUniformizer (π : Kˣ) : Prop :=
   normalizedValuation K π = Multiplicative.ofAdd 1
 
 variable (K)
 
+/-- **Layer 6A, the two descriptions of a uniformizer agree.** The Local Fields roadmap pins
+uniformizers through `Irreducible` in `𝒪[K]`, and its `normalizedValuation_irreducible` gives
+one direction. This is the equivalence, and it is the single lemma that relates the predicate
+above to that convention; every later statement uses whichever side is convenient. -/
+theorem isUniformizer_iff_exists_irreducible (π : Kˣ) :
+    IsUniformizer (K := K) π ↔ ∃ ϖ : 𝒪[K], Irreducible ϖ ∧ (ϖ : K) = (π : K) :=
+  sorry
+
 /-- A uniformizer exists. Statements that need one take it and this proof explicitly. -/
 theorem exists_isUniformizer : ∃ π : Kˣ, IsUniformizer (K := K) π :=
   sorry
 
-/-- **Layer 6A, the unit filtration** `U(K, i)`. -/
-noncomputable def unitFiltration (i : ℕ) : Subgroup Kˣ :=
-  sorry
-
-/-- `U(K,0)` is the group of units of `𝒪[K]`. -/
-theorem mem_unitFiltration_zero (x : Kˣ) :
-    x ∈ unitFiltration K 0 ↔ Multiplicative.toAdd (normalizedValuation K x) = 0 :=
-  sorry
-
-/-- `U(K,i+1)` is the group of units congruent to `1` modulo `𝓂[K]^{i+1}`. The quantifier
-is vacuous at `x = 1`, where `x − 1` is not a unit. -/
-theorem mem_unitFiltration_succ (i : ℕ) (x : Kˣ) :
-    x ∈ unitFiltration K (i + 1) ↔
-      x ∈ unitFiltration K 0 ∧
-        ∀ y : Kˣ, (y : K) = (x : K) - 1 →
-          (i + 1 : ℤ) ≤ Multiplicative.toAdd (normalizedValuation K y) :=
-  sorry
-
-/-- The filtration decreases. -/
-theorem unitFiltration_antitone : Antitone (unitFiltration K) :=
-  sorry
-
-/-- **Layer 6A, the absolute ramification index** `e = v_K(2)`. The standing hypothesis
-`Invertible (2 : K)` is what makes `2` a unit, so `e` is not data. -/
+/-- **Layer 6A, the absolute ramification index** `e = v_K(2)`, the decoded value of the
+supplier's valuation at `2`. The standing hypothesis `Invertible (2 : K)` is what makes `2` a
+unit, so `e` is not data. -/
 noncomputable def absoluteRamificationIndex [Invertible (2 : K)] : ℕ :=
   (Multiplicative.toAdd (normalizedValuation K (unitOfInvertible (2 : K)))).toNat
 
@@ -565,27 +569,21 @@ theorem normalizedValuation_two [Invertible (2 : K)] :
       Multiplicative.ofAdd ((absoluteRamificationIndex K : ℤ)) :=
   sorry
 
-/-- **Layer 6A, the filtration quotients are finite**, which is what the counting
-arguments below need. -/
-instance unitFiltration_quotient_finite (i : ℕ) :
-    Finite (unitFiltration K i ⧸ (unitFiltration K (i + 1)).subgroupOf (unitFiltration K i)) :=
+/-- **Layer 6A, the square-class dictionary.** The square classes of this roadmap are taken in
+`Subgroup.square Kˣ`, and the Local Fields power-class count and the Profinite Cohomology
+Kummer isomorphism are stated at `(powMonoidHom n).range`. This is the identification at
+`n = 2`, and it is what lets the counts below rest on the supplier's theorem and the Kummer
+isomorphism of Layer 7A be stated on square classes. -/
+theorem square_eq_powerSubgroup :
+    Subgroup.square Kˣ = (powMonoidHom 2 : Kˣ →* Kˣ).range :=
   sorry
 
-/-- **Layer 6A, the depth-zero quotient** `𝒪[K]ˣ / U(K,1) ≃* 𝓀[K]ˣ`. -/
-noncomputable def unitFiltrationQuotientZero :
-    (unitFiltration K 0 ⧸ (unitFiltration K 1).subgroupOf (unitFiltration K 0)) ≃*
-      (IsLocalRing.ResidueField 𝒪[K])ˣ :=
-  sorry
-
-/-- **Layer 6A, the deeper quotients** `U(K,i) / U(K,i+1) ≃ 𝓀[K]` as additive groups, for
-`i ≥ 1`. -/
-noncomputable def unitFiltrationQuotientSucc (i : ℕ) :
-    Additive (unitFiltration K (i + 1) ⧸
-        (unitFiltration K (i + 2)).subgroupOf (unitFiltration K (i + 1))) ≃+
-      IsLocalRing.ResidueField 𝒪[K] :=
-  sorry
-
-/-- **Layer 6A, the local square theorem** (O'Meara 63:1): `U(K, 2e+1) ⊆ (Kˣ)²`. -/
+/-- **Layer 6A, the local square theorem in its sharp form** (O'Meara 63:1):
+`U(K, 2e+1) ⊆ (Kˣ)²`. The Local Fields roadmap owns this mathematics, in its Layer 1 milestone
+*Deep units are squares, in mixed characteristic*, and carries the dyadic instance
+`1 + 8ℤ_2 ⊆ (ℚ_2ˣ)²` as a worked example; it exports no target signature for the general
+statement, so the form that 6B and 6C consume is stated here, against the supplier's
+`unitFiltration`. -/
 theorem unitFiltration_le_square [Invertible (2 : K)] :
     unitFiltration K (2 * absoluteRamificationIndex K + 1) ≤ Subgroup.square Kˣ :=
   sorry
@@ -597,13 +595,15 @@ theorem not_unitFiltration_le_square [Invertible (2 : K)] :
     ¬ (unitFiltration K (2 * absoluteRamificationIndex K) ≤ Subgroup.square Kˣ) :=
   sorry
 
-/-- **Layer 6A, the square-class group is finite.** -/
+/-- **Layer 6A, the square-class group is finite.** A corollary of the Local Fields Layer 1
+milestone *Power classes, the primary statement*, through `square_eq_powerSubgroup`. -/
 instance squareClass_finite [Invertible (2 : K)] : Finite (Kˣ ⧸ Subgroup.square Kˣ) :=
   sorry
 
 /-- **Layer 6A, the square-class count in odd residue characteristic**, together with the
 representatives `1, u, π, uπ` for a uniformizer `π` and a unit `u` whose residue is a
-nonsquare. -/
+nonsquare. This is the Local Fields Layer 1 count
+`#(Kˣ/(Kˣ)ⁿ) = n · #μ_n(K) · q^{v_K(n)}` at `n = 2` with `e = 0`, in the shape 6D consumes. -/
 theorem card_squareClass_of_odd [Invertible (2 : K)]
     (hodd : absoluteRamificationIndex K = 0) :
     Nat.card (Kˣ ⧸ Subgroup.square Kˣ) = 4 :=
@@ -612,7 +612,9 @@ theorem card_squareClass_of_odd [Invertible (2 : K)]
 /-- **Layer 6A, the square-class count in residue characteristic two**, stated
 intrinsically as `4 · q^e` with `q = #𝓀[K]` and `e = v_K(2)`. For a finite extension of
 `ℚ_2` of degree `N = e·f` this is `2^{N+2}`, and over `ℚ_2` itself it is `8`, on the
-basis `−1, 2, 5`. -/
+basis `−1, 2, 5`. It is the same Local Fields count at `n = 2`, where `#μ_2(K) = 2` because
+`2` is invertible; the Local Fields roadmap exports the general formula as a milestone and the
+`ℚ_2` instance as a worked example, so the `4·q^e` shape that 6D consumes is stated here. -/
 theorem card_squareClass_of_dyadic [Invertible (2 : K)]
     (h2 : absoluteRamificationIndex K ≠ 0) :
     Nat.card (Kˣ ⧸ Subgroup.square Kˣ) =
@@ -622,7 +624,11 @@ theorem card_squareClass_of_dyadic [Invertible (2 : K)]
 /-- **Layer 6A, the unramified quadratic extension and its norms.** There is a nonsquare
 unit `Δ` such that `K(√Δ)/K` is the unramified quadratic extension, and an element is a
 norm from it exactly when its valuation is even. The statement is phrased through the
-norm equation, so it needs no extension-building API. -/
+norm equation, so it needs no extension-building API, and that is the shape 6B's evaluation
+formula and 6C's symbol computation consume. It rests on the Local Fields Layer 2 milestones
+*Existence and uniqueness* and *Norms*, which own the unramified extension and the equality
+`N_{L/K}(Lˣ) = π^{fℤ} × 𝒪[K]ˣ`; that roadmap exports no target signature phrased through the
+norm equation. -/
 theorem exists_unramified_class [Invertible (2 : K)] :
     ∃ u : Kˣ, ¬ IsSquare u ∧
       ∀ b : Kˣ, (∃ x y : K, (b : K) = x ^ 2 - (u : K) * y ^ 2) ↔
@@ -641,6 +647,7 @@ unbounded. -/
 section Defect
 
 open scoped ValuativeRel
+open TauCetiRoadmap.LocalFields (normalizedValuation unitFiltration)
 
 variable [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
 
@@ -737,6 +744,7 @@ noncomputable def localHasse {n : ℕ} (w : Fin n → Kˣ) : ℤˣ :=
 section LocalSymbol
 
 open scoped ValuativeRel
+open TauCetiRoadmap.LocalFields (normalizedValuation unitFiltration)
 
 variable [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
   [Invertible (2 : K)]
@@ -878,70 +886,126 @@ quaternions, is anisotropic over `ℚ_2` (O'Meara 63:17). -/
 example : (weightedSumSquares ℚ_[2] fun _ : Fin 4 => (1 : ℚ_[2])).Anisotropic :=
   sorry
 
-/-! ## Layer 7A: mod-2 Galois cohomology in degrees 1 and 2
+end FormTheory
 
-The carrier is Mathlib's `continuousCohomology`, applied to the absolute Galois group
-with its Krull topology. The operations below are named canonical definitions, each with
-the theorems that characterize it. No later statement quantifies over an arbitrary
-operation record: a cup product that is identically zero satisfies no fewer axioms than
-the intended one, and it would falsify Layer 7C. -/
+/-! ## Layer 7A: consuming the Profinite Cohomology operations
 
-section GaloisCohomology
+The continuous cohomology of a profinite group, with its cup product, its Kummer theory, its
+restriction and corestriction, and its Evens norm, belongs to the
+[Profinite Cohomology roadmap](../ProfiniteCohomology/README.md). This sublayer consumes those
+declarations and adds only what is specific to `μ₂` and to quadratic forms.
+
+The carrier is that roadmap's `trivialF2` object over its `AbsoluteGaloisGroup`, so that its
+`cup`, `res`, `corestriction` and `evensNormIndexTwo` apply here with no transport at all. The
+abbreviations `contH`, `H1`, `H2` name that carrier and implement nothing.
+
+What this roadmap owns here is three things. First, the coefficient identification specific to
+`μ₂`: the Galois action on `μ₂` is trivial when `2` is invertible, so the supplier's
+`KummerCoeff K 2` and its `trivialF2` are isomorphic coefficient objects, and that isomorphism
+is what carries the supplier's Kummer classes into the carrier above. Second, the passage from a
+`K`-embedding `σ : L → Kˢ` to the open subgroup `G_L ≤ G_K` that the supplier's subgroup-indexed
+operations take, together with the transport of `G_L`-cohomology to `L`-cohomology. Third, the
+laws of the resulting adapters, including independence of `σ`, which is what lets every later
+statement be about `L/K` and not about a chosen embedding.
+
+The group `G_K` is in `Type`, because the supplier's index-two Evens norm and its canonical
+Kummer class are stated there. -/
+
+section Cohomology
+
+open TauCetiRoadmap.ProfiniteCohomology
+
+variable {K : Type} [Field K]
+
+section Carriers
 
 variable (K)
 
-/-- The absolute Galois group of `K`, with the Krull topology. -/
-abbrev absoluteGaloisGroup : Type u := SeparableClosure K ≃ₐ[K] SeparableClosure K
-
-/-- **Layer 7A, the mod-2 coefficient object**: `𝔽₂` with the trivial action, as a
-representation of `G_K` on a topological module. -/
-noncomputable def mod2Coeff : Action (TopModuleCat.{u} (ZMod 2)) (absoluteGaloisGroup K) :=
-  sorry
-
-/-- **Layer 7A, the multiplicative coefficient object**: `Kˢˣ` written additively, with
-the Galois action. -/
-noncomputable def unitsCoeff : Action (TopModuleCat.{u} ℤ) (absoluteGaloisGroup K) :=
-  sorry
-
-/-- **Layer 7A, the coefficient bridge** `μ₂ ≃ ZMod 2`, Galois-equivariantly. It needs
-`2` invertible, and it is what lets the mod-2 groups be stated with constant
-coefficients. -/
-noncomputable def mu2EquivZMod2 [Invertible (2 : K)] :
-    (rootsOfUnity 2 (SeparableClosure K)) ≃* Multiplicative (ZMod 2) :=
-  sorry
-
-/-- `Hⁿ_cont(G_K, 𝔽₂)`, as Mathlib's continuous cohomology. -/
-noncomputable def contH (n : ℕ) : TopModuleCat.{u} (ZMod 2) :=
-  (continuousCohomology (ZMod 2) (absoluteGaloisGroup K) n).obj (mod2Coeff K)
-
-/-- `Hⁿ_cont(G_K, Additive Kˢˣ)`. -/
-noncomputable def contHUnits (n : ℕ) : TopModuleCat.{u} ℤ :=
-  (continuousCohomology ℤ (absoluteGaloisGroup K) n).obj (unitsCoeff K)
+/-- `Hⁿ_cont(G_K, 𝔽₂)`, as the Profinite Cohomology roadmap's `trivialF2` object over its
+`AbsoluteGaloisGroup`. This is a carrier abbreviation and not an operation. -/
+noncomputable abbrev contH (n : ℕ) : TopModuleCat ℤ :=
+  (continuousCohomology ℤ (AbsoluteGaloisGroup K) n).obj (trivialF2 (AbsoluteGaloisGroup K))
 
 /-- `H¹(G_K, 𝔽₂)`. -/
-noncomputable abbrev H1 : Type u := (contH K 1 : Type u)
+noncomputable abbrev H1 : Type := (contH K 1 : Type)
 
 /-- `H²(G_K, 𝔽₂)`. -/
-noncomputable abbrev H2 : Type u := (contH K 2 : Type u)
+noncomputable abbrev H2 : Type := (contH K 2 : Type)
 
-/-- `H²(G_K, Additive Kˢˣ)`, the cohomological Brauer group. -/
-noncomputable abbrev H2Units : Type u := (contHUnits K 2 : Type u)
-
-/-- **Layer 7A, the cup product** `H¹ × H¹ → H²`. -/
-noncomputable def cup11 : H1 K →+ H1 K →+ H2 K :=
+/-- **Layer 7A, the multiplicative coefficient object**: `Kˢˣ` written additively, with the
+Galois action, as an object of the supplier's carrier. The supplier builds `μₙ` coefficients and
+this roadmap needs the full multiplicative group, so this object and its restriction below are
+this roadmap's own. -/
+noncomputable def unitsCoeff : TopRep ℤ (AbsoluteGaloisGroup K) :=
   sorry
 
-/-- **Layer 7A, the Kummer isomorphism** `Kˣ/(Kˣ)² ≃ H¹(G_K, 𝔽₂)`, through the
-coefficient bridge. -/
-noncomputable def kummerIso [Invertible (2 : K)] :
+/-- `Hⁿ_cont(G_K, Additive Kˢˣ)`. -/
+noncomputable abbrev contHUnits (n : ℕ) : TopModuleCat ℤ :=
+  (continuousCohomology ℤ (AbsoluteGaloisGroup K) n).obj (unitsCoeff K)
+
+/-- `H²(G_K, Additive Kˢˣ)`, the cohomological Brauer group. -/
+noncomputable abbrev H2Units : Type := (contHUnits K 2 : Type)
+
+/-- The Galois action on `μₙ(Kˢ)` is continuous. This is the supplier's
+`kummerCoeff_continuousSMul`, installed as an instance so that no statement below carries it as
+a hypothesis. -/
+instance continuousSMul_kummerCoeff (n : ℕ) :
+    ContinuousSMul (AbsoluteGaloisGroup K) (KummerCoeff K n) :=
+  kummerCoeff_continuousSMul K n
+
+/-- `2` is a unit in `K`, in the `ℕ`-coerced spelling the supplier's Kummer statements use. -/
+theorem isUnit_natCast_two [Invertible (2 : K)] : IsUnit ((2 : ℕ) : K) := by
+  simpa using isUnit_of_invertible (2 : K)
+
+/-- **Layer 7A adapter, the coefficient bridge** `μ₂ ≃ ZMod 2`. Its type pins it: there is only
+one additive equivalence `ZMod 2 ≃+ ZMod 2`, so no normalization law is needed beyond
+equivariance below. It needs `2` invertible, because both the bridge and the Kummer isomorphism
+fail in characteristic two. -/
+noncomputable def mu2EquivZMod2 [Invertible (2 : K)] : KummerCoeff K 2 ≃+ ZMod 2 :=
+  sorry
+
+/-- **Layer 7A adapter, the action on `μ₂` is trivial.** This is the content of the bridge: `μ₂`
+is `{±1} ⊆ K`, so `G_K` fixes it pointwise, and that is what makes the two coefficient objects
+below isomorphic. At `n > 2` the corresponding statement is false, which is why the roadmap's
+mod-2 layers carry `Invertible (2 : K)` and not a general `n`. -/
+theorem mu2EquivZMod2_equivariant [Invertible (2 : K)] (g : AbsoluteGaloisGroup K)
+    (x : KummerCoeff K 2) :
+    mu2EquivZMod2 K (g • x) = mu2EquivZMod2 K x :=
+  sorry
+
+/-- **Layer 7A adapter, the two coefficient objects agree.** The supplier's Kummer coefficients
+at `n = 2` and its trivial `𝔽₂` object are isomorphic in `TopRep ℤ G_K`, by the bridge and its
+equivariance. This is the transport that carries the supplier's Kummer classes into the carrier
+of this roadmap, and it is the only coefficient transport used below. -/
+noncomputable def kummerCoeffIsoTrivialF2 [Invertible (2 : K)] :
+    ofDiscreteModule (AbsoluteGaloisGroup K) (KummerCoeff K 2) ≅
+      trivialF2 (AbsoluteGaloisGroup K) :=
+  sorry
+
+variable {K}
+
+/-- **Layer 7A, the Kummer class** `(a) ∈ H¹(G_K, 𝔽₂)` of a unit. It is the supplier's
+`kummerMapCanonical` at `n = 2`, read through the coefficient transport, and not a second Kummer
+cocycle: the body is a real term, so the two cannot drift. -/
+noncomputable def kummerClass [Invertible (2 : K)] (a : Kˣ) : H1 K :=
+  (coeffMap ℤ (kummerCoeffIsoTrivialF2 K).hom 1).hom
+    (Multiplicative.toAdd (kummerMapCanonical K 2 (isUnit_natCast_two K) a))
+
+variable (K)
+
+/-- **Layer 7A, the Kummer isomorphism on square classes** `Kˣ/(Kˣ)² ≃ H¹(G_K, 𝔽₂)`. It is the
+supplier's `kummerIso` at `n = 2`, read through `square_eq_powerSubgroup` and the coefficient
+transport. The square-class side is the one Layer 0 and Layer 6 use. -/
+noncomputable def kummerSquareClassEquiv [Invertible (2 : K)] :
     Additive (Kˣ ⧸ Subgroup.square Kˣ) ≃+ H1 K :=
   sorry
 
 variable {K}
 
-/-- The Kummer class `(a) ∈ H¹(G_K, 𝔽₂)` of a unit. -/
-noncomputable def kummerClass [Invertible (2 : K)] (a : Kˣ) : H1 K :=
-  kummerIso K (Additive.ofMul (QuotientGroup.mk a))
+/-- The isomorphism sends a square class to the Kummer class of a representative. -/
+theorem kummerSquareClassEquiv_kummerClass [Invertible (2 : K)] (a : Kˣ) :
+    kummerSquareClassEquiv K (Additive.ofMul (QuotientGroup.mk a)) = kummerClass a :=
+  sorry
 
 variable (K)
 
@@ -959,124 +1023,189 @@ theorem h2MuToUnits_range [Invertible (2 : K)] (x : H2Units K) :
     (∃ y, h2MuToUnits K y = x) ↔ x + x = 0 :=
   sorry
 
-end GaloisCohomology
+end Carriers
 
-/-! ### Layer 7A: restriction, corestriction, and the index-two Evens norm
+/-! ### Layer 7A: the transfer adapters for a finite separable extension
 
-Each map is attached to a `K`-embedding `σ : L → Kˢ`, which is what identifies `G_L`
-with an open subgroup of `G_K`. Independence of `σ` is a theorem, not an assumption. -/
+The supplier's `res`, `corestriction` and `evensNormIndexTwo` are indexed by a subgroup of
+`G_K`. A finite separable `L/K` supplies one only after a `K`-embedding `σ : L → Kˢ` is chosen,
+so the passage from `σ` to that open subgroup, and the transport of its cohomology to the
+cohomology of `G_L`, are this roadmap's adapters. Independence of `σ` is a theorem about them,
+so no later statement mentions a chosen embedding. -/
 
 section Transfer
 
-variable (K) (L : Type u) [Field L] [Algebra K L] [FiniteDimensional K L]
+variable (K) (L : Type) [Field L] [Algebra K L] [FiniteDimensional K L]
   [Algebra.IsSeparable K L]
 
-/-- **Layer 7A, restriction in degree 1**, along the open subgroup that `σ` determines. -/
-noncomputable def res1 (σ : L →ₐ[K] SeparableClosure K) : H1 K →+ H1 L :=
+/-- **Layer 7A adapter, the open subgroup `G_L ≤ G_K`** cut out by a `K`-embedding of `L` into
+the separable closure. This is what turns the supplier's subgroup-indexed operations into
+operations attached to `L/K`. -/
+noncomputable def galoisSubgroup (σ : L →ₐ[K] SeparableClosure K) :
+    OpenSubgroup (AbsoluteGaloisGroup K) :=
   sorry
 
-/-- **Layer 7A, restriction in degree 2.** -/
-noncomputable def res2 (σ : L →ₐ[K] SeparableClosure K) : H2 K →+ H2 L :=
+/-- Its index is the degree. This is what supplies the supplier's index hypotheses, and in
+particular the index-two hypothesis of the Evens norm. -/
+theorem galoisSubgroup_index (σ : L →ₐ[K] SeparableClosure K) :
+    (galoisSubgroup K L σ).toSubgroup.index = Module.finrank K L :=
   sorry
 
-/-- **Layer 7A, corestriction in degree 1.** -/
-noncomputable def cor1 (σ : L →ₐ[K] SeparableClosure K) : H1 L →+ H1 K :=
+/-- **Layer 7A adapter, `G_L` is the absolute Galois group of `L`**, as topological groups. -/
+noncomputable def galoisSubgroupEquiv (σ : L →ₐ[K] SeparableClosure K) :
+    AbsoluteGaloisGroup L ≃* ↥(galoisSubgroup K L σ) :=
   sorry
 
-/-- **Layer 7A, corestriction in degree 2.** -/
-noncomputable def cor2 (σ : L →ₐ[K] SeparableClosure K) : H2 L →+ H2 K :=
+/-- It is a homeomorphism, which is what makes the cohomology transport below exist: continuous
+cohomology depends on the topology and not only on the abstract group. -/
+theorem galoisSubgroupEquiv_continuous (σ : L →ₐ[K] SeparableClosure K) :
+    Continuous (galoisSubgroupEquiv K L σ) ∧ Continuous (galoisSubgroupEquiv K L σ).symm :=
   sorry
 
-/-- **Layer 7A, restriction on the multiplicative coefficients**, which the coefficient
-compatibility below compares against. -/
-noncomputable def res2Units (σ : L →ₐ[K] SeparableClosure K) : H2Units K →+ H2Units L :=
+/-- **Layer 7A adapter, the cohomology transport.** The `𝔽₂`-cohomology of the open subgroup
+`G_L ≤ G_K` is the `𝔽₂`-cohomology of `G_L`, through the previous two milestones. Every
+statement below is phrased on the right-hand side, which is the carrier of `L`. -/
+noncomputable def subgroupCohomologyIso (σ : L →ₐ[K] SeparableClosure K) (n : ℕ) :
+    (continuousCohomology ℤ ↥(galoisSubgroup K L σ).toSubgroup n).obj
+        (trivialF2 ↥(galoisSubgroup K L σ).toSubgroup) ≅ contH L n :=
   sorry
 
-/-- **Layer 7A, the Evens norm at index two.** The Evens norm multiplies degree by the
-index, so a map `H¹(G_L) → H²(G_K)` exists exactly in the index-two case. The degree
-hypothesis is part of the signature. -/
-noncomputable def evensIndexTwo (σ : L →ₐ[K] SeparableClosure K)
-    (hdeg : Module.finrank K L = 2) : H1 L → H2 K :=
+/-- **Layer 7A adapter, restriction** `H^n(G_K, 𝔽₂) → H^n(G_L, 𝔽₂)`. It is the supplier's `res`
+at the subgroup above, followed by the transport, and it introduces no second restriction. -/
+noncomputable def resH (σ : L →ₐ[K] SeparableClosure K) (n : ℕ) : contH K n ⟶ contH L n :=
+  res ℤ (galoisSubgroup K L σ).toSubgroup (trivialF2 (AbsoluteGaloisGroup K)) n ≫
+    (subgroupCohomologyIso K L σ n).hom
+
+/-- **Layer 7A adapter, corestriction** `H^n(G_L, 𝔽₂) → H^n(G_K, 𝔽₂)`, the supplier's
+`corestriction` read through the same transport. -/
+noncomputable def corH (σ : L →ₐ[K] SeparableClosure K) (n : ℕ) : contH L n ⟶ contH K n :=
+  (subgroupCohomologyIso K L σ n).inv ≫
+    corestriction ℤ (galoisSubgroup K L σ) (trivialF2 (AbsoluteGaloisGroup K))
+      (trivialF2_isSmoothDiscrete (AbsoluteGaloisGroup K)) n
+
+/-- **Layer 7A adapter, restriction on the multiplicative coefficients.** The coefficient object
+`unitsCoeff` is this roadmap's, so its restriction is too. -/
+noncomputable def resHUnits (σ : L →ₐ[K] SeparableClosure K) (n : ℕ) :
+    contHUnits K n ⟶ contHUnits L n :=
   sorry
+
+/-- **Layer 7A adapter, the Evens norm at index two** `H¹(G_L, 𝔽₂) → H²(G_K, 𝔽₂)`. It is the
+supplier's `evensNormIndexTwo`, whose index hypothesis is discharged by `galoisSubgroup_index`.
+The Evens norm multiplies degree by the index, so this signature is the index-two case and
+nothing else: for `[L:K] = 3` the target is `H³`. -/
+noncomputable def evensH (σ : L →ₐ[K] SeparableClosure K) (hdeg : Module.finrank K L = 2) :
+    H1 L → H2 K :=
+  fun x =>
+    evensNormIndexTwo (galoisSubgroup K L σ) (by rw [galoisSubgroup_index]; exact hdeg)
+      ((subgroupCohomologyIso K L σ 1).inv.hom x)
 
 variable {K L}
 
-/-- **Layer 7A, the conjugate class** at index two, represented through `res ∘ cor`. -/
-noncomputable def conjClass (σ : L →ₐ[K] SeparableClosure K) (hdeg : Module.finrank K L = 2)
-    (y : H1 L) : H1 L :=
-  res1 K L σ (cor1 K L σ y) - y
+/-- **Layer 7A adapter, the conjugate class**, represented through `res ∘ cor` so that no
+element outside `G_L` is chosen. The supplier's `evensConj` is built from a chosen
+representative in an `IndexTwoDatum`; that the two agree is `conjH_evensConj` below. -/
+noncomputable def conjH (σ : L →ₐ[K] SeparableClosure K) (n : ℕ) (y : contH L n) : contH L n :=
+  (resH K L σ n).hom ((corH K L σ n).hom y) - y
 
-/-- Restriction is the base change of square classes. -/
-theorem res1_kummerClass [Invertible (2 : K)] [Invertible (2 : L)]
+/-- At index two, `res ∘ cor` is the sum over the two conjugates. It holds by the definition of
+`conjH`, and it is named because it is the form later proofs apply. -/
+theorem resH_corH (σ : L →ₐ[K] SeparableClosure K) (n : ℕ) (y : contH L n) :
+    (resH K L σ n).hom ((corH K L σ n).hom y) = y + conjH σ n y :=
+  sorry
+
+/-- **Layer 7A adapter, the two conjugates agree.** The supplier's `evensConj` depends on a
+chosen element outside the subgroup; the representation through `res ∘ cor` does not. Without
+this comparison the Evens identities below could not be transported to the `σ`-free form. -/
+theorem conjH_evensConj (σ : L →ₐ[K] SeparableClosure K)
+    (D : IndexTwoDatum (galoisSubgroup K L σ)) (y : H1 L) :
+    conjH σ 1 y =
+      (subgroupCohomologyIso K L σ 1).hom.hom
+        (evensConj (galoisSubgroup K L σ) D ((subgroupCohomologyIso K L σ 1).inv.hom y)) :=
+  sorry
+
+/-- Restriction is the base change of square classes. This is the supplier's `kummerIso_res` at
+`n = 2`, transported. -/
+theorem resH_kummerClass [Invertible (2 : K)] [Invertible (2 : L)]
     (σ : L →ₐ[K] SeparableClosure K) (a : Kˣ) :
-    res1 K L σ (kummerClass a) = kummerClass (Units.map (algebraMap K L : K →* L) a) :=
+    (resH K L σ 1).hom (kummerClass a) = kummerClass (Units.map (algebraMap K L : K →* L) a) :=
   sorry
 
-/-- Corestriction is the norm on square classes. -/
-theorem cor1_kummerClass [Invertible (2 : K)] [Invertible (2 : L)]
+/-- Corestriction is the norm on square classes. This is the supplier's `kummerIso_norm` at
+`n = 2`, transported. -/
+theorem corH_kummerClass [Invertible (2 : K)] [Invertible (2 : L)]
     (σ : L →ₐ[K] SeparableClosure K) (a : Lˣ) :
-    cor1 K L σ (kummerClass a) = kummerClass (Units.map (Algebra.norm K : L →* K) a) :=
+    (corH K L σ 1).hom (kummerClass a) = kummerClass (Units.map (Algebra.norm K : L →* K) a) :=
   sorry
 
-/-- Restriction preserves cup products. -/
-theorem res2_cup (σ : L →ₐ[K] SeparableClosure K) (x y : H1 K) :
-    res2 K L σ (cup11 K x y) = cup11 L (res1 K L σ x) (res1 K L σ y) :=
+/-- Restriction preserves cup products, from the supplier's `cup_res`. -/
+theorem resH_cup (σ : L →ₐ[K] SeparableClosure K) (x y : H1 K) :
+    (resH K L σ 2).hom (cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 x y) =
+      cup (f2Pairing (AbsoluteGaloisGroup L)) 1 1 ((resH K L σ 1).hom x) ((resH K L σ 1).hom y) :=
   sorry
 
-/-- At index two, `res ∘ cor` is the sum over the two conjugates. -/
-theorem res1_cor1 (σ : L →ₐ[K] SeparableClosure K) (hdeg : Module.finrank K L = 2)
-    (y : H1 L) :
-    res1 K L σ (cor1 K L σ y) = y + conjClass σ hdeg y :=
+/-- The projection formula, from the supplier's `cup_projection`. -/
+theorem corH_cup (σ : L →ₐ[K] SeparableClosure K) (x : H1 K) (y : H1 L) :
+    (corH K L σ 2).hom
+        (cup (f2Pairing (AbsoluteGaloisGroup L)) 1 1 ((resH K L σ 1).hom x) y) =
+      cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 x ((corH K L σ 1).hom y) :=
   sorry
 
-/-- The projection formula. -/
-theorem cor2_cup (σ : L →ₐ[K] SeparableClosure K) (x : H1 K) (y : H1 L) :
-    cor2 K L σ (cup11 L (res1 K L σ x) y) = cup11 K x (cor1 K L σ y) :=
-  sorry
-
-/-- The restriction of an Evens norm is the cup with the conjugate class. -/
-theorem res2_evens (σ : L →ₐ[K] SeparableClosure K) (hdeg : Module.finrank K L = 2)
+/-- The restriction of an Evens norm is the cup with the conjugate class. This is the supplier's
+`evensNorm_res`, transported to the `σ`-free conjugate. -/
+theorem resH_evensH (σ : L →ₐ[K] SeparableClosure K) (hdeg : Module.finrank K L = 2)
     (x : H1 L) :
-    res2 K L σ (evensIndexTwo K L σ hdeg x) = cup11 L x (conjClass σ hdeg x) :=
+    (resH K L σ 2).hom (evensH K L σ hdeg x) =
+      cup (f2Pairing (AbsoluteGaloisGroup L)) 1 1 x (conjH σ 1 x) :=
   sorry
 
-/-- The Evens norm fails additivity by the corestriction of a cup with the **conjugate**
-class. This is the identity that Layer 9 uses, and the conjugate is not optional. -/
-theorem evens_add (σ : L →ₐ[K] SeparableClosure K) (hdeg : Module.finrank K L = 2)
+/-- The Evens norm fails additivity by the corestriction of a cup with the **conjugate** class.
+This is the supplier's `evensNorm_polarization`, transported; the conjugate is not optional, and
+a formula without it is a different statement. It is the identity Layer 9 uses. -/
+theorem evensH_add (σ : L →ₐ[K] SeparableClosure K) (hdeg : Module.finrank K L = 2)
     (x y : H1 L) :
-    evensIndexTwo K L σ hdeg (x + y) =
-      evensIndexTwo K L σ hdeg x + evensIndexTwo K L σ hdeg y +
-        cor2 K L σ (cup11 L x (conjClass σ hdeg y)) :=
+    evensH K L σ hdeg (x + y) =
+      evensH K L σ hdeg x + evensH K L σ hdeg y +
+        (corH K L σ 2).hom (cup (f2Pairing (AbsoluteGaloisGroup L)) 1 1 x (conjH σ 1 y)) :=
   sorry
 
 /-- Compatibility of the coefficient map with restriction. -/
-theorem h2MuToUnits_res2 [Invertible (2 : K)] [Invertible (2 : L)]
+theorem h2MuToUnits_resH [Invertible (2 : K)] [Invertible (2 : L)]
     (σ : L →ₐ[K] SeparableClosure K) (x : H2 K) :
-    h2MuToUnits L (res2 K L σ x) = res2Units K L σ (h2MuToUnits K x) :=
+    h2MuToUnits L ((resH K L σ 2).hom x) = (resHUnits K L σ 2).hom (h2MuToUnits K x) :=
   sorry
 
-/-- Restriction and corestriction are functorial in a tower `M/L/K`. -/
-theorem res1_comp {M : Type u} [Field M] [Algebra K M] [Algebra L M] [IsScalarTower K L M]
-    [FiniteDimensional L M] [Algebra.IsSeparable L M]
+/-- Restriction is functorial in a tower `M/L/K`. -/
+theorem resH_comp {M : Type} [Field M] [Algebra K M] [Algebra L M] [IsScalarTower K L M]
+    [FiniteDimensional L M] [Algebra.IsSeparable L M] [FiniteDimensional K M]
+    [Algebra.IsSeparable K M]
     (σ : L →ₐ[K] SeparableClosure K) (τ : M →ₐ[L] SeparableClosure L)
-    (υ : M →ₐ[K] SeparableClosure K) :
-    res1 L M τ ∘ res1 K L σ = res1 K M υ :=
+    (υ : M →ₐ[K] SeparableClosure K) (n : ℕ) :
+    resH K L σ n ≫ resH L M τ n = resH K M υ n :=
   sorry
 
-/-- **Independence of the embedding.** Two `K`-embeddings of `L` give conjugate open
-subgroups, and the induced maps on cohomology agree. Every statement below is therefore
-about `L/K` and not about a chosen embedding. -/
-theorem res1_embedding_independent (σ τ : L →ₐ[K] SeparableClosure K) :
-    res1 K L σ = res1 K L τ :=
+/-- **Independence of the embedding, at the level of subgroups.** Two `K`-embeddings of `L` into
+`Kˢ` cut out conjugate open subgroups. -/
+theorem galoisSubgroup_conj (σ τ : L →ₐ[K] SeparableClosure K) :
+    ∃ g : AbsoluteGaloisGroup K,
+      (galoisSubgroup K L τ).toSubgroup =
+        (galoisSubgroup K L σ).toSubgroup.map (MulAut.conj g).toMonoidHom :=
   sorry
 
-theorem cor1_embedding_independent (σ τ : L →ₐ[K] SeparableClosure K) :
-    cor1 K L σ = cor1 K L τ :=
+/-- **Independence of the embedding**, for restriction. Conjugate subgroups induce the same map
+on cohomology, so every statement below is about `L/K` and not about a chosen embedding. -/
+theorem resH_embedding_independent (σ τ : L →ₐ[K] SeparableClosure K) (n : ℕ) :
+    resH K L σ n = resH K L τ n :=
   sorry
 
-theorem evens_embedding_independent (σ τ : L →ₐ[K] SeparableClosure K)
+/-- **Independence of the embedding**, for corestriction. -/
+theorem corH_embedding_independent (σ τ : L →ₐ[K] SeparableClosure K) (n : ℕ) :
+    corH K L σ n = corH K L τ n :=
+  sorry
+
+/-- **Independence of the embedding**, for the Evens norm. -/
+theorem evensH_embedding_independent (σ τ : L →ₐ[K] SeparableClosure K)
     (hdeg : Module.finrank K L = 2) :
-    evensIndexTwo K L σ hdeg = evensIndexTwo K L τ hdeg :=
+    evensH K L σ hdeg = evensH K L τ hdeg :=
   sorry
 
 end Transfer
@@ -1090,14 +1219,14 @@ open TauCetiRoadmap.RepresentationTheory.SemisimpleAlgebras
 variable (K)
 
 /-- The 2-torsion subgroup of the Brauer group. -/
-noncomputable def Br2 : Subgroup (BrauerGroup.{u, u} K) :=
-  MonoidHom.ker (powMonoidHom 2 : BrauerGroup.{u, u} K →* BrauerGroup.{u, u} K)
+noncomputable def Br2 : Subgroup (BrauerGroup.{0, 0} K) :=
+  MonoidHom.ker (powMonoidHom 2 : BrauerGroup.{0, 0} K →* BrauerGroup.{0, 0} K)
 
 /-- **Layer 7B, the crossed-product comparison**, as a named canonical equivalence.
 Multiplication of Brauer classes goes to addition of cohomology classes, which is what
 `≃+` records. -/
 noncomputable def brauerCohomologyEquiv :
-    Additive (BrauerGroup.{u, u} K) ≃+ H2Units K :=
+    Additive (BrauerGroup.{0, 0} K) ≃+ H2Units K :=
   sorry
 
 /-- **Layer 7B, the 2-torsion comparison**, `ι` in the README. -/
@@ -1110,7 +1239,7 @@ variable {K}
 /-- The two comparisons agree on 2-torsion, through the coefficient map. -/
 theorem brauer2EquivH2_h2MuToUnits [Invertible (2 : K)] (x : ↥(Br2 K)) :
     h2MuToUnits K (brauer2EquivH2 K (Additive.ofMul x)) =
-      brauerCohomologyEquiv K (Additive.ofMul (x : BrauerGroup.{u, u} K)) :=
+      brauerCohomologyEquiv K (Additive.ofMul (x : BrauerGroup.{0, 0} K)) :=
   sorry
 
 /-- **Layer 7B, the symbol as a cup product.** The quaternion class is 2-torsion by
@@ -1118,19 +1247,63 @@ theorem brauer2EquivH2_h2MuToUnits [Invertible (2 : K)] (x : ↥(Br2 K)) :
 theorem brauer2EquivH2_quaternionClass [Invertible (2 : K)] (a b : Kˣ)
     (h : quaternionClass a b ∈ Br2 K) :
     brauer2EquivH2 K (Additive.ofMul ⟨quaternionClass a b, h⟩) =
-      cup11 K (kummerClass a) (kummerClass b) :=
+      cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass a) (kummerClass b) :=
   sorry
 
 end BrauerComparison
 
-/-! ## Layer 7C: the symbol as a cup product -/
+/-! ## Layer 7C: the symbol as a cup product
 
-/-- **Layer 7C, the fifth equivalent condition.** The cup product of two Kummer classes
-vanishes exactly when the four conditions of Layer 2 hold. This is stated against the
-canonical cup product, so a zero pairing cannot satisfy it. -/
+The canonical cup-norm theorem is the first statement below, and the four theorems after it are
+the other descriptions of the same condition. Together they are what a consumer applies: one
+named theorem per description, all against the supplier's `cup` at the canonical `𝔽₂` pairing,
+so that a zero pairing cannot satisfy any of them. The hypothesis is `Invertible (2 : K)` and
+nothing else; in particular no statement excludes the dyadic case. -/
+
+/-- **Layer 7C, the canonical cup-norm theorem.** The cup product of two Kummer classes vanishes
+exactly when the norm equation `b = x² − a y²` is solvable. This is the fifth equivalent
+condition of Layer 2's four-fold criterion, and it holds over any field in which `2` is
+invertible (Serre, *Local Fields* XIV §2 Prop. 4-5; Gille-Szamuely 4.7). -/
 theorem cup_kummerClass_eq_zero_iff [Invertible (2 : K)] (a b : Kˣ) :
-    cup11 K (kummerClass a) (kummerClass b) = 0 ↔
+    cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass a) (kummerClass b) = 0 ↔
       ∃ x y : K, (b : K) = x ^ 2 - (a : K) * y ^ 2 :=
+  sorry
+
+/-- **Layer 7C, the cup against the splitting of the quaternion algebra.** The bridge to Layer
+2's four-fold criterion, named so that a consumer can move between the algebra and the class. -/
+theorem cup_kummerClass_eq_zero_iff_split [Invertible (2 : K)] (a b : Kˣ) :
+    cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass a) (kummerClass b) = 0 ↔
+      Nonempty (ℍ[K, (a : K), (b : K)] ≃ₐ[K] Matrix (Fin 2) (Fin 2) K) :=
+  sorry
+
+/-- **Layer 7C, the cup against the quadratic-algebra norm condition.** -/
+theorem cup_kummerClass_eq_zero_iff_norm [Invertible (2 : K)] (a b : Kˣ) :
+    cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass a) (kummerClass b) = 0 ↔
+      ∃ z : QuadraticAlgebra K (a : K) 0, QuadraticAlgebra.norm z = (b : K) :=
+  sorry
+
+/-- **Layer 7C, the cup against isotropy of `⟨1, −a, −b⟩`.** -/
+theorem cup_kummerClass_eq_zero_iff_isotropic [Invertible (2 : K)] (a b : Kˣ) :
+    cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass a) (kummerClass b) = 0 ↔
+      ¬ (weightedSumSquares K ![(1 : K), -(a : K), -(b : K)]).Anisotropic :=
+  sorry
+
+/-- **Layer 7C, the cup against the `{±1}`-valued Hilbert symbol**, over a nonarchimedean local
+field. This roadmap owns both halves of the symbol: the norm-criterion description of the mod-2
+pairing, which is `cup_kummerClass_eq_zero_iff` above and holds over any field with `2`
+invertible, and this identification with the classical symbol of Layer 6C. The Local Fields
+roadmap owns the duality pairing and its perfectness and states no comparison with the symbol,
+so this is the statement of record. -/
+theorem cup_kummerClass_eq_zero_iff_hilbertSymbol [ValuativeRel K] [TopologicalSpace K]
+    [IsNonarchimedeanLocalField K] [Invertible (2 : K)] (a b : Kˣ) :
+    cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass a) (kummerClass b) = 0 ↔
+      hilbertSymbol a b = 1 :=
+  sorry
+
+/-- **Layer 7C, the Steinberg corollary.** -/
+theorem cup_kummerClass_one_sub [Invertible (2 : K)] (a : Kˣ) (h : (1 : K) - a ≠ 0) :
+    cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass a)
+      (kummerClass (Units.mk0 ((1 : K) - a) h)) = 0 :=
   sorry
 
 /-! ## Layer 8: Stiefel-Whitney classes in degrees 1 and 2 -/
@@ -1144,22 +1317,59 @@ noncomputable def sw1 [Invertible (2 : K)] {n : ℕ} (w : Fin n → Kˣ) : H1 K 
 `w₂(q) = ∑_{i<j} (aᵢ)(aⱼ)`. -/
 noncomputable def sw2 [Invertible (2 : K)] {n : ℕ} (w : Fin n → Kˣ) : H2 K :=
   ∑ ij ∈ Finset.univ.filter fun ij : Fin n × Fin n => ij.1 < ij.2,
-    cup11 K (kummerClass (w ij.1)) (kummerClass (w ij.2))
+    cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass (w ij.1)) (kummerClass (w ij.2))
 
 /-- **Layer 8, well-definedness of the Stiefel-Whitney classes**, by the Layer 0 descent
-principle. The binary step is the cup identity `(a)(b) = (c)(d)` for `⟨a,b⟩ ≅ ⟨c,d⟩`,
-which is `cup_kummerClass_eq_zero_iff` together with Layer 0's binary criterion. -/
+principle. The binary step is the cup identity `(a)(b) = (c)(d)` for `⟨a,b⟩ ≅ ⟨c,d⟩`, which is
+`cup_kummerClass_eq_zero_iff` together with Layer 0's binary criterion. -/
 theorem sw_congr [Invertible (2 : K)] {n : ℕ} (w w' : Fin n → Kˣ)
     (h : (weightedSumSquares K fun i => ((w i : K))).Equivalent
       (weightedSumSquares K fun i => ((w' i : K)))) :
     sw1 w = sw1 w' ∧ sw2 w = sw2 w' :=
   sorry
 
+variable (K)
+
+/-- **Layer 8, `w₁` on isometry classes.** The descent of `sw1` along `Quotient.mk`, by the
+Layer 0 descent principle applied to `sw_congr`. This is the definition the form-level theorem
+of Layer 9 is stated with: a consumer never supplies a diagonalization. -/
+noncomputable def sw1Class [Invertible (2 : K)] : RegularFormClass K → H1 K :=
+  sorry
+
+/-- **Layer 8, `w₂` on isometry classes.** -/
+noncomputable def sw2Class [Invertible (2 : K)] : RegularFormClass K → H2 K :=
+  sorry
+
+variable {K}
+
+/-- `w₁` of a class is computed on any presentation of it. -/
+theorem sw1Class_mk [Invertible (2 : K)] {n : ℕ} (w : Fin n → Kˣ) :
+    sw1Class K (Quotient.mk (regularFormSetoid K) ⟨n, w⟩) = sw1 w :=
+  sorry
+
+/-- `w₂` of a class is computed on any presentation of it. -/
+theorem sw2Class_mk [Invertible (2 : K)] {n : ℕ} (w : Fin n → Kˣ) :
+    sw2Class K (Quotient.mk (regularFormSetoid K) ⟨n, w⟩) = sw2 w :=
+  sorry
+
+/-- **Layer 8, `w₁` and `w₂` are invariants of isometry.** Two regular forms that are
+`QuadraticMap.Equivalent` have the same classes, since they have the same class in
+`RegularFormClass K`. This is the statement a consumer needs in order to apply Layer 9 to a form
+given by a construction rather than by a tuple. -/
+theorem sw1Class_formClass_congr [Invertible (2 : K)] {V W : Type} [AddCommGroup V] [Module K V]
+    [FiniteDimensional K V] [AddCommGroup W] [Module K W] [FiniteDimensional K W]
+    (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) (R : QuadraticForm K W)
+    (hR : R.Nondegenerate) (h : Q.Equivalent R) :
+    sw1Class K (formClass Q hQ) = sw1Class K (formClass R hR) ∧
+      sw2Class K (formClass Q hQ) = sw2Class K (formClass R hR) :=
+  sorry
+
 /-- **Layer 8, the orthogonal-sum identities**, stated degreewise, since this roadmap has
 no total class. -/
 theorem sw_append [Invertible (2 : K)] {m n : ℕ} (w : Fin m → Kˣ) (w' : Fin n → Kˣ) :
     sw1 (Fin.append w w') = sw1 w + sw1 w' ∧
-      sw2 (Fin.append w w') = sw2 w + sw2 w' + cup11 K (sw1 w) (sw1 w') :=
+      sw2 (Fin.append w w') =
+        sw2 w + sw2 w' + cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (sw1 w) (sw1 w') :=
   sorry
 
 open TauCetiRoadmap.RepresentationTheory.SemisimpleAlgebras in
@@ -1177,19 +1387,20 @@ theorem brauer2EquivH2_cliffordInvariant [Invertible (2 : K)] {n : ℕ} (w : Fin
     (h : cliffordInvariant w ∈ Br2 K) :
     brauer2EquivH2 K (Additive.ofMul ⟨cliffordInvariant w, h⟩) =
       sw2 w + ((n - 1) * (n - 2) / 2 : ℕ) •
-          cup11 K (kummerClass (-1)) (sw1 w) +
+          cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass (-1)) (sw1 w) +
         ((n + 1) * n * (n - 1) * (n - 2) / 24 : ℕ) •
-          cup11 K (kummerClass (-1)) (kummerClass (-1)) :=
+          cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass (-1)) (kummerClass (-1)) :=
   sorry
 
 /-- **Layer 8, acceptance examples.** `w₁⟨a⟩ = (a)` and `w₂⟨a⟩ = 0`; and
 `w₂⟨a,b⟩ = (a) ∪ (b)`. -/
 example [Invertible (2 : K)] (a b : Kˣ) :
     sw1 ![a] = kummerClass a ∧ sw2 ![a] = 0 ∧
-      sw2 ![a, b] = cup11 K (kummerClass a) (kummerClass b) :=
+      sw2 ![a, b] = cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass a)
+        (kummerClass b) :=
   sorry
 
-/-! ## Layer 9: the Scharlau transfer and the Evens-Kahn identity -/
+/-! ## Layer 9: the Scharlau transfer and the relative Stiefel-Whitney formula -/
 
 /-- **Layer 9, the nonzero functionals form an `Lˣ`-torsor.** `Hom_K(L,K)` is
 one-dimensional over `L` under `(λ · s) x = s (λ x)`, so any two nonzero functionals
@@ -1210,6 +1421,16 @@ def scharlauTransfer {L : Type v} [Field L] [Algebra K L] {V : Type v} [AddCommG
     (q : QuadraticForm L V) : QuadraticForm K V :=
   s.compQuadraticMap' q
 
+/-- **Layer 9, the transfer respects isometry.** Isometric forms over `L` transfer to isometric
+forms over `K`. Without it the transfer is a function of a form and not of its class, and the
+form-level theorem below would have to name a presentation. -/
+theorem scharlauTransfer_congr {L : Type v} [Field L] [Algebra K L] {V W : Type v}
+    [AddCommGroup V] [Module L V] [Module K V] [IsScalarTower K L V]
+    [AddCommGroup W] [Module L W] [Module K W] [IsScalarTower K L W]
+    (s : L →ₗ[K] K) (q : QuadraticForm L V) (r : QuadraticForm L W) (h : q.Equivalent r) :
+    (scharlauTransfer s q).Equivalent (scharlauTransfer s r) :=
+  sorry
+
 /-- **Layer 9, the transfer preserves hyperbolic forms.** A Lagrangian stays a
 Lagrangian, so `s_*` descends to `W(L) → W(K)`. The descended map is additive and is a
 `W(K)`-module map by Frobenius reciprocity. It is **not** a ring map. -/
@@ -1227,23 +1448,54 @@ example [Invertible (2 : K)] (d : Kˣ) :
       (weightedSumSquares K ![(2 : K), 2 * d]) :=
   sorry
 
-/-- **Layer 9, the Evens-Kahn identity in degrees 1 and 2**, which is the statement that
-`gq2`'s B9 consumes (Kahn, Invent. Math. 78 (1984), Théorème 2 in degrees `≤ 2`). The
-extension is quadratic and separable, `t` presents the trace form `Tr_*⟨1⟩`, `b` presents
-the twisted trace form `Tr_*⟨a⟩`, and the transfer maps are the canonical ones attached
-to `L/K`. -/
-theorem evensKahn_deg_two {L : Type u} [Field L] [Algebra K L] [FiniteDimensional K L]
-    [Algebra.IsSeparable K L] [Invertible (2 : K)] [Invertible (2 : L)]
+/-- **Layer 9, the relative Stiefel-Whitney formula for a quadratic extension**, stated on the
+transferred forms themselves (Kahn, Invent. Math. 78 (1984), Théorème 2 in degrees `≤ 2`;
+Kozlowski, Proc. AMS 91 (1984), Thm 1.1; Evens, Trans. AMS 108 (1963), for the norm).
+
+Nothing in the statement is a chosen diagonalization: the two sides are the Stiefel-Whitney
+classes of the isometry classes of `Tr_*⟨1⟩` and `Tr_*⟨a⟩`, and the operations are the canonical
+corestriction, cup and Evens norm attached to `L/K`. The regularity hypotheses are what make the
+two transferred forms have classes; they are Layer 9's own milestone that the transfer of a
+regular form along a nonzero functional is regular. -/
+theorem relativeStiefelWhitney_quadraticExtension {L : Type} [Field L] [Algebra K L]
+    [FiniteDimensional K L] [Algebra.IsSeparable K L] [Invertible (2 : K)] [Invertible (2 : L)]
+    [FiniteDimensional K (Fin 1 → L)]
+    (hdeg : Module.finrank K L = 2) (σ : L →ₐ[K] SeparableClosure K) (a : Lˣ)
+    (h1 : (scharlauTransfer (Algebra.trace K L) (weightedSumSquares L ![(1 : L)])).Nondegenerate)
+    (ha : (scharlauTransfer (Algebra.trace K L) (weightedSumSquares L ![(a : L)])).Nondegenerate) :
+    sw1Class K (formClass _ ha) =
+        sw1Class K (formClass _ h1) + (corH K L σ 1).hom (kummerClass a) ∧
+      sw2Class K (formClass _ ha) =
+        sw2Class K (formClass _ h1) + evensH K L σ hdeg (kummerClass a) +
+          cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (sw1Class K (formClass _ h1))
+            ((corH K L σ 1).hom (kummerClass a)) :=
+  sorry
+
+/-- **Layer 9, the calculational corollary of the formula above**, on chosen diagonal tuples.
+`t` presents the trace form `Tr_*⟨1⟩` and `b` presents the twisted trace form `Tr_*⟨a⟩`; the
+identity is then an equation between the Layer 8 classes of those tuples. This is the shape a
+computation over a fixed base uses, and it follows from the form-level theorem through
+`sw1Class_mk` and `sw2Class_mk`. -/
+theorem relativeStiefelWhitney_quadraticExtension_diagonal {L : Type} [Field L] [Algebra K L]
+    [FiniteDimensional K L] [Algebra.IsSeparable K L] [Invertible (2 : K)] [Invertible (2 : L)]
     (hdeg : Module.finrank K L = 2) (σ : L →ₐ[K] SeparableClosure K)
     (a : Lˣ) (t b : Fin 2 → Kˣ)
     (ht : (weightedSumSquares K fun i => ((t i : K))).Equivalent
       (LinearMap.BilinMap.toQuadraticMap (Algebra.traceForm K L)))
     (hb : (weightedSumSquares K fun i => ((b i : K))).Equivalent
       (scharlauTransfer (Algebra.trace K L) (weightedSumSquares L ![(a : L)]))) :
-    sw1 b = sw1 t + cor1 K L σ (kummerClass a) ∧
-      sw2 b = sw2 t + evensIndexTwo K L σ hdeg (kummerClass a) +
-        cup11 K (sw1 t) (cor1 K L σ (kummerClass a)) :=
+    sw1 b = sw1 t + (corH K L σ 1).hom (kummerClass a) ∧
+      sw2 b = sw2 t + evensH K L σ hdeg (kummerClass a) +
+        cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (sw1 t)
+          ((corH K L σ 1).hom (kummerClass a)) :=
   sorry
+
+end Cohomology
+
+section FormTheoryChecks
+
+variable {K : Type u} [Field K]
+
 
 /-! ## Consumed-interface checks
 
@@ -1260,5 +1512,7 @@ Layer 9. -/
 example {L : Type v} [Field L] [Algebra K L] [FiniteDimensional K L] [Algebra.IsSeparable K L] :
     (Algebra.traceForm K L).Nondegenerate :=
   traceForm_nondegenerate K L
+
+end FormTheoryChecks
 
 end TauCetiRoadmap.QuadraticFormInvariants
