@@ -215,9 +215,48 @@ order — trivial included — to the field of moduli, ⚠ **but on a conic, not
 `ℙ¹`**; §8.3 gives the Hilbert-symbol obstruction in the cyclic even-order case. README
 Layer 11.6 carries the conic caveat.
 
-Still to locate for numbering: Girondo–González-Diez (LMS ST 79), Szamuely (CSAM 117),
-Forster (GTM 81), Serre (*Topics in Galois Theory*), Deligne (MSRI 16), MSSV (ANTS XIII),
-Dixon–Mortimer (GTM 163), Katok (*Fuchsian Groups*).
+**Girondo–González-Diez** and **Forster** were read directly on 2026-08-08 from the copies
+in `~/claude/references`; per-statement extracts are in `ggd-extract.md` and
+`forster-extract.md` beside them, and the numbers are folded into the README's `*Source:*`
+lines for Layers 4.1, 4.4, 4.5, 5, 6.1, 6.3, 6.5, 7.1, 7.4, 8.1–8.3, 8.5, 8.6, 9.2, 9.3,
+10.6, 12.11 and 13.5. Four findings changed the roadmap rather than annotating it:
+
+- **Girondo–González-Diez Theorem 4.49** proves faithfulness on genus-zero dessins by
+  **Lenstra's** argument — the polynomial `p_α = ∫ x(x−1)²(x−α)³` with its three *pairwise
+  distinct* critical multiplicities `2, 3, 4`, plus **Lemma 4.50** — and **Theorem 4.48**
+  states faithfulness for every genus, proved genus by genus. Layer 13.5 was rewritten onto
+  Lenstra's route, which is elementary and stays in `ℚ̄[x]`; it previously used an
+  elliptic-curve `j`-invariant argument, and so previously depended on AlgebraicCurves
+  Layer 10 and on Mathlib's `WeierstrassCurve.ModelsWithJ`/`IsomOfJ`. Those dependencies are
+  now gone.
+- **Its §2.4 supplies no matrices and no trace formula** for the general hyperbolic triangle
+  group, and its abstract presentation is unnumbered prose citing Jones–Singerman rather than
+  a proved statement; the geometric route runs through **Theorem 2.27** (Poincaré's polygon
+  theorem). Layer 4.5 therefore owns its explicit `PSL(2,ℝ)` construction and says so. Katok,
+  which the earlier draft cited for those matrices, is dropped rather than left unverifiable.
+- **Its §3.8 contains no field-of-moduli-versus-field-of-definition statement**, verified by
+  whole-book search, which confirms Layer 11.6's reliance on Couveignes rather than on this
+  book.
+- **The phrase "Riemann existence theorem" does not occur** in its chapters 1–4. Layer 8.6
+  now cites **Theorem 2.61** and **Proposition 2.63** by number and records that the name is
+  this roadmap's.
+
+⚠ **A third convention witness.** Girondo–González-Diez p. 148 defines monodromy as
+`M_f(γ) = σ_γ⁻¹` and p. 149 states: "Notice that if we had chosen to define `M_f(γ) = σ_γ`
+we would have obtained an anti-homomorphism." Their `π₁` composes paths in the geometers'
+order, the pin's `End.mul_def` composes in the opposite one, so the un-inverted `σ_γ` is the
+homomorphism *here*. Their triples are therefore the componentwise inverses of this
+roadmap's, exactly as the LMFDB's are — three conventions, one Layer 0.1 involution between
+them. Verified against the page, not inferred.
+
+⚠ **Szamuely.** The copy supplied is Gille–Szamuely, *Central Simple Algebras and Galois
+Cohomology*, which is a different book from Szamuely, *Galois Groups and Fundamental Groups*
+(CSAM 117), the one Layer 12 cites for its route. Layer 12 does not depend on it — its
+exponent is pinned by the Kummer identity of 12.10 — so this is an attribution gap, not a
+mathematical one.
+
+Still to locate for numbering: Szamuely (CSAM 117), Serre (*Topics in Galois Theory*),
+Deligne (MSRI 16), MSSV (ANTS XIII), Dixon–Mortimer (GTM 163).
 
 ## LMFDB state
 
@@ -434,11 +473,10 @@ the database is not claimed, and Layer 14 excludes completeness by name.
 
 ## Open items tracked here
 
-- Exact theorem numbers still outstanding: Girondo–González-Diez's Riemann-existence
-  chapter (Layers 7–9); Forster's numbered statements for Layers 8.2, 8.3, 8.5 and 9.2–9.3
-  (cited by section today); Szamuely's chapter-3/4 statements backing Layer 12's route;
-  Katok's matrices for Layer 4.5. Köck, Stix, Fried, Lando–Zvonkin, Couveignes and Weil are
-  done — see §Sources, verified.
+- Exact theorem numbers still outstanding: Szamuely (CSAM 117) for Layer 12's route, and
+  the wanted copy is not the Gille–Szamuely one to hand. Köck, Stix, Fried, Lando–Zvonkin,
+  Couveignes, Weil, Girondo–González-Diez and Forster are done — see §Sources, verified.
+  Katok is no longer wanted: Layer 4.5 owns its construction.
 - The LMFDB source commit behind the frozen schema above: the records were taken from the
   live API, so the column lists are dated rather than pinned to a `github.com/LMFDB/lmfdb`
   revision. Pinning one would let Layer 14.1's certificate cite a source file.

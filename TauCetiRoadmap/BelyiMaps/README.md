@@ -511,7 +511,10 @@ Prove, in this order:
    transitive product-one triple by Definition 1.1.1 — one has
    `χ = c(σ) + c(α) + c(φ) − n = 2 − 2g`.
    ⚠ **Their proof is topological**: `χ ≤ 2` and the parity come from the existence of the
-   associated surface, not from combinatorics. This roadmap deliberately does **not** follow
+   associated surface, not from combinatorics — as does the other standard reference's, since
+   Girondo–González-Diez reaches the genus through **Proposition 1.54** (`χ = 2 − 2g` for a
+   compact orientable surface) and **Theorem 1.76** (Riemann–Hurwitz), both presupposing the
+   surface. This roadmap deliberately does **not** follow
    it, because Layer 0 must not depend on Layers 5–8; the transposition induction above is
    the combinatorial replacement, and the topological statement reappears independently as
    Layer 8.6's genus reconciliation. An implementer who follows the citation to its proof
@@ -893,6 +896,17 @@ presentation `⟨x, y | x^a, y^b, (y·x)^c⟩`); behaviour at parameter `0` (`x^
 trivial relator, giving the free-er groups; the LMFDB's `abc` are always `≥ 1`, and
 statements assume `1 ≤ a b c` where they need it).
 
+*Source:* Girondo–González-Diez, **Definition 2.28** names `Γ_{n,m,l}` the triangle group of
+signature `(n,m,l)`, and **Remark 2.29** gives its uniqueness up to conjugation in
+`PSL(2,ℝ)`. ⚠ The abstract presentation `x₁ⁿ = x₂ᵐ = x₃ˡ = x₁x₂x₃ = 1` appears there as
+*unnumbered* prose on p. 119, and the book does **not** prove that the geometric group has no
+further relations — it cites Jones–Singerman for that. This roadmap takes the presentation as
+the **definition**, so nothing here depends on that unproved match; Layer 4.4's spherical
+classification and Layer 4.5 are what tie the presented group to a concrete group.
+
+⚠ *Nearby false statement:* `Γ_{∞,∞,∞}` is free of rank two, not of rank three — the third
+generator is determined. The presented group here degenerates the same way at parameter `0`.
+
 *Prerequisites:* Mathlib `PresentedGroup`, `FreeGroup`.
 
 #### 4.2 Triples as permutation representations
@@ -936,16 +950,39 @@ its sign matches Layer 0.7's geometry type of any connected triple with exact or
   affine group `z ↦ αz + β`, the relation is a computation in that group, and the
   commutator `[x, y]` is a nontrivial translation, of infinite order.
 
+*Source:* Girondo–González-Diez, **Remark 2.30**, which states the trichotomy qualitatively —
+the group is infinite in the Euclidean case and finite in the spherical case — and constructs
+the Euclidean and spherical groups by the same reflection route as the hyperbolic one.
+⚠ It is a remark, not a theorem, it gives no orders, and the identification of the spherical
+groups with the cyclic, dihedral, `A₄`, `S₄` and `A₅` families is **not** in that section; the
+only case it names is `Γ_{2,2,2} ≅ (ℤ/2)²`. The classification above is therefore this
+roadmap's own work, and the explicit permutation representations are what prove it.
+
 *Prerequisites:* Layers 0.7, 4.1, 4.2; Mathlib `ℚ`, complex affine maps.
 
 #### 4.5 Hyperbolic infiniteness
 
-For `χᵒʳᵇ < 0`, `TriangleGroup a b c` is infinite: the explicit hyperbolic rotation
-representation into `PSL₂(ℝ)` (generators as explicit matrices with traces
-`2cos(π/a), 2cos(π/b)`, the product condition a trigonometric identity, and an element of
-trace `> 2`, hence of infinite order, exhibited in the image). The milestone lists the
-matrices and the identity; `PROVENANCE.md` records the source pinned for this classical
-construction. Faithfulness of the representation is *not* claimed and not needed.
+For `χᵒʳᵇ < 0`, `TriangleGroup a b c` is infinite. The route is an explicit representation
+into `PSL₂(ℝ)`: rotations through `2π/a` and `2π/b` about two points at the hyperbolic
+distance the angle sum forces, written as explicit real matrices whose entries involve
+`cos(π/a)`, `cos(π/b)`, `cos(π/c)`; the relations are trigonometric identities; and the image
+contains an element of trace `> 2`, hence of infinite order, which is what infiniteness
+reduces to. The milestone owns the matrices and the identities, and **faithfulness of the
+representation is not claimed and not needed** — only that the image is infinite.
+
+*Source:* Girondo–González-Diez §2.4 is the classical treatment, and it takes a different
+route: a hyperbolic triangle with angles `π/a, π/b, π/c`, the three reflections in its sides,
+and **Theorem 2.27 (Poincaré's polygon theorem)** for discreteness, with infiniteness falling
+out of the tessellation. ⚠ **That book prints no matrices for the general hyperbolic case and
+no trace formula** — its explicit matrices are confined to the two worked examples
+`Γ_{2,3,∞} = PSL(2,ℤ)` (**Theorem 2.31**) and `Γ_{∞,∞,∞} = Γ(2)` (**Theorem 2.34**). So the
+construction above is this roadmap's, chosen because it needs only `SL(2,ℝ)` arithmetic and
+real trigonometry, where the geometric route would first require hyperbolic area, geodesics
+and Poincaré's theorem — a development no roadmap owns and this one does not need.
+
+⚠ *Nearby false statement:* discreteness is *not* what this milestone claims. The image being
+infinite needs one element of infinite order; discreteness of the image, and faithfulness,
+are strictly stronger and are where the geometric route's real work lies.
 
 *Prerequisites:* Layers 4.1, 4.4; Mathlib `Matrix.SpecialLinearGroup`, real trigonometry.
 
@@ -965,6 +1002,15 @@ the worked example (`N ⊴ TriangleGroup 4 4 2` of index `4`).
 
 The concrete model is affine: `ℙ¹(ℂ) ∖ {0, 1, ∞}` is `ℂ ∖ {0, 1}`, and the sphere enters
 only through the open embedding of 5.1.
+
+⚠ **There is a classical route that this roadmap deliberately does not take.**
+Girondo–González-Diez **Theorem 2.34** identifies the triangle group `Γ_{∞,∞,∞}` with the
+principal congruence subgroup `Γ(2)` and with the fundamental group of the thrice-punctured
+sphere, and pp. 125–126 match its three generators with loops around `0`, `1` and `∞`
+explicitly. Taking that as the definition would import uniformization, Fuchsian groups and
+the modular group — material belonging to the modular-forms family that nothing else here
+needs. The route below computes the fundamental group directly instead, and Layer 5.6's
+result is the same isomorphism.
 
 **The route is pinned, because the pin lacks a Seifert–van Kampen theorem and this
 roadmap does not build a general one.** Instead it builds the one case it needs — two
@@ -1268,6 +1314,19 @@ the fiber, not transitivity of the image of any one peripheral element, and not
 connectedness of `E` as a set of points over a single point. The empty cover has `n = 0`
 and is not connected, exactly matching Layer 0.4.
 
+*Source:* Girondo–González-Diez §2.7 defines the monodromy of a degree-`d` morphism and its
+`Mon(f) ≤ Σ_d`, with connectedness giving transitivity, and states that the homomorphism is
+well defined up to conjugation by the numbering of the fibre and by the base point.
+
+⚠ **That book inverts where this roadmap does not, and the two agree.** It defines
+`M_f(γ) = σ_γ⁻¹` and says explicitly that taking `σ_γ` itself "would have obtained an
+anti-homomorphism". That is because its `π₁` multiplies paths in the geometers' order; the
+pin multiplies them in the opposite order (`End.mul_def`), which makes the *un-inverted*
+`σ_γ` a homomorphism here. The net effect is that the book's monodromy triples are the
+componentwise inverses of this roadmap's — the same relation the LMFDB's stored triples bear
+to it, and the same Layer 0.1 involution translates both. Three independent conventions,
+one bridge.
+
 *Prerequisites:* Layers 0.1–0.4, 5.3, 5.7; Mathlib `IsCoveringMap`,
 `IsCoveringMap.exists_path_lifts`.
 
@@ -1325,6 +1384,12 @@ The equivalences, each with a named map in each direction:
 Prove that the correspondences match degree with fiber cardinality, and that they are
 natural in maps of covers.
 
+*Source:* Girondo–González-Diez **Theorem 2.61**: two morphisms of the same degree with the
+same branch-value set are isomorphic coverings if and only if their monodromies are
+conjugate. ⚠ Its hypotheses include *equal branch-value sets*, not merely equal degree; the
+statement is false without that, and the analogue here is that the three marked points are
+fixed once and for all.
+
 *Prerequisites:* Layers 0.2, 5.6, 6.1, 6.2; UniversalCovers milestone 8; Mathlib
 `existsUnique_continuousMap_lifts_of_range_le`.
 
@@ -1355,6 +1420,12 @@ corresponding subgroup of `FreeGroup (Fin 2)` is normal; the monodromy action is
 that case the deck group is isomorphic to the monodromy group, and the correspondence
 matches Layer 4.6's bijection between regular triples and finite-index normal subgroups of
 a triangle group.
+
+*Source:* Girondo–González-Diez **Definition 2.64** (Galois, equivalently normal or regular,
+covering), **Proposition 2.65** (`f` is Galois iff `f* : M(S₂) → M(S₁)` is a Galois field
+extension, and then the covering group is `Gal(M(S₁)/M(S₂))`), and **Proposition 2.66**
+(`f` is normal iff `deg f = |Mon(f)|`) — the last being the cleanest criterion to formalize,
+since both sides are already Layer 0 data.
 
 *Prerequisites:* Layers 4.6, 6.3, 6.4; UniversalCovers milestone 8.
 
@@ -1431,6 +1502,15 @@ the added points of either extension are recovered from `E` alone, as the ends o
 components of `p ⁻¹' D_q^*` — the milestone states the ends description as its own lemma,
 since it is what makes the compactification canonical rather than merely constructed.
 
+*Source:* Girondo–González-Diez **Lemma 1.80**: for `Y` compact, `Σ ⊂ Y` finite and
+`f* : X* → Y ∖ Σ` an unramified holomorphic covering of finite degree, there is a **unique**
+compact Riemann surface `X ⊇ X*` to which `f*` extends as a **unique** morphism `X → Y`, with
+`X ∖ X*` finite. The uniqueness of `X` is **Proposition 1.81**, and it is stronger than the
+statement needs: the compactification of `X*` is independent of `f` altogether. The
+construction — decompose `f⁻¹(V_y*)` into components, add one centre per component, declare
+the `z ↦ z^{mᵢ}` chart holomorphic — is given there as unnumbered prose in §1.2.7 and is what
+Layers 7.2 and 8.5 spell out.
+
 *Prerequisites:* Layers 7.2, 7.3.
 
 #### 7.5 The ramification dictionary
@@ -1492,8 +1572,14 @@ statements. Holomorphic maps are `MDifferentiable 𝓘(ℂ) 𝓘(ℂ)`; the comp
   `exists_eq_const_of_compactSpace`: a holomorphic function on a compact connected Riemann
   surface is constant.
 
-*Source:* Forster, *Lectures on Riemann Surfaces*, §1 for the definitions and the sphere;
-the roadmap's carrier differs from Forster's only in being unbundled.
+*Source:* Forster, *Lectures on Riemann Surfaces*, **1.1**–**1.4** for chart, atlas, complex
+structure and Riemann surface, **1.5(c)** for `ℙ¹` with its two charts `z` and `1/z`, **1.9**
+for holomorphic maps, **2.8** for constancy on a compact surface and **2.9** for
+`ℳ(ℙ¹) = ℂ(z)`; the roadmap's carrier differs from Forster's only in being unbundled.
+Girondo–González-Diez **Proposition 1.23** is the identification this layer's third bullet
+uses — meromorphic functions on `S` *are* the morphisms `S → Ĉ` other than the constant `∞` —
+and **Remark 1.25** is the maximum-principle corollary that a compact connected surface
+carries no nonconstant holomorphic function.
 
 ⚠ *Nearby false statement:* Hausdorffness is not automatic from the charted-space
 structure and must be carried — the line with two origins is charted over `ℂ` and is not a
@@ -1521,7 +1607,10 @@ compact; multiplicativity under composition; behaviour under pre- and post-compo
 with biholomorphisms; the value on the model maps `z ↦ z^n` and on `cyclicTriple`'s Belyi
 map; the identity theorem for maps of connected surfaces as a companion statement.
 
-*Source:* Forster §2 (the local behaviour of holomorphic maps).
+*Source:* Forster **2.1** — the local normal form, that a nonconstant holomorphic map is
+`z ↦ z^k` in suitable charts — with **2.2** for the multiplicity, **1.11** (identity theorem),
+**2.4** (open mapping), and **4.3** with **4.5(b)** for the branch points being exactly where
+the multiplicity exceeds `1`.
 
 ⚠ *Nearby false statement:* `e` is not the cardinality of a nearby fiber of `f` — that
 cardinality is the **sum** of the indices over the fiber, and equals `e` only locally, near
@@ -1543,8 +1632,17 @@ y ↦ Σ_{x ∈ f ⁻¹' {y}} ramificationIndex f x
 is constant, its value being the degree `d`. Off the branch values, `f` restricts to a
 degree-`d` covering map in the pin's `IsCoveringMap` sense.
 
-*Source:* Forster §4 (proper holomorphic maps are branched coverings; the degree is
-well-defined).
+*Source:* Forster **4.24** is the degree theorem — for a proper nonconstant map, `Σ v(f,x)`
+over a fibre is the same for every value — resting on **4.21(a)** (proper plus discrete gives
+finite fibres), **4.22** (a proper local homeomorphism is a covering map) and **4.23** (the
+branched-covering statement), with **2.7** for surjectivity from a compact source.
+Girondo–González-Diez **Theorem 1.74** packages exactly the three statements
+this milestone needs: (i) `f` restricts to a covering away from the branch values, (ii) over a
+small disc the preimage is a disjoint union of discs on each of which `f` is `z ↦ z^{mᵢ}`, and
+(iii) `Σ mₓ(f)` is independent of the point — with **Definition 1.75** taking that common
+value as the degree. ⚠ That book warns that "covering" there means an arbitrary morphism of
+compact surfaces, ramified or not; this roadmap reserves the word for the pin's
+`IsCoveringMap` and says "branched cover" otherwise.
 
 *Hypotheses:* compactness of the source is what makes the map proper and the branch locus
 finite; connectedness of the source is what makes "nonconstant" a global condition.
@@ -1587,9 +1685,13 @@ the filled points, and across them by the removable-singularity theorem in these
 Uniqueness: a homeomorphism of Riemann surfaces holomorphic off a finite set is
 holomorphic, again by removability.
 
-*Source:* Forster §4–§5 (the construction of the complex structure on a branched cover);
-Girondo–González-Diez, ch. 1–2, for the same construction at exactly the three-point
-generality of this roadmap.
+*Source:* Forster **4.6** (the unique complex structure making a local homeomorphism
+holomorphic), then **8.4** for the continuation of an unbranched proper covering of `X ∖ A`
+across `A` and **8.5** for its uniqueness up to fibre-preserving biholomorphism, with **8.9**
+packaging both as the Riemann surface of an algebraic function; Girondo–González-Diez §1.2.7 for the same construction, where the charts added at the filled
+points are declared holomorphic and the transition functions are checked, giving
+`m_{P}(f) = mᵢ` — with **Lemma 1.80** and **Proposition 1.81** supplying existence and
+uniqueness (Layer 7.4).
 
 ⚠ *Nearby false statement:* the complex structure is unique **given** that `fillMap` is
 holomorphic. A compact topological surface generally carries many inequivalent complex
@@ -1705,8 +1807,12 @@ comparison with the pin's `MeromorphicOn` vocabulary in each chart.
 poles need not be finite in number — `M(ℂ)` is enormous. Compactness and connectedness are
 both load-bearing, and every statement in this layer carries them.
 
-*Source:* Forster §1 and §2 for meromorphic functions on a Riemann surface; the sphere
-computation is the classical partial-fraction argument.
+*Source:* Forster **1.12** and **1.15** for meromorphic functions and their identification
+with holomorphic maps to `ℙ¹`, with **1.16** for the field structure. The sphere
+computation is Girondo–González-Diez **Proposition 1.26**, `M(ℙ¹) = ℂ(z)`, by subtracting
+principal parts and applying Liouville — the classical partial-fraction argument; and
+**Proposition 1.23** identifies `M(S)` with the non-constant-`∞` morphisms to `Ĉ`, which is
+the definition this milestone uses.
 
 *Prerequisites:* Layers 8.1–8.3; Mathlib `MeromorphicOn`, `analyticOrderAt`, `RatFunc ℂ`.
 
@@ -1741,8 +1847,21 @@ element — and that is what the second half supplies. Skipping it leaves the de
 unbounded, which is the gap the phrase "the monodromy is finite, so the field is finite"
 hides.
 
-*Source:* Forster §8 (the field of meromorphic functions is an algebraic function field);
-Girondo–González-Diez ch. 3 for the same statement at Belyi generality.
+*Source:* Girondo–González-Diez **Proposition 1.89** is the first half exactly —
+`[ℂ(f) : M(S)] ≤ deg f` by the elementary symmetric functions of the fibre values — and
+**Corollary 1.93(iv)** upgrades it to the equality `deg f = [M(S) : ℂ(f)]`. Forster proves the
+same over a general base as **8.3** (`π* : ℳ(X) → ℳ(Y)` is algebraic of degree `deg π`), by
+the elementary-symmetric-function argument of **8.1** and **8.2**; his separating input is
+**14.13**, which rests on the finiteness theorem **14.10**.
+
+⚠ **The second half is where the routes diverge, and the citation is not the plan.** That
+book's separating function is its **Theorem 1.90** (given `P ≠ Q` there is `φ ∈ M(S)` with
+`φ(P) = 0`, `φ(Q) = ∞`), which it calls "a highly non-trivial result" and proves **by
+uniformization**: the Weierstrass `℘`-function in genus one (**Corollary 2.12**) and Poincaré
+series for a cocompact Fuchsian group in genus `≥ 2` (**Proposition 2.16**). This roadmap does
+not have uniformization and does not want it, so the milestone above gets its separating
+function from the Riemann–Roch chain instead. An implementer following the citation to its
+proof would be led into chapter 2's Fuchsian machinery, which nothing else here uses.
 
 *Prerequisites:* Layers 8.2, 8.3, 9.2; ModularForms Layer 10B (i)–(iv).
 
@@ -1791,6 +1910,15 @@ regular projective model of `M(X)` matches everything:
 - the divisors of `β`, of `β − 1` and of `1/β` correspond, which is the statement Layer 14
   turns into the `lambdas` assertion;
 - automorphism groups correspond.
+
+*Source:* Girondo–González-Diez **Remark 1.94** states the three-way equivalence between
+compact Riemann surfaces, function fields in one variable over `ℂ`, and irreducible plane
+curves, and observes that only the passage to `M(S)` is choice-free; **Proposition 1.95**
+makes it an equivalence of categories, proving faithfulness and the fullness-plus-essential-
+surjectivity clause. **Theorem 1.91** is the concrete form used here — for `M(S) = ℂ(f,h)`
+with `F(f,h) ≡ 0`, the map `P ↦ (f(P), h(P))` is an isomorphism onto the curve's surface.
+⚠ That proof invokes the separation property (Theorem 1.90), so it inherits the route caveat
+recorded at Layer 9.3.
 
 *Prerequisites:* Layers 9.1–9.4; AlgebraicCurves Layers 3, 5, 12; ModularForms Layer 10B.
 
@@ -1961,6 +2089,14 @@ is Layer 9.7 plus 8.6 plus Layer 3.1: classes inject into isomorphism classes of
 triples, of which there are finitely many. Over `ℚ̄` it follows by base change to `ℂ`
 (AlgebraicCurves Layer 8 makes the base change fully faithful in characteristic zero, so the
 injection on isomorphism classes is preserved).
+
+*Source:* Girondo–González-Diez **Proposition 2.63**: for a compact `S`, a finite `B ⊂ S`
+and `d ≥ 1`, there are only finitely many pairs `(S̃, f)` with `f : S̃ → S` a degree-`d`
+morphism with branch-value set `B`. ⚠ Its proof for `S = ℙ¹` with three branch points is
+exactly the argument available here — `Γ(2)` is generated by two elements (**Theorem 2.34**),
+so there are finitely many homomorphisms to `Σ_d` — which is Layer 5.6's free generation
+again; the general case there cites finite generation of the uniformizing group, which this
+roadmap neither has nor needs.
 
 *Prerequisites:* Layers 3.1, 8.6, 9.7; AlgebraicCurves Layer 8.
 
@@ -2243,6 +2379,13 @@ with the Krull topology, a profinite group.
   with the branch-point action of Layer 2.6.
 - *Edge cases.* The trivial cover; a cover unramified over some of the three places.
 - *Downstream interfaces.* Layers 12.5, 12.7, 12.8, 13.1.
+
+*Source:* the finite-level statement this layer takes to the limit is
+Girondo–González-Diez **Theorem 2.71**, `Mon(x) ≅ Gal(M(S_F)/ℂ(x̃))` — the monodromy group of
+a covering of `ℙ¹` is the Galois group of the corresponding function-field extension — with
+**Corollary 2.70** giving the injection and **Corollary 2.72** characterizing the
+normalization as the Galois closure. That is the bridge that lets this layer define `π₁ᵍᵉᵒ`
+field-theoretically and still have it classify covers.
 
 *Prerequisites:* Layers 6.3, 12.3; AlgebraicCurves Layer 6; Mathlib infinite Galois theory,
 Krull topology, `IsGalois`.
@@ -2542,28 +2685,50 @@ its statement or its proof mentions anything outside this roadmap.
 The action of `Gal(ℚ̄/ℚ)` on isomorphism classes of algebraic Belyi pairs over `ℚ̄` —
 equivalently, by 12.3 and 9.7, on isomorphism classes of dessins — is faithful.
 
-The construction that detects a nontrivial `σ`, in proof order:
+**The route is Lenstra's, and it stays in genus zero** — no elliptic curves, no
+`j`-invariant, and no dependency on the curves roadmap. Everything below happens in
+`ℚ̄[x]`. In proof order:
 
-1. pick `j ∈ ℚ̄` with `σ(j) ≠ j`, possible because `ℚ̄` has trivial `Gal`-invariants beyond
-   `ℚ` and `σ ≠ 1`;
-2. take the elliptic curve with `j`-invariant `j` (the pin's
-   `WeierstrassCurve.ModelsWithJ`), and its function field via AlgebraicCurves Layer 10;
-3. give it a Belyi map by 10.4, obtaining a pair `(F, β)` over `ℚ̄`;
-4. the `σ`-conjugate pair has underlying curve of `j`-invariant `σ(j)`, because conjugation
-   acts on the coefficients and the `j`-invariant is a rational function of them;
-5. curves with distinct `j`-invariants are not isomorphic over `ℚ̄` (the pin's `IsomOfJ`),
-   so the two pairs are not isomorphic, so `σ` moves the class.
+1. Given `σ ≠ 1`, pick `α ∈ ℚ̄` with `σ(α) ≠ α`.
+2. Let `p_α ∈ ℚ(α)[x]` be the antiderivative of `x·(x−1)²·(x−α)³` — degree `7`, with
+   critical points exactly `0`, `1`, `α`, of multiplicities `2`, `3`, `4` respectively,
+   **pairwise distinct**, which is the whole point of the choice of exponents.
+3. Its critical values `p_α(0), p_α(1), p_α(α)` and `∞` lie in `ℚ̄ ∪ {∞}`, so Layers
+   10.2–10.3 produce `q_α ∈ ℚ[x]` making `P_α := q_α ∘ p_α` a Belyi polynomial — a Belyi
+   map from `ℙ¹` with `P_α⁻¹(∞) = {∞}`, so its dessin is a tree.
+4. Conjugating, `P_α^σ = q_α ∘ p_{σ(α)}`, since `q_α` has rational coefficients.
+5. Suppose the two pairs were isomorphic. Any isomorphism fixes `∞` (both maps have their
+   only pole there), so it is affine, `z ↦ az + b`. The polynomial lemma below turns
+   `q_α(p_α(az+b)) = q_α(p_{σ(α)}(z))` into `p_α(az+b) = c·p_{σ(α)}(z) + d`. Comparing the
+   critical points of multiplicity `2, 3, 4` on the two sides forces `b = 0`, `a = 1`, and
+   then `σ(α) = α` — a contradiction.
+
+**The polynomial lemma**, owned here and stated separately because step 5 is where all the
+work is: if `G₁ ∘ H₁ = G₂ ∘ H₂` with `H₁, H₂` of equal degree, then `H₂ = c·H₁ + d` for
+constants `c, d`; and if in addition `H₁, H₂` are monic with `H₁(0) = H₂(0) = 0`, then
+`H₁ = H₂`. Proved by comparing coefficients from the top down.
+
+Conclude faithfulness on dessins of genus `0`, hence on dessins.
 
 ⚠ *Nearby false statement:* faithfulness does not follow from the outer action of Layer 12
 being defined, nor from it being injective on any group — it is a statement about the action
-on the **set of classes**, and the proof above is the construction that produces a moved
-class. A milestone that inferred it from Layer 12 alone would be proving nothing.
+on the **set of classes**, and the construction above is what produces a moved class. A
+milestone that inferred it from Layer 12 alone would be proving nothing.
 
-*Source:* the argument is the standard one; the elliptic-curve step is the classical
-observation that the `j`-line already separates Galois orbits.
+⚠ The three multiplicities must be **pairwise distinct**. With `x(x−1)(x−α)` in place of
+`x(x−1)²(x−α)³` the critical points all have multiplicity `2`, an affine map can permute
+them, and step 5 collapses.
 
-*Prerequisites:* Layers 9.7, 10.4, 11.1, 12.3; AlgebraicCurves Layer 10; Mathlib
-`WeierstrassCurve.ModelsWithJ`, `IsomOfJ`.
+*Source:* Girondo–González-Diez, **Theorem 4.49** (the action on Shabat polynomials is
+faithful, hence on genus-zero dessins; the proof is attributed there to Lenstra) with
+**Lemma 4.50** for the polynomial lemma, and **Theorem 4.48** for the statement that the
+restriction to dessins of genus `g` is faithful for every `g`. ⚠ The book proves 4.48 by
+treating each genus separately, so a formalization that wants all genera does not get them
+from the genus-zero case for free; this milestone claims genus zero, which suffices for
+faithfulness on dessins.
+
+*Prerequisites:* Layers 9.7, 10.2, 10.3, 11.1, 12.3; Mathlib `Polynomial.derivative`,
+`Polynomial.roots`, `Polynomial.comp`.
 
 ### Layer 14: LMFDB assertion semantics
 
@@ -2764,8 +2929,11 @@ Primary sources, with the convention-sensitive role of each recorded; exact theo
 are verified against the copies recorded in `PROVENANCE.md` before any milestone cites one.
 
 - E. Girondo, G. González-Diez, *Introduction to Compact Riemann Surfaces and Dessins
-  d'Enfants*, LMS Student Texts 79, CUP 2012 — Layers 5–9, 11: the analytic theory at
-  exactly this roadmap's generality.
+  d'Enfants*, LMS Student Texts 79, CUP 2012 — the analytic theory at this roadmap's exact
+  generality, cited at Layers 0.6, 4.1, 4.4, 4.5, 5, 6.1, 6.3, 6.5, 7.4, 8.1, 8.3, 8.5, 9.2,
+  9.3, 9.5, 10.6 and 12.4. ⚠ Two of its routes are deliberately not followed: its separating
+  function comes from uniformization (Layer 9.3), and its fundamental group of the
+  thrice-punctured sphere comes from `Γ(2)` (Layer 5).
 - S. K. Lando, A. K. Zvonkin, *Graphs on Surfaces and Their Applications*, Encyclopaedia
   Math. Sci. 141, Springer 2004 — Layers 0–4: constellations, passports, and Proposition
   1.5.3 for the genus statement of Layer 0.6 (whose proof there is topological; see that
@@ -2796,6 +2964,8 @@ are verified against the copies recorded in `PROVENANCE.md` before any milestone
 - J. Sijsling, J. Voight, "On computing Belyi maps", Publ. Math. Besançon (2014) — Layer 14
   conventions; the computational literature this roadmap's exclusions point away from.
 - J. D. Dixon, B. Mortimer, *Permutation Groups*, GTM 163, Springer 1996 — Layers 1.4, 3.
-- S. Katok, *Fuchsian Groups*, University of Chicago Press 1992 — Layer 4.5's matrices.
-- O. Forster, *Lectures on Riemann Surfaces*, GTM 81 — through ModularForms Layer 10B,
-  whose chain Layers 8–9 consume.
+- O. Forster, *Lectures on Riemann Surfaces*, GTM 81 — Layers 8.1–8.3, 8.5, 9.2 and 9.3
+  directly (local normal form **2.1**, degree theorem **4.24**, continuation of coverings
+  **8.4** with uniqueness **8.5**, and the degree of the meromorphic extension **8.3**), and
+  the cohomology chain ModularForms Layer 10B builds and Layers 8–9 consume (finiteness
+  **14.10**, Riemann–Roch **16.9**, Serre duality **17.9**, Riemann–Hurwitz **17.14**).
