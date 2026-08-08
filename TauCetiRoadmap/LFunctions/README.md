@@ -434,6 +434,9 @@ poles and residues. The same for partial zeta functions.
 Poisson summation for a general lattice, the Hecke theta transformation, and a functional
 equation with a level.
 
+The ray class group itself. Mathlib has no modulus, no group of ideals prime to one, no ray
+subgroup, and no quotient, so Layer 1.7 builds all four before any character exists.
+
 Hecke L-series of ray-class characters and of Grossencharacters: Euler products, Gauss sums
 with `|τ(χ)| = √𝔑(𝔣₀)`, completed functional equations with root numbers, and induction of
 characters.
