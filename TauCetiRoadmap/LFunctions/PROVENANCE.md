@@ -80,20 +80,26 @@ around it, and none of them is a prerequisite of any milestone.
   holomorphic theta on the upper half-plane and its modular transformation law are that
   roadmap's Layer 8. Neither roadmap states the other's half.
 
-  ⚠ **The block now has four rows, not six, and the two copies are no longer byte-identical.**
-  The corrected milestone 2.11 compares the analytic dual of an ideal lattice with the **trace**
-  dual, through `traceToEuclidean` and `FractionalIdeal.dual`; no dual of an integral bilinear
-  form appears anywhere in Layers 2.10 to 2.13. So the two reverse rows
+  ⚠ **History of the block, and the open coordination.** It carried six rows and was
+  byte-identical in both `README.md` files. The corrected milestone 2.11 compares the analytic
+  dual of an ideal lattice with the **trace** dual, through `traceToEuclidean` and
+  `FractionalIdeal.dual`, and no dual of an integral bilinear form appears anywhere in Layers
+  2.10 to 2.13, so these two reverse rows recorded a dependency this roadmap does not have:
 
   | L-functions Layer 2, items 10 to 13 | Integral Lattices 1B | the dual lattice of an integral bilinear form, and the vocabulary for it | `IntegralLattice.dual` |
   | L-functions Layer 2, items 10 to 13 | Integral Lattices 8D | the analytic dual of the realization of `L` equals `IntegralLattice.dual` | `IntegralLattice.analyticDual_eq_dual` |
 
-  recorded a dependency this roadmap does not have, and they are deleted here, together with the
-  clause "and L-functions items 10 to 13 use 1B and 8D" of the closing paragraph. The integral
-  lattices roadmap has to delete the same two rows and the same clause to restore byte-identity.
-  Nothing else in the block changed, and the crossing that roadmap consumes — items 1, 2, 3, and
-  8 — is untouched. `IntegralLatticeInterface`, the compatibility structure that carried those
-  two rows in `Suggested.lean`, is deleted.
+  They are deleted, together with the clause "and L-functions items 10 to 13 use 1B and 8D" of
+  the closing paragraph, and the normative README now states only the durable fact that the
+  dependency is one-way, with the four exported names. `IntegralLatticeInterface`, the
+  compatibility structure that carried those two rows in `Suggested.lean`, is deleted with them.
+  The crossing that roadmap consumes — items 1, 2, 3, and 8 — is untouched.
+
+  **Open with the integral lattices roadmap**, and not resolvable from this branch: its copy
+  still advertises the six-row byte-identical block. Either it deletes the same two rows and the
+  same clause, or the two roadmaps agree that this table is an export list owned here and drop
+  the byte-identity convention. Until then, treat this copy as authoritative for what crosses,
+  because the reverse rows are the ones that are mathematically wrong.
 - **A downstream consumer cites this roadmap by declaration name**, which is why the targets in
   `Suggested.lean` that a growth-theoretic development would consume are named `sorry`-definitions
   with their characterizing theorems beside them, and not anonymous `example`s stating an `∃`:
@@ -240,6 +246,19 @@ the check: with `covolume (σI) = 2^{-r₂}√|d_K| 𝔑I` and `𝔑𝔡 = |d_K|
 `covolume(σI) · covolume(dual(σI))` equals `|det| · 2^{-2r₂}`, and biduality forces
 `|det| = 4^{r₂}`. At `K = ℚ(i)`, `(1/2)ℤ[i]` has covolume `1/4` and its image `ℤ[i]` has covolume
 `1`. Milestones 2.11, 2.12, 2.13, and 3.1 thread the corrected power.
+
+**The Mertens product constant carries the Dedekind-zeta residue.** The README used to assert
+`∏_{𝔑𝔭 ≤ x}(1 − 𝔑𝔭^{-1})^{-1} ∼ e^{γ} log x`. Over a general number field the constant is
+`e^{γ} κ_K` with `κ_K = Res_{s=1} ζ_K(s)`; the familiar form is the case `K = ℚ`, where
+`κ_ℚ = 1`, so the error is invisible to every rational check. Rosen, and Garcia–Lee Theorem 1,
+are the sources. Any roadmap that states Mertens over a number field meets the same factor.
+
+**The Frobenius fibre coefficient filters by `Frob_𝔭^m = σ`, not `Frob_𝔭 = σ`.** The logarithmic
+derivative of the Euler factor at `𝔭` is `∑_{m ≥ 1} χ(Frob_𝔭)^m log 𝔑𝔭 · 𝔑𝔭^{-ms}`, so character
+orthogonality isolates the `m`-th power. The witness is a quadratic cyclotomic extension: at an
+inert `𝔭` the Frobenius is the nontrivial `g` while `g² = 1`, so the `𝔭²` term belongs to the
+identity fibre. The version filtered on `Frob_𝔭 = σ` is nonnegative, but it is not the sequence
+the logarithmic derivatives produce, so the orthogonality identity is not provable for it.
 
 **A Grossencharacter whose full weight is an `IdealWeight` forces `shift = 0`.** The Layer 6.1
 structure used to carry the full weight `χ` as an `IdealWeight` *and* assert

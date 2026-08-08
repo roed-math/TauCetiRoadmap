@@ -438,9 +438,20 @@ structure CancellingFamily (G : Type*) [CommGroup G] [Fintype G] (w : G → Idea
   /-- Closure under conjugation, which the `3-4-1` product needs. -/
   conj : ∀ g : G, ∃ h : G, ∀ I : Ideal (𝓞 K),
     (w h).toFun I = starRingEnd ℂ ((w g).toFun I)
-  /-- ⚠ Closure of the cancellation property under the norm twists. Without it 7.4 has no
-  hypothesis to run the `3-4-1` inequality on at `1 + it`. -/
-  cancellation_normTwist : ∀ (g : G) (t : ℝ), g ≠ 1 ∨ t ≠ 0 →
+  /-- ⚠ Closure of the cancellation property under the norm twists, for the **nontrivial**
+  members only. Without it 7.4 has no hypothesis to run the `3-4-1` inequality on at `1 + it`.
+
+  ⚠ Requiring it at `g = 1` as well, for `t ≠ 0`, makes the structure uninhabitable by its own
+  principal examples, so it is false as a field. The twisted trivial weight has coefficients
+  `𝔑𝔞^{it}`, and since `#{𝔞 : 𝔑𝔞 ≤ X} ∼ ρ_K X`, partial summation gives
+  `∑_{𝔑𝔞 ≤ X} 𝔑𝔞^{it} ∼ ρ_K X^{1+it}/(1+it)`, of absolute value comparable to `X`, while
+  `HasCancellation` demands `O(X^{1−1/d})`. Equivalently the series is `ζ_K(s − it)`, which has a
+  pole at `s = 1 + it`, and a cancellation hypothesis would make it holomorphic there.
+
+  The trivial member is handled separately, and not through this field: at `t = 0` it is the pole
+  of `ζ_K`, and at `t ≠ 0` the nonvanishing of `ζ_K(1 + it)` is
+  `meromorphicOrderAt_dedekindZetaC_one_add`, a theorem of 7.4 about `ζ_K` itself. -/
+  cancellation_normTwist : ∀ g : G, g ≠ 1 → ∀ t : ℝ,
     HasCancellation K (IdealWeight.normTwist K (w g) t)
 
 /-- **Layer 1.5, local Euler-factor data.** The local factors are *data*: an existential
@@ -617,16 +628,33 @@ theorem classMap_surjective {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) :
     Function.Surjective (classMap h) := sorry
 
 /-- **Layer 1.7, the ray partial zeta function** on an exact carrier: the fibre of `idealClass`
-over `c`, taken over the integral ideals prime to `𝔪₀`. -/
+over `c`, taken over the integral ideals prime to `𝔪₀`.
+
+⚠ `∑'` and not `∑ᶠ`. Mathlib's `finsum` is the sum of a **finitely supported** function and takes
+the junk value `0` otherwise, and every fibre here has infinitely many ideals in it. A partial
+zeta function written with `∑ᶠ` is the constant `0`, so the sum formula, the residue of 1.8, the
+cancellation of 7.5, and the equidistribution of 8E would all be statements about that constant.
+`finsum` stays legitimate exactly where the index set is finite: ideals of one fixed norm, ideals
+of norm at most `x`, the primes dividing `𝔪₀`, and the sum over classes below. -/
 noncomputable def partialZeta (𝔪 : Modulus K) (c : 𝔪.RayClassGroup) (s : ℂ) : ℂ :=
-  ∑ᶠ I : {I : Ideal (𝓞 K) // 𝔪.IsCoprimeTo I ∧ 𝔪.idealClass I = c},
+  ∑' I : {I : Ideal (𝓞 K) // 𝔪.IsCoprimeTo I ∧ 𝔪.idealClass I = c},
     (Ideal.absNorm (I : Ideal (𝓞 K)) : ℂ) ^ (-s)
+
+/-- **Layer 1.7, summability of a fibre** on the convergence half-plane, which is what makes
+`partialZeta` the sum of its series rather than `tsum`'s junk value `0`, and what licenses the
+finite interchange with the class sum below. -/
+theorem summable_partialZeta (𝔪 : Modulus K) (c : 𝔪.RayClassGroup) {s : ℂ} (hs : 1 < s.re) :
+    Summable fun I : {I : Ideal (𝓞 K) // 𝔪.IsCoprimeTo I ∧ 𝔪.idealClass I = c} ↦
+      (Ideal.absNorm (I : Ideal (𝓞 K)) : ℂ) ^ (-s) := sorry
 
 /-- **Layer 1.7, the fibres sum to `ζ_K` with the bad Euler factors removed.**
 
 ⚠ The right-hand side is **not** `ζ_K`. Every ideal divisible by a prime of `𝔪₀` is missing from
 every fibre, so the finite product is there. At `𝔪₀ = 1` the product is empty and the statement
-is the decomposition over the ideal classes. -/
+is the decomposition over the ideal classes.
+
+⚠ The outer sum over classes is a `finsum`, and that is legitimate: `finite_rayClassGroup` makes
+the index type finite. The inner sum over ideals is a `tsum`, and must be. -/
 theorem sum_partialZeta (𝔪 : Modulus K) {s : ℂ} (hs : 1 < s.re) :
     ∑ᶠ c : 𝔪.RayClassGroup, 𝔪.partialZeta c s =
       dedekindZeta K s *
@@ -651,7 +679,11 @@ end Modulus
 `𝔪₀ = 1` of the ray case, and it is stated separately because Layers 3.3 and 3.4 integrate it
 class by class. -/
 noncomputable def classPartialZeta (c : ClassGroup (𝓞 K)) (s : ℂ) : ℂ :=
-  ∑ᶠ I : {I : (Ideal (𝓞 K))⁰ // ClassGroup.mk0 I = c}, (Ideal.absNorm I.1.1 : ℂ) ^ (-s)
+  ∑' I : {I : (Ideal (𝓞 K))⁰ // ClassGroup.mk0 I = c}, (Ideal.absNorm I.1.1 : ℂ) ^ (-s)
+
+theorem summable_classPartialZeta (c : ClassGroup (𝓞 K)) {s : ℂ} (hs : 1 < s.re) :
+    Summable fun I : {I : (Ideal (𝓞 K))⁰ // ClassGroup.mk0 I = c} ↦
+      (Ideal.absNorm I.1.1 : ℂ) ^ (-s) := sorry
 
 theorem sum_classPartialZeta {s : ℂ} (hs : 1 < s.re) :
     ∑ᶠ c : ClassGroup (𝓞 K), classPartialZeta c s = dedekindZeta K s := sorry
@@ -1562,9 +1594,18 @@ theorem frobeniusClass_eq_mk (𝔭 : HeightOneSpectrum (𝓞 K)) (Q : Ideal (�
     [Finite (𝓞 L ⧸ Q)] (hQ : Q.under (𝓞 K) = 𝔭.asIdeal) :
     frobeniusClass K L 𝔭 = ConjClasses.mk (arithFrobAt (𝓞 K) (L ≃ₐ[K] L) Q) := sorry
 
-/-- **Layer 8.0, the characterization**: `σ` lies in the class exactly when it is an arithmetic
-Frobenius at some prime of `L` over `𝔭`. This ties the construction to the pin's vocabulary. -/
-theorem mem_frobeniusClass_iff (𝔭 : HeightOneSpectrum (𝓞 K)) (σ : L ≃ₐ[K] L) :
+/-- **Layer 8.0, the characterization**: at an **unramified** prime, `σ` lies in the class exactly
+when it is an arithmetic Frobenius at some prime of `L` over `𝔭`. This ties the construction to
+the pin's vocabulary.
+
+⚠ The unramifiedness hypothesis cannot be dropped. Two Frobenius lifts at the same `Q` differ by
+an element of the inertia group, and Mathlib's uniqueness (`IsArithFrobAt.eq_of_isUnramifiedAt`)
+assumes exactly that the prime is unramified. In a totally ramified abelian extension every
+inertia element acts trivially on the residue field, so the right-hand side holds for several
+distinct singleton conjugacy classes while `frobeniusClass` picks one of them; the equivalence is
+then false. -/
+theorem mem_frobeniusClass_iff (𝔭 : HeightOneSpectrum (𝓞 K)) (hur : IsUnramifiedAt K L 𝔭)
+    (σ : L ≃ₐ[K] L) :
     σ ∈ (frobeniusClass K L 𝔭).carrier ↔
       ∃ Q : Ideal (𝓞 L), Q.IsPrime ∧ Q.under (𝓞 K) = 𝔭.asIdeal ∧
         ∀ x : 𝓞 L, σ • x - x ^ Nat.card (𝓞 K ⧸ 𝔭.asIdeal) ∈ Q := sorry
@@ -1585,14 +1626,31 @@ theorem frobeniusClass_restrictNormalHom (E : IntermediateField K L) [Normal K E
     ConjClasses.map (AlgEquiv.restrictNormalHom (F := K) (K₁ := L) E) (frobeniusClass K L 𝔭) =
       frobeniusClass K E 𝔭 := sorry
 
-/-- **Layer 8.0, tower compatibility**: over an intermediate field `E`, the Frobenius of a prime
-`𝔓` of `E` is the `f`-th power of the Frobenius of the prime below, where `f` is the residue
-degree of `𝔓` over `K`. Milestone 8D.2 is this theorem, and 8D.4's fibre count rests on it. -/
+/-- **Layer 8.0 and 8D.2, tower compatibility, relative to one prime of `L`.** For a prime `Q` of
+`L` lying over `𝔓` of `E` over `𝔭` of `K`, and `σ` an arithmetic Frobenius **at that `Q`**, the
+relative Frobenius at `Q/𝔓` is `σ ^ f(𝔓/𝔭)` when read in `Gal(L/K)`. The reason is one line of
+residue arithmetic: `σ^f` acts as `x ↦ x^{𝔑𝔭^f}` and `𝔑_E 𝔓 = 𝔑_K 𝔭^f`.
+
+⚠ The prime `Q` and the hypothesis `IsArithFrobAt … σ Q` are both load-bearing. A version that
+takes an arbitrary representative `σ` of the class `frobeniusClass K L 𝔭` and a fixed `𝔓` is
+false when `E/K` is not normal: a conjugate representative need not stabilize `Q`, so `σ^f` need
+not fix `E` pointwise and is then not the restriction of any element of `Gal(L/E)`. The
+class-level corollary below is derived from this theorem, never assumed in place of it. -/
+theorem isArithFrobAt_pow_inertiaDeg (E : Type*) [Field E] [NumberField E] [Algebra K E]
+    [Algebra E L] [IsScalarTower K E L] [IsGalois E L]
+    (Q : HeightOneSpectrum (𝓞 L)) (𝔓 : HeightOneSpectrum (𝓞 E)) (𝔭 : HeightOneSpectrum (𝓞 K))
+    (hQE : Q.asIdeal.under (𝓞 E) = 𝔓.asIdeal) (hQK : Q.asIdeal.under (𝓞 K) = 𝔭.asIdeal)
+    (σ : L ≃ₐ[K] L) (hσ : IsArithFrobAt (𝓞 K) σ Q.asIdeal) :
+    ∃ τ : L ≃ₐ[E] L, IsArithFrobAt (𝓞 E) τ Q.asIdeal ∧
+      AlgEquiv.restrictScalars K τ = σ ^ Ideal.inertiaDeg 𝔭.asIdeal 𝔓.asIdeal := sorry
+
+/-- **Layer 8D.2, the class-level corollary**, derived from the prime-relative theorem above and
+not stated independently of it. The representative `σ` is still tied to `Q`. -/
 theorem frobeniusClass_pow_inertiaDeg (E : Type*) [Field E] [NumberField E] [Algebra K E]
     [Algebra E L] [IsScalarTower K E L] [IsGalois E L]
-    (𝔓 : HeightOneSpectrum (𝓞 E)) (𝔭 : HeightOneSpectrum (𝓞 K))
-    (hlies : 𝔓.asIdeal.under (𝓞 K) = 𝔭.asIdeal) (σ : L ≃ₐ[K] L)
-    (hσ : σ ∈ (frobeniusClass K L 𝔭).carrier) :
+    (Q : HeightOneSpectrum (𝓞 L)) (𝔓 : HeightOneSpectrum (𝓞 E)) (𝔭 : HeightOneSpectrum (𝓞 K))
+    (hQE : Q.asIdeal.under (𝓞 E) = 𝔓.asIdeal) (hQK : Q.asIdeal.under (𝓞 K) = 𝔭.asIdeal)
+    (hur : IsUnramifiedAt K L 𝔭) (σ : L ≃ₐ[K] L) (hσ : IsArithFrobAt (𝓞 K) σ Q.asIdeal) :
     ∃ τ : L ≃ₐ[E] L, τ ∈ (frobeniusClass E L 𝔓).carrier ∧
       AlgEquiv.restrictScalars K τ = σ ^ Ideal.inertiaDeg 𝔭.asIdeal 𝔓.asIdeal := sorry
 
@@ -1614,7 +1672,20 @@ theorem hasDirichletDensity_splitsCompletely :
       {𝔭 : HeightOneSpectrum (𝓞 K) | IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = 1}
       (1 / (Nat.card (L ≃ₐ[K] L) : ℝ)) := sorry
 
-/-! ### Layers 8C.5 to 8C.8: the crossing argument, with its constant written out -/
+/-! ### Layers 8C.1 to 8C.8: the crossing argument, with its constant written out -/
+
+/-- **Layer 8C.1, auxiliary primes of every level exist**, by Dirichlet's theorem in the
+progression `1 mod f^r` together with the finiteness of the ramified set, which is what the
+excluded finite set `S` stands for.
+
+⚠ "`f` divides `[K(ζ_m):K]`" does **not** produce an element of order divisible by `f`.
+Divisibility of the order of a finite group gives no such element in general; the cyclicity of
+`Gal(K(ζ_q)/K)` is what does, and it is why the construction uses a rational prime `q` rather
+than an arbitrary modulus. -/
+theorem exists_auxiliaryPrime (f r : ℕ) (hf : 0 < f) (S : Finset ℕ) :
+    ∃ q : ℕ, q.Prime ∧ q ∉ S ∧ q ≡ 1 [MOD f ^ r] := sorry
+
+/-! ### Layers 8C.5 to 8C.8: the tagged fibres and the constant -/
 
 variable (M : Type*) [Field M] [NumberField M] [Algebra K M] [IsGalois K M]
 
@@ -1640,33 +1711,113 @@ noncomputable def crossingConstant (f : ℕ) : ℝ :=
     ((Nat.card (L ≃ₐ[K] L) : ℝ) * (Nat.card (M ≃ₐ[K] M) : ℝ))
 
 variable (N : Type*) [Field N] [NumberField N] [Algebra K N] [IsGalois K N]
+variable [Algebra L N] [Algebra M N] [IsScalarTower K L N] [IsScalarTower K M N]
+
+/-- **Layer 8C.2, the canonical restriction map** `Gal(N/K) → Gal(L/K) × Gal(M/K)`, built from
+Mathlib's `AlgEquiv.restrictNormalHom`. ⚠ It is this map, and not an arbitrary group isomorphism,
+that 8C.3's Frobenius compatibility is a statement about. -/
+noncomputable def crossingRestrict : (N ≃ₐ[K] N) →* ((L ≃ₐ[K] L) × (M ≃ₐ[K] M)) :=
+  (AlgEquiv.restrictNormalHom (F := K) (K₁ := N) L).prod
+    (AlgEquiv.restrictNormalHom (F := K) (K₁ := N) M)
+
+/-- **Layers 8C.1 to 8C.4, the auxiliary crossing diagram, as one datum.**
+
+⚠ The three theorems below are false without it, and not merely unprovable. Stated for arbitrary
+finite Galois `L/K`, `M/K`, `N/K` and an abstract isomorphism `Gal(N/K) ≃* Gal(L/K) × Gal(M/K)`:
+
+- the tagged fibre has density `#C_σ · #C_τ / (#G · #H)`, not `1/(#G · #H)` — in `S₃ × C₂` a
+  transposition paired with the nontrivial element has a conjugacy class of size `3`;
+- for a nonabelian `Gal(M/K)`, distinct conjugate `τ` determine the *same* conjugacy class and
+  hence the same set of primes, so the fibres are not pairwise disjoint.
+
+`L/K` abelian and `Gal(M/K)` cyclic make `Gal(N/K)` abelian, every class a singleton, and both
+statements true; the cyclotomic and compositum conditions are what make the route of 8C
+non-circular, because 8C.4's fixed field has to be cyclotomic over its base for 8B.5 to apply
+over it. This is data the construction depends on, not a stand-in for another roadmap's object. -/
+structure CrossingDatum where
+  /-- **8C**: `L/K` is abelian. -/
+  abelian_L : ∀ a b : L ≃ₐ[K] L, a * b = b * a
+  /-- **8C.1**: the auxiliary rational prime `q`. -/
+  q : ℕ
+  q_prime : q.Prime
+  /-- **8C.1**: `M = K(ζ_q)`. -/
+  isCyclotomic : IsCyclotomicExtension {q} K M
+  /-- **8C.1**: `Gal(K(ζ_q)/K)` is **cyclic**, which is what `K ∩ ℚ(ζ_q) = ℚ` buys, and what
+  8C.4 and the count of 8C.7 both need. -/
+  cyclic_M : IsCyclic (M ≃ₐ[K] M)
+  /-- **8C.2**: `N = L·M` with `L ∩ M = K`, in the form that the canonical restriction map is
+  bijective. This is the linear disjointness of 8C.2, and it is stated about `crossingRestrict`
+  rather than by exhibiting some isomorphism. -/
+  bijective_restrict : Function.Bijective ⇑(crossingRestrict K L M N)
+  /-- **8C.3**: Frobenius under restriction is the pair of the restricted Frobenius elements.
+  This is `frobeniusClass_restrictNormalHom` applied twice, and 8C.5 and 8C.6 read it. -/
+  frobenius_restrict : ∀ 𝔭 : HeightOneSpectrum (𝓞 K), IsUnramifiedAt K N 𝔭 →
+    ∀ ν : N ≃ₐ[K] N, ν ∈ (frobeniusClass K N 𝔭).carrier →
+      (crossingRestrict K L M N ν).1 ∈ (frobeniusClass K L 𝔭).carrier ∧
+        (crossingRestrict K L M N ν).2 ∈ (frobeniusClass K M 𝔭).carrier
+
+section CrossingDatumAPI
+
+variable {K L M N}
+
+namespace CrossingDatum
+
+/-- **Layer 8C.2, the crossed group is abelian**, from `abelian_L`, `cyclic_M` and bijectivity.
+⚠ This is the theorem that makes every conjugacy class of `Gal(N/K)` a singleton, and hence
+makes the density of a tagged fibre `1/(#G · #H)`. -/
+theorem commute (D : CrossingDatum K L M N) (a b : N ≃ₐ[K] N) : a * b = b * a := sorry
+
+/-- **Layer 8C.2, the element with prescribed restrictions.** -/
+noncomputable def pair (D : CrossingDatum K L M N) (σ : L ≃ₐ[K] L) (τ : M ≃ₐ[K] M) : N ≃ₐ[K] N :=
+  (Equiv.ofBijective _ D.bijective_restrict).symm (σ, τ)
+
+theorem crossingRestrict_pair (D : CrossingDatum K L M N) (σ : L ≃ₐ[K] L) (τ : M ≃ₐ[K] M) :
+    crossingRestrict K L M N (D.pair σ τ) = (σ, τ) := sorry
+
+/-- **Layer 8C.4, the fixed field of `⟨(σ, τ)⟩` is cyclotomic over its base.** With
+`f ∣ ord τ` the subgroup `⟨(σ, τ)⟩` meets `Gal(N/M)` trivially, so `N` is generated over that
+fixed field by `ζ_q` and 8B.5 applies there. ⚠ Without `f ∣ ord τ` the intersection is
+`⟨(σ^{ord τ}, 1)⟩`, which is nontrivial, and the fixed field's compositum with `M` is a proper
+subfield of `N`. -/
+theorem disjoint_zpowers_pair (D : CrossingDatum K L M N) (σ : L ≃ₐ[K] L) (τ : M ≃ₐ[K] M)
+    (hτ : orderOf σ ∣ orderOf τ) :
+    ∀ ν ∈ Subgroup.zpowers (D.pair σ τ),
+      (crossingRestrict K L M N ν).2 = 1 → ν = 1 := sorry
+
+end CrossingDatum
+
+end CrossingDatumAPI
 
 /-- **Layer 8C.6, the density of one tagged fibre after contraction to `K`.** In the compositum
 `N = L·K(ζ_q)`, whose group is `G × H_q` by 8C.2, the primes with Frobenius `(σ, τ)` have density
 `1/(#G · #H_q)`. This is 8B.5 applied over the fixed field of `⟨(σ, τ)⟩`, then contracted through
-8A.5; the hypothesis `f ∣ orderOf τ` is what makes that fixed field cyclotomic over its base. -/
-theorem hasDirichletDensity_taggedFibre
-    (e : (N ≃ₐ[K] N) ≃* ((L ≃ₐ[K] L) × (M ≃ₐ[K] M))) (σ : L ≃ₐ[K] L) (τ : M ≃ₐ[K] M)
-    (hτ : orderOf σ ∣ orderOf τ) :
+8A.5; `f ∣ ord τ` is what makes that fixed field cyclotomic over its base, and `D.commute` is
+what makes the class of `(σ, τ)` a singleton.
+
+⚠ The contraction needs the degree-one reduction of 8A.4 first. A prime `𝔓` of the fixed field of
+residue degree `f > 1` over `K` has `Frob_{N/E}(𝔓) = Frob_{N/K}(𝔭)^f`, which does not determine
+`Frob_{N/K}(𝔭)`; on the degree-one primes it does, and every prime of `K` in the target fibre
+carries `[E:K] = #G·#H_q/ord τ` of them. -/
+theorem hasDirichletDensity_taggedFibre (D : CrossingDatum K L M N)
+    (σ : L ≃ₐ[K] L) (τ : M ≃ₐ[K] M) (hτ : orderOf σ ∣ orderOf τ) :
     HasDirichletDensity K
       {𝔭 : HeightOneSpectrum (𝓞 K) |
-        IsUnramifiedAt K N 𝔭 ∧ frobeniusClass K N 𝔭 = ConjClasses.mk (e.symm (σ, τ))}
+        IsUnramifiedAt K N 𝔭 ∧ frobeniusClass K N 𝔭 = ConjClasses.mk (D.pair σ τ)}
       (1 / ((Nat.card (L ≃ₐ[K] L) : ℝ) * (Nat.card (M ≃ₐ[K] M) : ℝ))) := sorry
 
 /-- **Layer 8C.5, pairwise disjointness of the tagged fibres**, which is what makes the densities
-add rather than merely bound one another. -/
-theorem taggedFibre_pairwiseDisjoint
-    (e : (N ≃ₐ[K] N) ≃* ((L ≃ₐ[K] L) × (M ≃ₐ[K] M))) (σ : L ≃ₐ[K] L) :
+add rather than merely bound one another. ⚠ It needs `D.commute`: over a nonabelian `Gal(N/K)`,
+two distinct conjugate `τ` give the *same* conjugacy class and hence the same set of primes. -/
+theorem taggedFibre_pairwiseDisjoint (D : CrossingDatum K L M N) (σ : L ≃ₐ[K] L) :
     Pairwise (Function.onFun Disjoint fun τ : M ≃ₐ[K] M ↦
       {𝔭 : HeightOneSpectrum (𝓞 K) |
-        IsUnramifiedAt K N 𝔭 ∧ frobeniusClass K N 𝔭 = ConjClasses.mk (e.symm (σ, τ))}) := sorry
+        IsUnramifiedAt K N 𝔭 ∧ frobeniusClass K N 𝔭 = ConjClasses.mk (D.pair σ τ)}) := sorry
 
 /-- **Layer 8C.6, the lower bound from one auxiliary prime.**
 
 ⚠ The predicate is the inequality of 8A.1 and not an equality: the tagged fibres are contained in
 the target set and need not exhaust it, so nothing stronger is available here. -/
-theorem lowerDirichletDensityAtLeast_crossing
-    (e : (N ≃ₐ[K] N) ≃* ((L ≃ₐ[K] L) × (M ≃ₐ[K] M))) (σ : L ≃ₐ[K] L) :
+theorem lowerDirichletDensityAtLeast_crossing (D : CrossingDatum K L M N) (σ : L ≃ₐ[K] L) :
     LowerDirichletDensityAtLeast K
       {𝔭 : HeightOneSpectrum (𝓞 K) |
         IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ}
@@ -1718,20 +1869,48 @@ theorem hasDirichletDensity_abelian (hab : ∀ σ τ : L ≃ₐ[K] L, σ * τ = 
         IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ}
       (1 / (Nat.card (L ≃ₐ[K] L) : ℝ)) := sorry
 
-/-- **Layer 8D.4, the fibre count.** Each prime `𝔭` of `K` with Frobenius class `C` has exactly
-`#G/(#C · f)` primes of `E = L^{⟨σ⟩}` in the set of 8D.3, all of residue degree `1` over `K`.
-⚠ The count is not `#C·f/#G` and not `1`; the consistency check is that `8A.5` turns the density
-`1/f` over `E` into `#C/#G` over `K`. -/
+/-- **Layer 8D.4, the fibre count.** Each prime `𝔭` of `K` with Frobenius class `C = [σ]` has
+exactly `#G/(#C · f)` primes of `E = L^{⟨σ⟩}` whose relative Frobenius is `σ` and whose residue
+degree over `K` is `1`.
+
+⚠ The counted fibre is the one with relative Frobenius **`σ`**, not the identity. The
+split-completely fibre is a different set, and the difference is already visible in the smallest
+case: see `card_primesOver_fixedField_cyclic` below.
+
+⚠ `E` is identified as the fixed field of `⟨σ⟩` by `hσE` and `hgen`, and not by a cardinality.
+`Nat.card (L ≃ₐ[E] L) = orderOf σ` says only that `[L:E]` is right; it does not say that
+`Gal(L/E)` is `⟨σ⟩`, and every step of 8D uses that it is.
+
+⚠ The count is not `#C·f/#G` and not `1`. The consistency check is that 8A.5 turns the density
+`1/f` over `E` into `#C/#G` over `K`, and `#G/(#C·f) = #C_G(σ)/f`, a positive integer because
+`⟨σ⟩ ⊆ C_G(σ)`. -/
 theorem card_primesOver_fixedField (σ : L ≃ₐ[K] L) (E : Type*) [Field E] [NumberField E]
     [Algebra K E] [Algebra E L] [IsScalarTower K E L] [IsGalois E L]
-    (hE : Nat.card (L ≃ₐ[E] L) = orderOf σ)
+    (σE : L ≃ₐ[E] L) (hσE : AlgEquiv.restrictScalars K σE = σ)
+    (hgen : ∀ ρ : L ≃ₐ[E] L, ρ ∈ Subgroup.zpowers σE)
     (𝔭 : HeightOneSpectrum (𝓞 K)) (h : IsUnramifiedAt K L 𝔭)
     (hC : frobeniusClass K L 𝔭 = ConjClasses.mk σ) :
     Nat.card {𝔓 : HeightOneSpectrum (𝓞 E) //
         𝔓.asIdeal.under (𝓞 K) = 𝔭.asIdeal ∧ Ideal.inertiaDeg 𝔭.asIdeal 𝔓.asIdeal = 1 ∧
-          frobeniusClass E L 𝔓 = ConjClasses.mk (1 : L ≃ₐ[E] L)} =
+          frobeniusClass E L 𝔓 = ConjClasses.mk σE} =
       Nat.card (L ≃ₐ[K] L) /
         (Nat.card (ConjClasses.mk σ).carrier * orderOf σ) := sorry
+
+/-- **Layer 8D.4, the mandatory test.** Take `L/K` cyclic with `σ` a generator. Then
+`⟨σ⟩ = Gal(L/K)`, so `E = L^{⟨σ⟩} = K`, `#C = 1`, `f = ord σ = #G`, and the count is
+`#G/(1 · #G) = 1`: the prime `𝔭` is its own fibre.
+
+⚠ Its relative Frobenius is `σ`, not `1`. A version of 8D.4 that counts the primes of `E` with
+relative Frobenius `1` gives the empty set here while the displayed count is `1`, so this test
+catches the split-completely fibre being used in place of the `σ` fibre. -/
+theorem card_primesOver_fixedField_cyclic (σ : L ≃ₐ[K] L)
+    (hgen : ∀ ρ : L ≃ₐ[K] L, ρ ∈ Subgroup.zpowers σ)
+    (𝔭 : HeightOneSpectrum (𝓞 K)) (h : IsUnramifiedAt K L 𝔭)
+    (hC : frobeniusClass K L 𝔭 = ConjClasses.mk σ) :
+    Nat.card {𝔓 : HeightOneSpectrum (𝓞 K) //
+        𝔓.asIdeal = 𝔭.asIdeal ∧ frobeniusClass K L 𝔓 = ConjClasses.mk σ} = 1 ∧
+      Nat.card {𝔓 : HeightOneSpectrum (𝓞 K) //
+        𝔓.asIdeal = 𝔭.asIdeal ∧ frobeniusClass K L 𝔓 = 1} = 0 := sorry
 
 end Chebotarev
 
@@ -1801,26 +1980,52 @@ section FrobeniusCounting
 variable (F : Type*) [Field F] [NumberField F] [Algebra K F] [IsGalois K F]
 
 open scoped Classical in
-/-- **Layer 9.7, the nonnegative Frobenius-fibre coefficient** `a_σ(n) = ∑_{𝔑𝔞 = n, Frob 𝔞 = σ} Λ_K(𝔞)`,
-the sum of the ideal von Mangoldt weight over the prime powers of norm `n` whose Frobenius is
-`σ`. ⚠ It is this sequence, and never a character twist `χ(𝔞)Λ_K(𝔞)`, that Wiener–Ikehara is
-applied to: the twist is signed or complex, and 9.1 is a theorem about **nonnegative**
-coefficients. -/
+/-- **Layer 9.7, the nonnegative Frobenius-fibre coefficient**
+
+`a_σ(n) = ∑_{𝔑𝔭^m = n, Frob_𝔭^m = σ} log 𝔑𝔭`.
+
+⚠ The condition is `Frob_𝔭^m = σ`, and **not** `Frob_𝔭 = σ`. The logarithmic derivative of the
+Euler factor at `𝔭` is `∑_{m ≥ 1} χ(Frob_𝔭)^m log 𝔑𝔭 · 𝔑𝔭^{-ms}`, and `χ(Frob_𝔭)^m` is
+`χ(Frob_𝔭^m)`, so character orthogonality isolates the `m`-th power. The check is a quadratic
+cyclotomic extension: at an inert `𝔭` the Frobenius is the nontrivial `g`, but `g² = 1`, so the
+`𝔭²` term belongs to the *identity* fibre; a coefficient that filters on `Frob_𝔭 = σ` drops it,
+and then the orthogonality identity below is not provable for the named sequence.
+
+⚠ It is this sequence, and never a character twist `χ(𝔞)Λ_K(𝔞)`, that Wiener–Ikehara is applied
+to: the twist is signed or complex, and 9.1 is a theorem about **nonnegative** coefficients. -/
 noncomputable def frobeniusFibreCoeff (σ : F ≃ₐ[K] F) (n : ℕ) : ℝ :=
-  ∑ᶠ 𝔭 : {𝔭 : HeightOneSpectrum (𝓞 K) // (∃ m : ℕ, 0 < m ∧ Ideal.absNorm 𝔭.asIdeal ^ m = n) ∧
-      IsUnramifiedAt K F 𝔭 ∧ frobeniusClass K F 𝔭 = ConjClasses.mk σ},
-    Real.log (Ideal.absNorm (𝔭 : HeightOneSpectrum (𝓞 K)).asIdeal)
+  ∑ᶠ p : {p : HeightOneSpectrum (𝓞 K) × ℕ // 0 < p.2 ∧
+      Ideal.absNorm p.1.asIdeal ^ p.2 = n ∧ IsUnramifiedAt K F p.1 ∧
+      ∃ ρ : F ≃ₐ[K] F, frobeniusClass K F p.1 = ConjClasses.mk ρ ∧ ρ ^ p.2 = σ},
+    Real.log (Ideal.absNorm (p : HeightOneSpectrum (𝓞 K) × ℕ).1.asIdeal)
 
 theorem frobeniusFibreCoeff_nonneg (σ : F ≃ₐ[K] F) (n : ℕ) : 0 ≤ frobeniusFibreCoeff K F σ n :=
+  sorry
+
+/-- **Layer 9.7, the orthogonality identity, as a theorem.** ⚠ It is proved for the named
+coefficient and not assumed: with `Frob_𝔭^m = σ` as the filter it is exactly 8B.3 applied to
+`−L'/L` of each character, and with `Frob_𝔭 = σ` it is not provable at all. The map `w` sending a
+character of the Galois group to its ideal weight is 8B.1's content, and `hw` pins it on the
+unramified primes; `IdealWeight.map_mul` then determines it on prime powers. -/
+theorem lSeries_frobeniusFibreCoeff (σ : F ≃ₐ[K] F)
+    (w : ((F ≃ₐ[K] F) →* ℂˣ) → IdealWeight K)
+    (hw : ∀ (χ : (F ≃ₐ[K] F) →* ℂˣ) (𝔭 : HeightOneSpectrum (𝓞 K)) (τ : F ≃ₐ[K] F),
+      IsUnramifiedAt K F 𝔭 → frobeniusClass K F 𝔭 = ConjClasses.mk τ →
+        (w χ).toFun 𝔭.asIdeal = (χ τ : ℂ))
+    {s : ℂ} (hs : 1 < s.re) :
+    LSeries (fun n ↦ (frobeniusFibreCoeff K F σ n : ℂ)) s =
+      (Nat.card (F ≃ₐ[K] F) : ℂ)⁻¹ *
+        ∑ᶠ χ : (F ≃ₐ[K] F) →* ℂˣ, starRingEnd ℂ (χ σ : ℂ) *
+          LSeries (idealCoeffOfWeight K (fun I ↦ (w χ).toFun I * idealVonMangoldt K I)) s :=
   sorry
 
 /-- **Layer 9.7, the counting asymptotic for one Frobenius fibre.**
 
 Every hypothesis is named: the extension is cyclotomic over `K`, `σ` is an element of its finite
-Galois group, the coefficients are the nonnegative `a_σ` above, `horth` is the orthogonality
-identity of 8B.3 writing their Dirichlet series as a finite combination of logarithmic
-derivatives, and `hG`/`hFG` are the boundary-continuation hypotheses that 7.4 supplies. The
-conclusion constant is `1/#Gal(K(ζ_m)/K)`, and nothing else.
+Galois group, the coefficients are the nonnegative `a_σ` above, and `hG`/`hFG` are the
+boundary-continuation hypotheses that 7.4 supplies. The orthogonality step is no longer a
+hypothesis — it is `lSeries_frobeniusFibreCoeff`. The conclusion constant is
+`1/#Gal(K(ζ_m)/K)`, and nothing else.
 
 ⚠ The statement this replaces quantified over an arbitrary predicate `P` on ideals and an
 arbitrary limit `c`, and was therefore false: take `P` always false and `c = 1`. A green build
@@ -1829,16 +2034,6 @@ theorem tendsto_frobeniusFibreCoeff (m : ℕ) [NeZero m] [IsCyclotomicExtension 
     (σ : F ≃ₐ[K] F) (G : ℂ → ℂ)
     (hsum : ∀ s : ℂ, 1 < s.re →
       LSeriesSummable (fun n ↦ (frobeniusFibreCoeff K F σ n : ℂ)) s)
-    (w : ((F ≃ₐ[K] F) →* ℂˣ) → IdealWeight K)
-    (hw : ∀ (χ : (F ≃ₐ[K] F) →* ℂˣ) (𝔭 : HeightOneSpectrum (𝓞 K)) (τ : F ≃ₐ[K] F),
-      IsUnramifiedAt K F 𝔭 → frobeniusClass K F 𝔭 = ConjClasses.mk τ →
-        (w χ).toFun 𝔭.asIdeal = (χ τ : ℂ))
-    (horth : ∀ s : ℂ, 1 < s.re →
-      LSeries (fun n ↦ (frobeniusFibreCoeff K F σ n : ℂ)) s =
-        (Nat.card (F ≃ₐ[K] F) : ℂ)⁻¹ *
-          ∑ᶠ χ : (F ≃ₐ[K] F) →* ℂˣ, starRingEnd ℂ (χ σ : ℂ) *
-            LSeries (idealCoeffOfWeight K
-              (fun I ↦ (w χ).toFun I * idealVonMangoldt K I)) s)
     (hG : ContinuousOn G {s : ℂ | 1 ≤ s.re})
     (hFG : ∀ s : ℂ, 1 < s.re →
       G s = LSeries (fun n ↦ (frobeniusFibreCoeff K F σ n : ℂ)) s -
@@ -1937,20 +2132,31 @@ theorem mertens_sum :
         Real.log (Real.log x) - M)
       atTop (𝓝 0) := sorry
 
-/-- **Layer 9.12, Mertens for `K`, the product form**:
-`∏_{𝔑𝔭 ≤ x} (1 − 𝔑𝔭^{-1})^{-1} ∼ e^{γ} log x`.
+/-- **Layer 9.12, the higher-prime-power tail converges.** ⚠ A sub-milestone and not a
+hypothesis of the product theorem: it follows from `𝔑𝔭 ≥ 2` and the convergence of
+`∑_𝔭 𝔑𝔭^{-2}`, which is the Euler product of 1.4 at `s = 2`. It is where the passage from the
+sum form to the product form happens. -/
+theorem summable_primePower_tail :
+    Summable fun p : HeightOneSpectrum (𝓞 K) × ℕ ↦
+      if 2 ≤ p.2 then ((Ideal.absNorm p.1.asIdeal : ℝ) ^ (-(p.2 : ℤ))) / p.2 else 0 := sorry
 
-⚠ The higher-prime-power tail is visible as a hypothesis, because it is where the passage from
-the sum to the product happens: `∑_𝔭 ∑_{m ≥ 2} 𝔑𝔭^{-m}/m` converges, and without that bound the
-two forms differ by an unbounded factor. -/
-theorem mertens_prod
-    (htail : Summable fun p : HeightOneSpectrum (𝓞 K) × ℕ ↦
-      if 2 ≤ p.2 then ((Ideal.absNorm p.1.asIdeal : ℝ) ^ (-(p.2 : ℤ))) / p.2 else 0) :
+/-- **Layer 9.12, Mertens for `K`, the product form**:
+
+`∏_{𝔑𝔭 ≤ x} (1 − 𝔑𝔭^{-1})^{-1} ∼ e^{γ} · κ_K · log x`, with `κ_K = Res_{s=1} ζ_K(s)`.
+
+⚠ The residue is part of the constant. The familiar `e^{γ} log x` is the case `K = ℚ`, where
+`κ_ℚ = 1`, so a formula that omits `κ_K` passes every rational check and is wrong over every
+other field. Through the analytic class number formula the missing factor carries `h`, `R`, `w`,
+`|d_K|`, and the signature, which is most of what the theorem is worth.
+
+*Source:* Rosen; Garcia–Lee, *Unconditional explicit Mertens' theorems for number fields*,
+Theorem 1. *Test:* `K = ℚ(√−5)`, where `κ_K = π/√5 ≠ 1`. -/
+theorem mertens_prod :
     Tendsto
       (fun x : ℝ ↦
         (∏ᶠ 𝔭 : {𝔭 : HeightOneSpectrum (𝓞 K) // (Ideal.absNorm 𝔭.asIdeal : ℝ) ≤ x},
           (1 - ((Ideal.absNorm (𝔭 : HeightOneSpectrum (𝓞 K)).asIdeal : ℝ))⁻¹)⁻¹) /
-        (Real.exp (Real.eulerMascheroniConstant) * Real.log x))
+        (Real.exp Real.eulerMascheroniConstant * (dedekindZeta_residue K : ℝ) * Real.log x))
       atTop (𝓝 1) := sorry
 
 /-- **Layer 9.9, natural-density Chebotarev, worked at `ℚ(ζ₅)/ℚ`**: the primes

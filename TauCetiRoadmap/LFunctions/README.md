@@ -187,16 +187,16 @@ proved analytically from 1.7, 1.8, 7.3, and 7.5.
 
 ### Shared layer-DAG table: Integral Lattices ↔ L-functions
 
-The integral lattices roadmap consumes four items of Layer 2 here, and this roadmap consumes
-nothing from it. This table is the whole interface, and nothing crosses between the two
-roadmaps except through a row of it. The supplier owns each name, and the consumer cites the
-name instead of restating the object. The carrier is the bundled analytic lattice: a submodule
-of a Euclidean space together with its discreteness and its `IsZLattice` proof.
+The dependency is one-way. This roadmap supplies four declarations of Layer 2 and consumes
+nothing from the integral lattices roadmap, so this table is the export list and nothing crosses
+between the two roadmaps except through a row of it. The supplier owns each name, and the
+consumer cites the name instead of restating the object. The carrier is the bundled analytic
+lattice: a submodule of a Euclidean space together with its discreteness and its `IsZLattice`
+proof.
 
-⚠ The table used to carry two further rows in the reverse direction, and the block was
-byte-identical in both `README.md` files. Those rows are deleted below, so the two copies now
-differ by exactly them. [`PROVENANCE.md`](PROVENANCE.md) states which rows, and what the integral
-lattices roadmap has to delete to restore byte-identity.
+Milestone 2.11 owns the trace-to-Euclidean map and compares the analytic dual of an ideal lattice
+with the **trace** dual, through `FractionalIdeal.dual`. No dual of an integral bilinear form
+appears anywhere in Layers 2.10 to 2.13, which is why nothing travels in the other direction.
 
 | Consumer layer | Supplier layer | Exact object or theorem | Agreed provisional name |
 | --- | --- | --- | --- |
@@ -206,20 +206,8 @@ lattices roadmap has to delete to restore byte-identity.
 | Integral Lattices 8E | L-functions Layer 2, item 8 | `Θ_Λ(1/t) = t^{n/2} (covolume Λ)⁻¹ Θ_{dual Λ}(t)` for real `t > 0` | `ZLattice.gaussianTheta_one_div` |
 
 Poisson summation for a lattice is an L-functions target and is not consumed by the integral
-lattices roadmap, so it has no row. The crossing runs one way only: L-functions Layer 2 items 1,
-2, 3, and 8 use nothing from that roadmap, and Integral Lattices 8D and 8E use those four items.
-
-⚠ L-functions items 10 to 13 consume **nothing** from that roadmap. Milestone 2.11 owns the
-trace-to-Euclidean map, and it compares the analytic dual of an ideal lattice with the **trace**
-dual through `FractionalIdeal.dual`, never with the dual of an integral bilinear form. An earlier
-version of this table carried two rows in the reverse direction, for `IntegralLattice.dual` and
-`IntegralLattice.analyticDual_eq_dual`; they recorded a dependency that the corrected 2.11 does
-not have, and they are gone. [`PROVENANCE.md`](PROVENANCE.md) records that the integral lattices
-roadmap's copy of this block has to drop the same two rows.
-
-Layer 2 of this roadmap owns the `ZLattice` names. Milestones 2.1, 2.2, 2.3, and 2.8 are named so
-that the integral lattices roadmap's `GaussianThetaInterface` is produced by them, field for
-field.
+lattices roadmap, so it has no row. Milestones 2.1, 2.2, 2.3, and 2.8 are named so that the
+integral lattices roadmap's `GaussianThetaInterface` is produced by them, field for field.
 
 ## Standing hypotheses
 
@@ -835,7 +823,14 @@ representatives rest on. Prove also that `Cl_𝔪 ↠ Cl_𝔫` for `𝔫 ∣ �
 `α` does not define a subgroup, so a weight required to be trivial on such a set of integral
 elements need not factor through `Cl_𝔪`.
 
-Put `ζ(s, c) = ∑_{[𝔞] = c, 𝔞 integral and prime to 𝔪₀} 𝔑𝔞^{-s}` for `c : Cl_𝔪`. Then
+Put `ζ(s, c) = ∑_{[𝔞] = c, 𝔞 integral and prime to 𝔪₀} 𝔑𝔞^{-s}` for `c : Cl_𝔪`.
+
+⚠ That inner sum is infinite, so in Lean it is `tsum` and not `finsum`. Mathlib's `∑ᶠ` sums a
+finitely supported function and is the junk value `0` otherwise, and every fibre here contains
+infinitely many ideals, so a partial zeta function written with `∑ᶠ` is the constant `0` and 1.8,
+1.9, 5.3, 7.5, 8E, and 9.11 become statements about that constant. Prove summability on
+`Re s > 1` as its own statement, before the interchange with the finite class sum. The **outer**
+sum over `Cl_𝔪` may be a `finsum`, because `Cl_𝔪` is finite. Then
 
 `∑_{c : Cl_𝔪} ζ(·, c) = ζ_K(s) · ∏_{𝔭 ∣ 𝔪₀} (1 − 𝔑𝔭^{-s})`.
 
@@ -1514,8 +1509,20 @@ package over a **family** rather than a single weight:
 CancellingFamily (G : Type*) [Group G] [Fintype G] (w : G → IdealWeight K) : Prop
 ```
 requiring: `w` is a homomorphism to pointwise products; `w 1` is the trivial weight;
-`HasCancellation (w g)` for every `g ≠ 1`; and closure of the family under conjugation. Prove in
-addition that `HasCancellation` holds for each norm twist of each member.
+`HasCancellation (w g)` for every `g ≠ 1`; closure of the family under conjugation; and
+`HasCancellation (w g · ‖·‖^{it})` for every `g ≠ 1` and every real `t`.
+
+⚠ The last condition is for the **nontrivial** members only. Demanding it at `g = 1` and `t ≠ 0`
+makes the package uninhabitable by its own principal example. The twisted trivial weight has
+coefficients `𝔑𝔞^{it}`, and since `#{𝔞 ∣ 𝔑𝔞 ≤ X} ∼ ρ_K X`, partial summation gives
+`∑_{𝔑𝔞 ≤ X} 𝔑𝔞^{it} ∼ ρ_K X^{1+it}/(1+it)`, of absolute value comparable to `X`, while
+`HasCancellation` demands `O(X^{1−1/d})`. Equivalently the associated series is `ζ_K(s − it)`,
+which has a pole at `s = 1 + it`, and a cancellation hypothesis there would make it holomorphic
+throughout the strip.
+
+The trivial member is handled separately, and not through the package: at `t = 0` it is the pole
+of `ζ_K`, and at `t ≠ 0` the nonvanishing of `ζ_K(1 + it)` is the Dedekind-zeta statement of 7.4,
+proved from the `3-4-1` inequality applied to `ζ_K` itself.
 
 Then 7.3 and 7.4 are theorems about a `CancellingFamily`, and are instantiated twice, in 7.5 and
 in 8B.2. A single-weight statement would be false at the advertised generality.
@@ -1605,13 +1612,23 @@ Galois, this roadmap builds:
 - `frobeniusClass K L 𝔭 : ConjClasses (L ≃ₐ[K] L)` for an unramified `𝔭`, **constructed** from
   Mathlib's `arithFrobAt` and `isConj_arithFrobAt` over `Algebra.IsInvariant`, and not assumed.
   `Algebra.isInvariant_of_isGalois` supplies the invariance hypothesis;
-- the characterization: `σ` lies in `frobeniusClass K L 𝔭` exactly when there is a prime `Q` of
-  `L` over `𝔭` with `σ • x ≡ x^{𝔑𝔭} mod Q` for every `x`;
+- the characterization, **for an unramified `𝔭`**: `σ` lies in `frobeniusClass K L 𝔭` exactly
+  when there is a prime `Q` of `L` over `𝔭` with `σ • x ≡ x^{𝔑𝔭} mod Q` for every `x`. ⚠ The
+  hypothesis cannot be dropped. Two lifts at the same `Q` differ by an element of inertia, and
+  Mathlib's uniqueness assumes unramifiedness; in a totally ramified abelian extension every
+  inertia element acts trivially on the residue field, so the right-hand side holds for several
+  distinct singleton classes while `frobeniusClass` picks one;
 - **restriction compatibility**, stated against Mathlib's canonical restriction homomorphism
   `AlgEquiv.restrictNormalHom` and not against an arbitrary parameter: for `K ⊆ E ⊆ L` with `E/K`
   Galois, the image of `frobeniusClass K L 𝔭` is `frobeniusClass K E 𝔭`;
-- **tower compatibility**: for a prime `𝔓` of `E` over `𝔭` of residue degree `f` over `K`,
-  `frobeniusClass E L 𝔓` is the class of the `f`-th power of a Frobenius of `𝔭`;
+- **tower compatibility, stated relative to one prime of `L`**: for `Q` a prime of `L` over `𝔓`
+  of `E` over `𝔭` of `K`, and `σ` an arithmetic Frobenius **at that `Q`**, the relative Frobenius
+  at `Q/𝔓` is `σ^{f(𝔓/𝔭)}` when read in `Gal(L/K)`. The reason is one line of residue arithmetic:
+  `σ^f` acts as `x ↦ x^{𝔑𝔭^f}` and `𝔑_E 𝔓 = 𝔑_K 𝔭^f`. ⚠ A version taking an arbitrary
+  representative of `frobeniusClass K L 𝔭` and a fixed `𝔓` is false when `E/K` is not normal: a
+  conjugate representative need not stabilize `Q`, so `σ^f` need not fix `E` pointwise and is
+  then the restriction of nothing in `Gal(L/E)`. The class-level statement is a corollary of the
+  prime-relative one, never a replacement for it;
 - the value at a prime that splits completely, which is the identity class, and the cardinality
   of the class.
 
@@ -1780,6 +1797,23 @@ follows is an acceptance criterion.
 Let `L/K` be abelian with group `G`, and let `σ ∈ G` have order `f`. Every object below is a
 milestone. None of them is called "the crossing lemma".
 
+⚠ **Carry the whole diagram, and not just the group isomorphism.** Milestones 8C.5 and 8C.6 are
+false for arbitrary finite Galois `L/K`, `M/K`, `N/K` with an abstract isomorphism
+`Gal(N/K) ≅ Gal(L/K) × Gal(M/K)`:
+
+- the tagged fibre then has density `#C_σ · #C_τ/(#G · #H)` and not `1/(#G · #H)`. In `S₃ × C₂`
+  a transposition paired with the nontrivial element has a conjugacy class of size `3`;
+- for a nonabelian `Gal(M/K)`, two distinct but conjugate `τ` determine the *same* class and
+  hence the same set of primes, so the fibres are not pairwise disjoint.
+
+Package the diagram once, as the datum of 8C.1 to 8C.4: `L/K` abelian; `M = K(ζ_q)` with
+`Gal(M/K)` cyclic; `L ∩ M = K`; `N = L·M`; the map is Mathlib's canonical restriction
+homomorphism and it is bijective; and Frobenius under it is the pair of the restricted Frobenius
+elements. `L/K` abelian and `Gal(M/K)` cyclic make `Gal(N/K)` abelian and every class a
+singleton, which is what the numbers below need; the cyclotomic and compositum conditions are
+what make the route non-circular, since 8C.4's fixed field has to be cyclotomic over its base for
+8B.5 to apply over it.
+
 **8C.1 The auxiliary primes.** Do not quantify over abstract admissible moduli: construct them.
 For an integer `r ≥ 1`, call a rational prime `q` *auxiliary of level `r`* when
 
@@ -1931,6 +1965,17 @@ with the primes of `E` of degree one over `K` at no cost. Say once which set is 
 `#G/(#C · f)` primes of `E` in the set of 8D.3, all of residue degree `1` over `K`. Every prime of
 `E` in that set lies over such a `𝔭`.
 
+⚠ The set of 8D.3 is the one with relative Frobenius **`σ`**, not the identity. The
+split-completely fibre is a different set. The smallest case shows the difference: take `L/K`
+cyclic with `σ` a generator, so `⟨σ⟩ = G` and `E = L^{⟨σ⟩} = K`. Then `#C = 1`, `f = #G`, and the
+displayed count is `#G/(1·#G) = 1` — the prime `𝔭` is its own fibre, with relative Frobenius `σ`.
+The set of primes of `E = K` with relative Frobenius `1` is empty. That case is a mandatory test
+of this milestone.
+
+⚠ `E` is the fixed field of `⟨σ⟩`, and that has to be said. `[L:E] = ord σ` says only that the
+degree is right; every step here uses that `Gal(L/E)` *is* `⟨σ⟩`, so state it as: an element
+`σ_E` of `Gal(L/E)` restricting to `σ`, generating `Gal(L/E)`.
+
 *Source:* Milne, *Class Field Theory*, VIII 7.4, whose explicit bijections are the plan for the
 proof.
 *Hypotheses:* the number `#G/(#C · f)` equals `#C_G(σ)/f`, which is a positive integer because
@@ -2038,10 +2083,19 @@ reproves the rational prime number theorem.
 **9.7 Counting in a cyclotomic Frobenius fibre.** Fix `m` and `σ ∈ Gal(K(ζ_m)/K)`, and define the
 **nonnegative** coefficient
 
-`a_σ(n) = ∑_{𝔑𝔞 = n, Frob(𝔞) = σ} Λ_K(𝔞)`,
+`a_σ(n) = ∑_{𝔑𝔭^m = n, m ≥ 1, Frob_𝔭^m = σ} log 𝔑𝔭`,
 
-the sum over ideals prime to `m` whose Frobenius is `σ`. By orthogonality, 8B.3, its Dirichlet
-series is the finite combination `(#G)⁻¹ ∑_χ conj(χ σ) · (−L'/L)(χ, s)`. The trivial character
+the sum over prime powers of norm `n` whose Frobenius, raised to the exponent, is `σ`. By
+orthogonality, 8B.3, its Dirichlet series is the finite combination
+`(#G)⁻¹ ∑_χ conj(χ σ) · (−L'/L)(χ, s)`, and that identity is a **theorem** about this sequence,
+not a hypothesis imposed on it.
+
+⚠ The condition is `Frob_𝔭^m = σ` and not `Frob_𝔭 = σ`. The logarithmic derivative of the Euler
+factor at `𝔭` is `∑_{m ≥ 1} χ(Frob_𝔭)^m log 𝔑𝔭 · 𝔑𝔭^{-ms}`, and `χ(Frob_𝔭)^m = χ(Frob_𝔭^m)`, so
+orthogonality isolates the `m`-th power. The test is a quadratic cyclotomic extension: at an
+inert `𝔭` the Frobenius is the nontrivial `g`, but `g² = 1`, so the `𝔭²` term belongs to the
+*identity* fibre. A coefficient filtered on `Frob_𝔭 = σ` drops it, and then the orthogonality
+identity is not provable for the named sequence. The trivial character
 contributes the pole `1/(s−1)`, and each nontrivial character contributes a function continuous
 up to `Re s = 1`, by 7.4 with the family of 8B.2. Apply 9.1 to `a_σ` with `κ = 1/#G`, and then
 remove the prime powers as in 9.4 and 9.5. The result is
@@ -2100,9 +2154,20 @@ Dirichlet form.
 
 **9.12 Mertens for `K`.** The two statements
 
-`∑_{𝔑𝔭 ≤ x} 𝔑𝔭^{-1} = log log x + M_K + o(1)` and `∏_{𝔑𝔭 ≤ x} (1 − 𝔑𝔭^{-1})^{-1} ∼ e^{γ} log x`
+`∑_{𝔑𝔭 ≤ x} 𝔑𝔭^{-1} = log log x + M_K + o(1)` and
+`∏_{𝔑𝔭 ≤ x} (1 − 𝔑𝔭^{-1})^{-1} ∼ e^{γ} · κ_K · log x`, with `κ_K = Res_{s=1} ζ_K(s)`,
 
-need more than 9.4 and 9.6, which give only the leading term. The chain is:
+need more than 9.4 and 9.6, which give only the leading term.
+
+⚠ The residue is part of the product constant. The familiar `e^{γ} log x` is the case `K = ℚ`,
+where `κ_ℚ = 1`, so a formula that omits `κ_K` passes every rational check and is wrong over
+every other field. Through the analytic class number formula the missing factor carries `h`, `R`,
+`w`, `|d_K|`, and the signature. Test it at `K = ℚ(√−5)`, where `κ_K = π/√5`.
+
+*Source:* Rosen; Garcia–Lee, *Unconditional explicit Mertens' theorems for number fields and
+Dedekind zeta residue bounds*, Theorem 1.
+
+The chain is:
 
 1. the logarithmic Euler product near `s = 1`: `log ζ_K(s) = ∑_𝔭 𝔑𝔭^{-s} + H(s)` with `H`
    analytic on `Re s > 1/2`, from 1.4;
@@ -2110,7 +2175,10 @@ need more than 9.4 and 9.6, which give only the leading term. The chain is:
 3. the passage from the Dirichlet-series asymptotic to the partial sum, by 9.4 and partial
    summation, which is where the constant `M_K` is extracted;
 4. the passage from the sum to the product, by expanding `log(1 − t)⁻¹` and bounding the tail
-   `∑_𝔭 ∑_{m ≥ 2} 𝔑𝔭^{-m}/m`, which converges.
+   `∑_𝔭 ∑_{m ≥ 2} 𝔑𝔭^{-m}/m`. ⚠ Convergence of that tail is a **sub-milestone here**, proved
+   from `𝔑𝔭 ≥ 2` and the Euler product of 1.4 at `s = 2`, and not a hypothesis carried on the
+   final theorem. It is where the two constants separate, so a statement that assumes it assumes
+   the step the milestone exists to take.
 
 *Prerequisites:* Layers 1.4, 1.9, 9.4, 9.6.
 
@@ -2201,6 +2269,27 @@ statements do not.
   `HasMeromorphicContinuation` except analyticity. This test detects a data model whose
   representative is unconstrained away from its poles, and it is why 0.3 has an analyticity
   field.
+- **The twisted trivial character does not cancel** (Layer 7.2). At `K = ℚ`, the weight
+  `n ↦ n^{it}` has `∑_{n ≤ X} n^{it} ∼ X^{1+it}/(1+it)`, of size comparable to `X`, while
+  `HasCancellation` at degree one demands `O(1)`. This test detects a `CancellingFamily` whose
+  norm-twist condition is imposed on the trivial member, which no example satisfies.
+- **A nonabelian crossing gives the wrong density** (Layer 8C.5). In `S₃ × C₂`, the class of a
+  transposition paired with the nontrivial element has size `3`, so its fibre has density
+  `3/(6·2)` and not `1/(6·2)`, and two conjugate transpositions give the *same* fibre. This test
+  detects crossing contracts stated over an abstract product decomposition with no abelianness.
+- **The cyclic fixed field** (Layer 8D.4). For `L/K` cyclic with `σ` a generator, `E = K`, the
+  count is `1`, and the one prime in the fibre has relative Frobenius `σ`. The set with relative
+  Frobenius `1` is empty. This test detects the split-completely fibre used in place of the `σ`
+  fibre.
+- **The inert prime squared** (Layer 9.7). In a quadratic cyclotomic extension, an inert `𝔭` has
+  `Frob_𝔭 = g ≠ 1` but `Frob_𝔭² = 1`, so the `𝔭²` term belongs to the identity fibre. This test
+  detects a von Mangoldt fibre coefficient filtered on `Frob_𝔭 = σ` instead of `Frob_𝔭^m = σ`.
+- **Mertens away from `ℚ`** (Layer 9.12). At `K = ℚ(√−5)` the residue is `κ_K = π/√5 ≠ 1`, so
+  `∏_{𝔑𝔭 ≤ x}(1 − 𝔑𝔭^{-1})^{-1} ∼ e^{γ} κ_K log x` differs from `e^{γ} log x`. This test detects a
+  product constant that omits the Dedekind-zeta residue, which every rational check passes.
+- **The infinite fibre** (Layer 1.7). A ray class contains infinitely many integral ideals, so its
+  partial zeta function is a `tsum`. This test detects a `finsum`, which is the junk value `0`
+  there and makes every later statement about that constant.
 - **Wiener–Ikehara needs summability** (Layer 9.1). For a rapidly growing nonnegative `a`,
   Mathlib's `LSeries a` is the junk value `0` off the region of convergence, so `F = 0` and
   `κ = 0` satisfy an equality hypothesis while `∑_{n ≤ x} a n` is not `o(x)`. This test detects a
