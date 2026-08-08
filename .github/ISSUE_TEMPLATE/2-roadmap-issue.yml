@@ -29,6 +29,7 @@ body:
         - OrthogonalL2Bases
         - PDE
         - ProfiniteCohomology
+        - QuadraticFormInvariants
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers
