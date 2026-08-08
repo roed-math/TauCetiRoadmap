@@ -228,6 +228,19 @@ noncomputable def artinHomAway {L : Type*} [Field L] [NumberField L] [Algebra K 
     idealsAway (K := K) S →* (L ≃ₐ[K] L) :=
   sorry
 
+/-- **Layer 2.5, the unramified hypothesis descends to a subextension.** This is the pin's
+`Algebra.IsUnramifiedAt.of_liesOver` applied to the tower `𝓞 K ⊆ 𝓞 M ⊆ 𝓞 L`. ⚠ The functoriality
+equation below consumes this. Taking a second unramified hypothesis for `M/K` as an unrelated
+input would state something weaker than the milestone, which is that both Artin maps are defined
+from one hypothesis about `L`. -/
+theorem isUnramifiedAway_of_intermediateField {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    (M : IntermediateField K L) [NumberField M] (S : Finset (HeightOneSpectrum (𝓞 K)))
+    (hur : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
+      ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q) :
+    ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
+      ∀ (Q : Ideal (𝓞 M)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q :=
+  sorry
+
 section ArtinHomAway
 variable {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
   (hab : ∀ σ τ : L ≃ₐ[K] L, Commute σ τ)
@@ -268,15 +281,14 @@ example (S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S')
 
 /-- **Layer 2.5, functoriality in `L`, as an equation.** For an intermediate field `M`, normal
 over `K` (automatic here, since `L/K` is abelian), restriction of automorphisms carries the Artin
-map of `L/K` to the Artin map of `M/K` on the same carrier. ⚠ The excluded set is the same `S` on
-both sides, and `hurM` is what `hur` gives for the subextension: a prime unramified in `L` is
-unramified in `M`. -/
+map of `L/K` to the Artin map of `M/K` on the same carrier. ⚠ There is one excluded set and one
+unramified hypothesis: the right-hand side takes the *derived*
+`isUnramifiedAway_of_intermediateField M S hur`, not a second assumption. Its proof also needs
+Layer 2.4, which is what relates a Frobenius of `L/K` to a Frobenius of `M/K`. -/
 example (M : IntermediateField K L) [NumberField M] [Normal K M] [IsGalois K M]
-    (habM : ∀ σ τ : M ≃ₐ[K] M, Commute σ τ)
-    (hurM : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
-      ∀ (Q : Ideal (𝓞 M)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q) :
+    (habM : ∀ σ τ : M ≃ₐ[K] M, Commute σ τ) :
     (AlgEquiv.restrictNormalHom (F := K) M).comp (artinHomAway (L := L) hab S hur) =
-      artinHomAway (L := M) habM S hurM :=
+      artinHomAway (L := M) habM S (isUnramifiedAway_of_intermediateField M S hur) :=
   sorry
 
 /-- **Layer 2.5, the integral Artin homomorphism.** The composite of `integralIdealsAwayHom` with
@@ -1149,20 +1161,45 @@ example (B : ℝ) :
     {u : (𝓞 K)ˣ | ∀ w : NumberField.InfinitePlace K, w ((u : 𝓞 K) : K) ≤ B}.Finite :=
   sorry
 
+/-! ### Layer 7.4, the polynomial certificate: rank one **and** prime degree
+
+The four declarations below are the certificate, and they carry two hypotheses, neither implied
+by the other.
+
+* `NumberField.Units.rank K = 1` is what makes a candidate set exist at all. At rank one there
+  are exactly two infinite places, so a bound at one is a two-sided bound at the other and the
+  coefficients are bounded. Above rank one no `Finset` works: in `ℚ(√2, √3)`, of rank `3`, the
+  image of `u ↦ log (w u)` is a non-cyclic subgroup of `ℝ`, hence dense, so infinitely many units
+  satisfy `1 < w u < B` for every `B > 1` and they have infinitely many minimal polynomials.
+* `Nat.Prime (Module.finrank ℚ K)` is what makes a competing unit an `IntegralPrimitiveElement K`,
+  which is what the field test is about. At rank one the signature is `(2,0)`, `(1,1)` or
+  `(0,2)`; only the last has composite degree, and there a unit can sit in a quadratic subfield.
+  `ℚ(ζ₈)` is that case, with the non-torsion unit `1 + √2`, and `README.md` puts it out of scope.
+-/
+
 /-- **Layer 7.4, the candidate set.** The monic integer polynomials that can be the minimal
-polynomial of a unit `v` with `1 < w v < B`, as a `Finset`. The coefficient bounds come from the
-conjugates: `∏_w (w v)^{mult w} = 1`, so an upper bound at one place bounds every conjugate above
-and below. -/
+polynomial of a unit `v` with `1 < w v < B`, as a `Finset`. -/
 noncomputable def unitCandidates (K : Type*) [Field K] [NumberField K]
     (w : NumberField.InfinitePlace K) (B : ℝ) : Finset ℤ[X] :=
   sorry
 
-/-- **Layer 7.4, completeness of the candidate set.** ⚠ This is the half that makes the search
-exhaustive, and it needs `v` to generate `K`: a unit with `w v ≠ 1` is not rational, and for a
-field of prime degree that already forces `ℚ(v) = K` (Layer 7.1). -/
-example (w : NumberField.InfinitePlace K) (B : ℝ) (v : (𝓞 K)ˣ)
+/-- **Layer 7.4, completeness of the candidate set.** ⚠ Both scope hypotheses appear here and
+neither can be dropped. Without `hrank` the statement is unprovable for any definition of
+`unitCandidates`, since the competing units can be infinite in number. Without `hdeg` the minimal
+polynomial need not have degree `[K : ℚ]`, and the field test below does not apply to it. -/
+example (hrank : NumberField.Units.rank K = 1)
+    (hdeg : Nat.Prime (Module.finrank ℚ K))
+    (w : NumberField.InfinitePlace K) (B : ℝ) (v : (𝓞 K)ˣ)
     (h1 : 1 < w ((v : 𝓞 K) : K)) (h2 : w ((v : 𝓞 K) : K) < B) :
     minpoly ℤ (v : 𝓞 K) ∈ unitCandidates K w B :=
+  sorry
+
+/-- **Layer 7.4, prime degree makes a competing unit a generator**, which is what connects the
+candidate set to the field test. A unit with `w v ≠ 1` is not rational, and a proper subfield of
+a field of prime degree is `ℚ`. -/
+example (hdeg : Nat.Prime (Module.finrank ℚ K)) (w : NumberField.InfinitePlace K) (v : (𝓞 K)ˣ)
+    (h1 : 1 < w ((v : 𝓞 K) : K)) :
+    Algebra.adjoin ℚ {((v : 𝓞 K) : K)} = ⊤ :=
   sorry
 
 /-- **Layer 7.4, the field test**, in the form the elimination uses. By Layer 3.3 the minimal
@@ -1347,6 +1384,10 @@ example : θ * (θ ^ 2 - θ) = -1 := sorry
 
 /-! #### The unit certificate for `3.1.23.1`, in four steps
 
+This is the instance of Layer 7.4's polynomial certificate at `Units.rank K = 1` and
+`Module.finrank ℚ K = 3`, which is prime; both scope hypotheses hold here and follow from `hmin`,
+so neither is written out below.
+
 `u = θ² − θ` has `w u ≈ 1.3247` at the real place, and satisfies `u³ − u − 1 = 0`. The
 coefficient bounds of Layer 7.4 give `|a| ≤ 3`, `|b| ≤ 3`, `c = ±1` for the minimal polynomial
 `X³ − aX² + bX − c` of a competing unit, so the candidate set is these `98` polynomials. -/
@@ -1367,12 +1408,13 @@ example (w : NumberField.InfinitePlace K) (hw : w.IsReal) (u v : (𝓞 K)ˣ)
     minpoly ℤ (v : 𝓞 K) ∈ cubicUnitCandidates := sorry
 
 /-- **Step 3, the root test, with its exact outcome.** ⚠ This is where "discard the candidates
-with no root in `(1, w u)`" stops being enough. Fourteen of the `98` have a real root in that
-interval; twelve are reducible, each with `1` or `−1` as a root, and a minimal polynomial is
-irreducible. Exactly two irreducible candidates survive, and `minpoly ℤ u = X³ − X − 1` is not
-among them, since its root in the closed interval is the endpoint `u` itself. -/
+with no root in `(1, w u)`" stops being enough: exactly two of the `98` have a root in that open
+interval, and both are still standing after the test. ⚠ The interval is open at both ends, and
+the count depends on that. On the closed `[1, w u]` there are `15`: these two, twelve candidates
+with a root at `1`, and `minpoly ℤ u = X³ − X − 1`, whose only real root is `w u`. Neither
+endpoint is `w v` for a unit `v` with `1 < w v < w u`. -/
 example (w : NumberField.InfinitePlace K) (hw : w.IsReal) (u : (𝓞 K)ˣ)
-    (hu : (u : 𝓞 K) = θ ^ 2 - θ) (g : ℤ[X]) (hg : g ∈ cubicUnitCandidates) (hirr : Irreducible g)
+    (hu : (u : 𝓞 K) = θ ^ 2 - θ) (g : ℤ[X]) (hg : g ∈ cubicUnitCandidates)
     (hroot : ∃ x : ℝ, 1 < x ∧ x < w ((u : 𝓞 K) : K) ∧ aeval x g = 0) :
     g = X ^ 3 + X ^ 2 - 2 * X - 1 ∨ g = X ^ 3 + 2 * X ^ 2 - 3 * X - 1 := sorry
 
