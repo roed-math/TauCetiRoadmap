@@ -1,4 +1,5 @@
 import Mathlib
+import TauCetiRoadmap.LocalFields.Suggested
 
 /-!
 # Global class field theory: target signatures
@@ -24,6 +25,11 @@ Milestones whose statements need vocabulary that the pin does not have are in `R
 Layer 2B needs the base-change algebra structure on adele rings, which is milestone 2B.1, and
 Layers 5, 6, 7 and 11 need the objects that Layer 2B builds. Add each milestone here as soon as
 its types are expressible.
+
+Local class field theory, and the generic finite-group Tate and class-formation machinery, are the
+Local Fields roadmap's. This file imports `TauCetiRoadmap.LocalFields.Suggested` and applies those
+declarations by name; it restates none of them, and it carries no compatibility structure standing
+in for them. `README.md` has the exact declaration contract.
 -/
 
 namespace TauCetiRoadmap.GlobalClassFieldTheory
@@ -34,143 +40,99 @@ open scoped nonZeroDivisors ValuativeRel
 
 universe u
 
-/-! ## Layer I: the local input
+/-! ## Layer D: the local dictionary and the ideal-theoretic Artin map
 
-Global class field theory needs local class field theory. Milestone I.1 fixes the package of
-local data and laws that Layers 5, 6, 7, 9 and 11 use. Milestone I.4 constructs the canonical
-instance, and it is a deliverable of this roadmap, not a choice left open. -/
+Global class field theory needs local class field theory, and this roadmap does not build it. The
+Local Fields roadmap owns it, together with the generic finite-group Tate and class-formation
+machinery, and `README.md` carries the exact declaration contract. What is here is the dictionary
+onto that theory at a finite place of a number field, the ideal-theoretic Artin map, and the two
+milestones that read the consumed theory one prime at a time.
 
-/-- **I.1, principal units of level `n` in a nonarchimedean local field.** `x ∈ 1 + 𝔭^n`, stated
-through the maximal ideal of the valuation subring. Level `0` is the condition that `x − 1` is
-integral, and every unit satisfies it. -/
-def IsPrincipalUnitLocal (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] (n : ℕ) (x : Fˣ) : Prop :=
-  ∃ y : 𝒪[F], (y : F) = (x : F) - 1 ∧ y ∈ (IsLocalRing.maximalIdeal 𝒪[F]) ^ n
+Every name below in the namespace `TauCetiRoadmap.LocalFields` is the supplier's, imported and
+applied. None of them is restated here. -/
 
-/-- **I.1, the conductor exponent of a character of `Fˣ`.** The least level of principal units
-inside the kernel. It is `0` exactly for an unramified character, and it is the local ingredient
-of the conductor–discriminant formula I.6. -/
-noncomputable def charConductorExp (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
+/-- **D.1, the completion dictionary at a finite place.** The completion of a number field at a
+finite place is a nonarchimedean local field, which is what makes every declaration of the Local
+Fields roadmap applicable to it. The `ValuativeRel` and `IsValuativeTopology` instances are
+hypotheses, because producing them from the pin's `Valued` instance on `adicCompletion`, without
+stating anything new against `Valued`, is part of the milestone. -/
+example {K : Type} [Field K] [NumberField K] (v : HeightOneSpectrum (𝓞 K))
+    [ValuativeRel (v.adicCompletion K)] [IsValuativeTopology (v.adicCompletion K)] :
+    IsNonarchimedeanLocalField (v.adicCompletion K) :=
+  sorry
+
+/-- **D.1, the residue cardinality.** The residue field of the completion at `v` has
+`Ideal.absNorm v.asIdeal` elements, so the `q_v` of the conventions table and the `q` of the
+consumed absolute value `‖x‖_K = q^{−v_K(x)}` are the same number. -/
+example {K : Type} [Field K] [NumberField K] (v : HeightOneSpectrum (𝓞 K))
+    [ValuativeRel (v.adicCompletion K)] [IsNonarchimedeanLocalField (v.adicCompletion K)] :
+    Nat.card (IsLocalRing.ResidueField 𝒪[v.adicCompletion K]) = Ideal.absNorm v.asIdeal :=
+  sorry
+
+/-- **6.1 item 3, the local factor of the global Artin map at a finite place.** This is the point
+where the global compilation meets the consumed local theory: the local component is the Local
+Fields roadmap's `artinMap`, at the completion that D.1 identifies as a nonarchimedean local
+field. Nothing is defined here beyond that application, and in particular this roadmap has no
+local Artin map of its own. Composing with the restriction to a finite abelian `L/K` is 6.1
+items 1 and 2, which need the decomposition-group identification of 2B.6. -/
+noncomputable def localArtinAt {K : Type} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) [ValuativeRel (v.adicCompletion K)]
+    [IsNonarchimedeanLocalField (v.adicCompletion K)] :
+    (v.adicCompletion K)ˣ →* Field.absoluteGaloisGroupAbelianization (v.adicCompletion K) :=
+  LocalFields.artinMap (v.adicCompletion K)
+
+/-- **6.1 item 4, the arithmetic normalization of that local factor.** The unramified coordinate
+of the local component is the normalized valuation, which is the consumed
+`unramifiedCoordinate_artinMap` and nothing further. This is the equation behind "a uniformizer
+goes to the arithmetic Frobenius" of the conventions table, and it is what makes almost every
+factor of `∏_v Art_{K_v}(x_v)` trivial. -/
+theorem unramifiedCoordinate_localArtinAt {K : Type} [Field K] [NumberField K]
+    (v : HeightOneSpectrum (𝓞 K)) [ValuativeRel (v.adicCompletion K)]
+    [IsNonarchimedeanLocalField (v.adicCompletion K)] (x : (v.adicCompletion K)ˣ) :
+    LocalFields.unramifiedCoordinate (v.adicCompletion K) (localArtinAt v x)
+      = ProfiniteGrp.ProfiniteCompletion.etaFn (GrpCat.of (Multiplicative ℤ))
+          (LocalFields.normalizedValuation (v.adicCompletion K) x) :=
+  LocalFields.unramifiedCoordinate_artinMap (v.adicCompletion K) x
+
+/-- **D.3 clause 1, the cyclotomic orientation at a `p`-power level.** Stage 1 of 6.3 evaluates
+`χ_cyc(Art_{ℚ_p}(u)) = u⁻¹` at level `p ^ k`, with `χ_cyc` Mathlib's `modularCyclotomicCharacter`
+and the right-hand side the reduction of `u` along `PadicInt.toZModPow`. It is the consumed
+`cyclotomicCharacter_artinMap_padic`, which states the same equation in `ℤ_pˣ`, read modulo
+`p ^ k`. The direction is the whole content: with the geometric convention the right-hand side is
+`u`, every degree count is unchanged, and the error first shows up in global reciprocity.
+
+⚠ This is a `p`-power-level statement. At a level `m` prime to `p` there is no homomorphism
+`ℤ_pˣ → (ZMod m)ˣ`, so the same equation is ill-typed there; the clause that holds away from `p`
+is the unramified one, `unramifiedCoordinate_localArtinAt` above. -/
+example (p : ℕ) [Fact p.Prime] [IsNonarchimedeanLocalField ℚ_[p]] (k : ℕ)
+    (hk : Fintype.card {x // x ∈ rootsOfUnity (p ^ k) (AlgebraicClosure ℚ_[p])} = p ^ k)
+    (u : ℤ_[p]ˣ) (σ : Field.absoluteGaloisGroup ℚ_[p])
+    (_hσ : (QuotientGroup.mk σ : Field.absoluteGaloisGroupAbelianization ℚ_[p])
+      = LocalFields.artinMap ℚ_[p] (Units.map (algebraMap ℤ_[p] ℚ_[p]).toMonoidHom u)) :
+    modularCyclotomicCharacter (AlgebraicClosure ℚ_[p]) hk σ.toRingEquiv
+      = (Units.map (PadicInt.toZModPow k : ℤ_[p] →+* ZMod (p ^ k)).toMonoidHom u)⁻¹ :=
+  sorry
+
+/-- **D.4, the conductor exponent of a continuous character of `Fˣ`.** The least level of the
+consumed unit filtration inside the kernel. The Local Fields roadmap supplies the conductor of an
+abelian *extension*, `c(L/K)`, and no conductor of a character, so this roadmap defines the
+character version. It is defined on that roadmap's `unitFiltration` and on no filtration of its
+own: `U(F,0)` is `𝒪[F]ˣ`, so the exponent is `0` exactly for a character trivial on the units. -/
+noncomputable def charConductorExp (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
     [IsNonarchimedeanLocalField F] (χ : ContinuousMonoidHom Fˣ ℂˣ) : ℕ :=
-  sInf {n | ∀ x : Fˣ, IsPrincipalUnitLocal F n x → χ x = 1}
+  sInf {n | ∀ x ∈ LocalFields.unitFiltration F n, χ x = 1}
 
-/-- **I.1, the local class field theory package.** One term carries the whole nonarchimedean
-local theory that this roadmap consumes. The package is indexed by nothing: its fields quantify
-over every nonarchimedean local field `F` and every finite abelian Galois
-extension `E/F`. That is what makes the compatibility laws statable, because `art_norm` relates
-two different base fields, and it is what stops a consumer from choosing two unrelated terms.
-
-Every law that Layers 5, 6, 7, 9 and 11 quantify over is a field here. In particular the Artin
-map is continuous, the conductor exponent is the least principal-unit level in the norm group,
-and the invariant map is an additive equivalence onto the torsion of `ℚ/ℤ` of the right order. -/
-class LocalCFT where
-  /-- The local Artin map, continuous, for every finite abelian Galois extension. -/
-  art : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E], ContinuousMonoidHom Fˣ (E ≃ₐ[F] E)
-  /-- The Artin map is surjective. -/
-  art_surjective : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E], Function.Surjective (art F E)
-  /-- Its kernel is the group of norms from `E`. -/
-  ker_art : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E] (x : Fˣ),
-      art F E x = 1 ↔ ∃ y : Eˣ, Algebra.norm F (y : E) = (x : F)
-  /-- Restriction in the upper field: `art` for `E'/F` restricted to `E` is `art` for `E/F`. -/
-  art_restrict : ∀ (F E E' : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E] [Field E'] [Algebra F E'] [Module.Finite F E'] [IsAbelianGalois F E']
-    [Algebra E E'] [IsScalarTower F E E'] (x : Fˣ) (y : E),
-      algebraMap E E' ((art F E x) y) = (art F E' x) (algebraMap E E' y)
-  /-- Norm compatibility in the base field. -/
-  art_norm : ∀ (F F' E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field F'] [ValuativeRel F'] [TopologicalSpace F']
-    [IsNonarchimedeanLocalField F'] [Field E] [Algebra F F'] [Module.Finite F F']
-    [Algebra F E] [Module.Finite F E] [IsAbelianGalois F E] [Algebra F' E] [Module.Finite F' E]
-    [IsAbelianGalois F' E] [IsScalarTower F F' E] (y : F'ˣ) (z : E),
-      (art F' E y) z = (art F E (Units.map (Algebra.norm F : F' →* F) y)) z
-  /-- Arithmetic normalization. For unramified `E/F` and a uniformizer `π`, the value `art π`
-  acts on the integers of `E` as the `q`-power map modulo the maximal ideal, with `q` the
-  residue cardinality of `F`. -/
-  art_frobenius : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [ValuativeRel E] [TopologicalSpace E]
-    [IsNonarchimedeanLocalField E] [Algebra F E] [Module.Finite F E] [IsAbelianGalois F E]
-    (π : Fˣ), ValuativeRel.valuation F (π : F) < 1 →
-      (∀ y : F, ValuativeRel.valuation F y < 1 →
-        ValuativeRel.valuation F y ≤ ValuativeRel.valuation F (π : F)) →
-      (∀ u : Fˣ, ValuativeRel.valuation F (u : F) = 1 → art F E u = 1) →
-      ∀ x : E, ValuativeRel.valuation E x ≤ 1 →
-        ValuativeRel.valuation E (art F E π x - x ^ Nat.card 𝓀[F]) < 1
-  /-- The conductor exponent of the extension. -/
-  conductorExp : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E], ℕ
-  /-- The principal units of that level are norms. -/
-  conductorExp_le : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E] (x : Fˣ),
-      IsPrincipalUnitLocal F (conductorExp F E) x → art F E x = 1
-  /-- The conductor exponent is the **least** such level. -/
-  conductorExp_min : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E] (n : ℕ),
-      (∀ x : Fˣ, IsPrincipalUnitLocal F n x → art F E x = 1) → conductorExp F E ≤ n
-  /-- The local norm index, which is the degree. This is `#Ĥ⁰(Gal(E/F), Eˣ) = [E : F]`, and it
-  is the archimedean-free half of the local Herbrand quotient that Layer 5 uses. -/
-  normIndex : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E],
-      Nat.card (Fˣ ⧸ (Units.map (Algebra.norm F : E →* F)).range) = Module.finrank F E
-  /-- The invariant map, as an additive homomorphism to `ℚ/ℤ`. -/
-  inv : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E],
-      groupCohomology.H2 (Rep.ofAlgebraAutOnUnits F E) →+ (ℚ ⧸ AddSubgroup.zmultiples (1 : ℚ))
-  /-- The invariant map is injective. -/
-  inv_injective : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E], Function.Injective (inv F E)
-  /-- Its image is the `[E:F]`-torsion of `ℚ/ℤ`, so it is an equivalence onto that subgroup. -/
-  inv_range : ∀ (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E] (t : ℚ ⧸ AddSubgroup.zmultiples (1 : ℚ)),
-      (∃ α, inv F E α = t) ↔ (Module.finrank F E) • t = 0
-  /-- Inflation preserves invariants, which is what glues the local invariants into `ℚ/ℤ`. -/
-  inv_inflation : ∀ (F E E' : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E] [Field E'] [Algebra F E'] [Module.Finite F E'] [IsAbelianGalois F E']
-    [Algebra E E'] [IsScalarTower F E E']
-    (f : groupCohomology.H2 (Rep.ofAlgebraAutOnUnits F E) →+
-      groupCohomology.H2 (Rep.ofAlgebraAutOnUnits F E')) (α : _),
-      inv F E' (f α) = inv F E α
-  /-- The quadratic Hilbert symbol, in characteristic zero, which is what Layer 11 consumes.
-  It is `-1` exactly when the conic has no nontrivial point. -/
-  hilbert₂ : ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [CharZero F], Fˣ → Fˣ → ℤˣ
-  hilbert₂_spec : ∀ (F : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [CharZero F] (a b : Fˣ),
-      hilbert₂ F a b = 1 ↔
-        ∃ x y z : F, (x, y, z) ≠ (0, 0, 0) ∧ z ^ 2 = (a : F) * x ^ 2 + (b : F) * y ^ 2
-
-/-- **I.4, the canonical instance.** Local class field theory for the nonarchimedean local
-fields, in the shape of I.1. This is a deliverable of the roadmap; `README.md` I.4 lists the
-submilestones and their sources. -/
-example : LocalCFT :=
+/-- **D.4, the conductor exponent is attained.** The unit filtration is a neighbourhood basis of
+`1`, so a continuous character is trivial on some level, the infimum is over a nonempty set, and
+the level it names really is inside the kernel. Without this the definition above names a number
+and asserts nothing. Minimality is `Nat.sInf_le` and is not a separate target. -/
+example (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
+    [IsNonarchimedeanLocalField F] (χ : ContinuousMonoidHom Fˣ ℂˣ)
+    (x : Fˣ) (hx : x ∈ LocalFields.unitFiltration F (charConductorExp F χ)) :
+    χ x = 1 :=
   sorry
 
-/-- **I.6, the local conductor–discriminant formula.** For finite abelian `E/F`, the valuation
-of the discriminant is the sum of the conductor exponents of the characters of `Gal(E/F)`, each
-transported to a character of `Fˣ` along the Artin map. Milestone 9.2 globalizes this. -/
-example [LocalCFT] (F E : Type) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] [Field E] [Algebra F E] [Module.Finite F E]
-    [IsAbelianGalois F E] [Fintype (E ≃ₐ[F] E)]
-    (χ : (E ≃ₐ[F] E) → ContinuousMonoidHom Fˣ ℂˣ)
-    (hχ : ∀ σ, Function.Injective (χ σ)) :
-    ∃ d : ℕ, d = ∑ σ : (E ≃ₐ[F] E), charConductorExp F (χ σ) :=
-  sorry
-
-/-- **I.2, the ideals with support away from a finite set of primes.** The carrier of
+/-- **D.2, the ideals with support away from a finite set of primes.** The carrier of
 `artinHomAway`. It is `J^S` of the conventions table, and `J^{𝔪₀}` of Layer 1 is the case
 `S = support 𝔪₀`. -/
 def idealsAway {K : Type u} [Field K] [NumberField K] (S : Finset (HeightOneSpectrum (𝓞 K))) :
@@ -180,7 +142,7 @@ def idealsAway {K : Type u} [Field K] [NumberField K] (S : Finset (HeightOneSpec
   one_mem' := by sorry
   inv_mem' := by sorry
 
-/-- **I.2, unramifiedness away from `S`.** Every prime of `𝓞 L` above a prime of `𝓞 K` outside
+/-- **D.2, unramifiedness away from `S`.** Every prime of `𝓞 L` above a prime of `𝓞 K` outside
 `S` is unramified. This is the hypothesis of `artinHomAway`, and it is a statement about primes
 of the **upper** field. A condition on `v.asIdeal` alone would say nothing about `L/K`. -/
 def UnramifiedAway (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L]
@@ -188,7 +150,7 @@ def UnramifiedAway (K L : Type u) [Field K] [NumberField K] [Field L] [NumberFie
   ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
     ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q
 
-/-- **I.2, the ideal-theoretic Artin map `artinHomAway`.** The canonical multiplicative map on
+/-- **D.2, the ideal-theoretic Artin map `artinHomAway`.** The canonical multiplicative map on
 `J^S` whose value at a prime outside `S` is the arithmetic Frobenius. The Frobenius itself is
 Mathlib's `arithFrobAt`, so the content here is well-definedness, multiplicativity, and the
 functoriality that Layers 6 to 8 use.
@@ -201,7 +163,7 @@ noncomputable def artinHomAway (K L : Type u) [Field K] [NumberField K] [Field L
     (_hur : UnramifiedAway K L S) : idealsAway S →* (L ≃ₐ[K] L) :=
   sorry
 
-/-- **I.2, the characteristic property.** The value at a prime outside `S` is the arithmetic
+/-- **D.2, the characteristic property.** The value at a prime outside `S` is the arithmetic
 Frobenius, and that property determines the map, because the primes generate `J^S`. -/
 example (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L] [Algebra K L]
     [IsAbelianGalois K L] (S : Finset (HeightOneSpectrum (𝓞 K))) (hur : UnramifiedAway K L S)
@@ -213,7 +175,7 @@ example (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L] [Alge
     artinHomAway K L S hur I = σ :=
   sorry
 
-/-- **I.2, uniqueness.** A multiplicative map with the Frobenius values is `artinHomAway`. -/
+/-- **D.2, uniqueness.** A multiplicative map with the Frobenius values is `artinHomAway`. -/
 example (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L] [Algebra K L]
     [IsAbelianGalois K L] (S : Finset (HeightOneSpectrum (𝓞 K))) (hur : UnramifiedAway K L S)
     (f g : idealsAway S →* (L ≃ₐ[K] L))
@@ -223,23 +185,13 @@ example (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L] [Alge
     f = g :=
   sorry
 
-/-- **I.2, compatibility as `S` grows.** For `S ⊆ S'` the carriers are nested and the maps
+/-- **D.2, compatibility as `S` grows.** For `S ⊆ S'` the carriers are nested and the maps
 agree, so a consumer may enlarge `S` at will. -/
 example (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L] [Algebra K L]
     [IsAbelianGalois K L] (S S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S')
     (hur : UnramifiedAway K L S) (hur' : UnramifiedAway K L S') :
     ∃ ι : idealsAway S' →* idealsAway S,
       ∀ I : idealsAway S', artinHomAway K L S hur (ι I) = artinHomAway K L S' hur' I :=
-  sorry
-
-/-- **I.3, the completion dictionary at a finite place.** The completion of a number field at a
-finite place is a nonarchimedean local field. This statement is where every use of the local
-package enters. The `ValuativeRel` and `IsValuativeTopology` instances are hypotheses, because
-producing them from the pin's `Valued` instance on `adicCompletion`, without stating anything
-new against `Valued`, is part of the milestone. -/
-example {K : Type} [Field K] [NumberField K] (v : HeightOneSpectrum (𝓞 K))
-    [ValuativeRel (v.adicCompletion K)] [IsValuativeTopology (v.adicCompletion K)] :
-    IsNonarchimedeanLocalField (v.adicCompletion K) :=
   sorry
 
 /-! ## Layer 0: moduli, approximation, and multiplicative congruences -/
@@ -548,7 +500,7 @@ example (𝔪 𝔫 : Modulus K) (h : 𝔪 ∣ 𝔫) : RaySubgroup 𝔫 ≤ RaySu
 
 /-! ## Layer 2C: the archimedean local package
 
-The interface of Layer I is nonarchimedean, so the real and complex theory is built here. It is
+The consumed local theory is nonarchimedean, so the real and complex theory is built here. It is
 elementary, it is expressible at the pin, and Layers 5, 6, 7 and 11 use it. -/
 
 /-- **2C.3, the real reciprocity map.** `Art_ℝ : ℝˣ → Gal(ℂ/ℝ)` sends a positive element to `1`
@@ -575,10 +527,17 @@ example :
       (∀ x : ℝˣ, x ∈ N ↔ 0 < (x : ℝ)) ∧ Nat.card (ℝˣ ⧸ N) = 2 :=
   sorry
 
+/-- **2C.5, the archimedean Herbrand quotient, on the consumed carrier.** `h(Gal(ℂ/ℝ), ℂˣ) = 2`,
+stated with the Local Fields roadmap's `herbrandQuotient` and so on its Tate carrier, and not with
+a hand-made norm quotient. 5.2 multiplies this factor with the finite ones, and the two must be the
+same object for that product to typecheck. -/
+example : LocalFields.herbrandQuotient (Rep.ofAlgebraAutOnUnits ℝ ℂ) = 2 :=
+  sorry
+
 /-- **2C.8, the real Hilbert symbol.** `(a,b)_ℝ = −1` exactly when both `a` and `b` are
 negative, and `(a,b)_ℂ = 1` always. It is stated through the conic, because the Hilbert symbol
-itself belongs to the interface I.1.11. The product formula of 11.4 ranges over all places, and
-these two values close it at infinity. -/
+itself belongs to the Quadratic Form Invariants roadmap's `hilbertSymbol`. The product formula of
+11.4 ranges over all places, and these two values close it at infinity. -/
 example (a b : ℝ) (ha : a ≠ 0) (hb : b ≠ 0) :
     (∃ x y z : ℝ, (x, y, z) ≠ (0, 0, 0) ∧ z ^ 2 = a * x ^ 2 + b * y ^ 2) ↔ ¬(a < 0 ∧ b < 0) :=
   sorry

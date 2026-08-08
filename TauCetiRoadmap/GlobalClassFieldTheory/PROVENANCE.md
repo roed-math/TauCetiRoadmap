@@ -58,22 +58,44 @@ None of these is a prerequisite. Where one lands, adopt its names and delete the
 - **PR #42130**, instance transparency. Checked 2026-08-07: closed unmerged 2026-08-06. Do not
   plan against it.
 
+## Earlier drafts of this roadmap
+
+Recorded because a reader of the history will find these layers and would otherwise look for them
+in `README.md`. The README carries the final boundary only.
+
+- Checked 2026-08-08. Drafts before this one were dependency-closed: they built local class field
+  theory and the generic finite-group Tate machinery inside this roadmap, as a Layer T (Tate
+  cohomology in all degrees, functoriality, periodicity and the Herbrand quotient, cup products,
+  class formations and Tate-Nakayama) and a Layer I (a `LocalCFT` package class stating the local
+  theory, its construction, and the cyclotomic orientation over `ℚ_p`). Both are gone. The Local
+  Fields roadmap owns that material and this roadmap consumes it by the declaration table in
+  `README.md`. What survives here is Layer D: the completion dictionary at a finite place, the
+  ideal-theoretic Artin map, the finite-level cyclotomic orientation, and the local
+  conductor-discriminant formula. The quadratic Hilbert symbol left with the local theory, to the
+  Quadratic Form Invariants roadmap.
+
 ## Sibling Tau Ceti roadmaps
 
-These are alignments. The roadmap has no mandatory dependency on any of them, because Layer I
-states the local input as an interface that this repository owns.
+Local Fields and Quadratic Form Invariants are not alignments. They are prerequisites, and
+`README.md` names every declaration this roadmap takes from them. The rest below are alignments.
 
-- **Local Fields.** Checked 2026-08-07: head `a45463504ba5`. Plans nonarchimedean local reciprocity,
-  local conductors, local Herbrand
-  quotients and local Hilbert symbols. If it merges, its Layer 7 is the natural source for the
-  instance I.4. No definitional comparison of the two local packages has been made, so
-  adopting it is a checked rewrite of I.4, not a deletion.
+- **Local Fields.** The supplier of local class field theory and of the generic finite-group Tate
+  and class-formation machinery. Checked 2026-08-08 against its Layers 0 to 8 and its
+  `Suggested.lean`: every declaration and milestone that `README.md` cites exists there. One gap
+  found, and handled here rather than pushed back: that roadmap fixes the conductor of an abelian
+  *extension*, `c(L/K)` and `𝔣(L/K)`, and exports no conductor of a continuous character of `Kˣ`.
+  Milestone D.4 therefore defines the character exponent itself, on that roadmap's `unitFiltration`
+  and on no filtration of its own. Two further citations are to milestones that roadmap states
+  without a Lean name, `θ(π) = Frob` and `c(L/K)`; those rows cite the milestone, not a declaration.
+- **Quadratic Form Invariants.** The supplier of the quadratic Hilbert symbol that 11.4 multiplies
+  at the finite places, through its Layer 6C `hilbertSymbol`. Its Lean module is not imported by
+  `Suggested.lean`, so 11.4 has no prototype here rather than a faked one.
 - **Number Field Arithmetic.** Checked 2026-08-07: head `9b63e874e391`. Plans the decomposition,
   inertia and Frobenius API, and the ideal-theoretic Artin map `artinHomAway S hur` on the same
-  `(FractionalIdeal (𝓞 K)⁰ K)ˣ` carrier as I.2. Compared at that head: the carrier and the
+  `(FractionalIdeal (𝓞 K)⁰ K)ˣ` carrier as D.2. Compared at that head: the carrier and the
   unramifiedness hypothesis agree, and the abelian hypothesis is packaged differently. That
-  declaration takes `[IsGalois K L]` with a commutativity argument where I.2 takes
-  `[IsAbelianGalois K L]`, and the universe binders differ. If it merges, replace I.2 through
+  declaration takes `[IsGalois K L]` with a commutativity argument where D.2 takes
+  `[IsAbelianGalois K L]`, and the universe binders differ. If it merges, replace D.2 through
   that short transport; deletion alone does not typecheck.
 - **Profinite Cohomology.** Checked 2026-08-07: head `ac180b5a3ab3`. Plans continuous cohomology of
   `G_K` with colimits over finite
@@ -104,7 +126,7 @@ formula), R. Brasca (`ClassGroup.extendedHom`), D. Angdinata (`S`-integers).
 - The 2020 `maths > "Ideal class group"` thread (Baanen, Buzzard, Best) fixed the
   fractional-ideal design of `ClassGroup` that Layers 1 and 7 build on, and already discussed
   idele-class compactness as the unifying statement.
-- The `ValuativeRel`-replaces-`Valued` refactor threads. Milestone I.3 follows them: state no
+- The `ValuativeRel`-replaces-`Valued` refactor threads. Milestone D.1 follows them: state no
   new lemma against `Valued`.
 - Checked 2026-07-30 and again 2026-08-07: the Zulip archive has no thread on ray class groups,
   Hecke characters, or global reciprocity in Lean. Announce the intention before starting
