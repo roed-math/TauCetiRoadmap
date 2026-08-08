@@ -1,0 +1,669 @@
+import Mathlib
+
+/-!
+# Belyi maps, dessins d'enfants, and three-point covers: target signatures
+
+**This file is not the roadmap, and it is not exhaustive.** The definitive document is
+`README.md`, which numbers the milestones as Layer `n.m`. The statements here suggest Lean
+forms for particular milestones, so that contributors and reviewers agree on names and
+signatures. Discharging all of them finishes neither a layer nor the roadmap.
+
+What is prototyped here, in preference to end theorems, are the objects whose choice of
+carrier, index type, or map determines everything below them: the permutation-triple carrier
+with its pinned product relation, the relabeling action, dessins as bipartite ribbon graphs,
+triangle groups, the thrice-punctured sphere with its concrete peripheral loops, the
+monodromy homomorphism, the analytic Belyi-pair carrier, and the profinite peripheral
+objects with the pro-`ℓ` peripheral-power theorem. Every declaration elaborates against the
+pinned Mathlib. Proofs are `sorry` where the milestone is the proof; data is real wherever
+the formula is the convention being pinned.
+
+Conventions, recorded in `README.md` (§Pinned conventions):
+
+* Multiplication is Mathlib's: `(σ * τ) x = σ (τ x)` in `Equiv.Perm`, and `γ * δ` in
+  `FundamentalGroup` is "`δ` first, then `γ`" (`End.mul_def`). The product relation is
+  `σinf * σ1 * σ0 = 1`, and the monodromy homomorphism of Layer 5.4 is a genuine
+  `MonoidHom` with no `ᵐᵒᵖ`. The `z ↦ z²` example below pins the interpretation.
+* Relabeling is the left conjugation `MulAction`; isomorphism is `MulAction.orbitRel`.
+* Cycle data always includes fixed points: `fullCycleType` below is a local stand-in for
+  the PolynomialGaloisGroups declaration of the same name and definition, and is replaced
+  by it when that roadmap lands. Mathlib's bare `Equiv.Perm.cycleType` is never compared
+  with a partition of `n`.
+* Connectedness of a triple includes `n ≠ 0`; `MulAction.IsPretransitive` alone is
+  vacuously true on `Fin 0`.
+* The genus is defined only after the Euler-characteristic bounds; the `Int.toNat` in
+  `genus` is made junk-free by `two_sub_two_mul_genus`.
+* Peripheral elements: `P`, `T` are the images of the free generators, `C := (T * P)⁻¹`,
+  so `C * T * P = 1` — the same display order as the triple relation. A source writing
+  `P·T·C = 1` names a conjugate of this `C`; see README §Pinned conventions.
+* The two sorried `instance`s on `OnePoint ℂ` (charted space, manifold) are the Layer 8.1
+  milestones; they are declared as instances so that the analytic carriers below can be
+  stated, and they are implemented by the Riemann-sphere milestone, not by consumers.
+* Layers 9–11 (algebraic Belyi pairs, Belyi's theorem, fields of moduli) have no Lean
+  prototypes here: their statements need the AlgebraicCurves carriers, and the honest-`sorry`
+  rule keeps milestones whose *statements* cannot yet be formed out of this file.
+* `proPKernel` and `maximalProPQuotient` below are local elaboration stand-ins mirroring
+  the ProPGroups roadmap's pinned shapes (its Layer 3), and are replaced by that roadmap's
+  declarations when it lands, as are `freeProfiniteTwo` (its `freeProfiniteGroup (Fin 2)`)
+  and `zhat` (its `zHat`).
+-/
+
+open scoped Manifold ContDiff Topology Pointwise
+
+namespace TauCetiRoadmap.BelyiMaps
+
+universe u v
+
+/-! ## Layer 0: permutation triples -/
+
+/-- **Layer 0.1.** A degree-`n` permutation triple, with the pinned relation
+`σinf * σ1 * σ0 = 1` in Mathlib's multiplication: the concatenated loop
+"`γ0`, then `γ1`, then `γ∞`" is nullhomotopic, and monodromy is covariant. -/
+@[ext]
+structure PermutationTriple (n : ℕ) where
+  σ0 : Equiv.Perm (Fin n)
+  σ1 : Equiv.Perm (Fin n)
+  σinf : Equiv.Perm (Fin n)
+  product_eq_one : σinf * σ1 * σ0 = 1
+
+namespace PermutationTriple
+
+variable {n : ℕ}
+
+/-- **Layer 0.1.** The constructor from the first two components. -/
+def ofTwo (σ0 σ1 : Equiv.Perm (Fin n)) : PermutationTriple n where
+  σ0 := σ0
+  σ1 := σ1
+  σinf := (σ1 * σ0)⁻¹
+  product_eq_one := by group
+
+@[simp] theorem ofTwo_σ0 (σ0 σ1 : Equiv.Perm (Fin n)) : (ofTwo σ0 σ1).σ0 = σ0 := rfl
+@[simp] theorem ofTwo_σ1 (σ0 σ1 : Equiv.Perm (Fin n)) : (ofTwo σ0 σ1).σ1 = σ1 := rfl
+@[simp] theorem ofTwo_σinf (σ0 σ1 : Equiv.Perm (Fin n)) :
+    (ofTwo σ0 σ1).σinf = (σ1 * σ0)⁻¹ := rfl
+
+/-- **Layer 0.1.** `σinf` is determined by the other two components. -/
+theorem σinf_eq (t : PermutationTriple n) : t.σinf = (t.σ1 * t.σ0)⁻¹ := by
+  have h := t.product_eq_one
+  rw [mul_assoc] at h
+  exact eq_inv_of_mul_eq_one_left h
+
+/-- **Layer 0.1.** Extensionality on the first two components. -/
+theorem ext_of_two {t t' : PermutationTriple n} (h0 : t.σ0 = t'.σ0) (h1 : t.σ1 = t'.σ1) :
+    t = t' := by
+  ext1
+  · exact h0
+  · exact h1
+  · rw [t.σinf_eq, t'.σinf_eq, h0, h1]
+
+/-- **Layer 0.1, the opposite-convention translation.** Componentwise inversion is the
+bijection with triples for the rival relation `σ0 * σ1 * σinf = 1`; it preserves cycle
+types, monodromy, connectedness, and automorphisms (README, Layer 0.1). -/
+theorem inv_components_reverse (t : PermutationTriple n) :
+    t.σ0⁻¹ * t.σ1⁻¹ * t.σinf⁻¹ = 1 := by
+  have h := t.product_eq_one
+  have : (t.σinf * t.σ1 * t.σ0)⁻¹ = 1 := by rw [h]; simp
+  simpa [mul_inv_rev, mul_assoc] using this
+
+/-- **Layer 0.1, the convention-pinning example.** The monodromy triple of `z ↦ z²`:
+`σ0 = σinf = (0 1)`, `σ1 = 1`. -/
+example : (ofTwo (Equiv.swap 0 1) 1 : PermutationTriple 2).σinf = Equiv.swap 0 1 := by
+  simp
+
+/-! ### Layer 0.2: relabeling -/
+
+/-- **Layer 0.2.** Simultaneous conjugation, as a left action. -/
+instance : SMul (Equiv.Perm (Fin n)) (PermutationTriple n) where
+  smul τ t :=
+    { σ0 := MulAut.conj τ t.σ0
+      σ1 := MulAut.conj τ t.σ1
+      σinf := MulAut.conj τ t.σinf
+      product_eq_one := by
+        rw [← map_mul, ← map_mul, t.product_eq_one, map_one] }
+
+@[simp] theorem smul_σ0 (τ : Equiv.Perm (Fin n)) (t : PermutationTriple n) :
+    (τ • t).σ0 = τ * t.σ0 * τ⁻¹ := rfl
+@[simp] theorem smul_σ1 (τ : Equiv.Perm (Fin n)) (t : PermutationTriple n) :
+    (τ • t).σ1 = τ * t.σ1 * τ⁻¹ := rfl
+@[simp] theorem smul_σinf (τ : Equiv.Perm (Fin n)) (t : PermutationTriple n) :
+    (τ • t).σinf = τ * t.σinf * τ⁻¹ := rfl
+
+instance : MulAction (Equiv.Perm (Fin n)) (PermutationTriple n) where
+  one_smul t := by ext1 <;> simp
+  mul_smul τ υ t := by ext1 <;> simp [mul_assoc]
+
+/-- **Layer 0.2.** Isomorphism of triples is simultaneous conjugacy. -/
+def Equivalent (t t' : PermutationTriple n) : Prop :=
+  ∃ τ : Equiv.Perm (Fin n), τ • t = t'
+
+/-- **Layer 0.2.** The type of isomorphism classes. -/
+def IsoClass (n : ℕ) : Type :=
+  MulAction.orbitRel.Quotient (Equiv.Perm (Fin n)) (PermutationTriple n)
+
+/-! ### Layers 0.3, 0.4: monodromy, connectedness, automorphisms -/
+
+/-- **Layer 0.3.** The monodromy group, generated by the first two components. -/
+def monodromyGroup (t : PermutationTriple n) : Subgroup (Equiv.Perm (Fin n)) :=
+  Subgroup.closure {t.σ0, t.σ1}
+
+theorem σinf_mem_monodromyGroup (t : PermutationTriple n) :
+    t.σinf ∈ monodromyGroup t := by
+  rw [t.σinf_eq]
+  exact inv_mem (mul_mem (Subgroup.subset_closure (by simp))
+    (Subgroup.subset_closure (by simp)))
+
+/-- **Layer 0.4.** Connectedness. ⚠ The `n ≠ 0` clause is part of the definition:
+pretransitivity is vacuous on `Fin 0`, and the genus formula fails there. -/
+def IsConnected (t : PermutationTriple n) : Prop :=
+  n ≠ 0 ∧ MulAction.IsPretransitive (monodromyGroup t) (Fin n)
+
+/-- **Layer 0.4.** The automorphism group is the stabilizer under relabeling —
+definitionally the simultaneous centralizer. -/
+def automorphismGroup (t : PermutationTriple n) : Subgroup (Equiv.Perm (Fin n)) :=
+  MulAction.stabilizer (Equiv.Perm (Fin n)) t
+
+/-- **Layer 0.4.** The automorphism group is the centralizer of the monodromy group. -/
+theorem automorphismGroup_eq_centralizer (t : PermutationTriple n) :
+    automorphismGroup t = Subgroup.centralizer (monodromyGroup t) := by
+  sorry
+
+/-- **Layer 0.4.** For connected triples the automorphism action on `Fin n` is free, so
+the automorphism group's order divides `n`. -/
+theorem card_automorphismGroup_dvd (t : PermutationTriple n) (ht : t.IsConnected) :
+    Nat.card (automorphismGroup t) ∣ n := by
+  sorry
+
+/-! ### Layer 0.5: cycle data
+
+`fullCycleType` is a local stand-in for the PolynomialGaloisGroups Layer 0 declaration of
+the same name and definition (its `Suggested.lean`); it is replaced by that roadmap's copy
+when it lands. -/
+
+open scoped Classical in
+/-- Local stand-in; supplier: PolynomialGaloisGroups Layer 0 `fullCycleType`. The cycle
+type *with* fixed points: a partition of `Fintype.card α`. -/
+noncomputable def fullCycleType {α : Type u} [Fintype α] (σ : Equiv.Perm α) : Multiset ℕ :=
+  σ.cycleType + Multiset.replicate (Fintype.card α - σ.support.card) 1
+
+/-- **Layer 0.5.** The number of cycles, fixed points included. -/
+noncomputable def cycleCount {α : Type u} [Fintype α] (σ : Equiv.Perm α) : ℕ :=
+  (fullCycleType σ).card
+
+theorem fullCycleType_sum {α : Type u} [Fintype α] (σ : Equiv.Perm α) :
+    (fullCycleType σ).sum = Fintype.card α := by
+  sorry
+
+/-- **Layer 0.5, the transposition step lemma.** Multiplying by a transposition merges two
+cycles or splits one. -/
+theorem cycleCount_swap_mul {α : Type u} [Fintype α] [DecidableEq α]
+    (σ : Equiv.Perm α) {i j : α} (hij : i ≠ j) :
+    cycleCount (Equiv.swap i j * σ) =
+      if σ.SameCycle i j then cycleCount σ + 1 else cycleCount σ - 1 := by
+  sorry
+
+/-- **Layer 0.5, the sign identity.** -/
+theorem sign_eq_pow_sub_cycleCount {α : Type u} [Fintype α] [DecidableEq α]
+    (σ : Equiv.Perm α) :
+    Equiv.Perm.sign σ = (-1 : ℤˣ) ^ (Fintype.card α - cycleCount σ) := by
+  sorry
+
+/-! ### Layer 0.6: Euler characteristic and genus -/
+
+/-- **Layer 0.6.** The Euler characteristic, in `ℤ`, before any genus is defined. -/
+noncomputable def eulerChar (t : PermutationTriple n) : ℤ :=
+  cycleCount t.σ0 + cycleCount t.σ1 + cycleCount t.σinf - n
+
+/-- **Layer 0.6 (parity).** For every product-one triple, `2 - χ` is even — the sign
+identity applied to the relation. No connectedness is needed. -/
+theorem even_two_sub_eulerChar (t : PermutationTriple n) : Even (2 - t.eulerChar) := by
+  sorry
+
+/-- **Layer 0.6 (the connected bound).** `χ ≤ 2` for connected triples. Proof route:
+induction along a minimal transposition factorization of `σ1` with
+`cycleCount_swap_mul`; source Lando–Zvonkin (see `PROVENANCE.md`). -/
+theorem eulerChar_le_two (t : PermutationTriple n) (ht : t.IsConnected) :
+    t.eulerChar ≤ 2 := by
+  sorry
+
+/-- **Layer 0.6.** The genus. Junk-free by `two_sub_two_mul_genus`; never used before the
+bounds above. -/
+noncomputable def genus (t : PermutationTriple n) : ℕ :=
+  ((2 - t.eulerChar) / 2).toNat
+
+/-- **Layer 0.6.** `2 - 2g = χ` for connected triples: the `toNat` loses nothing. -/
+theorem two_sub_two_mul_genus (t : PermutationTriple n) (ht : t.IsConnected) :
+    2 - 2 * (t.genus : ℤ) = t.eulerChar := by
+  sorry
+
+/-! ### Layer 0.7: orders and geometry type -/
+
+/-- **Layer 0.7.** The order triple — the LMFDB's `abc` datum. -/
+noncomputable def orderTriple (t : PermutationTriple n) : ℕ × ℕ × ℕ :=
+  (orderOf t.σ0, orderOf t.σ1, orderOf t.σinf)
+
+/-- **Layer 0.7.** Spherical, Euclidean, or hyperbolic. -/
+inductive GeometryType : Type
+  | spherical
+  | euclidean
+  | hyperbolic
+  deriving DecidableEq, Repr
+
+/-- **Layer 0.7.** The geometry type, by exact comparison in `ℚ`. -/
+noncomputable def geometryType (t : PermutationTriple n) : GeometryType :=
+  let s : ℚ := (orderOf t.σ0 : ℚ)⁻¹ + (orderOf t.σ1 : ℚ)⁻¹ + (orderOf t.σinf : ℚ)⁻¹
+  if 1 < s then .spherical else if s = 1 then .euclidean else .hyperbolic
+
+/-! ### Layer 0.8: the example suite -/
+
+/-- **Layer 0.8.** The monodromy triple of `z ↦ zⁿ`. -/
+def cyclicTriple (n : ℕ) : PermutationTriple n := ofTwo (finRotate n) 1
+
+/-- **Layer 0.8.** The monodromy triple of `z ↦ 4z(1−z)`: unramified over `0`. -/
+def chebyshevTriple : PermutationTriple 2 := ofTwo 1 (Equiv.swap 0 1)
+
+/-- **Layer 0.8.** The Euclidean genus-one triple: degree `4`, cycle data
+`[4], [4], [2,2]`, regular with deck group `ℤ/4`, imprimitive. -/
+def torusTriple : PermutationTriple 4 := ofTwo (finRotate 4) (finRotate 4)
+
+/-- **Layer 0.8.** A triple with monodromy all of `S₃` and trivial automorphisms. -/
+def s3Triple : PermutationTriple 3 := ofTwo (finRotate 3) (Equiv.swap 0 1)
+
+example : torusTriple.σinf = (finRotate 4 ^ 2)⁻¹ := by simp [torusTriple, sq]
+
+theorem cyclicTriple_isConnected (n : ℕ) (hn : n ≠ 0) : (cyclicTriple n).IsConnected := by
+  sorry
+
+theorem genus_torusTriple : torusTriple.genus = 1 := by
+  sorry
+
+end PermutationTriple
+
+/-! ## Layer 1: passports -/
+
+open PermutationTriple in
+/-- **Layer 1.1.** A passport specification: a reference transitive subgroup (up to the
+conjugacy stated in `HasPassport`) and the three full cycle partitions. -/
+structure PassportSpec (n : ℕ) where
+  G : Subgroup (Equiv.Perm (Fin n))
+  lam0 : Multiset ℕ
+  lam1 : Multiset ℕ
+  laminf : Multiset ℕ
+
+namespace PassportSpec
+
+variable {n : ℕ}
+
+/-- **Layer 1.1.** Well-formedness: transitive reference, three partitions of `n`. -/
+def IsAdmissible (P : PassportSpec n) : Prop :=
+  MulAction.IsPretransitive P.G (Fin n) ∧
+    (P.lam0.sum = n ∧ ∀ i ∈ P.lam0, 0 < i) ∧
+    (P.lam1.sum = n ∧ ∀ i ∈ P.lam1, 0 < i) ∧
+    (P.laminf.sum = n ∧ ∀ i ∈ P.laminf, 0 < i)
+
+/-- **Layer 1.1.** Passport membership: conjugate monodromy (the exact
+PolynomialGaloisGroups spelling) and equal cycle data. -/
+def HasPassport (t : PermutationTriple n) (P : PassportSpec n) : Prop :=
+  (∃ τ : Equiv.Perm (Fin n),
+      (PermutationTriple.monodromyGroup t).map (MulAut.conj τ).toMonoidHom = P.G) ∧
+    PermutationTriple.fullCycleType t.σ0 = P.lam0 ∧
+    PermutationTriple.fullCycleType t.σ1 = P.lam1 ∧
+    PermutationTriple.fullCycleType t.σinf = P.laminf
+
+end PassportSpec
+
+namespace PermutationTriple
+
+variable {n : ℕ}
+
+/-- **Layer 1.5.** The passport of a triple. -/
+noncomputable def passportOf (t : PermutationTriple n) : PassportSpec n :=
+  ⟨monodromyGroup t, fullCycleType t.σ0, fullCycleType t.σ1, fullCycleType t.σinf⟩
+
+/-- **Layer 1.4.** Primitivity of the monodromy action, Mathlib's notion. -/
+def IsPrimitive (t : PermutationTriple n) : Prop :=
+  MulAction.IsPreprimitive (monodromyGroup t) (Fin n)
+
+end PermutationTriple
+
+/-! ## Layer 2: dessins as bipartite ribbon graphs -/
+
+/-- **Layer 2.1.** A finite bipartite ribbon graph: abstract edges, two vertex types,
+incidences, and rotations that are typed cyclic orders — `Equiv.Perm.IsCycleOn` each
+incidence fiber. Surjectivity of the incidences excludes isolated vertices, which is no
+loss for dessins (vertices are cycles). ⚠ Cyclic orders are never lists with coverage side
+conditions. -/
+structure BipartiteRibbonGraph : Type (u + 1) where
+  E : Type u
+  B : Type u
+  W : Type u
+  [fintypeE : Fintype E]
+  [fintypeB : Fintype B]
+  [fintypeW : Fintype W]
+  [decidableEqE : DecidableEq E]
+  [decidableEqB : DecidableEq B]
+  [decidableEqW : DecidableEq W]
+  blackEnd : E → B
+  whiteEnd : E → W
+  rotB : Equiv.Perm E
+  rotW : Equiv.Perm E
+  blackEnd_surjective : Function.Surjective blackEnd
+  whiteEnd_surjective : Function.Surjective whiteEnd
+  blackEnd_rotB : ∀ e, blackEnd (rotB e) = blackEnd e
+  whiteEnd_rotW : ∀ e, whiteEnd (rotW e) = whiteEnd e
+  isCycleOn_rotB : ∀ b, rotB.IsCycleOn (blackEnd ⁻¹' {b})
+  isCycleOn_rotW : ∀ w, rotW.IsCycleOn (whiteEnd ⁻¹' {w})
+
+namespace BipartiteRibbonGraph
+
+attribute [instance] fintypeE fintypeB fintypeW decidableEqE decidableEqB decidableEqW
+
+variable (Γ : BipartiteRibbonGraph.{u})
+
+/-- **Layer 2.1.** The face permutation, in the pinned display order:
+`facePerm * rotW * rotB = 1`. -/
+def facePerm : Equiv.Perm Γ.E := (Γ.rotW * Γ.rotB)⁻¹
+
+theorem facePerm_mul : Γ.facePerm * Γ.rotW * Γ.rotB = 1 := by
+  simp [facePerm, mul_assoc]
+
+/-- **Layer 2.1.** Connectedness: jointly transitive rotations on a nonempty edge set. -/
+def IsConnected : Prop :=
+  Nonempty Γ.E ∧ MulAction.IsPretransitive (Subgroup.closure {Γ.rotB, Γ.rotW}) Γ.E
+
+/-- **Layer 2.1.** The Euler characteristic: vertices minus edges plus faces. -/
+noncomputable def eulerChar : ℤ :=
+  Nat.card Γ.B + Nat.card Γ.W + PermutationTriple.cycleCount Γ.facePerm - Nat.card Γ.E
+
+/-- **Layer 2.3.** The triple of a dessin, along a numbering of the edges. Changing the
+numbering relabels the triple (README, Layer 2.3). -/
+def toTriple {n : ℕ} (ν : Γ.E ≃ Fin n) : PermutationTriple n :=
+  PermutationTriple.ofTwo (ν.permCongr Γ.rotB) (ν.permCongr Γ.rotW)
+
+end BipartiteRibbonGraph
+
+/-- **Layer 2.2.** The dessin of a connected triple: edges `Fin n`, vertices the cycles
+(orbits) of `σ0` and `σ1`, rotations the permutations themselves. -/
+noncomputable def PermutationTriple.toDessin {n : ℕ} (t : PermutationTriple n)
+    (ht : t.IsConnected) : BipartiteRibbonGraph := by
+  sorry
+
+/-! ## Layer 3: enumeration and counting
+
+The executable-enumeration milestones (Layer 3.1) are instance-level and appear as the
+`Fintype`/`DecidableEq` obligations on `PermutationTriple`; the Frobenius product-one
+formula (Layer 3.2) and its corrections (3.3, 3.4) are stated in `README.md` only, because
+their statements consume the CharacterTheory carriers (`classSum`, `structureConstant`,
+`characterTable`), which live in that roadmap. -/
+
+/-- **Layer 3.2 (the inverse-class involution).** Owned here; on no other roadmap. -/
+noncomputable def ConjClasses.inv {G : Type u} [Group G] (C : ConjClasses G) :
+    ConjClasses G := by
+  sorry
+
+/-! ## Layer 4: triangle groups -/
+
+/-- **Layer 4.1.** The relators of the `(a,b,c)` triangle group, in the pinned display
+order: `z * y * x` is the product relator. -/
+def triangleRelators (a b c : ℕ) : Set (FreeGroup (Fin 3)) :=
+  {FreeGroup.of 0 ^ a, FreeGroup.of 1 ^ b, FreeGroup.of 2 ^ c,
+    FreeGroup.of 2 * FreeGroup.of 1 * FreeGroup.of 0}
+
+/-- **Layer 4.1.** The oriented triangle group `Δ(a,b,c)`. -/
+abbrev TriangleGroup (a b c : ℕ) : Type := PresentedGroup (triangleRelators a b c)
+
+namespace TriangleGroup
+
+variable {a b c : ℕ}
+
+/-- The generator `x`, mapping to `σ0`. -/
+def x (a b c : ℕ) : TriangleGroup a b c := PresentedGroup.of 0
+
+/-- The generator `y`, mapping to `σ1`. -/
+def y (a b c : ℕ) : TriangleGroup a b c := PresentedGroup.of 1
+
+/-- The generator `z`, mapping to `σinf`. -/
+def z (a b c : ℕ) : TriangleGroup a b c := PresentedGroup.of 2
+
+theorem z_mul_y_mul_x (a b c : ℕ) : z a b c * y a b c * x a b c = 1 := by
+  sorry
+
+theorem x_pow (a b c : ℕ) : x a b c ^ a = 1 := by
+  sorry
+
+/-- **Layer 4.2.** A triple with component orders dividing `(a, b, c)` is a permutation
+representation of the triangle group, with range the monodromy group. -/
+noncomputable def toPerm {n : ℕ} (t : TauCetiRoadmap.BelyiMaps.PermutationTriple n)
+    (ha : t.σ0 ^ a = 1) (hb : t.σ1 ^ b = 1) (hc : t.σinf ^ c = 1) :
+    TriangleGroup a b c →* Equiv.Perm (Fin n) := by
+  sorry
+
+end TriangleGroup
+
+/-! ## Layer 5: the thrice-punctured sphere -/
+
+/-- **Layer 5.1.** The affine model of `ℙ¹(ℂ) ∖ {0, 1, ∞}`. -/
+def ThricePuncturedSphere : Type := {z : ℂ // z ≠ 0 ∧ z ≠ 1}
+
+namespace ThricePuncturedSphere
+
+instance : TopologicalSpace ThricePuncturedSphere :=
+  inferInstanceAs (TopologicalSpace {z : ℂ // z ≠ 0 ∧ z ≠ 1})
+
+/-- **Layer 5.1.** The pinned basepoint `1/2` — on the real segment, so that the embedded
+dessin of Layer 7.6 passes through it. -/
+noncomputable def basePt : ThricePuncturedSphere :=
+  ⟨1 / 2, by norm_num, by norm_num⟩
+
+/-- **Layer 5.2.** The peripheral loop around `0`: the counterclockwise circle
+`t ↦ (1/2)·exp(2πit)` of radius `1/2` about `0`, based at `1/2`. -/
+noncomputable def γ0 : Path basePt basePt where
+  toFun t :=
+    ⟨(1 / 2 : ℂ) * Complex.exp (2 * Real.pi * Complex.I * (t : ℝ)), by sorry⟩
+  continuous_toFun := by sorry
+  source' := by sorry
+  target' := by sorry
+
+/-- **Layer 5.2.** The peripheral loop around `1`: the counterclockwise circle
+`t ↦ 1 − (1/2)·exp(2πit)` of radius `1/2` about `1`, based at `1/2`. -/
+noncomputable def γ1 : Path basePt basePt where
+  toFun t :=
+    ⟨1 - (1 / 2 : ℂ) * Complex.exp (2 * Real.pi * Complex.I * (t : ℝ)), by sorry⟩
+  continuous_toFun := by sorry
+  source' := by sorry
+  target' := by sorry
+
+/-- **Layer 5.2.** The class of `γ0` in the fundamental group. -/
+noncomputable def periph0 : FundamentalGroup ThricePuncturedSphere basePt :=
+  FundamentalGroup.fromPath ⟦γ0⟧
+
+/-- **Layer 5.2.** The class of `γ1`. -/
+noncomputable def periph1 : FundamentalGroup ThricePuncturedSphere basePt :=
+  FundamentalGroup.fromPath ⟦γ1⟧
+
+/-- **Layer 5.2.** The peripheral element at `∞`, *defined* so that the pinned relation
+holds; the orientation statement identifying it with a clockwise large circle is the
+Layer 5.2 milestone. -/
+noncomputable def periphInf : FundamentalGroup ThricePuncturedSphere basePt :=
+  (periph1 * periph0)⁻¹
+
+/-- The pinned relation, in the same display order as the triple relation. -/
+theorem periphInf_mul_periph1_mul_periph0 : periphInf * periph1 * periph0 = 1 := by
+  simp [periphInf, mul_assoc]
+
+/-- **Layer 5.5.** The fundamental group is free on the two peripheral generators.
+Route: figure-eight retract, the graph-cover engine for injectivity, subdivision for
+surjectivity — no Seifert–van Kampen (README, Layers 5.3–5.5). -/
+noncomputable def freeGroupEquiv :
+    FreeGroup (Fin 2) ≃* FundamentalGroup ThricePuncturedSphere basePt := by
+  sorry
+
+theorem freeGroupEquiv_of0 : freeGroupEquiv (FreeGroup.of 0) = periph0 := by
+  sorry
+
+theorem freeGroupEquiv_of1 : freeGroupEquiv (FreeGroup.of 1) = periph1 := by
+  sorry
+
+end ThricePuncturedSphere
+
+/-! ## Layers 5.4, 6: monodromy -/
+
+/-- **Layer 5.4.** The fiber monodromy, packaged as a `MonoidHom` — a genuine
+homomorphism, with no `ᵐᵒᵖ`, by `IsCoveringMap.monodromy_trans_apply` and the
+`End`-multiplication convention. -/
+noncomputable def monodromyHom {E : Type u} {X : Type v} [TopologicalSpace E]
+    [TopologicalSpace X]
+    {p : E → X} (hp : IsCoveringMap p) (x : X) :
+    FundamentalGroup X x →* Equiv.Perm (p ⁻¹' {x}) := by
+  sorry
+
+theorem monodromyHom_apply {E : Type u} {X : Type v} [TopologicalSpace E]
+    [TopologicalSpace X]
+    {p : E → X} (hp : IsCoveringMap p) (x : X)
+    (γ : FundamentalGroup X x) (e : p ⁻¹' {x}) :
+    monodromyHom hp x γ e = hp.monodromy (FundamentalGroup.toPath γ) e := by
+  sorry
+
+open ThricePuncturedSphere in
+/-- **Layer 6.1.** The monodromy triple of a finite cover of the thrice-punctured sphere,
+along a numbering of the fiber. The third component automatically computes the monodromy
+of `periphInf` (README, Layer 6.1). -/
+noncomputable def monodromyTriple {E : Type u} [TopologicalSpace E]
+    {p : E → ThricePuncturedSphere} (hp : IsCoveringMap p) {n : ℕ}
+    (ν : p ⁻¹' {basePt} ≃ Fin n) : PermutationTriple n :=
+  PermutationTriple.ofTwo
+    (ν.permCongr (monodromyHom hp basePt periph0))
+    (ν.permCongr (monodromyHom hp basePt periph1))
+
+/-! ## Layer 8: analytic Belyi pairs
+
+The two sorried instances are the Riemann-sphere milestones of Layer 8.1: the charts are
+`z` and `1/z`. They are declared as instances so that the carriers below can be stated. -/
+
+/-- **Layer 8.1 (milestone, stated as an instance).** The Riemann sphere's charted-space
+structure on `OnePoint ℂ`, with the two standard charts. -/
+noncomputable instance : ChartedSpace ℂ (OnePoint ℂ) := by
+  sorry
+
+/-- **Layer 8.1 (milestone, stated as an instance).** The complex-manifold structure: the
+transition `z ↦ 1/z` on `ℂˣ` is analytic. -/
+instance : IsManifold 𝓘(ℂ) ω (OnePoint ℂ) := by
+  sorry
+
+open OnePoint in
+/-- **Layer 8.4.** An analytic Belyi pair: a compact connected Riemann surface — the
+unbundled hypothesis stack pinned in README §Pinned conventions — with a nonconstant
+holomorphic map to the sphere that is an even covering away from `{0, 1, ∞}`. The
+equivalence with the branch-value formulation is the Layer 8.4 milestone. -/
+structure AnalyticBelyiPair : Type (u + 1) where
+  X : Type u
+  [topX : TopologicalSpace X]
+  [chartedX : ChartedSpace ℂ X]
+  [manifoldX : IsManifold 𝓘(ℂ) ω X]
+  [t2X : T2Space X]
+  [compactX : CompactSpace X]
+  [connectedX : ConnectedSpace X]
+  β : X → OnePoint ℂ
+  mdifferentiable : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) β
+  exists_ne : ∃ x y, β x ≠ β y
+  isCoveringMapOn :
+    IsCoveringMapOn β
+      ({((0 : ℂ) : OnePoint ℂ), ((1 : ℂ) : OnePoint ℂ), OnePoint.infty}ᶜ)
+
+attribute [instance] AnalyticBelyiPair.topX AnalyticBelyiPair.chartedX
+  AnalyticBelyiPair.manifoldX AnalyticBelyiPair.t2X AnalyticBelyiPair.compactX
+  AnalyticBelyiPair.connectedX
+
+/-! ## Layers 12, 13: profinite peripheral objects
+
+Local stand-ins mirroring the ProPGroups roadmap's pinned shapes; each is replaced by that
+roadmap's declaration when it lands. Layers 9–11 have no prototypes here (see the header).
+-/
+
+/-- Local stand-in; supplier: ProPGroups Layer 4 `freeProfiniteGroup (Fin 2)`. The
+profinite completion of the free group on two generators. -/
+noncomputable abbrev freeProfiniteTwo : ProfiniteGrp :=
+  ProfiniteGrp.profiniteCompletion.obj (GrpCat.of (FreeGroup (Fin 2)))
+
+/-- **Layer 12.3 / §Pinned conventions.** The peripheral element `P`. -/
+noncomputable def periphP : freeProfiniteTwo :=
+  ProfiniteGrp.ProfiniteCompletion.etaFn (GrpCat.of (FreeGroup (Fin 2))) (FreeGroup.of 0)
+
+/-- The peripheral element `T`. -/
+noncomputable def periphT : freeProfiniteTwo :=
+  ProfiniteGrp.ProfiniteCompletion.etaFn (GrpCat.of (FreeGroup (Fin 2))) (FreeGroup.of 1)
+
+/-- The peripheral element `C := (T * P)⁻¹`, so that `C * T * P = 1` — the profinite image
+of the Layer 5.2 relation, in the pinned display order. -/
+noncomputable def periphC : freeProfiniteTwo := (periphT * periphP)⁻¹
+
+theorem periphC_mul_periphT_mul_periphP : periphC * periphT * periphP = 1 := by
+  simp [periphC, mul_assoc]
+
+/-- Local stand-in; supplier: ProPGroups Layer 0–2 `zHat`. The profinite completion of
+`ℤ`, the exponent object of the Layer 13.1 calculus. -/
+noncomputable abbrev zhat : ProfiniteGrp :=
+  ProfiniteGrp.profiniteCompletion.obj (GrpCat.of (Multiplicative ℤ))
+
+/-- **Layer 13.1.** The profinite power `x ^ᶻ a`: the image of `a` under the unique
+continuous homomorphism `ẑ → G` with `1 ↦ x`. The laws — agreement with integer powers,
+additivity, multiplicativity, continuity, and naturality under continuous homomorphisms
+(hence under conjugation) — are the Layer 13.1 milestones. -/
+noncomputable def zhatPow {G : ProfiniteGrp} (x : G) (a : zhat) : G := by
+  sorry
+
+/-- Local stand-in; supplier: ProPGroups Layer 3 `proPKernel`. -/
+def proPKernel (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G] : Subgroup G :=
+  ⨅ U : {U : OpenNormalSubgroup G // IsPGroup p (G ⧸ U.1.toSubgroup)}, U.1.toSubgroup
+
+/-- Local stand-in; supplier: ProPGroups Layer 3 `proPKernel_normal`. -/
+instance proPKernel_normal (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G] :
+    (proPKernel p G).Normal := by
+  sorry
+
+/-- Local stand-in; supplier: ProPGroups Layer 3 `maximalProPQuotient`. -/
+abbrev maximalProPQuotient (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G] : Type u :=
+  G ⧸ proPKernel p G
+
+/-- **Layer 13.3.** The maximal pro-`ℓ` quotient of the profinite free group on two
+generators — ProPGroups' `freeProP ℓ (Fin 2)` once that roadmap lands. -/
+noncomputable abbrev DeltaL (ℓ : ℕ) : Type :=
+  maximalProPQuotient ℓ freeProfiniteTwo
+
+/-- **Layer 13.3.** The pro-`ℓ` peripheral element `P_ℓ`. -/
+noncomputable def periphPL (ℓ : ℕ) : DeltaL ℓ := QuotientGroup.mk periphP
+
+/-- The pro-`ℓ` peripheral element `T_ℓ`. -/
+noncomputable def periphTL (ℓ : ℕ) : DeltaL ℓ := QuotientGroup.mk periphT
+
+/-- The pro-`ℓ` peripheral element `C_ℓ`. -/
+noncomputable def periphCL (ℓ : ℕ) : DeltaL ℓ := QuotientGroup.mk periphC
+
+theorem periphCL_mul_periphTL_mul_periphPL (ℓ : ℕ) :
+    periphCL ℓ * periphTL ℓ * periphPL ℓ = 1 := by
+  sorry
+
+/-- **Layer 13.2.** The `ℤ_ℓ`-power on the maximal pro-`ℓ` quotient: the canonical
+operation through which `zhatPow` factors on pro-`ℓ` groups, with the same laws. Not an
+arbitrary function argument — the comparison with `zhatPow` is the Layer 13.2 theorem. -/
+noncomputable def padicPow {ℓ : ℕ} [Fact ℓ.Prime] (x : DeltaL ℓ) (u : ℤ_[ℓ]) :
+    DeltaL ℓ := by
+  sorry
+
+/-- **Layer 13.4.** Surjectivity of the `ℓ`-adic cyclotomic character of `ℚ`, from the
+finite cyclotomic levels and compactness. Ring automorphisms of `ℚ̄` are exactly
+`Gal(ℚ̄/ℚ)`, since every ring automorphism fixes the prime field. -/
+theorem cyclotomicCharacter_surjective (ℓ : ℕ) [Fact ℓ.Prime] :
+    Function.Surjective (cyclotomicCharacter (AlgebraicClosure ℚ) ℓ) := by
+  sorry
+
+/-- **Layer 13.5, the peripheral-power theorem.** For every prime `ℓ` and every
+`u ∈ ℤ_ℓˣ` there is a continuous automorphism of `Δ_ℓ` carrying each peripheral element to
+a conjugate of its `u`-th power. The assignment `u ↦ φ_u` is not asserted to be a
+homomorphism, continuous, or canonical (README, Layer 13.5). -/
+theorem exists_peripheralPowerAutomorphism (ℓ : ℕ) [Fact ℓ.Prime] (u : ℤ_[ℓ]ˣ) :
+    ∃ φ : DeltaL ℓ ≃ₜ* DeltaL ℓ, ∃ cP cT cC : DeltaL ℓ,
+      φ (periphPL ℓ) = cP⁻¹ * padicPow (periphPL ℓ) u * cP ∧
+      φ (periphTL ℓ) = cT⁻¹ * padicPow (periphTL ℓ) u * cT ∧
+      φ (periphCL ℓ) = cC⁻¹ * padicPow (periphCL ℓ) u * cC := by
+  sorry
+
+end TauCetiRoadmap.BelyiMaps
