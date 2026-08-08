@@ -21,7 +21,7 @@ Conventions, recorded in `README.md` (§Pinned conventions):
 
 * Multiplication is Mathlib's: `(σ * τ) x = σ (τ x)` in `Equiv.Perm`, and `γ * δ` in
   `FundamentalGroup` is "`δ` first, then `γ`" (`End.mul_def`). The product relation is
-  `σinf * σ1 * σ0 = 1`, and the monodromy homomorphism of Layer 5.4 is a genuine
+  `σinf * σ1 * σ0 = 1`, and the monodromy homomorphism of Layer 5.3 is a genuine
   `MonoidHom` with no `ᵐᵒᵖ`. The `z ↦ z²` example below pins the interpretation.
 * Relabeling is the left conjugation `MulAction`; isomorphism is `MulAction.orbitRel`.
 * Cycle data always includes fixed points: `fullCycleType` below is a local stand-in for
@@ -108,6 +108,30 @@ theorem inv_components_reverse (t : PermutationTriple n) :
 `σ0 = σinf = (0 1)`, `σ1 = 1`. -/
 example : (ofTwo (Equiv.swap 0 1) 1 : PermutationTriple 2).σinf = Equiv.swap 0 1 := by
   simp
+
+/-! ### The LMFDB translation, machine-checked
+
+The frozen LMFDB record `3T2-3_2.1_2.1-a` (`PROVENANCE.md`) stores the triple
+`(1,2,3)`, `(2,3)`, `(1,2)`, which `0`-indexed is `finRotate 3`, `swap 1 2`, `swap 0 1`.
+Because the database composes permutations left to right, that stored triple satisfies the
+**opposite** relation in Mathlib's multiplication — and its componentwise inverse, the
+Layer 0.1 involution, is a triple in this roadmap's convention. The two `decide`s below are
+the machine-checked form of Layer 14.2's translation lemma on one record; a record whose
+data is symmetric under the swap (`σ1 = σ0`, `σinf = 1`) would check both relations and
+verify nothing. -/
+
+/-- The stored LMFDB triple satisfies `σ0 * σ1 * σinf = 1`, not this roadmap's relation. -/
+example : finRotate 3 * Equiv.swap 1 2 * Equiv.swap 0 1 = 1 := by decide
+
+/-- It does **not** satisfy this roadmap's relation: the two conventions really differ. -/
+example : Equiv.swap 0 1 * Equiv.swap 1 2 * finRotate 3 ≠ 1 := by decide
+
+/-- The componentwise inverse does satisfy this roadmap's relation. -/
+example : Equiv.swap 0 1 * Equiv.swap 1 2 * (finRotate 3)⁻¹ = 1 := by decide
+
+/-- The frozen record as a `PermutationTriple` in this roadmap's convention. -/
+def lmfdb3T2 : PermutationTriple 3 :=
+  ⟨(finRotate 3)⁻¹, Equiv.swap 1 2, Equiv.swap 0 1, by decide⟩
 
 /-! ### Layer 0.2: relabeling -/
 
@@ -489,9 +513,28 @@ noncomputable def periphInf : FundamentalGroup ThricePuncturedSphere basePt :=
 theorem periphInf_mul_periph1_mul_periph0 : periphInf * periph1 * periph0 = 1 := by
   simp [periphInf, mul_assoc]
 
-/-- **Layer 5.5.** The fundamental group is free on the two peripheral generators.
-Route: figure-eight retract, the graph-cover engine for injectivity, subdivision for
-surjectivity — no Seifert–van Kampen (README, Layers 5.3–5.5). -/
+/-- **Layer 5.5.** Van Kampen for two open sets with simply connected intersection — the
+one general topological theorem this roadmap owns, and the reason no figure-eight
+retraction is needed. The pin has no Seifert–van Kampen theorem in any form; this case is
+built from `exists_monotone_Icc_subset_open_cover_unitInterval` (generation) and its square
+analogue `..._prod_self` (relations), with `Path.subpath`, `Path.concat` and
+`Path.Homotopy.concatSubpath` reassembling the pieces.
+
+⚠ `IsPathConnected (A ∩ B)` is not implied by simple connectivity of the intersection and is
+not optional: a two-component intersection makes the conclusion false. -/
+theorem vanKampen_of_simplyConnected_inter {X : Type u} [TopologicalSpace X]
+    {A B : Set X} (_hA : IsOpen A) (_hB : IsOpen B) (_hAB : A ∪ B = Set.univ)
+    (_hApc : IsPathConnected A) (_hBpc : IsPathConnected B)
+    (_hIpc : IsPathConnected (A ∩ B)) [SimplyConnectedSpace ↥(A ∩ B)]
+    {x : X} (hxA : x ∈ A) (hxB : x ∈ B) :
+    Nonempty (Monoid.Coprod (FundamentalGroup ↥A ⟨x, hxA⟩) (FundamentalGroup ↥B ⟨x, hxB⟩)
+      ≃* FundamentalGroup X x) := by
+  sorry
+
+/-- **Layer 5.6.** The fundamental group is free on the two peripheral generators.
+Route: the two-set cover of 5.1, `π₁` of a punctured convex domain (5.4), and the
+simply-connected-intersection van Kampen theorem of 5.5, which this roadmap owns and
+builds from the pin's subdivision lemmas. -/
 noncomputable def freeGroupEquiv :
     FreeGroup (Fin 2) ≃* FundamentalGroup ThricePuncturedSphere basePt := by
   sorry
@@ -506,7 +549,7 @@ end ThricePuncturedSphere
 
 /-! ## Layers 5.4, 6: monodromy -/
 
-/-- **Layer 5.4.** The fiber monodromy, packaged as a `MonoidHom` — a genuine
+/-- **Layer 5.3.** The fiber monodromy, packaged as a `MonoidHom` — a genuine
 homomorphism, with no `ᵐᵒᵖ`, by `IsCoveringMap.monodromy_trans_apply` and the
 `End`-multiplication convention. -/
 noncomputable def monodromyHom {E : Type u} {X : Type v} [TopologicalSpace E]
@@ -520,6 +563,19 @@ theorem monodromyHom_apply {E : Type u} {X : Type v} [TopologicalSpace E]
     {p : E → X} (hp : IsCoveringMap p) (x : X)
     (γ : FundamentalGroup X x) (e : p ⁻¹' {x}) :
     monodromyHom hp x γ e = hp.monodromy (FundamentalGroup.toPath γ) e := by
+  sorry
+
+/-- **Layer 6.2.** The associated cover of a `π₁`-set: `(Ũ × S) ⧸ π₁` for the diagonal
+action, which is a covering map because the deck action on the universal cover is free and
+properly discontinuous, via Mathlib's `IsQuotientCoveringMap`. Prototyped as the contract —
+a cover exists with prescribed monodromy — because the universal cover itself is
+UniversalCovers' object, not this roadmap's. This replaces the constructive half of the
+covering-space classification, which that roadmap has not yet proved onto. -/
+theorem exists_cover_with_monodromy {X : Type u} [TopologicalSpace X]
+    [PathConnectedSpace X] [LocPathConnectedSpace X] (x : X)
+    {S : Type u} [Finite S] (act : FundamentalGroup X x →* Equiv.Perm S) :
+    ∃ (E : TopCat.{u}) (p : E → X) (hp : IsCoveringMap p) (ν : ↥(p ⁻¹' {x}) ≃ S),
+      ∀ γ, ν.permCongr (monodromyHom hp x γ) = act γ := by
   sorry
 
 open ThricePuncturedSphere in
@@ -583,7 +639,7 @@ profinite completion of the free group on two generators. -/
 noncomputable abbrev freeProfiniteTwo : ProfiniteGrp :=
   ProfiniteGrp.profiniteCompletion.obj (GrpCat.of (FreeGroup (Fin 2)))
 
-/-- **Layer 12.3 / §Pinned conventions.** The peripheral element `P`. -/
+/-- **Layer 12.5 / §Pinned conventions.** The peripheral element `P`. -/
 noncomputable def periphP : freeProfiniteTwo :=
   ProfiniteGrp.ProfiniteCompletion.etaFn (GrpCat.of (FreeGroup (Fin 2))) (FreeGroup.of 0)
 
@@ -599,14 +655,14 @@ theorem periphC_mul_periphT_mul_periphP : periphC * periphT * periphP = 1 := by
   simp [periphC, mul_assoc]
 
 /-- Local stand-in; supplier: ProPGroups Layer 0–2 `zHat`. The profinite completion of
-`ℤ`, the exponent object of the Layer 13.1 calculus. -/
+`ℤ`, the exponent object of the Layer 12.1 calculus. -/
 noncomputable abbrev zhat : ProfiniteGrp :=
   ProfiniteGrp.profiniteCompletion.obj (GrpCat.of (Multiplicative ℤ))
 
-/-- **Layer 13.1.** The profinite power `x ^ᶻ a`: the image of `a` under the unique
+/-- **Layer 12.1.** The profinite power `x ^ᶻ a`: the image of `a` under the unique
 continuous homomorphism `ẑ → G` with `1 ↦ x`. The laws — agreement with integer powers,
 additivity, multiplicativity, continuity, and naturality under continuous homomorphisms
-(hence under conjugation) — are the Layer 13.1 milestones. -/
+(hence under conjugation) — are the Layer 12.1 milestones. -/
 noncomputable def zhatPow {G : ProfiniteGrp} (x : G) (a : zhat) : G := by
   sorry
 
@@ -623,12 +679,12 @@ instance proPKernel_normal (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
 abbrev maximalProPQuotient (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G] : Type u :=
   G ⧸ proPKernel p G
 
-/-- **Layer 13.3.** The maximal pro-`ℓ` quotient of the profinite free group on two
+/-- **Layer 13.1.** The maximal pro-`ℓ` quotient of the profinite free group on two
 generators — ProPGroups' `freeProP ℓ (Fin 2)` once that roadmap lands. -/
 noncomputable abbrev DeltaL (ℓ : ℕ) : Type :=
   maximalProPQuotient ℓ freeProfiniteTwo
 
-/-- **Layer 13.3.** The pro-`ℓ` peripheral element `P_ℓ`. -/
+/-- **Layer 13.1.** The pro-`ℓ` peripheral element `P_ℓ`. -/
 noncomputable def periphPL (ℓ : ℕ) : DeltaL ℓ := QuotientGroup.mk periphP
 
 /-- The pro-`ℓ` peripheral element `T_ℓ`. -/
@@ -641,24 +697,24 @@ theorem periphCL_mul_periphTL_mul_periphPL (ℓ : ℕ) :
     periphCL ℓ * periphTL ℓ * periphPL ℓ = 1 := by
   sorry
 
-/-- **Layer 13.2.** The `ℤ_ℓ`-power on the maximal pro-`ℓ` quotient: the canonical
+/-- **Layer 12.2.** The `ℤ_ℓ`-power on the maximal pro-`ℓ` quotient: the canonical
 operation through which `zhatPow` factors on pro-`ℓ` groups, with the same laws. Not an
-arbitrary function argument — the comparison with `zhatPow` is the Layer 13.2 theorem. -/
+arbitrary function argument — the comparison with `zhatPow` is the Layer 12.2 theorem. -/
 noncomputable def padicPow {ℓ : ℕ} [Fact ℓ.Prime] (x : DeltaL ℓ) (u : ℤ_[ℓ]) :
     DeltaL ℓ := by
   sorry
 
-/-- **Layer 13.4.** Surjectivity of the `ℓ`-adic cyclotomic character of `ℚ`, from the
+/-- **Layer 13.2.** Surjectivity of the `ℓ`-adic cyclotomic character of `ℚ`, from the
 finite cyclotomic levels and compactness. Ring automorphisms of `ℚ̄` are exactly
 `Gal(ℚ̄/ℚ)`, since every ring automorphism fixes the prime field. -/
 theorem cyclotomicCharacter_surjective (ℓ : ℕ) [Fact ℓ.Prime] :
     Function.Surjective (cyclotomicCharacter (AlgebraicClosure ℚ) ℓ) := by
   sorry
 
-/-- **Layer 13.5, the peripheral-power theorem.** For every prime `ℓ` and every
+/-- **Layer 13.3, the peripheral-power theorem.** For every prime `ℓ` and every
 `u ∈ ℤ_ℓˣ` there is a continuous automorphism of `Δ_ℓ` carrying each peripheral element to
 a conjugate of its `u`-th power. The assignment `u ↦ φ_u` is not asserted to be a
-homomorphism, continuous, or canonical (README, Layer 13.5). -/
+homomorphism, continuous, or canonical (README, Layer 13.3). -/
 theorem exists_peripheralPowerAutomorphism (ℓ : ℕ) [Fact ℓ.Prime] (u : ℤ_[ℓ]ˣ) :
     ∃ φ : DeltaL ℓ ≃ₜ* DeltaL ℓ, ∃ cP cT cC : DeltaL ℓ,
       φ (periphPL ℓ) = cP⁻¹ * padicPow (periphPL ℓ) u * cP ∧
