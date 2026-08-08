@@ -260,6 +260,24 @@ inert `𝔭` the Frobenius is the nontrivial `g` while `g² = 1`, so the `𝔭²
 identity fibre. The version filtered on `Frob_𝔭 = σ` is nonnegative, but it is not the sequence
 the logarithmic derivatives produce, so the orthogonality identity is not provable for it.
 
+**A finite character family cannot contain a Grossencharacter.** A package indexed by a
+`Fintype` forces every good value of every member to satisfy `x^{#G} = 1`, hence to be a root of
+unity, because some positive power of each index element is `1`. A unitary Grossencharacter with a
+nonzero archimedean parameter, and every norm twist `‖·‖^{it}` with `t ≠ 0`, has infinite order.
+Any roadmap that packages nonvanishing hypotheses over a finite character group has to state a
+second package for the infinite-order case, or its Grossencharacter export is empty.
+
+**The Grossencharacter boundary is `Re s = 1 + shift`.** From `χ = χ_unit · 𝔑^{σ}` the two
+Dirichlet series satisfy `L(χ, s) = L(χ_unit, s − σ)`, so the edge of the critical strip moves.
+A nonvanishing statement at `Re s = 1` for the full quasicharacter is correct only when `σ = 0`.
+
+**One-dimensional characters separate only the abelianization.** An orthogonality identity that
+isolates `Frob_𝔭^m = σ` needs the Galois group abelian. Over `S₃` every one-dimensional character
+agrees at the identity and at a three-cycle, so the character sum returns `1` where the indicator
+returns `0`. The same statement also needs the character's ideal weight to *vanish* at the primes
+excluded from the coefficient, which is why the weight is constructed rather than specified only
+at the unramified primes.
+
 **A Grossencharacter whose full weight is an `IdealWeight` forces `shift = 0`.** The Layer 6.1
 structure used to carry the full weight `χ` as an `IdealWeight` *and* assert
 `χ = χ_unit · 𝔑^{shift}` with `χ_unit` unitary. `IdealWeight.norm_eq_one` gives `‖χ(𝔭)‖ = 1` at

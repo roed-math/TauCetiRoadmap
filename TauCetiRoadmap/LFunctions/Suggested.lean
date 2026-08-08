@@ -406,6 +406,14 @@ theorem analyticOnNhd_continuedLFunctionOfWeight (χ : IdealWeight K) (hχ : Has
     AnalyticOnNhd ℂ (continuedLFunctionOfWeight K χ)
       {s : ℂ | 1 - 1 / (Module.finrank ℚ K : ℝ) < s.re} := sorry
 
+/-- **Layer 1.2, the ideals a weight is nonzero on**, as one named predicate. ⚠ `I ≠ ⊥` is part
+of it. In `Ideal (𝓞 K)` divisibility is reverse inclusion, so `𝔭 ∣ ⊥` holds for **every** prime,
+and a "prime to the bad set" condition written without `I ≠ ⊥` is vacuously satisfied by `⊥`
+whenever the bad set is empty. Every weight in this roadmap sends `⊥` to `0`, so a law that
+concludes `toFun I = 1` under that vacuous premise is false at the trivial modulus. -/
+def IdealWeight.IsGood (χ : IdealWeight K) (I : Ideal (𝓞 K)) : Prop :=
+  I ≠ ⊥ ∧ ∀ 𝔭 ∈ χ.bad, ¬ 𝔭.asIdeal ∣ I
+
 /-- **Layer 1.2, the norm twist of an ideal weight**, `χ ‖·‖^{it}`, which the argument on
 `Re s = 1` needs and which the closure condition of 7.2 quantifies over. -/
 noncomputable def IdealWeight.normTwist (χ : IdealWeight K) (t : ℝ) : IdealWeight K where
@@ -429,9 +437,15 @@ structure CancellingFamily (G : Type*) [CommGroup G] [Fintype G] (w : G → Idea
   /-- The family is a homomorphism to pointwise products, so it is closed under products and
   hence contains `χ²`. -/
   map_mul : ∀ g h : G, ∀ I : Ideal (𝓞 K), (w (g * h)).toFun I = (w g).toFun I * (w h).toFun I
-  /-- The identity of `G` is the trivial weight: the value `1` at every ideal prime to the bad
-  set. It is the member that supplies the pole, and 7.3 and 7.4 exclude it by name. -/
-  map_one : ∀ I : Ideal (𝓞 K), (∀ 𝔭 ∈ (w 1).bad, ¬ 𝔭.asIdeal ∣ I) → (w 1).toFun I = 1
+  /-- The identity of `G` is the trivial weight: the value `1` at every **good** ideal. It is the
+  member that supplies the pole, and 7.3 and 7.4 exclude it by name.
+
+  ⚠ The carrier is `IdealWeight.IsGood`, which includes `I ≠ ⊥`. Without that the field is false
+  for the advertised ray-class instance: at the modulus with finite part `1` the bad set is empty,
+  so the prime-to-bad condition holds vacuously at `I = ⊥`, while the derived ray-class weight is
+  `0` there because `Modulus.IsCoprimeTo` requires `I ≠ ⊥`. The modulus-one case is the ordinary
+  class-group family, so this is not an edge case that can be waved away. -/
+  map_one : ∀ I : Ideal (𝓞 K), IdealWeight.IsGood K (w 1) I → (w 1).toFun I = 1
   /-- Every nontrivial member cancels. This is the analytic content, and it is what 7.1 turns
   into continuation into the strip. -/
   cancellation : ∀ g : G, g ≠ 1 → HasCancellation K (w g)
@@ -453,6 +467,47 @@ structure CancellingFamily (G : Type*) [CommGroup G] [Fintype G] (w : G → Idea
   `meromorphicOrderAt_dedekindZetaC_one_add`, a theorem of 7.4 about `ζ_K` itself. -/
   cancellation_normTwist : ∀ g : G, g ≠ 1 → ∀ t : ℝ,
     HasCancellation K (IdealWeight.normTwist K (w g) t)
+
+/-- **Layer 1.2, the pointwise square of an ideal weight**, which the `3-4-1` product needs. -/
+noncomputable def IdealWeight.sq (χ : IdealWeight K) : IdealWeight K where
+  toFun I := χ.toFun I ^ 2
+  bad := χ.bad
+  bad_finite := χ.bad_finite
+  map_mul := sorry
+  norm_eq_one := sorry
+  eq_zero_bad := sorry
+
+/-- **Layer 1.2, the conjugate weight**, the third factor of the `3-4-1` product. -/
+noncomputable def IdealWeight.conjugate (χ : IdealWeight K) : IdealWeight K where
+  toFun I := starRingEnd ℂ (χ.toFun I)
+  bad := χ.bad
+  bad_finite := χ.bad_finite
+  map_mul := sorry
+  norm_eq_one := sorry
+  eq_zero_bad := sorry
+
+/-- **Layer 7.2, the hypothesis package for a single, possibly infinite-order, unitary
+character.**
+
+⚠ `CancellingFamily` cannot carry this, and the difference is not cosmetic. That structure is
+indexed by a `Fintype`, so for every `g` some positive power is `1`; `map_mul` and `map_one` then
+force every good value of `w g` to satisfy `x^{#G} = 1`, hence to be a root of unity. A unitary
+Grossencharacter with a nonzero archimedean parameter has infinite order, and so does every norm
+twist `𝔑^{it}` with `t ≠ 0`, so neither can be a member of a finite family. Layers 7.5 and 8B.2
+keep the finite package, because their character groups really are finite; Layer 7.7 is stated
+over this one.
+
+The fields are exactly what the `3-4-1` argument consumes: `χ`, `χ²`, the conjugate, and the norm
+twists of `χ` and `χ²`. The trivial factor is `ζ_K`, whose pole is
+`meromorphicOrderAt_dedekindZetaC_one` and whose boundary nonvanishing is
+`meromorphicOrderAt_dedekindZetaC_one_add`, so it is a citation and not a field. -/
+structure UnitaryCancelling (χ : IdealWeight K) : Prop where
+  cancellation : HasCancellation K χ
+  cancellation_sq : HasCancellation K (IdealWeight.sq K χ)
+  cancellation_conjugate : HasCancellation K (IdealWeight.conjugate K χ)
+  cancellation_normTwist : ∀ t : ℝ, HasCancellation K (IdealWeight.normTwist K χ t)
+  cancellation_sq_normTwist : ∀ t : ℝ,
+    HasCancellation K (IdealWeight.normTwist K (IdealWeight.sq K χ) t)
 
 /-- **Layer 1.5, local Euler-factor data.** The local factors are *data*: an existential
 "there is a polynomial at each prime" cannot be referred to by a later theorem. The
@@ -1351,6 +1406,18 @@ noncomputable def gammaShiftComplex (χ : Grossencharacter 𝔪) (v : InfinitePl
 default value. -/
 def IsAlgebraic (χ : Grossencharacter 𝔪) : Prop := ∀ v, χ.archimedeanParam v = 0
 
+/-- **Layer 6.4, the continued L-function of a Grossencharacter**, *defined* from the unitary one
+by the shift. Since `χ(𝔞) = χ_unit(𝔞) · 𝔑𝔞^{shift}`, the two Dirichlet series satisfy
+`L(χ, s) = L(χ_unit, s − shift)`, so nothing new has to be continued. -/
+noncomputable def lFunctionC (χ : Grossencharacter 𝔪) (s : ℂ) : ℂ :=
+  continuedLFunctionOfWeight K χ.unitary (s - (χ.shift : ℂ))
+
+/-- **Layer 6.4, the shift translation**, which is what makes the definition above the right
+object: on its half-plane of convergence it *is* the Dirichlet series of the full
+quasicharacter. -/
+theorem lFunctionC_eq (χ : Grossencharacter 𝔪) {s : ℂ} (hs : 1 + χ.shift < s.re) :
+    χ.lFunctionC s = LSeries (idealCoeffOfWeight K χ.toFun) s := sorry
+
 /-- **Layer 6.4, continuation and the functional equation.** ⚠ The exceptional case is part of
 the statement: `Λ(χ, ·)` is entire **unless** `𝔪₀ = 1`, every `p_v = 0`, and `χ` is a power of
 the norm character, and there the poles are exactly at `s = Tr(−p + iq)/n` and
@@ -1429,6 +1496,47 @@ theorem meromorphicOrderAt_continuedLFunctionOfWeight {G : Type*} [CommGroup G] 
     {w : G → IdealWeight K} (hw : CancellingFamily K G w) {g : G} (hg : g ≠ 1) (t : ℝ) :
     meromorphicOrderAt (continuedLFunctionOfWeight K (w g)) (1 + t * I) = (0 : WithTop ℤ) :=
   sorry
+
+/-- **Layer 7.3 over the single-character package**: `L(χ, 1) ≠ 0` for a unitary character with
+cancellation, with no finiteness anywhere. -/
+theorem continuedLFunctionOfWeight_ne_zero_one_of_unitary {χ : IdealWeight K}
+    (h : UnitaryCancelling K χ) : continuedLFunctionOfWeight K χ 1 ≠ 0 := sorry
+
+/-- **Layer 7.4 over the single-character package**: nonvanishing on the whole line `Re s = 1`. -/
+theorem meromorphicOrderAt_continuedLFunctionOfWeight_of_unitary {χ : IdealWeight K}
+    (h : UnitaryCancelling K χ) (t : ℝ) :
+    meromorphicOrderAt (continuedLFunctionOfWeight K χ) (1 + t * I) = (0 : WithTop ℤ) := sorry
+
+/-- **Layer 7.7, the nonvanishing export for Grossencharacters.**
+
+⚠ The boundary is `Re s = 1 + shift`, and not `Re s = 1`. From `L(χ, s) = L(χ_unit, s − shift)`
+the edge of the critical strip for the full quasicharacter sits at `1 + shift`, so a statement at
+`1 + iu` is correct only in the unitary case. Milestone 7.8 uses the unitary case, where it is. -/
+theorem Grossencharacter.meromorphicOrderAt_lFunctionC (𝔪 : Modulus K) (χ : Grossencharacter 𝔪)
+    (h : UnitaryCancelling K χ.unitary) (t : ℝ) :
+    meromorphicOrderAt χ.lFunctionC ((1 : ℂ) + (χ.shift : ℂ) + t * I) = (0 : WithTop ℤ) := sorry
+
+/-- **Layer 7.7, the unitary case**, where the boundary is the familiar `Re s = 1`. -/
+theorem Grossencharacter.meromorphicOrderAt_lFunctionC_of_shift_zero (𝔪 : Modulus K)
+    (χ : Grossencharacter 𝔪) (h : UnitaryCancelling K χ.unitary) (hs : χ.shift = 0) (t : ℝ) :
+    meromorphicOrderAt χ.lFunctionC (1 + t * I) = (0 : WithTop ℤ) := sorry
+
+/-- **Layer 7.8, Hecke's equidistribution of Gaussian primes.** The arguments of the primes of
+`ℤ[i]` are equidistributed in `[0, π/2)`. It is the only equidistribution statement in the
+roadmap, and it is here because it is the test that 6.1 to 6.4 and 7.7 can actually be used: the
+characters `𝔞 ↦ (α/|α|)^{4k}` are unitary of infinite order, so a finite-family package cannot
+supply their nonvanishing. -/
+theorem equidistribution_gaussianPrimes (F : Type*) [Field F] [NumberField F]
+    [IsCyclotomicExtension {4} ℚ F] (v : InfinitePlace F) (hv : v.IsComplex)
+    (a b : ℝ) (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ Real.pi / 2) :
+    Tendsto
+      (fun x : ℝ ↦
+        (Nat.card {𝔭 : HeightOneSpectrum (𝓞 F) // (Ideal.absNorm 𝔭.asIdeal : ℝ) ≤ x ∧
+            ∃ α : 𝓞 F, 𝔭.asIdeal = Ideal.span {α} ∧
+              (v.embedding (algebraMap (𝓞 F) F α)).arg ∈ Set.Icc a b} : ℝ) /
+          (Nat.card {𝔭 : HeightOneSpectrum (𝓞 F) //
+            (Ideal.absNorm 𝔭.asIdeal : ℝ) ≤ x} : ℝ))
+      atTop (𝓝 ((b - a) / (Real.pi / 2))) := sorry
 
 /-- **Layer 7.5, the ray-class family is a cancelling family.** This is the first of the two
 instantiations of 7.2, and it is what makes 7.3 and 7.4 available for Layer 5's characters and
@@ -1610,6 +1718,14 @@ theorem mem_frobeniusClass_iff (𝔭 : HeightOneSpectrum (𝓞 K)) (hur : IsUnra
       ∃ Q : Ideal (𝓞 L), Q.IsPrime ∧ Q.under (𝓞 K) = 𝔭.asIdeal ∧
         ∀ x : 𝓞 L, σ • x - x ^ Nat.card (𝓞 K ⧸ 𝔭.asIdeal) ∈ Q := sorry
 
+/-- **Layer 8.0, a Frobenius element of a prime.** ⚠ In an **abelian** extension the class is a
+singleton and this is *the* Frobenius; in general it is a choice, and only the class is canonical.
+Layer 8B.1's cyclotomic weight reads it, and 8B.1 proves the group abelian first. -/
+noncomputable def frobeniusElt (𝔭 : HeightOneSpectrum (𝓞 K)) : L ≃ₐ[K] L := sorry
+
+theorem frobeniusClass_eq_mk_frobeniusElt (𝔭 : HeightOneSpectrum (𝓞 K)) :
+    frobeniusClass K L 𝔭 = ConjClasses.mk (frobeniusElt K L 𝔭) := sorry
+
 /-- **Layer 8.0**: only finitely many primes ramify. -/
 theorem finite_ramified : {𝔭 : HeightOneSpectrum (𝓞 K) | ¬ IsUnramifiedAt K L 𝔭}.Finite := sorry
 
@@ -1635,11 +1751,21 @@ residue arithmetic: `σ^f` acts as `x ↦ x^{𝔑𝔭^f}` and `𝔑_E 𝔓 = �
 takes an arbitrary representative `σ` of the class `frobeniusClass K L 𝔭` and a fixed `𝔓` is
 false when `E/K` is not normal: a conjugate representative need not stabilize `Q`, so `σ^f` need
 not fix `E` pointwise and is then not the restriction of any element of `Gal(L/E)`. The
-class-level corollary below is derived from this theorem, never assumed in place of it. -/
+class-level corollary below is derived from this theorem, never assumed in place of it.
+
+⚠ *Nearby false statement:* the same equality **without** `hur`. Take `L/K` a nontrivial Galois
+extension with `Q` totally ramified over `𝔭`, and `E = L`. Then `f(𝔓/𝔭) = 1`, and every
+`σ ∈ Gal(L/K)` satisfies the arithmetic-Frobenius congruence at `Q`, because every inertia
+element acts trivially on the residue field. Pick `σ ≠ 1`. The conclusion asks for
+`τ ∈ Gal(L/L) = {1}` with `restrictScalars K τ = σ^1 = σ`, and `restrictScalars K 1 = 1 ≠ σ`. At a
+ramified prime a Frobenius lift is determined only modulo inertia, so no equality of
+automorphisms is available; if a ramified statement is wanted, state it in the quotient by
+inertia, or as a coset. -/
 theorem isArithFrobAt_pow_inertiaDeg (E : Type*) [Field E] [NumberField E] [Algebra K E]
     [Algebra E L] [IsScalarTower K E L] [IsGalois E L]
     (Q : HeightOneSpectrum (𝓞 L)) (𝔓 : HeightOneSpectrum (𝓞 E)) (𝔭 : HeightOneSpectrum (𝓞 K))
     (hQE : Q.asIdeal.under (𝓞 E) = 𝔓.asIdeal) (hQK : Q.asIdeal.under (𝓞 K) = 𝔭.asIdeal)
+    (hur : IsUnramifiedAt K L 𝔭)
     (σ : L ≃ₐ[K] L) (hσ : IsArithFrobAt (𝓞 K) σ Q.asIdeal) :
     ∃ τ : L ≃ₐ[E] L, IsArithFrobAt (𝓞 E) τ Q.asIdeal ∧
       AlgEquiv.restrictScalars K τ = σ ^ Ideal.inertiaDeg 𝔭.asIdeal 𝔓.asIdeal := sorry
@@ -1674,16 +1800,29 @@ theorem hasDirichletDensity_splitsCompletely :
 
 /-! ### Layers 8C.1 to 8C.8: the crossing argument, with its constant written out -/
 
+/-- **Layer 8C.1, the finite exceptional set of rational primes.** An auxiliary prime has to
+avoid the primes ramified in `K/ℚ` and the primes below the primes ramified in `L/K`.
+
+⚠ Naming it is part of the milestone. "For all but finitely many `q`" hides which finitely many,
+and the two intersection conditions of 8C.1 and 8C.2 are exactly what avoiding this set buys. -/
+def crossingExceptional (L : Type*) [Field L] [NumberField L] [Algebra K L] : Set ℕ :=
+  {p : ℕ | p.Prime ∧ ((p : ℤ) ∣ discr K ∨
+    ∃ 𝔭 : HeightOneSpectrum (𝓞 K), ¬ IsUnramifiedAt K L 𝔭 ∧
+      (p : ℤ) ∈ 𝔭.asIdeal.under ℤ)}
+
+theorem finite_crossingExceptional (L : Type*) [Field L] [NumberField L] [Algebra K L]
+    [IsGalois K L] : (crossingExceptional K L).Finite := sorry
+
 /-- **Layer 8C.1, auxiliary primes of every level exist**, by Dirichlet's theorem in the
-progression `1 mod f^r` together with the finiteness of the ramified set, which is what the
-excluded finite set `S` stands for.
+progression `1 mod f^r` together with the finiteness of the exceptional set.
 
 ⚠ "`f` divides `[K(ζ_m):K]`" does **not** produce an element of order divisible by `f`.
 Divisibility of the order of a finite group gives no such element in general; the cyclicity of
 `Gal(K(ζ_q)/K)` is what does, and it is why the construction uses a rational prime `q` rather
 than an arbitrary modulus. -/
-theorem exists_auxiliaryPrime (f r : ℕ) (hf : 0 < f) (S : Finset ℕ) :
-    ∃ q : ℕ, q.Prime ∧ q ∉ S ∧ q ≡ 1 [MOD f ^ r] := sorry
+theorem exists_auxiliaryPrime (L : Type*) [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
+    (f r : ℕ) (hf : 0 < f) :
+    ∃ q : ℕ, q.Prime ∧ q ∉ crossingExceptional K L ∧ q ≡ 1 [MOD f ^ r] := sorry
 
 /-! ### Layers 8C.5 to 8C.8: the tagged fibres and the constant -/
 
@@ -1788,6 +1927,49 @@ end CrossingDatum
 
 end CrossingDatumAPI
 
+/-- **Layer 8C.1, the first intersection condition** `K ∩ ℚ(ζ_q) = ℚ`, in the form that the
+cyclotomic Galois group over `K` has full order `q − 1`, and is therefore cyclic. Avoiding
+`crossingExceptional` is what buys it. -/
+theorem cyclic_of_auxiliary (q : ℕ) (hq : q.Prime) (hex : q ∉ crossingExceptional K L)
+    [IsCyclotomicExtension {q} K M] :
+    Nat.card (M ≃ₐ[K] M) = q - 1 ∧ IsCyclic (M ≃ₐ[K] M) := sorry
+
+/-- **Layer 8C.2, the second intersection condition** `L ∩ K(ζ_q) = K`, in the form that the
+canonical restriction map is bijective. Injectivity is `N = L·M`, and the degree count is the
+disjointness. -/
+theorem bijective_crossingRestrict_of_auxiliary (q : ℕ) (hq : q.Prime)
+    (hex : q ∉ crossingExceptional K L) [IsCyclotomicExtension {q} K M]
+    (hcomp : ∀ ν : N ≃ₐ[K] N, crossingRestrict K L M N ν = 1 → ν = 1)
+    (hcard : Nat.card (N ≃ₐ[K] N) = Nat.card (L ≃ₐ[K] L) * Nat.card (M ≃ₐ[K] M)) :
+    Function.Bijective ⇑(crossingRestrict K L M N) := sorry
+
+/-- **Layers 8C.1 to 8C.4, the canonical constructor of the crossing datum.**
+
+⚠ A structure of correct hypotheses that nothing constructs shows only that the hypotheses
+typecheck. This is the declaration that turns 8C.1's auxiliary prime into the exact package the
+lower bound consumes, so the crossing route is not merely assumed. -/
+noncomputable def crossingDatumOfAuxiliary (q : ℕ) (hq : q.Prime)
+    (hex : q ∉ crossingExceptional K L) [hcyc : IsCyclotomicExtension {q} K M]
+    (habel : ∀ a b : L ≃ₐ[K] L, a * b = b * a)
+    (hcomp : ∀ ν : N ≃ₐ[K] N, crossingRestrict K L M N ν = 1 → ν = 1)
+    (hcard : Nat.card (N ≃ₐ[K] N) = Nat.card (L ≃ₐ[K] L) * Nat.card (M ≃ₐ[K] M)) :
+    CrossingDatum K L M N where
+  abelian_L := habel
+  q := q
+  q_prime := hq
+  isCyclotomic := hcyc
+  cyclic_M := (cyclic_of_auxiliary K L M q hq hex).2
+  bijective_restrict :=
+    bijective_crossingRestrict_of_auxiliary K L M N q hq hex hcomp hcard
+  frobenius_restrict := sorry
+
+/-- **Layer 8C.1, the level condition transfers.** From `q ≡ 1 mod f^r` and
+`#Gal(K(ζ_q)/K) = q − 1`, the tagged set of 8C.5 is computed at level `r`, which is what 8C.7's
+estimate consumes. -/
+theorem pow_dvd_card_of_auxiliary (q : ℕ) (hq : q.Prime) (hex : q ∉ crossingExceptional K L)
+    [IsCyclotomicExtension {q} K M] (f r : ℕ) (hf : 0 < f) (hq1 : q ≡ 1 [MOD f ^ r]) :
+    f ^ r ∣ Nat.card (M ≃ₐ[K] M) := sorry
+
 /-- **Layer 8C.6, the density of one tagged fibre after contraction to `K`.** In the compositum
 `N = L·K(ζ_q)`, whose group is `G × H_q` by 8C.2, the primes with Frobenius `(σ, τ)` have density
 `1/(#G · #H_q)`. This is 8B.5 applied over the fixed field of `⟨(σ, τ)⟩`, then contracted through
@@ -1822,6 +2004,23 @@ theorem lowerDirichletDensityAtLeast_crossing (D : CrossingDatum K L M N) (σ : 
       {𝔭 : HeightOneSpectrum (𝓞 K) |
         IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ}
       (crossingConstant K L M (orderOf σ)) := sorry
+
+/-- **Layer 8C.6, the lower bound from a *constructed* auxiliary diagram**, which is the form
+8C.8 consumes. ⚠ The datum is not a hypothesis here: it is produced by `crossingDatumOfAuxiliary`
+from the auxiliary prime of 8C.1, so this theorem is the one that shows the crossing route closes.
+Its proof is the composition, and carries no `sorry` of its own. -/
+theorem lowerDirichletDensityAtLeast_of_auxiliary (q : ℕ) (hq : q.Prime)
+    (hex : q ∉ crossingExceptional K L) [IsCyclotomicExtension {q} K M]
+    (habel : ∀ a b : L ≃ₐ[K] L, a * b = b * a)
+    (hcomp : ∀ ν : N ≃ₐ[K] N, crossingRestrict K L M N ν = 1 → ν = 1)
+    (hcard : Nat.card (N ≃ₐ[K] N) = Nat.card (L ≃ₐ[K] L) * Nat.card (M ≃ₐ[K] M))
+    (σ : L ≃ₐ[K] L) :
+    LowerDirichletDensityAtLeast K
+      {𝔭 : HeightOneSpectrum (𝓞 K) |
+        IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ}
+      (crossingConstant K L M (orderOf σ)) :=
+  lowerDirichletDensityAtLeast_crossing K L M N
+    (crossingDatumOfAuxiliary K L M N q hq hex habel hcomp hcard) σ
 
 /-- **Layer 8C.7, the exact cyclic-group count.** In a cyclic group of order `n` with `f ∣ n`,
 
@@ -1902,8 +2101,13 @@ theorem card_primesOver_fixedField (σ : L ≃ₐ[K] L) (E : Type*) [Field E] [N
 
 ⚠ Its relative Frobenius is `σ`, not `1`. A version of 8D.4 that counts the primes of `E` with
 relative Frobenius `1` gives the empty set here while the displayed count is `1`, so this test
-catches the split-completely fibre being used in place of the `σ` fibre. -/
-theorem card_primesOver_fixedField_cyclic (σ : L ≃ₐ[K] L)
+catches the split-completely fibre being used in place of the `σ` fibre.
+
+⚠ `σ ≠ 1` is needed. At the identity extension `L = K` with `σ = 1`, the generator hypothesis
+holds, both displayed sets are `{𝔭}`, and the second cardinal is `1` rather than `0`. The test
+exists to separate the nonidentity fibre from the split-completely fibre, so it has to exclude
+the case where they coincide. -/
+theorem card_primesOver_fixedField_cyclic (σ : L ≃ₐ[K] L) (hσ : σ ≠ 1)
     (hgen : ∀ ρ : L ≃ₐ[K] L, ρ ∈ Subgroup.zpowers σ)
     (𝔭 : HeightOneSpectrum (𝓞 K)) (h : IsUnramifiedAt K L 𝔭)
     (hC : frobeniusClass K L 𝔭 = ConjClasses.mk σ) :
@@ -2002,21 +2206,50 @@ noncomputable def frobeniusFibreCoeff (σ : F ≃ₐ[K] F) (n : ℕ) : ℝ :=
 theorem frobeniusFibreCoeff_nonneg (σ : F ≃ₐ[K] F) (n : ℕ) : 0 ≤ frobeniusFibreCoeff K F σ n :=
   sorry
 
-/-- **Layer 9.7, the orthogonality identity, as a theorem.** ⚠ It is proved for the named
-coefficient and not assumed: with `Frob_𝔭^m = σ` as the filter it is exactly 8B.3 applied to
-`−L'/L` of each character, and with `Frob_𝔭 = σ` it is not provable at all. The map `w` sending a
-character of the Galois group to its ideal weight is 8B.1's content, and `hw` pins it on the
-unramified primes; `IdealWeight.map_mul` then determines it on prime powers. -/
-theorem lSeries_frobeniusFibreCoeff (σ : F ≃ₐ[K] F)
-    (w : ((F ≃ₐ[K] F) →* ℂˣ) → IdealWeight K)
-    (hw : ∀ (χ : (F ≃ₐ[K] F) →* ℂˣ) (𝔭 : HeightOneSpectrum (𝓞 K)) (τ : F ≃ₐ[K] F),
-      IsUnramifiedAt K F 𝔭 → frobeniusClass K F 𝔭 = ConjClasses.mk τ →
-        (w χ).toFun 𝔭.asIdeal = (χ τ : ℂ))
-    {s : ℂ} (hs : 1 < s.re) :
+/-- **Layer 8B.1, the cyclotomic Galois group is abelian.** It embeds in `(ℤ/m)ˣ` by the
+Frobenius formula, and everything below rests on that: the Frobenius class is a singleton, and
+one-dimensional characters separate its elements. -/
+theorem commute_cyclotomicGal (m : ℕ) [NeZero m] [IsCyclotomicExtension {m} K F]
+    (a b : F ≃ₐ[K] F) : a * b = b * a := sorry
+
+/-- **Layer 8B.1, the ideal weight of a character of `Gal(K(ζ_m)/K)`**, built here rather than
+quantified over. Its value at an unramified prime is `χ(Frob_𝔭)`, its bad set is exactly the
+ramified primes, and it is `0` there. -/
+noncomputable def cyclotomicWeight (χ : (F ≃ₐ[K] F) →* ℂˣ) : IdealWeight K := sorry
+
+theorem cyclotomicWeight_bad (χ : (F ≃ₐ[K] F) →* ℂˣ) :
+    (cyclotomicWeight K F χ).bad = {𝔭 : HeightOneSpectrum (𝓞 K) | ¬ IsUnramifiedAt K F 𝔭} :=
+  sorry
+
+theorem cyclotomicWeight_apply (χ : (F ≃ₐ[K] F) →* ℂˣ) {𝔭 : HeightOneSpectrum (𝓞 K)}
+    (h : IsUnramifiedAt K F 𝔭) :
+    (cyclotomicWeight K F χ).toFun 𝔭.asIdeal = (χ (frobeniusElt K F 𝔭) : ℂ) := sorry
+
+/-- ⚠ It vanishes at the ramified primes. Without this the orthogonality identity below is false:
+its right-hand side runs over every prime, while `frobeniusFibreCoeff` excludes the ramified
+ones, so a weight merely *specified* at the unramified primes may contribute extra terms. -/
+theorem cyclotomicWeight_eq_zero (χ : (F ≃ₐ[K] F) →* ℂˣ) {𝔭 : HeightOneSpectrum (𝓞 K)}
+    (h : ¬ IsUnramifiedAt K F 𝔭) : (cyclotomicWeight K F χ).toFun 𝔭.asIdeal = 0 := sorry
+
+/-- **Layer 9.7, the orthogonality identity, as a theorem** about the canonical cyclotomic
+weight. With `Frob_𝔭^m = σ` as the filter it is exactly 8B.3 applied to `−L'/L` of each character;
+with `Frob_𝔭 = σ` it is not provable at all.
+
+⚠ It is stated for a **cyclotomic** `F`, and not for an arbitrary finite Galois extension. The
+characters here are one-dimensional, and those separate elements only in the abelianization: in
+`S₃` every one-dimensional character takes the same value at the identity and at a three-cycle,
+so the character sum returns `1` where the `Frob^m = σ` indicator returns `0`.
+`commute_cyclotomicGal` is what rules that out.
+
+⚠ It is also stated for the **named** `cyclotomicWeight` and not for an arbitrary `w` specified
+only at unramified primes, for the reason recorded at `cyclotomicWeight_eq_zero`. -/
+theorem lSeries_frobeniusFibreCoeff (m : ℕ) [NeZero m] [IsCyclotomicExtension {m} K F]
+    (σ : F ≃ₐ[K] F) {s : ℂ} (hs : 1 < s.re) :
     LSeries (fun n ↦ (frobeniusFibreCoeff K F σ n : ℂ)) s =
       (Nat.card (F ≃ₐ[K] F) : ℂ)⁻¹ *
         ∑ᶠ χ : (F ≃ₐ[K] F) →* ℂˣ, starRingEnd ℂ (χ σ : ℂ) *
-          LSeries (idealCoeffOfWeight K (fun I ↦ (w χ).toFun I * idealVonMangoldt K I)) s :=
+          LSeries (idealCoeffOfWeight K
+            (fun I ↦ (cyclotomicWeight K F χ).toFun I * idealVonMangoldt K I)) s :=
   sorry
 
 /-- **Layer 9.7, the counting asymptotic for one Frobenius fibre.**
