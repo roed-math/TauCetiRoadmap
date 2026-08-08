@@ -77,10 +77,10 @@ number field `K`, and recovering the classical object at `K = ℚ` in every case
 ### Out of scope
 
 - **The zeros program.** Zero-free regions, zero counting, the Riemann–von Mangoldt formula,
-  the explicit formula, and certified lists of zeros are not proved here. They need a theory
-  of growth that this roadmap does not build. The separate roadmap
-  `TauCetiRoadmap/LFunctionZeros/README.md` owns them. It consumes the completed instances
-  built here; *Interfaces supplied to other roadmaps* below states what it gets.
+  the explicit formula, and certified lists of zeros are not proved here. They need a theory of
+  growth that this roadmap does not build. *Interfaces supplied to other roadmaps* below lists
+  the durable exports that a development of them would consume, and this roadmap asserts nothing
+  about where that development lives.
 - **Tate's thesis.** Adelic Fourier analysis, self-dual measures, Schwartz–Bruhat functions,
   local zeta integrals, and local epsilon factors are not built here. Layer 3 proves the
   functional equation by Hecke's method, and a second derivation is not wanted. The
@@ -110,8 +110,15 @@ rebuild it.
   and Schwartz `f`, the statement is
   `∑_{v ∈ L} f v = (ZLattice.covolume L)⁻¹ ∑_{w ∈ Lᵛ} 𝓕f w`, where `Lᵛ` is `ZLattice.dual`. The
   shared table below fixes every name that crosses to that roadmap.
+- **The analytic L-function record of Layer 0.1, with its dual record** (Layer 0.2). The dual is
+  owned here because the functional equation of a non-self-dual record names a second *record* on
+  its right-hand side, so the roadmap that owns the record owns its dual.
 - **The completed Dedekind zeta function, its polar divisor, and its functional equation**
-  (Layer 3), and **completed Hecke L-functions with `‖W(χ)‖ = 1`** (Layers 5 and 6).
+  (Layer 3), and **completed Hecke L-functions with `‖W(χ)‖ = 1`** (Layers 5 and 6). ⚠ Regularity
+  away from the recorded poles is exported as `AnalyticAt`, never as `0 ≤ meromorphicOrderAt`:
+  the order condition depends only on the punctured germ, so it constrains no value.
+- **The Frobenius class of an unramified prime** (Layer 8.0), constructed from `arithFrobAt`,
+  with its restriction and tower theorems.
 - **Nonvanishing on `Re s = 1` in meromorphic-order form** (Layer 7.5), with the `3-4-1`
   inequality it rests on (Layer 7.4).
 - **The ideal von Mangoldt weight and the logarithmic-derivative Dirichlet series**
@@ -138,12 +145,11 @@ request, a future pin, an external repository, or a roadmap that does not yet ex
 
 Two consequences follow.
 
-First, where a sibling roadmap has not fixed the names this roadmap needs, this roadmap
-defines a **compatibility interface** and makes it one of its own milestones. Layers 5.1,
-6.1, and 8.0 are the three such interfaces. Each is a small structure with the operations the
-later layers use. When the sibling roadmap's declaration exists, the replacement is
-mechanical: delete the interface, import the sibling declaration, and keep every later
-statement unchanged. Each compatibility interface says which roadmap and layer will own it.
+First, an object that a sibling roadmap may one day own is **built here**, as a milestone of
+this roadmap, from Mathlib and from earlier milestones. Layers 5.1, 6.1, and 8.0 are the three
+such objects: the ray class group and its characters, the Grossencharacter, and the Frobenius
+class. Each is a construction and not a structure of hypotheses, so no theorem here is
+conditional on an arbitrary term supplied from outside.
 
 Second, Wiener–Ikehara is a milestone of Layer 9 and not an import. It is proved in
 PrimeNumberTheoremAnd. That project is neither Mathlib nor Tau Ceti, so it cannot be a
@@ -154,35 +160,43 @@ coordination obligation.
 
 | Supplier | Material consumed here | First consuming layer | Category |
 |---|---|---:|---|
-| [Local fields](https://github.com/roed-math/TauCetiRoadmap/pull/2), Layer 2 | the arithmetic-Frobenius convention, and the convention for the Euler factor at a ramified prime | 1.5 | Roadmap, convention only |
-| [Global class field theory](https://github.com/roed-math/TauCetiRoadmap/pull/6), Layers 0 to 3 | ray class groups, finite-order Hecke characters, the conductor with its finite part and its infinite part, and the unitary decomposition | 5.1 | Roadmap, through the compatibility interface of Layer 5.1 |
-| Global class field theory, its infinity-type layer | infinity types and algebraic Grossencharacters | 6.1 | Roadmap, through the compatibility interface of Layer 6.1 |
-| [Number field arithmetic](https://github.com/roed-math/TauCetiRoadmap/pull/9), Layers 2 and 5 | the Frobenius class of an unramified prime, and its behaviour under restriction in a tower | 8.0 | Roadmap, through the compatibility interface of Layer 8.0 |
-| [Integral lattices](https://github.com/roed-math/TauCetiRoadmap/pull/7), Layers 1B and 8D | the dual lattice of an integral bilinear form, as `IntegralLattice.dual`, and its comparison `IntegralLattice.analyticDual_eq_dual` | 2.10 | Roadmap |
 | [Modular forms](../ModularForms/README.md), Layer 7 | the newform L-series, its Euler product, its completion, its functional equation, and its analytic conductor | 0.7 | Roadmap |
+| Mathlib | `LSeries` and its convergence theory, `Gammaℝ`, `Gammaℂ`, `WeakFEPair`, `completedRiemannZeta`, `DirichletCharacter.LFunction`, `dedekindZeta`, `arithFrobAt`, `FractionalIdeal.dual`, `mixedEmbedding` | 0.1 | Mathlib |
 
-Nothing else is a prerequisite. Three remarks on the table.
+That table is the whole of it. The accepted modular forms roadmap is the only roadmap
+prerequisite, and it is consumed at one milestone.
 
-The local fields row is a convention and not a declaration. This roadmap states the same
-conventions in *Pinned conventions*, and the two must agree. No milestone here fails to
-typecheck if that roadmap does not exist.
+Three remarks.
 
-The rows for global class field theory and for number field arithmetic are routed through the
-compatibility interfaces of Layers 5.1, 6.1, and 8.0. Those interfaces are milestones of this
-roadmap, so no milestone here is blocked.
+**The three carriers are built here.** Layer 5.1 constructs a modulus, the group `J^{𝔪₀}` of
+ideals prime to its finite part, the ray subgroup `P^𝔪`, the quotient, and a character of that
+quotient. Layer 6.1 constructs a Grossencharacter from a unitary ideal weight, a real shift, and
+an infinity type. Layer 8.0 constructs the Frobenius class from Mathlib's `arithFrobAt`. None of
+the three is a hypothesis, and no later milestone quantifies over one. What a sibling roadmap
+would replace them by, and how, is recorded in [`PROVENANCE.md`](PROVENANCE.md), which is not
+normative.
 
-The roadmap does not depend on class field theory for Chebotarev. Layer 8 uses cyclotomic
-extensions, and every milestone of Layer 8 except 8E is independent of the global class field
-theory roadmap. The roadmap does not depend on Galois cohomology at all.
+**The Frobenius convention is stated here.** *Pinned conventions* fixes arithmetic Frobenius and
+the Euler factor at a ramified prime. That convention agrees with the local fields roadmap's, and
+no milestone here fails to typecheck if that roadmap does not exist, so it is a convention and
+not a prerequisite.
+
+**No class field theory, and no Galois cohomology.** Layer 8 proves Chebotarev through cyclotomic
+extensions. Every milestone of Layer 8, including 8E, is independent of class field theory: 8E is
+proved analytically from 1.7, 1.8, 7.3, and 7.5.
 
 ### Shared layer-DAG table: Integral Lattices ↔ L-functions
 
-The two roadmaps consume each other at different layers. This table is the whole
-interface, and it is byte-identical in both `README.md` files. Nothing crosses between the
-two roadmaps except through a row of this table. The supplier owns each name, and the
-consumer cites the name instead of restating the object. The carrier is the bundled analytic
-lattice: a submodule of a Euclidean space together with its discreteness and its `IsZLattice`
-proof.
+The integral lattices roadmap consumes four items of Layer 2 here, and this roadmap consumes
+nothing from it. This table is the whole interface, and nothing crosses between the two
+roadmaps except through a row of it. The supplier owns each name, and the consumer cites the
+name instead of restating the object. The carrier is the bundled analytic lattice: a submodule
+of a Euclidean space together with its discreteness and its `IsZLattice` proof.
+
+⚠ The table used to carry two further rows in the reverse direction, and the block was
+byte-identical in both `README.md` files. Those rows are deleted below, so the two copies now
+differ by exactly them. [`PROVENANCE.md`](PROVENANCE.md) states which rows, and what the integral
+lattices roadmap has to delete to restore byte-identity.
 
 | Consumer layer | Supplier layer | Exact object or theorem | Agreed provisional name |
 | --- | --- | --- | --- |
@@ -190,17 +204,22 @@ proof.
 | Integral Lattices 8D | L-functions Layer 2, item 2 | biduality `dual (dual Λ) = Λ` | `ZLattice.dual_dual` |
 | Integral Lattices 8D | L-functions Layer 2, item 3 | `covolume Λ * covolume (dual Λ) = 1` | `ZLattice.covolume_mul_covolume_dual` |
 | Integral Lattices 8E | L-functions Layer 2, item 8 | `Θ_Λ(1/t) = t^{n/2} (covolume Λ)⁻¹ Θ_{dual Λ}(t)` for real `t > 0` | `ZLattice.gaussianTheta_one_div` |
-| L-functions Layer 2, items 10 to 13 | Integral Lattices 1B | the dual lattice of an integral bilinear form, and the vocabulary for it | `IntegralLattice.dual` |
-| L-functions Layer 2, items 10 to 13 | Integral Lattices 8D | the analytic dual of the realization of `L` equals `IntegralLattice.dual` | `IntegralLattice.analyticDual_eq_dual` |
 
-Poisson summation for a lattice is an L-functions target and is not consumed here, so it has
-no row. The dependency is acyclic at item level: L-functions items 1, 2, 3 and 8 use nothing
-from this roadmap; Integral Lattices 8D and 8E use those four items; and L-functions items 10
-to 13 use 1B and 8D.
+Poisson summation for a lattice is an L-functions target and is not consumed by the integral
+lattices roadmap, so it has no row. The crossing runs one way only: L-functions Layer 2 items 1,
+2, 3, and 8 use nothing from that roadmap, and Integral Lattices 8D and 8E use those four items.
 
-Layer 2 of this roadmap owns the `ZLattice` names, and cites the `IntegralLattice`
-ones. Milestones 2.1, 2.2, 2.3, and 2.8 are named so that the integral lattices
-roadmap's `GaussianThetaInterface` is produced by them, field for field.
+⚠ L-functions items 10 to 13 consume **nothing** from that roadmap. Milestone 2.11 owns the
+trace-to-Euclidean map, and it compares the analytic dual of an ideal lattice with the **trace**
+dual through `FractionalIdeal.dual`, never with the dual of an integral bilinear form. An earlier
+version of this table carried two rows in the reverse direction, for `IntegralLattice.dual` and
+`IntegralLattice.analyticDual_eq_dual`; they recorded a dependency that the corrected 2.11 does
+not have, and they are gone. [`PROVENANCE.md`](PROVENANCE.md) records that the integral lattices
+roadmap's copy of this block has to drop the same two rows.
+
+Layer 2 of this roadmap owns the `ZLattice` names. Milestones 2.1, 2.2, 2.3, and 2.8 are named so
+that the integral lattices roadmap's `GaussianThetaInterface` is produced by them, field for
+field.
 
 ## Standing hypotheses
 
@@ -241,7 +260,7 @@ nonzero.
 | Euler factors | At a finite prime `𝔭` of Galois type the factor is `det(1 − Frob_𝔭 · 𝔑𝔭^{-s} ∣ V^{I_𝔭})⁻¹` with **arithmetic** Frobenius. Unqualified "Frobenius" always means arithmetic, that is `x ↦ x^q` on residue fields. This is Mathlib's `IsArithFrobAt` and the local fields roadmap's convention. The geometric form is a translation lemma and never a second convention. For a ray-class character the factor is `(1 − χ(𝔭) 𝔑𝔭^{-s})⁻¹` at `𝔭 ∤ 𝔣₀` and `1` at `𝔭 ∣ 𝔣₀` | Local fields roadmap; Layer 1.5 |
 | Normalization of the data record | The record of Layer 0.1 is **analytic-normalized**, and its name says so. Its functional equation reflects in `s ↦ 1 − s`, Dirichlet agreement holds on `Re s > 1`, and the gamma shifts are the analytic ones. It carries no motivic weight. An arithmetic-normalized object reaches these predicates through Layer 0.4, which carries the weight `w` and fixes the shift as `L_arith(s) = L_an(s − w/2)`. Degree, conductor, root number, and zero multiplicities are invariant under that translation, and the invariance is a theorem | Layer 0 |
 | Spectral parameters | The gamma data is two multisets: `{μ_j}` for the factors `Gammaℝ(s + μ_j)`, and `{ν_k}` for the factors `Gammaℂ(s + ν_k)`. Then `degree = #μ + 2·#ν`. These are the LMFDB's `mu` and `nu` lists | Layer 0 |
-| Frobenius | Public statements use the Frobenius class of Layer 8.0, whose eventual owner is the number field arithmetic roadmap. There is no second Frobenius here. Underneath sit Mathlib's `arithFrobAt` and `isConj_arithFrobAt` over `Algebra.IsInvariant`. The decomposition group is `MulAction.stabilizer G Q`, because Mathlib has no `decompositionSubgroup` for ideals | `Mathlib/RingTheory/Frobenius.lean`; Layer 8.0 |
+| Frobenius | Public statements use `frobeniusClass`, the Frobenius class constructed in Layer 8.0. There is no second Frobenius here, and no public statement takes a Frobenius interface as a parameter. Underneath sit Mathlib's `arithFrobAt` and `isConj_arithFrobAt` over `Algebra.IsInvariant`. The decomposition group is `MulAction.stabilizer G Q`, because Mathlib has no `decompositionSubgroup` for ideals | `Mathlib/RingTheory/Frobenius.lean`; Layer 8.0 |
 | Dirichlet density | The public predicate is `HasDirichletDensity S δ`. It is the ratio to the sum over all nonzero primes: `(∑_{𝔭 ∈ S} 𝔑𝔭^{-s}) / (∑_{𝔭} 𝔑𝔭^{-s}) → δ` along `𝓝[>] 1` in real `s`, with the partial sum named `primeIdealZetaSum S s`. Mathlib master has exactly this in `NumberTheory/NumberField/DirichletDensity.lean`, namespace `NumberField.Set`, used as `S.HasDirichletDensity δ`. The pin does not have it, so Layer 8A.1 builds it in that shape. Neukirch's denominator `log((s−1)⁻¹)` is not a second definition. It is the theorem of Layer 8A.2. No theorem here uses the numerical `dirichletDensity`, which takes a junk value when no density exists | Layer 8A; Neukirch VII (13.1) |
 | Upper and lower Dirichlet density | The `limsup` and the `liminf` of the same ratio, as two separate predicates. The crossing argument of Layer 8C produces a bound on a `liminf` and nothing stronger, so both are needed. Layer 8A.3 proves that equality of the two gives the density | Layer 8A |
 | Natural density | `δ(M) = lim_{x→∞} #{𝔭 ∈ M ∣ 𝔑𝔭 ≤ x} / #{𝔭 ∣ 𝔑𝔭 ≤ x}`. Natural density implies Dirichlet density with the same value, by Layer 8A.7. ⚠ The converse is false. Chebotarev is proved for Dirichlet density in Layer 8 and for natural density in Layer 9. The LMFDB displays the natural form | Layers 8A, 9 |
@@ -794,19 +813,34 @@ fibres and the residue differ.
 `ζ(s, c) = ∑_{[𝔞] = c, 𝔞 integral nonzero} 𝔑𝔞^{-s}`. Then `dedekindZeta K = ∑_c ζ(·, c)`, a
 finite sum over `h_K` terms.
 
-*The ray case.* Fix a modulus `𝔪 = 𝔪₀ 𝔪_∞`, and write `J^{𝔪₀}` for the group of fractional
-ideals prime to `𝔪₀` and `P^𝔪` for the subgroup generated by the principal ideals `(α)` with
-`α ≡ 1 mod^× 𝔪`. Let `Q` be a finite quotient of `J^{𝔪₀}` on which `P^𝔪` acts trivially, and
-`q : J^{𝔪₀} → Q` the projection. Put
-`ζ(s, c) = ∑_{q(𝔞) = c, 𝔞 integral and prime to 𝔪₀} 𝔑𝔞^{-s}` for `c : Q`. Then
+*The ray case.* This is where the carrier that Layers 5, 7.5, 8E, and 9.11 read is built, so it
+is built and not assumed. A **modulus** `𝔪` is a nonzero ideal `𝔪₀` of `𝓞 K` together with a
+finite set `𝔪_∞` of real places. Define, as subgroups of the group of nonzero fractional ideals:
 
-`∑_{c : Q} ζ(·, c) = ζ_K(s) · ∏_{𝔭 ∣ 𝔪₀} (1 − 𝔑𝔭^{-s})`.
+- `J^{𝔪₀}`, generated by the primes that do not divide `𝔪₀`;
+- `P^𝔪`, generated by the principal ideals `(α)` with `α ≡ 1 mod 𝔪₀` and `α` positive at every
+  place of `𝔪_∞`.
+
+Prove `P^𝔪 ≤ J^{𝔪₀}`, define the **ray class group** `Cl_𝔪 = J^{𝔪₀}/P^𝔪`, and prove it finite.
+Define the class map `𝔞 ↦ [𝔞]` on the integral ideals prime to `𝔪₀`, and prove three things about
+it: it is multiplicative, it sends `𝔞` to `1` exactly when `𝔞` is ray-principal, and every class
+contains such an `𝔞`. Those three are what 5.1's derived ideal weight and 5.6's choice of ray
+representatives rest on. Prove also that `Cl_𝔪 ↠ Cl_𝔫` for `𝔫 ∣ 𝔪`; that projection is the map
+5.1's primitivity and 5.4's induction are stated against.
+
+⚠ `P^𝔪` is a subgroup of a group of **fractional** ideals. A condition written only on integral
+`α` does not define a subgroup, so a weight required to be trivial on such a set of integral
+elements need not factor through `Cl_𝔪`.
+
+Put `ζ(s, c) = ∑_{[𝔞] = c, 𝔞 integral and prime to 𝔪₀} 𝔑𝔞^{-s}` for `c : Cl_𝔪`. Then
+
+`∑_{c : Cl_𝔪} ζ(·, c) = ζ_K(s) · ∏_{𝔭 ∣ 𝔪₀} (1 − 𝔑𝔭^{-s})`.
 
 ⚠ The right-hand side is not `ζ_K`. The fibres omit every ideal divisible by a prime of `𝔪₀`, so
-the bad Euler factors are removed. The ordinary case is the specialization `𝔪 = 1`, where the
-product is empty.
+the bad Euler factors are removed. The ordinary case is the specialization `𝔪₀ = 1`, `𝔪_∞ = ∅`,
+where the product is empty and `Cl_𝔪` is the ideal class group.
 
-In both cases, for a character `χ` of `Q`:
+In both cases, and more generally for a finite quotient `Q` of `Cl_𝔪` and a character `χ` of `Q`:
 
 - `L(χ, s) = ∑_{c} χ(c) ζ(s, c)`, a finite sum;
 - `ζ(s, c) = (#Q)⁻¹ ∑_χ conj (χ c) L(χ, s)`, by orthogonality of characters. Layer 8 uses this
@@ -815,8 +849,8 @@ In both cases, for a character `χ` of `Q`:
 Basic API: the case `#Q = 1`; the behaviour under a surjection `Q ↠ Q'`; the abscissa of
 `ζ(·, c)`; the set of integral ideals in one fibre.
 
-*Prerequisites:* Layers 1.1, 1.2; Mathlib `ClassGroup`, character orthogonality for a finite
-abelian group.
+*Prerequisites:* Layers 1.1, 1.2; Mathlib `FractionalIdeal`, `Subgroup`, `QuotientGroup`,
+`ClassGroup`, character orthogonality for a finite abelian group.
 
 **1.8 The residue of a partial zeta function.** Each `ζ(s, c)` has a simple pole at `s = 1`, and
 the residue does not depend on `c`:
@@ -964,8 +998,15 @@ The different is `(2i)`, so the trace dual is `(1/2)ℤ[i]`, which is not `ℤ[i
 `traceToEuclidean`, that is `z ↦ 2 conj z`, sends `(1/2)ℤ[i]` back to `ℤ[i]`, which is the
 Euclidean dual. This calculation is a mandatory test of the milestone.
 
-Also state the determinant of `traceToEuclidean`, which is `2^{r₂}`, and its effect on covolume
-and on the multi-parameter Gaussian of 2.8.
+Also state the determinant of `traceToEuclidean`, and its effect on covolume and on the
+multi-parameter Gaussian of 2.8.
+
+⚠ That determinant is `(−4)^{r₂}`, of absolute value `4^{r₂} = 2^{2r₂}`, and **not** `2^{r₂}`. On
+one complex coordinate `z ↦ 2 conj z` is `(a, b) ↦ (2a, −2b)` over `ℝ`, of determinant `−4`. The
+covolume identity of 2.3 is the check: with `covolume (σI) = 2^{-r₂} √|d_K| 𝔑I` from 2.12 and
+`𝔑𝔡 = |d_K|`, the product `covolume(σI) · covolume(dual(σI))` comes out as `|det| · 2^{-2r₂}`, so
+`|det| = 4^{r₂}`. At `K = ℚ(i)` the map carries `(1/2)ℤ[i]`, of covolume `1/4`, to `ℤ[i]`, of
+covolume `1`.
 
 *Prerequisites:* Layers 2.1, 2.10; Mathlib `FractionalIdeal.dual`,
 `RingTheory/DedekindDomain/Different.lean`, `NumberField.mixedEmbedding`.
@@ -1027,7 +1068,7 @@ the LMFDB's number field pages display.
 
 **3.1 The theta identity, written out.** The identity of 2.13, in the exact form this layer
 integrates: every power of `|d_K|`, every norm `𝔑𝔞`, and every power of `2`, including the
-`2^{r₂}` from `traceToEuclidean`.
+`4^{r₂}` from the determinant of `traceToEuclidean`.
 ⚠ No milestone here contains the phrase "the explicit factor". A constant that is not written is
 not specified.
 *Prerequisites:* Layer 2.13.
@@ -1221,43 +1262,45 @@ smallest check that 4.3 and 4.5 agree with something known independently.
 
 The full analytic theory of the L-function of a finite-order Hecke character.
 
-**5.1 The ray-class character, constructed here.** The global class field theory roadmap will
-eventually own this vocabulary, and until it is accepted this roadmap builds the object it needs.
-The definition is not a shell: every law the later milestones use is a field, so a term is a
-ray-class character and not an arbitrary assignment of roots of unity to primes.
+**5.1 The ray-class character, as a character of the ray class group.** A `RayClassCharacter 𝔪`
+is a homomorphism
 
-Fix a modulus `𝔪 = 𝔪₀ 𝔪_∞`, with `𝔪₀` a nonzero ideal of `𝓞 K` and `𝔪_∞` a set of real places.
-A `RayClassCharacter K 𝔪` carries:
+`J^{𝔪₀}/P^𝔪 → ℂˣ`,
 
-- an ideal weight `χ` in the sense of 1.2, with `bad = {𝔭 ∣ 𝔭 ∣ 𝔪₀}`;
-- **triviality on the principal congruence subgroup**: `χ((α)) = 1` for every `α` in `𝓞 K` with
-  `α ≡ 1 mod 𝔪₀` and `v(α) > 0` at every `v ∈ 𝔪_∞`. This is the field that makes the weight
-  factor through the ray class group, and it is what 5.6 and 5.7 use;
-- **finite order**: `∃ m > 0`, `χ(𝔞)^m = 1` for every `𝔞` prime to `𝔪₀`. The quantifier excludes
-  the bad primes, where the value is `0`;
-- **primitivity**: no proper divisor `𝔫 ∣ 𝔪₀` supports a character inducing `χ`.
+for the quotient constructed in 1.7. It carries no further data and no further laws, because it
+does not need any: on that quotient the operations 5.2 to 5.9 use are the operations of a group
+of characters.
 
-These operations are milestones, and not prose:
+- the **trivial** character is `1`;
+- the **product** of two characters of the same modulus is `χ · ψ`;
+- the **conjugate** is `χ⁻¹`, which agrees with the pointwise complex conjugate because the ray
+  class group is finite;
+- **induction** from a divisor `𝔫` of `𝔪` is composition with the canonical projection
+  `J^{𝔪₀}/P^𝔪 → J^{𝔫₀}/P^𝔫` of 1.7;
+- **primitivity** is the statement that `χ` is not induced along that projection from any proper
+  divisor of `𝔪`;
+- the **local component** at a real place is the sign of 5.5.
 
-- the conjugate character;
-- the product of two characters of the same modulus;
-- the trivial character;
-- induction from a divisor of the modulus;
-- the local component at a real place, which is the sign 5.5 reads.
+The ideal weight of 1.2 is then *derived*: `χ(𝔞)` is the character of the ray class of `𝔞` for
+`𝔞` prime to `𝔪₀`, and `0` otherwise. Triviality on the ray subgroup and finite order become
+theorems about that derived weight rather than fields on an arbitrary function.
 
 ⚠ The finite part `𝔪₀` and the infinite part `𝔪_∞` are separate data. Neither may be dropped:
 the gamma factor of 5.5 reads `𝔪_∞`, and the level of 5.7 reads `𝔪₀`.
 
-⚠ *Nearby false statement:* an ideal weight of finite order with a finite bad set need not be a
-ray-class character. The group of ideals prime to `𝔪₀` is free, so roots of unity may be assigned
-to its generators arbitrarily. Without the triviality field, Gauss sums and the functional
-equation do not follow, and 5.6 and 5.8 are false for such a term.
+⚠ *Nearby false statement:* an ideal weight of finite order with a finite bad set need not come
+from a ray-class character. The group `J^{𝔪₀}` is free, so roots of unity may be assigned to its
+generators arbitrarily, and Gauss sums and the functional equation do not follow. That is what
+carrying the quotient rules out, and it is why a structure whose only congruence field is a
+condition on *integral* `α ≡ 1 mod 𝔪₀` is not enough: such a condition is not a statement about a
+subgroup of the group of fractional ideals, so a weight satisfying it need not factor through the
+quotient at all.
 
-When the global class field theory roadmap is accepted, replace this definition by a named
-adapter to its Hecke-character carrier, proving each of the fields above from its API. Every
-statement of 5.2 to 5.9 then stands unchanged.
+⚠ *Nearby false statement:* primitivity written as "there is no function `ψ` agreeing with `χ`
+away from a divisor" is much weaker than primitivity, because a bare function is not required to
+be a character. State it against the projection of 1.7.
 
-*Prerequisites:* Layers 1.2, 1.7; Mathlib `Ideal`, `NumberField.InfinitePlace`.
+*Prerequisites:* Layers 1.2, 1.7; Mathlib `Ideal`, `NumberField.InfinitePlace`, `MonoidHom`.
 
 **5.2 The L-series and its Euler-factor data.** `L(χ, s) = LSeries (idealCoeffOfWeight χ) s`,
 with the convention `χ 𝔞 = 0` when `𝔞` is not coprime to `𝔪₀`. The Euler product is
@@ -1342,37 +1385,53 @@ The infinite-order theory, which the LMFDB calls Hecke characters. It completes 
 degree-one instances over `K`.
 
 **6.1 The Grossencharacter, constructed here.** As in 5.1, the object is built rather than
-assumed, and every law the later milestones use is a field. A `Grossencharacter K 𝔪` carries the
-data of 5.1 without the finite-order field, together with:
+assumed. A `Grossencharacter 𝔪` carries:
 
-- the **unitary decomposition** `χ = χ_unit · ‖·‖^{σ}` with `σ` real, `χ_unit` of absolute value
-  `1` on every ideal prime to `𝔪₀`, and the theorem that `σ` and `χ_unit` are determined by `χ`;
-- the **archimedean local character** `χ_v` at each infinite place. At a real place it is a
-  pair `(p_v, q_v)` with `p_v ∈ {0, 1}` and `q_v` real, giving
-  `χ_v(x) = sgn(x)^{p_v} |x|^{i q_v}`. At a complex place it is a **pair of integers**
-  `(p_v, p̄_v)` together with a real `q_v`, giving `χ_v(z) = z^{-p_v} z̄^{-p̄_v} |z|^{i q_v}`;
-- **admissibility**: `∏_v χ_v(u) = 1` for every unit `u` of `𝓞 K`, which is what makes the
-  archimedean data compatible with the ideal-theoretic weight, and which 6.3 uses;
-- the **compatibility** of `χ` with its archimedean components on principal ideals prime to
-  `𝔪₀`: `χ((α)) = ∏_v χ_v(α)^{-1}`;
-- a predicate `IsAlgebraic`, the `A₀` condition, requiring every `q_v` to vanish.
+- the **unitary** ideal weight `χ_unit` in the sense of 1.2, with `bad = {𝔭 ∣ 𝔭 ∣ 𝔪₀}`;
+- a **real** exponent `σ`;
+- the **infinity type**: a pair of integers `(p_v, p̄_v)` at every infinite place, with `p̄_v = 0`
+  and `p_v ∈ {0, 1}` at a real place;
+- the **archimedean parameters** `q_v`, one real number per place;
+- **admissibility**: `∏_v χ_v(u) = 1` for every unit `u` of `𝓞 K`, where `χ_v` is the local
+  character below. This is what makes the archimedean data compatible with the ideal weight, and
+  6.3 uses it;
+- the **compatibility** of the weight with the archimedean components on principal ideals prime
+  to `𝔪₀`: `χ((α)) = ∏_v χ_v(α)^{-1}`.
 
-⚠ The unitary decomposition is unique only because `σ` is required to be **real**. With a complex
-exponent it is ambiguous up to `‖·‖^{it}`.
+Two things are then *defined* and not carried, and that is the point of the layout.
 
-⚠ *Nearby false statement:* admissibility is not automatic and is not cosmetic. Without it, the
-archimedean data and the ideal weight need not come from one character, and 6.2 to 6.4 fail. A
-structure that omits the field admits terms for which the functional equation is false.
+The **full quasicharacter** is `χ(𝔞) = χ_unit(𝔞) · 𝔑𝔞^{σ}`.
+
+⚠ The full weight is **not** an `IdealWeight`, and a structure that stores it as one is
+inconsistent for every `σ ≠ 0`. `IdealWeight.norm_eq_one` forces `‖χ(𝔭)‖ = 1` at every prime off
+the finite bad set; with the decomposition that forces `𝔑𝔭^{σ} = 1` at all but finitely many
+primes, hence `σ = 0`. Such a structure can be inhabited only by the characters this layer does
+not need. The unitary part is the `IdealWeight`; the full weight is a plain function on ideals.
+
+The **archimedean local character** `χ_v` is defined from the infinity type and `q_v`: at a real
+place `χ_v(x) = sgn(x)^{p_v} |x|^{i q_v}`, and at a complex place
+`χ_v(z) = z^{-p_v} z̄^{-p̄_v} |z|^{i q_v}`. Prove that each is a continuous homomorphism into `ℂˣ`.
+
+⚠ A field of type `InfinitePlace K → K → ℂ` is an arbitrary function: it need not be
+multiplicative, need not avoid `0`, and need not have the formula the gamma factor of 6.2 is
+computed from. Every milestone from 6.2 on is false for some term of a structure that carries the
+local character as such a field, so it is built rather than assumed.
 
 ⚠ A single integer at a complex place is not enough. The local character there needs the pair
 `(p_v, p̄_v)`, and the gamma shift of 6.2 is built from both.
 
+⚠ The unitary decomposition is unique only because `σ` is required to be **real**. With a complex
+exponent it is ambiguous up to `‖·‖^{it}`. Uniqueness is a theorem of this milestone, not a
+field.
+
+⚠ *Nearby false statement:* admissibility is not automatic and is not cosmetic. Without it, the
+archimedean data and the ideal weight need not come from one character, and 6.2 to 6.4 fail.
+
+The `A₀` condition, that every `q_v` vanishes, is a predicate `IsAlgebraic` over the structure.
+
 *Source:* Neukirch VII (6.11) to (6.14).
 
-When the global class field theory roadmap is accepted, replace this definition by a named
-adapter to its infinity-type carrier, proving each field above from its API.
-
-*Prerequisites:* Layers 1.2, 5.1.
+*Prerequisites:* Layers 1.2, 1.7, 5.1.
 
 **6.2 The gamma factor from the infinity type.** At a real place the shift is `p_v − i q_v`. At a
 complex place the two integers give one `Gammaℂ` factor with shift `max(p_v, p̄_v) − i q_v`, and
@@ -1530,9 +1589,8 @@ that 6.1 to 6.4 and 7.7 can be used.
 The main theorem of the roadmap. It is proved without class field theory, by the argument of
 Lenstra–Stevenhagen and of Sharifi Thm 7.2.2.
 
-**8.0 The Frobenius class, constructed here.** The number field arithmetic roadmap will
-eventually own this vocabulary, and until it is accepted this roadmap builds what it needs, for
-number fields `K ⊆ L` with `L/K` finite Galois:
+**8.0 The Frobenius class, constructed here.** For number fields `K ⊆ L` with `L/K` finite
+Galois, this roadmap builds:
 
 - `IsUnramifiedAt K L 𝔭 : Prop` for `𝔭 : HeightOneSpectrum (𝓞 K)`, as
   `Ideal.ramificationIdxIn 𝔭.asIdeal (𝓞 L) = 1`, together with finiteness of the ramified set;
@@ -1549,12 +1607,15 @@ number fields `K ⊆ L` with `L/K` finite Galois:
 - the value at a prime that splits completely, which is the identity class, and the cardinality
   of the class.
 
-Milestones 8C and 8D use restriction and tower compatibility directly, so both are fields here
+Milestones 8C and 8D use restriction and tower compatibility directly, so both are theorems here
 rather than remarks. ⚠ Frobenius here is arithmetic; 8B.1 tests the orientation.
 
-When the number field arithmetic roadmap is accepted, replace these definitions by named adapters
-to its declarations, proving each statement above from its API. Every statement of 8A to 8E then
-stands unchanged.
+⚠ No statement of Layer 8 takes a Frobenius interface as a parameter. A theorem of the shape
+`(F : FrobeniusInterface K L) → HasDirichletDensity …` is conditional on an arbitrary term of a
+small structure: unrelated assignments of conjugacy classes to primes satisfy its fields, the
+theorem holds vacuously for them, and the crossing and fixed-field proofs cannot use restriction
+or tower compatibility because those are properties of a term the theorem does not construct.
+8D.5 is a theorem about `K` and `L`, and about nothing else.
 
 *Prerequisites:* Mathlib `arithFrobAt`, `IsArithFrobAt`, `isConj_arithFrobAt`,
 `Algebra.IsInvariant`, `Algebra.isInvariant_of_isGalois`, `Ideal.ramificationIdxIn`,
@@ -1574,8 +1635,8 @@ stands unchanged.
 
 ⚠ Mathlib master has `primeIdealZetaSum` and `HasDirichletDensity` in
 `NumberTheory/NumberField/DirichletDensity.lean`, namespace `NumberField.Set`. The pin does not
-have them. Build them here in that exact shape. When the project pin advances past that file,
-delete these two definitions and import Mathlib's; every statement below is unchanged by that.
+have them, so 8A.1 builds them in that exact shape, which is what makes every statement below
+independent of which of the two is in force.
 
 Basic API:
 
@@ -1757,35 +1818,78 @@ disjoint as `τ` varies, and each contracts into `{𝔭 ∣ Frob_𝔭 = σ}` in 
 makes the densities add, so it is a stated lemma.
 *Prerequisites:* Layers 8C.2, 8C.3, 8C.4.
 
-**8C.6 The lower bound from one auxiliary prime.** Fix an auxiliary `q` and a generator `τ` of
-the cyclic group `Gal(K(ζ_q)/K)`, and let `E` be the fixed field of 8C.4 for the pair `(σ, τ)`.
-Milestone 8B.5 gives the primes of `E` with Frobenius `(σ, τ)` in `M/E` the density
-`1/[M:E] = 1/(q−1)`. Contracting them to `K` through 8A.5, using 8C.3 and 8C.5, gives
+**8C.6 The lower bound from one auxiliary prime, with its constant written out.** Fix an
+auxiliary `q`. Write
 
-`LowerDirichletDensityAtLeast {𝔭 ∣ Frob_𝔭 = σ} c_q`
+`H_q = Gal(K(ζ_q)/K)`, which is cyclic of order `q − 1` by 8C.1;
 
-for a constant `c_q` determined by the construction: the number of tagged fibres used, divided
-by `q − 1`, divided by the fibre count of the contraction.
+`H_{q,f} = {τ ∈ H_q ∣ f ∣ ord(τ)}`, the tagged elements of 8C.5;
+
+`M = L·K(ζ_q)`, with `Gal(M/K) ≅ G × H_q` by 8C.2.
+
+For `τ ∈ H_{q,f}`, let `E_τ` be the fixed field of `⟨(σ, τ)⟩`, which is cyclotomic over its base
+by 8C.4, and let `n_τ = ord(τ) = [M:E_τ]`. Then:
+
+1. **The density of one tagged fibre.** Milestone 8B.5 over `E_τ` gives the primes `𝔓` of `E_τ`
+   with `Frob_{M/E_τ}(𝔓) = (σ, τ)` the density `1/n_τ`. Intersect that set with the primes of
+   degree one over `K`, which by 8A.4 changes no density. Then:
+
+   - a member `𝔓` of the intersection, lying over `𝔭`, has
+     `Frob_{M/E_τ}(𝔓) = Frob_{M/K}(𝔭)^{f(𝔓/𝔭)} = Frob_{M/K}(𝔭)`, so `Frob_{M/K}(𝔭) = (σ, τ)`;
+   - conversely, if `Frob_{M/K}(𝔭) = (σ, τ)` then the decomposition group of any prime of `M`
+     over `𝔭` is `⟨(σ, τ)⟩ = Gal(M/E_τ)`, so every one of the `[E_τ:K] = #G·#H_q/n_τ` primes of
+     `E_τ` over `𝔭` has degree one over `K` and lies in the intersection.
+
+   Those are exactly the three hypotheses of 8A.5, with `k = #G·#H_q/n_τ`, so contracting gives
+
+   `HasDirichletDensity {𝔭 ∣ Frob_{M/K}(𝔭) = (σ, τ)} (1/(#G · #H_q))`,
+
+   a value independent of `τ`. ⚠ The degree-one intersection is not a convenience. Without it the
+   first bullet fails: a prime of `E_τ` of residue degree `f > 1` over `K` has
+   `Frob_{M/E_τ}(𝔓) = Frob_{M/K}(𝔭)^f`, which does not determine `Frob_{M/K}(𝔭)`.
+2. **Pairwise disjointness.** Distinct `τ` give distinct elements `(σ, τ)` of the abelian group
+   `Gal(M/K)`, so the fibres are pairwise disjoint. This is 8C.5.
+3. **The lower bound.** Every one of those fibres lies inside `{𝔭 ∣ Frob_{L/K}(𝔭) = σ}`, by
+   restriction, so the finite disjoint union of 8A.3 gives
+
+   `LowerDirichletDensityAtLeast {𝔭 ∣ Frob_𝔭 = σ} c_q` with **`c_q = #H_{q,f} / (#G · #H_q)`**.
+
+⚠ The union over **all** of `H_{q,f}` is needed. One generator `τ` gives a single fibre, hence
+`c_q = 1/(#G(q−1))`, which tends to `0` as `q` grows and proves nothing.
 
 ⚠ The predicate is the inequality of 8A.1 and not an equality. The tagged fibres are contained
 in the target set and need not exhaust it, so nothing stronger is available here.
 
-⚠ Computing `c_q` exactly, including which `τ` are used and what the fibre count is, is part of
-this milestone and is where the argument is done. Lenstra–Stevenhagen §3 and Sharifi Thm 7.2.2
-carry it out; the four AINTLIB files named in [`PROVENANCE.md`](PROVENANCE.md) contain a machine
--checked version of the same computation. Do not record a value for `c_q` here that has not been
-derived.
+*Source:* Lenstra–Stevenhagen §3 and Sharifi Thm 7.2.2 carry out this computation; the four
+AINTLIB files named in [`PROVENANCE.md`](PROVENANCE.md) contain a machine-checked version of it.
 
 *Prerequisites:* Layers 8A.3, 8A.5, 8B.5, 8C.3, 8C.4, 8C.5.
 
-**8C.7 The bound approaches `1/#G`.** For every `ε > 0` there is an auxiliary prime `q` with
-`1/#G − ε < c_q`. The statement is about the auxiliary construction alone, and not about `L`:
-once `c_q` is computed in 8C.6, it is an elementary estimate on the cyclic group
-`Gal(K(ζ_q)/K)` and on the fibre count.
+**8C.7 The bound approaches `1/#G`.** Since `c_q = (#H_{q,f}/#H_q)/#G`, the statement to prove is
+that the tagged proportion approaches `1`. It is an elementary count in a cyclic group, about the
+auxiliary construction alone and not about `L`.
+
+*The exact count.* In a cyclic group of order `n` with `f ∣ n`,
+
+`#H_{q,f} = n · ∏_{p ∣ f} (1 − p^{−(v_p(n) − v_p(f) + 1)})`,
+
+because for each prime `p ∣ f` the elements `τ` with `v_p(ord τ) < v_p(f)` are exactly the
+subgroup of index `p^{v_p(n) − v_p(f) + 1}`, and those conditions are independent across `p`. The
+test is `n = 4`, `f = 2`: the formula gives `4(1 − 1/4) = 3`, and the elements of `C₄` of order
+divisible by `2` are `g`, `g²`, `g³`.
+
+*The estimate.* An auxiliary prime of level `r` has `q ≡ 1 mod f^r`, so `f^r ∣ n = q − 1` and
+`v_p(n) − v_p(f) + 1 ≥ (r − 1)v_p(f) + 1 ≥ r` for every `p ∣ f`. Hence
+
+`#H_{q,f}/#H_q ≥ 1 − ω(f)·2^{−r}`,
+
+with `ω(f)` the number of distinct primes of `f`. So for every `ε > 0`, choosing `r` with
+`ω(f)·2^{−r} < ε·#G` and an auxiliary prime of that level gives `1/#G − ε < c_q`.
 
 ⚠ *Nearby false statement:* `c_q = 1/#G` for a single `q` would make 8C.8 immediate and 8C.7
-unnecessary. Do not assume it. A bound that is uniform in `q` but strictly below `1/#G` is also
-not enough, because 8C.8 needs the sum of the bounds over `G` to reach `1`.
+unnecessary. It is false: `H_{q,f}` is a proper subset of `H_q` whenever `f > 1`. A bound that is
+uniform in `q` but strictly below `1/#G` is also not enough, because 8C.8 needs the sum of the
+bounds over `G` to reach `1`.
 
 *Prerequisites:* Layers 8C.1, 8C.6.
 
@@ -1973,9 +2077,18 @@ what is transported through it. The roadmap asks for both, because neither impli
 
 *Prerequisites:* Layers 8D.4, 8D.5, 9.8, 9.9.
 
-**9.11 Natural-density equidistribution in ray classes.** The same upgrade applied to 8E, with
-the ray-class family of 7.5 in place of the cyclotomic family.
-*Prerequisites:* Layers 7.5, 8E, 9.7, 9.9.
+**9.11 Natural-density equidistribution in ray classes.** For a modulus `𝔪` and the ray class
+group of 1.7, the primes prime to `𝔪₀` are equidistributed among the classes by **natural**
+density, with density `1/#(J^{𝔪₀}/P^𝔪)`.
+
+The proof is 9.7 and 9.9 run over the **ray-class** family of 7.5 in place of the cyclotomic
+family of 8B.2, and nothing else changes: 9.7's nonnegative coefficient is the von Mangoldt
+weight summed over the ideals in one ray class, 8B.3's orthogonality is replaced by orthogonality
+for the characters of `J^{𝔪₀}/P^𝔪`, and the boundary continuation comes from 7.4 with the family
+of 7.5. Name that milestone; it is a different Tauberian input from 9.7's, and 8E gives only the
+Dirichlet form.
+
+*Prerequisites:* Layers 1.7, 7.4, 7.5, 8E, 9.1, 9.4, 9.5.
 
 **9.12 Mertens for `K`.** The two statements
 
@@ -2055,7 +2168,20 @@ statements do not.
 - **The Euclidean dual of `ℤ[i]`** (Layer 2.11). The mixed lattice of `𝓞_{ℚ(i)}` is `ℤ[i] ⊂ ℂ`,
   which is Euclidean self-dual. The different is `(2i)`, so the trace dual is `(1/2)ℤ[i]`, and
   `traceToEuclidean` sends that to `ℤ[i]`. This test detects the claim that the analytic dual is
-  the embedded trace dual, which is false here.
+  the embedded trace dual, which is false here. It also fixes the determinant: `(1/2)ℤ[i]` has
+  covolume `1/4` and `ℤ[i]` has covolume `1`, so `|det| = 4 = 4^{r₂}`, and a recorded value of
+  `2^{r₂}` is wrong by a square.
+- **The tagged count in `C₄`** (Layer 8C.7). With `n = 4` and `f = 2`, the formula
+  `#H_{q,f} = n ∏_{p ∣ f}(1 − p^{−(v_p(n) − v_p(f) + 1)})` gives `4(1 − 1/4) = 3`, and the
+  elements of `C₄` of order divisible by `2` are `g`, `g²`, `g³`. This test detects an off-by-one
+  in the exponent, which is invisible when `v_p(n) = v_p(f)`.
+- **One generator is not enough** (Layer 8C.6). Taking a single `τ` gives
+  `c_q = 1/(#G(q−1))`, which tends to `0`. This test detects a crossing argument that tags one
+  fibre instead of all of `H_{q,f}`, which no typecheck and no single numerical case will find.
+- **The Grossencharacter with a nonzero shift** (Layer 6.1). Take `K = ℚ`, `χ_unit = 1`, and
+  `σ = 1`, so `χ(𝔞) = 𝔑𝔞`. Check that the structure admits it. A structure whose full weight is an
+  `IdealWeight` does not: `norm_eq_one` would force `‖χ(p)‖ = 1` at cofinitely many primes. This
+  test detects a carrier that typechecks and excludes every character Layer 6 exists for.
 - **The cyclotomic factorization at `n = 4`** (Layer 4.4). The primitive product is
   `ζ(s) L(s, χ₋₄)`, with no correction factor, and it agrees with Layer 4.2. This test detects a
   correction factor with the wrong sign of the exponent.
@@ -2122,8 +2248,9 @@ What can be built at the same time:
   roadmap.
 - **Layer 9** needs 7.4, 7.6, 8B, 8C, and 8D.
 
-The zeros roadmap starts where Layer 9 ends. It needs 0.4, 3.6, 5.7, 5.8, 7.4, and 7.6 of this
-roadmap, and nothing else.
+A development of the zeros program starts where Layer 9 ends. It needs 0.1 to 0.4, 3.6, 3.7,
+5.7, 5.8, 7.4, and 7.6 of this roadmap, and nothing else. Those are the durable exports listed
+under *Interfaces supplied to other roadmaps*.
 
 The interface with the integral lattices roadmap is the shared table under *Dependencies*.
 Nothing crosses between the two roadmaps except through a row of it.

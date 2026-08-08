@@ -25,18 +25,44 @@ its authors, and make the corresponding statement a milestone here.
 - **The Dirichlet density predicate.** Now in Mathlib master, so it is a Mathlib declaration and
   not external. The pin does not have it, so Layer 8A.1 builds it in Mathlib's shape.
 
+## Migration: what a later supplier would replace, and how
+
+**None of this is normative.** The README's dependency table lists only the accepted modular
+forms roadmap and Mathlib, and every milestone is executable against those. This section records
+what could later be deleted, so that the roadmap does not carry merge instructions in its
+normative text.
+
+- **Layer 5.1 and Layer 1.7's ray class group.** The global class field theory roadmap is
+  expected to own the ray class group and its characters. If it is accepted, `Modulus`,
+  `Modulus.coprimeIdeals`, `Modulus.rayPrincipal`, `Modulus.RayClassGroup`, `Modulus.classMap`
+  and `RayClassCharacter` here become named adapters to its carrier, and every statement of 5.2
+  to 5.9 stands unchanged, because they are stated in terms of the derived `weight` and of `→*`
+  operations. Aligning the two vocabularies early makes that adapter short; the character
+  vocabulary should also be aligned with Mathlib #40735 and #40736.
+- **Layer 6.1.** The same for the infinity-type carrier. ⚠ Any adapter must keep the unitary
+  weight and the full weight apart; see the correction recorded below.
+- **Layer 8.0.** The number field arithmetic roadmap is expected to own the Frobenius class. If
+  it is accepted, `chosenPrimeOver` and `frobeniusClass` here become an adapter to its
+  declaration, and `frobeniusClass_restrictNormalHom` and `frobeniusClass_pow_inertiaDeg` become
+  citations. Everything in 8A to 8E is stated against the named `frobeniusClass` and takes no
+  interface parameter, so nothing else changes.
+- **Layer 8A.1.** `primeIdealZetaSum` and `HasDirichletDensity` are built in the exact shape of
+  Mathlib's `NumberTheory/NumberField/DirichletDensity.lean`, namespace `NumberField.Set`. When
+  the project pin advances past that file, delete the two definitions here and import Mathlib's.
+- **Layer 9.1.** Wiener–Ikehara is written to match PrimeNumberTheoremAnd's
+  `WienerIkeharaTheorem'`, so an agreed integration is an import and not a rewrite.
+- **Merge order.** This roadmap is executable on its own. Where a merge order matters for the
+  adapters above, it is recorded in the pull request description and not here.
+
 ## Coordination the specification does not carry
 
 The README states mathematics and nothing else. These are the conversations that should happen
 around it, and none of them is a prerequisite of any milestone.
 
-- **Before Layer 5**, agree the ray-class character interface with the global class field theory
-  roadmap. Milestone 5.1 builds the object this roadmap needs, with every law it uses as a field.
-  When that roadmap is accepted, 5.1 becomes a named adapter to its carrier. Aligning the two
-  vocabularies early makes that adapter short.
+- **Before Layer 5**, agree the ray-class character vocabulary with the global class field theory
+  roadmap.
 - **Before Layer 6**, the same for the infinity-type carrier and milestone 6.1.
-- **Before Layer 8**, contact the people working on Chebotarev in Lean, listed below. Milestone
-  8.0 builds the Frobenius class, and the number field arithmetic roadmap will eventually own it.
+- **Before Layer 8**, contact the people working on Chebotarev in Lean, listed below.
 - **Before Layer 9**, contact PrimeNumberTheoremAnd about Wiener–Ikehara, milestone 9.1.
 - **Milestone 8E has one proof**, the analytic one. The classical second proof runs through Artin
   reciprocity, and therefore through class field theory, which is not a prerequisite of this
@@ -44,27 +70,51 @@ around it, and none of them is a prerequisite of any milestone.
   comparing them is the one place where this roadmap's arithmetic-Frobenius convention and that
   roadmap's reciprocity normalization could be caught disagreeing. That comparison is worth
   doing, and it is not a milestone here.
-- **The shared table with the integral lattices roadmap** fixes six names. An earlier copy
+- **The shared table with the integral lattices roadmap** fixed six names. An earlier copy
   disagreed with that roadmap's `GaussianThetaInterface` on two rows. Settled 2026-08-07 in a
   coordinated edit of both roadmaps: the table carries a biduality row, milestone 2.2 here,
   and no Poisson-summation row, because that roadmap does not consume Poisson summation;
   milestone 2.6 stays a target of this roadmap with no row. The carrier of the crossing is
-  that roadmap's bundled analytic lattice. The two copies of the block are byte-identical
-  again as of this edit. The same settlement fixes the theta division: this roadmap owns
-  the real-parameter Gaussian theta, its transformation, and Poisson summation; the
+  that roadmap's bundled analytic lattice. The same settlement fixes the theta division: this
+  roadmap owns the real-parameter Gaussian theta, its transformation, and Poisson summation; the
   holomorphic theta on the upper half-plane and its modular transformation law are that
   roadmap's Layer 8. Neither roadmap states the other's half.
-- **The zeros roadmap consumes this one by declaration name**, which is why several targets in
-  `Suggested.lean` that used to be anonymous `example`s stating an `∃` are now named
-  `sorry`-definitions with their characterizing theorems beside them: `dedekindZetaC` and
-  `completedDedekindZeta` (Layers 3.6 and 3.7), the Hecke family `heckeLFunctionC`,
+
+  ⚠ **The block now has four rows, not six, and the two copies are no longer byte-identical.**
+  The corrected milestone 2.11 compares the analytic dual of an ideal lattice with the **trace**
+  dual, through `traceToEuclidean` and `FractionalIdeal.dual`; no dual of an integral bilinear
+  form appears anywhere in Layers 2.10 to 2.13. So the two reverse rows
+
+  | L-functions Layer 2, items 10 to 13 | Integral Lattices 1B | the dual lattice of an integral bilinear form, and the vocabulary for it | `IntegralLattice.dual` |
+  | L-functions Layer 2, items 10 to 13 | Integral Lattices 8D | the analytic dual of the realization of `L` equals `IntegralLattice.dual` | `IntegralLattice.analyticDual_eq_dual` |
+
+  recorded a dependency this roadmap does not have, and they are deleted here, together with the
+  clause "and L-functions items 10 to 13 use 1B and 8D" of the closing paragraph. The integral
+  lattices roadmap has to delete the same two rows and the same clause to restore byte-identity.
+  Nothing else in the block changed, and the crossing that roadmap consumes — items 1, 2, 3, and
+  8 — is untouched. `IntegralLatticeInterface`, the compatibility structure that carried those
+  two rows in `Suggested.lean`, is deleted.
+- **A downstream consumer cites this roadmap by declaration name**, which is why the targets in
+  `Suggested.lean` that a growth-theoretic development would consume are named `sorry`-definitions
+  with their characterizing theorems beside them, and not anonymous `example`s stating an `∃`:
+  the record and its dual (`AnalyticLFunctionData`, `.dual`, and the transport theorems),
+  `NormalizationTranslation` with `degree_eq`, `existsUnique`, `hasFunctionalEquation_iff` and
+  the two tests, `dedekindZetaC` and `completedDedekindZeta` (Layers 3.6 and 3.7) with
+  `analyticAt_dedekindZetaC`, `analyticOnNhd_dedekindZetaC`, `analyticAt_completedDedekindZeta`
+  and `analyticOnNhd_completedDedekindZeta`, the Hecke family `heckeLFunctionC`,
   `completedHeckeLFunction` and `heckeRootNumber` (Layers 5.3, 5.7 and 5.8), the two
   factorizations at the continued level (`dedekindZetaC_quadratic`, `dedekindZetaC_cyclotomic`),
-  and the smaller crossings `abscissaOfAbsConv_idealCoeff`,
-  `eq_of_meromorphic_of_eqOn_halfPlane`, `three_four_one_nonneg`, `idealVonMangoldt_nonneg`,
-  `LSeries_idealVonMangoldt_eq`, and the three nonvanishing statements of 7.4. ⚠ An anonymous
-  `example` is not a declaration contract: a downstream roadmap cannot cite it, import it, or
-  check against it, so anything another roadmap consumes is named here.
+  `frobeniusClass` with its restriction and tower theorems (Layer 8.0), and the smaller crossings
+  `abscissaOfAbsConv_idealCoeff`, `eq_of_meromorphic_of_eqOn_halfPlane`, `three_four_one_nonneg`,
+  `idealVonMangoldt_nonneg`, `LSeries_idealVonMangoldt_eq`, and the three nonvanishing statements
+  of 7.4. ⚠ An anonymous `example` is not a declaration contract: a consumer cannot cite it,
+  import it, or check against it, so anything another development consumes is named here.
+
+  ⚠ Regularity away from the recorded poles is exported as `AnalyticAt` and `AnalyticOnNhd`. The
+  earlier contracts `meromorphicOrderAt_dedekindZetaC_nonneg` and
+  `meromorphicOrderAt_completedDedekindZeta_nonneg` asserted only `0 ≤ meromorphicOrderAt`, which
+  depends solely on the punctured germ and therefore constrains no value; they survive as
+  corollaries, and a consumer must not read them as regularity.
 - **The dual record is owned here**, as `AnalyticLFunctionData.dual`, with `dual_gammaFactor`,
   `dual_dual`, `dual_degree`, `dual_eq_self`, the three predicate-transport theorems, and
   `hasFunctionalEquation_dual`. ⚠ It belongs here rather than downstream: the functional equation
@@ -170,18 +220,35 @@ early 2025, with Mathlib bumps only. Its README says most results have reached M
 unlanded: the `PNT.lean` reduction of asymptotic Dirichlet to Wiener–Ikehara. It is the
 historical provenance of `LSeries/`, `EulerProduct/`, `Nonvanishing.lean`, and `PrimesInAP.lean`.
 
-### A correction worth passing on
+### Corrections worth passing on
 
-Milestone 2.11 of the README used to assert that the analytic dual of `mixedEmbedding K '' I` is
-`mixedEmbedding K '' (I𝔡)⁻¹`. That is false: the trace pairing and the Euclidean inner product on
-the mixed space differ at the complex places. For `K = ℚ(i)` and `I = 𝓞_K` the mixed lattice is
-`ℤ[i] ⊂ ℂ`, which is Euclidean self-dual, while the trace dual is `(1/2)ℤ[i]`. The two are
-related by the map that is the identity on real coordinates and `z ↦ 2 conj z` on complex ones.
-Milestone 2.11 now owns that map.
+**The dual of an ideal lattice.** Milestone 2.11 of the README used to assert that the analytic
+dual of `mixedEmbedding K '' I` is `mixedEmbedding K '' (I𝔡)⁻¹`. That is false: the trace pairing
+and the Euclidean inner product on the mixed space differ at the complex places. For `K = ℚ(i)`
+and `I = 𝓞_K` the mixed lattice is `ℤ[i] ⊂ ℂ`, which is Euclidean self-dual, while the trace dual
+is `(1/2)ℤ[i]`. The two are related by the map `traceToEuclidean` that is the identity on real
+coordinates and `z ↦ 2 conj z` on complex ones. Milestone 2.11 now owns that map.
 
 Any roadmap that realizes an ideal lattice in Euclidean space and compares its dual with a
 bilinear dual meets the same factor. It is worth telling the integral lattices roadmap, whose
 milestone 8D compares an analytic dual with `IntegralLattice.dual`.
+
+**The determinant of that map.** The README used to record it as `2^{r₂}`. That is wrong. Over
+`ℝ`, one complex coordinate contributes `(a, b) ↦ (2a, −2b)`, of determinant `−4`, so the
+determinant is `(−4)^{r₂}` and its absolute value is `4^{r₂} = 2^{2r₂}`. The covolume identity is
+the check: with `covolume (σI) = 2^{-r₂}√|d_K| 𝔑I` and `𝔑𝔡 = |d_K|`, the product
+`covolume(σI) · covolume(dual(σI))` equals `|det| · 2^{-2r₂}`, and biduality forces
+`|det| = 4^{r₂}`. At `K = ℚ(i)`, `(1/2)ℤ[i]` has covolume `1/4` and its image `ℤ[i]` has covolume
+`1`. Milestones 2.11, 2.12, 2.13, and 3.1 thread the corrected power.
+
+**A Grossencharacter whose full weight is an `IdealWeight` forces `shift = 0`.** The Layer 6.1
+structure used to carry the full weight `χ` as an `IdealWeight` *and* assert
+`χ = χ_unit · 𝔑^{shift}` with `χ_unit` unitary. `IdealWeight.norm_eq_one` gives `‖χ(𝔭)‖ = 1` at
+every prime off the finite bad set, so the decomposition forces `𝔑𝔭^{shift} = 1` at cofinitely
+many primes and hence `shift = 0`. The structure could therefore be inhabited only by the
+finite-order characters of Layer 5, which is exactly the case Layer 6 exists to go beyond. The
+unitary part is now the `IdealWeight`, and the full quasicharacter is defined from it and the
+shift. Any sibling roadmap that stores an infinity-type carrier meets the same trap.
 
 ## Coordination ledger
 
