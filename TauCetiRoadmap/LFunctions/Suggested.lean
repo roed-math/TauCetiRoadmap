@@ -391,12 +391,20 @@ def HasCancellation (χ : IdealWeight K) : Prop :=
   (fun X : ℝ ↦ ∑ᶠ I : {I : Ideal (𝓞 K) // (Ideal.absNorm I : ℝ) ≤ X}, χ.toFun I)
     =O[atTop] fun X : ℝ ↦ X ^ (1 - 1 / (Module.finrank ℚ K : ℝ))
 
-/-- **Layer 7.2, cancellation gives continuation** into the strip `Re s > 1 - 1/[K:ℚ]`.
-Stated in `∃`-form because the continued object is what the milestone builds. -/
-example (χ : IdealWeight K) (hχ : HasCancellation K χ) :
-    ∃ F : ℂ → ℂ,
-      (∀ s : ℂ, 1 < s.re → F s = LSeries (idealCoeffOfWeight K χ.toFun) s) ∧
-      AnalyticOnNhd ℂ F {s : ℂ | 1 - 1 / (Module.finrank ℚ K : ℝ) < s.re} := sorry
+/-- **Layer 1.9, the continued L-function of an ideal weight**, on the strip
+`Re s > 1 − 1/[K:ℚ]`. ⚠ Named, and not left as the `F` of an `∃`-statement: 7.3, 7.4, 8B.5 and
+9.7 all state properties of this object, an anonymous existential cannot be cited by another
+roadmap, and Layer 3.5's uniqueness is what makes the two theorems below determine it rather
+than merely constrain it. -/
+noncomputable def continuedLFunctionOfWeight (χ : IdealWeight K) : ℂ → ℂ := sorry
+
+theorem continuedLFunctionOfWeight_eq (χ : IdealWeight K) {s : ℂ} (hs : 1 < s.re) :
+    continuedLFunctionOfWeight K χ s = LSeries (idealCoeffOfWeight K χ.toFun) s := sorry
+
+/-- **Layer 7.2, cancellation gives continuation** into the strip `Re s > 1 - 1/[K:ℚ]`. -/
+theorem analyticOnNhd_continuedLFunctionOfWeight (χ : IdealWeight K) (hχ : HasCancellation K χ) :
+    AnalyticOnNhd ℂ (continuedLFunctionOfWeight K χ)
+      {s : ℂ | 1 - 1 / (Module.finrank ℚ K : ℝ) < s.re} := sorry
 
 /-- **Layer 1.2, the norm twist of an ideal weight**, `χ ‖·‖^{it}`, which the argument on
 `Re s = 1` needs and which the closure condition of 7.2 quantifies over. -/
@@ -1376,22 +1384,19 @@ consume. -/
 /-- **Layer 7.3, `L(χ, 1) ≠ 0` for a nontrivial member of a cancelling family.** The continued
 function is the one 7.1 produces from `HasCancellation`, so the statement is about a value and
 not about a junk value: for `g ≠ 1` the member is analytic at `s = 1`. -/
-theorem lFunction_ne_zero_one_of_cancellingFamily {G : Type*} [CommGroup G] [Fintype G]
-    {w : G → IdealWeight K} (hw : CancellingFamily K G w) {g : G} (hg : g ≠ 1)
-    (F : ℂ → ℂ) (hF : ∀ s : ℂ, 1 < s.re → F s = LSeries (idealCoeffOfWeight K (w g).toFun) s)
-    (hFa : AnalyticOnNhd ℂ F {s : ℂ | 1 - 1 / (Module.finrank ℚ K : ℝ) < s.re}) :
-    F 1 ≠ 0 := sorry
+theorem continuedLFunctionOfWeight_ne_zero_one {G : Type*} [CommGroup G] [Fintype G]
+    {w : G → IdealWeight K} (hw : CancellingFamily K G w) {g : G} (hg : g ≠ 1) :
+    continuedLFunctionOfWeight K (w g) 1 ≠ 0 := sorry
 
 /-- **Layer 7.4, nonvanishing on the whole line `Re s = 1`, for a cancelling family.**
 
 ⚠ Stated in meromorphic order, and for every real `t` including `t = 0`, because a nontrivial
 member has no pole there. The corresponding statement for an arbitrary member is false at `g = 1`
 and `t = 0`, where the trivial weight has a pole. -/
-theorem meromorphicOrderAt_eq_zero_of_cancellingFamily {G : Type*} [CommGroup G] [Fintype G]
-    {w : G → IdealWeight K} (hw : CancellingFamily K G w) {g : G} (hg : g ≠ 1)
-    (F : ℂ → ℂ) (hF : ∀ s : ℂ, 1 < s.re → F s = LSeries (idealCoeffOfWeight K (w g).toFun) s)
-    (hFa : AnalyticOnNhd ℂ F {s : ℂ | 1 - 1 / (Module.finrank ℚ K : ℝ) < s.re}) (t : ℝ) :
-    meromorphicOrderAt F (1 + t * I) = (0 : WithTop ℤ) := sorry
+theorem meromorphicOrderAt_continuedLFunctionOfWeight {G : Type*} [CommGroup G] [Fintype G]
+    {w : G → IdealWeight K} (hw : CancellingFamily K G w) {g : G} (hg : g ≠ 1) (t : ℝ) :
+    meromorphicOrderAt (continuedLFunctionOfWeight K (w g)) (1 + t * I) = (0 : WithTop ℤ) :=
+  sorry
 
 /-- **Layer 7.5, the ray-class family is a cancelling family.** This is the first of the two
 instantiations of 7.2, and it is what makes 7.3 and 7.4 available for Layer 5's characters and

@@ -1488,6 +1488,11 @@ def HasCancellation (χ : IdealWeight K) : Prop :=
 that is `∑_{𝔑𝔞 ≤ X} χ(𝔞) = O(X^{1 − 1/d})` with `d = [K:ℚ]`. Then `HasCancellation χ` implies
 that `L(χ, ·)` continues holomorphically to `Re s > 1 − 1/d`, by 1.9 applied to the partial sums.
 
+⚠ Name the continued object, as `continuedLFunctionOfWeight χ`, with the two theorems that it
+agrees with the series on `Re s > 1` and is analytic on the strip. Milestones 7.3, 7.4, 8B.5, and
+9.7 all state properties of it, and 3.5's uniqueness is what makes those two theorems determine
+it. A statement of the form `∃ F, …` leaves every later milestone quantifying over its own `F`.
+
 ⚠ This hypothesis cannot be replaced by an algebraic one. The group of ideals prime to a finite
 set is free, so it has finite quotients whose values on primes are arbitrary, and finiteness of a
 quotient gives no continuation.
