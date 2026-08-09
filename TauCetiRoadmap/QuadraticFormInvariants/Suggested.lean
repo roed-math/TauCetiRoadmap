@@ -880,17 +880,12 @@ The carrier is that roadmap's `trivialF2` object over its `AbsoluteGaloisGroup`,
 `cup`, `res`, `corestriction` and `evensNormIndexTwo` apply here with no transport at all. The
 abbreviations `contH`, `H1`, `H2` name that carrier and implement nothing.
 
-What this roadmap owns here is three things. First, the coefficient identification specific to
-`μ₂`: the Galois action on `μ₂` is trivial when `2` is invertible, so the supplier's
-`KummerCoeff K 2` and its `trivialF2` are isomorphic coefficient objects, and that isomorphism
-is what carries the supplier's Kummer classes into the carrier above. Second, the passage from a
-`K`-embedding `σ : L → Kˢ` to the open subgroup `G_L ≤ G_K` that the supplier's subgroup-indexed
-operations take, together with the transport of `G_L`-cohomology to `L`-cohomology. Third, the
-laws of the resulting adapters, including independence of `σ`, which is what lets every later
-statement be about `L/K` and not about a chosen embedding.
-
-The group `G_K` is in `Type`, because the supplier's index-two Evens norm and its canonical
-Kummer class are stated there. -/
+What this roadmap owns here is the coefficient identification specific to `μ₂`: the Galois action
+on `μ₂` is trivial when `2` is invertible, so the supplier's `KummerCoeff K 2` and its `trivialF2`
+are isomorphic coefficient objects, and that isomorphism is what carries the supplier's Kummer
+classes into the carrier above. Everything it is applied to is the supplier's, including the
+coefficients `UnitsCoeff` and the passage from a `K`-embedding `σ : L → Kˢ` to the open subgroup
+`G_L ≤ G_K` with the three operations attached to `L/K` and their independence of `σ`. -/
 
 section Cohomology
 

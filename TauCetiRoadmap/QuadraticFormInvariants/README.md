@@ -489,9 +489,8 @@ Everything below the linear algebra:
   of the symbol with the mod-2 specialization of the local duality pairing;
 - the local classification by `(dim, d, s)`, with `u(K) = 4` and the unique anisotropic
   quaternary form;
-- the `μ₂` coefficient identification of Layer 7A, and the adapters that carry the
-  profinite-cohomology roadmap's subgroup-indexed restriction, corestriction, and
-  index-two Evens norm to a finite separable extension, with their laws;
+- the `μ₂` coefficient identification of Layer 7A, and the mod-2 laws read through it:
+  the Kummer class of a unit, the square-class isomorphism, and `h2MuToUnits`;
 - the comparison of the Brauer group with `H²`, and the identification of the quaternion
   class with a Kummer cup product;
 - the cup-norm theorem in each of its five descriptions, over any field in which `2` is
@@ -510,7 +509,7 @@ isometry classes, the chain-equivalence relation, the four-fold criterion, the B
 symbol and the Hasse invariant, the Witt ring with its fundamental ideal and the
 Clifford invariant, the Layer 6A objects stated against the supplied valuation and
 filtration, the quadratic defect with its exponent,
-the Hilbert symbol, the `μ₂` and transfer adapters of Layer 7A with their laws, the
+the Hilbert symbol, the `μ₂` identification of Layer 7A with its laws, the
 Brauer comparison, `w₁` and `w₂` on isometry classes, and the Scharlau transfer with the
 relative Stiefel-Whitney formula. It is illustrative and not exhaustive, and this README
 is the definitive document.
@@ -1854,11 +1853,12 @@ Prerequisites:
 - **[Tau Ceti]** `TauCeti/NumberTheory/EffectiveBounds/TraceForm.lean` and
   `TauCeti/FieldTheory/Trace`;
 - **[Layer 1]** to **[Layer 4]** for the form theory and the Witt ring;
-- **[Layer 7A]** the carriers for `K` and for `L`, and the transfer adapters of `L/K`
-  with their laws;
+- **[Layer 7A]** the carriers for `K` and for `L`, and the Kummer class;
+- **[Profinite Cohomology, Layer 9]** `galoisRes`, `galoisCor`, `galoisEvens`,
+  `galoisConj` and their laws, which are the transfer along `L/K`;
 - **[Profinite Cohomology, Layers 12 and 13]** `cup` at `f2Pairing`, and
-  `evensNormIndexTwo` with `evensNorm_res` and `evensNorm_polarization`, which the adapter
-  laws transport;
+  `evensNormIndexTwo` with `evensNorm_res` and `evensNorm_polarization`, which
+  `galoisRes_galoisEvens` and `galoisEvens_add` transport;
 - **[Layer 8]** the Stiefel-Whitney classes.
 
 Milestones:
@@ -2045,8 +2045,8 @@ square-class language and on 6A for the square-class dictionary. Layer 7B depend
 Layer 5, on Layer 7A, and on the semisimple-algebras roadmap's Layer 6. Layer 7C depends
 on Layer 2 and on Layer 7B, and its local identification on Layer 6C. Layer 8 depends on
 Layer 7. Layer 9 splits: the transfer half needs only Layers 1 to 4 and can be built
-together with Layer 5; the relative-formula half needs Layer 8 and the transfer adapters
-of Layer 7A.
+together with Layer 5; the relative-formula half needs Layer 8 and the supplier's transfer
+along `L/K`, which Layer 7A consumes.
 
 Every statement of a layer uses only earlier layers, Mathlib, landed Tau Ceti files, and
 the three roadmaps of the contract table. The two exceptions to the numbering, both named
@@ -2123,11 +2123,11 @@ subject matter belongs and built where its prerequisites are ready.
 - The [profinite-cohomology roadmap](../ProfiniteCohomology/README.md) owns continuous
   cohomology and its operations. Sublayer 7A consumes it through the exact contract
   above: the carrier, the cup product, restriction, inflation, corestriction, Kummer
-  theory, and the index-two Evens norm with its four identities are all that roadmap's.
-  This roadmap defines no second cup product, no second Kummer isomorphism, and no
-  second Evens norm. What 7A adds is the coefficient identification specific to `μ₂`, the
-  multiplicative coefficient object, and the adapters that carry the subgroup-indexed
-  operations to a finite separable extension, with their laws.
+  theory, the multiplicative coefficients, the index-two Evens norm with its four
+  identities, and the transfer along a finite separable `L/K` are all that roadmap's.
+  This roadmap defines no second cup product, no second Kummer isomorphism, no second
+  Evens norm, and no second restriction or corestriction. What 7A adds is the coefficient
+  identification specific to `μ₂` and the mod-2 laws read through it.
 - **This roadmap owns the quadratic-form side of that boundary**: the quadratic defect,
   the Hilbert symbol and both of its identifications, the local classification, the
   Brauer comparison, the Stiefel-Whitney classes, and the Scharlau transfer with the
