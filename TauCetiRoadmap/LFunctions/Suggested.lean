@@ -132,11 +132,12 @@ theorem dual_eq_self {d : AnalyticLFunctionData}
     d.dual = d := sorry
 
 /-- **Layer 0.2, agreement of two cards**: every field equal, with the coefficients compared
-away from `n = 0`. ⚠ That slot is irrelevant to `LSeries` (0.1), and a card built from an ideal
-weight inherits at `n = 0` the weight's value at the zero ideal, which no hypothesis
-constrains — while `idealCoeff` counts the zero ideal itself and gives `1` there. Record
-equality `d = e` between two such cards is therefore false exactly at the junk slot, and the
-instance tests of 3.10 and 6.4 are stated with this predicate instead. -/
+away from `n = 0`. ⚠ That slot is irrelevant to `LSeries` (0.1), and the two coefficient
+conventions disagree exactly there: a card built from an ideal weight has `0` at `n = 0`, the
+weight's canonical value at the zero ideal (`IdealWeight.eq_zero_bot`), while `idealCoeff`
+counts the zero ideal itself and gives `1`. Record equality `d = e` across the two conventions
+is therefore false exactly at the junk slot, and the instance tests of 3.10 and 6.4 are stated
+with this predicate instead. -/
 def EqOffZero (d e : AnalyticLFunctionData) : Prop :=
   (∀ n : ℕ, n ≠ 0 → d.coeff n = e.coeff n) ∧ d.conductor = e.conductor ∧
     d.gammaR = e.gammaR ∧ d.gammaC = e.gammaC ∧ d.rootNumber = e.rootNumber ∧
@@ -368,8 +369,17 @@ noncomputable def idealCoeffOfWeight (χ : Ideal (𝓞 K) → ℂ) : ℕ → ℂ
   fun n ↦ ∑ᶠ I : {I : Ideal (𝓞 K) // Ideal.absNorm I = n}, χ I
 
 /-- **Layer 1.2, an ideal weight**: multiplicative, unitary away from a finite bad set, zero
-on it. The analytic hypothesis such a weight needs for continuation is *not* part of this
-structure — it is `HasCancellation` below, and keeping the two apart is the point. -/
+on it, and **zero at the zero ideal**. The analytic hypothesis such a weight needs for
+continuation is *not* part of this structure — it is `HasCancellation` below, and keeping the
+two apart is the point.
+
+⚠ The zero-ideal law is a field, not a convention. Multiplicativity alone admits a weight that
+is `1` everywhere, including at `⊥`, and such a weight differs from the trivial weight **only
+there** — a difference no coprimality-guarded law ever observes, since `Modulus.IsCoprimeTo`
+excludes `⊥`. Two such weights would give two unequal primitive bundles in 6.1 both inducing
+the same character, so the uniqueness of primitive reduction would be false. With the law, the
+value at `⊥` is canonical and the constant-one function inhabits no `IdealWeight`, which
+`IdealWeight.not_forall_eq_one` records with a closed proof. -/
 structure IdealWeight where
   /-- The weight itself. -/
   toFun : Ideal (𝓞 K) → ℂ
@@ -379,6 +389,13 @@ structure IdealWeight where
   map_mul : ∀ I J : Ideal (𝓞 K), toFun (I * J) = toFun I * toFun J
   norm_eq_one : ∀ 𝔭 ∉ bad, ‖toFun 𝔭.asIdeal‖ = 1
   eq_zero_bad : ∀ 𝔭 ∈ bad, toFun 𝔭.asIdeal = 0
+  eq_zero_bot : toFun ⊥ = 0
+
+/-- **Layer 1.2, the rejection test for the zero-ideal law**: the constant-one function is not
+an ideal weight. Closed proof, so a carrier change that loses the law breaks the build here. -/
+theorem IdealWeight.not_forall_eq_one (w : IdealWeight K) :
+    ¬ ∀ I : Ideal (𝓞 K), w.toFun I = 1 :=
+  fun h ↦ one_ne_zero ((h ⊥).symm.trans w.eq_zero_bot)
 
 /-- **Layer 1.2, ideal convolution.** ⚠ This, and not the pointwise product, is the operation
 that grouping by norm carries to Mathlib's Dirichlet convolution. Writing
@@ -435,6 +452,7 @@ noncomputable def IdealWeight.normTwist (χ : IdealWeight K) (t : ℝ) : IdealWe
   map_mul := sorry
   norm_eq_one := sorry
   eq_zero_bad := sorry
+  eq_zero_bot := sorry
 
 /-- **Layer 7.2, the hypothesis package a nonvanishing proof needs.**
 
@@ -488,6 +506,7 @@ noncomputable def IdealWeight.sq (χ : IdealWeight K) : IdealWeight K where
   map_mul := sorry
   norm_eq_one := sorry
   eq_zero_bad := sorry
+  eq_zero_bot := sorry
 
 /-- **Layer 1.2, the conjugate weight**, the third factor of the `3-4-1` product. -/
 noncomputable def IdealWeight.conjugate (χ : IdealWeight K) : IdealWeight K where
@@ -497,6 +516,7 @@ noncomputable def IdealWeight.conjugate (χ : IdealWeight K) : IdealWeight K whe
   map_mul := sorry
   norm_eq_one := sorry
   eq_zero_bad := sorry
+  eq_zero_bot := sorry
 
 /-- **Layer 1.2, a weight that is a pure norm twist on its good ideals.** ⚠ This, and not
 triviality, is the branch condition of the `3-4-1` argument. `u = 0` is the trivial case. -/
@@ -1259,6 +1279,7 @@ noncomputable def weight {𝔪 : Modulus K} (χ : RayClassCharacter 𝔪) : Idea
   map_mul := sorry
   norm_eq_one := sorry
   eq_zero_bad := sorry
+  eq_zero_bot := sorry
 
 theorem weight_apply {𝔪 : Modulus K} (χ : RayClassCharacter 𝔪) {I : Ideal (𝓞 K)}
     (hI : 𝔪.IsCoprimeTo I) : χ.weight.toFun I = (χ (𝔪.idealClass I) : ℂ) := sorry
@@ -1288,7 +1309,8 @@ theorem weight_mul {𝔪 : Modulus K} (χ ψ : RayClassCharacter 𝔪) (I : Idea
 theorem weight_one {𝔪 : Modulus K} (I : Ideal (𝓞 K)) (hI : 𝔪.IsCoprimeTo I) :
     (1 : RayClassCharacter 𝔪).weight.toFun I = 1 := sorry
 
-/-- **Layer 5.4, the imprimitive correction**, a finite product of Euler factors. -/
+/-- **Layer 5.4, the induced weight agrees on the ideals prime to the larger modulus**; the
+L-function-level Euler-factor correction is `heckeLFunctionC_induced` in 5.3's block. -/
 theorem weight_induced {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) (ψ : RayClassCharacter 𝔫)
     {I : Ideal (𝓞 K)} (hI : 𝔪.IsCoprimeTo I) :
     (induced h ψ).weight.toFun I = ψ.weight.toFun I := sorry
@@ -1311,6 +1333,59 @@ theorem localSign_eq_neg_one_iff {𝔪 : Modulus K} {χ : RayClassCharacter 𝔪
 
 end RayClassCharacter
 
+/-! #### Layer 5.1: the two constructed regression characters over `ℚ`
+
+⚠ Constructed by name, with value specifications and primitivity as named theorems — not
+quantified. A theorem of the shape "for every primitive `η` of this modulus …" is true when no
+such `η` exists, so it cannot detect a carrier that accidentally trivializes the quotient or
+empties primitivity; these constructions are what the acceptance tests of 6.4 instantiate. -/
+
+/-- **Layer 5.1, the modulus `(4)∞` over `ℚ`**: finite part `(4)`, infinite part the real
+place. -/
+noncomputable def modulusFourInfinity : Modulus ℚ where
+  finitePart := Ideal.span {(4 : 𝓞 ℚ)}
+  finitePart_ne_bot := sorry
+  infinitePart := Finset.univ
+  infinitePart_isReal := sorry
+
+/-- **Layer 5.1, the modulus `(5)` over `ℚ`**, with empty infinite part. -/
+noncomputable def modulusFive : Modulus ℚ where
+  finitePart := Ideal.span {(5 : 𝓞 ℚ)}
+  finitePart_ne_bot := sorry
+  infinitePart := ∅
+  infinitePart_isReal := by simp
+
+/-- **Layer 5.1, the odd character modulo `(4)∞`, constructed**: the character of the ray class
+group of `modulusFourInfinity` whose value on the class of `(n)`, for odd positive `n`, is
+`χ₄(n)` — the bridge to the already-constructed Dirichlet character `χ₄C` of Layer 4. The ray
+class group here is `(ℤ/4)ˣ`, read off positive generators, so the specification below pins the
+character completely. -/
+noncomputable def oddRayClassCharacterModFour : RayClassCharacter modulusFourInfinity := sorry
+
+theorem oddRayClassCharacterModFour_spec (n : ℕ) (hn : Odd n) :
+    (oddRayClassCharacterModFour
+        (modulusFourInfinity.idealClass (Ideal.span {(n : 𝓞 ℚ)})) : ℂ) =
+      χ₄C (n : ZMod 4) := sorry
+
+theorem oddRayClassCharacterModFour_isPrimitive :
+    oddRayClassCharacterModFour.IsPrimitive := sorry
+
+instance : Fact (Nat.Prime 5) := ⟨by norm_num⟩
+
+/-- **Layer 5.1, the even quadratic character modulo `(5)`, constructed**: the character of the
+ray class group of `modulusFive` — which is `(ℤ/5)ˣ/{±1}` — whose value on the class of `(n)`,
+for `5 ∤ n`, is the quadratic residue symbol of `n` mod `5`. It is the unique nontrivial
+character of that quotient. -/
+noncomputable def evenRayClassCharacterModFive : RayClassCharacter modulusFive := sorry
+
+theorem evenRayClassCharacterModFive_spec (n : ℕ) (hn : ¬ (5 ∣ n)) :
+    (evenRayClassCharacterModFive
+        (modulusFive.idealClass (Ideal.span {(n : 𝓞 ℚ)})) : ℂ) =
+      ((quadraticChar (ZMod 5) (n : ZMod 5) : ℤ) : ℂ) := sorry
+
+theorem evenRayClassCharacterModFive_isPrimitive :
+    evenRayClassCharacterModFive.IsPrimitive := sorry
+
 /-! ### Layers 5.3, 5.7 and 5.8: the Hecke L-function, by name
 
 ⚠ Named rather than existential, because the zeros roadmap builds its Hecke instance on these
@@ -1321,6 +1396,17 @@ noncomputable def heckeLFunctionC {𝔪 : Modulus K} (χ : RayClassCharacter �
 
 theorem heckeLFunctionC_eq {𝔪 : Modulus K} (χ : RayClassCharacter 𝔪) {s : ℂ} (hs : 1 < s.re) :
     heckeLFunctionC χ s = LSeries (idealCoeffOfWeight K χ.weight.toFun) s := sorry
+
+/-- **Layer 5.4, the imprimitive correction at the level of L-functions**: induction multiplies
+the continued L-function by the finite Euler factors at the primes of `𝔪₀` off `𝔫₀`. This, and
+not a second card, is what an imprimitive character owns. -/
+theorem heckeLFunctionC_induced {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) (ψ : RayClassCharacter 𝔫)
+    (s : ℂ) :
+    heckeLFunctionC (RayClassCharacter.induced h ψ) s = heckeLFunctionC ψ s *
+      ∏ᶠ 𝔭 : {𝔭 : HeightOneSpectrum (𝓞 K) //
+          𝔭.asIdeal ∣ 𝔪.finitePart ∧ ¬ 𝔭.asIdeal ∣ 𝔫.finitePart},
+        (1 - ψ.weight.toFun (𝔭 : HeightOneSpectrum (𝓞 K)).asIdeal *
+          ((Ideal.absNorm (𝔭 : HeightOneSpectrum (𝓞 K)).asIdeal : ℝ) : ℂ) ^ (-s)) := sorry
 
 /-- **Layer 5.7, the completed Hecke L-function**, conductor power and gamma factor included, as
 an instance of the level frame of 2.14 at level `|d_K| 𝔑𝔪₀`. -/
@@ -1370,14 +1456,20 @@ theorem exists_mellin_completedHeckeLFunction {𝔪 : Modulus K} (χ : RayClassC
         ∫ t in Set.Ioi (0 : ℝ), θ t * (t : ℂ) ^ s / (t : ℂ) := sorry
 
 open scoped Classical in
-/-- **Layer 5.9, the instance card of a ray-class character**, named, so that the finite-order
-comparison of 6.4 has a record to equal rather than an anonymous field-by-field target. The
-fields are honest for a **primitive** `η`: coefficients of the derived weight, the level
-`|d_K| 𝔑𝔪₀` of 5.7, real gamma shifts `1` exactly at the places of `𝔪_∞`, complex shifts `0`,
-the Gauss-sum root number of 5.6, the completion of 5.8, and a polar divisor supported at
-`{0, 1}` exactly for the trivial character — which is primitive only at the trivial modulus,
-where the card is the `ζ_K` card. -/
-noncomputable def heckeData {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) :
+/-- **Layer 5.9, the instance card of a primitive ray-class character**, named, so that the
+finite-order comparison of 6.4 has a record to equal rather than an anonymous field-by-field
+target: coefficients of the derived weight, the level `|d_K| 𝔑𝔪₀` of 5.7, real gamma shifts `1`
+exactly at the places of `𝔪_∞`, complex shifts `0`, the Gauss-sum root number of 5.6, the
+completion of 5.8, and a polar divisor supported at `{0, 1}` exactly for the trivial
+character — which is primitive only at the trivial modulus, where the card is the `ζ_K` card.
+
+⚠ The primitivity proof is an argument of the **definition**: `conductor` is an arithmetic
+invariant, not a presentation level, and it has no later predicate to certify it — for the
+principal character at a modulus with `𝔪₀ = (p)` the formula below would record `|d_K| · 𝔑𝔭`
+where the arithmetic conductor is `|d_K|`, and its presented series carries a removed Euler
+factor besides. No card records a presentation modulus as a conductor; the presented series
+keeps `heckeLFunctionC` and its Euler-factor correction. -/
+noncomputable def heckeData {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) (hη : η.IsPrimitive) :
     AnalyticLFunctionData where
   coeff := idealCoeffOfWeight K η.weight.toFun
   conductor := ⟨(|discr K| * Ideal.absNorm 𝔪.finitePart : ℤ).toNat, sorry⟩
@@ -1390,8 +1482,26 @@ noncomputable def heckeData {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) :
 
 /-- **Layer 5.9, the two degrees, exactly.** The card carries the **absolute** degree, computed
 from the gamma data: `r₁` real shifts and `r₂` complex ones give `r₁ + 2r₂ = [K:ℚ]`. -/
-theorem degree_heckeData {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) :
-    (heckeData η).degree = Module.finrank ℚ K := sorry
+theorem degree_heckeData {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) (hη : η.IsPrimitive) :
+    (heckeData η hη).degree = Module.finrank ℚ K := sorry
+
+/-- **Layer 5.1, the trivial character of a nontrivial modulus is imprimitive**: it is induced
+from the trivial modulus along `Modulus.classMap`. It is therefore a character that has
+`heckeLFunctionC` and the correction below, and **no card**. -/
+theorem not_isPrimitive_one {𝔪 : Modulus K} (h : 𝔪 ≠ Modulus.one) :
+    ¬ (1 : RayClassCharacter 𝔪).IsPrimitive := sorry
+
+/-- **Layer 5.9, the principal regression at Layer 5**: the trivial character at `𝔪₀ = (p)` is
+imprimitive, and its presented series is the Dedekind zeta function times the removed Euler
+factors. With `heckeData` primitive-scoped, no Layer 5 card exists for it at the presented
+modulus — the pair of statements that keeps presentation levels out of the conductor field. -/
+theorem principalHecke_test (𝔪 : Modulus K) (h : 𝔪 ≠ Modulus.one) :
+    ¬ (1 : RayClassCharacter 𝔪).IsPrimitive ∧
+      ∀ s : ℂ, heckeLFunctionC (1 : RayClassCharacter 𝔪) s =
+        dedekindZetaC K s *
+          ∏ᶠ 𝔭 : {𝔭 : HeightOneSpectrum (𝓞 K) // 𝔭.asIdeal ∣ 𝔪.finitePart},
+            (1 - ((Ideal.absNorm (𝔭 : HeightOneSpectrum (𝓞 K)).asIdeal : ℝ) : ℂ) ^ (-s)) :=
+  sorry
 
 /-- **Layer 5.9, the relative degree**, the separate invariant that the phrase "a Hecke character
 has degree one" refers to. ⚠ It is never written into `AnalyticLFunctionData.degree`; a record
@@ -1410,6 +1520,7 @@ noncomputable def IdealWeight.trivialOn (𝔪 : Modulus K) : IdealWeight K where
   map_mul := sorry
   norm_eq_one := sorry
   eq_zero_bad := sorry
+  eq_zero_bot := sorry
 
 /-- **Layer 6.1, the normalized absolute value at an infinite place**: `(v x) ^ mult v`, so
 `v x` itself at a real place and `‖σ_v(x)‖²` at a complex one. It is the local absolute value
@@ -1852,8 +1963,11 @@ of the conductor alone is strictly weaker: it leaves two distinct primitive char
 same conductor both claiming to induce `χ`, and every "canonical" object below would depend on
 the choice. The proof transports `e.prim` along the conductor equality and identifies the
 transported character with `d.prim` field by field; the divisibility and primitivity fields are
-proofs, so they carry no data — and the finite-character field compares no junk either, because
-a `MulChar` is forced to `0` off the units, so every one of its values is observed by the law. -/
+proofs, so they carry no data — and no field compares junk: a `MulChar` is forced to `0` off
+the units, and an `IdealWeight` is forced to `0` at the zero ideal (`eq_zero_bot`), which is
+the clause that closes the last gap. Without it, two weights differing only at `⊥` — a value
+`Induces` never compares, since coprimality excludes `⊥` — would give two unequal primitive
+bundles both inducing the same character, and this equality would be false. -/
 theorem primitiveData_unique (χ : Grossencharacter 𝔪) (d e : PrimitiveData χ) : d = e := sorry
 
 /-- **Layer 6.1, the canonical primitive reduction**, *defined* from existence; by
@@ -2370,8 +2484,9 @@ noncomputable def shiftedDedekindZetaData (u : ℝ) : AnalyticLFunctionData wher
 card of 3.10 — every named field, via the agreement predicate of 0.2, not one field of it. A
 completed-function comparison alone would pass with the wrong conductor, gamma multisets, root
 number, or polar divisor; and raw record equality is the wrong statement at the junk slot
-`n = 0`, where the weight's value at the zero ideal is unconstrained. The trivial modulus is not
-hypothesized: primitivity forces it, since the data below is invisible to any smaller one. -/
+`n = 0`, where the weight-derived coefficient is the canonical `0` while `idealCoeff` counts
+the zero ideal. The trivial modulus is not hypothesized: primitivity forces it, since the data
+below is invisible to any smaller one. -/
 theorem unitaryData_of_trivial (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive)
     (hunit : IdealWeight.IsTrivialOnGood K χ.unitary) (hshift : χ.shift = 0)
     (hang : ∀ v, χ.angular v = 0) (hpar : ∀ v, χ.parity v = 0)
@@ -2422,7 +2537,7 @@ theorem unitaryData_of_finiteOrder (χ : Grossencharacter 𝔪) (η : RayClassCh
     (harch : ∀ v, χ.archimedeanParam v = 0) (hang : ∀ v, χ.angular v = 0)
     (hpar : ∀ v, v.IsReal → ((χ.parity v = 1) ↔ v ∈ 𝔪.infinitePart))
     (hη : ∀ I : Ideal (𝓞 K), χ.unitary.toFun I = η.weight.toFun I) :
-    (χ.unitaryData hprim).EqOffZero (heckeData η) := sorry
+    (χ.unitaryData hprim).EqOffZero (heckeData η hη_prim) := sorry
 
 /-- **Layer 6.4, the canonical finite-order root-number comparison**: for a primitive ray-class
 character, the canonical root number of its Layer 6 embedding is the Layer 5 Gauss-sum root
@@ -2437,30 +2552,47 @@ and 6 use one normalization, one conductor — infinite part included — one ga
 root number. -/
 theorem primitiveUnitaryData_ofRayClassCharacter {𝔪 : Modulus K} {η : RayClassCharacter 𝔪}
     (hη : η.IsPrimitive) :
-    ((ofRayClassCharacter η).primitiveUnitaryData).EqOffZero (heckeData η) := sorry
+    ((ofRayClassCharacter η).primitiveUnitaryData).EqOffZero (heckeData η hη) := sorry
 
-/-- **Layer 6.4, the odd regression instance**: the primitive character modulo `(4)∞` over `ℚ`.
-Its Layer 6 conductor keeps the real place, its single real gamma shift is `1` — the odd
-`Gammaℝ(s + 1)` — and its canonical card is the Layer 5 card. ⚠ This is the instance that a
-parity law missing from the carrier silently destroys: without `parity_supported` the character
-is induced from the modulus with empty infinite part, is never primitive at `(4)∞`, and every
-comparison above is vacuous for it. -/
-theorem oddCharacter_mod_four_test (𝔪 : Modulus ℚ)
-    (h₀ : 𝔪.finitePart = Ideal.span {(4 : 𝓞 ℚ)}) (hinf : 𝔪.infinitePart = Finset.univ)
-    (η : RayClassCharacter 𝔪) (hη : η.IsPrimitive) :
-    (ofRayClassCharacter η).conductor = 𝔪 ∧
-      ((ofRayClassCharacter η).primitiveUnitaryData).gammaR = {(1 : ℂ)} ∧
-      ((ofRayClassCharacter η).primitiveUnitaryData).EqOffZero (heckeData η) := sorry
+/-- **Layer 6.4, the odd regression instance**, over the **constructed** character
+`oddRayClassCharacterModFour` — no character or primitivity hypotheses, so the theorem fails if
+any carrier on the path accidentally empties: the Layer 6 conductor keeps the real place, the
+parity is odd at it, the finite `MulChar` is `χ₄` on the odd residues, the single real gamma
+shift is `1` — the odd `Gammaℝ(s + 1)` — and the canonical card is the Layer 5 card. ⚠ This is
+the instance that a carrier whose fields ignore `𝔪_∞` silently destroys: without
+`parity_supported` the character is induced from the modulus with empty infinite part, is never
+primitive at `(4)∞`, and every comparison above is vacuous for it. -/
+theorem oddCharacter_mod_four_test :
+    (ofRayClassCharacter oddRayClassCharacterModFour).conductor = modulusFourInfinity ∧
+      (∀ v : InfinitePlace ℚ, v.IsReal →
+        (ofRayClassCharacter oddRayClassCharacterModFour).parity v = 1) ∧
+      (∀ n : ℕ, Odd n →
+        (ofRayClassCharacter oddRayClassCharacterModFour).finiteChar
+            (Ideal.Quotient.mk modulusFourInfinity.finitePart (n : 𝓞 ℚ)) =
+          χ₄C (n : ZMod 4)) ∧
+      ((ofRayClassCharacter oddRayClassCharacterModFour).primitiveUnitaryData).gammaR =
+        {(1 : ℂ)} ∧
+      ((ofRayClassCharacter oddRayClassCharacterModFour).primitiveUnitaryData).EqOffZero
+        (heckeData oddRayClassCharacterModFour oddRayClassCharacterModFour_isPrimitive) :=
+  sorry
 
-/-- **Layer 6.4, the even regression instance**: a primitive character modulo `(5)` over `ℚ`,
-with empty infinite part — necessarily the quadratic character, since the ray class group
-modulo `(5)` is `(ℤ/5)ˣ/{±1}`. Its single real gamma shift is `0`. -/
-theorem evenCharacter_mod_five_test (𝔪 : Modulus ℚ)
-    (h₀ : 𝔪.finitePart = Ideal.span {(5 : 𝓞 ℚ)}) (hinf : 𝔪.infinitePart = ∅)
-    (η : RayClassCharacter 𝔪) (hη : η.IsPrimitive) :
-    (ofRayClassCharacter η).conductor = 𝔪 ∧
-      ((ofRayClassCharacter η).primitiveUnitaryData).gammaR = {(0 : ℂ)} ∧
-      ((ofRayClassCharacter η).primitiveUnitaryData).EqOffZero (heckeData η) := sorry
+/-- **Layer 6.4, the even regression instance**, over the **constructed** character
+`evenRayClassCharacterModFive`: empty infinite part, even parity, the finite `MulChar` equal to
+the quadratic residue symbol on the prime-to-`5` residues, single real gamma shift `0`, and the
+canonical card equal to the Layer 5 card. -/
+theorem evenCharacter_mod_five_test :
+    (ofRayClassCharacter evenRayClassCharacterModFive).conductor = modulusFive ∧
+      (∀ v : InfinitePlace ℚ, v.IsReal →
+        (ofRayClassCharacter evenRayClassCharacterModFive).parity v = 0) ∧
+      (∀ n : ℕ, ¬ (5 ∣ n) →
+        (ofRayClassCharacter evenRayClassCharacterModFive).finiteChar
+            (Ideal.Quotient.mk modulusFive.finitePart (n : 𝓞 ℚ)) =
+          ((quadraticChar (ZMod 5) (n : ZMod 5) : ℤ) : ℂ)) ∧
+      ((ofRayClassCharacter evenRayClassCharacterModFive).primitiveUnitaryData).gammaR =
+        {(0 : ℂ)} ∧
+      ((ofRayClassCharacter evenRayClassCharacterModFive).primitiveUnitaryData).EqOffZero
+        (heckeData evenRayClassCharacterModFive evenRayClassCharacterModFive_isPrimitive) :=
+  sorry
 
 /-- **Layer 6.4, the principal-character test**, which is what keeps the primitive and the
 presented objects apart. `normCharacter 𝔪 0` is the principal character modulo `𝔪`: its

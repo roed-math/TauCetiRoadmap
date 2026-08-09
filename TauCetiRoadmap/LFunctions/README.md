@@ -172,8 +172,10 @@ Three remarks.
 
 **The three carriers are built here.** Layer 5.1 constructs a modulus, the group `J^{𝔪₀}` of
 ideals prime to its finite part, the ray subgroup `P^𝔪`, the quotient, and a character of that
-quotient. Layer 6.1 constructs a Grossencharacter from a unitary ideal weight, a real shift, and
-an infinity type. Layer 8.0 constructs the Frobenius class from Mathlib's `arithFrobAt`. None of
+quotient. Layer 6.1 constructs a Grossencharacter from a unitary ideal weight, a real shift, the
+finite character of `(𝓞_K/𝔪₀)ˣ` as a `MulChar`, and unitary archimedean data whose real parity
+is supported on `𝔪_∞`, glued by one law over every coprime principal ideal; the infinity type is
+derived. Layer 8.0 constructs the Frobenius class from Mathlib's `arithFrobAt`. None of
 the three is a hypothesis, and no later milestone quantifies over one. What a sibling roadmap
 would replace them by, and how, is recorded in [`PROVENANCE.md`](PROVENANCE.md), which is not
 normative.
@@ -683,7 +685,16 @@ structure IdealWeight (K : Type*) [Field K] [NumberField K] where
   map_mul : ∀ I J, toFun (I * J) = toFun I * toFun J
   norm_eq_one : ∀ 𝔭 ∉ bad, ‖toFun 𝔭.asIdeal‖ = 1
   eq_zero_bad : ∀ 𝔭 ∈ bad, toFun 𝔭.asIdeal = 0
+  eq_zero_bot : toFun ⊥ = 0
 ```
+
+⚠ The zero-ideal law `eq_zero_bot` is a field, not a convention. Multiplicativity admits the
+constant-one function, which differs from the trivial weight **only at `⊥`** — a difference no
+coprimality-guarded law observes, since coprimality excludes `⊥`. Without the law, two weights
+differing only there give two unequal primitive bundles in 6.1 that both induce the same
+character, so the uniqueness of primitive reduction is false. With it, the value at `⊥` is
+canonical, every constructor discharges it, and the rejection test — the constant-one function
+inhabits no `IdealWeight` — has a closed proof.
 
 Define `idealCoeffOfWeight χ : ℕ → ℂ` by `n ↦ ∑_{𝔑𝔞 = n} χ 𝔞`, and set
 `L(χ, s) = LSeries (idealCoeffOfWeight χ) s`. The convention for bad primes is fixed here and
@@ -1289,6 +1300,15 @@ The ideal weight of 1.2 is then *derived*: `χ(𝔞)` is the character of the ra
 `𝔞` prime to `𝔪₀`, and `0` otherwise. Triviality on the ray subgroup and finite order become
 theorems about that derived weight rather than fields on an arbitrary function.
 
+Two characters over `ℚ` are **constructed by name**, with value specifications against Layer 4's
+`χ₄` and the quadratic residue symbol mod `5`, and with primitivity as named theorems: the odd
+character of modulus `(4)∞` and the even quadratic character of modulus `(5)`. They exist so
+that the acceptance tests of 6.4 quantify over nothing: a test of the shape "for every primitive
+character of this modulus …" is true when the carrier accidentally empties, and only a
+constructed instance fails then. ⚠ The trivial character of any nontrivial modulus is
+**imprimitive** — induced from the trivial modulus along the projection — and that is a named
+theorem, because 5.9's card demands primitivity and the principal regression reads it.
+
 ⚠ The finite part `𝔪₀` and the infinite part `𝔪_∞` are separate data. Neither may be dropped:
 the gamma factor of 5.5 reads `𝔪_∞`, and the level of 5.7 reads `𝔪₀`.
 
@@ -1373,7 +1393,15 @@ field-by-field target: derived-weight coefficients, the level `|d_K| 𝔑𝔪₀
 shifts `1` exactly at the places of `𝔪_∞`, complex shifts `0`, the Gauss-sum root number of
 5.6, the completion of 5.8, and a polar divisor supported at `{0, 1}` exactly for the trivial
 character, which is primitive only at the trivial modulus, where the card is the `ζ_K` card of
-3.10. The fields are honest for a **primitive** character. The card has
+3.10. ⚠ The primitivity proof is an argument of the **definition**: the card's `conductor` is an
+arithmetic invariant with no later predicate to certify it, and at an imprimitive character the
+level formula records the presentation modulus — for the principal character at `𝔪₀ = (p)`,
+`|d_K| · 𝔑𝔭` where the arithmetic conductor is `|d_K|` — while the presented series carries a
+removed Euler factor besides. No card records a presentation modulus as a conductor; an
+imprimitive character owns the presented L-function of 5.3 and the Euler-factor correction of
+5.4, and no card. The principal regression states exactly that pair: the trivial character of a
+nontrivial modulus is imprimitive (a named 5.1 theorem), and its presented series is `ζ_K` times
+the removed factors. The card has
 `degree = [K:ℚ]`, because `gammaR` has `r₁` entries and `gammaC` has `r₂`, and that is the degree
 of the L-series over `ℕ`.
 
@@ -1781,10 +1809,10 @@ available to the record.
 Card tests, each an agreement of **every named field** — a completed-function comparison alone
 passes with the wrong conductor, gamma multisets, root number, or polar divisor. State the
 agreement through a named Layer 0 predicate that compares every field and the coefficients away
-from `n = 0`: that slot is irrelevant to `LSeries` (0.1), and a card built from an ideal weight
-inherits there the weight's value at the zero ideal, which no hypothesis constrains, while
-`idealCoeff` counts the zero ideal and gives `1` — so raw record equality between two such cards
-is false exactly at the junk slot:
+from `n = 0`: that slot is irrelevant to `LSeries` (0.1), and the two coefficient conventions
+disagree exactly there — a card built from an ideal weight has the canonical `0` (the weight's
+zero-ideal law of 1.2), while `idealCoeff` counts the zero ideal and gives `1` — so raw record
+equality across the two conventions is false exactly at the junk slot:
 
 - the trivial character recovers the Dedekind-zeta card of 3.10;
 - `𝔑^{iu}` recovers the vertically shifted zeta card. Name that card: coefficients
@@ -1804,14 +1832,17 @@ is false exactly at the junk slot:
   Gauss-sum root number, and its canonical card agrees with the 5.9 card — the acceptance test
   that Layers 5 and 6 use one normalization, one conductor with its infinite part, one gamma
   factor, and one root number;
-- the **odd regression instance**: the primitive character modulo `(4)∞` over `ℚ`. Its Layer 6
-  conductor keeps the real place, its single real gamma shift is `1` — the odd `Γ_ℝ(s + 1)` —
-  and its canonical card is the Layer 5 card. This is the instance that a carrier without the
-  parity support law silently destroys, and the smallest normalization test for the odd real
-  gamma shift;
-- the **even regression instance**: a primitive character modulo `(5)` over `ℚ` with empty
-  infinite part — necessarily the quadratic character, the ray class group being
-  `(ℤ/5)ˣ/{±1}` — with single real gamma shift `0`;
+- the **odd regression instance**: the **constructed** character of 5.1 modulo `(4)∞` over `ℚ`,
+  with no character or primitivity hypotheses, so the theorem fails if any carrier on the path
+  accidentally empties. Its Layer 6 conductor keeps the real place, its parity is odd there,
+  its finite `MulChar` is `χ₄` on the odd residues, its single real gamma shift is `1` — the
+  odd `Γ_ℝ(s + 1)` — and its canonical card is the Layer 5 card. This is the instance that a
+  carrier without the parity support law silently destroys, and the smallest normalization test
+  for the odd real gamma shift;
+- the **even regression instance**: the **constructed** quadratic character of 5.1 modulo `(5)`
+  over `ℚ` with empty infinite part: even parity, finite `MulChar` the quadratic residue
+  symbol on the prime-to-`5` residues, single real gamma shift `0`, canonical card the Layer 5
+  card;
 - the principal character modulo `𝔪`: canonical primitive data the trivial character of trivial
   conductor, canonical card the Dedekind-zeta card, and **presented** L-series equal to the
   primitive one times the removed Euler factors — `ζ(s)(1 − p^{-s})` over `ℚ` with `𝔪₀ = (p)`.

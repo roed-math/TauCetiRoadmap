@@ -439,6 +439,34 @@ sides primitive: the presented Gauss sum of an imprimitive character vanishes un
 definition while the primitive-conductor root number does not, so an unrestricted comparison
 equates two different objects.
 
+**A multiplicative weight must be forced to vanish at the zero ideal, or primitive reduction
+is not unique.** Multiplicativity admits the constant-one function on ideals, which differs
+from the trivial weight **only at `⊥`** — and every coprimality-guarded law is blind there,
+since coprimality predicates exclude `⊥`. Two weights differing only at `⊥` give two unequal
+primitive bundles both inducing the same character, so a bundle-equality uniqueness theorem is
+false however carefully the rest of the carrier is normalized. The fix is a carrier law
+`toFun ⊥ = 0`, discharged by every constructor, with the constant-one rejection as a
+closed-proof test; the residual `n = 0` mismatch against `idealCoeff`, which counts the zero
+ideal, remains and is why the card-agreement predicate compares coefficients off `0`. This
+closes the junk-slot family: `MulChar` forces the finite character's nonunit values, and the
+zero-ideal law forces the weight's value at `⊥`.
+
+**A card's conductor field is an arithmetic invariant, not a presentation level.** Unlike
+continuation or the functional equation, the conductor has no separate predicate that later
+certifies it, so a card constructor accepting imprimitive characters records the wrong
+invariant silently — the principal character at `𝔪₀ = (p)` gets level `|d_K| 𝔑𝔭` where its
+arithmetic conductor is `|d_K|`. Any named instance card must take the primitivity proof as an
+argument (or be defined through canonical primitive reduction); the imprimitive character keeps
+its presented L-function and Euler-factor correction, and no card.
+
+**A conditional instance theorem tests nothing about existence.** "For every primitive
+character of this modulus, its card is …" is true when the carrier accidentally trivializes the
+quotient or empties primitivity, so it cannot serve as a non-vacuity acceptance test. The
+regression instances must be **constructed by name** — modulus, character, value specification
+against an independently constructed object (here Layer 4's `χ₄` and the quadratic residue
+symbol mod `5`), and primitivity as named theorems — so that an accidental collapse breaks a
+named declaration rather than emptying a quantifier.
+
 ## Coordination ledger
 
 No outreach had been performed when this was written. Every contact status below is therefore
