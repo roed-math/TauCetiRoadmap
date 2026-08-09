@@ -161,8 +161,9 @@ supplier declaration exactly.
 Two roadmaps in this repository supply material that this one used to define for itself.
 
 - The **[local-fields roadmap](../LocalFields/README.md)** owns the normalized valuation,
-  the unit filtration, local power and square classes, unramified extensions, norm
-  groups, local duality, and the invariant map. Layer 6A consumes them.
+  the absolute ramification index, the unit filtration, local power and square classes
+  with the identification of the two spellings of the square classes, unramified
+  extensions, norm groups, local duality, and the invariant map. Layer 6A consumes them.
 - The **[profinite-cohomology roadmap](../ProfiniteCohomology/README.md)** owns continuous
   cohomology in all degrees, with cup products, Kummer theory, restriction,
   corestriction, and the Evens norm. Layer 7A consumes them.
@@ -176,9 +177,9 @@ phrased through the norm equation `b = x² − Δ y²`; and the filtration quoti
 6A cites rather than restates. If the local-fields roadmap later names any of them, the
 local statement is deleted and the contract table gains a declaration.
 
-Two objects are this roadmap's because neither supplier names them: `IsUniformizer` in
-its valuation form, and `absoluteRamificationIndex` as the decoded `v_K(2)`. Two more are
-this roadmap's because they are specific to `μ₂` or to the multiplicative group:
+One object is this roadmap's because neither supplier names it: `IsUniformizer` in its
+valuation form. Two more are this roadmap's because they are specific to `μ₂` or to the
+multiplicative group:
 `mu2EquivZMod2` with the triviality of the Galois action on `μ₂`, and the coefficient
 object `Additive Kˢˣ` with `h2MuToUnits`. The adapters that carry the profinite-cohomology
 roadmap's subgroup-indexed operations to a finite separable extension are likewise this

@@ -516,21 +516,23 @@ theorem cliffordHomI2_eq_zero [Invertible (2 : K)] (x : ↥(fundamentalIdeal K ^
 The general arithmetic of a nonarchimedean local field belongs to the
 [Local Fields roadmap](../LocalFields/README.md), and this sublayer consumes it rather than
 building a second copy. The normalized valuation is
-`TauCetiRoadmap.LocalFields.normalizedValuation` and the unit filtration is
-`TauCetiRoadmap.LocalFields.unitFiltration`; both are opened by name below, and no valuation
-and no filtration is defined here.
+`TauCetiRoadmap.LocalFields.normalizedValuation`, the unit filtration is
+`TauCetiRoadmap.LocalFields.unitFiltration`, the absolute ramification index `e = v_K(2)` is
+`TauCetiRoadmap.LocalFields.absoluteRamificationIndex K 2`, and the identification of the two
+spellings of the square classes is that roadmap's `square_eq_range_powMonoidHom`. All four are
+opened by name below, and no valuation, no filtration and no ramification index is defined here.
 
 What remains is the quadratic-form-facing arithmetic, stated against those objects: the
 uniformizer predicate in its valuation form together with the lemma comparing it with the
-supplier's `Irreducible` convention, the absolute ramification index as the decoded `v_K(2)`,
-the sharp local square theorem, the square-class counts in the `4·q^e` shape that 6D consumes,
-and the unramified norm description in the shape 6C consumes. Each of the last three carries a
-remark naming the Local Fields milestone it rests on. -/
+supplier's `Irreducible` convention, the sharp local square theorem, the square-class counts in
+the `4·q^e` shape that 6D consumes, and the unramified norm description in the shape 6C consumes.
+Each of the last three carries a remark naming the Local Fields milestone it rests on. -/
 
 section LocalField
 
 open scoped ValuativeRel
-open TauCetiRoadmap.LocalFields (normalizedValuation unitFiltration)
+open TauCetiRoadmap.LocalFields (normalizedValuation unitFiltration absoluteRamificationIndex
+  square_eq_range_powMonoidHom)
 
 variable (K)
 variable [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
@@ -557,46 +559,25 @@ theorem isUniformizer_iff_exists_irreducible (π : Kˣ) :
 theorem exists_isUniformizer : ∃ π : Kˣ, IsUniformizer (K := K) π :=
   sorry
 
-/-- **Layer 6A, the absolute ramification index** `e = v_K(2)`, the decoded value of the
-supplier's valuation at `2`. The standing hypothesis `Invertible (2 : K)` is what makes `2` a
-unit, so `e` is not data. -/
-noncomputable def absoluteRamificationIndex [Invertible (2 : K)] : ℕ :=
-  (Multiplicative.toAdd (normalizedValuation K (unitOfInvertible (2 : K)))).toNat
-
-/-- The defining equation of `e`. -/
-theorem normalizedValuation_two [Invertible (2 : K)] :
-    normalizedValuation K (unitOfInvertible (2 : K)) =
-      Multiplicative.ofAdd ((absoluteRamificationIndex K : ℤ)) :=
-  sorry
-
-/-- **Layer 6A, the square-class dictionary.** The square classes of this roadmap are taken in
-`Subgroup.square Kˣ`, and the Local Fields power-class count and the Profinite Cohomology
-Kummer isomorphism are stated at `(powMonoidHom n).range`. This is the identification at
-`n = 2`, and it is what lets the counts below rest on the supplier's theorem and the Kummer
-isomorphism of Layer 7A be stated on square classes. -/
-theorem square_eq_powerSubgroup :
-    Subgroup.square Kˣ = (powMonoidHom 2 : Kˣ →* Kˣ).range :=
-  sorry
-
 /-- **Layer 6A, the local square theorem in its sharp form** (O'Meara 63:1):
 `U(K, 2e+1) ⊆ (Kˣ)²`. The Local Fields roadmap owns this mathematics, in its Layer 1 milestone
 *Deep units are squares, in mixed characteristic*, and carries the dyadic instance
 `1 + 8ℤ_2 ⊆ (ℚ_2ˣ)²` as a worked example; it exports no target signature for the general
 statement, so the form that 6B and 6C consume is stated here, against the supplier's
-`unitFiltration`. -/
+`unitFiltration` and `absoluteRamificationIndex`. -/
 theorem unitFiltration_le_square [Invertible (2 : K)] :
-    unitFiltration K (2 * absoluteRamificationIndex K + 1) ≤ Subgroup.square Kˣ :=
+    unitFiltration K (2 * absoluteRamificationIndex K 2 + 1) ≤ Subgroup.square Kˣ :=
   sorry
 
 /-- **Layer 6A, sharpness of the local square theorem.** The bound `2e+1` cannot be
 lowered. Over `ℚ_2`, where `e = 1`, the unit `5` lies in `U(ℚ_2, 2)` and is not a
 square. -/
 theorem not_unitFiltration_le_square [Invertible (2 : K)] :
-    ¬ (unitFiltration K (2 * absoluteRamificationIndex K) ≤ Subgroup.square Kˣ) :=
+    ¬ (unitFiltration K (2 * absoluteRamificationIndex K 2) ≤ Subgroup.square Kˣ) :=
   sorry
 
 /-- **Layer 6A, the square-class group is finite.** A corollary of the Local Fields Layer 1
-milestone *Power classes, the primary statement*, through `square_eq_powerSubgroup`. -/
+milestone *Power classes, the primary statement*, through `square_eq_range_powMonoidHom`. -/
 instance squareClass_finite [Invertible (2 : K)] : Finite (Kˣ ⧸ Subgroup.square Kˣ) :=
   sorry
 
@@ -605,7 +586,7 @@ representatives `1, u, π, uπ` for a uniformizer `π` and a unit `u` whose resi
 nonsquare. This is the Local Fields Layer 1 count
 `#(Kˣ/(Kˣ)ⁿ) = n · #μ_n(K) · q^{v_K(n)}` at `n = 2` with `e = 0`, in the shape 6D consumes. -/
 theorem card_squareClass_of_odd [Invertible (2 : K)]
-    (hodd : absoluteRamificationIndex K = 0) :
+    (hodd : absoluteRamificationIndex K 2 = 0) :
     Nat.card (Kˣ ⧸ Subgroup.square Kˣ) = 4 :=
   sorry
 
@@ -616,9 +597,9 @@ basis `−1, 2, 5`. It is the same Local Fields count at `n = 2`, where `#μ_2(K
 `2` is invertible; the Local Fields roadmap exports the general formula as a milestone and the
 `ℚ_2` instance as a worked example, so the `4·q^e` shape that 6D consumes is stated here. -/
 theorem card_squareClass_of_dyadic [Invertible (2 : K)]
-    (h2 : absoluteRamificationIndex K ≠ 0) :
+    (h2 : absoluteRamificationIndex K 2 ≠ 0) :
     Nat.card (Kˣ ⧸ Subgroup.square Kˣ) =
-      4 * Nat.card (IsLocalRing.ResidueField 𝒪[K]) ^ absoluteRamificationIndex K :=
+      4 * Nat.card (IsLocalRing.ResidueField 𝒪[K]) ^ absoluteRamificationIndex K 2 :=
   sorry
 
 /-- **Layer 6A, the unramified quadratic extension and its norms.** There is a nonsquare
@@ -647,7 +628,7 @@ unbounded. -/
 section Defect
 
 open scoped ValuativeRel
-open TauCetiRoadmap.LocalFields (normalizedValuation unitFiltration)
+open TauCetiRoadmap.LocalFields (normalizedValuation unitFiltration absoluteRamificationIndex)
 
 variable [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
 
@@ -707,15 +688,15 @@ theorem defectExponent_of_odd (a : Kˣ)
 square, the exponent is `2e` or an odd number below `2e`. -/
 theorem defectExponent_unit [Invertible (2 : K)] (u : Kˣ)
     (hu : Multiplicative.toAdd (normalizedValuation K u) = 0) (hsq : ¬ IsSquare u) :
-    defectExponent u = ((2 * absoluteRamificationIndex K : ℕ) : ℤ) ∨
-      ∃ k : ℕ, k < absoluteRamificationIndex K ∧ defectExponent u = ((2 * k + 1 : ℕ) : ℤ) :=
+    defectExponent u = ((2 * absoluteRamificationIndex K 2 : ℕ) : ℤ) ∨
+      ∃ k : ℕ, k < absoluteRamificationIndex K 2 ∧ defectExponent u = ((2 * k + 1 : ℕ) : ℤ) :=
   sorry
 
 /-- **Layer 6B, the ramification dictionary.** A nonsquare of even exponent is, up to
 squares, the unramified class of `exists_unramified_class`. -/
 theorem exists_sq_mul_eq_unramified [Invertible (2 : K)] (a : Kˣ) (ha : ¬ IsSquare a)
     (d : ℤ) (hd : defectExponent a = (d : ℤ)) (hev : Even d) :
-    ∃ c : Kˣ, defectExponent (a * c ^ 2) = ((2 * absoluteRamificationIndex K : ℕ) : ℤ) :=
+    ∃ c : Kˣ, defectExponent (a * c ^ 2) = ((2 * absoluteRamificationIndex K 2 : ℕ) : ℤ) :=
   sorry
 
 end Defect
@@ -994,7 +975,7 @@ noncomputable def kummerClass [Invertible (2 : K)] (a : Kˣ) : H1 K :=
 variable (K)
 
 /-- **Layer 7A, the Kummer isomorphism on square classes** `Kˣ/(Kˣ)² ≃ H¹(G_K, 𝔽₂)`. It is the
-supplier's `kummerIso` at `n = 2`, read through `square_eq_powerSubgroup` and the coefficient
+supplier's `kummerIso` at `n = 2`, read through `square_eq_range_powMonoidHom` and the coefficient
 transport. The square-class side is the one Layer 0 and Layer 6 use. -/
 noncomputable def kummerSquareClassEquiv [Invertible (2 : K)] :
     Additive (Kˣ ⧸ Subgroup.square Kˣ) ≃+ H1 K :=

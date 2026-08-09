@@ -384,14 +384,13 @@ operation and falsifies the theorems.
   the Steinberg relation, and invariance under binary equivalence are theorems about
   that definition.
 - **The local field.** The carrier is Mathlib's `IsNonarchimedeanLocalField`, and the
-  valuation and the unit filtration are the local-fields roadmap's
-  `normalizedValuation` and `unitFiltration`. What Layer 6A adds are the two objects
-  that roadmap does not name, `IsUniformizer` and `absoluteRamificationIndex`, each with
-  its characterizing theorems. A uniformizer is a choice satisfying `IsUniformizer`, and
-  never a component of a package: an element of valuation one is not unique, so a
-  package that stores one is not unique either. The absolute ramification index is the
-  decoded value `v_K(2)` of the supplier's valuation and is not separate data, because
-  `Invertible (2 : K)` already makes `2` a unit.
+  valuation, the unit filtration and the absolute ramification index are the
+  local-fields roadmap's `normalizedValuation`, `unitFiltration` and
+  `absoluteRamificationIndex`, the last of which is read at the argument `2`, so that
+  `e = v_K(2)` throughout. What Layer 6A adds is the one object that roadmap does not
+  name, `IsUniformizer`, with its characterizing theorems. A uniformizer is a choice
+  satisfying `IsUniformizer`, and never a component of a package: an element of valuation
+  one is not unique, so a package that stores one is not unique either.
 - **Mod-2 Galois cohomology.** The carrier is the profinite-cohomology roadmap's
   `trivialF2` object over its `AbsoluteGaloisGroup`, so that roadmap's `cup`, `res`,
   `corestriction`, and `evensNormIndexTwo` apply here with no transport. What Layer 7A
@@ -423,6 +422,8 @@ shape its own layers consume, marked as such at the point of use.
 | Layer 6A, the valuation; every statement of 6B and 6C | 0 | `normalizedValuation`, `normalizedValuation_surjective`, `normalizedValuation_eq_one_iff`, `normalizedValuation_irreducible` | `Kˣ →* Multiplicative ℤ`, surjective, with the unit equation and the uniformizer equation |
 | Layer 6A, the unit filtration; 6B's defect bounds | 1 | `unitFiltration`, `mem_unitFiltration_zero`, `mem_unitFiltration_succ_congr`, `mem_unitFiltration_succ_valuation`, `unitFiltration_antitone`, `iInf_unitFiltration` | `ℕ → Subgroup Kˣ`, decreasing with trivial intersection, in both membership forms |
 | Layer 6A, residue and ramification data of a finite extension | 0 | `ramificationIndex`, `inertiaDegree`, `normalizedValuation_algebraMap`, `card_residueField`, `ramificationIndex_mul_inertiaDegree` | `e`, `f`, `v_L ∘ algebraMap = e · v_K`, `#𝓀[L] = #𝓀[K]^f`, and `e · f = [L:K]` |
+| Layer 6A, the absolute ramification index; the thresholds of 6B and the counts of 6D | 0 | `absoluteRamificationIndex`, `normalizedValuation_natCast`, `absoluteRamificationIndex_eq_zero_iff` | `e = v_K(2)` as `absoluteRamificationIndex K 2`, with `v_K^×(2) = Multiplicative.ofAdd e` and `e = 0` exactly when `2` is a unit of `𝒪[K]`. ⚠ The relative `ramificationIndex K L` of the row above is a different invariant |
+| Layer 6A, the square-class dictionary; every count of 6D and the Kummer isomorphism of 7A | 1 | `square_eq_range_powMonoidHom` | `Subgroup.square Kˣ = (powMonoidHom 2).range`, the identification of Mathlib's subgroup of squares with the range the supplier's count and the Kummer isomorphism are stated at |
 | Layer 6A, the residue field and its unit group | 1 | `teichmuller`, `teichmuller_section` | `𝓀[K]ˣ →* 𝒪[K]ˣ`, a multiplicative section of reduction |
 | Layer 6A, the filtration quotients | 1 | milestone *Graded pieces* (no target signature) | `U(K,0)/U(K,1) ≃* 𝓀[K]ˣ` and `U(K,i)/U(K,i+1) ≃* 𝓀[K]⁺` for `i ≥ 1` |
 | Layer 6A, the square-class counts; 6D's counting arguments | 1 | milestone *Power classes, the primary statement* (no target signature) | `#(Kˣ/(Kˣ)ⁿ) = n · #μ_n(K) · q^{v_K(n)}` |
@@ -1013,15 +1014,20 @@ is stated at the end of 6C, with its own prerequisites.
 The general arithmetic of a nonarchimedean local field belongs to the
 [local-fields roadmap](../LocalFields/README.md), and this sublayer consumes it. The
 normalized valuation is that roadmap's `normalizedValuation`, the unit filtration is its
-`unitFiltration`, and the graded pieces, the power-class counts, the unramified
-extensions and their norm groups are its milestones. Nothing here defines a second
-valuation or a second filtration: a second one would need a comparison lemma at every use
-site, and every statement of 6B, 6C and 6D is written against the supplied objects.
+`unitFiltration`, the absolute ramification index `e = v_K(2)` is its
+`absoluteRamificationIndex K 2`, and the graded pieces, the power-class counts with the
+identification of the two spellings of the square classes, the unramified extensions and
+their norm groups are its milestones. Nothing here defines a second valuation, a second
+filtration or a second ramification index: a second one would need a comparison lemma at
+every use site, and every statement of 6B, 6C and 6D is written against the supplied
+objects.
 
-Two objects remain this roadmap's own, because the supplier does not name them, and three
+One object remains this roadmap's own, because the supplier does not name it, and three
 statements remain because the supplier owns the mathematics but exports no target
-signature for the shape the later sublayers consume. Both kinds are listed below, and the
-supplier rows are in the contract table under
+signature for the shape the later sublayers consume. Both kinds are listed below. Two
+further entries carry no work and are there to fix a name: they record which supplier
+declaration `e` and the square classes are read through, because 6B, 6C and 6D read both
+constantly. The supplier rows are in the contract table under
 ["Cross-roadmap contract"](#cross-roadmap-contract).
 
 Scope: `K` is a nonarchimedean local field with `2` invertible. In odd residue
@@ -1035,12 +1041,14 @@ Prerequisites:
 - **[Local Fields, Layer 0]** `normalizedValuation` with `normalizedValuation_surjective`,
   `normalizedValuation_eq_one_iff` and `normalizedValuation_irreducible`;
   `ramificationIndex`, `inertiaDegree`, `card_residueField`,
-  `ramificationIndex_mul_inertiaDegree`;
+  `ramificationIndex_mul_inertiaDegree`; `absoluteRamificationIndex` with
+  `normalizedValuation_natCast` and `absoluteRamificationIndex_eq_zero_iff`;
 - **[Local Fields, Layer 1]** `unitFiltration` with `mem_unitFiltration_zero`,
   `mem_unitFiltration_succ_congr`, `mem_unitFiltration_succ_valuation`,
-  `unitFiltration_antitone` and `iInf_unitFiltration`; `teichmuller` with
-  `teichmuller_section`; the milestones *Graded pieces*, *Power classes, the primary
-  statement*, and *Deep units are squares, in mixed characteristic*;
+  `unitFiltration_antitone` and `iInf_unitFiltration`; `square_eq_range_powMonoidHom`;
+  `teichmuller` with `teichmuller_section`; the milestones *Graded pieces*, *Power
+  classes, the primary statement*, and *Deep units are squares, in mixed
+  characteristic*;
 - **[Local Fields, Layer 2]** the milestones *Existence and uniqueness* and *Norms*;
 - **[Layer 0]** the square-class calculus and the `Nat.card` finiteness API.
 
@@ -1054,16 +1062,18 @@ Milestones:
   `𝒪[K]` and proves one direction in `normalizedValuation_irreducible`; the equivalence of
   the two descriptions is a single named lemma here, and every later statement uses
   whichever side is convenient.
-- **The absolute ramification index.** `absoluteRamificationIndex K` is `e = v_K(2)`, the
-  decoded value of the supplied valuation at `2`. Under the standing hypothesis
-  `Invertible (2 : K)` the element `2` is a unit, so `e` is not data. Its defining
-  equation is a stated lemma. The supplier names the relative `ramificationIndex` of an
-  extension and not this absolute one, so it is defined here.
-- **The square-class dictionary.** This roadmap takes square classes in
+- **The absolute ramification index, consumed.** `e` is the supplier's
+  `absoluteRamificationIndex K 2`, the decoded value `v_K(2)` of the supplied valuation.
+  Under the standing hypothesis `Invertible (2 : K)` the element `2` is a unit, so `e` is
+  not data, and `e = 0` says exactly that the residue characteristic is odd. Nothing is
+  defined here; the supplier's defining equation and vanishing criterion are what the
+  statements below use.
+- **The square-class dictionary, consumed.** This roadmap takes square classes in
   `Subgroup.square Kˣ`, and both the local-fields power-class count and the
   profinite-cohomology Kummer isomorphism are stated at `(powMonoidHom n).range`. The
-  identification at `n = 2` is a named lemma, and it is what lets the counts below rest on
-  the supplier's theorem and Layer 7A's Kummer isomorphism be stated on square classes.
+  identification at `n = 2` is the supplier's `square_eq_range_powMonoidHom`, and it is
+  what lets the counts below rest on the supplier's theorem and Layer 7A's Kummer
+  isomorphism be stated on square classes.
 - **The local square theorem, in the sharp form the later sublayers use** (O'Meara 63:1).
   With `e = v_K(2)`, `U(K, 2e+1) ⊆ (Kˣ)²`, and the bound is sharp: `U(K, 2e) ⊄ (Kˣ)²`. The
   local-fields roadmap owns this mathematics and carries the dyadic instance
@@ -1089,7 +1099,8 @@ Milestones:
 
 Basic API for the objects introduced here:
 
-- constructors: `IsUniformizer`, `absoluteRamificationIndex`, and `q = Nat.card 𝓀[K]`;
+- constructors: `IsUniformizer` and `q = Nat.card 𝓀[K]`; `e` is the supplier's
+  `absoluteRamificationIndex K 2` and is constructed there;
 - examples: `ℚ_[p]` with `π = p`; `ℚ_2`, where `e = 1` and `#(ℚ_2ˣ/(ℚ_2ˣ)²) = 8` on the
   basis `−1, 2, 5`;
 - morphisms: none are introduced; the inclusions and quotient maps of the filtration are
@@ -1097,9 +1108,10 @@ Basic API for the objects introduced here:
 - functoriality: for a finite extension `L/K` the supplier's
   `normalizedValuation_algebraMap` gives `v_L ∘ (algebraMap K L) = e(L/K) · v_K`, and
   `U(K,i)` maps into `U(L, e(L/K)·i)`;
-- comparison lemmas: `IsUniformizer` against the supplier's `Irreducible` convention;
-  `Subgroup.square Kˣ` against `(powMonoidHom 2).range`; the multiplicative square-class
-  group against `TauCeti.SquareClassGroup`;
+- comparison lemmas: `IsUniformizer` against the supplier's `Irreducible` convention; the
+  multiplicative square-class group against `TauCeti.SquareClassGroup`. The comparison of
+  `Subgroup.square Kˣ` with `(powMonoidHom 2).range` is the supplier's
+  `square_eq_range_powMonoidHom` and is not restated;
 - naturality: the counts are invariant under an isomorphism of local fields, because the
   supplied valuation is;
 - edge cases: odd residue characteristic, where `e = 0` and `U(K,1) ⊆ (Kˣ)²`; the residue
