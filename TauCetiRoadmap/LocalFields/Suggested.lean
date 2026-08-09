@@ -513,11 +513,14 @@ structure ProPOps (p : ℕ) : Prop where
       (hU : IsTopologicallyFinitelyGenerated U),
       topologicalGeneratorRankNat U hU ≤ 1 + U.index * (topologicalGeneratorRankNat G hG - 1)
   /-- The Burnside criterion: a subset of a pro-`p` group generates topologically if and only if
-  its image generates the Frattini quotient `G ⧸ Φ(G)`. Layer 9 uses it for the tame frame. -/
+  its image topologically generates the Frattini quotient `G ⧸ Φ(G)`. ⚠ The closure on the
+  right is not decoration: without it the statement is false for `∏_ℕ C_p`, where the Frattini
+  subgroup is trivial and a countable dense subset generates topologically but not abstractly.
+  Layer 9 uses this field for the tame frame. -/
   topologicallyGenerates_iff_frattiniQuotient : ∀ (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] [CompactSpace G], IsProP p G → ∀ s : Set G,
       (Subgroup.closure s).topologicalClosure = ⊤ ↔
-        Subgroup.closure ((QuotientGroup.mk' (proPFrattini p G)) '' s) = ⊤
+        (Subgroup.closure ((QuotientGroup.mk' (proPFrattini p G)) '' s)).topologicalClosure = ⊤
 
 /-- The rank of the maximal pro-`p` quotient of an absolute Galois group, in the two cases that
 Layer 9 uses. ⚠ Every field is about `G_F(p)`, and none is about `G_F`. -/
