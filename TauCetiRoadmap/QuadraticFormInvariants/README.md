@@ -427,12 +427,12 @@ shape its own layers consume, marked as such at the point of use.
 | Layer 6A, the square-class dictionary; every count of 6D and the Kummer isomorphism of 7A | 1 | `square_eq_range_powMonoidHom` | `Subgroup.square Kˣ = (powMonoidHom 2).range`, the identification of Mathlib's subgroup of squares with the range the supplier's count and the Kummer isomorphism are stated at |
 | Layer 6A, the residue field and its unit group | 1 | `teichmuller`, `teichmuller_section` | `𝓀[K]ˣ →* 𝒪[K]ˣ`, a multiplicative section of reduction |
 | Layer 6A, the filtration quotients | 1 | milestone *Graded pieces* (no target signature) | `U(K,0)/U(K,1) ≃* 𝓀[K]ˣ` and `U(K,i)/U(K,i+1) ≃* 𝓀[K]⁺` for `i ≥ 1` |
-| Layer 6A, the square-class counts; 6D's counting arguments | 1 | milestone *Power classes, the primary statement* (no target signature) | `#(Kˣ/(Kˣ)ⁿ) = n · #μ_n(K) · q^{v_K(n)}` |
-| Layer 6A, the local square theorem; 6B's list of unit defects | 1 | milestone *Deep units are squares, in mixed characteristic* (no target signature) | `U(K, 2e+1) ⊆ (Kˣ)²` for `K/ℚ_2` finite |
-| Layer 6A, the unramified class; 6B's evaluation formula | 2 | milestones *Existence and uniqueness* and *Norms* (no target signature) | the unramified extension of each degree, and `N_{L/K}(Lˣ) = π^{fℤ} × 𝒪[K]ˣ` |
+| Layer 6A, the square-class counts; 6D's counting arguments | 1 | `card_powerClasses_of_isUnit`, `card_powerClasses_mixed`, `card_squareClasses_of_isUnit`, `card_squareClasses_dyadic` | `#(Kˣ/(Kˣ)ⁿ) = n · #μ_n(K) · q^{v_K(n)}` in the two regimes, with the `n = 2` values `4` when `2` is a unit of `𝒪[K]` and `4 · q^e` for `K/ℚ_2` finite, at `e = absoluteRamificationIndex K 2` |
+| Layer 6A, the local square theorem; 6B's list of unit defects | 1 | `unitFiltration_le_range_powMonoidHom_two`, `not_unitFiltration_le_range_powMonoidHom_two` | `U(K, 2e+1) ⊆ (Kˣ)²` for `K/ℚ_2` finite, and its sharpness `U(K, 2e) ⊄ (Kˣ)²`, which 6B's defect list needs in order to know the bound is attained |
+| Layer 6A, the unramified class; 6B's evaluation formula | 2 | `normGroup`, `map_norm_unitFiltration_zero`, `mem_normGroup_iff_dvd_normalizedValuation`; milestone *Existence and uniqueness* (no target signature) | the unramified norm group in norm-equation form, `x ∈ normGroup L/K ↔ f ∣ v_K(x)`, with `N_{L/K}(𝒪[L]ˣ) = 𝒪[K]ˣ`; and the unramified extension of each degree |
 | Layer 6, the `ℚ_p` acceptance suite | 0 | the non-vacuity milestone (worked example) | `IsNonarchimedeanLocalField ℚ_[p]` |
 | Layer 6C and Layer 7C, the symbol against local duality | 8 | `tateEvaluationPairing`, `tateDualityPairing`, `tateDualityPairing_perfect_mixed` | the evaluation pairing `A' × A → μ_n`, the duality pairing `Hⁱ(G_K, A') × H^{2−i}(G_K, A) → ZMod n`, and its perfectness |
-| Layer 6E, the invariant map | 5 | milestone *`Br(K)` is unramified*, interface name `inv_K` (no target signature) | `H²(G_K, (Kˢ)ˣ) ≅ ℚ/ℤ`, with `inv_L ∘ res = [L:K] · inv_K` and `inv_K ∘ cor = inv_L` |
+| Layer 6E, the invariant map | 5 | `unitsRep`, `Br`, `invMap`, `brRes`, `brCor`, `invMap_brRes`, `invMap_brCor` | `inv_K : Br K = H²(G_K, (Kˢ)ˣ) ≃+ ℚ/ℤ`, with `inv_L ∘ res = [L:K] · inv_K` and `inv_K ∘ cor = inv_L` at the two named maps, each taking a `K`-embedding `L ↪ Kˢ`. ⚠ The coefficient ring is `ℤ`, so `Br` is not a value of the supplier's `ZMod n`-linear `H` |
 
 **From the [profinite-cohomology roadmap](../ProfiniteCohomology/README.md)**, namespace
 `TauCetiRoadmap.ProfiniteCohomology`.
@@ -481,10 +481,9 @@ Everything below the linear algebra:
 - the classical invariants `dim mod 2`, `d`, and `d±`;
 - the Brauer-valued Hasse and Clifford invariants, and the classification in dimension
   at most 3;
-- the uniformizer predicate and the absolute ramification index of Layer 6A, together
-  with the specialized shapes of the local square theorem, the square-class count, and
-  the unramified norm group that Layers 6B to 6D consume, each stated against the
-  local-fields roadmap's valuation and filtration;
+- the uniformizer predicate of Layer 6A, its square-class representatives in odd residue
+  characteristic, and the binary norm form `b = x² − Δ y²` that Layers 6B to 6D apply,
+  each stated against the local-fields roadmap's valuation, filtration, and norm group;
 - the quadratic defect, the Hilbert symbol over a nonarchimedean local field with the
   dyadic case, bimultiplicativity, and nondegeneracy, together with the identification
   of the symbol with the mod-2 specialization of the local duality pairing;
@@ -533,7 +532,7 @@ Each prerequisite carries one of these sources:
 Layers 0 to 6 use no cohomology, and only Layer 5 uses the Brauer group. There is one
 exception, stated where it occurs: the second milestone of sublayer 6E, which identifies
 the Hasse invariant with the invariant map of local class field theory, uses Layer 7B and
-the local-fields roadmap's `inv_K`, so it is placed after Layer 7B in the build order.
+the local-fields roadmap's `invMap`, so it is placed after Layer 7B in the build order.
 
 ### Layer 0: square classes, diagonal calculus, and chain equivalence
 
@@ -1049,10 +1048,12 @@ Prerequisites:
 - **[Local Fields, Layer 1]** `unitFiltration` with `mem_unitFiltration_zero`,
   `mem_unitFiltration_succ_congr`, `mem_unitFiltration_succ_valuation`,
   `unitFiltration_antitone` and `iInf_unitFiltration`; `square_eq_range_powMonoidHom`;
-  `teichmuller` with `teichmuller_section`; the milestones *Graded pieces*, *Power
-  classes, the primary statement*, and *Deep units are squares, in mixed
-  characteristic*;
-- **[Local Fields, Layer 2]** the milestones *Existence and uniqueness* and *Norms*;
+  `teichmuller` with `teichmuller_section`; `card_powerClasses_of_isUnit`,
+  `card_powerClasses_mixed`, `card_squareClasses_of_isUnit`, `card_squareClasses_dyadic`;
+  `unitFiltration_le_range_powMonoidHom_two` with
+  `not_unitFiltration_le_range_powMonoidHom_two`; the milestone *Graded pieces*;
+- **[Local Fields, Layer 2]** `normGroup`, `map_norm_unitFiltration_zero` and
+  `mem_normGroup_iff_dvd_normalizedValuation`; the milestone *Existence and uniqueness*;
 - **[Layer 0]** the square-class calculus and the `Nat.card` finiteness API.
 
 Milestones:
@@ -1077,28 +1078,35 @@ Milestones:
   identification at `n = 2` is the supplier's `square_eq_range_powMonoidHom`, and it is
   what lets the counts below rest on the supplier's theorem and Layer 7A's Kummer
   isomorphism be stated on square classes.
-- **The local square theorem, in the sharp form the later sublayers use** (O'Meara 63:1).
-  With `e = v_K(2)`, `U(K, 2e+1) ⊆ (Kˣ)²`, and the bound is sharp: `U(K, 2e) ⊄ (Kˣ)²`. The
-  local-fields roadmap owns this mathematics and carries the dyadic instance
-  `1 + 8ℤ_2 ⊆ (ℚ_2ˣ)²` as a worked example; the general statement, against the supplied
-  filtration, is stated here because 6B's classification of unit defects consumes exactly
-  it, and the sharpness half is stated here in full generality.
-- **The square-class counts, in the `4 · q^e` form 6D consumes.** `Kˣ/(Kˣ)²` is finite,
-  which is a separate statement from its order. The order is `4` when the residue
-  characteristic is odd, and `4 · q^e` with `q = #𝓀[K]` and `e = v_K(2)` when the residue
+- **The local square theorem, consumed in its sharp form** (O'Meara 63:1). With
+  `e = absoluteRamificationIndex K 2`, `U(K, 2e+1) ⊆ (Kˣ)²`, and the bound is sharp:
+  `U(K, 2e) ⊄ (Kˣ)²`. Both halves are the supplier's, against the supplied filtration and
+  in the generality 6B's classification of unit defects needs:
+  `unitFiltration_le_range_powMonoidHom_two` and
+  `not_unitFiltration_le_range_powMonoidHom_two`. Nothing is restated here. 6B needs the
+  sharpness and not only the containment, because a defect list built on a depth that is
+  not attained would classify nothing.
+- **The square-class counts, consumed in the `4 · q^e` form 6D uses.** `Kˣ/(Kˣ)²` is
+  finite, which is a separate statement from its order. The order is
+  `card_squareClasses_of_isUnit`, that is `4`, when the residue
+  characteristic is odd, and `card_squareClasses_dyadic`, that is `4 · q^e` with
+  `q = #𝓀[K]` and `e = absoluteRamificationIndex K 2`, when the residue
   characteristic is `2`. For a finite extension of `ℚ_2` of degree `N = e·f` the second
-  reads `2^{N+2}`, and over `ℚ_2` it reads `8`. Each is the supplier's count
+  reads `2^{N+2}`, and over `ℚ_2` it reads `8`. Both are the supplier's count
   `#(Kˣ/(Kˣ)ⁿ) = n · #μ_n(K) · q^{v_K(n)}` at `n = 2`, where `#μ_2(K) = 2` because `2` is
-  invertible. For odd residue characteristic, the four classes are represented by
+  invertible. What is stated here, and is not the supplier's, is the choice of
+  representatives: for odd residue characteristic the four classes are represented by
   `1, u, π, uπ`, where `u` is a unit whose residue is a nonsquare. That choice of `u` is
   part of the statement and is never left implicit.
 - **The unramified quadratic extension, in the norm-equation form 6B and 6C consume.**
   There is a nonsquare unit `Δ` such that `K(√Δ)/K` is the unramified quadratic extension,
   and `b` is a norm from it exactly when `v_K(b)` is even; equivalently every unit is a
   norm and a uniformizer is not. The local-fields roadmap owns the unramified extension
-  and the equality `N_{L/K}(Lˣ) = π^{fℤ} × 𝒪[K]ˣ`; this statement phrases the degree-two
-  case through the norm equation `b = x² − Δ y²`, which is the shape 6B's evaluation
-  formula and 6C's symbol computation apply, and which needs no extension-building API.
+  and the norm group, and states the criterion at `mem_normGroup_iff_dvd_normalizedValuation`,
+  namely `x ∈ normGroup L/K ↔ f ∣ v_K(x)`; at `f = 2` that is the parity condition above.
+  What this statement adds is the passage to the norm equation `b = x² − Δ y²`, which is
+  the shape 6B's evaluation formula and 6C's symbol computation apply, and which needs no
+  extension-building API.
 
 Basic API for the objects introduced here:
 
@@ -1478,8 +1486,9 @@ Prerequisites:
 - **[Layer 6C]** `localHasse`;
 - **[Layer 6D]** the uniqueness of the quaternion division algebra;
 - **[Layer 7B]** the 2-torsion comparison `ι`, for the second milestone only;
-- **[Local Fields, Layer 5]** the invariant map `inv_K` with its injectivity,
-  surjectivity, and the two functoriality squares, for the second milestone only.
+- **[Local Fields, Layer 5]** the invariant map `invMap`, whose injectivity and
+  surjectivity are the two halves of the `≃+`, with the functoriality squares
+  `invMap_brRes` and `invMap_brCor`, for the second milestone only.
 
 Milestone 1. The subgroup `Q(K) ≤ BrauerGroup K` generated by the quaternion classes is
 `{1, [D]}`, where `D` is the quaternion division algebra of 6D, so the map
@@ -1496,11 +1505,12 @@ from the Brauer group alone. Layer 7C's local specialization consumes it.
 
 Milestone 2. `ε` is the local invariant map of class field theory. Precisely,
 `Q(K) = Br(K)[2]`, and under the identification `Br(K)[2] ≅ H²(G_K, μ₂)` of Layer 7B the
-composite with the local-fields roadmap's `inv_K : H²(G_K, (Kˢ)ˣ) ≅ ℚ/ℤ` is the injection
+composite with the local-fields roadmap's `invMap : Br K ≃+ ℚ/ℤ`, where `Br K` is that
+roadmap's `H²(G_K, (Kˢ)ˣ)`, is the injection
 of `(1/2)ℤ/ℤ`, which carries `[D]` to `1/2`. So
 
 ```text
-inv_K [(a,b)] = 0   if and only if   (a,b)_K = +1,
+invMap [(a,b)] = 0   if and only if   (a,b)_K = +1,
 ```
 
 and the Hasse invariant of a form is the invariant map of its Brauer class. The
@@ -2106,8 +2116,10 @@ subject matter belongs and built where its prerequisites are ready.
   section, the ramification and residue degrees, the power-class counts, the unramified
   extensions and their norm groups, the local duality pairing, and the invariant map are
   all that roadmap's. This roadmap defines no second valuation and no second filtration.
-  What 6A adds is the uniformizer predicate, the absolute ramification index, and the
-  specialized shapes of three of that roadmap's milestones in the form 6B to 6D consume.
+  What 6A adds is the uniformizer predicate, the choice of square-class representatives in
+  odd residue characteristic, and the passage from that roadmap's norm-equation criterion
+  to the binary form `b = x² − Δ y²` that 6B and 6C apply. The local square theorem in its
+  sharp form and the square-class counts are consumed by name and are not restated.
 - The [profinite-cohomology roadmap](../ProfiniteCohomology/README.md) owns continuous
   cohomology and its operations. Sublayer 7A consumes it through the exact contract
   above: the carrier, the cup product, restriction, inflation, corestriction, Kummer
