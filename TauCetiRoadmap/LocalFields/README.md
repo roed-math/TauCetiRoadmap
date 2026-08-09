@@ -278,7 +278,8 @@ exists there. Do not rebuild any of it.
 Everything below is specific to the arithmetic of local fields, and none of it exists in Mathlib
 in the form stated here.
 
-- The normalized `ℤ`-valued valuation and the absolute value `‖·‖_K`.
+- The normalized `ℤ`-valued valuation, the absolute value `‖·‖_K`, and the absolute ramification
+  index `v_K(p)`.
 - The unit filtration `U(K,i)`, with its graded pieces `𝒪[K]ˣ/U(K,1) ≅ 𝓀[K]ˣ` and
   `U(K,i)/U(K,i+1) ≅ 𝓀[K]⁺`. With it: the Teichmüller section `𝓀[K]ˣ →* 𝒪[K]ˣ`, the decomposition
   `Kˣ ≅ πᶻ × μ_{q−1} × U(K,1)` with `U(K,1)` pro-`p`, and the cardinality of `Kˣ/(Kˣ)ⁿ` in the two
@@ -300,8 +301,9 @@ in the form stated here.
   unramified units; `H²(unramified) ≅ (1/n)ℤ/ℤ`; solvability of local Galois groups; the invariant
   map `inv_K : Br(K) ≅ ℚ/ℤ`; fundamental classes; the class formation; Tate–Nakayama; finite-level
   reciprocity with tower functoriality; the Artin map with its normalizations; norm groups; norm
-  limitation; and the existence theorem, away from the residue characteristic for a general local
-  field and in full for `K/ℚ_p` finite.
+  limitation; the conductor, of an abelian extension and of a continuous character of `Kˣ`; and
+  the existence theorem, away from the residue characteristic for a general local field and in
+  full for `K/ℚ_p` finite.
 - Local Tate duality and the Euler characteristic in the two regimes, and the exact rank
   `d(G_K) = [K:ℚ_p] + 2`.
 
@@ -422,6 +424,34 @@ types of the next layer expressible, add the milestones of that layer to `Sugges
     valued base. *False generalization:* over an incomplete base, or with more than one prime
     above `𝓂[K]`, the identity becomes `∑_P e_P f_P = [L:K]`, which is `sum_ramification_inertia`
     and is a different theorem.
+- **The absolute ramification index.** Define `absoluteRamificationIndex K p : ℕ`, for a natural
+  number `p`, as the decoded valuation `v_K(p)` of the image of `p` in `K`. Its characteristic
+  property is `v_K^×(p) = Multiplicative.ofAdd (e_K(p))`, which carries the hypothesis
+  `(p : K) ≠ 0` and, since the exponent is a natural number, also says that `p` lies in `𝒪[K]`.
+  For `p` prime and `K/ℚ_p` finite this is the ramification index of `K/ℚ_p`, and it is the `e`
+  that the two deep-unit milestones of Layer 1 are stated with, at the residue characteristic and
+  at `p = 2` respectively. It is `0` exactly when `p` is a unit of `𝒪[K]`, that is when `p` is not
+  the residue characteristic; the relative `e(L/K)` above is a different invariant, and neither
+  name is used for the other. ⚠ In equal characteristic `p` the image of `p` in `K` is `0` and
+  there is no such invariant, so the definition takes the junk value `0` there, as
+  `Ideal.ramificationIdx` does in its degenerate case. The hypothesis `(p : K) ≠ 0` on every
+  statement is what separates the two cases.
+  - *Prerequisites:*
+    - `Layer 0: the normalized valuation`;
+    - `Layer 0: e and f, intrinsically`, for the comparison below.
+  - *API:*
+    - the definition and its characteristic equation;
+    - the vanishing criterion, `e_K(p) = 0` if and only if `p` is a unit of `𝒪[K]`;
+    - the comparison `absoluteRamificationIndex K p = ramificationIndex ℚ_[p] K` for `K/ℚ_p`
+      finite, with `e_K(p) · f = [K : ℚ_p]` as a corollary of the product formula above;
+    - multiplicativity along a finite extension `L/K`, that is
+      `absoluteRamificationIndex L p = ramificationIndex K L * absoluteRamificationIndex K p`;
+    - the values `e_{ℚ_p}(p) = 1`, `e_{ℚ_p}(2) = 0` for odd `p`, and `e_K(2) = 2` for
+      `K = ℚ_2(√2)`, in the examples section.
+  - *Source:* Serre LF II §1; Neukirch ANT II §6, for `e_K(p) · f = [K : ℚ_p]`. The hypothesis
+    used there is that `K` is a finite extension of `ℚ_p`. *False generalization:* the vanishing
+    criterion is false without `(p : K) ≠ 0`. At `K = 𝔽_p((t))` the left-hand side is `0`, from
+    the junk branch, while `p` is not a unit of `𝒪[K]`, because it is `0`.
 
 ### Layer 1: units, the filtration, and the multiplicative group
 
@@ -494,12 +524,14 @@ types of the next layer expressible, add the milestones of that layer to `Sugges
     - the projection `Kˣ → ℤ`, which is `v_K`, and its splitting.
   - *Source:* Serre LF II §§4–5; Neukirch ANT II §5.
 - **Deep units in mixed characteristic.** Let `K/ℚ_p` be finite of degree `N`, with absolute
-  ramification index `e`. Let `i : ℕ` satisfy the integer inequality `(p − 1) * i > e`. Then the
-  logarithm is an isomorphism of topological groups `U(K,i) ≃ (𝓂[K]^i, +)`, with `exp` as its
-  inverse, and therefore `U(K,i) ≃ ℤ_p^N` as `ℤ_p`-modules. State the threshold as that integer
-  inequality, and never as `i > e/(p−1)`, so that no division of natural numbers occurs.
+  ramification index `e = absoluteRamificationIndex K p`. Let `i : ℕ` satisfy the integer
+  inequality `(p − 1) * i > e`. Then the logarithm is an isomorphism of topological groups
+  `U(K,i) ≃ (𝓂[K]^i, +)`, with `exp` as its inverse, and therefore `U(K,i) ≃ ℤ_p^N` as
+  `ℤ_p`-modules. State the threshold as that integer inequality, and never as `i > e/(p−1)`, so
+  that no division of natural numbers occurs.
   - *Prerequisites:*
     - `Layer 1: the unit filtration as an object`;
+    - `Layer 0: the absolute ramification index`;
     - `Layer 0: finite extensions, III`;
     - `Mathlib: exp` and `log` for a `p`-adic field.
   - *Source:* NSW (7.4.4); Neukirch ANT II §5. The hypotheses used are `char K = 0` and the
@@ -521,7 +553,16 @@ types of the next layer expressible, add the milestones of that layer to `Sugges
   - *Prerequisites:*
     - `Layer 1: structure of Kˣ`;
     - `Layer 1: deep units in mixed characteristic` (regime 2 only);
-    - `Layer 0: the normalized valuation`.
+    - `Layer 0: the normalized valuation`;
+    - `Layer 0: the absolute ramification index`, which is the `v_K(n)` of the formula.
+  - *API:*
+    - the count in each regime, with `v_K(n) = 0` under `IsUnit (n : 𝒪[K])` as a named lemma;
+    - finiteness of `Kˣ/(Kˣ)ⁿ`, which the formula gives and which is not a separate theorem;
+    - the identification `Subgroup.square Kˣ = (powMonoidHom 2).range` of the two spellings of the
+      square classes, Mathlib's subgroup of squares and the range this formula is stated at. It is
+      what lets the count at `n = 2`, and the Kummer isomorphism of Layer 5, be read on
+      `Subgroup.square Kˣ`;
+    - the dyadic instance `#(ℚ_2ˣ/(ℚ_2ˣ)²) = 8` of the examples section.
   - *Source:* the formula follows from the structure of `Kˣ` above, with the logarithm in regime
     2; compare NSW VII §3. *False generalization:* at `K = 𝔽_q((t))`, `n = p`, the left side is
     infinite, so the equation fails in equal characteristic when `p ∣ n`. The hypothesis
@@ -573,17 +614,19 @@ types of the next layer expressible, add the milestones of that layer to `Sugges
   primary statement, and not a separate theorem.
   - *Prerequisites:* `Layer 1: power classes, the primary statement`.
 - **Deep units are squares, in mixed characteristic.** Let `K/ℚ_2` be finite, and let
-  `e = v_K(2)`. Then `U(K, 2e+1) ⊆ (Kˣ)²`. The threshold is sharp: at `K = ℚ_2`, `e = 1`, and
+  `e = absoluteRamificationIndex K 2`, that is `e = v_K(2)`. Then `U(K, 2e+1) ⊆ (Kˣ)²`. The
+  threshold is sharp: at `K = ℚ_2`, `e = 1`, and
   `U(K,3) = 1 + 8ℤ_2` consists of squares while `U(K,2)` does not. ⚠ This is **not** an instance
   of the cardinality count, which decides how many square classes there are and not which
   subgroup lies inside the squares. The proof is Hensel's lemma applied to `X² − u`, or the
   deep-unit logarithm with the fact that multiplication by `2` carries the logarithmic lattice at
   depth `2e+1` into the lattice at depth `e+1`. ⚠ The hypothesis is mixed characteristic. In
-  equal characteristic `2` the element `2` is zero, `e` is not defined, and the displayed
-  statement is a different assertion.
+  equal characteristic `2` the element `2` is zero, there is no such `e`, the definition takes
+  its junk value there, and the displayed statement is a different assertion.
   - *Prerequisites:*
     - `Layer 1: deep units in mixed characteristic`;
     - `Layer 1: the unit filtration as an object`;
+    - `Layer 0: the absolute ramification index`;
     - `Mathlib: Hensel's lemma in Mathlib/NumberTheory/Padics/Hensel.lean`.
   - *Source:* Serre, *A Course in Arithmetic*, II §3, for `ℚ_2`; Neukirch ANT II §5 in general.
 
@@ -1617,20 +1660,43 @@ exchanges one for another is a different theorem.
    `L/K` is unramified, stated separately because `U(K,0) = 𝒪[K]ˣ`; and, for `c(L/K) = n > 0`,
    minimality reads `U(K,n) ≤ NormGroup L/K` and `U(K, n−1) ≰ NormGroup L/K`, where `n − 1` is
    meaningful because `n > 0`. The letter `f` keeps its Layer-0 meaning throughout.
+
+   An abelian extension has a conductor, and so does a character of `Kˣ`; both are objects of
+   this milestone. For a continuous character `χ : Kˣ →ₜ* ℂˣ` define
+
+   ```text
+   a(χ) := sInf { n : ℕ | ∀ x ∈ U(K,n), χ x = 1 }         (the character conductor exponent)
+   ```
+
+   with the name `characterConductorExp`, on the same `U(K,n)` and on no filtration of its own,
+   and prove that it too is attained. ⚠ Attainment is not a formality: it needs more than
+   continuity and the fact that the `U(K,n)` are a neighbourhood basis of `1`. The argument is
+   that `ℂˣ` has no small subgroups, so the image of `U(K,n)`, a subgroup lying inside a small
+   enough ball around `1`, is trivial. Against a target that does have small subgroups the set
+   above can be empty and the infimum is then the junk value `0`: the identity homomorphism
+   `Kˣ →ₜ* Kˣ` is continuous and is trivial on no `U(K,n)`. That is why the target is fixed at
+   `ℂˣ` here.
    - *Prerequisites:*
      - `Layer 3: Hasse–Arf`;
      - `Layer 3: the norm on the unit filtration` (item 2);
      - `Layer 6: finite-level reciprocity`;
-     - `Layer 7: the Artin map and its normalizations`.
+     - `Layer 7: the Artin map and its normalizations`;
+     - `Layer 1: the unit filtration as an object`, for the character conductor.
    - *API:*
-     - the two definitions;
-     - attainment of the infimum;
-     - the unramified criterion;
+     - the two definitions for an extension, and `characterConductorExp` for a character;
+     - attainment of each infimum;
+     - the unramified criterion, `c(L/K) = 0` for an extension and `a(χ) = 0` exactly for a
+       character trivial on `𝒪[K]ˣ`;
      - the minimality statement;
+     - the comparison of the two, `a(χ ∘ θ_{L/K}) = c(L'/K)` when `χ` is a character of
+       `Gal(L/K)` cutting out the subextension `L'`, and `a(χ) = 0` for the trivial character;
+     - the behaviour of `a` under inflation from a quotient of `Gal(L/K)`;
      - the conductor of a cyclic extension of prime degree, which is `t + 1` for the jump `t`;
      - the conductor-discriminant relation for an abelian extension;
-     - the value for `ℚ_2(√5)/ℚ_2`, which is `0`, and for `ℚ_2(√2)/ℚ_2`, which is `3`.
-   - *Source:* Neukirch ANT V §6 for the finite-level statement.
+     - the value for `ℚ_2(√5)/ℚ_2`, which is `0`, and for `ℚ_2(√2)/ℚ_2`, which is `3`; the
+       quadratic character cutting out the second has `a(χ) = 3`.
+   - *Source:* Neukirch ANT V §6 for the finite-level statement; Serre LF VI §2 for the conductor
+     of a character and its comparison with the conductor of the extension it cuts out.
 9. **The interface for a modularity-lifting consumer, for `K/ℚ_p` finite.** Assemble four items
    into one structure: the finite-abelian-level isomorphisms, the arithmetic-Frobenius
    normalization, the tower compatibility, and the full existence theorem of step 6. The structure
@@ -1954,8 +2020,10 @@ instance, a sign error, a wrong normalization, or a dropped dyadic case.
   incomplete, and therefore not locally compact; and for `ℂ` no valuation class with a compatible
   topology qualifies, because a nonarchimedean local field is never algebraically closed.
 - **`v_2`, `‖·‖`, and `q` on `ℚ_2`** (Layer 0): `v_2^×(2) = Multiplicative.ofAdd 1`, equivalently
-  `v_2(2) = 1`; `‖2‖ = 1/2`; `q = 2`. On `K = ℚ_2(√2)`: `e = 2`, `f = 1`, and
-  `v_K^×(2) = Multiplicative.ofAdd 2`.
+  `v_2(2) = 1`, that is `absoluteRamificationIndex ℚ_[2] 2 = 1`; `‖2‖ = 1/2`; `q = 2`. On
+  `K = ℚ_2(√2)`: `e = 2`, `f = 1`, and `v_K^×(2) = Multiplicative.ofAdd 2`, that is
+  `absoluteRamificationIndex K 2 = 2`. The odd contrast is `absoluteRamificationIndex ℚ_[p] 2 = 0`
+  for `p` odd, where `2` is a unit.
 - **`ℚ_2ˣ/(ℚ_2ˣ)²` has order 8** (Layer 1), with the classes of `−1`, `2`, and `5` as a basis,
   where `5 ≡ −3 mod (ℚ_2ˣ)²`. For odd `p`, `ℚ_pˣ/(ℚ_pˣ)²` has order `4`. The sharp deep-square
   bound is `1 + 8ℤ_2 ⊆ (ℤ_2ˣ)²`, that is `U(2e+1) = U(3)` at `K = ℚ_2`.

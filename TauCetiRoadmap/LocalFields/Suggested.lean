@@ -192,6 +192,31 @@ theorem ramificationIndex_mul_inertiaDegree [Algebra K L] [ValuativeExtension K 
     ramificationIndex K L * inertiaDegree K L = Module.finrank K L :=
   sorry
 
+open Classical in
+/-- **Layer 0, the absolute ramification index** `e_K(p) = v_K(p)`, the decoded normalized
+valuation of the image of the natural number `p` in `K`. For `p` prime and `K/ℚ_p` finite it is
+`ramificationIndex ℚ_[p] K`, and it is `0` exactly when `p` is a unit of `𝒪[K]`, that is when `p`
+is not the residue characteristic. ⚠ In equal characteristic `p` the image of `p` in `K` is `0`
+and there is no such invariant. That branch takes the junk value `0`, in the manner of
+`Ideal.ramificationIdx`, so every statement below carries `(p : K) ≠ 0`; the hypothesis is what
+separates the two cases, and it is not a convenience. -/
+noncomputable def absoluteRamificationIndex (p : ℕ) : ℕ :=
+  if h : (p : K) = 0 then 0
+  else (Multiplicative.toAdd (normalizedValuation K (Units.mk0 (p : K) h))).toNat
+
+/-- **Layer 0, the characteristic property of the absolute ramification index.** Its value is a
+natural number, so the equation also carries the assertion that `p` lies in `𝒪[K]`. -/
+theorem normalizedValuation_natCast (p : ℕ) (hp : (p : K) ≠ 0) :
+    normalizedValuation K (Units.mk0 (p : K) hp)
+      = Multiplicative.ofAdd (absoluteRamificationIndex K p : ℤ) :=
+  sorry
+
+/-- **Layer 0, the vanishing criterion.** `e_K(p) = 0` exactly when `p` is invertible in the
+valuation ring, which for `p` prime says that `p` is not the residue characteristic. -/
+theorem absoluteRamificationIndex_eq_zero_iff (p : ℕ) (_hp : (p : K) ≠ 0) :
+    absoluteRamificationIndex K p = 0 ↔ IsUnit (p : ↥𝒪[K]) :=
+  sorry
+
 /-! ## Layer 1: units, the filtration, and the multiplicative group -/
 
 /-- **Layer 1, the unit filtration** as an object: `U(K,0) = 𝒪[K]ˣ` and
@@ -276,6 +301,14 @@ example (p : ℕ) [Fact p.Prime] [Algebra ℚ_[p] K] [Module.Finite ℚ_[p] K]
     Nat.card (Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range)
       = n * Nat.card (rootsOfUnity n K)
         * Nat.card (↥𝒪[K] ⧸ Ideal.span {(n : ↥𝒪[K])}) :=
+  sorry
+
+/-- **Layer 1, the two spellings of the square classes.** Mathlib's `Subgroup.square Kˣ` is the
+subgroup of squares, and the counts above are stated at the range of `powMonoidHom`. This is the
+identification at `n = 2`, and it is what lets a consumer read the count of this layer, and the
+Kummer isomorphism of Layer 5, on `Subgroup.square Kˣ`. -/
+theorem square_eq_range_powMonoidHom :
+    Subgroup.square Kˣ = (powMonoidHom 2 : Kˣ →* Kˣ).range :=
   sorry
 
 /-- **Layer 1, worked example: `ℚ_2ˣ/(ℚ_2ˣ)²` has order 8** (the classes of `−1, 2, 5`
@@ -929,6 +962,27 @@ example [IsNonarchimedeanLocalField ℚ_[2]] (σ : Field.absoluteGaloisGroup ℚ
     (_hσ : (QuotientGroup.mk σ : Field.absoluteGaloisGroupAbelianization ℚ_[2])
       = artinMap ℚ_[2] (Units.mk0 (2 : ℚ_[2]) (by norm_num))) :
     cyclotomicCharacter (AlgebraicClosure ℚ_[2]) 2 σ.toRingEquiv = 1 :=
+  sorry
+
+/-! ### Layer 7: the conductor of a continuous character of `Kˣ` -/
+
+/-- **Layer 7, `characterConductorExp`**, the conductor exponent `a(χ)` of a continuous character
+of `Kˣ`: the least depth of the unit filtration inside the kernel. `U(K,0)` is `𝒪[K]ˣ`, so `a(χ)`
+is `0` exactly for a character trivial on the units. This is the character-level companion of the
+conductor `c(L/K)` of a finite abelian extension, and the two agree when `χ ∘ θ_{L/K}` cuts out
+`L`. -/
+noncomputable def characterConductorExp (χ : ContinuousMonoidHom Kˣ ℂˣ) : ℕ :=
+  sInf {n | ∀ x ∈ unitFiltration K n, χ x = 1}
+
+/-- **Layer 7, the conductor exponent is attained**, so that the definition above names a depth
+that really is inside the kernel; minimality is then `Nat.sInf_le`. ⚠ Continuity and the
+neighbourhood basis do not suffice on their own. The proof also uses that `ℂˣ` has no small
+subgroups, so that the image of `U(K,n)`, being a subgroup inside a small enough ball around `1`,
+is trivial. Against a target with small subgroups the set above can be empty and the infimum is
+then the junk value `0`: the identity homomorphism of `Kˣ` is continuous and is trivial on no
+`U(K,n)`. -/
+theorem unitFiltration_characterConductorExp_le_ker (χ : ContinuousMonoidHom Kˣ ℂˣ) :
+    unitFiltration K (characterConductorExp K χ) ≤ χ.toMonoidHom.ker :=
   sorry
 
 /-! ### Layer 6: the Tate cup product and Tate–Nakayama
