@@ -249,14 +249,34 @@ homomorphism *here*. Their triples are therefore the componentwise inverses of t
 roadmap's, exactly as the LMFDB's are — three conventions, one Layer 0.1 involution between
 them. Verified against the page, not inferred.
 
-⚠ **Szamuely.** The copy supplied is Gille–Szamuely, *Central Simple Algebras and Galois
-Cohomology*, which is a different book from Szamuely, *Galois Groups and Fundamental Groups*
-(CSAM 117), the one Layer 12 cites for its route. Layer 12 does not depend on it — its
-exponent is pinned by the Kummer identity of 12.10 — so this is an attribution gap, not a
-mathematical one.
+**Szamuely, *Galois Groups and Fundamental Groups* (CSAM 117)** was read 2026-08-08 (an
+earlier copy supplied was Gille–Szamuely's *Central Simple Algebras and Galois Cohomology*, a
+different book; that gap is closed). Its Chapter 4 is Layer 12 nearly milestone for
+milestone:
 
-Still to locate for numbering: Szamuely (CSAM 117), Serre (*Topics in Galois Theory*),
-Deligne (MSRI 16), MSSV (ANTS XIII), Dixon–Mortimer (GTM 163).
+| Layer | Szamuely |
+| --- | --- |
+| 12.3 the `ℚ̄`/`ℂ` comparison | **Theorem 4.6.10**, **Corollary 4.6.11** (base change between algebraically closed fields of characteristic `0` is an equivalence on finite étale covers) |
+| 12.5 the comparison isomorphism | **Example 4.6.12(3)**: `π₁(ℙ¹ ∖ {0,1,∞})` is free profinite on two generators; **4.6.12(2)** is the Kummer case `≅ ẑ` |
+| 12.7 the exact sequence and outer action | **Proposition 4.7.1** and the definition of `ρ_U : Gal(k̄|k) → Out(π₁(U_k̄))` in §4.7 |
+| 12.8 peripheral inertia | **Lemma 4.7.2** (the stabilizer of a pro-point over a `k`-rational point is its inertia group) |
+| 12.9 the cyclotomic character | **Example 4.7.4** (constructed as `Gal(k̄|k) → Aut(ẑ) ≅ ẑ^×`) |
+| 12.10 the branch-cycle theorem | **Remark 4.7.5**: the action on inertia is by the cyclotomic character in characteristic zero, by Kummer theory on a local parameter |
+
+⚠ **A fourth witness for the exponent, and it is non-inverted.** Example 4.7.4 fixes the
+direction explicitly: `σ` carries the automorphism `ⁿ√t ↦ ω_n·ⁿ√t` to `ⁿ√t ↦ σ(ω_n)·ⁿ√t`,
+which with `σ(ω_n) = ω_n^{χ(σ)}` is `γ ↦ γ^{χ(σ)}`. That agrees with this roadmap's own
+Kummer computation and with Stix's Definition 37(i), against Fried's `−c_γ` and Völklein's
+opposite sign — the disagreement being conventions, not mathematics.
+
+⚠ **Corollary 4.7.3 corrected a warning in Layer 12.7.** When `U` has a `k`-rational point
+the exact sequence *splits*, and `ℙ¹_ℚ ∖ {0,1,∞}` has many. So the earlier draft's "a lift
+exists only after choosing a rational or tangential basepoint, which is outside this roadmap"
+understated the situation: lifts exist and are easy; what fails is **canonicity**, since each
+rational basepoint gives its own splitting. The milestone now says that.
+
+Still to locate for numbering: Serre (*Topics in Galois Theory*), Deligne (MSRI 16),
+MSSV (ANTS XIII), Dixon–Mortimer (GTM 163).
 
 ## LMFDB state
 
@@ -473,10 +493,11 @@ the database is not claimed, and Layer 14 excludes completeness by name.
 
 ## Open items tracked here
 
-- Exact theorem numbers still outstanding: Szamuely (CSAM 117) for Layer 12's route, and
-  the wanted copy is not the Gille–Szamuely one to hand. Köck, Stix, Fried, Lando–Zvonkin,
-  Couveignes, Weil, Girondo–González-Diez and Forster are done — see §Sources, verified.
-  Katok is no longer wanted: Layer 4.5 owns its construction.
+- Every load-bearing citation now carries a verified number. Köck, Stix, Fried,
+  Lando–Zvonkin, Couveignes, Weil, Girondo–González-Diez, Forster and Szamuely are all
+  done — see §Sources, verified. Katok is no longer wanted: Layer 4.5 owns its construction.
+  What remains is secondary attribution only: Serre (*Topics in Galois Theory*), Deligne
+  (MSRI 16), MSSV (ANTS XIII), Dixon–Mortimer (GTM 163).
 - The LMFDB source commit behind the frozen schema above: the records were taken from the
   live API, so the column lists are dated rather than pinned to a `github.com/LMFDB/lmfdb`
   revision. Pinning one would let Layer 14.1's certificate cite a source file.

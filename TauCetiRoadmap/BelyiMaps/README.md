@@ -2349,6 +2349,13 @@ extension in characteristic zero, and it is what makes the triple of a `ℚ̄`-p
 well-defined. Without it, a pair could acquire extra automorphisms over `ℂ` and the
 correspondence would only be a surjection.
 
+*Source:* Szamuely, *Galois Groups and Fundamental Groups*, **Theorem 4.6.10** — for an
+extension `k ⊂ L` of algebraically closed fields of characteristic `0`, base change is an
+equivalence between the finite covers étale over `U` and those étale over `U_L`, so
+`π₁(U_L) ≅ π₁(U)` — with **Corollary 4.6.11**. That is this milestone at the level of
+fundamental groups; the statement here is at the level of Belyi pairs, and 10.7 is what
+supplies essential surjectivity in that form.
+
 *Prerequisites:* Layers 6.3, 9.5–9.7, 10.7; AlgebraicCurves Layer 8.
 
 #### 12.4 The geometric fundamental group
@@ -2407,6 +2414,13 @@ This is the profinite Riemann existence theorem, and it is the single place wher
 analytic work of Layers 5–9 enters the arithmetic: the finite-level bijections it assembles
 come from 12.3, which rests on 10.7, which rests on the analytic classification.
 
+*Source:* Szamuely **Example 4.6.12(3)** states exactly this: for `k` algebraically closed
+of characteristic `0`, `π₁(ℙ¹_k ∖ {0,1,∞})` is the free profinite group on two generators —
+and draws the consequence this roadmap's Layer 3 makes finite, that every two-generated
+finite group is the Galois group of a cover étale outside the three points. **Example
+4.6.12(2)** is the Kummer case `π₁(ℙ¹_k ∖ {0,∞}) ≅ ẑ`, realized by normalizing in `xⁿ = t`,
+which is the tower Layers 12.8 and 12.10 compute with.
+
 *Prerequisites:* Layers 5.6, 12.4; ProPGroups Layers 0, 4; Mathlib
 `ProfiniteGrp.profiniteCompletion` with its adjunction.
 
@@ -2460,11 +2474,14 @@ extension construction and transporting along 12.5 gives the outer action
 ρ : Gal(ℚ̄/ℚ) →* ContinuousOut (profiniteCompletion (FreeGroup (Fin 2))) .
 ```
 
-⚠ *Nearby false statement:* `ρ` is not asserted to lift to an action by actual
-automorphisms, and no section of the exact sequence is claimed. A lift exists only after
-choosing a rational or tangential basepoint, which is outside this roadmap; every statement
-below is phrased on conjugacy classes or in outer form for that reason. Nor is `ρ` asserted
-continuous — nothing here needs it.
+⚠ **A section does exist here, and the roadmap still works outer.** Szamuely's
+**Corollary 4.7.3**: when `U` has a `k`-rational point the sequence splits and `π₁(U)` is a
+semidirect product — and `ℙ¹_ℚ ∖ {0,1,∞}` has plenty of rational points, `t = 2` among them.
+So the obstruction to a genuine action is not existence but **canonicity**: each rational
+basepoint gives its own splitting, and none is preferred. Every statement below is phrased on
+conjugacy classes or in outer form for that reason, not because a lift is unavailable.
+Choosing one, and tracking what it does, is the tangential-basepoint theory this roadmap
+excludes. Nor is `ρ` asserted continuous — nothing here needs it.
 
 *Prerequisites:* Layers 12.4–12.8; Mathlib infinite Galois theory, linear disjointness.
 
@@ -2493,6 +2510,12 @@ under 12.5 the class of the compatible inertia generator at `0`, `1`, `∞` goes
 of `P`, `T`, `C` respectively. Compatibility with Layer 7.1's `z ↦ z^e` local model is what
 fixes which generator, and the milestone proves that compatibility rather than assuming it.
 
+*Source:* Szamuely **Lemma 4.7.2**: for a closed point `P` with residue field `k`, the
+stabilizer in `π₁(U_k̄)` of a pro-point above `P` **is** its inertia group — the statement
+that makes "the inertia subgroup at a marked point" well defined up to conjugacy, and the
+form this milestone assembles over the tower. The three marked points are `ℚ`-rational, so
+the hypothesis holds for each.
+
 *Prerequisites:* Layers 7.1, 12.4, 12.5; AlgebraicCurves Layers 6, 7; Mathlib inertia
 subgroups, `IsPrimitiveRoot`, roots of unity.
 
@@ -2508,6 +2531,11 @@ on Layer 12.1's carrier, with the finite-level specification `σ ζ = ζ ^ χ_n(
 `n`-th root of unity, and with `ℓ`-adic components equal to the pin's
 `cyclotomicCharacter ℓ`. The compatibility across levels is the milestone; the pin supplies
 each level separately.
+
+*Source:* Szamuely **Example 4.7.4** constructs exactly this character, as
+`Gal(k̄|k) → Aut(ẑ) ≅ ẑ^×` obtained from the compatible system of actions on the Kummer
+layers, and names it the cyclotomic character. The pin supplies the finite levels; the
+compatibility across levels is the milestone.
 
 *Prerequisites:* Layer 12.1 (the `ẑ` carrier and its unit group); Mathlib
 `modularCyclotomicCharacter`, `cyclotomicCharacter`.
@@ -2553,7 +2581,18 @@ which `ρ(σ)` sends `P` to `P^{χ(σ)}` on the nose — that would require a ca
 Layer 13.3 obtains an actual automorphism only with conjugators, one per generator, which
 need not agree.
 
-*Source:* Stix, "On cuspidal sections of algebraic fundamental groups", ASPM 63 (2012),
+*Source:* Szamuely **Remark 4.7.5** is the same theorem in the same generality and with the
+same proof: in the situation of his **Lemma 4.7.2**, the action of `Gal(k̄|k)` on the inertia
+group `I ≅ ẑ` coming from `1 → I → D → Gal(k̄|k) → 1` **is given by the cyclotomic character
+in characteristic zero**, because each degree-`n` layer inside the fixed field of `I` is
+generated by an `n`-th root of a local parameter, by Kummer theory. His **Example 4.7.4**
+performs the computation on `ℙ¹ ∖ {0,∞}` and fixes the direction — `σ` carries the
+automorphism `ⁿ√t ↦ ω_n·ⁿ√t` to `ⁿ√t ↦ σ(ω_n)·ⁿ√t` — which with `σ(ω_n) = ω_n^{χ(σ)}` is
+the **non-inverted** exponent displayed above, and is where he defines the cyclotomic
+character. The Kummer identity of this milestone is that computation, and the agreement of
+two independent sources on the direction is why it is stated rather than cited.
+
+Also: Stix, "On cuspidal sections of algebraic fundamental groups", ASPM 63 (2012),
 **Definition 37(i)**, in §7 ("Orientation and degree") — a commutative square whose content
 for an element of the decomposition group is exactly `γ x γ⁻¹ = x ^ χ(γ)`, with the
 **non-inverted** exponent, matching the Kummer computation above. ⚠ Three citation traps,
@@ -2942,8 +2981,13 @@ are verified against the copies recorded in `PROVENANCE.md` before any milestone
   10 (1992) — the same combinatorics, surveyed.
 - B. Köck, "Belyi's theorem revisited", Beiträge Algebra Geom. 45 (2004) 253–265
   (arXiv:math/0108222) — Layer 10: both directions, including the specialization descent.
-- T. Szamuely, *Galois Groups and Fundamental Groups*, CSAM 117, CUP 2009 — Layers 5, 6,
-  12: the field-theoretic fundamental group and Riemann existence.
+- T. Szamuely, *Galois Groups and Fundamental Groups*, CSAM 117, CUP 2009 — Layer 12
+  throughout: base change between algebraically closed fields (**4.6.10**, **4.6.11**), the
+  free profinite `π₁` of the three-point line (**Example 4.6.12(3)**) and the Kummer case
+  (**4.6.12(2)**), the arithmetic exact sequence and the outer action (**Proposition 4.7.1**,
+  §4.7), its splitting at a rational point (**Corollary 4.7.3**), inertia as a stabilizer
+  (**Lemma 4.7.2**), the cyclotomic character (**Example 4.7.4**), and the action on inertia
+  through it in characteristic zero (**Remark 4.7.5**).
 - J.-P. Serre, *Topics in Galois Theory*, 2nd ed., A K Peters 2008 — Layers 12, 13
   context; rigidity.
 - J. Stix, "On cuspidal sections of algebraic fundamental groups", in *Galois–Teichmüller
