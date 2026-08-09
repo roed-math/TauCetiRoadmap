@@ -41,6 +41,12 @@ Conventions, recorded in `README.md` (§Pinned conventions):
 * Layers 9–11 (algebraic Belyi pairs, Belyi's theorem, fields of moduli) have no Lean
   prototypes here: their statements need the AlgebraicCurves carriers, and the honest-`sorry`
   rule keeps milestones whose *statements* cannot yet be formed out of this file.
+* A literal `PermutationTriple n` is the invariant of a **fiber-numbered** cover
+  (`FiberNumberedCover` below), not of a pointed one: a chosen point of the fiber leaves
+  `(n−1)!` relabelings. README Layer 6.3 classifies the three rigidifications separately.
+* `SemilocallySimplyConnectedSpace` below is a local stand-in for UniversalCovers
+  Stage 0.2's class of the same name, absent from the pinned Mathlib. Layer 6.2's
+  associated-cover theorem carries it because the universal-cover construction requires it.
 * `proPKernel` and `maximalProPQuotient` below are local elaboration stand-ins mirroring
   the ProPGroups roadmap's pinned shapes (its Layer 3), and are replaced by that roadmap's
   declarations when it lands, as are `freeProfiniteTwo` (its `freeProfiniteGroup (Fin 2)`)
@@ -633,7 +639,7 @@ instance : TopologicalSpace ThricePuncturedSphere :=
   inferInstanceAs (TopologicalSpace {z : ℂ // z ≠ 0 ∧ z ≠ 1})
 
 /-- **Layer 5.1.** The pinned basepoint `1/2` — on the real segment, so that the embedded
-dessin of Layer 7.6 passes through it. -/
+graph of Layer 7.6 passes through it. -/
 noncomputable def basePt : ThricePuncturedSphere :=
   ⟨1 / 2, by norm_num, by norm_num⟩
 
@@ -673,6 +679,18 @@ noncomputable def periphInf : FundamentalGroup ThricePuncturedSphere basePt :=
 theorem periphInf_mul_periph1_mul_periph0 : periphInf * periph1 * periph0 = 1 := by
   simp [periphInf, mul_assoc]
 
+/-- **Layer 5.5.** The **canonical** map out of the free product: the `Monoid.Coprod.lift`
+of the two inclusion-induced homomorphisms. Van Kampen is the statement that *this* map is
+an isomorphism; a bare `Nonempty (… ≃* …)` would not let Layer 5.6 read off the values on
+`periph0` and `periph1`. -/
+noncomputable def vanKampenLift {X : Type u} [TopologicalSpace X] (A B : Set X)
+    {x : X} (hxA : x ∈ A) (hxB : x ∈ B) :
+    Monoid.Coprod (FundamentalGroup ↥A ⟨x, hxA⟩) (FundamentalGroup ↥B ⟨x, hxB⟩) →*
+      FundamentalGroup X x :=
+  Monoid.Coprod.lift
+    (FundamentalGroup.map ⟨Subtype.val, continuous_subtype_val⟩ (⟨x, hxA⟩ : ↥A))
+    (FundamentalGroup.map ⟨Subtype.val, continuous_subtype_val⟩ (⟨x, hxB⟩ : ↥B))
+
 /-- **Layer 5.5.** Van Kampen for two open sets with simply connected intersection — the
 one general topological theorem this roadmap owns, and the reason no figure-eight
 retraction is needed. The pin has no Seifert–van Kampen theorem in any form; this case is
@@ -682,14 +700,35 @@ analogue `..._prod_self` (relations), with `Path.subpath`, `Path.concat` and
 
 ⚠ `IsPathConnected (A ∩ B)` is not implied by simple connectivity of the intersection and is
 not optional: a two-component intersection makes the conclusion false. -/
-theorem vanKampen_of_simplyConnected_inter {X : Type u} [TopologicalSpace X]
+theorem vanKampenLift_bijective {X : Type u} [TopologicalSpace X]
     {A B : Set X} (_hA : IsOpen A) (_hB : IsOpen B) (_hAB : A ∪ B = Set.univ)
     (_hApc : IsPathConnected A) (_hBpc : IsPathConnected B)
     (_hIpc : IsPathConnected (A ∩ B)) [SimplyConnectedSpace ↥(A ∩ B)]
     {x : X} (hxA : x ∈ A) (hxB : x ∈ B) :
-    Nonempty (Monoid.Coprod (FundamentalGroup ↥A ⟨x, hxA⟩) (FundamentalGroup ↥B ⟨x, hxB⟩)
-      ≃* FundamentalGroup X x) := by
+    Function.Bijective (vanKampenLift A B hxA hxB) := by
   sorry
+
+/-- **Layer 5.5.** The van Kampen isomorphism, as a named `MulEquiv` whose underlying
+homomorphism is `vanKampenLift` by construction — which is what
+`MulEquiv.ofBijective` delivers and what `vanKampenEquiv_toMonoidHom` records. -/
+noncomputable def vanKampenEquiv {X : Type u} [TopologicalSpace X]
+    {A B : Set X} (hA : IsOpen A) (hB : IsOpen B) (hAB : A ∪ B = Set.univ)
+    (hApc : IsPathConnected A) (hBpc : IsPathConnected B)
+    (hIpc : IsPathConnected (A ∩ B)) [SimplyConnectedSpace ↥(A ∩ B)]
+    {x : X} (hxA : x ∈ A) (hxB : x ∈ B) :
+    Monoid.Coprod (FundamentalGroup ↥A ⟨x, hxA⟩) (FundamentalGroup ↥B ⟨x, hxB⟩)
+      ≃* FundamentalGroup X x :=
+  MulEquiv.ofBijective _
+    (vanKampenLift_bijective hA hB hAB hApc hBpc hIpc hxA hxB)
+
+theorem vanKampenEquiv_toMonoidHom {X : Type u} [TopologicalSpace X]
+    {A B : Set X} (hA : IsOpen A) (hB : IsOpen B) (hAB : A ∪ B = Set.univ)
+    (hApc : IsPathConnected A) (hBpc : IsPathConnected B)
+    (hIpc : IsPathConnected (A ∩ B)) [SimplyConnectedSpace ↥(A ∩ B)]
+    {x : X} (hxA : x ∈ A) (hxB : x ∈ B) :
+    (vanKampenEquiv hA hB hAB hApc hBpc hIpc hxA hxB).toMonoidHom
+      = vanKampenLift A B hxA hxB :=
+  rfl
 
 /-- **Layer 5.6.** The fundamental group is free on the two peripheral generators.
 Route: the two-set cover of 5.1, `π₁` of a punctured convex domain (5.4), and the
@@ -725,29 +764,66 @@ theorem monodromyHom_apply {E : Type u} {X : Type v} [TopologicalSpace E]
     monodromyHom hp x γ e = hp.monodromy (FundamentalGroup.toPath γ) e := by
   sorry
 
-/-- **Layer 6.2.** The associated cover of a `π₁`-set: `(Ũ × S) ⧸ π₁` for the diagonal
-action, which is a covering map because the deck action on the universal cover is free and
-properly discontinuous, via Mathlib's `IsQuotientCoveringMap`. Prototyped as the contract —
-a cover exists with prescribed monodromy — because the universal cover itself is
-UniversalCovers' object, not this roadmap's. This replaces the constructive half of the
-covering-space classification, which that roadmap has not yet proved onto. -/
+/-- Local stand-in; supplier: UniversalCovers Stage 0.2's `SemilocallySimplyConnectedSpace`.
+⚠ Absent from the pinned Mathlib, and **not** implied by path- plus local path-connectedness:
+the Hawaiian earring satisfies those two and has no universal cover. Layer 6.2 carries it
+because the universal-cover construction it consumes requires it. -/
+class SemilocallySimplyConnectedSpace (X : Type u) [TopologicalSpace X] : Prop where
+  exists_nhds_nullhomotopic : ∀ x : X, ∃ U : Set X, IsOpen U ∧ x ∈ U ∧
+    ∀ γ : Path x x, (∀ t, γ t ∈ U) →
+      (⟦γ⟧ : Path.Homotopic.Quotient x x) = ⟦Path.refl x⟧
+
+/-- **Layer 6.2, the general construction.** For an **arbitrary discrete** `π₁`-set `S`, the
+associated cover `(Ũ × S) ⧸ π₁` exists and has monodromy the given action. Stated as the
+contract — a cover exists with prescribed monodromy — because the universal cover itself is
+UniversalCovers' object, not this roadmap's.
+
+The diagonal action is pinned in the README: with `ũ · γ` the deck action (which is a
+**right** action, because UniversalCovers milestone 5 identifies deck transformations with
+`(π₁)ᵐᵒᵖ`), it is `γ ⋆ (ũ, s) = (ũ · γ⁻¹, act γ s)`. That inverse is exactly what makes the
+conclusion below carry `act γ` rather than `act γ⁻¹`. -/
 theorem exists_cover_with_monodromy {X : Type u} [TopologicalSpace X]
-    [PathConnectedSpace X] [LocPathConnectedSpace X] (x : X)
-    {S : Type u} [Finite S] (act : FundamentalGroup X x →* Equiv.Perm S) :
-    ∃ (E : TopCat.{u}) (p : E → X) (hp : IsCoveringMap p) (ν : ↥(p ⁻¹' {x}) ≃ S),
-      ∀ γ, ν.permCongr (monodromyHom hp x γ) = act γ := by
+    [PathConnectedSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X]
+    (x : X) {S : Type u} [TopologicalSpace S] [DiscreteTopology S]
+    (act : FundamentalGroup X x →* Equiv.Perm S) :
+    ∃ (E : Type u) (_ : TopologicalSpace E) (p : E → X) (hp : IsCoveringMap p)
+      (ν : ↥(p ⁻¹' {x}) ≃ S), ∀ γ, ν.permCongr (monodromyHom hp x γ) = act γ := by
   sorry
 
+/-- **Layer 6.2, the finite corollary.** The form Layer 6.3 consumes: a numbering of the
+fiber by `Fin n`, hence a literal `PermutationTriple n`. ⚠ The general theorem above is
+**not** the finite one specialized — the regular `π₁`-set is infinite for
+`π₁(U, b) ≃* FreeGroup (Fin 2)`, so the universal cover is an instance of the general
+construction only. -/
+theorem exists_finiteCover_with_monodromy {X : Type u} [TopologicalSpace X]
+    [PathConnectedSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X]
+    (x : X) {n : ℕ} (act : FundamentalGroup X x →* Equiv.Perm (Fin n)) :
+    ∃ (E : Type u) (_ : TopologicalSpace E) (p : E → X) (hp : IsCoveringMap p)
+      (ν : ↥(p ⁻¹' {x}) ≃ Fin n), ∀ γ, ν.permCongr (monodromyHom hp x γ) = act γ := by
+  sorry
+
+/-- **Layer 6.1.** A cover **with a numbered fiber** — the carrier that a literal
+`PermutationTriple n` classifies. ⚠ A *pointed* cover is a different carrier: one chosen
+point of the fiber leaves `(n−1)!` relabelings, and Layer 6.3 classifies pointed covers by
+subgroups of `π₁`, never by literal triples. -/
+structure FiberNumberedCover {X : Type u} [TopologicalSpace X] (x : X) (n : ℕ) where
+  E : Type u
+  [topE : TopologicalSpace E]
+  p : E → X
+  isCoveringMap : IsCoveringMap p
+  ν : ↥(p ⁻¹' {x}) ≃ Fin n
+
+attribute [instance] FiberNumberedCover.topE
+
 open ThricePuncturedSphere in
-/-- **Layer 6.1.** The monodromy triple of a finite cover of the thrice-punctured sphere,
-along a numbering of the fiber. The third component automatically computes the monodromy
-of `periphInf` (README, Layer 6.1). -/
-noncomputable def monodromyTriple {E : Type u} [TopologicalSpace E]
-    {p : E → ThricePuncturedSphere} (hp : IsCoveringMap p) {n : ℕ}
-    (ν : p ⁻¹' {basePt} ≃ Fin n) : PermutationTriple n :=
+/-- **Layer 6.1.** The monodromy triple of a fiber-numbered cover of the thrice-punctured
+sphere. The third component automatically computes the monodromy of `periphInf` (README,
+Layer 6.1). -/
+noncomputable def FiberNumberedCover.triple {n : ℕ}
+    (c : FiberNumberedCover basePt n) : PermutationTriple n :=
   PermutationTriple.ofTwo
-    (ν.permCongr (monodromyHom hp basePt periph0))
-    (ν.permCongr (monodromyHom hp basePt periph1))
+    (c.ν.permCongr (monodromyHom c.isCoveringMap basePt periph0))
+    (c.ν.permCongr (monodromyHom c.isCoveringMap basePt periph1))
 
 /-! ## Layer 8: analytic Belyi pairs
 

@@ -102,8 +102,9 @@ degree `TauCeti.exists_localDegree`, holomorphic branch roots — belongs to
 local normal form. Nothing here uses the Riemann mapping theorem, Montel, or the boundary
 correspondence. The `ℍ/Γ(2) ≅ ℂ∖{0,1}` λ-uniformization is that roadmap family's material
 (recorded there as belonging to ModularForms); no layer here consumes or supplies it — the
-route to the fundamental group of the thrice-punctured sphere is the figure-eight retract,
-not uniformization.
+route to the fundamental group of the thrice-punctured sphere is the two-open van Kampen
+theorem of Layer 5.5, applied to the cover of Layer 5.1, and no retraction onto a figure
+eight occurs anywhere in it.
 
 **Modular forms.** The compact-Riemann-surface cohomology chain — structure sheaf, sheaves of
 a divisor, finiteness of `H¹`, analytic Riemann–Roch, Serre duality by residues,
@@ -766,7 +767,8 @@ dessins reduces along this bijection to Layer 3.
 
 `χ`, parity, the connected bound `χ ≤ 2`, and the genus — transported along 2.4 from
 Layer 0.6, with the Euler-characteristic equality of 2.2 doing the work. The combinatorial
-genus stays independent of any analytic surface until Layer 7.6 proves they agree.
+genus stays independent of any analytic surface until Layer 8.6's genus reconciliation
+proves they agree.
 
 *Prerequisites:* Layers 0.6, 2.2, 2.4.
 
@@ -1329,9 +1331,24 @@ Prove the four facts the rest of the layer runs on, each an explicit computation
 - *Morphisms and functoriality.* The open embedding `U ↪ ℂ`; the open embedding
   `U ↪ OnePoint ℂ` with image the complement of `{0, 1, ∞}` — the statement that makes
   "thrice-punctured **sphere**" honest, and the one Layers 7 and 8 extend across.
+- *The three standard punctured-disc neighbourhoods,* pinned here once and consumed by
+  5.2, 5.4 and 7.2:
+
+  ```text
+  D₀*  := {z | 0 < |z| < 1/2}      D₁*  := {z | 0 < |z − 1| < 1/2}
+  D∞* := {z | 2 < |z|}
+  ```
+
+  Prove each is an open subset of `U`, that they are pairwise disjoint, and that each is
+  the image of a punctured disc under a chart of `OnePoint ℂ` centred at its puncture —
+  for `D∞*` this is the chart `w = 1/z`, in which it is `{w | 0 < |w| < 1/2}`.
 - *Comparison lemmas.* The three self-homeomorphisms of `U` permuting the punctures in
-  the affine chart (`z ↦ 1 − z` swaps `0, 1` and fixes `∞`; `z ↦ 1/z` swaps `0, ∞`), and
-  their compatibility with the branch-point action of Layer 2.6.
+  the affine chart (`z ↦ 1 − z` swaps `0, 1` and fixes `∞`; `z ↦ 1/z` swaps `0, ∞`;
+  `z ↦ z/(z−1)` swaps `1, ∞`). ⚠ **Only `z ↦ 1 − z` fixes the basepoint**: the orbit of
+  `b = 1/2` under the anharmonic group is `{1/2, 2, −1}`, so the other five operations move
+  `b` and act on `π₁(U, b)` only after a choice of connecting path. That is the topological
+  source of Layer 2.6's finding that the `S₃`-action lives on isomorphism classes, and
+  Layer 6.3 is where the two are matched.
 - *Edge cases.* `A` and `B` are each connected but neither is simply connected; `A ∩ B` is
   simply connected but is **not** all of `U`.
 - *Downstream interfaces.* Layers 6, 7, 8, and the analytic side of 12.3.
@@ -1357,8 +1374,10 @@ The two loops at `b`, both traversed counterclockwise in the affine chart:
 Both are loops at `b = 1/2`, since `γ0 0 = γ0 1 = 1/2` and `γ1 0 = γ1 1 = 1/2`; both avoid
 both punctures, since `|γ0 t| = 1/2` and `|γ1 t − 1| = 1/2`; and their images `C₀`, `C₁`
 lie in `A` and `B` respectively. The two circles are externally tangent — the distance
-between their centres is `1 = 1/2 + 1/2` — so they meet exactly at `b`, which is why the
-picture is a figure eight and not two crossing circles.
+between their centres is `1 = 1/2 + 1/2` — so they meet exactly at `b`. ⚠ That makes the
+picture a figure eight rather than two crossing circles, and nothing more: **no milestone
+retracts `U` onto `C₀ ∪ C₁`**, and the fundamental group is computed by the two-open van
+Kampen theorem of 5.5 instead.
 
 Define the peripheral elements of `FundamentalGroup U b`:
 
@@ -1372,15 +1391,14 @@ so that
 periphInf * periph1 * periph0 = 1
 ```
 
-holds **by definition**. The mathematical content is not this identity but the geometric
-identification of `periphInf`, which is the milestone: `periphInf` is freely homotopic in
-`U` to the circle `|z| = 2` traversed **clockwise**, equivalently to a small loop
-counterclockwise around `∞` in the chart `w = 1/z` of `OnePoint ℂ`. Prove it by the
-explicit homotopy through the region `|z| ≥ 2` after a subdivision, or by computing the
-winding numbers of the three loops about `0` and about `1` (Mathlib's
-`Complex.integral_circle` / index API) and using that a loop in `U` is determined up to
-free homotopy in the complement by that pair only for these particular classes — the
-milestone records which of the two proofs is intended and carries it out.
+holds **by definition**. That identity is bookkeeping; the mathematical content is the
+geometric identification of `periphInf` as a loop around `∞`, which is Layer 5.8 and needs
+the fundamental-group computation first. This milestone owns only the definitions and the
+two facts that make them well posed: the images `C₀ ⊆ A` and `C₁ ⊆ B`, and the tangency.
+
+Also prove here the two `Path` identities that Layer 5.8 and Layer 6.3 both use:
+`(1 − ·) ∘ γ0 = γ1` and `(1 − ·) ∘ γ1 = γ0` on the nose, where `z ↦ 1 − z` is 5.1's
+basepoint-fixing self-homeomorphism.
 
 ⚠ *Nearby false statement:* "the loop around `∞` is counterclockwise" is meaningless
 without naming the chart. The transition `w = 1/z` reverses the apparent orientation, so
@@ -1448,10 +1466,14 @@ The reusable computation, stated for a convex open `V ⊆ ℂ`, a point `p ∈ V
 - **The transport.** For `V`, `p`, `r` as above, the inclusion `V ∖ {p} ↪ ℂ ∖ {p}` is a
   homotopy equivalence, because both deformation-retract onto the same circle; hence
   `π₁(V ∖ {p})` is infinite cyclic, generated by the circle loop of radius `r` about `p`.
+- **The invariant.** The isomorphism `π₁(V ∖ {p}) ≅ ℤ` is the **winding number about `p`**:
+  state it as such, so that a loop's class in `V ∖ {p}` is *computed* rather than merely
+  known to exist. This is the form Layer 5.8 consumes, and it is available only inside a
+  punctured convex domain — see the warning there.
 - **The three instances.** `A` with `p = 0`, `r = 1/2`, whose generator is the class of `γ0`
   **in `A`** — the element that the inclusion `A ↪ U` carries to `periph0`, a distinction
   5.6 needs and 5.2 does not make; `B` with `p = 1`, `r = 1/2`, similarly for `γ1` and
-  `periph1` (transport along `z ↦ 1 − z`, which is an isomorphism of the situation and
+  `periph1` (transport along `z ↦ 1 − z`, which by 5.2 carries `γ0` to `γ1` on the nose and
   reverses no orientation, being holomorphic); and the punctured unit disc `𝔻*` with
   `p = 0`, `r = 1/2`, which Layer 7.1 consumes.
 
@@ -1468,42 +1490,68 @@ because both instances are convex and Mathlib's `Convex` API is the one in place
 to a circle — the punctured annulus is a counterexample. Convexity (or star-shapedness
 about the puncture) is doing real work.
 
-*Prerequisites:* Mathlib `Complex.isAddQuotientCoveringMap_exp`, `IsQuotientCoveringMap`,
-`Convex`, `ContinuousMap.Homotopy`; UniversalCovers milestones 4, 5.
+*Prerequisites:* Layers 5.1, 5.2; Mathlib `Complex.isAddQuotientCoveringMap_exp`,
+`IsQuotientCoveringMap`, `Convex`, `ContinuousMap.Homotopy`, the winding-number/index API;
+UniversalCovers milestones 4, 5.
 
 #### 5.5 Van Kampen with a simply connected intersection
 
 The one general topological theorem this roadmap owns. For a space `X`, open `A, B` with
 `A ∪ B = X`, a basepoint `x ∈ A ∩ B`, with `A`, `B`, `A ∩ B` path-connected and `A ∩ B`
-simply connected, the canonical map from the free product
+simply connected, **the canonical map**
 
 ```text
-FundamentalGroup A x ∗ FundamentalGroup B x  →*  FundamentalGroup X x
+vanKampenLift : FundamentalGroup A x ∗ FundamentalGroup B x  →*  FundamentalGroup X x
+vanKampenLift := Monoid.Coprod.lift (π₁ of the inclusion A ↪ X) (π₁ of the inclusion B ↪ X)
 ```
 
-(the `Monoid.Coprod.lift` of the two inclusion-induced maps) is an isomorphism.
+is bijective, and the milestone is the named
 
-- **Surjectivity.** Given a loop `γ` at `x` in `X`, apply
-  `exists_monotone_Icc_subset_open_cover_unitInterval` to the cover `{γ⁻¹' A, γ⁻¹' B}` of
-  `[0,1]` to get a monotone partition `t₀ = 0 ≤ … ≤ t_m = 1` with each `γ '' [tᵢ, tᵢ₊₁]`
-  inside `A` or inside `B`. Each division point lies in `A ∩ B` (it is an endpoint of an
-  `A`-piece and of a `B`-piece, or of two pieces of the same type, in which case merge);
-  choose for each a path in `A ∩ B` from `x` to it (path-connectedness). Then
-  `Path.Homotopy.concatSubpath` rewrites `γ` as the concatenation of the subpaths, and
-  inserting the chosen paths and their reverses turns each subpath into a loop at `x`
-  inside `A` or inside `B`.
-- **Injectivity.** Given a null-homotopy in `X` of a word, apply the square version
-  `exists_monotone_Icc_subset_open_cover_unitInterval_prod_self` to the homotopy to get a
-  grid of squares each mapping into `A` or into `B`; simple connectivity of `A ∩ B` makes
-  the choice of connecting paths irrelevant, so the resulting word reductions are exactly
-  the free-product relations. The milestone states the induction over the grid explicitly:
-  it is the only place in the roadmap where a two-variable subdivision occurs, and it is
-  where the simply connected hypothesis is consumed.
+```text
+vanKampenEquiv : FundamentalGroup A x ∗ FundamentalGroup B x  ≃*  FundamentalGroup X x
+```
 
-**New object: the van Kampen isomorphism.** Basic API: the isomorphism, its value on each
-factor's generators, naturality in maps of triads `(X, A, B)`, the corollary that `X` is
-simply connected when both `A` and `B` are, and the corollary for a wedge-shaped
-decomposition used in 5.6.
+**together with `vanKampenEquiv.toMonoidHom = vanKampenLift`**. ⚠ A bare
+`Nonempty (… ≃* …)` is too weak to be used: 5.6 reads the *values* of this isomorphism on
+`periph0` and `periph1` off the inclusions, and an unnamed abstract isomorphism supports no
+such computation.
+
+Basic API: the two value lemmas `vanKampenEquiv (inl u) = ι_A u` and
+`vanKampenEquiv (inr v) = ι_B v`; naturality in maps of triads `(X, A, B) → (X', A', B')`
+(a continuous `f` with `f '' A ⊆ A'`, `f '' B ⊆ B'`, `f x = x'` makes the evident square
+commute); the corollary that `X` is simply connected when `A` and `B` are; and injectivity
+and surjectivity of `vanKampenLift` as separately usable statements.
+
+The proof plan, as the lemmas it needs — this is the roadmap's largest single topological
+target and it is not one theorem:
+
+1. **Subordinate subdivision of a path.** For a loop `γ` at `x`, applying
+   `exists_monotone_Icc_subset_open_cover_unitInterval` to the cover `{γ⁻¹' A, γ⁻¹' B}`
+   gives a monotone partition `t₀ = 0 ≤ … ≤ t_m = 1` with each `γ '' [tᵢ, tᵢ₊₁]` inside `A`
+   or inside `B`, and with consecutive pieces of the same type merged, so that each interior
+   division point lies in `A ∩ B`.
+2. **Extraction of a word.** Choosing for each division point a path in `A ∩ B` from `x` to
+   it (path-connectedness), `Path.Homotopy.concatSubpath` rewrites `γ` as the concatenation
+   of its subpaths, and inserting the chosen paths and their reverses turns each subpath
+   into a loop at `x` inside `A` or inside `B`. This produces an element of the free
+   product mapping to `⟦γ⟧`, hence **surjectivity**.
+3. **Independence of the choices.** The word's image is unchanged under refining the
+   partition and under replacing a connecting path by another path in `A ∩ B` — the latter
+   because `A ∩ B` is simply connected, so any two such paths are homotopic rel endpoints.
+4. **Grid subdivision of a homotopy.** For a null-homotopy `H : [0,1]² → X` of a word,
+   `exists_monotone_Icc_subset_open_cover_unitInterval_prod_self` gives a grid of closed
+   subsquares each mapping into `A` or into `B`.
+5. **The relation contributed by one cell.** Crossing a single grid cell changes the
+   extracted word by one free-product relation — either a merge of two adjacent letters of
+   the same factor, or an insertion of a letter and its inverse.
+6. **Induction over the grid.** Traversing the cells row by row (or column by column)
+   composes those single-cell moves into a chain of free-product relations from the word at
+   the bottom edge to the word at the top edge.
+7. **The free-product conclusion.** The bottom word is the given one and the top word is
+   trivial, so the given word is trivial in the free product, hence **injectivity**.
+
+Steps 3 and 5 are where simple connectivity of `A ∩ B` is consumed; step 4 is the only
+two-variable subdivision anywhere in this roadmap.
 
 *Source:* Hatcher, *Algebraic Topology*, Theorem 1.20 (van Kampen), specialized to two
 sets with simply connected intersection, where the amalgamating subgroup is trivial and
@@ -1555,26 +1603,93 @@ action in Layer 12.7.
 
 *Prerequisites:* Layers 5.2, 5.6; UniversalCovers milestone 7's basepoint-change API.
 
-### Layer 6: finite covers and their triples
+#### 5.8 The loop at infinity
 
-#### 6.1 The monodromy triple of a finite cover
-
-For a covering map `p : E → U` whose fiber over `b` is finite of cardinality `n`, and a
-numbering `ν : p ⁻¹' {b} ≃ Fin n`, the triple
+`periphInf` was *defined* in 5.2 so that the relation holds. This milestone proves it is
+what its name says: the peripheral class at the third puncture. **One route, cut into the
+pieces that prove it**, entirely inside the two-set cover of 5.1 and the punctured-convex
+computation of 5.4. Let
 
 ```text
-σ_i := ν.permCongr (monodromyHom p periph_i)   for i = 0, 1, ∞
+δ (t) := 3 · exp (2πit) ,     p± := 1/2 ± i·(√35)/2 ,
 ```
 
-is a `PermutationTriple n`: the relation is `monodromyHom` applied to 5.2's relation, and
-it is a relation on the nose because 5.3 gives a homomorphism.
+so `δ` is the counterclockwise circle of radius `3`, contained in `D∞*`, and `p±` are its
+two points with `re = 1/2`. Let `α±` be the vertical segments from `b` to `p±`, let
+`a : p+ ⟶ p−` be the arc of `δ` with `re ≤ 1/2` and `c : p− ⟶ p+` the arc with `re ≥ 1/2`,
+each traversed counterclockwise, so that `δ` based at `p+` is `a` then `c`. Then:
+
+1. **Containment.** `a` lies in `A`, `c` lies in `B`, and `α±` and `p±` lie in the strip
+   `A ∩ B`. Each is an inequality on `re` and on `|z|` or `|z − 1|`.
+2. **The two winding numbers.** `ℓ_A := α+ · a · ᾱ−` is a loop at `b` inside `A` whose
+   winding number about `0` is `1`, and `ℓ_B := α− · c · ᾱ+` is a loop at `b` inside `B`
+   whose winding number about `1` is `1`. Each is a computation of an argument increment
+   along three explicit pieces.
+3. **Identification of the classes.** By 5.4's winding-number invariant those loops
+   generate `π₁(A, b)` and `π₁(B, b)`, so their images in `π₁(U, b)` are `periph0` and
+   `periph1`.
+4. **Assembly.** `α+ · δ · ᾱ+ ≃ ℓ_A · ℓ_B` as paths — the two copies of `α−` cancel — so in
+   `FundamentalGroup U b`, where `γ * δ` is "`δ` first, then `γ`",
+
+   ```text
+   ⟦α+ · δ · ᾱ+⟧ = periph1 * periph0 = periphInf⁻¹ .
+   ```
+
+Conclude: `periphInf` is the class of the circle of radius `3` traversed **clockwise**,
+transported along `α+`; and, by 5.7, its **conjugacy class** is the image of the generator
+of `π₁(D∞*)` that is counterclockwise in the chart `w = 1/z`, independently of the
+transporting path. That conjugacy class is what Layer 7.2 consumes at the puncture `∞`.
+
+⚠ *Nearby false statement:* the pair of winding numbers about `0` and about `1` does
+**not** determine a class, or even a free homotopy class, in `U`. It is the image in the
+abelianization of a free group of rank `2`, so every commutator has pair `(0,0)`. Step 2
+uses winding numbers only **inside `A`** and **inside `B`**, where 5.4 has made them a
+complete invariant; a proof that used them in `U` itself would prove nothing.
+
+*Prerequisites:* Layers 5.1, 5.2, 5.4, 5.6, 5.7; Mathlib `Path.trans`, `Path.symm`,
+the winding-number/index API.
+
+### Layer 6: finite covers and their triples
+
+#### 6.1 Three rigidifications of a cover, and the monodromy triple
+
+⚠ **A literal `PermutationTriple n` is the invariant of a cover with a numbered fiber, not
+of a pointed cover and not of a bare cover.** A chosen point of the fiber does not identify
+the fiber with `Fin n`; the relabelings fixing that point survive. The three carriers are
+therefore separated here, once, and Layer 6.3 classifies each of them by its own
+combinatorial object.
+
+```text
+FiberNumberedCover n := a covering map p : E → U, an equivalence ν : p ⁻¹' {b} ≃ Fin n
+PointedCover         := a covering map p : E → U together with e : p ⁻¹' {b}
+Cover                := a covering map p : E → U
+```
+
+with, in each case, the exact notion of isomorphism, all three being homeomorphisms over
+`U` — that is, `f : E ≃ₜ E'` with `p' ∘ f = p`:
+
+- **numbered:** additionally `ν' ∘ f|_{fiber} = ν`, so an isomorphism preserves the label of
+  every point of the fiber;
+- **pointed:** additionally `f e = e'`, which constrains one point only;
+- **unnumbered:** no further condition.
+
+For a `FiberNumberedCover n` the triple is
+
+```text
+σ_i := ν.permCongr (monodromyHom p periph_i)   for i = 0, 1, ∞ ,
+```
+
+a `PermutationTriple n`: the relation is `monodromyHom` applied to 5.2's relation, and it
+is a relation on the nose because 5.3 gives a homomorphism.
 
 Prove: `E` is path-connected iff the triple is connected (path lifting identifies the
 monodromy orbits on the fiber with the path components of `E`, and `n ≠ 0` matches
 `Nonempty E`); the degree is well-defined (the fiber cardinality is locally constant on
-the connected base, hence constant); changing `ν` relabels the triple by the corresponding
-element of `Equiv.Perm (Fin n)`; changing the basepoint along a path conjugates it (5.7).
-Consequently the **isomorphism class** of the triple is an invariant of the cover alone.
+the connected base, hence constant); the triple is **unchanged** by an isomorphism of
+fiber-numbered covers; changing `ν` by `τ` relabels the triple by `τ` (Layer 0.2);
+changing the basepoint along a path conjugates it (5.7). Consequently the triple itself is
+an invariant of the fiber-numbered cover, and its **isomorphism class** is an invariant of
+the underlying cover alone.
 
 ⚠ *Nearby false statement:* connectedness of `E` is transitivity of the monodromy group on
 the fiber, not transitivity of the image of any one peripheral element, and not
@@ -1599,71 +1714,144 @@ one bridge.
 
 #### 6.2 The associated cover of a `π₁`-set
 
-The converse construction, and the place where a cover is built rather than analysed.
-Given a finite `FundamentalGroup U b`-set `S` — equivalently, by 5.6, a pair of
-permutations of `S`, equivalently a triple — form
+The converse construction, and the place where a cover is built rather than analysed. It is
+stated **generically**, for an arbitrary discrete `π₁`-set, under the exact hypotheses the
+universal-cover supplier requires; the finite case is a corollary, not the theorem.
+
+*Standing hypotheses* for the general construction, matching UniversalCovers Stage 0.2
+exactly:
 
 ```text
-assocCover S := (UniversalCover U × S) ⧸ π₁ ,
+[TopologicalSpace X] [PathConnectedSpace X] [LocPathConnectedSpace X]
+[SemilocallySimplyConnectedSpace X]
 ```
 
-the quotient of the product by the diagonal action, `S` carrying the discrete topology.
-The action is free and properly discontinuous because it already is on the universal cover
-(UniversalCovers milestone 3), so the pin's quotient-covering theory
-(`IsQuotientCoveringMap`, `Mathlib/Topology/Covering/Quotient.lean`) makes the induced map
-to `U` a covering map.
+with `x : X` and `Ũ := UniversalCover x` its universal cover, `q : Ũ → X` the projection.
+⚠ Semilocal simple connectivity is **not** optional and is not implied by the others: the
+Hawaiian earring is path-connected and locally path-connected and has no universal cover.
+`U` of 5.1 satisfies all three because it is an open subset of `ℂ` (Layer 5.1's instance
+list), and that is where the hypotheses are discharged for this roadmap's use.
+
+**The action, pinned.** UniversalCovers milestone 5 identifies the deck group with
+`(π₁)ᵐᵒᵖ`, so `π₁` acts on `Ũ` on the **right**: writing `ũ · γ` for the deck
+transformation attached to `γ`, one has `(ũ · δ) · γ = ũ · (δ γ)` and
+`ũ₀ · γ = monodromy γ ũ₀` on the fiber. For a discrete `π₁`-set `S` with action map
+`act : π₁ →* Equiv.Perm S`, the diagonal action on `Ũ × S` is therefore
+
+```text
+γ ⋆ (ũ, s) := (ũ · γ⁻¹, act γ s)
+```
+
+— a genuine **left** action, and the inverse in the first coordinate is exactly what the
+`ᵐᵒᵖ` of milestone 5 forces. Define
+
+```text
+assocCover S := (Ũ × S) ⧸ ⋆ ,        p ⟦ũ, s⟧ := q ũ .
+```
+
+The milestone owns these statements, each named:
+
+1. **The quotient is a covering of `Ũ × S`.** The action is free and properly discontinuous
+   because it already is on `Ũ` (UniversalCovers milestone 3) and `S` is discrete, so
+   Mathlib's `IsQuotientCoveringMap` applies to `Ũ × S → assocCover S`. This is what gives
+   `assocCover S` its topology and the universal property for maps out of it.
+2. **`p` is a covering map.** Over an evenly covered connected open `V ∋ y` the equivariant
+   sheet decomposition gives `q ⁻¹' V ≃ V × π₁` with `π₁` acting by right translation on
+   the second factor, whence `p ⁻¹' V ≃ V × S`. ⚠ This does **not** follow from
+   `IsQuotientCoveringMap` alone: that theorem describes `Ũ × S → assocCover S`, not
+   `assocCover S → X`, and the two maps have different groups in play.
+3. **The fiber equivalence.** `ν_S : S ≃ p ⁻¹' {x}`, `s ↦ ⟦ũ₀, s⟧`, using that `π₁` acts
+   simply transitively on `q ⁻¹' {x}`.
+4. **The monodromy calculation.** `ν_S.permCongr (monodromyHom p x γ) = act γ` for every
+   `γ`, **with no inverse and no `ᵐᵒᵖ`**. Proof: lift `γ` in `Ũ` from `ũ₀`; the path
+   `t ↦ ⟦γ̃ t, s⟧` lifts it in `assocCover S` and ends at
+   `⟦ũ₀ · γ, s⟧ = ⟦ũ₀, act γ s⟧`. Reversing the sign in the diagonal action would produce
+   `act γ⁻¹` here, which is why the formula above is displayed rather than described.
+
+**The finite corollary.** For `S` finite of cardinality `n`, `assocCover S` has finite
+fibers of cardinality `n`, and composing with a numbering `S ≃ Fin n` makes it a
+`FiberNumberedCover n` whose triple is the triple of the action. This is the form Layer 6.3
+consumes.
 
 **New object: `assocCover`.** Basic API:
 
-- *Constructors and instances.* The quotient topology, the covering map, the identification
-  of the fiber over `b` with `S`, and finiteness of the fiber when `S` is finite.
-- *Examples.* `S` a one-point set gives `U` itself; `S = π₁` with the translation action
-  gives the universal cover back; `S = Fin n` with the action of a triple gives the cover
-  Layer 6.3 pairs with that triple.
-- *Morphisms and functoriality.* A map of `π₁`-sets induces a map of covers over `U`;
-  the construction is a functor from finite `π₁`-sets to covers, and it preserves
-  coproducts.
-- *Comparison lemmas and naturality.* `monodromyHom (assocCover S) = ` the given action,
-  under the fiber identification — the computation that makes 6.3 an equivalence rather
-  than a pair of unrelated constructions.
-- *Edge cases.* `S` empty; `S` with a non-transitive action, where the cover is
-  disconnected and decomposes as the coproduct over the orbits.
+- *Constructors and instances.* The quotient topology, the covering map, the fiber
+  identification, and finiteness of the fiber for finite `S`.
+- *Examples.* `S` a one-point set gives `X` itself; `S = π₁` with the left translation
+  action gives the universal cover back — an instance of the **general** construction, since
+  `π₁(U, b)` is free of rank `2` and hence infinite, so it is not an example of the finite
+  corollary; `S = Fin n` with the action of a triple gives the cover Layer 6.3 pairs with
+  that triple.
+- *Morphisms and functoriality.* A map of `π₁`-sets induces a map of covers over `X`; the
+  construction is a functor from discrete `π₁`-sets to covers, and it preserves coproducts.
+- *Edge cases.* `S` empty, where the cover is empty; `S` with a non-transitive action, where
+  the cover is disconnected and decomposes as the coproduct over the orbits.
 - *Downstream interfaces.* Layers 6.3, 6.5, 7.2.
 
-*Prerequisites:* Layer 5.6; UniversalCovers milestones 3, 4; Mathlib
-`IsQuotientCoveringMap`, `MulAction`.
+*Prerequisites:* Layers 5.3, 5.6; UniversalCovers milestones 3, 4, 5; Mathlib
+`IsQuotientCoveringMap`, `MulAction`, `LocPathConnectedSpace`.
 
-#### 6.3 The classification
+#### 6.3 The classification, at three levels of rigidification
 
-The equivalences, each with a named map in each direction:
+**Three statements, not one.** Each is an equivalence with a named map in each direction,
+between the carrier of 6.1 and its combinatorial counterpart:
 
-- pointed connected covers of `(U, b)` with fiber of size `n`, up to pointed isomorphism
-  over `U`, ↔ connected `PermutationTriple n` — 6.1 one way, 6.2 the other, with
-  uniqueness of the comparison map from the pin's lifting criterion
-  `IsCoveringMap.existsUnique_continuousMap_lifts_of_range_le`;
-- unpointed connected covers up to isomorphism over `U` ↔ isomorphism classes of connected
-  triples (Layer 0.2's quotient), the passage between the two being UniversalCovers
-  milestone 8's conjugacy bookkeeping;
-- both compatible with the free-group description of 5.6: transitive
-  `FreeGroup (Fin 2)`-sets of cardinality `n` ↔ connected triples, by evaluating the
-  action homomorphism at the two generators.
+1. **Fiber-numbered covers ↔ literal triples.** Isomorphism classes of connected
+   `FiberNumberedCover n` correspond to connected `PermutationTriple n` **on the nose**:
+   6.1 one way, 6.2's finite corollary the other, with uniqueness of the comparison map
+   from the pin's lifting criterion
+   `IsCoveringMap.existsUnique_continuousMap_lifts_of_range_le`. This is the only level at
+   which a literal triple is the classifying datum.
+2. **Unnumbered covers ↔ isomorphism classes of triples.** Connected covers up to
+   isomorphism over `U` correspond to `IsoClass n`, Layer 0.2's quotient by simultaneous
+   conjugation: forgetting the numbering on one side is exactly passing to the relabeling
+   orbit on the other.
+3. **Pointed covers ↔ subgroups, equivalently triples with a marked label.** Connected
+   pointed covers of `(U, b)` up to pointed isomorphism correspond to transitive
+   `π₁`-sets with a distinguished point, equivalently to subgroups of `π₁(U, b)` of index
+   `n` (UniversalCovers milestone 8), equivalently to pairs `(t, i)` with `t` a connected
+   `PermutationTriple n` and `i : Fin n`, modulo the action of the stabilizer of `i` in
+   `Equiv.Perm (Fin n)`. The subgroup attached to `(t, i)` is the stabilizer of `i` under
+   the monodromy action. ⚠ **Do not identify this quotient with literal triples.** Fixing
+   one label leaves `(n−1)!` relabelings, and for `n ≥ 3` the quotient is strictly coarser
+   than the set of triples and strictly finer than `IsoClass n`.
 
-Prove that the correspondences match degree with fiber cardinality, and that they are
-natural in maps of covers.
+All three are compatible with the free-group description of 5.6: transitive
+`FreeGroup (Fin 2)`-sets of cardinality `n` correspond to connected triples by evaluating
+the action homomorphism at the two generators, and the three levels above correspond to the
+three standard levels there (numbered set, set up to isomorphism, pointed set).
+
+Prove that the correspondences match degree with fiber cardinality, that they are natural in
+maps of covers, and that the forgetful maps between the three levels commute with the
+corresponding forgetful maps on the combinatorial side.
+
+**Compatibility with the branch-point action.** The self-homeomorphism `h : z ↦ 1 − z` of
+5.1 fixes `b`, so pulling back along it acts on all three carriers; prove that on level 1
+it induces exactly Layer 2.6's `swap01`, using 5.2's path identities
+`h ∘ γ0 = γ1`, `h ∘ γ1 = γ0`, which give `h_*(periph0) = periph1`, `h_*(periph1) = periph0`
+and hence `h_*(periphInf) = periph1⁻¹ · periphInf · periph1`. ⚠ The other five operations of
+2.6 are **not** induced on the nose: their Möbius transformations move `b` (5.1), so they
+act only after a choice of connecting path and therefore only on level 2. That is the
+geometric reason Layer 2.6's `S₃`-action is stated on `IsoClass n`.
 
 *Source:* Girondo–González-Diez **Theorem 2.61**: two morphisms of the same degree with the
 same branch-value set are isomorphic coverings if and only if their monodromies are
 conjugate. ⚠ Its hypotheses include *equal branch-value sets*, not merely equal degree; the
 statement is false without that, and the analogue here is that the three marked points are
-fixed once and for all.
+fixed once and for all. ⚠ That statement is this milestone's level 2, phrased with
+conjugacy on the combinatorial side; it is not level 1 and not level 3.
 
-*Prerequisites:* Layers 0.2, 5.6, 6.1, 6.2; UniversalCovers milestone 8; Mathlib
-`existsUnique_continuousMap_lifts_of_range_le`.
+*Prerequisites:* Layers 0.2, 2.6, 5.1, 5.2, 5.6, 6.1, 6.2; UniversalCovers milestone 8;
+Mathlib `existsUnique_continuousMap_lifts_of_range_le`.
 
 #### 6.4 Deck transformations
 
-For a connected cover with triple `t`, the deck group is isomorphic to
-`automorphismGroup t` of Layer 0.4.
+For a connected `FiberNumberedCover n` with triple `t`, the deck group is isomorphic to
+`automorphismGroup t` of Layer 0.4, **as a subgroup of `Equiv.Perm (Fin n)`**: a deck
+transformation is sent to the permutation it induces on the numbered fiber. The numbering is
+what makes the target a concrete subgroup rather than an abstract group; changing `ν` by `τ`
+conjugates both sides by `τ` compatibly, so the abstract isomorphism descends to the
+unnumbered cover while the embedding does not.
 
 ⚠ **This is where the `ᵐᵒᵖ` of UniversalCovers milestone 5 is absorbed, once, explicitly.**
 That milestone identifies the deck group of the universal cover with `(π₁)ᵐᵒᵖ`; composing
@@ -1701,11 +1889,14 @@ since both sides are already Layer 0 data.
 #### 7.1 Covers of the punctured disc
 
 Every connected covering map onto the punctured disc `𝔻* = {z | 0 < |z| < 1}` with finite
-fiber of cardinality `e` is isomorphic over `𝔻*` to the restriction of `z ↦ z^e`. Route:
-5.4 gives `π₁(𝔻*) ≅ ℤ` generated by the circle loop; 6.3's argument, transported to `𝔻*`,
-classifies connected finite covers by transitive finite `ℤ`-sets, i.e. by one cyclic
-`ℤ`-set per degree `e`; and the pin's `isCoveringMap_zpow` (restricted to the disc)
-realizes the degree-`e` one as `z ↦ z^e`, whose monodromy is a single `e`-cycle.
+fiber of cardinality `e ≥ 1` is isomorphic over `𝔻*` to the restriction of `z ↦ z^e`.
+Route: 5.4 gives `π₁(𝔻*) ≅ ℤ` generated by the circle loop; 6.3's **level 2** — unnumbered
+covers up to isomorphism over the base — transported to `𝔻*`, classifies connected finite
+covers by transitive finite `ℤ`-sets up to isomorphism, i.e. by one cyclic `ℤ`-set per
+degree `e`; and the pin's `isCoveringMap_zpow` (restricted to the disc) realizes the
+degree-`e` one as `z ↦ z^e`, whose monodromy is a single `e`-cycle. ⚠ Level 2 is the right
+level here and level 1 would be wrong: no numbering of the fiber is given or wanted, and
+the conclusion is an isomorphism of covers, not an equality of triples.
 
 **New object: the local model.** Basic API: the map, its covering property, its degree, its
 monodromy (an `e`-cycle), its deck group (`ℤ/e`, generated by multiplication by a primitive
@@ -1718,36 +1909,58 @@ an `e`-th root of unity. Layer 7.4's uniqueness statement is about the compactif
 cover, where the extra point rigidifies nothing either; the uniqueness there comes from
 properness, not from this milestone.
 
-*Prerequisites:* Layers 5.4, 6.1–6.3 (transported to `𝔻*`); Mathlib `isCoveringMap_zpow`,
+*Prerequisites:* Layers 5.4, 6.2, 6.3 (transported to `𝔻*`); Mathlib `isCoveringMap_zpow`,
 `isCoveringMapOn_zpow`.
 
 #### 7.2 Filling the punctures
 
-For a connected finite cover `p : E → U` with triple `t`, fix for each puncture
-`q ∈ {0, 1, ∞}` the standard punctured-disc neighbourhood `D_q^*` inside `U` (radius `1/2`
-about `0` and about `1`, and `|z| > 2` for `∞`, in the chart `w = 1/z`). Prove:
+**The carrier is attached to a cover, not to a triple.** Define `FilledCover p` for a
+connected covering map `p : E → U` with finite fibers; the filled object of a triple `t` is
+then `FilledCover` applied to the cover 6.2 associates to `t`, and the notation `fill t`
+is that composite and nothing else. ⚠ A notation that names only `t` hides which cover the
+topology was built from, and 7.4's uniqueness statement is precisely about that cover.
 
-- the connected components of `p ⁻¹' D_q^*` are in bijection with the cycles of `σ_q`, the
-  component of a cycle having degree its length — 7.1 applied componentwise, with the
-  bijection coming from the monodromy orbit computation of 6.1;
-- the filled space `fill t`, obtained by adjoining one point per component, carries a
-  topology in which each filled component is homeomorphic to a disc via the chart
-  `z ↦ z^{1/e}` transported from 7.1;
-- `fill t` is compact, connected, Hausdorff, second countable, and locally homeomorphic to
-  `ℂ`.
+Fix for each puncture `q ∈ {0, 1, ∞}` the standard punctured-disc neighbourhood `D_q^*` of
+5.1. The construction, with every piece of data pinned:
 
-**New object: `fill`.** Basic API: the topology and its universal property (a map out of
-`fill t` is continuous iff its restrictions to `E` and to each filled disc are); the open
-embedding `E ↪ fill t` with finite complement; the finite set of filled points with its
-labelling by the cycles of the three peripheral permutations; functoriality in maps of
-covers; the count `#(filled points) = c(σ0) + c(σ1) + c(σinf)`.
+- **The added points.** The connected components of `p ⁻¹' D_q^*` are in bijection with the
+  cycles of `σ_q`, the component of a cycle having degree its length — 7.1 applied
+  componentwise, with the bijection coming from the monodromy orbit computation of 6.1.
+  ⚠ Every local degree `e` is `≥ 1`: cycles of a permutation are nonempty, and the
+  `e = 0` case that would break every chart below cannot arise.
+- **The underlying type.** `FilledCover p := E ⊕ Σ_q (components of p ⁻¹' D_q^*)`, a sum,
+  with the second summand finite.
+- **The gluing maps.** For a component `C` over `q` of degree `e`, 7.1 gives an isomorphism
+  `C ≃ 𝔻*` over `D_q^*` under which `p` is `z ↦ z^e`; pinning one such isomorphism gives the
+  chart `φ_C : C ∪ {*_C} ≃ 𝔻`, sending `*_C` to `0`. Different choices differ by a rotation
+  by an `e`-th root of unity (7.1), which is a homeomorphism of `𝔻`, so the *topology* below
+  does not depend on the choice even though the chart does.
+- **The topology.** The neighbourhood basis at `*_C` is `{φ_C ⁻¹' (disc of radius r)}` for
+  `0 < r < 1`; on `E` it is the topology of `E`. Prove this is a topology, that `E` is open
+  and dense in it, and that the added points are isolated from one another.
+- **The properties.** `FilledCover p` is Hausdorff (two added points lie over different
+  components or different punctures, which the pairwise disjointness of the `D_q^*` in 5.1
+  separates); second countable (a countable base on `E` plus countably many basic
+  neighbourhoods per added point, of which there are finitely many); locally homeomorphic
+  to `ℂ` (the charts `φ_C`, and the charts of `E` elsewhere); connected when `E` is; and
+  **compact**, by the compact-core argument: `E ∖ ⋃_q p ⁻¹' D_q^*` is a closed subset of `E`
+  lying over the compact `U ∖ ⋃_q D_q^*`, hence compact for a finite-degree cover, and the
+  finitely many closed filled discs cover the rest.
+
+**New object: `FilledCover`.** Basic API: the topology and its universal property (a map out
+of `FilledCover p` is continuous iff its restrictions to `E` and to each filled disc are);
+the open embedding `E ↪ FilledCover p` with finite complement; the finite set of filled
+points with its labelling by the cycles of the three peripheral permutations;
+functoriality in isomorphisms of covers over `U`; the count
+`#(filled points) = c(σ0) + c(σ1) + c(σinf)`.
 
 ⚠ *Nearby false statement:* the components of `p ⁻¹' D_q^*` are not in bijection with the
 points of the fiber, nor with the orbits of the whole monodromy group — they are the orbits
-of the single element `σ_q`. Compactness of `fill t` needs the cover to have **finite**
-degree; an infinite-degree cover of `U` fills to a non-compact surface.
+of the single element `σ_q`. Compactness needs the cover to have **finite** degree; an
+infinite-degree cover of `U` fills to a non-compact surface.
 
-*Prerequisites:* Layers 0.5, 6.1, 7.1; Mathlib quotient/gluing topology.
+*Prerequisites:* Layers 0.5, 5.1, 6.1, 6.2, 7.1; Mathlib sum/quotient topology,
+`TopologicalSpace.IsTopologicalBasis`.
 
 #### 7.3 The branched covering map
 
@@ -1761,13 +1974,25 @@ filled point coming from a cycle of length `e` the map is `w ↦ w^e` in the pin
 
 #### 7.4 Uniqueness of the compactification
 
-Any two extensions of `p` to a proper continuous map from a compact Hausdorff space, with
-finite fibers over the punctures and the `z^e` local model, are homeomorphic over
-`OnePoint ℂ` by a **unique** homeomorphism restricting to the identity on `E`. Route:
-uniqueness of the map is density of `E` plus Hausdorffness of the target; existence is that
-the added points of either extension are recovered from `E` alone, as the ends of the
-components of `p ⁻¹' D_q^*` — the milestone states the ends description as its own lemma,
-since it is what makes the compactification canonical rather than merely constructed.
+Let `(Z, π)` be **any** competitor: a compact Hausdorff `Z` with a proper continuous
+`π : Z → OnePoint ℂ`, together with an open embedding `j : E ↪ Z` satisfying
+
+- `π ∘ j` is `p` followed by 5.1's embedding `U ↪ OnePoint ℂ`;
+- `j '' E` is **dense** in `Z` and its complement is exactly `π ⁻¹' {0, 1, ∞}`, which is
+  finite;
+- at each point of that complement `π` is `w ↦ w^e` in some charts, with `e ≥ 1`.
+
+Then there is a **unique** homeomorphism `FilledCover p ≃ₜ Z` over `OnePoint ℂ` commuting
+with the two embeddings of `E`. ⚠ All three clauses are needed. Without density and the
+exact description of the complement a competitor may carry extra components or extra points
+over an unbranched value, and the theorem is false; "finite fibers over the punctures"
+alone does not exclude them.
+
+Route: uniqueness of the map is density of `E` plus Hausdorffness of the target; existence
+is that the added points of either extension are recovered from `E` alone, as the ends of
+the components of `p ⁻¹' D_q^*` — the milestone states the ends description as its own
+lemma, since it is what makes the compactification canonical rather than merely
+constructed.
 
 *Source:* Girondo–González-Diez **Lemma 1.80**: for `Y` compact, `Σ ⊂ Y` finite and
 `f* : X* → Y ∖ Σ` an unramified holomorphic covering of finite degree, there is a **unique**
@@ -1795,18 +2020,50 @@ ramified over all of them. Layer 0.8's degree-`2` example `4z(1−z)` is unramif
 
 *Prerequisites:* Layers 0.5, 7.2, 7.3.
 
-#### 7.6 The embedded dessin
+#### 7.6 The embedded graph
 
 The preimage `fillMap ⁻¹' [0, 1]` of the closed real segment, with black points over `0`,
 white points over `1`, and edges the components of the preimage of the open segment,
-realizes the Layer 2.2 dessin of `t`. State it as a bijection of combinatorial data: edges
-to `Fin n`, black vertices to the cycles of `σ0`, white vertices to the cycles of `σ1`,
-with the incidence maps and the two rotations matching. The rotation matching is the
-content: the cyclic order in which the edges at a black vertex leave it, read
-counterclockwise in the chart of 7.2, is the cycle of `σ0`. No general theory of embedded
-graphs is developed — only these bijections.
+realizes the **underlying bipartite graph** of the Layer 2.2 dessin of `t`. State it as a
+bijection of combinatorial data: edges to `Fin n`, black vertices to the cycles of `σ0`,
+white vertices to the cycles of `σ1`, with the two incidence maps matching. No general
+theory of embedded graphs is developed — only these bijections.
+
+⚠ **The rotations are not part of this milestone.** A cyclic order on the edges at a vertex
+is orientation data, and `FilledCover p` is at this stage only a charted topological
+surface: the charts of 7.2 are pinned only up to a rotation by a root of unity, and nothing
+so far chooses a coherent orientation across them. The statement that the counterclockwise
+cyclic order at a black vertex is the cycle of `σ0` is Layer 8.7, after the complex
+structure of 8.5 supplies the orientation.
 
 *Prerequisites:* Layers 2.2, 7.2, 7.3, 7.5.
+
+#### 7.7 Topological branched covers as a carrier
+
+The object Layer 8.6 classifies, defined here so that "isomorphism classes of connected
+topological branched covers of the sphere with branch values in `{0,1,∞}`" names something.
+
+```text
+structure TopBranchedCover (n : ℕ) where
+  Z    : Type              -- compact, connected, Hausdorff, second countable, locally ℂ
+  π    : Z → OnePoint ℂ    -- continuous, proper, surjective
+  ...  -- π restricted over OnePoint ℂ ∖ {0,1,∞} is a covering map of degree n
+       -- at each point of π ⁻¹' {0,1,∞}, π is w ↦ w ^ e in some charts, with e ≥ 1
+```
+
+An **isomorphism** is a homeomorphism `Z ≃ₜ Z'` commuting with `π` and `π'`. Prove: the
+local degree `e` at a point is well defined (independent of the charts); the fibers over the
+three marked points are finite; `Σ e = n` over each of them; and the restriction of an
+isomorphism to the unbranched part is an isomorphism of covers in the sense of 6.1.
+
+7.2 and 7.3 construct a `TopBranchedCover n` from a connected finite cover of `U`, and 7.4
+says that construction is unique up to a unique isomorphism. Conversely, restricting `π`
+over `OnePoint ℂ ∖ {0,1,∞}` sends a `TopBranchedCover n` to a connected finite cover of
+`U`, and 7.4 makes the two constructions mutually inverse on isomorphism classes. That
+equivalence is what Layer 8.6 consumes; it is stated here rather than there because it is
+purely topological.
+
+*Prerequisites:* Layers 6.1, 7.2–7.5.
 
 ### Layer 8: Riemann surfaces and analytic Riemann existence
 
@@ -1822,8 +2079,8 @@ with
 together with `[CompactSpace X]` and `[ConnectedSpace X]` where a milestone needs them,
 and second countability where it needs that. **No bundled `RiemannSurface` structure is
 introduced**; the hypotheses travel unbundled, as they do in the pin's own manifold
-statements. Holomorphic maps are `MDifferentiable 𝓘(ℂ) 𝓘(ℂ)`; the comparison with
-`ContMDiff` at exponent `ω` is a milestone, not an assumption. Build:
+statements. **Holomorphy is `MDifferentiable 𝓘(ℂ) 𝓘(ℂ)`**, and every comparison with
+another spelling is a named target of this milestone, not an assumption. Build:
 
 - **the Riemann sphere.** The `ChartedSpace ℂ (OnePoint ℂ)` instance with the two charts
   `z` and `1/z`, and the `IsManifold 𝓘(ℂ) ω` instance, whose content is that the transition
@@ -1832,9 +2089,20 @@ statements. Holomorphic maps are `MDifferentiable 𝓘(ℂ) 𝓘(ℂ)`; the comp
   against it.
 - **open submanifolds.** The instances for an open subset of a Riemann surface, applied to
   `ℂ`, to `U` (5.1), and to `𝔻*`.
-- **holomorphic maps to the sphere.** The identification of holomorphic `X → OnePoint ℂ`
-  other than the constant `∞` with meromorphic functions in charts, in the pin's
-  `MeromorphicAt`/`MeromorphicOn` vocabulary — the bridge Layer 9.2 turns into a field.
+- **the three comparisons of holomorphy**, each a named theorem, so that no later milestone
+  silently switches spelling:
+  1. `mdifferentiable_iff_analyticAt_chart` — `f : X → Y` is `MDifferentiable 𝓘(ℂ) 𝓘(ℂ)` iff
+     its chart representatives are `AnalyticAt ℂ` at every point;
+  2. `mdifferentiable_iff_contMDiff_omega` — for maps between complex manifolds at
+     analyticity exponent `ω`, `MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f ↔ ContMDiff 𝓘(ℂ) 𝓘(ℂ) ω f`;
+  3. `mdifferentiable_toSphere_iff_meromorphicOn` — a map `X → OnePoint ℂ` other than the
+     constant `∞` is holomorphic iff, in each chart, the composite with the affine chart of
+     the sphere is `MeromorphicOn` in the pin's vocabulary, the poles being exactly the
+     preimage of `∞`.
+
+  ⚠ (3) is the bridge Layer 9.2 turns into a field, and it is a **theorem about charts**,
+  not a definition: "meromorphic function" is not introduced as a primitive anywhere in this
+  roadmap.
 - **the maximum principle.** From the pin's `MDifferentiable.isLocallyConstant` and
   `exists_eq_const_of_compactSpace`: a holomorphic function on a compact connected Riemann
   surface is constant.
@@ -1928,8 +2196,11 @@ nonconstant holomorphic `β : X → OnePoint ℂ` whose branch values lie in `{0
 - *Constructors and instances.* The structure; the equivalent formulation "`β` restricted
   over `OnePoint ℂ ∖ {0,1,∞}` is a covering map" (equivalent by 8.3), which is the form
   `Suggested.lean` prototypes because it is the one Layer 6 consumes directly.
-- *Examples.* `(OnePoint ℂ, z ↦ z^n)`; `(OnePoint ℂ, z ↦ 4z(1−z))`; the genus-one pair of
-  `torusTriple`.
+- *Examples.* `(OnePoint ℂ, z ↦ z^n)`, of degree `n` with partitions `[n], [1ⁿ], [n]`; and
+  `(OnePoint ℂ, z ↦ 4z(1−z))`, of degree `2` with partitions `[1,1], [2], [2]`. ⚠ Both live
+  on the sphere, which is the only Riemann surface this milestone has in hand. The
+  positive-genus example belongs to 8.5, which is where a surface other than the sphere is
+  first constructed.
 - *Morphisms and functoriality.* Morphisms are holomorphic maps over `OnePoint ℂ`;
   isomorphisms are biholomorphisms over it; the automorphism group is finite.
 - *Comparison lemmas and naturality.* The attached triple, via 8.3 and Layer 6.1, with its
@@ -1946,11 +2217,35 @@ nonconstant holomorphic `β : X → OnePoint ℂ` whose branch values lie in `{0
 The filled space `fill t` of Layer 7.2 carries a unique complex structure making `fillMap`
 holomorphic, and with it `(fill t, fillMap)` is an analytic Belyi pair. Route: on the
 unramified part pull back the charts of the sphere along the covering map; at a filled point
-coming from a cycle of length `e` take 7.2's chart `z ↦ z^{1/e}` as the holomorphic chart;
-the transition functions are analytic by construction; `fillMap` is holomorphic away from
+coming from a cycle of length `e` take 7.2's chart `φ_C` as the holomorphic chart; the
+transition functions are analytic by construction; `fillMap` is holomorphic away from
 the filled points, and across them by the removable-singularity theorem in these charts.
 Uniqueness: a homeomorphism of Riemann surfaces holomorphic off a finite set is
 holomorphic, again by removability.
+
+**The positive-genus worked example**, owned here because this is where a surface other than
+the sphere first exists. `torusTriple` (Layer 0.8) has degree `4`, cycle data
+`[4], [4], [2,2]`, and genus `1`; its analytic pair is the **superelliptic curve**
+
+```text
+y⁴ = t · (t − 1) ,        β = t ,
+```
+
+that is, the compact Riemann surface of the algebraic function `y = (t² − t)^{1/4}`. Verify
+its invariants directly from the equation rather than by appeal to the classification:
+
+- over `t = 0` and `t = 1` the exponent of the vanishing factor is `1`, coprime to `4`, so
+  each has a single point with `e = 4`, giving partitions `[4]` and `[4]`;
+- over `t = ∞` the total order is `−2`, and `gcd(4, 2) = 2`, so there are two points each
+  with `e = 2`, giving `[2,2]`;
+- Riemann–Hurwitz then reads `2g − 2 = 4·(−2) + (3 + 3 + 1 + 1) = 0`, so `g = 1`;
+- `y ↦ i·y` generates a cyclic group of order `4` of automorphisms over `β`, acting
+  transitively on a generic fiber, so the pair is regular with deck group `ℤ/4` — matching
+  Layer 0.8's automorphism group of `torusTriple` and Layer 6.4's deck-group theorem.
+
+The frozen LMFDB record for this passport is `4T1-4_4_2.2-a` (`PROVENANCE.md`), whose curve
+friend is an elliptic curve over `ℚ`, so the example is also Layer 10.8's genus-one
+acceptance instance.
 
 *Source:* Forster **4.6** (the unique complex structure making a local homeomorphism
 holomorphic), then **8.4** for the continuation of an unbranched proper covering of `X ∖ A`
@@ -1972,10 +2267,14 @@ The summit of the analytic track: the following four classifications agree, by e
 named maps, and the maps are mutually inverse up to the relevant isomorphisms.
 
 - isomorphism classes of analytic Belyi pairs of degree `n`;
-- isomorphism classes of connected topological branched covers of the sphere with branch
-  values in `{0,1,∞}` and degree `n` (Layers 7.3, 7.4);
-- isomorphism classes of connected `PermutationTriple n` (Layer 6.3);
+- isomorphism classes of connected `TopBranchedCover n` (Layer 7.7's carrier, with its
+  isomorphism notion);
+- `IsoClass n` restricted to connected triples — Layer 6.3's **level 2**, not level 1;
 - isomorphism classes of connected dessins with `n` edges (Layer 2.4).
+
+⚠ Every one of the four is a set of **isomorphism classes**, so the classifying datum on
+the combinatorial side is `IsoClass n` and never a literal triple. A statement at Layer
+6.3's level 1 would need a fiber numbering, and an analytic Belyi pair carries none.
 
 The two nontrivial directions are 8.4 (a pair gives a triple) and 8.5 (a triple gives a
 pair); that they are inverse uses 7.4's uniqueness for one composite and 6.3's for the
@@ -1995,7 +2294,36 @@ formulas.
 say that every compact Riemann surface admits a Belyi map — that is Layer 10, and it is
 false without the definability hypothesis over `ℚ̄`.
 
-*Prerequisites:* Layers 0.6, 2.4, 6.3, 7.3–7.5, 8.4, 8.5; ModularForms Layer 10B(v).
+*Prerequisites:* Layers 0.6, 2.4, 6.3, 7.3–7.7, 8.4, 8.5; ModularForms Layer 10B(v).
+
+#### 8.7 Orientation and the rotations of the embedded dessin
+
+The orientation-sensitive half of 7.6, stated here because it needs the complex structure of
+8.5 and is false without a chosen orientation.
+
+A Riemann surface is canonically oriented: in a holomorphic chart, "counterclockwise" is the
+positive direction of `arg`, and the transition functions being holomorphic with nonvanishing
+derivative preserve it. Prove that first — the milestone owns the statement that the charts
+of 8.5 induce a well-defined cyclic order on the germs of arcs leaving a point.
+
+Then: for the analytic Belyi pair `(fill t, fillMap)` of 8.5 and a black point `P` over `0`
+coming from a cycle of `σ0` of length `e`, the `e` edges of 7.6's embedded graph meeting `P`
+leave it in the counterclockwise cyclic order given by that cycle of `σ0`; likewise for white
+points and `σ1`. Together with 7.6 this identifies the embedded graph **with its rotations**,
+that is the full Layer 2.1 ribbon graph, with the Layer 2.2 dessin of `t`.
+
+Route: in the chart `φ_C` of 7.2 the map is `w ↦ w^e` and the preimage of the segment
+`(0,1)` is `e` radial arcs at angles `2πk/e`; the monodromy of the counterclockwise
+peripheral loop `γ0` advances a point of the fiber by one `σ0`-step (Layer 6.1), and the
+same loop advances the radial arc index by one. So the two cyclic orders are the same cycle,
+not merely cycles of the same length.
+
+⚠ The corresponding statement at `∞` must be read in the chart `w = 1/z` (Layer 5.2's
+warning): the face at `∞` is counterclockwise there and clockwise in `z`, and it is
+`σinf`, not `σinf⁻¹`, exactly because Layer 5.8 identified `periphInf` with the *clockwise*
+circle in the `z`-chart.
+
+*Prerequisites:* Layers 2.1, 2.2, 5.8, 6.1, 7.2, 7.6, 8.5.
 
 ### Layer 9: algebraic Belyi pairs and algebraization
 
@@ -2608,8 +2936,10 @@ Base change along a fixed embedding `ℚ̄ ↪ ℂ` is an equivalence from algeb
 over `ℚ̄` to algebraic Belyi pairs over `ℂ`: essentially surjective by 10.7, fully faithful
 by AlgebraicCurves Layer 8 (constant-field extension in characteristic zero), and
 compatible with degree, ramification partitions, and automorphism groups. Composing with
-9.5–9.7 and 6.3, isomorphism classes of Belyi pairs over `ℚ̄` biject with isomorphism
-classes of connected triples.
+9.5–9.7 and Layer 6.3's **level 2**, isomorphism classes of Belyi pairs over `ℚ̄` biject
+with `IsoClass n` restricted to connected triples. ⚠ Level 2 throughout: an algebraic Belyi
+pair carries no fiber numbering, so no literal triple is attached to it, and every statement
+of Layers 11–14 about "the triple of a pair" means its simultaneous-conjugacy class.
 
 ⚠ *Nearby false statement:* full faithfulness is a theorem about *constant* field
 extension in characteristic zero, and it is what makes the triple of a `ℚ̄`-pair
