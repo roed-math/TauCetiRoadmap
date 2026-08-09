@@ -124,7 +124,7 @@ cited as AlgebraicCurves Layers 0–8 and 12; that roadmap's own contract table 
 roadmap as the consumer of exactly those layers. Layer 9 here consumes them for the algebraic side of the comparison. The analytic
 comparison over `ℂ` — a compact Riemann surface with a Belyi function versus the regular
 projective model of its function field — is excluded there by name and **owned here**
-(Layers 9.4–9.6).
+(Layers 9.4–9.7).
 
 **Polynomial Galois groups.** The full cycle type `fullCycleType`, the transitive-group
 reference data `TransitiveGroupIndex`, `referenceSubgroup`, `numTransitiveGroups`, and the
@@ -2333,11 +2333,21 @@ neither roadmap owns and which AlgebraicCurves excludes by name.
 
 #### 9.1 The algebraic carrier
 
-Over a field `k`, an **algebraic Belyi pair** is a function field `F/k` in AlgebraicCurves'
-sense — `IsFunctionField k F` with exact constants `IsIntegrallyClosedIn k F` — together
-with a finite separable `k`-embedding `k(t) ↪ F` such that every place of `F` over a place
-of `k(t)` other than the three marked places `t = 0`, `t = 1`, `t = ∞` has ramification
-index `1`.
+**The base field has characteristic zero, everywhere in this roadmap.** Over a field `k`
+with `[CharZero k]`, an **algebraic Belyi pair** is a function field `F/k` in
+AlgebraicCurves' sense — `IsFunctionField k F` with exact constants
+`IsIntegrallyClosedIn k F` — together with a finite `k`-embedding `k(t) ↪ F` such that
+every place of `F` over a place of `k(t)` other than the three marked places `t = 0`,
+`t = 1`, `t = ∞` has ramification index `1`.
+
+⚠ **Why the scope is pinned rather than left general.** Separability and tame ramification
+are used from Layer 9.7 onwards and are not available in general; the standard examples
+degenerate — `t ↦ t^n` is inseparable when `char k ∣ n`, and `4t(1−t)` is the constant map
+`0` in characteristic `2`; and Belyi's theorem itself (Layer 10) and the whole of Layers
+11–13 are characteristic-zero statements. Carrying a general `k` and re-imposing hypotheses
+at each use would leave every consumer to rediscover them. In characteristic zero
+separability is automatic, so the definition does **not** carry a separability hypothesis;
+it carries `[CharZero k]` instead, and every milestone below inherits it.
 
 The three marked places are AlgebraicCurves Layer 1's places of the rational function field:
 the finite places of the monic irreducibles `t` and `t − 1`, and the infinite place, in that
@@ -2345,13 +2355,31 @@ order — the `0, 1, ∞` convention, algebraically.
 
 **New object: `AlgebraicBelyiPair`.** Basic API:
 
-- *Constructors and instances.* The structure; the degree `[F : k(t)]`; the three
-  ramification partitions, as the multisets of `e(P′ | P)` over the places above each marked
-  place (AlgebraicCurves Layer 6), each a partition of the degree by the fundamental
-  identity, given that all residue degrees are `1` over an algebraically closed `k` and in
-  general by `Σ e·f = n`.
-- *Examples.* `(k(t), id)` of degree `1`; `(k(t), t ↦ t^n)` via `k(t) ↪ k(u)`, `t ↦ u^n`;
-  the degree-`2` pair of `4t(1 − t)`, unramified over `0`.
+- *Constructors and instances.* The structure; the degree `n := [F : k(t)]`; separability of
+  `k(t) ↪ F`, derived from `CharZero`.
+- *Local data at a marked place.* The primary invariant is the multiset of **pairs**
+
+  ```text
+  localData P := {(e(P′ | P), f(P′ | P)) | P′ above P}       for P ∈ {0, 1, ∞}
+  ```
+
+  (AlgebraicCurves Layer 6), subject to the fundamental identity `Σ e·f = n`. From it:
+  - the **weighted ramification partition** `Σ_{P′} replicate (f P′) (e P′)`, a multiset of
+    positive integers summing to `n` — a genuine partition of `n` over any `k`;
+  - the **unweighted multiset** `{e(P′ | P)}`, which is a partition of `n` **only when every
+    residue degree is `1`**.
+
+  ⚠ *Nearby false statement:* over a base field that is not algebraically closed the
+  unweighted multiset of ramification indices is **not** a partition of the degree, because
+  residue degrees contribute through `Σ e·f = n`. State the unweighted partition theorem
+  only under `[IsAlgClosed k]`, where every residue degree is `1`; and prove that the
+  weighted partition is the base change of the unweighted one to `k̄`, which is the
+  compatibility Layer 11 needs.
+- *Examples,* each in characteristic zero. `(k(t), id)` of degree `1`; `(k(t), t ↦ t^n)` via
+  `k(t) ↪ k(u)`, `t ↦ u^n`, with local data `{(n,1)}` at `0` and at `∞` and `{(1,1)}^n` at
+  `1`; the degree-`2` pair of `4t(1 − t)`, unramified over `0`. A worked example with a
+  residue degree `> 1`, over `k = ℚ`, showing the weighted and unweighted multisets
+  differing — so that the distinction has a witness and not only a warning.
 - *Morphisms and functoriality.* Morphisms are `k(t)`-embeddings; isomorphisms are
   `k(t)`-isomorphisms; base change along `k ↪ k′` (AlgebraicCurves Layer 8's constant-field
   extension), with the caveat recorded there that constants must be re-checked after base
@@ -2361,20 +2389,16 @@ order — the `0, 1, ∞` convention, algebraically.
   points — is **equivalent**, through AlgebraicCurves Layer 12's anti-equivalence, and is
   proved equivalent rather than offered as a second definition.
 - *Edge cases.* Unramified over one or two of the three places; `F = k(t)` itself; `k` not
-  algebraically closed, where residue degrees above a marked place can exceed `1` and the
-  partitions are partitions of `n` only after weighting by `f`.
-- *Downstream interfaces.* Layers 9.5, 9.6, 10, 11, 12.3.
+  algebraically closed, where residue degrees above a marked place can exceed `1`.
+- *Downstream interfaces.* Layers 9.5, 9.7, 10, 11, 12.3 — all of which inherit
+  `[CharZero k]` from here and none of which re-derives it.
 
 ⚠ *Nearby false statement:* "branch locus equal to `{0,1,∞}`" is the wrong condition. The
 definition is containment, and the degree-`2` example above is a Belyi pair unramified over
 `0`. A roadmap milestone or a database record that assumes equality excludes genuine Belyi
 maps.
 
-⚠ *Nearby false statement:* separability of `k(t) ↪ F` is automatic only in characteristic
-zero. The definition carries it, and no milestone drops it; AlgebraicCurves Layer 7 records
-that the different theory degenerates without it.
-
-*Prerequisites:* AlgebraicCurves Layers 0, 1, 6, 12.
+*Prerequisites:* AlgebraicCurves Layers 0, 1, 6, 12; Mathlib `CharZero`, `IsAlgClosed`.
 
 #### 9.2 The meromorphic function field
 
@@ -2398,9 +2422,21 @@ the polar sets and extended across them by removability. Prove:
 (finiteness from compactness); functoriality along nonconstant holomorphic maps; and the
 comparison with the pin's `MeromorphicOn` vocabulary in each chart.
 
-⚠ *Nearby false statement:* on a non-compact surface the constants need not be `ℂ` and the
-poles need not be finite in number — `M(ℂ)` is enormous. Compactness and connectedness are
-both load-bearing, and every statement in this layer carries them.
+⚠ **What compactness actually buys.** It is *not* that the constants change: on any
+connected Riemann surface a meromorphic function algebraic over the constant field is
+constant, so the constant field of `M(X)` is `ℂ` whether or not `X` is compact. Compactness
+is load-bearing for four other things, and each statement in this layer names which one it
+uses:
+
+- a noncompact surface carries **nonconstant global holomorphic functions** — `M(ℂ) ⊇ ℂ[z]`
+  — so the maximum principle of 8.1 fails and `M(X)` is not generated by any finite set;
+- a meromorphic function may have **infinitely many poles** (`1/sin`, on `ℂ`);
+- the **polar divisor need not have finite support**, so "the divisor of `f`" is not a
+  finitely supported function and the divisor-degree bookkeeping of 9.4–9.5 has nothing to
+  count;
+- the compact maximum-principle and finite-divisor arguments used in 9.2–9.5 therefore do
+  not transfer, and the sphere computation `M(OnePoint ℂ) = ℂ(t)` has no noncompact
+  analogue.
 
 *Source:* Forster **1.12** and **1.15** for meromorphic functions and their identification
 with holomorphic maps to `ℙ¹`, with **1.16** for the field structure. The sphere
@@ -2426,13 +2462,27 @@ two halves, each its own milestone:
   because they are locally bounded there after multiplying by a suitable power of a local
   coordinate; so by 9.2's sphere computation they lie in `ℂ(t)`. The resulting monic
   polynomial of degree `n` kills `f`.
-- **Some element has degree exactly `n`.** ModularForms Layer 10B's Riemann–Roch chain
-  produces, for any two distinct points of `X`, a meromorphic function taking different
-  values at them: `ℓ(D)` grows with `deg D`, so for `D` of large degree the space `L(D)` has
-  a function with a pole at one point and not the other. Applying this finitely many times
-  separates the `n` points of one unbranched fiber of `β`, and the separating `f` then has
-  `n` distinct conjugates, so `[ℂ(t)(f) : ℂ(t)] = n`, whence `M(X) = ℂ(t)(f)` by the first
-  half.
+- **Some element has degree exactly `n`.** Three named lemmas, not one step:
+  1. **Point separation.** ModularForms Layer 10B's Riemann–Roch chain produces, for any two
+     distinct points `x ≠ y` of `X`, a meromorphic function with a pole at `x` and none at
+     `y`: `ℓ(D)` grows with `deg D`, so for `D` of large degree `L(D)` has a function that
+     `L(D − x)` does not.
+  2. **Fiber separation.** A *single* function separating all `n` points of one unbranched
+     fiber `{x₁, …, x_n}` is assembled from the `n(n−1)/2` pairwise separators `f_{ij}` by a
+     **generic linear combination**: the set of `(c_{ij}) ∈ ℂ^{n(n−1)/2}` for which
+     `f := Σ c_{ij} f_{ij}` fails to separate some pair is a finite union of proper linear
+     subspaces, hence proper, so some choice works. State the genericity argument as its own
+     lemma; "apply the separator finitely many times" is not a construction, because
+     different pairs need different functions.
+  3. **Generation.** Such an `f` has `n` distinct values on the fiber, so its minimal
+     polynomial over `ℂ(t)` has degree `n` by the first half, giving
+     `[ℂ(t)(f) : ℂ(t)] = n`. To conclude `M(X) = ℂ(t)(f)`, take any `g ∈ M(X)`, let `h` be a
+     primitive element of `ℂ(t)(f, g)` — available in characteristic zero — and apply the
+     first half to `h`: `[ℂ(t)(h) : ℂ(t)] ≤ n`, while `ℂ(t)(f) ⊆ ℂ(t)(h)` forces
+     `[ℂ(t)(h) : ℂ(t)] ≥ n`. Hence `ℂ(t)(h) = ℂ(t)(f)` and `g ∈ ℂ(t)(f)`.
+
+  ⚠ Step 3 is not optional bookkeeping. One element of degree `n` bounds nothing about
+  `M(X)` on its own; without it the first half leaves `[M(X) : ℂ(t)]` unbounded.
 
 Separability is automatic in characteristic zero.
 
@@ -2466,8 +2516,15 @@ For `X` compact connected with a nonconstant `β`, build the map from points of 
 of `M(X)/ℂ` (AlgebraicCurves Layer 0's `Place`), sending `x` to the valuation `ord_x` of
 9.2, and prove it is a **bijection**:
 
-- well-defined: `ord_x` is a discrete valuation trivial on `ℂ` and surjective onto `ℤ` (a
-  local coordinate has order `1`);
+- well-defined: `ord_x` is a discrete valuation trivial on `ℂ`, and its **value group is
+  `ℤ`**. ⚠ The second half is not the observation that a local coordinate has order `1`: a
+  chart coordinate is a germ, not an element of `M(X)`, and `ord_x` is a function on `M(X)`.
+  What supplies a global witness is Riemann–Roch: for each `x` the spaces `L(k·x)` grow
+  with `k`, so for `k` large `L(k·x) ⊋ L((k−1)·x)` and any element of the difference has
+  `ord_x = −k`; taking two consecutive such `k` and dividing gives an element of order
+  exactly `−1`, hence `ord_x` is onto. Cite ModularForms Layer 10B(iii)'s Riemann–Roch and
+  10B(i)'s `𝒪_D` for the strict-growth statement, or state the "function with prescribed
+  order at one point" consequence here as a named target of this milestone;
 - injective: by 9.3's separating function;
 - surjective: over each place of `ℂ(t)` the analytic fiber count `Σ e = n` of 8.3 matches the
   algebraic fundamental identity `Σ e·f = n` of AlgebraicCurves Layer 6, and every residue
@@ -2517,28 +2574,89 @@ recorded at Layer 9.3.
 
 *Prerequisites:* Layers 9.1–9.4; AlgebraicCurves Layers 3, 5, 12; ModularForms Layer 10B.
 
-#### 9.6 Analytification of an algebraic pair
+#### 9.6 The local comparison at a place
+
+The bridge that makes 9.7 possible, and the one an "algebraic unramifiedness implies the
+plane model fills in" argument silently assumes. It is local, it is about **one** point of
+the base, and it is the algebraic-to-analytic ramification theorem in the exact form this
+roadmap needs.
+
+*Setting.* Let `p ∈ OnePoint ℂ`, let `s` be the pinned local coordinate at `p` (`t − p` at a
+finite point, `1/t` at `∞`), let `D` be a disc about `p` in that coordinate with `D* = D ∖ {p}`,
+and let `m ∈ 𝒪(D)[y]` be monic of degree `n`, separable over the fraction field, with
+`disc m` vanishing at most at `p`. Write `F` for the fraction field of `𝒪(D)[y]/(m)`.
+
+*Statements, in proof order.*
+
+1. **The smooth part is a covering.** `V := {(s, y) ∈ D* × ℂ | m(s, y) = 0}` with the first
+   projection is a degree-`n` covering map, by the holomorphic implicit function theorem at
+   each of the `n` simple roots.
+2. **Its components are the local models.** By 7.1 each connected component `W_i` of `V` is
+   isomorphic over `D*` to `z ↦ z^{d_i}`, with `Σ d_i = n`, and the local monodromy is the
+   product of the corresponding `d_i`-cycles.
+3. **Each component is a place, with `e = d_i`.** On `W_i ≅ 𝔻*` the coordinate `y` is
+   bounded, because it satisfies a monic equation with coefficients holomorphic on `D`, so
+   it extends holomorphically across the puncture; the resulting `ℂ((s))`-embedding
+   `F ↪ ℂ((z))` with `s = z^{d_i}` is a place of `F` over `p`. Its ramification index is
+   **exactly** `d_i`, not a proper divisor: the `n` points over a given `s ∈ D*` have
+   distinct `y`-coordinates, so no nontrivial deck transformation of `W_i` fixes `y`, and
+   the image is contained in no `ℂ((z^k))` with `k > 1`.
+4. **The assignment is a bijection.** Distinct components give distinct places, again because
+   `y` separates the points of a fiber; and since every residue field is `ℂ`, all residue
+   degrees are `1`, so the fundamental identity reads `Σ_{P′ | p} e(P′|p) = n = Σ d_i`
+   (AlgebraicCurves Layer 6). Injectivity plus equal totals forces surjectivity. **So the
+   multiset of local monodromy cycle lengths at `p` is the multiset of ramification indices
+   of the places of `F` over `p`.**
+5. **The unramified case.** In particular, `F` is unramified over `p` iff every `d_i = 1`,
+   iff the local monodromy at `p` is trivial, iff the covering of 1 extends to a covering of
+   `D`. This is the step 9.7 uses at the points of `Δ ∖ {0,1,∞}`.
+6. **Agreement of indices.** Combining with 8.2, the analytic `ramificationIndex` at the
+   point of the filled surface coming from `W_i` equals the algebraic `e(P′|p)` of the
+   corresponding place. This is the statement Layers 9.7 and 9.8 export.
+
+⚠ **Normalization is what is being constructed, and it is not the plane model.** The plane
+locus `{m = 0}` over all of `D` is generally **singular** at `p` — several branches may
+cross, and the fiber over `p` may have fewer than `r` points — so no removable-singularity
+argument makes it a Riemann surface. What 3 constructs is one point per **component of the
+punctured preimage**, that is one point per place, which is exactly the normalization; the
+map from it to the plane locus is finite and is injective off the singular points only.
+⚠ Nor does the *conclusion* of 9.1 substitute for this theorem: unramifiedness of the field
+extension is a statement about places, and it becomes a statement about the covering only
+through 4.
+
+*Prerequisites:* Layers 7.1, 7.2, 8.2; AlgebraicCurves Layers 0, 6; Mathlib holomorphic
+implicit function theorem, removable singularities, `Polynomial.discriminant`.
+
+#### 9.7 Analytification of an algebraic pair
 
 For an algebraic Belyi pair `(F, ℂ(t) ↪ F)` over `ℂ`, construct an analytic pair and prove
 the two constructions inverse. Route, in proof order:
 
 1. **A primitive element.** `F = ℂ(t)[y]/(m)` for a monic irreducible `m ∈ ℂ(t)[y]` of degree
    `n` — characteristic zero, so the extension is separable and the primitive element theorem
-   applies.
+   applies. Clearing denominators, the coefficients are holomorphic off a finite set.
 2. **The affine analytic model.** Let `Δ ⊂ OnePoint ℂ` be the finite set of poles of the
-   coefficients of `m` together with the zeros of its discriminant, and the three marked
-   points. Over `OnePoint ℂ ∖ Δ` the vanishing locus of `m` in the product with `ℂ`, with the
-   first projection, is a degree-`n` covering map, by the holomorphic implicit function
-   theorem applied at each of the `n` simple roots.
-3. **Extension over the marked points.** By 9.1 the map is unramified over
-   `Δ ∖ {0,1,∞}`, so it extends to a covering map over `OnePoint ℂ ∖ {0,1,∞}`; concretely,
-   the fibers over the points of `Δ ∖ {0,1,∞}` are filled in by the removable-singularity
-   argument of 8.5 with all `e = 1`.
-4. **Compactification.** Layers 7.2–7.4 and 8.5 compactify to an analytic Belyi pair.
-5. **Identification.** Its meromorphic field is `F` over `ℂ(t)`: both are degree-`n`
-   extensions generated by `y`, and 9.3 makes the comparison a `ℂ(t)`-isomorphism.
+   coefficients of `m`, the zeros of its discriminant, and the three marked points. Over
+   `OnePoint ℂ ∖ Δ` the vanishing locus of `m`, with the first projection, is a degree-`n`
+   covering map (9.6, statement 1, applied on a disc about each point of the complement).
+3. **Extension over the unmarked bad points.** At each `p ∈ Δ ∖ {0,1,∞}`, 9.1 says `F` is
+   unramified over `p`, so by **9.6 statement 5** the local monodromy at `p` is trivial and
+   the covering extends across `p` as a covering. Iterating over the finitely many such `p`
+   gives a covering map over `OnePoint ℂ ∖ {0,1,∞}`. ⚠ This is where the old
+   "fill the discriminant fibers with all `e = 1` by removability" reasoning fails without
+   9.6: the plane model is singular there, and removability applies to functions, not to
+   the local structure of a possibly singular curve.
+4. **Compactification.** Layers 7.2–7.4 and 8.5 compactify to an analytic Belyi pair, with
+   the local degrees at the three marked points given by 9.6 statement 4 applied at `0`, `1`
+   and `∞`.
+5. **Identification of the field.** Its meromorphic field is `F` over `ℂ(t)`: both are
+   degree-`n` extensions generated by `y`, and 9.3 makes the comparison a
+   `ℂ(t)`-isomorphism.
+6. **Agreement of everything else.** Ramification indices agree by 9.6 statement 6; the
+   points of the surface correspond to the places of `F` by 9.4; degrees, divisors and
+   automorphism groups follow.
 
-Conclude the equivalence: `9.5` and `9.6` are mutually inverse on isomorphism classes, so
+Conclude the equivalence: `9.5` and `9.7` are mutually inverse on isomorphism classes, so
 analytic Belyi pairs over `ℂ` and algebraic Belyi pairs over `ℂ` are the same objects. This
 is the GAGA-sized statement of the roadmap, proved at exactly Belyi generality and no
 further.
@@ -2546,23 +2664,21 @@ further.
 ⚠ *Nearby false statement:* step 2's covering property holds only off the discriminant. A
 milestone that takes the vanishing locus of `m` over all of `OnePoint ℂ ∖ {0,1,∞}` and calls
 it a cover is wrong wherever the discriminant vanishes, even though 9.1 guarantees the
-*final* map is unramified there — the resolution is step 3, which fills those fibers rather
-than assuming them.
+*final* map is unramified there — the resolution is step 3, and step 3 is 9.6.
 
-*Prerequisites:* Layers 7.2–7.4, 8.5, 9.3–9.5; Mathlib implicit function theorem,
-`Polynomial.discriminant`, primitive element theorem.
+*Prerequisites:* Layers 7.2–7.4, 8.5, 9.1, 9.3–9.6; Mathlib primitive element theorem.
 
-#### 9.7 The comparison contract
+#### 9.8 The comparison contract
 
 The named theorem list downstream layers cite, so that nothing below reaches into the
-constructions of 9.5 and 9.6: equality of degrees; of genera; of the three ramification
+constructions of 9.5, 9.6 and 9.7: equality of degrees; of genera; of the three ramification
 partitions; of the attached triple's isomorphism class; of automorphism groups; of the
 divisors of `β`, `β − 1`, `1/β`; and functoriality in isomorphisms of pairs. Together with
 Layer 8.6, this contract says that all six descriptions of a Belyi object over `ℂ` —
 permutation triple, dessin, topological branched cover, analytic pair, algebraic pair,
 function field with three marked places — carry the same invariants.
 
-*Prerequisites:* Layers 8.6, 9.5, 9.6.
+*Prerequisites:* Layers 8.6, 9.5–9.7.
 
 ### Layer 10: Belyi's theorem
 
@@ -2602,9 +2718,14 @@ whose points have degree `< d`, or degree `d` but fewer of them, at the cost of 
 critical values of `m` — which have degree at most `d − 1`, since they are values of `m` at
 roots of `m′`, a polynomial of degree `d − 1` over `ℚ`.
 
-State the induction with its well-founded measure explicitly. Iterating, every finite
-`S ⊂ ℙ¹(ℚ̄)` is carried into `ℙ¹(ℚ)` by a composite of rational functions defined over `ℚ`,
-whose branch values are also carried into `ℙ¹(ℚ)`.
+State the induction with its well-founded measure explicitly, and state **first** that the
+set is taken `Gal(ℚ̄/ℚ)`-stable: the measure is `#S` for an `S` closed under conjugation
+over `ℚ`, and the step replaces `S` by `m(S) ∪ Crit(m)`, which is again `Gal(ℚ̄/ℚ)`-stable
+because `m` has rational coefficients. Without stability the cardinality count is not
+available — `m` collapses a full conjugacy orbit of size `d` to a single point precisely
+because the orbit is the root set of `m`. Iterating, every finite `S ⊂ ℙ¹(ℚ̄)` is carried
+into `ℙ¹(ℚ)` by a composite of rational functions defined over `ℚ`, whose branch values are
+also carried into `ℙ¹(ℚ)`.
 
 *Source:* Köck, "Belyi's theorem revisited", **(3.5) Lemma**. ⚠ **His well-founded measure
 is `#S` for `S` closed under conjugation over `ℚ`** — the cardinality of the set, not a field
@@ -2630,20 +2751,40 @@ B_{m,n}(x) = ((m + n)^{m+n} / (m^m · n^n)) · x^m · (1 − x)^n
 ```
 
 satisfies: `B_{m,n}(0) = 0`, `B_{m,n}(1) = 0`, `B_{m,n}(∞) = ∞`, and
-`B_{m,n}(m/(m+n)) = 1`; its derivative vanishes exactly at `0`, `1` and `m/(m+n)`; so its
-critical values lie in `{0, 1, ∞}`. Prove each of these by direct computation — the constant
-is chosen precisely to make the third value `1`.
+`B_{m,n}(m/(m+n)) = 1`. Its derivative is
+`const · x^{m−1}(1−x)^{n−1}(m − (m+n)x)`, so:
+
+```text
+zeros of B′_{m,n}  ⊆  {0, 1, m/(m+n)} ,   with equality iff m > 1 and n > 1 .
+```
+
+⚠ **The containment is the correct statement, and it is strict when `m = 1` or `n = 1`**:
+the factor `x^{m−1}` is the constant `1` at `m = 1`, so `0` is not a critical point there,
+and likewise `1` at `n = 1`. That costs nothing, because the critical **values** at those
+points are `0` and `0`, which lie in `{0,1,∞}` either way; but a milestone asserting
+equality is false at `B_{1,1} = 4x(1−x)`, whose only critical point is `1/2`. Prove the
+three critical values lie in `{0,1,∞}` from the containment, not from equality — the
+constant is chosen precisely to make the value at `m/(m+n)` equal `1`.
 
 Then, by induction on `#S` for a finite `S ⊂ ℙ¹(ℚ)`: applying a Möbius transformation over
 `ℚ` to send three chosen points of `S` to `0, 1, ∞` and a suitable `B_{m,n}` to absorb a
 fourth, every finite `S ⊂ ℙ¹(ℚ)` is carried into `{0,1,∞}` by a composite of rational
 functions over `ℚ` whose critical values lie in `{0,1,∞}`.
 
+**The Möbius carrier is `PGL₂`, not `SL₂`.** Fractional-linear transformations of `ℙ¹_ℚ`
+are the elements of `PGL₂(ℚ)` — Mathlib's `Matrix.GeneralLinearGroup (Fin 2) ℚ` modulo
+scalars, matching the `GL(2)` action on `OnePoint ℂ` the pin already supplies. ⚠ `SL₂(ℚ)`
+does not represent every such transformation: `x ↦ λx` is `diag(λ, 1)`, of determinant `λ`,
+and scaling to determinant `1` needs `√λ`, which is not rational in general. This milestone
+uses `x ↦ λx` to normalize the third point, so the distinction is load-bearing rather than
+pedantic.
+
 *Source:* Köck, **(3.6) Lemma**, with the polynomial exactly as displayed; Belyi's original
 argument uses the same polynomial.
 
-*Prerequisites:* Layer 10.1; Mathlib polynomial calculus, `Matrix.SpecialLinearGroup` for
-the Möbius normalization.
+*Prerequisites:* Layer 10.1; Mathlib polynomial calculus,
+`Matrix.GeneralLinearGroup`/`Matrix.GeneralLinearGroup.det` and the `GL(2)` Möbius action
+on `OnePoint`.
 
 #### 10.4 A curve over `ℚ̄` admits a Belyi map
 
@@ -2659,73 +2800,141 @@ bound on the degree of the resulting Belyi map.
 
 *Prerequisites:* Layers 9.1, 10.1–10.3; AlgebraicCurves Layers 0, 6.
 
-#### 10.5 Specialization
+#### 10.5 Automorphisms of `ℂ`, and the moduli field of a pair
 
-The descent engine. An algebraic Belyi pair over `ℂ` is defined over a subfield finitely
-generated over `ℚ̄` — its coefficients, in the presentation `F = ℂ(t)[y]/(m)` of 9.6, are
-finitely many complex numbers. Present that subfield as the function field of a `ℚ̄`-variety
-and prove: all but a proper closed subset of the `ℚ̄`-points of that variety give
-specializations of `m` that remain irreducible of the same degree, separable, and unramified
-outside `{0,1,∞}` — the conditions being the non-vanishing of the discriminant and of the
-finitely many resultants that 9.1's unramifiedness amounts to.
+The descent direction runs through the **relative** field of moduli of the pair `(F, t)`,
+not through the field of moduli of the curve. This milestone builds the vocabulary; nothing
+in it is specific to Belyi maps.
 
-State it for one transcendence degree at a time and iterate; the milestone records the
-finitely many polynomial conditions explicitly rather than appealing to a general spreading-out
-theorem.
+**The group-theoretic input**, three statements about the abstract group `Aut(ℂ)`:
 
-*Prerequisites:* Layer 9.1, 9.6; AlgebraicCurves Layer 8; Mathlib
-`Polynomial.discriminant`, `Polynomial.resultant`, `Transcendental`.
+1. every automorphism of a subfield `K ⊆ ℂ` extends to an automorphism of `ℂ`, and
+   `ℂ^{Aut(ℂ/K)} = K`;
+2. if `U ≤ Aut(ℂ)` and `Aut(ℂ/K) ⊆ U` for some field extension `K/ℂ^U` that is **finite**,
+   then `U` is closed, i.e. `U = Aut(ℂ/ℂ^U)`;
+3. if `V ≤ U ≤ Aut(ℂ)` with `[U : V] < ∞`, then `ℂ^V/ℂ^U` is a **finite** field extension,
+   with `[ℂ^V : ℂ^U] ≤ [U : V]` when `V ⊴ U` or `U` is closed, and equality when `V` is
+   closed.
 
-#### 10.6 Finiteness in bounded degree
+⚠ Not every finite-index subgroup of `Aut(ℂ)` is closed, so 3 is stated for arbitrary
+subgroups and its inequality clause carries hypotheses. Statement 3 is the whole engine of
+10.6 and 10.7.
+
+**The moduli field of a pair.** For an algebraic Belyi pair `(F, ℂ(t) ↪ F)` over `ℂ`, and
+`σ ∈ Aut(ℂ)`, let `(F, ℂ(t) ↪ F)^σ` be the conjugate pair — the same abstract field with
+its `ℂ`-algebra structure precomposed by `σ⁻¹` and the same distinguished `t`, exactly as
+in Layer 11.1. Set
+
+```text
+U(F, t) := {σ ∈ Aut(ℂ) | (F, t)^σ ≅ (F, t) as pairs} ,
+M(F, t) := ℂ^{U(F, t)} .
+```
+
+Prove `U(F, t)` is a subgroup and that `M(F, t)` contains the moduli field of `F` alone.
+⚠ **The distinguished `t` is part of the datum**, and dropping it gives a different and
+smaller field; the whole point of Köck's route is that the *relative* moduli field is
+tractable where the absolute one is not.
+
+*Source:* Köck, "Belyi's theorem revisited", **(1.4)**, **(1.5)**, **(1.6) Lemma** for the
+three group-theoretic statements, and **(2.1) Definition** for `M(X, t)`, there phrased with
+the commuting square `t ∘ f_σ = Proj(σ) ∘ t^σ`.
+
+*Prerequisites:* Layer 9.1; Mathlib field automorphisms, `IntermediateField`, infinite
+Galois theory. The conjugation of pairs is defined here for the abstract group `Aut(ℂ)`;
+Layer 11 restricts it to `Gal(ℚ̄/ℚ)` and consumes it there.
+
+#### 10.6 Finiteness in bounded degree, and the moduli field is a number field
 
 Over an algebraically closed field of characteristic zero — used at `ℚ̄` and at `ℂ` — there
 are finitely many isomorphism classes of algebraic Belyi pairs of degree `n`. Over `ℂ` this
-is Layer 9.7 plus 8.6 plus Layer 3.1: classes inject into isomorphism classes of degree-`n`
+is Layer 9.8 plus 8.6 plus Layer 3.1: classes inject into isomorphism classes of degree-`n`
 triples, of which there are finitely many. Over `ℚ̄` it follows by base change to `ℂ`
 (AlgebraicCurves Layer 8 makes the base change fully faithful in characteristic zero, so the
 injection on isomorphism classes is preserved).
 
-*Source:* Girondo–González-Diez **Proposition 2.63**: for a compact `S`, a finite `B ⊂ S`
-and `d ≥ 1`, there are only finitely many pairs `(S̃, f)` with `f : S̃ → S` a degree-`d`
-morphism with branch-value set `B`. ⚠ Its proof for `S = ℙ¹` with three branch points is
-exactly the argument available here — `Γ(2)` is generated by two elements (**Theorem 2.34**),
-so there are finitely many homomorphisms to `Σ_d` — which is Layer 5.6's free generation
-again; the general case there cites finite generation of the uniformizing group, which this
-roadmap neither has nor needs.
+**The corollary that Layer 10.7 consumes.** `Aut(ℂ)` acts on isomorphism classes of degree-`n`
+Belyi pairs over `ℂ`, preserving the degree and the three marked places — the latter because
+`0, 1, ∞` are `ℚ`-rational and `Proj(σ)` fixes them. So every orbit is finite, the stabilizer
+`V` of the class of `(F, t)` has finite index in `Aut(ℂ)`, and `V ⊆ U(F, t)`. By 10.5's
+statements 1 and 3 with `U = Aut(ℂ)`,
 
-*Prerequisites:* Layers 3.1, 8.6, 9.7; AlgebraicCurves Layer 8.
+```text
+M(F, t) = ℂ^{U(F,t)} ⊆ ℂ^V ,   with [ℂ^V : ℚ] < ∞ ,
+```
+
+so **`M(F, t)` is a number field**.
+
+*Source:* Köck **(3.1) Proposition** — for `S ⊂ ℙ¹_C` finite and `d ≥ 1`, finitely many
+isomorphism classes of pairs `(X, t)` of degree `d` with critical values in `S` — proved
+there by injecting into homeomorphism classes of degree-`d` coverings of `ℙ¹(ℂ) ∖ S` and
+using that a finitely generated group has finitely many subgroups of each finite index; and
+**(3.2) Corollary**, the statement that `M(X, t)` lies in a finite extension of `K` whenever
+the critical values are `K`-rational. Girondo–González-Diez **Proposition 2.63** is the same
+finiteness statement analytically. ⚠ Both proofs are the argument this roadmap already owns:
+Layer 5.6's free generation of `π₁` plus Layer 3.1's finite enumeration.
+
+*Prerequisites:* Layers 3.1, 5.6, 8.6, 9.8, 10.5; AlgebraicCurves Layer 8.
 
 #### 10.7 Belyi pairs descend to `ℚ̄`
 
-Every algebraic Belyi pair over `ℂ` is the base change of one over `ℚ̄`. Route: by 10.5 the
-pair spreads out over a `ℚ̄`-variety `V` with a dense set of good specializations, each a
-Belyi pair over `ℚ̄` of the same degree; by 10.6 only finitely many isomorphism classes occur
-among them, so one class occurs on a dense subset; and the generic point of `V` therefore
-lies in the base change of that class, which forces the original pair to be its base change.
-The milestone states the density-and-pigeonhole step precisely — it is the only step that
-uses both 10.5 and 10.6, and it is where the argument would fail if either were weakened.
+Every algebraic Belyi pair over `ℂ` is the base change of one over a number field, hence of
+one over `ℚ̄`. **The route is Köck's, and it is an explicit construction of a model, not a
+descent datum.** In proof order:
+
+1. **A rational unbranched value.** Choose `Q ∈ ℙ¹(ℚ)` that is not a critical value of `t`
+   — possible since the critical values are three and `ℙ¹(ℚ)` is infinite — and a place `P`
+   of `F` over `Q`.
+2. **A generator with a single pole.** Riemann–Roch on the divisor `(g + 1)·[P]`
+   (AlgebraicCurves Layer 5) gives `z ∈ F ∖ ℂ` whose only pole is `P`. Then `F = ℂ(t, z)`:
+   the extension `F/ℂ(t, z)` is a subextension of both `F/ℂ(t)`, which is unramified at `P`,
+   and `F/ℂ(z)`, which is totally ramified there, so its degree is `1`.
+3. **Rigidifying `z`.** Among such `z`, take the pole order `m := −ord_P(z)` **minimal**;
+   then `{x ∈ F | ord_P x ≥ −m and ord_{P'} x ≥ 0 for P' ≠ P} = ℂ ⊕ ℂ·z`. Since `Q` is not a
+   critical value, `t − Q` is a uniformizer at `P`, so `z` has a Laurent expansion in
+   `t − Q`; normalize it so that the coefficient of `(t − Q)^{−m}` is `1` and the coefficient
+   of `(t − Q)^0` is `0`. **That determines `z` uniquely.**
+4. **Invariance of the minimal polynomial.** Let `U(F, t, P) ⊆ U(F, t)` be the subgroup of
+   those `σ` admitting an isomorphism `f_σ` of pairs with `f_σ(P^σ) = P`; such an `f_σ` is
+   unique, because the automorphism group of the pair acts freely on the fiber over an
+   unbranched `Q`. So `U(F, t, P)` acts on `F` by `ℂ`-semilinear field automorphisms fixing
+   `t`, and it is the stabilizer of `[P]` under the action of `U(F, t)` on the finite set
+   `t^{-1}(Q)/Aut(F, t)`, hence of **finite index** in `U(F, t)`. The three properties
+   pinning `z` in 3 are preserved by that action, so `z` is fixed, and therefore so are the
+   coefficients of its minimal polynomial over `ℂ(t)`.
+5. **The model.** By 10.5 statement 3 those coefficients lie in `k(t)` for a finite extension
+   `k` of `M(F, t)`, which is a number field by 10.6. So `F = ℂ ⊗_k (k(t)[Z]/(minpoly))`,
+   an algebraic Belyi pair over `k`, and base-changing to `ℚ̄` gives one over `ℚ̄`.
+
+⚠ **The general statement is "over a finite extension of `M(F, t)`", not "over
+`M(F, t)`".** Equality holds when the covering is Galois, because then `t^{-1}(Q)/Aut(F,t)`
+is a single point and `U(F, t, P) = U(F, t)`; in general it does not, and no milestone here
+asserts it. This is the same gap Layer 11.6 studies, and Layer 10 does not need it closed.
 
 Conclude the classification corollary: analytic Belyi pairs over `ℂ`, algebraic Belyi pairs
 over `ℂ`, algebraic Belyi pairs over `ℚ̄`, connected triples, and connected dessins all
 classify the same objects. The classical slogan follows in two lines: a compact Riemann
 surface admits a Belyi map iff it is the analytification of a curve over `ℚ̄` — the "only if"
 by this milestone applied to the pair, the "if" by 10.4 applied to the curve's function
-field and 9.6 to analytify.
+field and 9.7 to analytify.
 
 ⚠ *Nearby false statement:* "the cover has finite monodromy, hence the curve is algebraic
-over `ℚ̄`" is not an argument; it names no descent datum. The content is 10.5 and 10.6
-together, and the roadmap builds them separately for that reason.
+over `ℚ̄`" is not an argument; it names no descent datum and no model.
 
-**Route decision.** Köck proves this direction differently, and his route is recorded here
-so that nobody mistakes the citation for the plan: he descends through the **relative**
-field of moduli `M(X, t)` of the *pair* — (3.1) and (3.2) there, feeding his (2.2) — which
-is what lets him avoid his own Theorem (1.8), the one result his paper cites without proof.
-This roadmap pins the specialization-and-finiteness route instead, because 10.6 is needed
-anyway for Layer 11.2 and because the route keeps Layer 10 independent of Layer 11's
-moduli-field theory. Both routes are complete; an implementer follows the one written here,
-and `PROVENANCE.md` records the comparison.
+⚠ *Nearby false statement:* a dense set of good specializations taking finitely many
+isomorphism classes does **not** put the generic fiber in one of those classes. That
+inference needs an isomorphism scheme, constructibility, or a rigidity theorem, none of
+which this roadmap has; `PROVENANCE.md` records the specialization-and-pigeonhole route as
+rejected for exactly that reason.
 
-*Prerequisites:* Layers 9.5–9.7, 10.4–10.6.
+*Source:* Köck **(2.2) Theorem** for steps 1–5 — "the curve `X/C` and the morphism `t` are
+defined over a finite extension of `M(X, t)`, and over `M(X, t)` itself if `t` is a Galois
+covering" — and **(3.3) Theorem** for the assembly with 10.6. ⚠ Köck's (2.2) needs neither
+his (1.8) (which he cites without proof) nor Weil descent: the general case is the explicit
+`z` above plus 10.5 statement 3, and his (1.9) Weil criterion enters only in his §1 material
+on the *absolute* moduli field, which this roadmap consumes at Layer 11.4 for a different
+purpose.
+
+*Prerequisites:* Layers 9.1, 9.5–9.8, 10.4–10.6; AlgebraicCurves Layers 5, 6.
 
 #### 10.8 Acceptance examples
 
@@ -2757,18 +2966,17 @@ with composition of the underlying maps.
 fix the attached triple. That it moves them is the entire subject: Layer 13.5 proves the
 action is faithful.
 
-*Prerequisites:* Layers 9.1, 9.7; Mathlib `Field.absoluteGaloisGroup`.
+*Prerequisites:* Layers 9.1, 9.8; Mathlib `Field.absoluteGaloisGroup`.
 
 #### 11.2 Stabilizers and orbits
 
 For an isomorphism class `c` of algebraic Belyi pairs over `ℚ̄`: its stabilizer in
-`Gal(ℚ̄/ℚ)` is a subgroup; the orbit is finite, by 10.6, since conjugation preserves degree;
-and the stabilizer is **open**, because the pair is defined over a number field (10.5's
-spreading-out applied over `ℚ̄` with finitely many coefficients, or directly: the finitely
-many coefficients of a presentation generate a number field `K`, and `Gal(ℚ̄/K)` fixes the
-pair, hence the class).
+`Gal(ℚ̄/ℚ)` is a subgroup; the orbit is finite, by 10.6, since conjugation preserves degree
+and the three marked places; and the stabilizer is **open**, because 10.7 supplies a model
+over a number field `k` — a presentation `k(t)[Z]/(minpoly)` with finitely many
+coefficients — and `Gal(ℚ̄/k)` fixes that model, hence fixes the class.
 
-*Prerequisites:* Layers 10.5, 10.6, 11.1; Mathlib Krull topology on
+*Prerequisites:* Layers 10.6, 10.7, 11.1; Mathlib Krull topology on
 `Field.absoluteGaloisGroup`.
 
 #### 11.3 The field of moduli
@@ -2793,20 +3001,46 @@ the cocycle condition `f_{στ} = f_σ ∘ σ(f_τ)` and locally constant in `σ
 a finite quotient, which is automatic here because the pair is defined over a number field).
 
 Prove effectiveness: a descent datum produces a model over `k` together with a base-change
-isomorphism. Route: descend the field `F` as a `k`-vector space with its multiplication, by
-Galois descent for the finite level at which the datum factors, then pass to the colimit;
-the marked `t` descends because it is fixed by construction.
+isomorphism.
+
+⚠ **`F` is not a finite-dimensional `k`-vector space**, so "descend `F` as a `k`-vector
+space" is not a descent step at all: `F` has transcendence degree `1` over `k`, and finite
+Galois descent applies only to finite-dimensional data. The route is to descend at a
+**finite Galois level, relative to the rational function field**:
+
+1. **Reduce to a finite level.** The datum factors through `Gal(L/k)` for a finite Galois
+   `L/k` inside `ℚ̄`, and 10.7's model is already defined over a number field, so there is a
+   finite Galois `L/k` and a model `F_L` over `L`, with `F = ℚ̄ ⊗_L F_L` and `F_L` a
+   **finite-dimensional `L(t)`-algebra** — of dimension the degree `n`.
+2. **The semilinear object.** The datum makes `Gal(L/k)` act on `F_L` semilinearly over the
+   semilinear action on `L(t)` that fixes `t`. State the descent target for exactly that
+   object: a finite-dimensional `L(t)`-vector space with a compatible ring structure, a
+   distinguished copy of `L(t)`, and a semilinear `Gal(L/k)`-action.
+3. **The invariants.** By Galois descent for vector spaces applied over the extension
+   `k(t) ⊆ L(t)`, which **is** finite Galois with group `Gal(L/k)` (the two are linearly
+   disjoint over `k` because `t` is transcendental), the invariant subring `F_L^{Gal(L/k)}`
+   satisfies `L(t) ⊗_{k(t)} F_L^{Gal(L/k)} ≅ F_L`.
+4. **The properties that must be checked, each its own target.** The invariant algebra is a
+   **field**; base change recovers `F_L`, hence `F`; the distinguished `t` descends, because
+   it is fixed by construction; the exact constants of the descended field are `k` and not
+   a larger field; and separability, degree, and the three-place unramifiedness descend.
+   ⚠ None of the last three is formal — an invariant subalgebra of a field need not be a
+   field without the base-change isomorphism, and exact constants can grow under descent.
 
 ⚠ *Nearby false statement:* an arbitrary family of isomorphisms is not a descent datum. The
 cocycle condition is what makes the descended object exist, and Layer 11.6 is precisely about
 when the natural family fails to satisfy it.
 
 *Source:* Weil, "The field of definition of a variety" (1956) — Köck cites it as his
-Theorem 1, and Couveignes restates it as **Théorème 3 ("Critère de Weil")**, p. 22, which is
-the accessible form the implementation should follow.
+Theorem 1 and states a slight weakening as his **(1.9) Theorem**, whose proof reduces to his
+**(1.10) Lemma**, Galois descent for a vector space with a semilinear action of a *finite*
+subgroup of `Aut(L)`; Couveignes restates Weil's criterion as **Théorème 3 ("Critère de
+Weil")**, p. 22, which is the accessible form the implementation should follow. ⚠ Köck
+applies (1.9) to the **function field** of the variety, that is at step 2 above, not to the
+variety's coordinate ring and not to `F` over `k`.
 
-*Prerequisites:* Layers 9.1, 11.1; Mathlib Galois descent for vector spaces, infinite Galois
-theory.
+*Prerequisites:* Layers 9.1, 10.7, 11.1; AlgebraicCurves Layer 8; Mathlib Galois descent for
+vector spaces, linear disjointness, infinite Galois theory.
 
 #### 11.5 Fields of definition
 
@@ -2849,18 +3083,50 @@ distinct from the field of moduli for exactly this reason.
 
 #### 11.7 Orbit sizes and embeddings
 
-The orbit of `c` is in bijection with `Gal(ℚ̄/ℚ)` modulo the stabilizer, so its size is the
-degree of the field of moduli over `ℚ`. For a pair with a model over a number field `k`, each
-embedding `k ↪ ℚ̄` produces a conjugate pair, hence (through Layer 9.7 and 8.6) an embedded
-triple; two embeddings give the same class exactly when they differ by an automorphism of `k`
-stabilizing the class. This is the mathematics behind the LMFDB's `base_field`, `embeddings`
-and `orbit_size` columns, and Layer 14.2 cites it rather than restating it.
+**The true orbit size.** Define `trueOrbitSize c := Nat.card (Gal(ℚ̄/ℚ) · c)`, the
+cardinality of the Galois orbit of an isomorphism class. The orbit is in bijection with
+`Gal(ℚ̄/ℚ)` modulo the stabilizer, so
 
-⚠ *Nearby false statement:* the orbit size is the degree of the field of **moduli**, not of
-the stored base field. They coincide when the base field is the field of moduli and not
-otherwise, and 11.6 is why that is not automatic.
+```text
+trueOrbitSize c = [fieldOfModuli c : ℚ] .
+```
 
-*Prerequisites:* Layers 8.6, 9.7, 11.2, 11.3, 11.5.
+**Embeddings, and the map they give.** Fix a field-of-definition certificate for `c` over a
+number field `k` (11.5) and an embedding `k ↪ ℚ̄`. Write
+
+```text
+G := Gal(ℚ̄/ℚ) ,   H := Gal(ℚ̄/k) ,   S := stabilizer of c in G .
+```
+
+Then `H ≤ S`, because `Gal(ℚ̄/k)` fixes the model (11.2). Embeddings `k ↪ ℚ̄` are modelled by
+the coset space `G/H`, true orbit classes by `G/S`, and the milestone is the **surjection**
+
+```text
+G/H  ↠  G/S ,     gH ↦ gS ,
+```
+
+together with: each embedding produces a conjugate pair and hence, through Layer 9.8 and
+8.6, an isomorphism class of triples; the class attached to `gH` depends only on `gS`; the
+map is surjective, so every element of the true orbit is reached; and its fibers have
+cardinality `[S : H]`.
+
+⚠ **The map need not be injective**, and the degree `[k : ℚ] = [G : H]` therefore need not
+equal `trueOrbitSize c = [G : S]`. Two embeddings can produce simultaneously conjugate
+triples, hence the *same* Belyi-pair isomorphism class; `PROVENANCE.md` records witnesses in
+the frozen database.
+
+⚠ **Do not characterize the fibers by `Aut(k/ℚ)`.** For a nonnormal `k`, `Aut(k/ℚ)` is
+controlled by `N_G(H)/H` and is strictly smaller than what the fibers of `G/H ↠ G/S`
+require; the statement "two embeddings give the same class exactly when they differ by an
+automorphism of `k` stabilizing the class" is false in that generality and is not asserted.
+The correct statement is the coset-space one above.
+
+⚠ *Nearby false statement:* the true orbit size is the degree of the field of **moduli**,
+not of a stored base field. They coincide when the base field *is* the field of moduli and
+not otherwise, and 11.6 is why that is not automatic. Layer 14 keeps the stored count
+separate from `trueOrbitSize` for exactly this reason.
+
+*Prerequisites:* Layers 8.6, 9.8, 11.2, 11.3, 11.5, 11.6.
 
 ### Layer 12: profinite powers, the fundamental group, and the branch-cycle theorem
 
@@ -2936,7 +3202,7 @@ Base change along a fixed embedding `ℚ̄ ↪ ℂ` is an equivalence from algeb
 over `ℚ̄` to algebraic Belyi pairs over `ℂ`: essentially surjective by 10.7, fully faithful
 by AlgebraicCurves Layer 8 (constant-field extension in characteristic zero), and
 compatible with degree, ramification partitions, and automorphism groups. Composing with
-9.5–9.7 and Layer 6.3's **level 2**, isomorphism classes of Belyi pairs over `ℚ̄` biject
+9.5–9.8 and Layer 6.3's **level 2**, isomorphism classes of Belyi pairs over `ℚ̄` biject
 with `IsoClass n` restricted to connected triples. ⚠ Level 2 throughout: an algebraic Belyi
 pair carries no fiber numbering, so no literal triple is attached to it, and every statement
 of Layers 11–14 about "the triple of a pair" means its simultaneous-conjugacy class.
@@ -2953,7 +3219,7 @@ equivalence between the finite covers étale over `U` and those étale over `U_L
 fundamental groups; the statement here is at the level of Belyi pairs, and 10.7 is what
 supplies essential surjectivity in that form.
 
-*Prerequisites:* Layers 6.3, 9.5–9.7, 10.7; AlgebraicCurves Layer 8.
+*Prerequisites:* Layers 6.3, 9.5–9.8, 10.7; AlgebraicCurves Layer 8.
 
 #### 12.4 The geometric fundamental group
 
@@ -3348,7 +3614,7 @@ its statement or its proof mentions anything outside this roadmap.
 #### 13.5 Faithfulness of the Galois action on dessins
 
 The action of `Gal(ℚ̄/ℚ)` on isomorphism classes of algebraic Belyi pairs over `ℚ̄` —
-equivalently, by 12.3 and 9.7, on isomorphism classes of dessins — is faithful.
+equivalently, by 12.3 and 9.8, on isomorphism classes of dessins — is faithful.
 
 **The route is Lenstra's, and it stays in genus zero** — no elliptic curves, no
 `j`-invariant, and no dependency on the curves roadmap. Everything below happens in
@@ -3392,7 +3658,7 @@ treating each genus separately, so a formalization that wants all genera does no
 from the genus-zero case for free; this milestone claims genus zero, which suffices for
 faithfulness on dessins.
 
-*Prerequisites:* Layers 9.7, 10.2, 10.3, 11.1, 12.3; Mathlib `Polynomial.derivative`,
+*Prerequisites:* Layers 9.8, 10.2, 10.3, 11.1, 12.3; Mathlib `Polynomial.derivative`,
 `Polynomial.roots`, `Polynomial.comp`.
 
 ### Layer 14: LMFDB assertion semantics
@@ -3606,7 +3872,12 @@ are verified against the copies recorded in `PROVENANCE.md` before any milestone
 - R. Cori, A. Machì, "Maps, hypermaps and their automorphisms: a survey", Exposition. Math.
   10 (1992) — the same combinatorics, surveyed.
 - B. Köck, "Belyi's theorem revisited", Beiträge Algebra Geom. 45 (2004) 253–265
-  (arXiv:math/0108222) — Layer 10: both directions, including the specialization descent.
+  (arXiv:math/0108222) — Layer 10 throughout: the `Aut(ℂ)` lemmas (**1.4**–**1.6**), Weil's
+  criterion in the weakened form (**1.9**) with its Galois-descent lemma (**1.10**), the
+  moduli field of a covering (**2.1**) and its model over a finite extension (**2.2**), the
+  finiteness of coverings with prescribed critical values (**3.1**) and the corollary that
+  the moduli field is a number field (**3.2**), Belyi's theorem (**3.3**), and the two
+  construction lemmas (**3.5**, **3.6**).
 - T. Szamuely, *Galois Groups and Fundamental Groups*, CSAM 117, CUP 2009 — Layer 12
   throughout: base change between algebraically closed fields (**4.6.10**, **4.6.11**), the
   free profinite `π₁` of the three-point line (**Example 4.6.12(3)**) and the Kummer case

@@ -129,21 +129,66 @@ implemented or pinned today.
    audit confirms the choice: its `geomtype` is a function of `abc` alone, agreeing with
    `1/a + 1/b + 1/c` against `1` on all 1111 records, and is independent of the genus.
 
-9. **The generic profinite exponentiation calculus opens Layer 12**, as milestones 12.1 and
+6. **The generic profinite exponentiation calculus opens Layer 12**, as milestones 12.1 and
    12.2, rather than sitting in Layer 13. It was in Layer 13 in the first draft, which made
    12.9 and 12.10 depend forwards on it — the only forward edge in the roadmap. Moving it
    makes every prerequisite point strictly backwards in document order, which a mechanical
    check now confirms (99 milestones, headings ascending, no forward or self references).
    The calculus depends on nothing else in this roadmap, so it can still be built first.
-6. **The graph-cover engine is stated over a wedge of `k` circles**, so `k = 1` yields
+7. **The graph-cover engine is stated over a wedge of `k` circles**, so `k = 1` yields
    the punctured-disc classification (Layer 7.1) and `k = 2` the three-point theory, one
    construction serving both.
-7. **No topological orientation theory**: Layer 7.2 delivers a charted topological
+8. **No topological orientation theory**: Layer 7.2 delivers a charted topological
    surface; orientation content rides on the Layer 8.5 complex structure. The plan's
    "oriented topological surface" clause is discharged there.
-8. **Compact-Riemann-surface cohomology is consumed from ModularForms 10B**, not built:
+9. **Compact-Riemann-surface cohomology is consumed from ModularForms 10B**, not built:
    the plan predated that roadmap's 10B chain and asked for the substrate here; the audit
    found 10B supplies it for general compact Riemann surfaces.
+
+10. **The descent direction of Belyi's theorem goes through Köck's relative moduli field**,
+    not through specialization and pigeonhole. See §Routes not used for the rejected route
+    and why it is rejected; the table above records the exact statements the chosen route
+    consumes.
+
+11. **Algebraic Belyi pairs are defined over characteristic-zero base fields only.**
+    Separability and tame ramification are used from README Layer 9.7 onwards, the standard
+    examples degenerate in small characteristic (`t ↦ t^n` is inseparable when
+    `char k ∣ n`; `4t(1−t)` is constant in characteristic `2`), and Layers 10–13 are
+    characteristic-zero statements. The carrier therefore takes `[CharZero k]` and carries
+    no separability hypothesis, which is implied. The **local data at a marked place is the
+    multiset of pairs `(e, f)`**; the unweighted multiset of ramification indices is a
+    partition of the degree only over an algebraically closed base, because `Σ e·f = n`.
+
+## Routes not used
+
+Recorded so that nobody mistakes a rejected route for the plan, and so that the reasons
+survive.
+
+**Specialization and pigeonhole, for the descent to `ℚ̄`.** An earlier draft descended a
+Belyi pair over `ℂ` by spreading its coefficients out over a `ℚ̄`-variety `V`, specializing
+at the `ℚ̄`-points where a finite list of discriminants and resultants is nonzero, and
+concluding from finiteness in bounded degree that one isomorphism class occurs on a dense
+subset and therefore at the generic point. **Two steps do not hold as stated.** First,
+geometric integrality of a specialized cover is not captured by the nonvanishing of a finite
+list of discriminants and resultants attached to one primitive polynomial. Second, and
+fatally, "one class occurs on a dense subset, therefore the generic point lies in its base
+change" is not a valid inference: it needs an isomorphism scheme, a constructibility
+theorem, or a rigidity theorem, none of which this roadmap owns. Köck's route — (3.1) ⟹
+(3.2) ⟹ (2.2) — reaches the same conclusion with Riemann–Roch and the `Aut(ℂ)` lemmas
+alone, and is what README Layer 10.5–10.7 now specify.
+
+**The raw plane model, for analytification.** An earlier draft analytified an algebraic pair
+`F = ℂ(t)[y]/(m)` by taking the affine zero locus of `m`, observing it is a covering off the
+discriminant, and "filling the discriminant fibers with all `e = 1`" by a
+removable-singularity argument, justified by the fact that `F` is unramified there. That
+does not work: the plane locus can be **singular** over a zero of the discriminant, several
+branches can cross, and the fiber can have fewer points than the number of places — so there
+is nothing for removability to extend. Algebraic unramifiedness is a statement about places,
+and it becomes a statement about the covering only through the local comparison theorem now
+stated as README Layer 9.6, which identifies the cycle lengths of the local monodromy with
+the ramification indices of the places above the point. What the construction produces is
+the **normalization**, one point per place; the map to the plane locus is injective only off
+its singular points.
 
 ## External consumer note
 
@@ -165,20 +210,44 @@ bundle from Layer 13.4 is packaging, not mathematics, and lives outside this rep
 Read directly and checked against the README's citations, 2026-08-08. A fuller transcript
 with verbatim quotations is in the session handoff notes.
 
-**Köck, "Belyi's theorem revisited"** (local PDF, `references/`; arXiv:math/0108222).
-Belyi's theorem is **(3.3) Theorem** — also stated unnumbered in the introduction, so a
-citation to "Theorem 1.1" is wrong. Degree reduction is **(3.5) Lemma**, whose well-founded
-measure is `#S` for `S` closed under conjugation over `ℚ`, *not* a field degree. The Belyi
-polynomial is **(3.6) Lemma**, `q₁(z) = ((m+n)^{m+n}/(m^m n^n)) z^m (1−z)^n`. He **does**
-prove the descent direction, via (3.1) → (3.2) → (2.2), and does so through the **relative**
-field of moduli `M(X, t)` of the pair, which is how he avoids his Theorem (1.8) — the one
-result the paper cites without proof. README Layer 10.7 records why this roadmap pins the
-specialization route instead.
+**Köck, "Belyi's theorem revisited"** (local PDF, `references/`; arXiv:math/0108222), read
+in full 2026-08-09. Belyi's theorem is **(3.3) Theorem** — also stated unnumbered in the
+introduction, so a citation to "Theorem 1.1" is wrong. Degree reduction is **(3.5) Lemma**,
+whose well-founded measure is `#S` for `S` closed under conjugation over `ℚ`, *not* a field
+degree. The Belyi polynomial is **(3.6) Lemma**,
+`q₁(z) = ((m+n)^{m+n}/(m^m n^n)) z^m (1−z)^n`.
+
+**The descent direction, statement by statement**, since README Layer 10 is now built on it:
+
+| Köck | statement |
+| --- | --- |
+| **(1.4) Lemma** | every automorphism of a subfield `K ⊆ ℂ` extends to `ℂ`, and `ℂ^{Aut(ℂ/K)} = K` |
+| **(1.5) Lemma** | if `Aut(ℂ/K) ⊆ U` for a **finite** extension `K/ℂ^U`, then `U` is closed |
+| **(1.6) Lemma** | `[U : V] < ∞` ⟹ `ℂ^V/ℂ^U` finite, with `[ℂ^V : ℂ^U] ≤ [U : V]` when `V ⊴ U` or `U` closed, and `=` when `V` closed |
+| **(1.9) Theorem** | Weil's criterion, weakened: a finite `G ≤ Aut(L)` with birational `f_σ : X^σ → X` satisfying `f_{στ} = f_σ ∘ f_τ^σ` gives a model over `L^G` up to birational equivalence |
+| **(1.10) Lemma** | Galois descent: `L ⊗_{L^G} W^G ≅ W` for a semilinear action of a finite `G ≤ Aut(L)` on an `L`-vector space `W` |
+| **(2.1) Definition** | `M(X,t) := ℂ^{U(X,t)}`, with `U(X,t)` the `σ` admitting `f_σ : X^σ → X` with `t ∘ f_σ = Proj(σ) ∘ t^σ` |
+| **(2.2) Theorem** | `X` and `t` are defined over a **finite extension** of `M(X,t)`, and over `M(X,t)` itself when `t` is Galois |
+| **(3.1) Proposition** | finitely many isomorphism classes of degree-`d` pairs with critical values in a fixed finite `S` |
+| **(3.2) Corollary** | if the critical values are `K`-rational then `M(X,t)` lies in a finite extension of `K` |
+
+⚠ **(2.2) needs neither (1.8) nor Weil descent.** Its proof is explicit: pick `Q ∈ ℙ¹(ℚ)`
+unbranched and `P` above it, use Riemann–Roch on `(g+1)[P]` to get `z` with `P` its only
+pole, take the pole order minimal, normalize the Laurent expansion in the local parameter
+`t − Q` so the leading coefficient is `1` and the constant term `0` — which makes `z`
+**unique** — and observe that `U(X,t,P)`, of finite index in `U(X,t)`, fixes `z` and hence
+the coefficients of its minimal polynomial; (1.6) then puts them in a finite extension of
+`M(X,t)`. (1.9)/(1.10) are used only in his §1, on the *absolute* moduli field.
 
 ⚠ Two gaps in Köck that the roadmap must discharge rather than cite: (3.6) applies the
 induction hypothesis without showing the cardinality has dropped, and its hypothesis
 `T ⊆ ℚ` does not match the `Crit(p) ∪ p(S) ⊆ ℚ ∪ {∞}` supplied to it. Both are recorded at
 README Layer 10.2.
+
+⚠ **The critical set of `x^m(1−x)^n`.** `B′_{m,n}` is a constant times
+`x^{m−1}(1−x)^{n−1}(m − (m+n)x)`, so its zero set is **contained in** `{0, 1, m/(m+n)}`,
+with equality only when `m > 1` and `n > 1`. At `B_{1,1} = 4x(1−x)` the only critical point
+is `1/2`. README Layer 10.3 states the containment.
 
 **Stix, "On cuspidal sections of algebraic fundamental groups"**, ASPM 63 (2012), 519–563.
 The cyclotomic action on cuspidal inertia is **Definition 37(i)**, in **§7 "Orientation and
