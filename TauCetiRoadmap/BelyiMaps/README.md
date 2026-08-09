@@ -439,12 +439,12 @@ lands. The mathematics always belongs to the supplier; only the spelling is loca
 | 5.1, 6.2 | UniversalCovers Stage 0.2 | semilocal simple connectivity | **no Mathlib class exists**; local interface: `class SemilocallySimplyConnectedSpace (X) [TopologicalSpace X] : Prop` with the "some neighbourhood's loops are nullhomotopic in `X`" field, in `Suggested.lean` |
 | 6.2 | UniversalCovers Stage 0.2, 0.3 | the universal cover, its covering map, and the free proper `π₁`-action | `UniversalCover x₀`, `proj`, `IsCoveringMap proj`, `SimplyConnectedSpace (UniversalCover x₀)`, `UniversalCover.isQuotientCoveringMap` |
 | 6.4 | UniversalCovers Stage 0.4, 1 | deck groups and `Deck ≅ (π₁)ᵐᵒᵖ` | `Deck`, `deckFundamentalGroupEquiv : Deck proj ≃* (FundamentalGroup X x₀)ᵐᵒᵖ` |
-| 6.3 | UniversalCovers Stage 2 | basepoint change, and the pointed/unpointed correspondence | `basepointChangeSubgroup`; for milestone 8 that roadmap pins no name, local interface: `pointedCoverEquivSubgroup : {pointed connected covers of (X, x₀)}/≅ ≃ {H : Subgroup (FundamentalGroup X x₀)}` and its unpointed quotient by conjugacy |
+| 6.3 | UniversalCovers Stage 2 | basepoint change, and the pointed/unpointed correspondence | `basepointChangeSubgroup`; for milestone 8 that roadmap pins no name, local interface: `pointedCoverEquivSubgroup (X) [TopologicalSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X] (x₀ : X) : Quotient (PointedCoverIso X x₀) ≃ Subgroup (FundamentalGroup X x₀)`, with `PointedCoverIso` the setoid on `PointedCover X x₀` of 6.1 and the map given by `p ↦ (p.proj).map (π₁ …)`; the unpointed statement is the induced `Quotient (CoverIso X) ≃ ConjClasses (Subgroup (FundamentalGroup X x₀))` |
 | 8.2 | ConformalMapping L0 | the local degree of a holomorphic map | `TauCeti.exists_localDegree`, and the holomorphic branch-root extraction beside it |
-| 8.6, 9.3, 9.4 | ModularForms Layer 10B | Riemann–Roch and Riemann–Hurwitz for compact Riemann surfaces | that roadmap pins **no Riemann-surface carrier and no Lean names**; local interfaces, stated against Layer 8.1's hypothesis stack: `riemannRochSpaceAn (D : Divisor X) : Submodule ℂ (M X)`, `ellAn (D) : ℕ`, `riemannRochAn : ellAn D - ellAn (K - D) = deg D + 1 - genusAn X`, `riemannHurwitzAn (f : X → Y) : 2 * genusAn X - 2 = deg f * (2 * genusAn Y - 2) + Σ (e x - 1)` |
+| 8.6, 9.3, 9.4 | ModularForms Layer 10B | Riemann–Roch and Riemann–Hurwitz for compact Riemann surfaces | that roadmap pins **no Riemann-surface carrier and no Lean names**; local interfaces, stated against Layer 8.1's hypothesis stack and against Layer 9.2's `M X`, with the divisor group and genus pinned here rather than assumed: `Divisor X := X →₀ ℤ` (finitely supported, which is where compactness enters), `deg (D : Divisor X) : ℤ := D.sum (fun _ m => m)`, `genusAn (X) : ℕ` the topological genus of the underlying surface via Layer 8.1, and then `riemannRochSpaceAn (D : Divisor X) : Submodule ℂ (M X)`, `ellAn (D) : ℕ`, `riemannRochAn : ellAn D - ellAn (K - D) = deg D + 1 - genusAn X`, `riemannHurwitzAn (f : X → Y) : 2 * genusAn X - 2 = deg f * (2 * genusAn Y - 2) + Σ (e x - 1)` |
 | 9.1, 9.4, 9.6 | AlgebraicCurves Layers 0, 1, 6 | function fields, places, ramification and residue degrees | `IsFunctionField`, `IsIntegrallyClosedIn`, `Place`, `Divisor`, and the ramification data `e (P' ∣ P)`, `f (P' ∣ P)` with the fundamental identity `Σ e·f = n` |
 | 9.5, 10.7, 11.4 | AlgebraicCurves Layers 5, 8 | Riemann–Roch, genus, and constant-field extension | `riemannRochSpace`, `genus`, and the full faithfulness of constant-field extension in characteristic zero |
-| 9.1, 9.5 | AlgebraicCurves Layer 12 | the regular projective model and the anti-equivalence | the model of a function field and the curve/function-field anti-equivalence, cited by that roadmap's declaration names once it pins them; **this roadmap never analytifies a scheme** (Layer 9.6 works with places) |
+| 9.1, 9.5 | AlgebraicCurves Layer 12 | the regular projective model and the anti-equivalence | that roadmap pins **no Lean names**; local interfaces: `regularModel (F) [Field F] [Algebra k F] (h : IsFunctionField k F) : Curve k` and `functionFieldEquiv : (Curve k)ᵒᵖ ≌ FunctionField k`, together with `regularModel_functionField : functionField (regularModel h) ≃ₐ[k] F`; **this roadmap never analytifies a scheme** — Layer 9.6 works with places, so only the place set and its `(e,f)` data are consumed, never a scheme-theoretic fiber |
 | 12.1, 12.3, 13.1 | ProPGroups Layers 0, 3, 4 | free profinite group, maximal pro-`p` quotient, `zHat` **as a group** | `freeProfiniteGroup`, `freeProfiniteGroup.of`, `freeProfiniteGroup.lift`, `proPKernel`, `maximalProPQuotient`, `freeProP`, `zHat`, `maximalProPQuotient p zHat ≃ₜ* Multiplicative ℤ_[p]` |
 
 ⚠ An open pull request is not an executable dependency, and neither is a prose row on a
@@ -455,10 +455,11 @@ here; nothing is left as "the supplier will have something like this".
 
 The fifteen layers are a dependency order: every milestone rests on Mathlib, on Tau Ceti, on
 an earlier layer, or on a cited layer of a named roadmap, and there are no forward
-references. Layers 0–4 are pure finite mathematics and are startable immediately and in
-parallel; Layers 5–8 are topology and analysis; Layers 9–11 are algebraic geometry over `ℂ`
-and `ℚ̄`; Layers 12–13 are the arithmetic summit; Layer 14 is the LMFDB interface. The
-§Ordering section records which layers are independent.
+references. Layers 0–4 are pure finite mathematics and are startable immediately — but they
+form a **chain**, not four independent pieces; Layers 5–8 are topology and analysis; Layers
+9–11 are algebraic geometry over `ℂ` and `ℚ̄`; Layers 12–13 are the arithmetic summit; Layer
+14 is the LMFDB interface. The §Ordering section records what genuinely runs in parallel,
+derived from the per-milestone prerequisite lines rather than asserted alongside them.
 
 `Suggested.lean` holds suggested signatures for the milestones whose carrier, index type, or
 map determines the layers below them. It is not a checklist, and it is not exhaustive.
