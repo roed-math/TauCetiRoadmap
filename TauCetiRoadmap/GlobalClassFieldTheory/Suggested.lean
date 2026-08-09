@@ -45,8 +45,13 @@ universe u
 Global class field theory needs local class field theory, and this roadmap does not build it. The
 Local Fields roadmap owns it, together with the generic finite-group Tate and class-formation
 machinery, and `README.md` carries the exact declaration contract. What is here is the dictionary
-onto that theory at a finite place of a number field, the ideal-theoretic Artin map, and the two
+onto that theory at a finite place of a number field, the ideal-theoretic Artin map, and the
 milestones that read the consumed theory one prime at a time.
+
+D.4 is in `README.md` only. Its exponent `a(χ)` is the supplier's `characterConductorExp`, so
+nothing is defined here for it, and its own content, the sum `v_F(𝔡_{E/F}) = ∑_χ a(χ ∘ θ_{E/F})`,
+needs the different of a local extension, which in turn needs the `Algebra 𝒪[F] 𝒪[E]` instance
+that is a Layer 0 milestone of the supplier and does not exist at the pin.
 
 Every name below in the namespace `TauCetiRoadmap.LocalFields` is the supplier's, imported and
 applied. None of them is restated here. -/
@@ -111,25 +116,6 @@ example (p : ℕ) [Fact p.Prime] [IsNonarchimedeanLocalField ℚ_[p]] (k : ℕ)
       = LocalFields.artinMap ℚ_[p] (Units.map (algebraMap ℤ_[p] ℚ_[p]).toMonoidHom u)) :
     modularCyclotomicCharacter (AlgebraicClosure ℚ_[p]) hk σ.toRingEquiv
       = (Units.map (PadicInt.toZModPow k : ℤ_[p] →+* ZMod (p ^ k)).toMonoidHom u)⁻¹ :=
-  sorry
-
-/-- **D.4, the conductor exponent of a continuous character of `Fˣ`.** The least level of the
-consumed unit filtration inside the kernel. The Local Fields roadmap supplies the conductor of an
-abelian *extension*, `c(L/K)`, and no conductor of a character, so this roadmap defines the
-character version. It is defined on that roadmap's `unitFiltration` and on no filtration of its
-own: `U(F,0)` is `𝒪[F]ˣ`, so the exponent is `0` exactly for a character trivial on the units. -/
-noncomputable def charConductorExp (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] (χ : ContinuousMonoidHom Fˣ ℂˣ) : ℕ :=
-  sInf {n | ∀ x ∈ LocalFields.unitFiltration F n, χ x = 1}
-
-/-- **D.4, the conductor exponent is attained.** The unit filtration is a neighbourhood basis of
-`1`, so a continuous character is trivial on some level, the infimum is over a nonempty set, and
-the level it names really is inside the kernel. Without this the definition above names a number
-and asserts nothing. Minimality is `Nat.sInf_le` and is not a separate target. -/
-example (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
-    [IsNonarchimedeanLocalField F] (χ : ContinuousMonoidHom Fˣ ℂˣ)
-    (x : Fˣ) (hx : x ∈ LocalFields.unitFiltration F (charConductorExp F χ)) :
-    χ x = 1 :=
   sorry
 
 /-- **D.2, the ideals with support away from a finite set of primes.** The carrier of

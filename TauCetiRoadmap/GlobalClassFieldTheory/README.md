@@ -72,7 +72,7 @@ are imported and applied.
 | Global CFT consumer | Local Fields supplier | Declaration or milestone | Type/normalization |
 |---|---|---|---|
 | D.1, the completion dictionary; the local factors of the idele norm in 2A.4 | 0 | `normalizedValuation`, `Layer 0: the normalized valuation` | `v_K^× : Kˣ →* Multiplicative ℤ` with `v_K(π) = 1`, and `‖x‖_K = q^{−v_K(x)}` with `q = Nat.card 𝓀[K]` |
-| D.4, and the local depths of 3.2 | 1 | `unitFiltration`, `Layer 1: the unit filtration as an object` | `U(K,i) : Subgroup Kˣ`, with `U(K,0) = 𝒪[K]ˣ` and `U(K,i) = 1 + 𝓂[K]^i` for `i ≥ 1` |
+| D.1's comparison with `1 + 𝔭_v^n`, and the depths named in D.4, 3.2 and 3.3 | 1 | `unitFiltration`, `Layer 1: the unit filtration as an object` | `U(K,i) : Subgroup Kˣ`, with `U(K,0) = 𝒪[K]ˣ` and `U(K,i) = 1 + 𝓂[K]^i` for `i ≥ 1` |
 | 6.1 item 4, and D.3 | 2 | `Layer 2: residue correspondence`, `Layer 2: the maximal unramified extension`, `Layer 2: norms` | the **arithmetic** Frobenius `x ↦ x^q` as the distinguished generator of `Gal(L/K)`; `Gal(K^{ur}/K) ≅ Ẑ` carrying it to `1`; `N_{L/K}(𝒪[L]ˣ) = 𝒪[K]ˣ` for `L/K` unramified |
 | the local compilation map of 6.1 and 6.3; the local reciprocity input of 6.2 and 7.3 | 6, 7 | `Layer 6: finite-level reciprocity`, `artinMap` | `θ_{L/K} : Kˣ/N_{L/K}Lˣ ≅ Gal(L/K)^{ab}` and `Art_K : Kˣ →* G_K^{ab}`, in the arithmetic Frobenius normalization, with `θ(π) = Frob` for unramified `L/K` a named lemma of the supplier. ⚠ The local map is injective and not surjective |
 | 6.1 item 4, the triviality of almost all local factors | 7 | `unramifiedCoordinate`, `unramifiedCoordinate_artinMap`, `ZHat`, `zhatOfInt`, `geometricArtinMap`, `unramifiedCoordinate_geometricArtinMap` | `ν_K ∘ Art_K = ι ∘ v_K` with values in `Ẑ`, which is the equation that fixes both maps; the geometric map is `Art_K ∘ (·)⁻¹` and is never a second convention |
@@ -82,6 +82,7 @@ are imported and applied.
 | 5.2 item 1, the local Herbrand factors | 5 | `Layer 5: the Herbrand quotient`, `herbrandQuotient`, `herbrandQuotient_of_finite_ker_coker` | `h(Gal(L/K), Lˣ) = [L:K]` and `h(Gal(L/K), 𝒪[L]ˣ) = 1` for cyclic `L/K`; and invariance under an equivariant map with finite kernel and finite cokernel, which 5.2 item 4 uses globally |
 | 5.1 item 9, the vanishing that makes the sum over places finite | 5 | `Layer 5: unramified cohomology` | `H^i(Gal(L/K), 𝒪[L]ˣ) = 0` for `i ≥ 1` and `L/K` unramified |
 | the local conductors assembled in 6.5, bounded in 7.4, and summed in D.4 and 9.2 | 7 | `Layer 7: ramification compatibility and the conductor` | `c(L/K) = sInf {n | U(K,n) ≤ NormGroup L/K}` and `𝔣(L/K) = 𝓂[K]^{c(L/K)}`, with **both** halves of the defining property, namely `U(K, c) ≤ NormGroup L/K` and `U(K, c−1) ≰ NormGroup L/K` when `c > 0`, and with `c = 0` exactly when `L/K` is unramified |
+| the character exponents summed in D.4, and the local exponent `n_v(χ)` of 3.2 | 7 | `characterConductorExp`, `unitFiltration_characterConductorExp_le_ker` | `a(χ) = sInf {n | ∀ x ∈ U(K,n), χ x = 1}` for `χ : Kˣ →ₜ* ℂˣ` continuous, with attainment, so that `U(K, a(χ)) ≤ ker χ`; `a(χ) = 0` exactly for a character trivial on `𝒪[K]ˣ`. ⚠ Attainment is not a consequence of continuity alone: it uses that `ℂˣ` has no small subgroups, which is why the target is `ℂˣ` and not an arbitrary topological group |
 | 2C.6, the normalization it matches; 11.3, the finite invariants | 5 | `Layer 5: Br(K) is unramified` | `inv_K : H²(G_K, (Kˢ)ˣ) ≅ ℚ/ℤ`, normalized by evaluation at the arithmetic Frobenius, with `inv_L(res α) = [L:K] · inv_K(α)` and `inv_K(cor β) = inv_L(β)` |
 | the global fundamental class input of 11.1 and 11.3 | 5 | `Layer 5: fundamental classes and the class formation`, `FiniteClassFormation`, `FiniteClassFormation.restrict`, `FiniteClassFormation.topClass`, `FiniteClassFormation.restrict_cls`, `tateHTopEquiv`, `tateHTowerEquiv` | `u_{L/K}` with `inv_K(u_{L/K}) = 1/[L:K]` and compatibility in a tower; the structure's fields `cls`, `res`, `cor`, `h1_eq_zero`, `h2_cyclic`, `h2_card`, `res_cls`, `cor_cls`, `res_comp_cor`. ⚠ The order in `h2_card` is `Nat.card H`, never the index |
 | 11.1, Tate–Nakayama in degree `−2` and in all degrees | 5, 6 | `tateNakayama`, `tateNakayama_top`, `tateCupSigma`, `tateCup` | cup product with the distinguished class is an isomorphism `Ĥ^r(H, ℤ) ≅ Ĥ^{r+2}(H, M)` for every integer `r` and every `H ≤ G`, stated at `fcf.cls H` and at `fcf.topClass`. ⚠ There is no free class parameter: cup with an arbitrary `Ĥ²` class is not bijective |
@@ -423,27 +424,28 @@ R Local Fields `cyclotomicCharacter_artinMap`, M `IsCyclotomicExtension.autEquiv
 
 **D.4. The local conductor-discriminant formula.** For finite abelian `E/F` a nonarchimedean local
 extension, prove `v_F(𝔡_{E/F}) = ∑_χ a(χ)`, where `χ` ranges over the characters of `Gal(E/F)`, and
-`a(χ)` is the conductor exponent of the character `χ ∘ θ_{E/F}` of `Fˣ`, that is the least `n` with
-`U(F,n) ⊆ ker(χ ∘ θ_{E/F})`. Define that exponent here, on the consumed `unitFiltration`, because
-the supplied conductor is the conductor of an extension and not of a character; prove that it is
-attained, and that it agrees with the consumed `c(E'/F)` when `χ` cuts out the subextension `E'`.
-The formula then follows from the consumed conductor and from finite-level reciprocity, by
-induction along the characters. Milestone 9.2 globalizes it, one place at a time through D.1.
+`a(χ)` is the consumed `characterConductorExp` of the character `χ ∘ θ_{E/F}` of `Fˣ`, that is the
+least `n` with `U(F,n) ⊆ ker(χ ∘ θ_{E/F})`. That exponent is the supplier's, on the supplier's
+`unitFiltration`, and this roadmap defines no second one; attainment of the infimum and the
+agreement with `c(E'/F)` when `χ` cuts out the subextension `E'` are the supplier's too. What is
+proved here is the sum, which follows from the consumed conductor and from finite-level
+reciprocity, by induction along the characters. Milestone 9.2 globalizes it, one place at a time
+through D.1.
 *Source.* Serre, *Corps Locaux*, Ch. VI §2, Proposition 6, and Ch. VI §3.
-*Prerequisites:* L D.1, R Local Fields `unitFiltration`,
+*Prerequisites:* L D.1, R Local Fields `characterConductorExp`, R Local Fields `unitFiltration`,
 R Local Fields `Layer 7: ramification compatibility and the conductor`,
 R Local Fields `Layer 6: finite-level reciprocity`, M `differentIdeal`.
 **Basic API.**
-- *Constructors:* the conductor exponent of a character, from the consumed unit filtration.
-- *Examples:* the trivial character, whose exponent is `0`; an unramified character, likewise `0`;
-  the quadratic character of `ℚ_2(√2)/ℚ_2`, whose exponent is `3`.
+- *Constructors:* none. The character exponent is the supplier's `characterConductorExp`; what
+  this milestone forms is the sum of it over the character group of `Gal(E/F)`.
+- *Examples:* `E/F` unramified, where every exponent is `0` and the different is trivial;
+  `E = ℚ_2(√2)` over `F = ℚ_2`, where the quadratic character has exponent `3` and
+  `v_F(𝔡_{E/F}) = 3`.
 - *Morphisms:* the pairing of `Gal(E/F)`-characters with subextensions.
-- *Functoriality:* the exponent of `χ ∘ θ` under inflation from a quotient.
-- *Comparison lemmas:* the character exponent against the consumed `c(E'/F)`; the formula against
-  the tower multiplicativity of `differentIdeal`.
+- *Functoriality:* the sum under inflation from a quotient of `Gal(E/F)`.
+- *Comparison lemmas:* the formula against the tower multiplicativity of `differentIdeal`.
 - *Naturality:* the sum is unchanged by an automorphism of `Gal(E/F)`.
-- *Edge cases:* `E = F`, where both sides are `0`; `E/F` unramified, where every exponent is `0`
-  and the different is trivial.
+- *Edge cases:* `E = F`, where both sides are `0`.
 - *Downstream interface:* 9.2.
 
 ### Layer 0: moduli, approximation, and multiplicative congruences
@@ -808,13 +810,17 @@ back uses finiteness of `Cl_𝔪 K`, and the compactness of `C_K/D_K`; it is not
   the trivial `𝔪`.
 - *Downstream interface:* Layers 9 and 10A, and any later analytic development.
 
-**3.2. The finite conductor ideal.** Let `χ` be a continuous quasicharacter. Prove that the local
-component `χ_v` is trivial on `1 + 𝔭_v^n` for `n` large. The reason is that the principal-unit
-filtration is a neighbourhood basis of `1`. Define `n_v(χ)` as the least such `n`, with `n_v(χ) = 0`
-exactly when
-`χ_v` is trivial on `𝒪_vˣ`. Prove `n_v(χ) = 0` for almost all `v`, and define `𝔣₀(χ) = ∏_v
-𝔭_v^{n_v(χ)}`. Minimality here is one place at a time and needs no global argument.
-*Prerequisites:* L 3.1, L D.1, R Local Fields `unitFiltration`.
+**3.2. The finite conductor ideal.** Let `χ` be a continuous quasicharacter. Its local component
+`χ_v` is a continuous character of `K_vˣ`, so `n_v(χ)` is the consumed `characterConductorExp` of
+`χ_v`, read at the local field D.1 supplies; this roadmap defines no exponent of its own, and the
+triviality of `χ_v` on `1 + 𝔭_v^n` for `n` large, together with `n_v(χ) = 0` exactly when `χ_v` is
+trivial on `𝒪_vˣ`, is the supplier's. ⚠ That triviality is not merely the statement that the
+principal-unit filtration is a neighbourhood basis of `1`; the supplier's proof also uses that
+`ℂˣ` has no small subgroups. What is proved here is global: `n_v(χ) = 0` for almost all `v`, from
+which `𝔣₀(χ) = ∏_v 𝔭_v^{n_v(χ)}` is a well-defined ideal. Minimality at a place needs no global
+argument.
+*Prerequisites:* L 3.1, L D.1, R Local Fields `characterConductorExp`,
+R Local Fields `unitFiltration`.
 
 **3.3. The ray conductor modulus.** Let `χ` be trivial on the connected component of the
 archimedean part. Every finite-order character has that property. Define the ray conductor of

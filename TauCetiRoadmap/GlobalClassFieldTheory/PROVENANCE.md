@@ -80,13 +80,13 @@ Local Fields and Quadratic Form Invariants are not alignments. They are prerequi
 `README.md` names every declaration this roadmap takes from them. The rest below are alignments.
 
 - **Local Fields.** The supplier of local class field theory and of the generic finite-group Tate
-  and class-formation machinery. Checked 2026-08-08 against its Layers 0 to 8 and its
-  `Suggested.lean`: every declaration and milestone that `README.md` cites exists there. One gap
-  found, and handled here rather than pushed back: that roadmap fixes the conductor of an abelian
-  *extension*, `c(L/K)` and `𝔣(L/K)`, and exports no conductor of a continuous character of `Kˣ`.
-  Milestone D.4 therefore defines the character exponent itself, on that roadmap's `unitFiltration`
-  and on no filtration of its own. Two further citations are to milestones that roadmap states
-  without a Lean name, `θ(π) = Frob` and `c(L/K)`; those rows cite the milestone, not a declaration.
+  and class-formation machinery. Checked 2026-08-09 against its Layers 0 to 8 and its
+  `Suggested.lean`: every declaration and milestone that `README.md` cites exists there. It fixes
+  the conductor of an abelian *extension*, `c(L/K)` and `𝔣(L/K)`, and the conductor
+  `characterConductorExp` of a continuous character of `Kˣ`, on its own `unitFiltration`; D.4 and
+  3.2 consume the latter and define no exponent of their own. Two citations are to milestones that
+  roadmap states without a Lean name, `θ(π) = Frob` and `c(L/K)`; those rows cite the milestone,
+  not a declaration.
 - **Quadratic Form Invariants.** The supplier of the quadratic Hilbert symbol that 11.4 multiplies
   at the finite places, through its Layer 6C `hilbertSymbol`. Its Lean module is not imported by
   `Suggested.lean`, so 11.4 has no prototype here rather than a faked one.
