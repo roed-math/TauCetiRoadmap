@@ -8,6 +8,12 @@ the roadmap sits next to, and what has to be discussed with whom. All of it goes
 Audit date **2026-08-07**. The project pin is `9caeba1000` (Mathlib, 2026-06-03). Statements
 about Mathlib master are dated 2026-08-07.
 
+**The ecosystem gaps the README opens with also held on Mathlib master on 2026-08-07**, except
+where that list marks otherwise: no L-function data model, no Dedekind continuation or functional
+equation, no Hecke L-functions, no Landau or Tauberian theorem, no Chebotarev, and no L-series
+connection for modular forms. That is dated status, so it lives here and not in the
+specification.
+
 ## Prior art, and why none of it is a prerequisite
 
 The roadmap's rule is in [`README.md`](README.md#how-prerequisites-are-recorded). A prerequisite
@@ -274,6 +280,26 @@ Landau's argument on `ζ_K(s)L(χ_t,s)`, which is why Landau's theorem is a mile
 `Λ(χ,s) = W Λ(χ⁻¹, 1−s)` and `Λ(χ,s) = W Λ(χ̄, 1+2σ−s)`, equivalent because `χ⁻¹ = χ̄·𝔑^{−2σ}`.
 The same shift is why the full quasicharacter is not an analytic-normalized data record: its
 coefficients converge only for `Re s > 1+σ`, and conjugating them does not move the shift.
+
+**A compatibility law must not mix unitary and non-unitary factors.** A Grossencharacter carrier
+whose finite factor carries `𝔑^{σ}` while its archimedean factors have absolute value `1` forces
+`σ = 0`, so it contains no character with a nonzero real shift. Witness: `K = ℚ`, modulus `1`,
+`χ = 𝔑^{σ}`, where the law reads `χ_unit((n))·n^{σ}·n^{it} = 1` with two unit-modulus factors.
+The fix is to store *unitary* archimedean data — parity `ε_v`, angular exponent `m_v`, parameter
+`t_v` — and state compatibility on the unitary components alone, making the algebraic pair
+`(p_v,p̄_v)` a derived predicate via `σ = (p+p̄)/2`, `m = p̄−p`. Any roadmap that carries an
+infinity type alongside a norm shift meets the same trap, and the test that catches it is simply
+constructing `𝔑^{σ}`.
+
+**A shifted completion has to be defined by recentering.** With `A` the conductor,
+`Λ_unit(s) = A^{s/2}γ(s)L_unit(s)` and `L_full(s) = L_unit(s−σ)` together force
+`Λ_full(s) = Λ_unit(s−σ)`, whose conductor power is `A^{(s−σ)/2}`. Writing `Λ_full(s) = A^{s/2}γ(s)L_full(s)`
+as well is inconsistent by a factor `A^{σ/2}` and a gamma shift, and the Layer 0 card built from
+it satisfies no Dirichlet agreement.
+
+**The root-number involution is `W(χ⁻¹) = W(χ)⁻¹`.** Applying the functional equation twice gives
+`Λ_χ(s) = W(χ)W(χ⁻¹)Λ_χ(s)`. The plausible `conj(W(χ))⁻¹` equals `W(χ)` and would force
+`W² = 1`, which general Hecke root numbers do not satisfy.
 
 **The square of a boundary twist has three cases, not two.** For `χ = η·𝔑^{iu}` with `η`
 quadratic, `(χ𝔑^{it})² = 𝔑^{2i(u+t)}` is trivial only at `t = −u` and is a *nontrivial* norm twist

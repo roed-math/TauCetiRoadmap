@@ -32,7 +32,9 @@ conjugacy classes. Roblot's `NumberField.dedekindZeta` has the Dirichlet class n
 asymptotics and on his fundamental domain for the unit action.
 
 The subject of the LMFDB's L-function section is nevertheless almost absent. The following
-statements hold at the pin, and also on Mathlib master on 2026-08-07 unless marked otherwise:
+statements hold at the pinned Mathlib. [`PROVENANCE.md`](PROVENANCE.md) records what was also true
+of Mathlib master when the roadmap was written; that is dated ecosystem status, and it does not
+belong in the specification.
 
 - No structure carries a degree, a conductor, gamma data, or a root number, and no theorem
   relates them. Even `‖rootNumber χ‖ = 1` is unproved for Dirichlet characters.
@@ -1386,37 +1388,52 @@ degree-one instances over `K`.
 assumed. A `Grossencharacter 𝔪` carries:
 
 - the **unitary** ideal weight `χ_unit` in the sense of 1.2, with `bad = {𝔭 ∣ 𝔭 ∣ 𝔪₀}`;
-- a **real** exponent `σ`;
-- the **infinity type**: a pair of integers `(p_v, p̄_v)` at every infinite place, with `p̄_v = 0`
-  and `p_v ∈ {0, 1}` at a real place;
-- the **archimedean parameters** `q_v`, one real number per place;
-- **admissibility**: `∏_v χ_v(u) = 1` for every unit `u` of `𝓞 K`, where `χ_v` is the local
-  character below. This is what makes the archimedean data compatible with the ideal weight, and
-  6.3 uses it;
-- the **compatibility** of the weight with the archimedean components on principal ideals prime
-  to `𝔪₀`: `χ((α)) = ∏_v χ_v(α)^{-1}`.
+- a **real** exponent `σ`, constrained by nothing else;
+- the **unitary archimedean data**: a parity `ε_v ∈ {0, 1}` at each real place, an angular
+  exponent `m_v ∈ ℤ` at each complex place, and a real `t_v` at every place;
+- **admissibility**: `∏_v χ_v^{unit}(u) = 1` for every unit `u` of `𝓞 K`. This is what makes the
+  archimedean data compatible with the ideal weight, and 6.3 uses it;
+- the **compatibility** of the unitary weight with the unitary archimedean components on
+  principal ideals prime to `𝔪₀`: `χ_unit((α)) = ∏_v χ_v^{unit}(α)^{-1}`.
 
-Two things are then *defined* and not carried, and that is the point of the layout.
+Three things are then *defined* and not carried, and that is the point of the layout.
 
-The **full quasicharacter** is `χ(𝔞) = χ_unit(𝔞) · 𝔑𝔞^{σ}`.
+The **unitary archimedean local character** is `sgn(x)^{ε_v} |x|_v^{i t_v}` at a real place and
+`(z/|z|)^{m_v} |z|_v^{i t_v}` at a complex one. Both have absolute value `1`. Prove that each is a
+continuous homomorphism into `ℂˣ`.
+
+The **full quasicharacter** is `χ(𝔞) = χ_unit(𝔞) · 𝔑𝔞^{σ}`, and the full local character is the
+unitary one times `|x|_v^{-σ}`.
+
+The **algebraic infinity type** `(p_v, p̄_v)` is a *predicate* over the carrier, related to the
+unitary data by `σ = (p_v + p̄_v)/2` and `m_v = p̄_v − p_v`.
 
 ⚠ The full weight is **not** an `IdealWeight`, and a structure that stores it as one is
 inconsistent for every `σ ≠ 0`. `IdealWeight.norm_eq_one` forces `‖χ(𝔭)‖ = 1` at every prime off
 the finite bad set; with the decomposition that forces `𝔑𝔭^{σ} = 1` at all but finitely many
-primes, hence `σ = 0`. Such a structure can be inhabited only by the characters this layer does
-not need. The unitary part is the `IdealWeight`; the full weight is a plain function on ideals.
+primes, hence `σ = 0`.
 
-The **archimedean local character** `χ_v` is defined from the infinity type and `q_v`: at a real
-place `χ_v(x) = sgn(x)^{p_v} |x|^{i q_v}`, and at a complex place
-`χ_v(z) = z^{-p_v} z̄^{-p̄_v} |z|^{i q_v}`. Prove that each is a continuous homomorphism into `ℂˣ`.
+⚠ **State compatibility entirely on the unitary components, or entirely on the full ones — never
+mixed.** That is the same inconsistency one level down, and it is easy to write by accident. A law
+whose finite factor carries `𝔑^{σ}` while its archimedean factors have absolute value `1` forces
+`σ = 0`, so the carrier contains no character with a nonzero real shift at all. The witness is
+`K = ℚ`, modulus `1`, `χ = 𝔑^{σ}`: for a positive integer `n` the mixed law reads
+`χ_unit((n)) · n^{σ} · n^{i t} = 1`, and the first and third factors have modulus `1`, so
+`n^{σ} = 1` for every `n`.
+
+⚠ The pure norm character `𝔑^{σ}`, for **arbitrary** real `σ`, is the mandatory non-vacuity test
+of this milestone: construct it and discharge its compatibility field. Without it, every later
+statement mentioning a nonzero shift — the shifted poles, the shifted functional equation,
+nonvanishing on `Re s = 1 + σ` — is vacuous.
+
+⚠ **The algebraic pair is derived, not stored.** `z^{-p} z̄^{-p̄}` has radial size `|z|^{-(p+p̄)}`
+and is not unitary, so its radial exponent belongs in the global shift. Storing an arbitrary pair
+in the unitary carrier is what makes a nonzero shift impossible.
 
 ⚠ A field of type `InfinitePlace K → K → ℂ` is an arbitrary function: it need not be
 multiplicative, need not avoid `0`, and need not have the formula the gamma factor of 6.2 is
 computed from. Every milestone from 6.2 on is false for some term of a structure that carries the
 local character as such a field, so it is built rather than assumed.
-
-⚠ A single integer at a complex place is not enough. The local character there needs the pair
-`(p_v, p̄_v)`, and the gamma shift of 6.2 is built from both.
 
 ⚠ The unitary decomposition is unique only because `σ` is required to be **real**. With a complex
 exponent it is ambiguous up to `‖·‖^{it}`. Uniqueness is a theorem of this milestone, not a
@@ -1425,23 +1442,36 @@ field.
 ⚠ *Nearby false statement:* admissibility is not automatic and is not cosmetic. Without it, the
 archimedean data and the ideal weight need not come from one character, and 6.2 to 6.4 fail.
 
-The `A₀` condition, that every `q_v` vanishes, is a predicate `IsAlgebraic` over the structure.
+The `A₀` condition, that every `t_v` vanishes, is a predicate `IsAlgebraic` over the structure.
 
-**Induction and primitivity.** Define induction from a divisor `𝔫` of `𝔪` — the unitary weights
-agree on the ideals prime to `𝔪₀`, and every infinite datum is equal — and primitivity as not
-being induced from a proper divisor. Layer 6.4 is stated for primitive characters, and the
-imprimitive case is the finite Euler-factor correction. ⚠ Without this the carrier admits the
-principal character modulo a prime, whose completed L-function is not entire; see 6.4.
+**Induction, the conductor, and primitive reduction.** Define induction along a divisor `𝔫` of
+`𝔪` as a **constructor** — restrict the unitary weight to the ideals prime to `𝔪₀` and carry every
+infinite datum across — and prove that it realizes the induction relation. Then define the
+conductor as the minimal modulus and prove existence and uniqueness of the primitive inducing
+character. Layer 6.4's completion, root number, polar divisor, and Layer 0 card are all built from
+the primitive character at its conductor, and the imprimitive L-function is derived by the finite
+Euler-factor correction.
+
+⚠ A relation `Induces ψ χ` together with a theorem conditional on a *supplied* `ψ` does not
+produce the primitive ancestor the rest of the layer consumes. The construction is the milestone.
+⚠ And the conductor used by the completion and the card is the **primitive** one, not the modulus
+the character happens to be presented over. ⚠ Without primitivity the carrier admits the principal
+character modulo a prime, whose completed L-function is not entire; see 6.4.
 
 *Source:* Neukirch VII (6.11) to (6.14).
 
-*Prerequisites:* Layers 1.2, 1.7, 5.1.
+*Prerequisites:* Layers 1.2, 1.7, 5.1, 5.4.
 
-**6.2 The gamma factor from the infinity type.** At a real place the shift is `p_v − i q_v`. At a
-complex place the two integers give one `Gammaℂ` factor with shift `max(p_v, p̄_v) − i q_v`, and
-the difference `|p_v − p̄_v|` enters the root number. Write the translation of Neukirch §4's
-`G(ℂ|ℝ)`-set formalism into `Gammaℝ` and `Gammaℂ` shifts out at each real place and at each
-complex place. These are the first entries of the spectral multisets of 0.1 that are not real.
+**6.2 The gamma factor from the unitary infinity data.** At a real place the shift is
+`ε_v − i t_v`. At a complex place there is one `Gammaℂ` factor with shift `|m_v|/2 − i t_v`. Write
+the translation of Neukirch §4's `G(ℂ|ℝ)`-set formalism into `Gammaℝ` and `Gammaℂ` shifts out at
+each real place and at each complex place. These are the first entries of the spectral multisets
+of 0.1 that are not real.
+
+⚠ The shifts are computed from the **unitary** data. The radial part of the algebraic pair lives
+in `σ` and is recentered away before the completion of 6.4 is formed, so a gamma shift built from
+`max(p_v, p̄_v)` mixes the two normalizations and does not match the recentred completion.
+
 *Prerequisites:* Layers 0.1, 6.1.
 
 **6.3 The weighted theta series.** From 2.9: the series
@@ -1491,7 +1521,16 @@ the same:
 | `χ⁻¹` | `(p_v, 0) ↦ (p_v, 0)`, `q_v ↦ −q_v` | `(p_v, p̄_v) ↦ (−p_v, −p̄_v)`, `q_v ↦ −q_v` |
 | `χ̄` | `(p_v, 0) ↦ (p_v, 0)`, `q_v ↦ −q_v` | `(p_v, p̄_v) ↦ (p̄_v, p_v)`, `q_v ↦ −q_v` |
 
-with shift `−σ` for the inverse and `σ` for the conjugate.
+with shift `−σ` for the inverse and `σ` for the conjugate. ⚠ On the **unitary** data the two
+involutions coincide — both send `ε_v ↦ ε_v`, `m_v ↦ −m_v`, `t_v ↦ −t_v` — so the two characters
+differ only in the shift. In algebraic terms that is the same statement: inversion negates the
+pair and conjugation swaps it, and `m_v = p̄_v − p_v` changes sign either way.
+
+The involution API is part of the milestone: `(χ⁻¹)⁻¹ = χ`, `(χ̄)‾ = χ`, preservation of
+primitivity and of the conductor, all four real/complex gamma-shift comparisons, the root-number
+formula for the conjugate, and the comparison of the two completions. A primitive non-real
+finite-order character with non-real root number is the regression test: inverting twice must
+recover both the character and its root number.
 
 ⚠ Real parity is **unchanged** by both. The local character is `sgn(x)^{p} |x|^{iq}` with
 `p ∈ {0,1}`, and `sgn(x)^{-1} = sgn(x)`; negating `p` gives `−1`, which the carrier forbids, so
@@ -1501,12 +1540,20 @@ inverse, and the two agree only when `p_v = p̄_v`. Both constructions are miles
 local-character, ideal-weight, gamma-shift, and completion comparisons proved. An odd real
 character is the inverse test, and a complex place with `p_v ≠ p̄_v` is the conjugation test.
 
-*The root number.* Define `W(χ)` for a Grossencharacter, from the Gauss sum of 5.6 and the
-infinity type of 6.2, and prove `‖W(χ)‖ = 1`, its behaviour under inverse and conjugation, and
-that at shift `0` with trivial archimedean parameters it is Layer 5's `W(χ)` for the corresponding
-ray-class character. ⚠ It depends on the finite character, the infinity type, and the archimedean
-parameters. The root number of the *trivial* ray-class character does not mention `χ` and is not
-it.
+*The root number.* Define `W(χ)` for a Grossencharacter, from the Gauss sum of 5.6 at the
+primitive conductor and the unitary infinity data of 6.2, and prove `‖W(χ)‖ = 1`. ⚠ It depends on
+the finite character, the parity, the angular exponents, and the archimedean parameters. The root
+number of the *trivial* ray-class character does not mention `χ` and is not it.
+
+⚠ The involution is `W(χ⁻¹) = W(χ)⁻¹`, and **not** `conj(W(χ))⁻¹`. Applying the functional
+equation twice gives `Λ_χ(s) = W(χ) Λ_{χ⁻¹}(1 − s) = W(χ) W(χ⁻¹) Λ_χ(s)`, so `W(χ)W(χ⁻¹) = 1`.
+The form `conj(W)⁻¹` equals `W`, which would force `W² = 1`, and a general Hecke root number is
+not confined to `±1`. With `‖W‖ = 1` the correct statement reads `W(χ⁻¹) = conj(W(χ))`.
+
+The finite-order comparison with Layer 5 must fix the **infinite-place data** as well as the ideal
+values: at shift `0`, trivial `t_v`, vanishing angular exponents, and parity matching `𝔪_∞`, it is
+Layer 5's `W(χ)`. ⚠ Agreement of ideal values alone does not identify two completed L-functions;
+that is the defect fixed in 5.8, and it applies to the comparison too.
 
 *The functional equation*, for a primitive `χ`:
 
@@ -1521,14 +1568,39 @@ because `χ⁻¹ = χ̄ · ‖·‖^{−2σ}`. ⚠ Use the **canonical** conjuga
 character agreeing with `χ̄` on ideal values: that determines neither its infinity type, nor its
 gamma factors, nor its completion, and it is the defect already fixed in 5.8.
 
-*The completion, and its identification.* `Λ(χ, ·)` must be identified on the convergence
-half-plane with `(|d_K| 𝔑𝔪₀)^{s/2}` times the gamma factor of 6.2 times `L(χ, ·)`. Without that
-theorem the completion is an unconstrained function and every statement about its poles, its
+*The completion, built by recentering.* Write `A = |d_K| 𝔑𝔣₀` for the **primitive** conductor.
+Build the unitary completion first,
+
+`Λ_unit(χ, s) = A^{s/2} · γ_unit(χ, s) · L(χ_unit, s)`,
+
+and *define* the full one by recentering:
+
+`Λ(χ, s) = Λ_unit(χ, s − σ)`, equivalently
+`Λ(χ, s) = A^{(s−σ)/2} · γ_unit(χ, s − σ) · L(χ, s)`.
+
+⚠ Writing `Λ(χ, s) = A^{s/2} γ(s) L(χ, s)` alongside the unitary formula and `L(χ,s) = L_unit(s−σ)`
+is inconsistent for `σ ≠ 0`: the two differ by a conductor factor `A^{σ/2}` **and** a gamma shift.
+The recentered definition is what makes both the card's Dirichlet agreement and the reflection
+against the inverse come out. Identify `Λ_unit` on the convergence half-plane by a named theorem;
+without it the completion is an unconstrained function and every statement about its poles, its
 entirety, and its functional equation is about nothing.
 
-*The Layer 0 card is the card of the **unitary** part.* Build it explicitly, with its coefficients,
-conductor, both gamma multisets, root number, completion, and polar divisor, and derive
-`degree = [K:ℚ]` from the **gamma multisets**.
+*The Layer 0 card is the card of the **unitary** part.* Build it explicitly, with its
+coefficients, the **primitive** conductor, both gamma multisets, root number, the unitary
+completion, and its polar divisor, and derive `degree = [K:ℚ]` from the **gamma multisets**. Then
+prove that it satisfies all four Layer 0 predicates — Dirichlet agreement, meromorphic
+continuation, the functional equation, and the average coefficient bound — with the exact
+hypotheses each needs. A type-correct record whose completion does not satisfy them validates
+nothing.
+
+⚠ The polar divisor is not `0` for every character. When the unitary part is the norm twist
+`𝔑^{iu}`, the recentered completion is a vertically shifted Dedekind completion with simple poles
+at `iu` and `1 + iu`. Name the exponent `u`, with its uniqueness theorem, so those two points are
+available to the record.
+
+Three card tests: the trivial character recovers the Dedekind-zeta card of 3.10; `𝔑^{iu}` recovers
+the vertically shifted zeta card, poles included; and a primitive nontrivial finite-order
+character recovers Layer 5's completion.
 
 ⚠ The degree does not follow from the coefficients. `HasDirichletAgreement` leaves `gammaR`,
 `gammaC` and `completed` free: for one coefficient function, choose any extra gamma factors and
@@ -2534,6 +2606,18 @@ statements do not.
   `Λ_χ` has poles at `σ` and `1 + σ` while `Λ_χ(1 − s)` has poles at `−σ` and `1 − σ`. This test
   detects a functional equation reflecting against the conjugate at `1 − s` instead of against
   the inverse, and it is invisible whenever `σ = 0`.
+- **The pure norm character inhabits the carrier** (Layer 6.1). Over `K = ℚ` with modulus `1`,
+  `χ = 𝔑^{σ}` for arbitrary real `σ` must typecheck and discharge compatibility. A carrier whose
+  compatibility law mixes a finite `𝔑^{σ}` with unitary archimedean factors forces `σ = 0`, and
+  then every shifted statement in Layers 6.4 and 7.7 is vacuous. This is a non-vacuity test, and
+  no green build detects its absence.
+- **The recentered card agrees with itself** (Layers 0.2, 6.4). With `A = |d_K|𝔑𝔣₀`, the card's
+  Dirichlet agreement needs `A^{s/2}γ(s)L_unit(s)` while `Λ_full(s + σ)` gives
+  `A^{(s+σ)/2}γ(s+σ)L_unit(s)`. This test detects a completion defined by the unshifted formula
+  instead of by recentering, and the discrepancy is exactly a conductor factor and a gamma shift.
+- **The root number is not an involution up to conjugation** (Layer 6.2). Applying the functional
+  equation twice forces `W(χ)W(χ⁻¹) = 1`. The form `W(χ⁻¹) = conj(W(χ))⁻¹` equals `W(χ)`, hence
+  `W² = 1`. This test detects a root-number law that silently restricts to `±1`.
 - **The odd real character has an inverse** (Layer 6.4). At a real place with `p_v = 1`, the
   inverse local character is `sgn(x)^{-1}|x|^{-iq} = sgn(x)|x|^{-iq}`, so the parity is unchanged.
   This test detects an inverse that negates the infinity type, which would give `p_v = −1` and
