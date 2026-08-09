@@ -409,6 +409,36 @@ or the Layer 0 functional-equation bridge is conditional everywhere downstream.
 `|d_K|^{iu/2} · Λ_K(s − iu)` and to carry root number `|d_K|^{iu}` — not `1`. Both constants are
 invisible over `ℚ`, so only a field with `|d_K| ≠ 1` tests them.
 
+**A modulus datum no structure field reads is not part of the structure, and primitivity is
+where it shows.** A Grossencharacter carrier over a modulus with an infinite part, none of whose
+fields mention that infinite part, makes every term induced from the modulus with the same
+finite part and empty infinite part: nothing with `𝔪_∞ ≠ ∅` is primitive, the primitive odd
+character modulo `4` over `ℚ` satisfies no primitivity hypothesis at its Layer 5 modulus
+`(4)∞`, and the Layer 6 conductor silently drops the real place whose `Γ_ℝ(s+1)` it owns. The
+law that repairs it is parity support — `ε_v = 1` only at `v ∈ 𝔪_∞` — with the converse
+statement (the infinite part of a *primitive* modulus is exactly the parity support) as the
+theorem. Any carrier indexed by a modulus should be audited for fields that never read a
+component of the index.
+
+**A finite character off its units is either the canonical zero or junk, and only `MulChar`
+makes it the former.** A bare `→* ℂ` carries nonunit values no law observes, so bundle equality
+compares junk; Gauss sums range over the residue ring and need the zero extension, since any
+other extension changes the sum; and inflation along a divisor is a **units-pullback re-extended
+by zero**, not composition with the residue projection — the projection carries nonunits to
+units (`3 mod 6 ↦ 1 mod 2`), so composing inflates the conductor-one character to the all-one
+map where the inflated character vanishes. The induction relation must carry the exact
+finite-character square along the named residue-units map, or it transports every datum the
+Gauss sum reads except the one it evaluates.
+
+**Primitive scope belongs in the types, not the prose.** A completion or card whose formula
+pairs the conductor with the presented series names one L-function exactly for a primitive
+character; taking the primitivity proof as an argument of the definitions makes the imprimitive
+hybrid — `|d_K|^{s/2} γ(s) ζ_K(s)(1 − 𝔑𝔭^{-s})` for the principal character modulo `p` —
+inexpressible rather than deprecated. The finite-order root-number comparison needs **both**
+sides primitive: the presented Gauss sum of an imprimitive character vanishes under the usual
+definition while the primitive-conductor root number does not, so an unrestricted comparison
+equates two different objects.
+
 ## Coordination ledger
 
 No outreach had been performed when this was written. Every contact status below is therefore

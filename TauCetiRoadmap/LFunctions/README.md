@@ -247,7 +247,7 @@ nonzero.
 | Completed L-function | The conductor power is included: `Λ(s) = N^{s/2} · γ(s) · L(s)`, where `γ` is a product of factors `Gammaℝ (s + μ)` and `Gammaℂ (s + ν)`. The functional equation is then free of constants: `Λ(s) = ε · Λ^∨(1 − s)` with `‖ε‖ = 1` and `Λ^∨(s) = conj (Λ (conj s))`. Mathlib's `DirichletCharacter.completedLFunction` does not include `N^{s/2}`, and its functional equation carries `N ^ (s − 1/2)`. Layer 0.6 states the lemma that relates the two shapes | Layer 0; Neukirch VII (8.6) |
 | Completed Dedekind zeta | `Λ_K(s) = |d_K|^{s/2} · Gammaℝ(s)^{r₁} · Gammaℂ(s)^{r₂} · ζ_K(s)`, with `Λ_K(s) = Λ_K(1 − s)`, simple poles at `s = 0` and `s = 1` and nowhere else, and `Res_{s=1} ζ_K = 2^{r₁}(2π)^{r₂} h R / (w √|d_K|)`, which is Mathlib's `dedekindZeta_residue` | Layer 3; Neukirch VII (5.10), (5.11) |
 | Hecke L conductor | For `χ` primitive of conductor `𝔣₀` the completed level is `|d_K| · 𝔑(𝔣₀)`, so `Λ(χ, s) = (|d_K| 𝔑𝔣₀)^{s/2} L_∞(χ, s) L(χ, s)`, with `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)` and `‖W(χ)‖ = 1`. ⚠ The conjugate at `1 − s` is right for a **finite-order** character, where `χ̄ = χ⁻¹`. Layer 6's shifted characters reflect against the inverse, or against the conjugate at `1 + 2σ − s`; do not carry this row past Layer 5 | Layer 5; Neukirch VII (8.6) |
-| Archimedean local characters | The normalized absolute value at an infinite place is `‖x‖_v = (v x)^{mult v}` — Mathlib's `v x` at a real place and its **square** at a complex one — so the product formula is `∏_v ‖x‖_v = \|N_{K/ℚ}(x)\|` with no multiplicities (`InfinitePlace.prod_eq_abs_norm`). The unitary local character is `sgn(x)^{ε_v} ‖x‖_v^{-i t_v}` at a real place and `(z/\|z\|)^{m_v} ‖z‖_v^{-i t_v}` at a complex one — radial exponent **negative** — and the full local character multiplies by `‖x‖_v^{-σ}`. The gamma shifts are `ε_v − i t_v` and `\|m_v\|/2 − i t_v`. Jointly with the compatibility law `χ_unit((α)) · χ_f(α) · ∏_v χ_v(α) = 1` this puts the norm twist `𝔑^{iu}` at parameter `t_v = u` with gamma shift `−iu`, as its L-series `ζ_K(s − iu)` requires; flipping any one of the three conventions breaks that card. Norm twists **of ideals** are always written `𝔑^{it}`; a subscripted `‖·‖_v` always means this normalized archimedean absolute value | Layer 6.1; Neukirch VII (6.9), (8.5); Mathlib `NumberTheory/NumberField/InfinitePlace/Basic.lean` |
+| Archimedean local characters | The normalized absolute value at an infinite place is `‖x‖_v = (v x)^{mult v}` — Mathlib's `v x` at a real place and its **square** at a complex one — so the product formula is `∏_v ‖x‖_v = \|N_{K/ℚ}(x)\|` with no multiplicities (`InfinitePlace.prod_eq_abs_norm`). The unitary local character is `sgn(x)^{ε_v} ‖x‖_v^{-i t_v}` at a real place and `(z/\|z\|)^{m_v} ‖z‖_v^{-i t_v}` at a complex one — radial exponent **negative** — and the full local character multiplies by `‖x‖_v^{-σ}`. The gamma shifts are `ε_v − i t_v` and `\|m_v\|/2 − i t_v`. Jointly with the compatibility law `χ_unit((α)) · χ_f(α) · ∏_v χ_v(α) = 1` this puts the norm twist `𝔑^{iu}` at parameter `t_v = u` with gamma shift `−iu`, as its L-series `ζ_K(s − iu)` requires; flipping any one of the three conventions breaks that card. Norm twists **of ideals** are always written `𝔑^{it}`; a subscripted `‖·‖_v` always means this normalized archimedean absolute value. `χ_f` is a Mathlib `MulChar` of the residue ring — the character of `(𝓞_K/𝔪₀)ˣ` with its canonical zero extension, which is what Gauss sums read — and real parity `ε_v = 1` occurs only at places of `𝔪_∞` | Layer 6.1; Neukirch VII (6.9), (8.5); Mathlib `NumberTheory/NumberField/InfinitePlace/Basic.lean`, `Mathlib/NumberTheory/MulChar/Basic.lean` |
 | Euler factors | At a finite prime `𝔭` of Galois type the factor is `det(1 − Frob_𝔭 · 𝔑𝔭^{-s} ∣ V^{I_𝔭})⁻¹` with **arithmetic** Frobenius. Unqualified "Frobenius" always means arithmetic, that is `x ↦ x^q` on residue fields. This is Mathlib's `IsArithFrobAt` and the local fields roadmap's convention. The geometric form is a translation lemma and never a second convention. For a ray-class character the factor is `(1 − χ(𝔭) 𝔑𝔭^{-s})⁻¹` at `𝔭 ∤ 𝔣₀` and `1` at `𝔭 ∣ 𝔣₀` | Local fields roadmap; Layer 1.5 |
 | Normalization of the data record | The record of Layer 0.1 is **analytic-normalized**, and its name says so. Its functional equation reflects in `s ↦ 1 − s`, Dirichlet agreement holds on `Re s > 1`, and the gamma shifts are the analytic ones. It carries no motivic weight. An arithmetic-normalized object reaches these predicates through Layer 0.4, which carries the weight `w` and fixes the shift as `L_arith(s) = L_an(s − w/2)`. Degree, conductor, root number, and zero multiplicities are invariant under that translation, and the invariance is a theorem | Layer 0 |
 | Spectral parameters | The gamma data is two multisets: `{μ_j}` for the factors `Gammaℝ(s + μ_j)`, and `{ν_k}` for the factors `Gammaℂ(s + ν_k)`. Then `degree = #μ + 2·#ν`. These are the LMFDB's `mu` and `nu` lists | Layer 0 |
@@ -1367,7 +1367,13 @@ the per-class functional equations, which carry the `[𝔣₀𝔡]`-twist exactl
 *Source:* Neukirch VII (8.5), (8.6), restricted to infinity type `(p, 0)` with `p ∈ {0,1}^{r₁}`.
 *Prerequisites:* Layers 5.6, 5.7.
 
-**5.9 The instance card, and the two degrees.** The card of Layer 0 has
+**5.9 The instance card, and the two degrees.** Build the card as a **named record** — the
+finite-order comparison of 6.4 equates a record with it, and cannot cite an anonymous
+field-by-field target: derived-weight coefficients, the level `|d_K| 𝔑𝔪₀` of 5.7, real gamma
+shifts `1` exactly at the places of `𝔪_∞`, complex shifts `0`, the Gauss-sum root number of
+5.6, the completion of 5.8, and a polar divisor supported at `{0, 1}` exactly for the trivial
+character, which is primitive only at the trivial modulus, where the card is the `ζ_K` card of
+3.10. The fields are honest for a **primitive** character. The card has
 `degree = [K:ℚ]`, because `gammaR` has `r₁` entries and `gammaC` has `r₂`, and that is the degree
 of the L-series over `ℕ`.
 
@@ -1400,12 +1406,27 @@ A `Grossencharacter 𝔪` carries:
 
 - the **unitary** ideal weight `χ_unit` in the sense of 1.2, with `bad = {𝔭 ∣ 𝔭 ∣ 𝔪₀}`;
 - a **real** exponent `σ`, constrained by nothing else;
-- the **finite character** `χ_f`, a character of `(𝓞_K/𝔪₀)ˣ`, carried as a multiplicative map
-  on the residue ring whose values off the units are unconstrained;
+- the **finite character** `χ_f` of `(𝓞_K/𝔪₀)ˣ`, carried as a Mathlib `MulChar` of the residue
+  ring — unit-valued on the units and **zero off them**, so the carrier holds exactly the unit
+  character together with its canonical zero extension, and no unconstrained values;
 - the **unitary archimedean data**: a parity `ε_v ∈ {0, 1}` at each real place, an angular
   exponent `m_v ∈ ℤ` at each complex place, and a real `t_v` at every place;
+- the **parity support law**: `ε_v = 1` only at places of `𝔪_∞`. An imprimitive presentation
+  may carry extra places of `𝔪_∞` with `ε_v = 0`;
 - the **compatibility law**, on **every** principal ideal prime to `𝔪₀`:
   `χ_unit((α)) · χ_f(α) · ∏_v χ_v^{unit}(α) = 1`.
+
+⚠ The `MulChar` carrier is not a spelling preference. A bare multiplicative map to `ℂ` carries
+nonunit values that no law observes, so the equality of primitive bundles below would compare
+junk; and the Gauss sums of 5.6 and 6.2 range over the residue ring, where they must read the
+**canonical zero extension** — any other extension changes the sum.
+
+⚠ The parity support law is what makes the infinite part of the modulus visible to the carrier
+at all. Without it every field reads only `𝔪₀`, so every term is induced from the modulus with
+the same finite part and empty infinite part, nothing with `𝔪_∞ ≠ ∅` is primitive, and the odd
+characters break: the primitive odd character modulo `4` over `ℚ` could satisfy no primitivity
+hypothesis at its Layer 5 modulus `(4)∞`, and its Layer 6 conductor would silently drop the
+real place whose gamma factor `Γ_ℝ(s + 1)` it owns.
 
 Three things are then *defined* and not carried, and that is the point of the layout.
 
@@ -1478,7 +1499,10 @@ field, and no green build detects the absence of any of them:
   parameters `0`, and `χ_f` and the parities produced by decomposing `η([(α)])⁻¹` along residues
   mod `𝔪₀` and signs at `𝔪_∞` — the existence half of Neukirch VII (6.9). Without it a
   compatibility law that a ramified character cannot satisfy leaves the finite-order comparisons
-  of 6.2 and 6.4 true and empty.
+  of 6.2 and 6.4 true and empty. Its specification is four named theorems: the weight, shift,
+  and parameter identities; the finite character pinned by the (6.9) law with `η` spelled out;
+  the parity of the embedding of a **primitive** `η` odd exactly on `𝔪_∞`; and preservation of
+  primitivity, which is what lets 6.4's canonical comparisons run with no side conditions.
 
 ⚠ **The algebraic pair is derived, not stored.** `z^{-p} z̄^{-p̄}` has radial size `|z|^{-(p+p̄)}`
 and is not unitary, so its radial exponent belongs in the global shift. Storing an arbitrary pair
@@ -1506,17 +1530,32 @@ infinity type exists. ⚠ The first clause alone is not it: `𝔑^{√2}` has ev
 irrational radial exponent. Two tests are mandatory: `𝔑^{n}` is algebraic for every integer `n`
 (with pair `p_v = n` at real places and `p_v = p̄_v = n` at complex ones), and `𝔑^{√2}` is not.
 
-**Induction, the conductor, and primitive reduction.** Define induction along a divisor `𝔫` of
-`𝔪` as a **constructor** — restrict the unitary weight to the ideals prime to `𝔪₀`, compose the
-finite character with the residue projection, and carry every infinite datum across — and prove
-that it realizes the induction relation. Bundle the primitive reduction as data — conductor,
-divisibility, primitive inducing character, induction witness — and prove it exists and that
-**any two bundles are equal**: same conductor, and, across that equality of moduli, the same
-primitive character. The canonical reduction is then defined from existence and does not depend
-on the choice; name the canonical primitive character, and prove that on a primitive character
-the reduction is the identity. Layer 6.4's completion, root number, polar divisor, and Layer 0
-card are all built from the canonical primitive character at its conductor, and the imprimitive
-L-function is derived by the finite Euler-factor correction.
+**Induction, the conductor, and primitive reduction.** Name the canonical reduction map on
+residue units along a divisibility of moduli — the quotient-ring map restricted to unit
+groups — and define induction along a divisor `𝔫` of `𝔪` as a **constructor**: restrict the
+unitary weight to the ideals prime to `𝔪₀`, pull the finite character back along the residue
+units and re-extend by zero, and carry every infinite datum across; the infinite part may grow,
+and cannot shed a place supporting odd parity, because the smaller character's support law
+already forbids it. Prove that the constructor realizes the induction relation, whose clauses
+include the **exact finite-character square** along the named units map — without that clause
+the relation transports every datum the Gauss sum reads except the one it evaluates.
+
+⚠ The finite character is **not** composed with the residue projection on the whole ring: the
+projection carries nonunits to units (over `ℚ`, `3 mod 6 ↦ 1 mod 2`), so plain composition
+inflates the conductor-one character to the **all-one** map on `𝓞_K/(p)`, where the inflated
+character is `0` off the units. Pulling back on units and re-extending by zero is the operation,
+and the `MulChar` carrier is what makes it canonical.
+
+Bundle the primitive reduction as data — conductor, divisibility, primitive inducing character,
+induction witness — and prove it exists and that **any two bundles are equal**: same conductor,
+and, across that equality of moduli, the same primitive character. The canonical reduction is
+then defined from existence and does not depend on the choice; name the canonical primitive
+character, and prove that on a primitive character the reduction is the identity, and that the
+**infinite part of a primitive modulus is exactly the parity support** — the theorem that keeps
+the Layer 6 conductor of an odd character equal to its Layer 5 conductor, infinite part
+included. Layer 6.4's completion, root number, polar divisor, and Layer 0 card are all built
+from the canonical primitive character at its conductor, and the imprimitive L-function is
+derived by the finite Euler-factor correction.
 
 ⚠ A relation `Induces ψ χ` together with a theorem conditional on a *supplied* `ψ` does not
 produce the primitive ancestor the rest of the layer consumes. The construction is the milestone.
@@ -1645,21 +1684,26 @@ character is the inverse test, and a complex place with `p_v ≠ p̄_v` is the c
 
 *The root number.* Define `W(χ)` for a Grossencharacter, from the Gauss sum of the finite
 character `χ_f` at the primitive conductor, as in 5.6, and the unitary infinity data of 6.2, and
-prove `‖W(χ)‖ = 1`. ⚠ It depends on `χ_f`, the parity, the angular exponents, and the archimedean
-parameters — and on nothing else; in particular it never reads the shift, so the conjugate and
-the inverse, which differ only there, have **equal** root numbers with no primitivity
-hypothesis. The root number of the *trivial* ray-class character does not mention `χ` and is not
-it.
+prove `‖W(χ)‖ = 1`. The Gauss sum ranges over the residue ring and reads the `MulChar` — the
+canonical zero extension of the unit character; any other extension gives a different sum.
+⚠ It depends on `χ_f`, the parity, the angular exponents, and the archimedean parameters — and
+on nothing else; in particular it never reads the shift, so the conjugate and the inverse, which
+differ only there, have **equal** root numbers with no primitivity hypothesis. The root number
+of the *trivial* ray-class character does not mention `χ` and is not it.
 
 ⚠ The involution is `W(χ⁻¹) = W(χ)⁻¹`, and **not** `conj(W(χ))⁻¹`. Applying the functional
 equation twice gives `Λ_χ(s) = W(χ) Λ_{χ⁻¹}(1 − s) = W(χ) W(χ⁻¹) Λ_χ(s)`, so `W(χ)W(χ⁻¹) = 1`.
 The form `conj(W)⁻¹` equals `W`, which would force `W² = 1`, and a general Hecke root number is
 not confined to `±1`. With `‖W‖ = 1` the correct statement reads `W(χ⁻¹) = conj(W(χ))`.
 
-The finite-order comparison with Layer 5 must fix the **infinite-place data** as well as the ideal
-values: at shift `0`, trivial `t_v`, vanishing angular exponents, and parity matching `𝔪_∞`, it is
-Layer 5's `W(χ)`. ⚠ Agreement of ideal values alone does not identify two completed L-functions;
-that is the defect fixed in 5.8, and it applies to the comparison too.
+The finite-order comparison with Layer 5 must fix the **infinite-place data** as well as the
+ideal values — at shift `0`, trivial `t_v`, vanishing angular exponents, and parity matching
+`𝔪_∞`, it is Layer 5's `W(χ)` — and it requires **both sides primitive**: agreement of ideal
+values alone does not identify two completed L-functions, which is the defect fixed in 5.8, and
+for the principal character modulo a prime the presented Gauss sum is the imprimitive one —
+vanishing under the usual definition — while the Layer 6 root number is built at the primitive
+conductor, so an unrestricted comparison equates two different objects. The canonical form of
+the comparison is 6.4's, over the embedding of a primitive ray-class character.
 
 *The functional equation*, for a primitive `χ`:
 
@@ -1691,10 +1735,17 @@ against the inverse come out. Identify `Λ_unit` on the convergence half-plane b
 without it the completion is an unconstrained function and every statement about its poles, its
 entirety, and its functional equation is about nothing.
 
-⚠ These completions are coherent for a **primitive** character, where the presented series and
-the conductor belong to the same L-function. The canonical completion of an arbitrary character
-is the completion of its canonical primitive character; pairing the primitive conductor with an
-imprimitive presented series in one formula is the same mix one definition up.
+⚠ These completions are definitions **for a primitive character**, and the primitivity proof is
+an argument of each definition, not a hypothesis of some later theorem: their formulas combine
+the conductor with the presented series, which name one L-function exactly in the primitive
+case. For an imprimitive character the same formula is the hybrid
+`|d_K|^{s/2} γ(s) ζ_K(s)(1 − 𝔑𝔭^{-s})` — primitive conductor, presented Euler-factor-deleted
+series — which is neither the canonical completion nor an object with a functional equation, and
+the scoping is what makes it inexpressible rather than merely deprecated. The public analytic
+objects of an **arbitrary** character are exactly the canonical primitive root number,
+completion, and card, through the canonical primitive character, together with the presented
+L-series and its Euler-factor correction. Downstream consumers take the canonical objects unless
+their input is already primitive.
 
 *The Layer 0 card is the card of the **unitary** part of a **primitive** character.* Build it
 explicitly, with its coefficients, conductor, both gamma multisets, root number, the unitary
@@ -1746,10 +1797,21 @@ is false exactly at the junk slot:
 - over `ℚ(i)`: the same character has the single complex gamma shift `−iu` — not `−2iu` — and
   the same two poles. This is the witness for the multiplicity in the normalized absolute
   value;
-- a nontrivial primitive finite-order character recovers the Layer 5 data field by field:
-  derived-weight coefficients, the level `|d_K| 𝔑𝔪₀` of 5.7, parity-driven real gamma shifts
-  read against `𝔪_∞` with none of them non-real, the Gauss-sum root number of 5.6, the
-  completion of 5.8, and an empty polar divisor;
+- a primitive finite-order character recovers the **named** Layer 5 card of 5.9, with **both
+  sides primitive** — the Layer 5 Gauss sum and card are defined there, and the Layer 6 card is
+  built there. The canonical form of the comparison runs over the embedding of a primitive
+  ray-class character with no data-matching hypotheses at all: its canonical root number is the
+  Gauss-sum root number, and its canonical card agrees with the 5.9 card — the acceptance test
+  that Layers 5 and 6 use one normalization, one conductor with its infinite part, one gamma
+  factor, and one root number;
+- the **odd regression instance**: the primitive character modulo `(4)∞` over `ℚ`. Its Layer 6
+  conductor keeps the real place, its single real gamma shift is `1` — the odd `Γ_ℝ(s + 1)` —
+  and its canonical card is the Layer 5 card. This is the instance that a carrier without the
+  parity support law silently destroys, and the smallest normalization test for the odd real
+  gamma shift;
+- the **even regression instance**: a primitive character modulo `(5)` over `ℚ` with empty
+  infinite part — necessarily the quadratic character, the ray class group being
+  `(ℤ/5)ˣ/{±1}` — with single real gamma shift `0`;
 - the principal character modulo `𝔪`: canonical primitive data the trivial character of trivial
   conductor, canonical card the Dedekind-zeta card, and **presented** L-series equal to the
   primitive one times the removed Euler factors — `ζ(s)(1 − p^{-s})` over `ℚ` with `𝔪₀ = (p)`.
@@ -2770,6 +2832,16 @@ statements do not.
   the law restricted to `α ≡ 1 mod^× 𝔪` while being no character at all. The two witnesses
   together force the finite character as a field and the law over every coprime `α`; the
   embedding of every ray-class character is the non-vacuity construction.
+- **The odd character survives primitive reduction** (Layers 6.1, 6.4). Without a law supporting
+  parity on `𝔪_∞`, no structure field reads the infinite part, so every term is induced from
+  the modulus with empty infinite part: the primitive odd character modulo `4` over `ℚ` is then
+  never primitive at `(4)∞`, its Layer 6 conductor drops the real place its `Γ_ℝ(s+1)` reads,
+  and every finite-order comparison is vacuous for odd characters. This test detects a carrier
+  whose moduli carry an infinite part that nothing observes.
+- **Inflation is a units-pullback, not a ring composition** (Layer 6.1). The residue projection
+  carries nonunits to units (`3 mod 6 ↦ 1 mod 2`), so composing the conductor-one character
+  with it gives the all-one map on `𝓞_K/(p)` where the inflated character is `0` off the
+  units. This test detects a finite character carried without its canonical zero extension.
 - **The radial sign, over `ℚ`** (Layers 6.1, 6.4). The unitary norm twist `𝔑^{iu}` has
   compatibility `n^{iu} · n^{-it} = 1`, so `t = u` and the single real gamma shift is `−iu`,
   matching `Γ_ℝ(s − iu) ζ(s − iu)` with poles at `iu` and `1 + iu`. With the positive radial
