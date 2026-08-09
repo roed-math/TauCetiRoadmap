@@ -393,12 +393,13 @@ operation and falsifies the theorems.
   one is not unique, so a package that stores one is not unique either.
 - **Mod-2 Galois cohomology.** The carrier is the profinite-cohomology roadmap's
   `trivialF2` object over its `AbsoluteGaloisGroup`, so that roadmap's `cup`, `res`,
-  `corestriction`, and `evensNormIndexTwo` apply here with no transport. What Layer 7A
-  adds is the coefficient identification specific to `μ₂` (`mu2EquivZMod2` and the
-  resulting isomorphism of coefficient objects), the multiplicative coefficient object
-  `Additive Kˢˣ` with `h2MuToUnits`, and the adapters that turn a `K`-embedding of a
-  finite separable `L` into the open subgroup `G_L ≤ G_K` those operations are indexed
-  by. Each adapter carries its laws, including independence of the embedding.
+  `corestriction`, and `evensNormIndexTwo` apply here with no transport, as do its
+  `UnitsCoeff` for the coefficients `Additive Kˢˣ` and its `galoisRes`, `galoisCor` and
+  `galoisEvens` for a finite separable `L/K`, which already carry independence of the
+  embedding. What Layer 7A adds is the coefficient identification specific to `μ₂`
+  (`mu2EquivZMod2` and the resulting isomorphism of coefficient objects) and the laws that
+  mention this roadmap's own notions: the Kummer class of a unit, the square-class
+  isomorphism, and `h2MuToUnits`.
 
 ### Cross-roadmap contract
 
@@ -444,7 +445,9 @@ shape its own layers consume, marked as such at the point of use.
 | Layer 7A, restriction and inflation | 1 | `map`, `res`, `infl`, `coeffMap` | `Hⁿ(G, X) ⟶ Hⁿ(H, Y)` for a compatible pair, and its three named instances |
 | Layer 7A, corestriction | 10 | `corestriction`, `corestrictionLe`, `corestriction_comp_res`, `corestriction_mackey` | `Hⁿ(U, res X) ⟶ Hⁿ(G, X)` for open `U`, with `cor ∘ res = (G : U) · id` and the double-coset formula |
 | Layer 7A, Kummer classes; Layer 8's classes | 9 | `KummerCoeff`, `powerClassQuotient`, `kummerMap`, `kummerIso`, `kummerMapCanonical`, `kummerIso_res`, `kummerIso_norm`, `kummerCoeff_continuousSMul` | `Kˣ ⧸ (Kˣ)ⁿ ≃* Multiplicative (H¹(G_K, μ_n))` for `n` invertible in `K`, with the restriction and norm squares |
-| Layer 7A, the Evens norm; Layer 9's formula | 13 | `evensNorm`, `evensNormIndexTwo`, `IndexTwoDatum`, `evensConj`, `evensNorm_res`, `evensNorm_polarization`, `evensNorm_cor_shapiro`, `evensNorm_identity_infl` | `H¹(U, 𝔽₂) → H²(G, 𝔽₂)` for open `U` of index two, with its four characterizing identities |
+| Layer 7A, the multiplicative coefficients; Layer 7B's comparison | 9 | `UnitsCoeff`, `unitsCoeff_continuousSMul`, `kummerShortExact`, `hilbert90`, `h2KummerToUnits`, `h2KummerToUnits_injective`, `h2KummerToUnits_range` | `Additive Kˢˣ` as a discrete `G_K`-module, `H¹(G_K, Kˢˣ) = 0`, and `H²(G_K, μₙ) ↪ H²(G_K, Kˢˣ)` with image the `n`-torsion |
+| Layer 7A, the transfer along `L/K`; Layers 8 and 9 | 9, with 10 and 13 | `galoisSubgroup`, `galoisSubgroup_index`, `galoisSubgroupEquiv`, `galoisF2Iso`, `galoisRes`, `galoisCor`, `galoisEvens`, `galoisConj`, `galoisRes_cup`, `galoisCor_cup`, `galoisRes_galoisEvens`, `galoisEvens_add`, `galoisRes_comp`, `galoisRes_embedding_independent`, `galoisCor_embedding_independent`, `galoisEvens_embedding_independent` | restriction, corestriction and the index-two Evens norm attached to a finite separable `L/K`, with their laws and independence of the embedding |
+| Layer 7A, the Evens norm; Layer 9's formula | 13 | `evensNorm`, `evensNormIndexTwo`, `evensConj`, `evensNorm_res`, `evensNorm_polarization`, `evensNorm_cor_shapiro`, `evensNorm_identity_infl` | `H¹(U, 𝔽₂) → H²(G, 𝔽₂)` for open `U` of index two, with its four characterizing identities |
 | Layer 7B, the comparison with the explicit model | 8, 12 | `explicitCup11`, `explicitIso_cup` | the agreement of the explicit bidegree-`(1,1)` cup with `cup` |
 
 **From the [semisimple-algebras
@@ -1538,16 +1541,19 @@ Prerequisites:
   `continuousCohomology`, `map`, `res`, `infl`, `coeffMap`;
 - **[Profinite Cohomology, Layer 9]** `KummerCoeff`, `powerClassQuotient`, `kummerMap`,
   `kummerIso`, `kummerMapCanonical`, `kummerIso_res`, `kummerIso_norm`,
-  `kummerCoeff_continuousSMul`;
+  `kummerCoeff_continuousSMul`, `UnitsCoeff`, `unitsCoeff_continuousSMul`,
+  `kummerShortExact`, `hilbert90`, `h2KummerToUnits`, `h2KummerToUnits_injective`,
+  `h2KummerToUnits_range`, `galoisSubgroup`, `galoisSubgroup_index`,
+  `galoisSubgroupEquiv`, `galoisF2Iso`, `galoisRes`, `galoisCor`, `galoisEvens`,
+  `galoisConj`, and their laws;
 - **[Profinite Cohomology, Layer 10]** `corestriction`, `corestrictionLe`,
   `corestriction_comp_res`, `corestriction_mackey`;
 - **[Profinite Cohomology, Layer 12]** `TopPairing`, `cup`, `cup_add_left`,
   `cup_add_right`, `cup_res`, `cup_infl`, `cup_projection`, `cup_gradedComm`,
   `degreeCast`, `ofDiscreteModulePairing`;
 - **[Profinite Cohomology, Layer 13]** `trivialF2`, `trivialF2_isSmoothDiscrete`,
-  `f2Pairing`, `evensNorm`, `evensNormIndexTwo`, `IndexTwoDatum`, `evensConj`,
-  `evensNorm_res`, `evensNorm_polarization`, `evensNorm_cor_shapiro`,
-  `evensNorm_identity_infl`;
+  `f2Pairing`, `evensNorm`, `evensNormIndexTwo`, `evensConj`, `evensNorm_res`,
+  `evensNorm_polarization`, `evensNorm_cor_shapiro`, `evensNorm_identity_infl`;
 - **[Layer 0]** the square-class group and the square-class dictionary of 6A.
 
 Milestones:
@@ -1570,66 +1576,53 @@ Milestones:
   `Kˣ/(Kˣ)² ≃ H¹(G_K, 𝔽₂)` is the supplier's `kummerIso` at `n = 2` read through it and
   through 6A's square-class dictionary. Both are stated, and the second sends a square
   class to the Kummer class of a representative.
-- **The multiplicative coefficient object and the Kummer sequence.** `Additive Kˢˣ` with
-  the Galois action, as an object of the supplier's carrier, together with
-  `h2MuToUnits : H²(G_K, 𝔽₂) → H²(G_K, Additive Kˢˣ)`, its injectivity, and the theorem
-  that its image is the 2-torsion. That pair of theorems is the long exact sequence of
-  `1 → μ₂ → Kˢˣ → Kˢˣ → 1` together with Hilbert 90. The supplier builds `μₙ`
-  coefficients and this roadmap needs the full multiplicative group, so this object, and
-  the restriction of classes with these coefficients, are this roadmap's.
-- **The transfer adapters for a finite separable `L/K`.** The supplier's `res`,
-  `corestriction` and `evensNormIndexTwo` are indexed by a subgroup of `G_K`. A finite
-  separable `L/K` supplies one only after a `K`-embedding `σ : L → Kˢ` is chosen, so the
-  passage from `σ` to that subgroup is this roadmap's:
-  - the open subgroup `G_L ≤ G_K` cut out by `σ`, and the theorem that its index is
-    `[L:K]`, which is what discharges the supplier's index hypotheses and in particular
-    the index-two hypothesis of the Evens norm;
-  - the isomorphism of topological groups between `G_L` and the absolute Galois group of
-    `L`, and the resulting transport of `𝔽₂`-cohomology. Continuous cohomology depends on
-    the topology and not only on the abstract group, so the transport carries the
-    statement that the isomorphism is a homeomorphism;
-  - the resulting restriction, corestriction and index-two Evens norm attached to `L/K`,
-    each defined as the supplier's operation composed with that transport, together with
-    restriction on the multiplicative coefficients;
-  - their laws, each the transport of a supplier theorem: restriction of a Kummer class is
-    the Kummer class of the image and corestriction of a Kummer class is the Kummer class
-    of the norm; restriction preserves cup products; the projection formula; and the two
-    Evens identities
+- **The map from `H²(G_K, 𝔽₂)` into the cohomological Brauer group.** The coefficients
+  `Additive Kˢˣ` are the supplier's `UnitsCoeff`, and the injection of `H²(G_K, μₙ)` into
+  `H²(G_K, Kˢˣ)` with image the `n`-torsion is its `h2KummerToUnits` with its two
+  theorems, from the long exact sequence of `1 → μₙ → Kˢˣ → Kˢˣ → 1` together with
+  Hilbert 90. What is stated here is the mod-2 form `h2MuToUnits`, that composite read
+  through the `μ₂` transport, with its injectivity and its 2-torsion image, since it is
+  the form Layers 7B and 8 name. Its body is a real term over the supplier's map, so the
+  two cannot drift.
+- **What the transfer along a finite separable `L/K` adds here.** The supplier owns the
+  passage from a `K`-embedding `σ : L → Kˢ` to the open subgroup `G_L ≤ G_K`, the
+  transport of its `𝔽₂`-cohomology, the resulting `galoisRes`, `galoisCor` and
+  `galoisEvens`, the choice-free conjugate `galoisConj`, the two Evens identities
 
-    ```text
-    res (N x)   = x ∪ σ·x
-    N (x + y)   = N x + N y + cor (x ∪ σ·y)
-    ```
+  ```text
+  res (N x)   = x ∪ σ·x
+  N (x + y)   = N x + N y + cor (x ∪ σ·y)
+  ```
 
-    where the conjugate `σ·y` is represented as `res(cor y) − y`, so that no element
-    outside `G_L` is chosen. The supplier's `evensConj` is built from a chosen
-    representative in an `IndexTwoDatum`; that the two conjugates agree is a milestone
-    here, and without it these identities could not be put in the choice-free form Layer 9
-    uses. ⚠ The conjugate is not optional: the cross term of the quadratic expansion is a
-    cup with `σ·y` and not with `y`;
-  - functoriality in a tower `M/L/K`, and **independence of the embedding**: two
-    `K`-embeddings of `L` cut out conjugate open subgroups, and the induced restriction,
-    corestriction and Evens norm agree. This is a theorem, so no later statement mentions
-    a chosen embedding.
+  functoriality in a tower `M/L/K`, and independence of the embedding. None of that is
+  rebuilt here. ⚠ The conjugate is not optional: the cross term of the quadratic expansion
+  is a cup with `σ·y` and not with `y`. What is left for this sublayer is the part that
+  mentions this roadmap's own notions:
+  - restriction on the multiplicative coefficients, which is not an instance of
+    `galoisRes`: `UnitsCoeff K` and `UnitsCoeff L` are coefficient objects over different
+    groups;
+  - restriction of a Kummer class is the Kummer class of the image, and corestriction of a
+    Kummer class is the Kummer class of the norm, each the supplier's Kummer square at
+    `n = 2` read through the `μ₂` transport;
+  - compatibility of `h2MuToUnits` with restriction.
 
 Basic API:
 
 - constructors: `mu2EquivZMod2` and the coefficient-object isomorphism; the Kummer class
-  and the square-class isomorphism; the multiplicative coefficient object; the open
-  subgroup attached to an embedding and the cohomology transport; the three transfer
-  adapters and the conjugate;
+  and the square-class isomorphism; `h2MuToUnits`; restriction on the multiplicative
+  coefficients;
 - examples: `(a) = 0` exactly when `a` is a square; over `ℚ_2`, the eight Kummer classes
   of the square-class representatives `{±1, ±5, ±2, ±10}`;
-- morphisms: the transfer adapters, which are additive, and the Evens norm, which is a
-  plain function and not additive; its failure of additivity is the polarization law;
-- functoriality: towers, and independence of the embedding;
-- comparison lemmas: the choice-free conjugate against the supplier's `evensConj`; the
-  square-class Kummer isomorphism against the supplier's `kummerIso`; `h2MuToUnits`
-  against restriction;
+- morphisms: `h2MuToUnits`, which is additive, and restriction on the multiplicative
+  coefficients;
+- functoriality: the supplier's towers and independence of the embedding carry over
+  unchanged, so nothing here mentions a chosen embedding;
+- comparison lemmas: the square-class Kummer isomorphism against the supplier's
+  `kummerIso`; `h2MuToUnits` against restriction;
 - naturality: each adapter law is the transport of the corresponding supplier theorem, and
   is named as such;
-- edge cases: `L = K`, where the subgroup is everything and the transfer adapters are the
-  identity; a square `a`, where the Kummer class vanishes;
+- edge cases: `L = K`, where the supplier's subgroup is everything and its three
+  operations are the identity; a square `a`, where the Kummer class vanishes;
 - downstream interfaces: Layer 7B's comparison, Layer 7C's cup criterion, Layer 8's
   classes, and Layer 9's relative formula.
 

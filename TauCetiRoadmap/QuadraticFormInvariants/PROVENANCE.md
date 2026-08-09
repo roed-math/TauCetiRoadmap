@@ -178,13 +178,12 @@ phrased through the norm equation `b = x² − Δ y²`; and the filtration quoti
 local statement is deleted and the contract table gains a declaration.
 
 One object is this roadmap's because neither supplier names it: `IsUniformizer` in its
-valuation form. Two more are this roadmap's because they are specific to `μ₂` or to the
-multiplicative group:
-`mu2EquivZMod2` with the triviality of the Galois action on `μ₂`, and the coefficient
-object `Additive Kˢˣ` with `h2MuToUnits`. The adapters that carry the profinite-cohomology
-roadmap's subgroup-indexed operations to a finite separable extension are likewise this
-roadmap's, because the supplier's operations are indexed by a subgroup and the passage
-from a field embedding to that subgroup is arithmetic rather than cohomological.
+valuation form. One more is this roadmap's because it is specific to `μ₂`: `mu2EquivZMod2`
+with the triviality of the Galois action on `μ₂`, and the mod-2 map `h2MuToUnits` read
+through it. The coefficient object `Additive Kˢˣ` and the passage from a field embedding to
+the open subgroup the supplier's operations are indexed by are the profinite-cohomology
+roadmap's, as `UnitsCoeff` and as `galoisSubgroup` with `galoisRes`, `galoisCor` and
+`galoisEvens`; this roadmap consumes them and builds no copy.
 
 ## Licence note
 
