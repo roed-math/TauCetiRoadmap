@@ -924,22 +924,18 @@ def profiniteIntSubring : Subring (∀ n : ℕ+, ZMod (n : ℕ)) where
   carrier := {f | ∀ (m n : ℕ+) (h : (n : ℕ) ∣ (m : ℕ)),
     ZMod.castHom h (ZMod (n : ℕ)) (f m) = f n}
   zero_mem' := by intro m n h; simp
-  one_mem' := by intro m n h; simp
+  one_mem' := by intro m n h; simpa using map_one (ZMod.castHom h (ZMod (n : ℕ)))
   add_mem' ha hb := by intro m n h; simp [map_add, ha m n h, hb m n h]
   mul_mem' ha hb := by intro m n h; simp [map_mul, ha m n h, hb m n h]
   neg_mem' ha := by intro m n h; simp [map_neg, ha m n h]
 
-/-- **Layer 12.1.** The carrier. -/
-def ProfiniteInt : Type := profiniteIntSubring
-
-noncomputable instance : CommRing ProfiniteInt :=
-  inferInstanceAs (CommRing profiniteIntSubring)
-
-instance : TopologicalSpace ProfiniteInt :=
-  inferInstanceAs (TopologicalSpace profiniteIntSubring)
+/-- **Layer 12.1.** The carrier. An `abbrev` so that the `Subring` instances and the
+coercion to `∀ n : ℕ+, ZMod n` are found without transport. -/
+abbrev ProfiniteInt : Type := profiniteIntSubring
 
 /-- **Layer 12.1.** The remaining structure — a topological ring, compact and totally
-disconnected — is the milestone; the pin has no profinite-integer development to consume. -/
+disconnected — is the milestone; the pin has no profinite-integer development to consume.
+The `CommRing` and `TopologicalSpace` instances are inherited from the ambient product. -/
 instance : IsTopologicalRing ProfiniteInt := sorry
 instance : CompactSpace ProfiniteInt := sorry
 instance : TotallyDisconnectedSpace ProfiniteInt := sorry
@@ -955,7 +951,7 @@ def ProfiniteInt.toZMod (n : ℕ+) : ProfiniteInt →+* ZMod (n : ℕ) where
 /-- **Layer 12.1.** Compatibility of the projections — the limit property in usable form. -/
 theorem ProfiniteInt.castHom_toZMod (m n : ℕ+) (h : (n : ℕ) ∣ (m : ℕ)) (a : ProfiniteInt) :
     ZMod.castHom h (ZMod (n : ℕ)) (ProfiniteInt.toZMod m a) = ProfiniteInt.toZMod n a :=
-  (a : profiniteIntSubring).2 m n h
+  a.2 m n h
 
 /-- **Layer 12.1.** The `ℓ`-adic component, a **ring** homomorphism — this is the map
 Layer 12.3's comparison `x ^ᶻ a = x ^[ℓ] (component_ℓ a)` is stated with. -/
