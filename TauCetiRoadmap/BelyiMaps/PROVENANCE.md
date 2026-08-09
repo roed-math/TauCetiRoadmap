@@ -622,6 +622,29 @@ than deriving it. The comparison Layer 3.5 makes is therefore one-directional: e
 record matches exactly one enumerated class, distinct records match distinct classes, and
 the records' passports form a set of `S₃`-orbit representatives.
 
+## The prerequisite check
+
+Two mechanical checks stand behind the roadmap's dependency claims, and they check different
+things.
+
+1. **The `*Prerequisites:*` lines.** A parser reads every milestone's prerequisite line,
+   **expands numerical ranges** such as `9.3–9.6`, and rejects self references, references to
+   later milestones, nonexistent milestone numbers, and ranges that are reversed or cross a
+   layer. ⚠ **Range expansion is the whole point.** An earlier version of this checker did
+   not expand ranges, and that is exactly where both of the roadmap's real forward
+   references hid — Layer 12.7 listing "Layers 12.4–12.8", which includes itself and a
+   future milestone, and Layer 12.10 listing "Layers 12.7–12.11". A DAG claim made with a
+   checker that does not expand ranges is worth nothing, and this file does not repeat one.
+2. **The prose.** The prerequisite lines are not the only place a dependency can hide: a
+   milestone whose body says "by 12.9" while sitting at 12.6 depends forwards whatever its
+   prerequisite line says. A second pass reports every milestone-number reference in a
+   milestone's body that points later, excluding the `*Source:*` and
+   `*Downstream interfaces.*` material, where forward references are deliberate. ⚠ This pass
+   **reports, it does not gate**: the roadmap uses forward *pointers* on purpose
+   ("that is Layer 10"), and only a human can tell a pointer from a dependency. It also
+   over-reports, since a milestone's block runs to the next `####` heading and so absorbs an
+   intervening layer introduction.
+
 ## Open items tracked here
 
 - Every load-bearing citation now carries a verified number. Köck, Stix, Fried,

@@ -153,10 +153,9 @@ comparison between the two (Layers 12.2, 12.3), that roadmap's exponentiation st
 abelian pro-`p` groups; and the **continuous-outer-automorphism carrier** (Layer 12.7), which
 no roadmap and no Mathlib file owns.
 
-Path note: AlgebraicCurves, PolynomialGaloisGroups, and ProPGroups are under review as pull
-requests on this repository; their paths become `../AlgebraicCurves/README.md`,
-`../PolynomialGaloisGroups/README.md`, and `../ProPGroups/README.md` when they land, and
-`PROVENANCE.md` records the dated state.
+AlgebraicCurves, PolynomialGaloisGroups and ProPGroups live at
+`../AlgebraicCurves/README.md`, `../PolynomialGaloisGroups/README.md` and
+`../ProPGroups/README.md`.
 
 What this roadmap supplies to other subjects:
 
@@ -173,6 +172,54 @@ What this roadmap supplies to other subjects:
 - the branch-cycle theorem and the pro-`ℓ` peripheral-power theorem (Layers 12, 13), the
   reusable arithmetic core for any consumer of the Galois action on covers of
   `ℙ¹ ∖ {0,1,∞}`.
+
+## Internal boundaries
+
+The roadmap is one roadmap, and its fifteen layers group into three sections with clean
+contracts between them, so that a reader can decide in one step which section owns a result.
+Each contract lists what the section exports and what it imports; nothing crosses a boundary
+except through these lists.
+
+**A. Finite combinatorics — Layers 0–4.**
+*Exports:* `PermutationTriple` with its relabeling action, `IsoClass`, `ConnectedTriple`;
+`monodromyGroup`, `automorphismGroup`; full cycle data, `eulerChar`, `genus`, `orderTriple`,
+`GeometryType`; `PassportSpec` with `HasPassport`, `passportOf`, `passportSize`; blocks,
+quotient triples, primitivity; `BipartiteRibbonGraph` and the dessin/triple equivalence; the
+branch-point `S₃`-action on `IsoClass n` and on ordered passports; the executable
+enumeration and the small complete tables; the Frobenius product-one formula, generating
+counts and the normalizer counting formula; `TriangleGroup` with its trichotomy.
+*Imports:* Mathlib permutations, group actions, free and presented groups;
+PolynomialGaloisGroups' `fullCycleType` and transitive-group data; CharacterTheory's class
+sums, structure constants, character table and central characters. **Nothing topological.**
+
+**B. Topology and geometry — Layers 5–11.**
+*Exports:* `U` with its two-set cover, peripheral loops and `π₁(U, b) ≃* FreeGroup (Fin 2)`;
+the van Kampen theorem for a simply connected intersection; the three cover carriers
+(`FiberNumberedCover`, pointed, unnumbered) and their three classifications; `FilledCover`
+and `TopBranchedCover`; the compact-Riemann-surface hypothesis stack, the Riemann sphere,
+`ramificationIndex`, `AnalyticBelyiPair`; `M(X)` with the points-to-places bijection;
+`AlgebraicBelyiPair` with its local `(e,f)` data; the local algebraic-to-analytic comparison
+and the comparison contract; Belyi's theorem in both directions; fields of moduli and of
+definition, Weil descent, and `trueOrbitSize`.
+*Imports:* from A, exactly Layer 0's vocabulary (6.1), Layers 2.2 and 2.4 (7.6, 8.6), Layer
+2.6 (6.3), and Layer 3.1 (10.6) — and nothing else; UniversalCovers; ConformalMapping L0;
+ModularForms Layer 10B; AlgebraicCurves.
+
+**C. Arithmetic and database semantics — Layers 12–14.**
+*Exports:* `ProfiniteInt` as a topological ring, the profinite exponentiation calculus and
+its pro-`ℓ` comparison; `ContinuousOut`; `π₁ᵍᵉᵒ` and the comparison isomorphism with its
+orientation; the arithmetic exact sequence and outer action; peripheral inertia; the
+`ẑ`-cyclotomic character; the branch-cycle theorem and its finite Nielsen-class corollary;
+the pro-`ℓ` peripheral-power theorem and its dyadic instance; faithfulness; the LMFDB
+record certificates.
+*Imports:* from A, Layers 0.5, 0.6, 1.1, 1.2, 1.4, 1.6, 2.6, 3.4 and 3.5; from B, Layers
+6.1, 6.3, 7.1, 8.6, 8.7, 9.1, 9.8, 10.2, 10.3, 10.7 and 11.1–11.7; ProPGroups; Mathlib's
+Galois categories and cyclotomic characters.
+
+⚠ The boundary between B and C is **not** the boundary between geometry and arithmetic:
+Layers 10 and 11 are already arithmetic, and they sit in B because they consume the analytic
+classification and are consumed by C through a small, listed interface. Milestones 12.1–12.3
+sit in C but import nothing from A or B at all.
 
 ## Pinned conventions
 
@@ -331,7 +378,8 @@ convention.
 
 ## What Mathlib supplies
 
-The pin is `9caeba1000` (2026-06-03). The load-bearing imports, verified there:
+The load-bearing imports, against the pinned Mathlib (`9caeba1000`, Lean `v4.31.0-rc1`);
+`PROVENANCE.md` carries the dated audit that produced this list:
 
 | Area | Declarations |
 | --- | --- |
@@ -353,23 +401,35 @@ schemes, and any ribbon-graph or triangle-group object.
 
 ## What Tau Ceti supplies
 
-Exact contracts with the seven suppliers. The name belongs to the supplier; this roadmap
-cites the name and never restates the object.
+**Every consumed theorem gets a name or a signature, and no row cites a layer range.** A
+local agent cannot implement against "the Layer 10B chain" or "the milestone-8
+correspondence": it has to know what to `apply`. So each row below carries either the
+supplier's exact declaration name, or — where the supplier has specified the object in prose
+and pinned no Lean name — an **exact local interface signature**, which `Suggested.lean`
+carries as a stand-in and which is deleted in favour of the supplier's declaration when it
+lands. The mathematics always belongs to the supplier; only the spelling is local.
 
-| Consumer layer | Supplier | Exact object or theorem | Name |
+| Consumer | Supplier | Object | Exact name, or local interface signature |
 | --- | --- | --- | --- |
-| 0.5, 1.1 | PolynomialGaloisGroups Layer 0 | cycle type with fixed points | `fullCycleType` |
-| 1.6, 14 | PolynomialGaloisGroups Layers 6, 7 | transitive reference data and label predicate | `numTransitiveGroups`, `TransitiveGroupIndex`, `referenceSubgroup`, `TransitiveGroupLabel` |
-| 3.2 | CharacterTheory Layers 1, 3, 4 | class sums, structure constants, column orthogonality, central characters | `classSum`, `structureConstant`, `classSum_mul`, `characterTable`, `char_column_orthogonality`, `centralCharacter`, `centralCharacter_coordinate` |
-| 6.3, 6.4 | UniversalCovers milestones 4, 5, 7, 8 | deck groups, `Deck ≅ (π₁)ᵐᵒᵖ`, basepoint change, pointed/unpointed classification, `Deck ≅ N(H)/H` | `Deck`, `deckFundamentalGroupEquiv`, `basepointChangeSubgroup`, the milestone-8 correspondence |
-| 8.2 | ConformalMapping L0 | local degree of a holomorphic map | `TauCeti.exists_localDegree` |
-| 8.5, 9.2 | ModularForms Layer 10B (i)–(v) | sheaves `𝒪_D`, finiteness of `H¹`, analytic Riemann–Roch, Serre duality, Riemann–Hurwitz, meromorphic sections of line bundles | the 10B chain, cited by its milestone numbers |
-| 9.1, 9.4 | AlgebraicCurves Layers 0–8, 12 | `IsFunctionField`, `Place`, `Divisor`, genus, Riemann–Roch, ramification, the different, Riemann–Hurwitz, the regular projective model and anti-equivalence | `IsFunctionField`, `Place`, `Divisor`, `riemannRochSpace`, `genus`, Layers 6–7 and 12A–12E |
-| 12.1, 12.3, 12.6 | ProPGroups Layers 3, 4 | free profinite group, maximal pro-`p` quotient, universal properties, characteristic kernel, `zHat` as a **group** | `freeProfiniteGroup`, `freeProfiniteGroup.of`, `freeProfiniteGroup.lift`, `proPKernel`, `maximalProPQuotient`, `freeProP`, `zHat`, `maximalProPQuotient p zHat ≃ₜ* Multiplicative ℤ_[p]` |
+| 0.5, 1.1 | PolynomialGaloisGroups Layer 0 | cycle type with fixed points | `fullCycleType (σ : Equiv.Perm α) : Multiset ℕ` — name pinned there; stand-in in `Suggested.lean` |
+| 1.6, 14.1, 14.5 | PolynomialGaloisGroups Layers 6, 7 | transitive reference data and the label predicate | `numTransitiveGroups`, `TransitiveGroupIndex`, `referenceSubgroup`, `TransitiveGroupLabel` — all four names pinned there |
+| 3.2 | CharacterTheory Layer 1 | class sums and structure constants | `classSum`, `structureConstant`, `classSum_mul` |
+| 3.2 | CharacterTheory Layer 3 | the character table and column orthogonality | `characterTable`, `char_column_orthogonality` |
+| 3.2 | CharacterTheory Layer 4 | central characters, and the conversion to class sizes | `centralCharacter`, `centralCharacter_coordinate`, and the conversion of `ω_χ` on a class sum into class size times character value over degree, for which that roadmap pins **no Lean name**; local interface: `centralCharacter_eq_card_mul_div (χ) (j) : centralCharacter χ (classSum j) = (Nat.card (carrier j) : ℂ) * χ (rep j) / χ 1` |
+| 5.1, 6.2 | UniversalCovers Stage 0.2 | semilocal simple connectivity | **no Mathlib class exists**; local interface: `class SemilocallySimplyConnectedSpace (X) [TopologicalSpace X] : Prop` with the "some neighbourhood's loops are nullhomotopic in `X`" field, in `Suggested.lean` |
+| 6.2 | UniversalCovers Stage 0.2, 0.3 | the universal cover, its covering map, and the free proper `π₁`-action | `UniversalCover x₀`, `proj`, `IsCoveringMap proj`, `SimplyConnectedSpace (UniversalCover x₀)`, `UniversalCover.isQuotientCoveringMap` |
+| 6.4 | UniversalCovers Stage 0.4, 1 | deck groups and `Deck ≅ (π₁)ᵐᵒᵖ` | `Deck`, `deckFundamentalGroupEquiv : Deck proj ≃* (FundamentalGroup X x₀)ᵐᵒᵖ` |
+| 6.3 | UniversalCovers Stage 2 | basepoint change, and the pointed/unpointed correspondence | `basepointChangeSubgroup`; for milestone 8 that roadmap pins no name, local interface: `pointedCoverEquivSubgroup : {pointed connected covers of (X, x₀)}/≅ ≃ {H : Subgroup (FundamentalGroup X x₀)}` and its unpointed quotient by conjugacy |
+| 8.2 | ConformalMapping L0 | the local degree of a holomorphic map | `TauCeti.exists_localDegree`, and the holomorphic branch-root extraction beside it |
+| 8.6, 9.3, 9.4 | ModularForms Layer 10B | Riemann–Roch and Riemann–Hurwitz for compact Riemann surfaces | that roadmap pins **no Riemann-surface carrier and no Lean names**; local interfaces, stated against Layer 8.1's hypothesis stack: `riemannRochSpaceAn (D : Divisor X) : Submodule ℂ (M X)`, `ellAn (D) : ℕ`, `riemannRochAn : ellAn D - ellAn (K - D) = deg D + 1 - genusAn X`, `riemannHurwitzAn (f : X → Y) : 2 * genusAn X - 2 = deg f * (2 * genusAn Y - 2) + Σ (e x - 1)` |
+| 9.1, 9.4, 9.6 | AlgebraicCurves Layers 0, 1, 6 | function fields, places, ramification and residue degrees | `IsFunctionField`, `IsIntegrallyClosedIn`, `Place`, `Divisor`, and the ramification data `e (P' ∣ P)`, `f (P' ∣ P)` with the fundamental identity `Σ e·f = n` |
+| 9.5, 10.7, 11.4 | AlgebraicCurves Layers 5, 8 | Riemann–Roch, genus, and constant-field extension | `riemannRochSpace`, `genus`, and the full faithfulness of constant-field extension in characteristic zero |
+| 9.1, 9.5 | AlgebraicCurves Layer 12 | the regular projective model and the anti-equivalence | the model of a function field and the curve/function-field anti-equivalence, cited by that roadmap's declaration names once it pins them; **this roadmap never analytifies a scheme** (Layer 9.6 works with places) |
+| 12.1, 12.3, 13.1 | ProPGroups Layers 0, 3, 4 | free profinite group, maximal pro-`p` quotient, `zHat` **as a group** | `freeProfiniteGroup`, `freeProfiniteGroup.of`, `freeProfiniteGroup.lift`, `proPKernel`, `maximalProPQuotient`, `freeProP`, `zHat`, `maximalProPQuotient p zHat ≃ₜ* Multiplicative ℤ_[p]` |
 
-Merged Tau Ceti files (`RepresentationTheory/CharacterTable/`, `UniversalCover/`,
-`Conformal/`) supply the implemented halves of those contracts; `PROVENANCE.md` records which
-halves exist at which date, since implementation state is not part of this specification.
+⚠ An open pull request is not an executable dependency, and neither is a prose row on a
+supplier's README. Every entry above is either a name that exists, or a signature written
+here; nothing is left as "the supplier will have something like this".
 
 ## The build, in layers
 
@@ -2869,8 +2929,9 @@ subgroups and its inequality clause carries hypotheses. Statement 3 is the whole
 
 **The moduli field of a pair.** For an algebraic Belyi pair `(F, ℂ(t) ↪ F)` over `ℂ`, and
 `σ ∈ Aut(ℂ)`, let `(F, ℂ(t) ↪ F)^σ` be the conjugate pair — the same abstract field with
-its `ℂ`-algebra structure precomposed by `σ⁻¹` and the same distinguished `t`, exactly as
-in Layer 11.1. Set
+its `ℂ`-algebra structure precomposed by `σ⁻¹` and the same distinguished `t`. That
+construction is **defined here**, for the abstract group `Aut(ℂ)`; Layer 11 restricts it to
+`Gal(ℚ̄/ℚ)` and adds nothing to it. Set
 
 ```text
 U(F, t) := {σ ∈ Aut(ℂ) | (F, t)^σ ≅ (F, t) as pairs} ,
@@ -3029,9 +3090,11 @@ coefficients — and `Gal(ℚ̄/k)` fixes that model, hence fixes the class.
 #### 11.3 The field of moduli
 
 The **field of moduli** of `c` is the fixed field of its stabilizer. By 11.2 the stabilizer
-is open, so the field of moduli is a number field. Prove: it is invariant under isomorphism
-of pairs; `moduli(σ · c) = σ(moduli(c))`; it is contained in every field of definition
-(11.5); and its degree over `ℚ` is the orbit size (11.7).
+is open, so the field of moduli is a number field. Prove **here**: it is invariant under
+isomorphism of pairs, and `moduli(σ · c) = σ(moduli(c))`. Two further properties belong to
+the milestones that supply their inputs and are not obligations of this one — containment in
+every field of definition is proved in 11.5, and the equality of its degree with the orbit
+size in 11.7.
 
 ⚠ *Nearby false statement:* the field of moduli is defined by a stabilizer of an
 **isomorphism class**, not of a pair. The stabilizer of a pair on the nose is usually much
@@ -3641,9 +3704,8 @@ independently powering three elements of a nonabelian group destroys the product
 For `σ0 = (0 1 2)`, `σ1 = (0 1)`, `σinf = (1 2)` in `S₃` — which satisfies
 `σinf·σ1·σ0 = 1` — and `u = 5`, the componentwise fifth powers give
 `(1 2)·(0 1)·(0 2 1)`, which sends `0 ↦ 1`. `Suggested.lean` carries this as a
-`decide`-checked counterexample. An earlier draft of this roadmap asserted the tuple
-statement; it is false, and the class-by-class form above is what the branch-cycle theorem
-gives.
+`decide`-checked counterexample. The class-by-class form above is what the branch-cycle
+theorem gives, and it is all it gives.
 
 ⚠ Fried's (5.2) is likewise a statement about **conjugacy classes** and never about chosen
 representatives, and the conjugating element it produces lies in `N_{S_n}(G)` — the same

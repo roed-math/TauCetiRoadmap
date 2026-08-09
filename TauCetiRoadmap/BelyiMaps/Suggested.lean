@@ -417,6 +417,23 @@ theorem swap1Inf_sq (t : PermutationTriple n) : swap1Inf (swap1Inf t) = t.σ1⁻
 set_option maxRecDepth 8000 in
 example : s3Triple.σinf ^ 5 * s3Triple.σ1 ^ 5 * s3Triple.σ0 ^ 5 ≠ 1 := by decide
 
+/-- **Layer 12.12, the class-by-class ingredients.** What survives the counterexample above
+is a statement about **conjugacy classes**, one slot at a time, and passport invariance
+follows from these two finite facts alone. Powering by a unit modulo the order preserves the
+full cycle type... -/
+theorem fullCycleType_pow_of_coprime {α : Type u} [Fintype α] [DecidableEq α]
+    (σ : Equiv.Perm α) {u : ℕ} (hu : Nat.Coprime u (orderOf σ)) :
+    fullCycleType (σ ^ u) = fullCycleType σ := by
+  sorry
+
+/-- ...and it does not change the generated subgroup, which is why the monodromy group is a
+Galois invariant. -/
+theorem closure_pow_eq {α : Type u} [Fintype α] [DecidableEq α]
+    (t : PermutationTriple n) {u : ℕ}
+    (hu : Nat.Coprime u (Monoid.exponent (monodromyGroup t))) :
+    Subgroup.closure {t.σ0 ^ u, t.σ1 ^ u} = monodromyGroup t := by
+  sorry
+
 /-- **Layer 2.6.** The Coxeter braid relation, on isomorphism classes. -/
 theorem braid_on_isoClass (t : PermutationTriple n) :
     Equivalent (swap01 (swap1Inf (swap01 (swap1Inf (swap01 (swap1Inf t)))))) t := by
@@ -1030,5 +1047,26 @@ theorem exists_peripheralPowerAutomorphism (ℓ : ℕ) [Fact ℓ.Prime] (u : ℤ
       φ (periphTL ℓ) = cT⁻¹ * padicPow (periphTL ℓ) u * cT ∧
       φ (periphCL ℓ) = cC⁻¹ * padicPow (periphCL ℓ) u * cC := by
   sorry
+
+/-- **Layer 13.3, the conjugation-transfer lemma.** The conjugator for a conjugate element
+is **computed**, not guessed: `d := q * c * (φ q)⁻¹`. ⚠ It involves `φ q`, and is not
+obtained by multiplying `c` by `q` on one side. Stated on an abstract group with an abstract
+power operation, since that is all the proof uses — naturality of the power under
+conjugation (Layer 12.2) supplies `pow (q * x * q⁻¹) = q * pow x * q⁻¹`. -/
+theorem conjugation_transfer {G : Type u} [Group G] (φ : G ≃* G) (pow : G → G)
+    (hpow : ∀ q x : G, pow (q * x * q⁻¹) = q * pow x * q⁻¹)
+    {x c : G} (hx : φ x = c⁻¹ * pow x * c) (q : G) :
+    φ (q * x * q⁻¹) =
+      (q * c * (φ q)⁻¹)⁻¹ * pow (q * x * q⁻¹) * (q * c * (φ q)⁻¹) := by
+  have h : φ (q * x * q⁻¹) = φ q * (c⁻¹ * pow x * c) * (φ q)⁻¹ := by
+    simp [map_mul, map_inv, hx]
+  rw [h, hpow]
+  group
+
+/-- **§Pinned conventions.** The transfer applied at `q = P`, `x = C`: the rival
+convention's third peripheral element `(P * T)⁻¹` is `P * C * P⁻¹`, so a consumer using it
+needs no new mathematics, only the conjugator the lemma computes. -/
+example {G : Type u} [Group G] (P T : G) : (P * T)⁻¹ = P * ((T * P)⁻¹) * P⁻¹ :=
+  opposite_third_peripheral P T
 
 end TauCetiRoadmap.BelyiMaps
