@@ -973,8 +973,7 @@ them is the definition:
   because its proof is the pro-`p` trivial-filtration theorem of this layer.
 
 Writing the elementary abelian test as the definition would make the dévissage vacuous and
-would not agree with the standard `cd_p`. The imported `cd_p` places the group in `Type`, so
-the milestones of this layer are stated there.
+would not agree with the standard `cd_p`.
 
 - **The trivial-filtration theorem.** For pro-`p` `G`, a nonzero finite discrete `p`-primary
   `G`-module has nonzero invariants: the action factors through a finite `p`-quotient, and a
@@ -2180,9 +2179,6 @@ contract, so none appears here. All names are in the namespace
 | Layer 6, the two general reductions | Profinite Cohomology Layer 11 | `cd_p_le_iff_finite_pPrimary`, `cd_p_le_iff_boundedExponent` | `cd_p G ≤ n` tested on finite discrete `p`-primary modules, and on modules of bounded exponent |
 | Layer 6, `cd` of open subgroups and the Sylow equality | Profinite Cohomology Layer 11 | `cd_p_le_of_isClosed`, `cd_p_eq_of_index_not_dvd` | monotonicity of `cd_p` in a closed subgroup, and equality for an **open** subgroup of index prime to `p` |
 | Layer 6, `scd_p` comparisons | Profinite Cohomology Layer 11 | `scd_p`, `cd`, `cd_p_le_scd_p`, `scd_p_le_cd_p_add_one` | the strict dimension, the dimension over all primes, and the two comparisons |
-
-The imported `cd_p` states its coefficients through `ofDiscreteModule`, which places the group
-in `Type`, so the Layer 6 milestones of this roadmap are stated there.
 
 **The Sylow equality is this roadmap's.** `cd_p G = cd_p G_p`, for a `p`-Sylow subgroup `G_p`
 from Layer 2, is a Layer 6 milestone here, built on the Sylow theory of Layer 2, which the

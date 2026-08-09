@@ -2278,8 +2278,7 @@ theorem standardD0Orientation_relator (φ : freeProP 2 (Fin 3) →* ℤ_[2]ˣ)
 no second cohomological dimension. The two general reductions, to finite coefficients and to
 coefficients of bounded exponent, are `ProfiniteCohomology.cd_p_le_iff_finite_pPrimary` and
 `ProfiniteCohomology.cd_p_le_iff_boundedExponent`; the pro-`p` reduction below is the third and
-is owned here. The imported `cd_p` places the group in `Type`, so the milestones of this layer
-are stated there. -/
+is owned here. -/
 
 section CohomologicalDimension
 
@@ -2292,11 +2291,11 @@ Route: the trivial-filtration theorem of this layer, which for a pro-`p` group f
 finite discrete `p`-primary module with factors `𝔽_p`, and the long exact sequences of the
 imported carrier. ⚠ This equivalence is a reduction and not the definition: writing the
 elementary abelian test as the definition would make the dévissage vacuous. -/
-theorem cd_p_le_iff_elementaryAbelian_of_isProP (G : Type) [Group G] [TopologicalSpace G]
+theorem cd_p_le_iff_elementaryAbelian_of_isProP (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G)
     (n : ℕ) :
     ProfiniteCohomology.cd_p p G ≤ (n : ℕ∞) ↔
-      ∀ (M : Type) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+      ∀ (M : Type u) [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
         [DiscreteTopology M] [DistribMulAction G M] [ContinuousSMul G M] [Finite M],
         (∀ m : M, p • m = 0) → (∀ (g : G) (m : M), g • m = m) →
           Limits.IsZero ((continuousCohomology ℤ G (n + 1)).obj
@@ -2308,9 +2307,9 @@ theorem cd_p_le_iff_elementaryAbelian_of_isProP (G : Type) [Group G] [Topologica
 `p`-quotient. Iterating gives the `G`-stable filtration with one-dimensional trivial factors
 that the dévissage above runs on. ⚠ Do not write `dim_{𝔽_p} M` here: `ℤ/p²` is a finite
 `p`-primary module that is not an `𝔽_p`-vector space. -/
-theorem exists_ne_zero_invariant_of_isProP (G : Type) [Group G] [TopologicalSpace G]
+theorem exists_ne_zero_invariant_of_isProP (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G)
-    (M : Type) [AddCommGroup M] [TopologicalSpace M] [DiscreteTopology M]
+    (M : Type u) [AddCommGroup M] [TopologicalSpace M] [DiscreteTopology M]
     [DistribMulAction G M] [ContinuousSMul G M] [Finite M] (hM : Nontrivial M)
     (htors : ∀ m : M, ∃ k : ℕ, (p ^ k) • m = 0) :
     ∃ m : M, m ≠ 0 ∧ ∀ g : G, g • m = m :=
@@ -2327,7 +2326,7 @@ theorem cd_p_freeProP_le_one (n : ℕ) [TotallyDisconnectedSpace (freeProP p (Fi
 generated `G`. The route is projectivity, a minimal presentation, a homomorphic section, and
 Burnside. ⚠ The version without finite generation is a different theorem with a different
 proof, and it is Layer 10's. -/
-theorem isFree_of_cd_p_le_one (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+theorem isFree_of_cd_p_le_one (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
     [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G)
     (hfg : IsTopologicallyFinitelyGenerated G) (hcd : ProfiniteCohomology.cd_p p G ≤ 1)
     [TotallyDisconnectedSpace (freeProP p (Fin (topologicalGeneratorRankNat G hfg)))] :
@@ -2337,7 +2336,7 @@ theorem isFree_of_cd_p_le_one (G : Type) [Group G] [TopologicalSpace G] [IsTopol
 /-- **Layer 6, `cd_p` of an open subgroup.** For `U` open in pro-`p` `G` with `cd_p G` finite,
 `cd_p U = cd_p G`. ⚠ The imported `cd_p_eq_of_index_not_dvd` is the prime-to-`p`-index case and
 does not cover an open subgroup of index divisible by `p`, which is the case used here. -/
-theorem cd_p_eq_of_isOpen (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+theorem cd_p_eq_of_isOpen (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
     [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G) (U : OpenSubgroup G)
     (hfin : ProfiniteCohomology.cd_p p G ≠ ⊤)
     [CompactSpace U.toSubgroup] [TotallyDisconnectedSpace U.toSubgroup] :
@@ -2351,7 +2350,7 @@ pro-`p`. A `p`-Sylow subgroup is closed and in general **not** open, so the impo
 subgroups above `G_p`; the colimit description of the cohomology of a closed subgroup, the
 Sylow theory of Layer 2, and the imported closed-subgroup Shapiro are what turn those into the
 equality. -/
-theorem cd_p_eq_of_isProPSylow (G : Type) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+theorem cd_p_eq_of_isProPSylow (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
     [CompactSpace G] [TotallyDisconnectedSpace G] (P : Subgroup G) (hP : IsProPSylow p P)
     [CompactSpace P] [TotallyDisconnectedSpace P] :
     ProfiniteCohomology.cd_p p P = ProfiniteCohomology.cd_p p G :=
@@ -2360,7 +2359,7 @@ theorem cd_p_eq_of_isProPSylow (G : Type) [Group G] [TopologicalSpace G] [IsTopo
 /-- **Layer 7, an infinite Demushkin group has `cd_p = 2`.** `≤ 2` from the one-relator
 presentation and the imported five-term sequence; `≥ 2` from `dim H²(G, 𝔽_p) = 1`, which is part
 of the definition. -/
-theorem cd_p_eq_two_of_isDemushkin (G : Type) [Group G] [TopologicalSpace G]
+theorem cd_p_eq_two_of_isDemushkin (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
     (hG : IsDemushkin p G) (hinf : Infinite G) : ProfiniteCohomology.cd_p p G = 2 :=
   sorry
