@@ -73,17 +73,17 @@ are imported and applied.
 |---|---|---|---|
 | D.1, the completion dictionary; the local factors of the idele norm in 2A.4 | 0 | `normalizedValuation`, `Layer 0: the normalized valuation` | `v_K^× : Kˣ →* Multiplicative ℤ` with `v_K(π) = 1`, and `‖x‖_K = q^{−v_K(x)}` with `q = Nat.card 𝓀[K]` |
 | D.1's comparison with `1 + 𝔭_v^n`, and the depths named in D.4, 3.2 and 3.3 | 1 | `unitFiltration`, `Layer 1: the unit filtration as an object` | `U(K,i) : Subgroup Kˣ`, with `U(K,0) = 𝒪[K]ˣ` and `U(K,i) = 1 + 𝓂[K]^i` for `i ≥ 1` |
-| 6.1 item 4, and D.3 | 2 | `Layer 2: residue correspondence`, `Layer 2: the maximal unramified extension`, `Layer 2: norms` | the **arithmetic** Frobenius `x ↦ x^q` as the distinguished generator of `Gal(L/K)`; `Gal(K^{ur}/K) ≅ Ẑ` carrying it to `1`; `N_{L/K}(𝒪[L]ˣ) = 𝒪[K]ˣ` for `L/K` unramified |
-| the local compilation map of 6.1 and 6.3; the local reciprocity input of 6.2 and 7.3 | 6, 7 | `Layer 6: finite-level reciprocity`, `artinMap` | `θ_{L/K} : Kˣ/N_{L/K}Lˣ ≅ Gal(L/K)^{ab}` and `Art_K : Kˣ →* G_K^{ab}`, in the arithmetic Frobenius normalization, with `θ(π) = Frob` for unramified `L/K` a named lemma of the supplier. ⚠ The local map is injective and not surjective |
+| 6.1 item 4, and D.3 | 2 | `frobeniusAlgEquiv`, `valuation_frobeniusAlgEquiv_sub_pow`, `normGroup`, `map_norm_unitFiltration_zero`, `mem_normGroup_iff_dvd_normalizedValuation`; `Layer 2: the maximal unramified extension` | the **arithmetic** Frobenius `x ↦ x^q` as the distinguished generator of `Gal(L/K)`, fixed by the congruence `σ(y) ≡ y^q mod 𝓂[L]`; `Gal(K^{ur}/K) ≅ Ẑ` carrying it to `1`; `N_{L/K}(𝒪[L]ˣ) = 𝒪[K]ˣ` for `L/K` unramified, and the norm-equation form `x ∈ normGroup L/K ↔ f ∣ v_K(x)` |
+| the local compilation map of 6.1 and 6.3; the local reciprocity input of 6.2 and 7.3 | 6, 7 | `normResidue`, `normResidue_uniformizer`, `artinMap` | `θ_{L/K} : Kˣ ⧸ normGroup L/K ≃* Abelianization (L ≃ₐ[K] L)` and `Art_K : Kˣ →* G_K^{ab}`, in the arithmetic Frobenius normalization, with `θ(π) = Frob` for unramified `L/K` a named lemma of the supplier, quantified over every uniformizer and stated at the supplier's `frobeniusAlgEquiv`. ⚠ The local map is injective and not surjective |
 | 6.1 item 4, the triviality of almost all local factors | 7 | `unramifiedCoordinate`, `unramifiedCoordinate_artinMap`, `ZHat`, `zhatOfInt`, `geometricArtinMap`, `unramifiedCoordinate_geometricArtinMap` | `ν_K ∘ Art_K = ι ∘ v_K` with values in `Ẑ`, which is the equation that fixes both maps; the geometric map is `Art_K ∘ (·)⁻¹` and is never a second convention |
 | 6.1 item 8, 6.3 stage 1 base change, and 6.3 stage 2 transport | 6 | `Layer 6: functoriality` | in a tower, `Kˣ/N_M Mˣ → Kˣ/N_L Lˣ` matches `Gal(M/K)^{ab} → Gal(L/K)^{ab}`; under base change the norm `N_{K'/K}` matches the natural map on abelianizations, which is the form `θ_{LE/E}(y)∣_L = θ_{L/K}(N_{E/K} y)` used in the crossing argument |
 | D.3, and 6.3 stage 1 | 7 | `cyclotomicCharacter_artinMap`, `cyclotomicCharacter_artinMap_padic` | `χ_cyc(Art_K(u)) = N_{K/ℚ_p}(u)⁻¹` in `ℤ_pˣ` for `K/ℚ_p` finite, and `χ_cyc(Art_{ℚ_p}(u)) = u⁻¹` at `u ∈ ℤ_pˣ`. ⚠ The field norm is part of the statement; without it the equation is ill-typed |
-| 5.2 item 1, the local norm index | 6, 7 | `Layer 6: finite-level reciprocity` (its index formula), `Layer 7: norm groups and the normic topology` | `[Kˣ : N_{L/K}Lˣ] = [L:K]` for `L/K` abelian, equivalently `#Ĥ⁰(Gal(L/K), Lˣ) = [L:K]`, with `NormGroup L/K` open of that index |
+| 5.2 item 1, the local norm index | 6, 7 | `Layer 6: finite-level reciprocity` (its index formula), `Layer 7: norm groups and the normic topology` | `[Kˣ : N_{L/K}Lˣ] = [L:K]` for `L/K` abelian, equivalently `#Ĥ⁰(Gal(L/K), Lˣ) = [L:K]`, with `normGroup L/K` open of that index |
 | 5.2 item 1, the local Herbrand factors | 5 | `Layer 5: the Herbrand quotient`, `herbrandQuotient`, `herbrandQuotient_of_finite_ker_coker` | `h(Gal(L/K), Lˣ) = [L:K]` and `h(Gal(L/K), 𝒪[L]ˣ) = 1` for cyclic `L/K`; and invariance under an equivariant map with finite kernel and finite cokernel, which 5.2 item 4 uses globally |
 | 5.1 item 9, the vanishing that makes the sum over places finite | 5 | `Layer 5: unramified cohomology` | `H^i(Gal(L/K), 𝒪[L]ˣ) = 0` for `i ≥ 1` and `L/K` unramified |
-| the local conductors assembled in 6.5, bounded in 7.4, and summed in D.4 and 9.2 | 7 | `Layer 7: ramification compatibility and the conductor` | `c(L/K) = sInf {n | U(K,n) ≤ NormGroup L/K}` and `𝔣(L/K) = 𝓂[K]^{c(L/K)}`, with **both** halves of the defining property, namely `U(K, c) ≤ NormGroup L/K` and `U(K, c−1) ≰ NormGroup L/K` when `c > 0`, and with `c = 0` exactly when `L/K` is unramified |
+| the local conductors assembled in 6.5, bounded in 7.4, and summed in D.4 and 9.2 | 7 | `conductorExponent`, `conductorIdeal`, `unitFiltration_conductorExponent_le_normGroup`, `not_unitFiltration_pred_le_normGroup`, `conductorExponent_eq_zero_iff` | `c(L/K) = sInf {n | U(K,n) ≤ normGroup L/K}` and `𝔣(L/K) = 𝓂[K]^{c(L/K)}`, with **both** halves of the defining property, namely `U(K, c) ≤ normGroup L/K` and `U(K, c−1) ≰ normGroup L/K` when `c > 0`, and with `c = 0` exactly when `L/K` is unramified. ⚠ The two definitions are total and the laws carry the finite-abelian hypothesis, so an unattained infimum is the junk value `0` and not a conductor of `0` |
 | the character exponents summed in D.4, and the local exponent `n_v(χ)` of 3.2 | 7 | `characterConductorExp`, `unitFiltration_characterConductorExp_le_ker` | `a(χ) = sInf {n | ∀ x ∈ U(K,n), χ x = 1}` for `χ : Kˣ →ₜ* ℂˣ` continuous, with attainment, so that `U(K, a(χ)) ≤ ker χ`; `a(χ) = 0` exactly for a character trivial on `𝒪[K]ˣ`. ⚠ Attainment is not a consequence of continuity alone: it uses that `ℂˣ` has no small subgroups, which is why the target is `ℂˣ` and not an arbitrary topological group |
-| 2C.6, the normalization it matches; 11.3, the finite invariants | 5 | `Layer 5: Br(K) is unramified` | `inv_K : H²(G_K, (Kˢ)ˣ) ≅ ℚ/ℤ`, normalized by evaluation at the arithmetic Frobenius, with `inv_L(res α) = [L:K] · inv_K(α)` and `inv_K(cor β) = inv_L(β)` |
+| 2C.6, the normalization it matches; 11.3, the finite invariants | 5 | `unitsRep`, `Br`, `invMap`, `brRes`, `brCor`, `invMap_brRes`, `invMap_brCor` | `inv_K : Br K ≃+ ℚ/ℤ`, where `Br K` is `H²(G_K, (Kˢ)ˣ)` on the coefficient object `unitsRep K`, normalized by evaluation at the arithmetic Frobenius, with `inv_L(res α) = [L:K] · inv_K(α)` and `inv_K(cor β) = inv_L(β)` at the two named maps, each taking a `K`-embedding `L ↪ Kˢ`. ⚠ The coefficient ring is `ℤ`, so `Br` is not a value of the supplier's `ZMod n`-linear `H`, and the two squares do not by themselves fix the sign |
 | the global fundamental class input of 11.1 and 11.3 | 5 | `Layer 5: fundamental classes and the class formation`, `FiniteClassFormation`, `FiniteClassFormation.restrict`, `FiniteClassFormation.topClass`, `FiniteClassFormation.restrict_cls`, `tateHTopEquiv`, `tateHTowerEquiv` | `u_{L/K}` with `inv_K(u_{L/K}) = 1/[L:K]` and compatibility in a tower; the structure's fields `cls`, `res`, `cor`, `h1_eq_zero`, `h2_cyclic`, `h2_card`, `res_cls`, `cor_cls`, `res_comp_cor`. ⚠ The order in `h2_card` is `Nat.card H`, never the index |
 | 11.1, Tate–Nakayama in degree `−2` and in all degrees | 5, 6 | `tateNakayama`, `tateNakayama_top`, `tateCupSigma`, `tateCup` | cup product with the distinguished class is an isomorphism `Ĥ^r(H, ℤ) ≅ Ĥ^{r+2}(H, M)` for every integer `r` and every `H ≤ G`, stated at `fcf.cls H` and at `fcf.topClass`. ⚠ There is no free class parameter: cup with an arbitrary `Ĥ²` class is not bijective |
 | the Tate carrier of 2C.5, 5.2, 5.4, 5.5 and 11.1 | 5, 6 | `tateH`, `tateMap`, `tateMap_id`, `tateMap_comp`, `ordinaryToTate`, `tateMap_ordinaryToTate`, `tateCup_agrees_ordinary`, `ordinaryCup` | `tateH M r` for `M : Rep ℤ G`, `G` finite, and every `r : ℤ`, with `Ĥ^n ≅ H^n` for `n ≥ 1` along `ordinaryToTate`, so that the ordinary `H¹` and `H²` of Layer 5 and the Tate groups are one theory |
@@ -407,7 +407,7 @@ local factors of `∏_v Art_{ℚ_v}(x)` on `ℚ(ζ_n)`, and needs two clauses, o
 2. *Away from it.* For `m` prime to `p`, prove that `ℚ_p(μ_m)/ℚ_p` is unramified and that
    `Art_{ℚ_p}(u)` acts trivially on `μ_m` for `u ∈ ℤ_pˣ`, so that only the uniformizer contributes
    and it contributes the arithmetic Frobenius. This is the consumed `unramifiedCoordinate_artinMap`
-   together with `Layer 2: norms`.
+   together with `mem_normGroup_iff_dvd_normalizedValuation`.
 
 D.1 is what makes `ℚ_p` the completion of `ℚ` at `(p)`, so that both clauses are statements about a
 place of `ℚ`.
@@ -433,8 +433,8 @@ reciprocity, by induction along the characters. Milestone 9.2 globalizes it, one
 through D.1.
 *Source.* Serre, *Corps Locaux*, Ch. VI §2, Proposition 6, and Ch. VI §3.
 *Prerequisites:* L D.1, R Local Fields `characterConductorExp`, R Local Fields `unitFiltration`,
-R Local Fields `Layer 7: ramification compatibility and the conductor`,
-R Local Fields `Layer 6: finite-level reciprocity`, M `differentIdeal`.
+R Local Fields `conductorExponent`, R Local Fields `conductorIdeal`,
+R Local Fields `normResidue`, M `differentIdeal`.
 **Basic API.**
 - *Constructors:* none. The character exponent is the supplier's `characterConductorExp`; what
   this milestone forms is the sum of it over the character group of `Gal(E/F)`.
@@ -774,8 +774,8 @@ where they carry as much weight as the finite ones.
 
 **2C.6. Invariants.** Prove `inv_ℂ = 0` and `inv_ℝ : H²(Gal(ℂ/ℝ), ℂˣ) ≃ (1/2)ℤ/ℤ ⊆ ℚ/ℤ`, with the
 nontrivial class going to `1/2`. State the compatibility with the normalization of the consumed
-`inv_K`, because Layer 11 adds the finite and infinite invariants together.
-*Prerequisites:* L 2C.5, R Local Fields `Layer 5: Br(K) is unramified`.
+`invMap`, because Layer 11 adds the finite and infinite invariants together.
+*Prerequisites:* L 2C.5, R Local Fields `invMap`.
 
 **2C.7. Ramification and conductors at infinity.** For finite abelian `L/K` and a real place `w` of
 `K`, prove that the following are equivalent: `w` is unramified in `L`; the local norm group at `w`
@@ -1039,9 +1039,10 @@ of the following is a target.
    compatibility statement that every later layer uses, and it holds by construction.
 8. Prove functoriality in `L`: `θ_{M/K}` restricts to `θ_{L/K}` for `K ⊆ L ⊆ M`.
 *Source.* Neukirch ANT VI §5; Milne CFT V §4.
-*Prerequisites:* L D.1, R Local Fields `artinMap`, R Local Fields `Layer 6: finite-level
-reciprocity`, R Local Fields `unramifiedCoordinate_artinMap`, R Local Fields `Layer 2: norms`,
-L 2B.6, L 2C.3, L 2A.1.
+*Prerequisites:* L D.1, R Local Fields `artinMap`, R Local Fields `normResidue`,
+R Local Fields `normResidue_uniformizer`, R Local Fields `unramifiedCoordinate_artinMap`,
+R Local Fields `map_norm_unitFiltration_zero`,
+R Local Fields `mem_normGroup_iff_dvd_normalizedValuation`, L 2B.6, L 2C.3, L 2A.1.
 
 **6.2. Surjectivity, without density.** Prove that `θ_{L/K}` is surjective. Argument: if the image
 were a proper subgroup, its fixed field would be a nontrivial subextension `M/K`, which may be taken
@@ -1051,7 +1052,7 @@ map would be surjective. By 2B.4 the global norm `N_{M/K} : I_M → I_K` would t
 `N_{M/K} C_M = C_K` and the norm index would be `1`. That contradicts `herbrand_ge` for nontrivial
 cyclic `M/K`. **Common error.** Do not import a Chebotarev-style density argument here.
 *Source.* Janusz V §5; Artin–Tate.
-*Prerequisites:* L 6.1, L 5.2, L 2B.4, R Local Fields `Layer 6: finite-level reciprocity`.
+*Prerequisites:* L 6.1, L 5.2, L 2B.4, R Local Fields `normResidue`.
 
 **6.3. The reciprocity law.** Prove `θ_{L/K}(Kˣ) = 1`, that is `∏_v Art_{K_v}(x)∣_L = 1` for `x ∈
 Kˣ`. The route has three stages.
@@ -1147,8 +1148,8 @@ place, prove that the following are equivalent: `v` is unramified in `L`; the lo
 𝔣(L/K)`. Prove the local assembly `𝔣(L/K) = ∏_v 𝔣_v`, with the finite local conductor exponents
 `c(L_w/K_v)` of the contract above and the real ones from 2C.7. Higher-ramification refinements are local and are not targets here;
 only the assembly is global.
-*Prerequisites:* L 6.4, L D.1, R Local Fields
-`Layer 7: ramification compatibility and the conductor`, L 2C.7.
+*Prerequisites:* L 6.4, L D.1, R Local Fields `conductorExponent`,
+R Local Fields `conductorIdeal`, L 2C.7.
 
 ### Layer 7: norm groups, the existence theorem, and ray class fields
 
@@ -1233,8 +1234,8 @@ for a unique finite abelian `L/K`. Decompose the proof.
    subgroups of `C_K` that are not open. The openness hypothesis does real work.
 *Source.* Milne CFT VII §9, items 9.1 to 9.5; Neukirch ANT VI §6; Janusz V §§7–9. Tate's article in
 Cassels–Fröhlich, p. 202, gives the route that avoids norm limitation.
-*Prerequisites:* L 6.4, L 7.1, L 7.2, L 2A.8, L 5.1, L 5.3, R Local Fields
-`Layer 6: finite-level reciprocity`, M `Set.unit`,
+*Prerequisites:* L 6.4, L 7.1, L 7.2, L 2A.8, L 5.1, L 5.3, R Local Fields `normResidue`,
+M `Set.unit`,
 M `Mathlib/FieldTheory/KummerExtension.lean`.
 
 **7.4. Ray class fields.** Define `K_𝔪` as the abelian extension inside `K̄` with `N(K_𝔪/K) =
@@ -1525,11 +1526,10 @@ external dependency.
 M `Field.absoluteGaloisGroup`, M `Mathlib/Topology/Algebra/Category/ProfiniteGrp/`.
 
 **11.3. Sum of local invariants.** Prove the exact sequence `0 → H²(G_K, K̄ˣ) → ⊕_v H²(G_{K_v},
-K̄_vˣ) → ℚ/ℤ → 0` in invariant-map coordinates. The local invariants come from the consumed `inv_K` at
-the finite places, and from 2C.6 at the infinite places. Prove the reciprocity statement `∑_v inv_v(α) =
-0` for
-a global class.
-*Prerequisites:* L 11.1, L 11.2, R Local Fields `Layer 5: Br(K) is unramified`, L 2C.6.
+K̄_vˣ) → ℚ/ℤ → 0` in invariant-map coordinates. The local invariants come from the consumed
+`invMap` at the finite places, and from 2C.6 at the infinite places. Prove the reciprocity
+statement `∑_v inv_v(α) = 0` for a global class.
+*Prerequisites:* L 11.1, L 11.2, R Local Fields `invMap`, R Local Fields `Br`, L 2C.6.
 
 **11.4. Hilbert reciprocity.** Prove `∏_v (a, b)_v = 1` for `a, b ∈ Kˣ`, with the local symbols from
 the consumed `hilbertSymbol` at the finite places and from 2C.8 at the real places. Derive quadratic reciprocity over
