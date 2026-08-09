@@ -2484,9 +2484,21 @@ maps.
 
 #### 9.2 The meromorphic function field
 
-For a compact connected Riemann surface `X`, define `M(X)`: the holomorphic maps
-`X → OnePoint ℂ` other than the constant `∞`, with the field structure defined chartwise off
-the polar sets and extended across them by removability. Prove:
+**The carrier, exactly.** For a compact connected Riemann surface `X`,
+
+```lean
+def M (X) := {f : X → OnePoint ℂ // MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f ∧ f ≠ fun _ => ∞}
+def poles (f : M X) : Set X := f ⁻¹' {∞}          -- finite, by 8.3
+```
+
+⚠ **"Defined chartwise off the polar set and extended by removability" is a proof, not a
+definition**, and the operations are pinned by a characterization instead. Each of `+`, `*`,
+`-`, `⁻¹` on `M X` is a **named target** given by its defining property: `f + g` is the
+unique element of `M X` that is holomorphic on all of `X` and agrees with the chartwise sum
+on `X ∖ (poles f ∪ poles g)`. Existence is removability at the finitely many excluded
+points; **uniqueness is the identity theorem**, and it is uniqueness that makes this a
+definition rather than a description. Spell out one such target in full; the other three
+follow the same shape. Then prove:
 
 - `M(X)` is a field — the milestone is that inverses exist, which is where the identity
   theorem enters: a nonzero `f` has isolated zeros, so `1/f` is holomorphic off a finite set
