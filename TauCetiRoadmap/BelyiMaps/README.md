@@ -4130,8 +4130,9 @@ the reader already knows: `cyclicTriple n` (the monodromy of `z ↦ zⁿ`: genus
 spherical, defined over `ℚ`, trivial passport structure) and `torusTriple` (degree `4`,
 genus `1`, Euclidean, regular with deck group `ℤ/4`, imprimitive, realized on an elliptic
 curve). The per-layer example obligations appear inside the milestones (0.8, 2.7, 3.5, 4.4,
-6.4, 10.8, 14.6); a layer introducing a new carrier without instantiating both threaded
-examples on it is incomplete.
+6.4, 8.5, 10.8, 14.6); a layer introducing a new carrier without instantiating both threaded
+examples on it is incomplete. Layer 8.5 is where `torusTriple` acquires its exact analytic
+and algebraic model, `y⁴ = t(t−1)` with `β = t`.
 
 ## Ordering
 
