@@ -140,13 +140,18 @@ as there.
 universal property and the characteristicity of its kernel under continuous automorphisms,
 the free pro-`p` group `freeProP`, and the identification
 `maximalProPQuotient p zHat ≃ₜ* Multiplicative ℤ_[p]` belong to the ProPGroups roadmap (its
-Layers 3 and 4). Layers 12 and 13 consume them. That roadmap's exponentiation stops at
-abelian pro-`p` groups; the **profinite
-exponentiation calculus** — `x ^ᶻ a` for `a ∈ ẑ` in an arbitrary profinite group, its laws,
-its `ℤ_ℓ`-specialization on pro-`ℓ` groups, and the comparison between the two — is owned
-here (Layer 12.1), in the generic `TauCeti/GroupTheory/Profinite/` home, exported for reuse.
-So is the continuous-outer-automorphism carrier (Layer 12.6), which no roadmap and no Mathlib
-file owns.
+Layers 3 and 4). Layers 12 and 13 consume them. ⚠ **What that roadmap supplies is the
+profinite completion of the infinite cyclic *group*, and Layers 12–13 need a *ring*.** There
+is no multiplication of two profinite exponents there, no `ẑˣ`, and no `ℓ`-adic component
+map — yet `(x ^ᶻ a) ^ᶻ b = x ^ᶻ (a·b)`, the cyclotomic character `Gal(ℚ̄/ℚ) →* ẑˣ`, and the
+pro-`ℓ` comparison all need them. So this roadmap owns, in the generic
+`TauCeti/GroupTheory/Profinite/` home and exported for reuse: the **profinite integers as a
+topological commutative ring** with their finite and `ℓ`-adic projections and unit group
+(Layer 12.1); the **profinite exponentiation calculus** — `x ^ᶻ a` for `a ∈ ẑ` in an
+arbitrary profinite group, its laws, its `ℤ_ℓ`-specialization on pro-`ℓ` groups, and the
+comparison between the two (Layers 12.2, 12.3), that roadmap's exponentiation stopping at
+abelian pro-`p` groups; and the **continuous-outer-automorphism carrier** (Layer 12.7), which
+no roadmap and no Mathlib file owns.
 
 Path note: AlgebraicCurves, PolynomialGaloisGroups, and ProPGroups are under review as pull
 requests on this repository; their paths become `../AlgebraicCurves/README.md`,
@@ -308,17 +313,17 @@ peripheral element the *conjugate*
 and **not** `P⁻¹ · C · P`. The peripheral-power theorems of Layer 13 transfer along it by the
 conjugation-transfer lemma of 13.3, whose conjugator is computed rather than guessed.
 
-**Profinite powers.** Powers `x ^ᶻ a` by `a ∈ ẑ` are the canonical operation of Layer 12.1,
+**Profinite powers.** Powers `x ^ᶻ a` by `a ∈ ẑ` are the canonical operation of Layer 12.2,
 defined through the universal property of the profinite completion of `ℤ`; powers by
 `u ∈ ℤ_ℓ` on a pro-`ℓ` group factor through the `ℓ`-adic component, and the comparison is a
-theorem (Layer 12.2), not a definition. No milestone raises a profinite element to an
+theorem (Layer 12.3), not a definition. No milestone raises a profinite element to an
 "integer representative" power.
 
 **The absolute Galois group and the cyclotomic character.** `Gal(ℚ̄/ℚ)` is the pin's
 `Field.absoluteGaloisGroup ℚ` with `ℚ̄ = AlgebraicClosure ℚ` fixed once. The cyclotomic
 characters are the pin's `modularCyclotomicCharacter n` and `cyclotomicCharacter ℓ`, whose
 defining convention is `g ζ = ζ ^ χ(g)` on `n`-th (respectively `ℓ`-power) roots of unity.
-The branch-cycle exponent in Layer 12.8 is `χ(σ)` in exactly this normalization; the
+The branch-cycle exponent in Layer 12.9 is `χ(σ)` in exactly this normalization; the
 milestone states the finite-level `ζ_n` identity explicitly so that a sign or inverse error
 cannot hide in prose. ⚠ Sources using the geometric (inverse) convention for the Galois
 action on covers state the theorem with `χ(σ)⁻¹`; each citation records the source's
@@ -360,7 +365,7 @@ cites the name and never restates the object.
 | 8.2 | ConformalMapping L0 | local degree of a holomorphic map | `TauCeti.exists_localDegree` |
 | 8.5, 9.2 | ModularForms Layer 10B (i)–(v) | sheaves `𝒪_D`, finiteness of `H¹`, analytic Riemann–Roch, Serre duality, Riemann–Hurwitz, meromorphic sections of line bundles | the 10B chain, cited by its milestone numbers |
 | 9.1, 9.4 | AlgebraicCurves Layers 0–8, 12 | `IsFunctionField`, `Place`, `Divisor`, genus, Riemann–Roch, ramification, the different, Riemann–Hurwitz, the regular projective model and anti-equivalence | `IsFunctionField`, `Place`, `Divisor`, `riemannRochSpace`, `genus`, Layers 6–7 and 12A–12E |
-| 12.5, 12.1 | ProPGroups Layers 3, 4 | free profinite group, maximal pro-`p` quotient, universal properties, characteristic kernel, `zHat` | `freeProfiniteGroup`, `freeProfiniteGroup.of`, `freeProfiniteGroup.lift`, `proPKernel`, `maximalProPQuotient`, `freeProP`, `zHat`, `maximalProPQuotient p zHat ≃ₜ* Multiplicative ℤ_[p]` |
+| 12.1, 12.3, 12.6 | ProPGroups Layers 3, 4 | free profinite group, maximal pro-`p` quotient, universal properties, characteristic kernel, `zHat` as a **group** | `freeProfiniteGroup`, `freeProfiniteGroup.of`, `freeProfiniteGroup.lift`, `proPKernel`, `maximalProPQuotient`, `freeProP`, `zHat`, `maximalProPQuotient p zHat ≃ₜ* Multiplicative ℤ_[p]` |
 
 Merged Tau Ceti files (`RepresentationTheory/CharacterTable/`, `UniversalCover/`,
 `Conformal/`) supply the implemented halves of those contracts; `PROVENANCE.md` records which
@@ -690,7 +695,7 @@ State the label-semantics predicate for the stable mathematical part of a passpo
 degree, `nTj` group, and the three partitions — as a predicate on `PassportSpec`, and prove
 it invariant under conjugating the reference subgroup. The final orbit letter of a full
 LMFDB label is an external enumeration of Galois orbits inside a passport; it is
-deliberately not interpreted at this layer (Layer 14.4 records its status).
+deliberately not interpreted at this layer (Layer 14.5 records its status).
 
 *Prerequisites:* Layer 1.1; PolynomialGaloisGroups Layers 6, 7.
 
@@ -824,7 +829,24 @@ in Lean, not asserted as rewriting folklore. In particular `t ∘ s` is the cycl
 - *Dessins.* Under Layer 2.4, `s` exchanges black and white vertices, and `t` is the
   classical duality exchanging white vertices with faces.
 
-*Prerequisites:* Layers 0.2, 0.5, 0.6, 2.4.
+**The induced action on passports, and the three objects that must not be confused.** The
+passport of Layer 1.1 is **ordered** by `(0, 1, ∞)` and stays so; the branch-point action
+gives a second, coarser object on top of it. Define:
+
+- `OrderedPassport n := PassportSpec n` restricted to admissible specifications — the
+  intrinsic invariant of Layers 1–3, ordered, and the one `passportOf` produces;
+- the induced `S₃`-action on `OrderedPassport n`, permuting `(λ0, λ1, λinf)` and fixing the
+  reference subgroup up to conjugacy, with the equivariance
+  `passportOf (s · t) = s · passportOf t` for each of the six operations;
+- the **orbit** of an ordered passport under that action, a set of at most six ordered
+  passports.
+
+Prove that the `S₃`-orbit is a coarser invariant than the ordered passport, with a witness
+where the orbit has fewer than six elements. ⚠ A **tabulated representative** — one chosen
+member of an orbit — is a third thing again, and it is not defined here: it is a database
+convention with no intrinsic content, and Layer 14.4 is where it is certified as such.
+
+*Prerequisites:* Layers 0.2, 0.5, 0.6, 1.1, 2.4.
 
 #### 2.7 Dessin examples
 
@@ -1351,7 +1373,7 @@ Prove the four facts the rest of the layer runs on, each an explicit computation
   Layer 6.3 is where the two are matched.
 - *Edge cases.* `A` and `B` are each connected but neither is simply connected; `A ∩ B` is
   simply connected but is **not** all of `U`.
-- *Downstream interfaces.* Layers 6, 7, 8, and the analytic side of 12.3.
+- *Downstream interfaces.* Layers 6, 7, 8, and the analytic side of 12.4.
 
 ⚠ *Nearby false statement:* `A ∩ B` is simply connected only because both punctures lie
 on its boundary lines `re = 0` and `re = 1`. Sliding the cut to `A = U ∩ {re < 1/2}`,
@@ -1441,7 +1463,7 @@ taking `IsCoveringMap.monodromy_bijective` for the `Equiv` and
 homomorphism with no `ᵐᵒᵖ` and no inversion; the roadmap's product relation
 (§Pinned conventions) is the consequence. A treatment that composes paths in the other
 order gets an antihomomorphism here and must invert, and that inversion propagates all the
-way to the branch-cycle exponent of Layer 12.10.
+way to the branch-cycle exponent of Layer 12.11.
 
 *Prerequisites:* Mathlib `IsCoveringMap.monodromy`, `monodromy_trans_apply`,
 `monodromy_bijective`, `CategoryTheory.End.mul_def`.
@@ -1599,7 +1621,7 @@ carries the peripheral elements to conjugates of themselves, and the three perip
 **conjugacy classes** are independent of the path and of the basepoint. State the
 conjugacy-class invariance as the milestone; the element-level statement is false without
 fixing a path, and that failure is the topological origin of the outer form of the Galois
-action in Layer 12.7.
+action in Layer 12.8.
 
 *Prerequisites:* Layers 5.2, 5.6; UniversalCovers milestone 7's basepoint-change API.
 
@@ -2390,7 +2412,7 @@ order — the `0, 1, ∞` convention, algebraically.
   proved equivalent rather than offered as a second definition.
 - *Edge cases.* Unramified over one or two of the three places; `F = k(t)` itself; `k` not
   algebraically closed, where residue degrees above a marked place can exceed `1`.
-- *Downstream interfaces.* Layers 9.5, 9.7, 10, 11, 12.3 — all of which inherit
+- *Downstream interfaces.* Layers 9.5, 9.7, 10, 11, 12.4 — all of which inherit
   `[CharZero k]` from here and none of which re-derives it.
 
 ⚠ *Nearby false statement:* "branch locus equal to `{0,1,∞}`" is the wrong condition. The
@@ -2779,10 +2801,35 @@ and scaling to determinant `1` needs `√λ`, which is not rational in general. 
 uses `x ↦ λx` to normalize the third point, so the distinction is load-bearing rather than
 pedantic.
 
-*Source:* Köck, **(3.6) Lemma**, with the polynomial exactly as displayed; Belyi's original
-argument uses the same polynomial.
+**Polynomial Belyification over `ℚ`**, a separate statement of this milestone because Layer
+13.5 needs it and the rational-function version does not imply it:
 
-*Prerequisites:* Layer 10.1; Mathlib polynomial calculus,
+```text
+for every finite S ⊂ ℙ¹(ℚ̄) with ∞ ∈ S there is a POLYNOMIAL q ∈ ℚ[x] with
+    q(∞) = ∞  and  Crit(q) ∪ q(S ∖ {∞}) ⊆ {0, 1, ∞} .
+```
+
+Route: 10.2's degree reduction already uses minimal polynomials, which are polynomials and
+send `∞ ↦ ∞`; the induction above is then run with **affine** normalizations `x ↦ ax + b`
+over `ℚ` only, choosing among three rational points the least and the greatest **in the real
+order on `ℚ`** to go to `0` and `1`, so that the third lands in the open interval `(0,1)`
+and is `m/(m+n)` with `m, n` **positive** coprime integers — which is exactly the condition
+making `B_{m,n}` a polynomial rather than a rational function. Composites of polynomials are
+polynomials, and `∞` remains a critical value at every stage.
+
+⚠ **A general rational Belyi map does not suffice**, and this is not a stylistic preference.
+Layer 13.5 needs `P⁻¹(∞) = {∞}` so that every isomorphism of the resulting pairs fixes `∞`
+and is therefore affine; a `q` with a finite pole gives `P` extra poles, the dessin is no
+longer a tree, and the argument's key step disappears. ⚠ Nor may `x ↦ 1/x` be used to move a
+point out of the way: it does not fix `∞`, and it is what makes the general normalization
+`PGL₂` rather than affine.
+
+*Source:* Köck, **(3.6) Lemma**, with the polynomial exactly as displayed; Belyi's original
+argument uses the same polynomial. Girondo–González-Diez §3.1 runs the same algorithm and
+asserts in the proof of its **Theorem 4.49** that it returns a polynomial `q ∈ ℚ[x]`; the
+displayed statement is that assertion made into a target.
+
+*Prerequisites:* Layers 10.1, 10.2; Mathlib polynomial calculus,
 `Matrix.GeneralLinearGroup`/`Matrix.GeneralLinearGroup.det` and the `GL(2)` Möbius action
 on `OnePoint`.
 
@@ -3130,10 +3177,11 @@ separate from `trueOrbitSize` for exactly this reason.
 
 ### Layer 12: profinite powers, the fundamental group, and the branch-cycle theorem
 
-The layer opens with two milestones of generic profinite group theory — the exponentiation
-calculus that every later statement is phrased with, which depends on nothing else in this
-roadmap. It comes first because 12.9 and 12.10 both consume it, so that the layer's
-prerequisites run strictly backwards.
+The layer opens with three milestones of generic profinite algebra — the profinite integers
+as a **ring**, the exponentiation calculus that every later statement is phrased with, and
+its pro-`ℓ` specialization. They come first because 12.10 and 12.11 both consume them, so
+that the layer's prerequisites run strictly backwards, and they depend on nothing else in
+this roadmap.
 
 The fundamental group's carrier is field-theoretic: the Galois theory of the maximal
 extension of `ℚ̄(t)` unramified outside the three marked places. Every object is then Mathlib Galois theory plus
@@ -3142,16 +3190,55 @@ the comparison with a scheme-theoretic `π₁` is an explicit scope exclusion. T
 Galois-category machinery is available for classification statements and is cited where it
 shortens one, but it is not the definition.
 
-#### 12.1 The profinite exponentiation calculus
+#### 12.1 The profinite integers as a topological ring
+
+⚠ **The supplier provides a group, and this layer needs a ring.** ProPGroups supplies the
+profinite completion of the infinite cyclic **group** and its maximal pro-`p` quotients.
+That gives no multiplication of two profinite exponents, no unit group, and no compatible
+projections to finite rings — yet 12.2's law `(x ^ᶻ a) ^ᶻ b = x ^ᶻ (a·b)`, 12.10's character
+`χ : Gal(ℚ̄/ℚ) →* ẑˣ` and 12.3's `ℓ`-adic component all need exactly those. This milestone
+builds them, in the generic `TauCeti/GroupTheory/Profinite/` home, and everything below
+consumes it.
+
+**New object: `ProfiniteInt`.** Either constructed here as `lim (ZMod n)` over the divisibility
+order, or taken as the accepted supplier spelling if ProPGroups later owns it; the roadmap
+cites the name and the API, not the construction. Required:
+
+- *Carrier and instances.* A topological commutative ring structure: `CommRing ProfiniteInt`,
+  `TopologicalSpace`, `IsTopologicalRing`, compactness, total disconnectedness, and
+  `T2Space`.
+- *The group comparison.* A `ContinuousMulEquiv` between the additive/procyclic group of
+  `ProfiniteInt` and ProPGroups' `zHat`, so that `ẑ` in this roadmap means one object with
+  two structures and no milestone silently switches. State it as a named theorem, not as a
+  definitional identification.
+- *Projections.* Continuous ring homomorphisms `ProfiniteInt →+* ZMod n` for every `n`, with
+  the compatibility `ZMod m → ZMod n` for `n ∣ m`; the induced map to the inverse limit is
+  an isomorphism (the universal/limit property).
+- *`ℓ`-adic components.* A continuous ring homomorphism `ProfiniteInt →+* ℤ_[ℓ]` for each
+  prime `ℓ`, compatible with the `ZMod ℓ^k` projections, and the theorem that the induced
+  map to `∏_ℓ ℤ_[ℓ]` is a topological ring isomorphism.
+- *Units.* The unit group `ProfiniteIntˣ` with its topology, and the criterion
+  `a ∈ ProfiniteIntˣ ↔ ∀ n, image of a in ZMod n is a unit ↔ ∀ ℓ, component_ℓ a ∈ ℤ_[ℓ]ˣ`.
+- *The universal property for characters.* A compatible system of homomorphisms into
+  `(ZMod n)ˣ` assembles into one homomorphism into `ProfiniteIntˣ`; this is what 12.10 uses
+  to build the cyclotomic character out of the pin's finite levels.
+- *Edge cases.* `ProfiniteInt` is not a domain (it is `∏_ℓ ℤ_[ℓ]`); `ℤ → ProfiniteInt` is
+  injective with dense image.
+
+*Prerequisites:* Mathlib `ZMod`, `PadicInt`, `ProfiniteGrp`, inverse limits of topological
+rings; ProPGroups Layers 0, 4 for `zHat` and its group API.
+
+#### 12.2 The profinite exponentiation calculus
 
 Owned here, in the generic profinite namespace, and exported for reuse; ProPGroups stops at
 abelian pro-`p` groups and gains no dependency on this roadmap. Neither this milestone nor
-the next mentions Belyi maps, and neither depends on any earlier layer.
+the next mentions Belyi maps.
 
-Carrier: `ẑ := profiniteCompletion ℤ` (ProPGroups' `zHat`, cited not restated). For a
-profinite group `G` and `x : G`, define `x ^ᶻ a` for `a : ẑ` as the image of `a` under the
-unique continuous homomorphism `ẑ → G` sending `1` to `x` — the completion's universal
-property applied to `n ↦ xⁿ`, which lands in the closed procyclic subgroup generated by `x`.
+Carrier: `ẑ := ProfiniteInt` of 12.1, whose underlying procyclic group is ProPGroups' `zHat`
+by 12.1's comparison. For a profinite group `G` and `x : G`, define `x ^ᶻ a` for `a : ẑ` as
+the image of `a` under the unique continuous homomorphism `ẑ → G` sending `1` to `x` — the
+completion's universal property applied to `n ↦ xⁿ`, which lands in the closed procyclic
+subgroup generated by `x`.
 
 **New object: `^ᶻ`.** Basic API:
 
@@ -3161,42 +3248,51 @@ property applied to `n ↦ xⁿ`, which lands in the closed procyclic subgroup g
   multiplication.
 - *Morphisms and functoriality.* **Naturality**: `f (x ^ᶻ a) = (f x) ^ᶻ a` for every
   continuous homomorphism `f`. This is the workhorse of the whole layer — it gives the
-  conjugation instance `(c⁻¹ x c) ^ᶻ a = c⁻¹ (x ^ᶻ a) c` used in 12.10 and 13.3, and the
-  quotient instance used in 12.2.
-- *Comparison lemmas.* `x ^ᶻ (a + b) = x ^ᶻ a * x ^ᶻ b`, `(x ^ᶻ a) ^ᶻ b = x ^ᶻ (a * b)`,
-  and continuity in `a` and jointly in `(x, a)`.
-- *Edge cases.* `x` of finite order, where `^ᶻ` factors through `ẑ ↠ ℤ/orderOf x`; `x = 1`.
-- *Downstream interfaces.* Layers 12.9, 12.10, 12.2, 13.3.
+  conjugation instance `(c⁻¹ x c) ^ᶻ a = c⁻¹ (x ^ᶻ a) c` used in 12.11 and 13.3, and the
+  quotient instance used in 12.3.
+- *Comparison lemmas.* `x ^ᶻ (a + b) = x ^ᶻ a * x ^ᶻ b`, and
+  `(x ^ᶻ a) ^ᶻ b = x ^ᶻ (a * b)` — **the product here is 12.1's ring multiplication**, and
+  the law is what forces the ring milestone to precede this one; and continuity in `a` and
+  jointly in `(x, a)`.
+- *Edge cases.* `x` of finite order, where `^ᶻ` factors through the ring surjection
+  `ẑ ↠ ZMod (orderOf x)` of 12.1; `x = 1`.
+- *Downstream interfaces.* Layers 12.10, 12.11, 12.3, 13.3.
 
 ⚠ *Nearby false statement:* `x ^ᶻ a` is not "`x` to the power of an integer representative
 of `a`". No such representative exists, and the operation is defined by the universal
 property, never by a choice. Nor is `(xy) ^ᶻ a = x ^ᶻ a · y ^ᶻ a` — that needs `x` and `y`
 to commute.
 
-*Prerequisites:* Mathlib `ProfiniteGrp.profiniteCompletion` with `lift` and the adjunction;
-ProPGroups Layers 0, 4 for `zHat` and its API.
+*Prerequisites:* Layer 12.1; Mathlib `ProfiniteGrp.profiniteCompletion` with `lift` and the
+adjunction; ProPGroups Layers 0, 4 for `zHat` and its API.
 
-#### 12.2 Pro-`ℓ` powers and the component comparison
+#### 12.3 Pro-`ℓ` powers and the component comparison
 
 On a pro-`ℓ` group the power depends only on the `ℓ`-adic component of the exponent. Using
 ProPGroups Layer 4's `maximalProPQuotient ℓ zHat ≃ₜ* Multiplicative ℤ_[ℓ]`, define the
 `ℤ_ℓ`-power `x ^[ℓ] u` for `u : ℤ_[ℓ]` on a pro-`ℓ` group, prove it satisfies the same laws
-as 12.1, and prove the comparison
+as 12.2, and prove the comparison
 
 ```text
 x ^ᶻ a = x ^[ℓ] (component_ℓ a)
 ```
 
 by factoring the powering homomorphism `ẑ → G` through the maximal pro-`ℓ` quotient of `ẑ`
-— legitimate by ProPGroups Layer 3's universal property, since `G` is pro-`ℓ`.
+— legitimate by ProPGroups Layer 3's universal property, since `G` is pro-`ℓ` — and
+identifying that quotient with `ℤ_[ℓ]` compatibly with 12.1's component map, so that
+`component_ℓ` here is the ring homomorphism of 12.1 and not a second unrelated projection.
+
+⚠ Every statement in this milestone and every consumer of `^[ℓ]` below carries
+`[Fact ℓ.Prime]`; `ℤ_[ℓ]` and the maximal pro-`ℓ` quotient are not the intended objects
+otherwise.
 
 ⚠ *Nearby false statement:* the factorization uses that the *target* is pro-`ℓ`. On a
 general profinite group the `ℓ`-adic component of `a` does not determine `x ^ᶻ a`, and no
 milestone applies `^[ℓ]` outside a pro-`ℓ` group.
 
-*Prerequisites:* Layer 12.1; ProPGroups Layers 3, 4.
+*Prerequisites:* Layers 12.1, 12.2; ProPGroups Layers 3, 4; Mathlib `Fact`, `PadicInt`.
 
-#### 12.3 The `ℚ̄`/`ℂ` comparison of finite covers
+#### 12.4 The `ℚ̄`/`ℂ` comparison of finite covers
 
 Base change along a fixed embedding `ℚ̄ ↪ ℂ` is an equivalence from algebraic Belyi pairs
 over `ℚ̄` to algebraic Belyi pairs over `ℂ`: essentially surjective by 10.7, fully faithful
@@ -3221,7 +3317,7 @@ supplies essential surjectivity in that form.
 
 *Prerequisites:* Layers 6.3, 9.5–9.8, 10.7; AlgebraicCurves Layer 8.
 
-#### 12.4 The geometric fundamental group
+#### 12.5 The geometric fundamental group
 
 Fix an algebraic closure of `ℚ̄(t)` and let `Ω` be the compositum of all finite
 subextensions unramified outside the three marked places. Prove `Ω/ℚ̄(t)` is Galois — a
@@ -3240,15 +3336,15 @@ with the Krull topology, a profinite group.
   open normal subgroups with the finite Galois subextensions unramified outside the marked
   places.
 - *Examples.* The Kummer subextensions `ℚ̄(t^{1/n})` (unramified outside `0, ∞`) and their
-  analogues at `1`; these are the worked instances 12.8 and 12.10 run on.
+  analogues at `1`; these are the worked instances 12.9 and 12.11 run on.
 - *Morphisms and functoriality.* Finite continuous quotients correspond to finite Belyi
   covers, via the Galois closure of the pair's function field, with the correspondence
-  matching monodromy groups; through 12.3 and 6.3 this matches, at every finite level, the
+  matching monodromy groups; through 12.4 and 6.3 this matches, at every finite level, the
   finite quotients of `FreeGroup (Fin 2)`.
 - *Comparison lemmas.* Compatibility of the correspondence with composition of covers and
   with the branch-point action of Layer 2.6.
 - *Edge cases.* The trivial cover; a cover unramified over some of the three places.
-- *Downstream interfaces.* Layers 12.5, 12.7, 12.8, 13.1.
+- *Downstream interfaces.* Layers 12.6, 12.8, 12.9, 13.1.
 
 *Source:* the finite-level statement this layer takes to the limit is
 Girondo–González-Diez **Theorem 2.71**, `Mon(x) ≅ Gal(M(S_F)/ℂ(x̃))` — the monodromy group of
@@ -3257,37 +3353,66 @@ a covering of `ℙ¹` is the Galois group of the corresponding function-field ex
 normalization as the Galois closure. That is the bridge that lets this layer define `π₁ᵍᵉᵒ`
 field-theoretically and still have it classify covers.
 
-*Prerequisites:* Layers 6.3, 12.3; AlgebraicCurves Layer 6; Mathlib infinite Galois theory,
+*Prerequisites:* Layers 6.3, 12.4; AlgebraicCurves Layer 6; Mathlib infinite Galois theory,
 Krull topology, `IsGalois`.
 
-#### 12.5 The comparison isomorphism
+#### 12.6 The comparison isomorphism
 
-The finite-level bijections of 12.4 assemble into a continuous isomorphism
+The continuous isomorphism
 
 ```text
-π₁ᵍᵉᵒ  ≃ₜ*  profiniteCompletion (FreeGroup (Fin 2))
+π₁ᵍᵉᵒ  ≃ₜ*  profiniteCompletion (FreeGroup (Fin 2)) ,
 ```
 
-by the universal property of the completion together with the fact that a profinite group
-is the limit of its finite continuous quotients (ProPGroups Layer 0). The milestone pins the
-isomorphism, not merely its existence: it carries the peripheral inertia classes of 12.8 to
-the classes of `P`, `T`, `C` of §Pinned conventions, in that order.
+**un-oriented**: this milestone constructs one specific isomorphism, determined by the fixed
+embedding `ℚ̄ ↪ ℂ` and the basepoint `b` of 5.1, and says nothing about where the peripheral
+inertia classes go. That statement is 12.9, which consumes the inertia milestone and
+therefore cannot be part of this one.
+
+⚠ **A family of finite-level bijections does not assemble into a group isomorphism.** There
+is no map to build from bijections of *sets of isomorphism classes* of covers, and even a
+compatible system of group isomorphisms of automorphism groups would need naturality with
+respect to the quotient maps before the limit is a homomorphism. The construction therefore
+goes through fiber functors, and every bridge is a separate target:
+
+1. **The topological Galois category.** The category of finite covers of `U` (Layer 6.1's
+   unnumbered carrier), with the fiber functor `Fib_b : E ↦ p ⁻¹' {b}` to finite sets. Prove
+   it satisfies the pin's `PreGaloisCategory` and `FiberFunctor` axioms.
+2. **The algebraic Galois category.** The category of finite subextensions of `Ω/ℚ̄(t)`
+   (12.5), equivalently of finite covers unramified outside the three marked places, with
+   the geometric fiber functor determined by the fixed embedding `ℚ̄ ↪ ℂ` and the point `b`.
+   Prove the same axioms.
+3. **An equivalence compatible with the fiber functors.** A natural equivalence of the two
+   categories together with a natural isomorphism of the two fiber functors, assembled from
+   12.4 and 9.5–9.8. It is the compatibility with the fiber functors, not the equivalence
+   alone, that makes the next step available.
+4. **Automorphism groups of fiber functors.** The induced continuous isomorphism
+   `Aut(Fib_alg) ≃ₜ* Aut(Fib_top)`, through Mathlib's Galois-category API
+   (`PreGaloisCategory`, `FiberFunctor`, the profinite topology on `Aut F`,
+   `IsFundamentalGroup.toAutMulEquiv`).
+5. **Identification of both sides.** `Aut(Fib_alg) ≃ₜ* π₁ᵍᵉᵒ` — the fiber functor of the
+   Galois category of finite subextensions has automorphism group the Galois group — and
+   `Aut(Fib_top) ≃ₜ* profiniteCompletion (FreeGroup (Fin 2))`, through Layer 5.6's free
+   generation and the completion's universal property. Composing 4 and 5 gives the displayed
+   isomorphism.
 
 This is the profinite Riemann existence theorem, and it is the single place where the
-analytic work of Layers 5–9 enters the arithmetic: the finite-level bijections it assembles
-come from 12.3, which rests on 10.7, which rests on the analytic classification.
+analytic work of Layers 5–9 enters the arithmetic: step 3 rests on 12.4, which rests on
+10.7, which rests on the analytic classification.
 
 *Source:* Szamuely **Example 4.6.12(3)** states exactly this: for `k` algebraically closed
 of characteristic `0`, `π₁(ℙ¹_k ∖ {0,1,∞})` is the free profinite group on two generators —
 and draws the consequence this roadmap's Layer 3 makes finite, that every two-generated
 finite group is the Galois group of a cover étale outside the three points. **Example
 4.6.12(2)** is the Kummer case `π₁(ℙ¹_k ∖ {0,∞}) ≅ ẑ`, realized by normalizing in `xⁿ = t`,
-which is the tower Layers 12.8 and 12.10 compute with.
+which is the tower Layers 12.9 and 12.11 compute with.
 
-*Prerequisites:* Layers 5.6, 12.4; ProPGroups Layers 0, 4; Mathlib
-`ProfiniteGrp.profiniteCompletion` with its adjunction.
+*Prerequisites:* Layers 5.6, 6.1, 6.3, 12.4, 12.5; ProPGroups Layers 0, 4; Mathlib
+`PreGaloisCategory`, `FiberFunctor`, `functorToContAction`, `IsFundamentalGroup` with
+`toAutMulEquiv`, the profinite topology on `Aut F`, `ProfiniteGrp.profiniteCompletion` with
+its adjunction.
 
-#### 12.6 Continuous outer automorphisms
+#### 12.7 Continuous outer automorphisms
 
 The generic carrier, owned here because neither Mathlib nor any sibling roadmap has one,
 and placed in the generic profinite namespace so that it is reusable.
@@ -3308,20 +3433,20 @@ API:
   `ContinuousOut G → ContinuousOut (G ⧸ N)`. This is what makes Layer 13.1's descent to the
   pro-`ℓ` quotient legitimate, and it is stated here rather than there.
 - *Comparison lemmas.* The action of `ContinuousOut G` on the set of conjugacy classes of
-  `G`, and on closed subgroups up to conjugacy — the two actions every statement in 12.10
+  `G`, and on closed subgroups up to conjugacy — the two actions every statement in 12.11
   and 13.3 is phrased against, since neither is defined on elements.
 - *Edge cases.* An automorphism that is inner as an abstract automorphism but not by a
   continuous inner map — impossible for profinite `G`, and worth the lemma.
-- *Downstream interfaces.* Layers 12.7, 12.10, 13.1, 13.3.
+- *Downstream interfaces.* Layers 12.8, 12.11, 13.1, 13.3.
 
 **The outer action of an extension.** For a topological group `E` with closed normal `N`,
 conjugation gives `E ⧸ N → ContinuousOut N`, well-defined because conjugation by an element
-of `N` is inner. Stated generically here; applied in 12.7.
+of `N` is inner. Stated generically here; applied in 12.8.
 
 *Prerequisites:* Mathlib `ContinuousMulEquiv`, `MulAut`, `QuotientGroup`; the pattern of
 `CategoryTheory/Galois/Topology.lean`.
 
-#### 12.7 The arithmetic extension and the outer action
+#### 12.8 The arithmetic extension and the outer action
 
 `Ω/ℚ(t)` is Galois, and restriction gives the exact sequence
 
@@ -3330,8 +3455,8 @@ of `N` is inner. Stated generically here; applied in 12.7.
 ```
 
 the surjectivity on the right being that `ℚ̄` and `ℚ̄(t)` are linearly disjoint over `ℚ(t)`
-— `t` is transcendental — so `Gal(ℚ̄(t)/ℚ(t)) ≅ Gal(ℚ̄/ℚ)`. Applying 12.6's
-extension construction and transporting along 12.5 gives the outer action
+— `t` is transcendental — so `Gal(ℚ̄(t)/ℚ(t)) ≅ Gal(ℚ̄/ℚ)`. Applying 12.7's
+extension construction and transporting along 12.6 gives the outer action
 
 ```text
 ρ : Gal(ℚ̄/ℚ) →* ContinuousOut (profiniteCompletion (FreeGroup (Fin 2))) .
@@ -3346,33 +3471,50 @@ conjugacy classes or in outer form for that reason, not because a lift is unavai
 Choosing one, and tracking what it does, is the tangential-basepoint theory this roadmap
 excludes. Nor is `ρ` asserted continuous — nothing here needs it.
 
-*Prerequisites:* Layers 12.4, 12.5, 12.6; Mathlib infinite Galois theory, linear
+*Prerequisites:* Layers 12.5, 12.6, 12.7; Mathlib infinite Galois theory, linear
 disjointness.
 
-#### 12.8 Peripheral inertia
+#### 12.9 Peripheral inertia, and the orientation of the comparison
 
-For each marked place, the inertia subgroups of `π₁ᵍᵉᵒ` at the places of `Ω` above it, as
-the compatible system of finite-level inertia subgroups.
+**Three separate things, in increasing order of how much choice they need.** Conflating them
+is how a roadmap ends up asserting a canonical generator that does not exist.
 
-The structural input, proved at finite level first: **in characteristic zero the inertia
-group of a place in a finite Galois extension of function fields over `ℚ̄` is cyclic of
-order `e`**, because wild inertia is a `p`-group for `p` the residue characteristic and
-here `p = 0`; and the canonical tame character
+1. **The inertia subgroup**, canonical **only up to conjugacy.** For each marked place, the
+   inertia subgroups of `π₁ᵍᵉᵒ` at the places of `Ω` above it, as the compatible system of
+   finite-level inertia subgroups. The structural input, proved at finite level first:
+   **in characteristic zero the inertia group of a place in a finite Galois extension of
+   function fields over `ℚ̄` is cyclic of order `e`**, because wild inertia is a `p`-group
+   for `p` the residue characteristic and here `p = 0`. The subgroups over one place are all
+   conjugate, by transitivity of the Galois action on the places above a place, and no one
+   of them is preferred; the well-defined object is the **conjugacy class of closed
+   subgroups**, and Layer 12.7's action of `ContinuousOut` on that set is what later
+   statements are phrased against.
+2. **The tame character**, canonical **given the roots of unity.** For a uniformizer `π`,
 
-```text
-γ ↦ γ(π)/π mod 𝔪 ∈ μ_e(ℚ̄)
-```
+   ```text
+   γ ↦ γ(π)/π mod 𝔪 ∈ μ_e(ℚ̄)
+   ```
 
-for a uniformizer `π` is an injective homomorphism independent of the choice of `π`.
-Assembling over the tower: each inertia subgroup of `π₁ᵍᵉᵒ` over a marked place is
-procyclic with a canonical isomorphism to `lim μ_n(ℚ̄)`, and all of them over one place are
-conjugate (transitivity of the Galois action on the places above a place).
+   is an injective homomorphism independent of the choice of `π`. Assembling over the tower,
+   each inertia subgroup of `π₁ᵍᵉᵒ` over a marked place is procyclic with a canonical
+   isomorphism to `lim μ_n(ℚ̄)` — the Tate twist `ẑ(1)`. ⚠ This is an isomorphism onto
+   `lim μ_n(ℚ̄)`, **not** onto `ẑ`: identifying the two needs a compatible system of roots
+   of unity, which is an extra choice, and the whole content of the cyclotomic character
+   (12.10) is that `Gal(ℚ̄/ℚ)` moves that choice.
+3. **A compatible generator**, which needs both a choice of inertia subgroup in its
+   conjugacy class **and** a compatible system of roots of unity. Nothing here is canonical,
+   and no milestone below uses a generator except through its conjugacy class.
 
-**The orientation statement.** The Kummer tower `t^{1/n}` at `0`, and its analogues
-`(t−1)^{1/n}` at `1` and `(1/t)^{1/n}` at `∞`, compute the tame character explicitly, and
-under 12.5 the class of the compatible inertia generator at `0`, `1`, `∞` goes to the class
-of `P`, `T`, `C` respectively. Compatibility with Layer 7.1's `z ↦ z^e` local model is what
-fixes which generator, and the milestone proves that compatibility rather than assuming it.
+**The orientation statement**, the only place 12.6's isomorphism is pinned. The Kummer tower
+`t^{1/n}` at `0`, and its analogues `(t−1)^{1/n}` at `1` and `(1/t)^{1/n}` at `∞`, compute
+the tame character explicitly, and under 12.6 the **conjugacy class** of the inertia
+subgroup at `0`, `1`, `∞` goes to the class of the closed subgroup generated by `P`, `T`, `C`
+respectively. Compatibility with Layer 7.1's `z ↦ z^e` local model and Layer 8.7's
+orientation is what fixes which of the two generators of a procyclic group is meant, once a
+system of roots of unity is fixed, and the milestone proves that compatibility rather than
+assuming it. ⚠ **Stated on classes, not on elements**: there is no canonical element of
+`π₁ᵍᵉᵒ` mapping to `P`, and a milestone that produced one would be choosing a basepoint path
+that Layer 12.8 has already shown is not canonical.
 
 *Source:* Szamuely **Lemma 4.7.2**: for a closed point `P` with residue field `k`, the
 stabilizer in `π₁(U_k̄)` of a pro-point above `P` **is** its inertia group — the statement
@@ -3380,10 +3522,10 @@ that makes "the inertia subgroup at a marked point" well defined up to conjugacy
 form this milestone assembles over the tower. The three marked points are `ℚ`-rational, so
 the hypothesis holds for each.
 
-*Prerequisites:* Layers 7.1, 12.4, 12.5; AlgebraicCurves Layers 6, 7; Mathlib inertia
-subgroups, `IsPrimitiveRoot`, roots of unity.
+*Prerequisites:* Layers 7.1, 8.7, 12.5, 12.6, 12.7; AlgebraicCurves Layers 6, 7; Mathlib
+inertia subgroups, `IsPrimitiveRoot`, roots of unity.
 
-#### 12.9 The `ẑ`-cyclotomic character
+#### 12.10 The `ẑ`-cyclotomic character
 
 Assemble the pin's `modularCyclotomicCharacter n`, over all `n`, into the continuous
 
@@ -3391,7 +3533,7 @@ Assemble the pin's `modularCyclotomicCharacter n`, over all `n`, into the contin
 χ : Gal(ℚ̄/ℚ) →* ẑˣ
 ```
 
-on Layer 12.1's carrier, with the finite-level specification `σ ζ = ζ ^ χ_n(σ)` for every
+on Layer 12.2's carrier, with the finite-level specification `σ ζ = ζ ^ χ_n(σ)` for every
 `n`-th root of unity, and with `ℓ`-adic components equal to the pin's
 `cyclotomicCharacter ℓ`. The compatibility across levels is the milestone; the pin supplies
 each level separately.
@@ -3401,18 +3543,19 @@ each level separately.
 layers, and names it the cyclotomic character. The pin supplies the finite levels; the
 compatibility across levels is the milestone.
 
-*Prerequisites:* Layer 12.1 (the `ẑ` carrier and its unit group); Mathlib
+*Prerequisites:* Layer 12.1 (the ring `ẑ`, its unit group, and the universal property that
+assembles a compatible system of maps into `(ZMod n)ˣ` into one map into `ẑˣ`); Mathlib
 `modularCyclotomicCharacter`, `cyclotomicCharacter`.
 
-#### 12.10 The branch-cycle theorem
+#### 12.11 The branch-cycle theorem
 
-For every `σ ∈ Gal(ℚ̄/ℚ)`, the outer action of 12.7 satisfies, on conjugacy classes,
+For every `σ ∈ Gal(ℚ̄/ℚ)`, the outer action of 12.8 satisfies, on conjugacy classes,
 
 ```text
 ρ(σ) [P] = [P ^ᶻ χ(σ)] ,   ρ(σ) [T] = [T ^ᶻ χ(σ)] ,   ρ(σ) [C] = [C ^ᶻ χ(σ)] ,
 ```
 
-with `^ᶻ` the profinite power of Layer 12.1 and `χ` the character of 12.9.
+with `^ᶻ` the profinite power of Layer 12.2 and `χ` the character of 12.10.
 
 **The convention is pinned by a computation inside the theorem, not by a citation.** The
 finite-level statement is the Kummer identity: let `ζ` be a primitive `n`-th root of unity,
@@ -3430,7 +3573,7 @@ cancelling. Every convention enters this one computation — the conjugation is
 `γ(π)/π` — so a reader can check the exponent without consulting a source, and a milestone
 that flipped one of them would fail here.
 
-The general case follows by transporting along 12.8's identification and assembling over
+The general case follows by transporting along 12.9's identification and assembling over
 `n`: a lift of `σ` normalizes the decomposition data at each marked place, because the three
 places are `ℚ`-rational, and acts on the procyclic inertia through the tame character.
 
@@ -3473,15 +3616,15 @@ why the Kummer identity rather than any citation is what pins this roadmap. Clas
 origin: Deligne, "Le groupe fondamental de la droite projective moins trois points",
 MSRI 16 (1989).
 
-*Prerequisites:* Layers 12.1, 12.2, 12.7, 12.8, 12.9.
+*Prerequisites:* Layers 12.2, 12.3, 12.8, 12.9, 12.10.
 
-#### 12.11 The finite branch-cycle corollary and passport invariance
+#### 12.12 The finite branch-cycle corollary and passport invariance
 
 The statement is about **conjugacy classes, one slot at a time** — a Nielsen-class
 statement — and it is not about a tuple of powers.
 
 For a connected triple `t` with monodromy group `G` of exponent `n`, and its Belyi pair over
-`ℚ̄` via 12.3, let `u = χ_n(σ)`, a unit mod `n`. Write `t^σ = (τ0, τ1, τinf)` for the triple
+`ℚ̄` via 12.4, let `u = χ_n(σ)`, a unit mod `n`. Write `t^σ = (τ0, τ1, τinf)` for the triple
 of the `σ`-conjugate pair, in some numbering. Then:
 
 - `τ0` lies in the `S_n`-conjugacy class of `σ0 ^ u`, and likewise `τ1` of `σ1 ^ u` and
@@ -3522,30 +3665,32 @@ Layer 11.2's partial statement.
 not a Galois orbit — the frozen `5T1-5_5_5` passport in `PROVENANCE.md` has one passport
 and three orbits. Layer 14 never treats `pass_size` and `orbit_size` as the same datum.
 
-*Prerequisites:* Layers 0.5, 0.6, 1.1, 1.4, 11.1, 12.10.
+*Prerequisites:* Layers 0.5, 0.6, 1.1, 1.4, 11.1, 12.11.
 
 ### Layer 13: the pro-`ℓ` peripheral theorem and faithfulness
 
 #### 13.1 The pro-`ℓ` peripheral triple
 
-Define `Δ_ℓ := maximalProPQuotient ℓ (profiniteCompletion (FreeGroup (Fin 2)))` — which is
-ProPGroups Layer 4's `freeProP ℓ (Fin 2)`, cited not restated — with `P_ℓ, T_ℓ, C_ℓ` the
+For a **prime** `ℓ` — every statement of Layer 13 carries `[Fact ℓ.Prime]`, since neither
+`maximalProPQuotient` nor `ℤ_[ℓ]` is the intended object otherwise — define
+`Δ_ℓ := maximalProPQuotient ℓ (profiniteCompletion (FreeGroup (Fin 2)))`, which is
+ProPGroups Layer 4's `freeProP ℓ (Fin 2)`, cited not restated, with `P_ℓ, T_ℓ, C_ℓ` the
 images of the peripheral elements and the relation `C_ℓ * T_ℓ * P_ℓ = 1`.
 
 The outer action descends: `proPKernel ℓ` is topologically characteristic (ProPGroups Layer
-3), so 12.6's functoriality gives
+3), so 12.7's functoriality gives
 
 ```text
 ρ_ℓ : Gal(ℚ̄/ℚ) →* ContinuousOut (Δ_ℓ) ,
 ```
 
-and 12.10's statements descend with `^ᶻ` becoming `^[ℓ]` by 12.2.
+and 12.11's statements descend with `^ᶻ` becoming `^[ℓ]` by 12.3.
 
-*Prerequisites:* Layers 12.6, 12.10, 12.1, 12.2; ProPGroups Layers 3, 4.
+*Prerequisites:* Layers 12.7, 12.11, 12.2, 12.3; ProPGroups Layers 3, 4.
 
 #### 13.2 Cyclotomic surjectivity
 
-`cyclotomicCharacter ℓ` is surjective onto `ℤ_[ℓ]ˣ`, and the `ẑˣ`-valued character of 12.9
+`cyclotomicCharacter ℓ` is surjective onto `ℤ_[ℓ]ˣ`, and the `ẑˣ`-valued character of 12.10
 is surjective. Route: at each finite level, irreducibility of the cyclotomic polynomial over
 `ℚ` gives `Gal(ℚ(ζ_{ℓ^k})/ℚ) ≅ (ZMod ℓ^k)ˣ`, so `χ_{ℓ^k}` is onto; then surjectivity of the
 inverse limit follows from compactness of `Gal(ℚ̄/ℚ)` and surjectivity at each level (an
@@ -3555,7 +3700,7 @@ inverse limit of nonempty compact fibers is nonempty).
 §Pinned conventions. ⚠ Over a general number field the character is **not** surjective, and
 Layer 13.3's "for every `u`" would fail; the milestone states the base field explicitly.
 
-*Prerequisites:* Layer 12.9; Mathlib cyclotomic fields over `ℚ`, `IsPrimitiveRoot.autToPow`,
+*Prerequisites:* Layer 12.10; Mathlib cyclotomic fields over `ℚ`, `IsPrimitiveRoot.autToPow`,
 compactness of Galois groups.
 
 #### 13.3 The peripheral-power theorem
@@ -3571,7 +3716,7 @@ For every prime `ℓ` and every `u ∈ ℤ_[ℓ]ˣ` there exist a continuous aut
 
 Proof: choose `σ` with `cyclotomicCharacter ℓ σ = u` (13.2); take `ρ_ℓ(σ)` (13.1) and any
 representative automorphism `φ_u` of that outer class; the three conjugacy statements of
-12.10, descended by 13.1, say exactly that each `φ_u(X_ℓ)` is conjugate to `X_ℓ ^[ℓ] u`, and
+12.11, descended by 13.1, say exactly that each `φ_u(X_ℓ)` is conjugate to `X_ℓ ^[ℓ] u`, and
 the conjugators are the witnesses.
 
 ⚠ **The three conjugators are independent.** Nothing asserts `c_P = c_T = c_C`; a single
@@ -3594,14 +3739,14 @@ Then for any conjugate `y = q · x · q⁻¹`,
 ```
 
 The proof is `φ y = (φ q)(φ x)(φ q)⁻¹`, then naturality of the power under conjugation
-(12.1); the conjugator involves `φ q`, and is **not** obtained by multiplying `c` by `q` on
+(12.2); the conjugator involves `φ q`, and is **not** obtained by multiplying `c` by `q` on
 one side.
 
 Applying it with `q = P_ℓ` and `x = C_ℓ` transfers the theorem to the opposite-convention
 third element `(P_ℓ · T_ℓ)⁻¹ = P_ℓ · C_ℓ · P_ℓ⁻¹`, so consumers using that spelling need no
 new mathematics.
 
-*Prerequisites:* Layers 12.1, 13.1, 13.2.
+*Prerequisites:* Layers 12.2, 13.1, 13.2.
 
 #### 13.4 The dyadic instance
 
@@ -3614,19 +3759,24 @@ its statement or its proof mentions anything outside this roadmap.
 #### 13.5 Faithfulness of the Galois action on dessins
 
 The action of `Gal(ℚ̄/ℚ)` on isomorphism classes of algebraic Belyi pairs over `ℚ̄` —
-equivalently, by 12.3 and 9.8, on isomorphism classes of dessins — is faithful.
+equivalently, by 12.4 and 9.8, on isomorphism classes of dessins — is faithful.
 
 **The route is Lenstra's, and it stays in genus zero** — no elliptic curves, no
 `j`-invariant, and no dependency on the curves roadmap. Everything below happens in
 `ℚ̄[x]`. In proof order:
 
 1. Given `σ ≠ 1`, pick `α ∈ ℚ̄` with `σ(α) ≠ α`.
-2. Let `p_α ∈ ℚ(α)[x]` be the antiderivative of `x·(x−1)²·(x−α)³` — degree `7`, with
-   critical points exactly `0`, `1`, `α`, of multiplicities `2`, `3`, `4` respectively,
-   **pairwise distinct**, which is the whole point of the choice of exponents.
-3. Its critical values `p_α(0), p_α(1), p_α(α)` and `∞` lie in `ℚ̄ ∪ {∞}`, so Layers
-   10.2–10.3 produce `q_α ∈ ℚ[x]` making `P_α := q_α ∘ p_α` a Belyi polynomial — a Belyi
-   map from `ℙ¹` with `P_α⁻¹(∞) = {∞}`, so its dessin is a tree.
+2. Let `p_α ∈ ℚ(α)[x]` be the antiderivative of `x·(x−1)²·(x−α)³` **normalized by
+   `p_α(0) = 0`**, which pins the integration constant and hence `p_α` itself; it has degree
+   `7` and leading coefficient `1/7`. Its critical points are exactly `0`, `1`, `α`, of
+   multiplicities `2`, `3`, `4` respectively — the orders of vanishing of `p_α′` there,
+   plus one — and those multiplicities are **pairwise distinct**, which is the whole point
+   of the choice of exponents.
+3. Its critical values `p_α(0), p_α(1), p_α(α)` and `∞` lie in `ℚ̄ ∪ {∞}`, so **10.3's
+   polynomial Belyification** produces `q_α ∈ ℚ[x]` making `P_α := q_α ∘ p_α` a Belyi
+   **polynomial** — a Belyi map from `ℙ¹` with `P_α⁻¹(∞) = {∞}`, so its dessin is a tree.
+   ⚠ The polynomial form is essential and is exactly what 10.3's separate statement
+   supplies: a rational `q_α` would give `P_α` finite poles and step 5 would collapse.
 4. Conjugating, `P_α^σ = q_α ∘ p_{σ(α)}`, since `q_α` has rational coefficients.
 5. Suppose the two pairs were isomorphic. Any isomorphism fixes `∞` (both maps have their
    only pole there), so it is affine, `z ↦ az + b`. The polynomial lemma below turns
@@ -3634,10 +3784,23 @@ equivalently, by 12.3 and 9.8, on isomorphism classes of dessins — is faithful
    critical points of multiplicity `2, 3, 4` on the two sides forces `b = 0`, `a = 1`, and
    then `σ(α) = α` — a contradiction.
 
-**The polynomial lemma**, owned here and stated separately because step 5 is where all the
-work is: if `G₁ ∘ H₁ = G₂ ∘ H₂` with `H₁, H₂` of equal degree, then `H₂ = c·H₁ + d` for
-constants `c, d`; and if in addition `H₁, H₂` are monic with `H₁(0) = H₂(0) = 0`, then
-`H₁ = H₂`. Proved by comparing coefficients from the top down.
+**The polynomial decomposition lemma**, owned here and stated separately because step 5 is
+where all the work is. Two statements, the second proved from the first:
+
+1. If `H₁, H₂ ∈ k[x]` are **monic of the same degree** with `H₁(0) = H₂(0) = 0`, and there
+   are polynomials `G₁, G₂` with `G₁ ∘ H₁ = G₂ ∘ H₂`, then `H₁ = H₂`. Proof: equal degrees
+   force `deg G₁ = deg G₂ = n` and equal leading coefficients, and comparing the terms of
+   degree `nm − j` for `j = 1, …, m − 1` gives the coefficients of `H₁` and `H₂` equal one
+   at a time from the top down.
+2. If `H₁, H₂ ∈ k[x]` are **arbitrary of the same degree `m ≥ 1`** with `G₁ ∘ H₁ = G₂ ∘ H₂`,
+   then there are constants `c, d` with `H₂ = c·H₁ + d`. Proof: normalize
+   `Ĥᵢ := (Hᵢ − Hᵢ(0))/(leading coefficient)` and absorb the change into `Gᵢ`, apply 1, and
+   read off `c = α_m/β_m`, `d = α_0 − α_m β_0/β_m` for the leading and constant coefficients
+   `α, β` of `H₁, H₂`.
+
+⚠ Both hypotheses in 1 are used, and `m ≥ 1` in 2 is what makes the division by the leading
+coefficient legitimate. Step 5 applies **2**, with `H₁ = p_α(a·+b)` and `H₂ = p_{σ(α)}`,
+both of degree `7`.
 
 Conclude faithfulness on dessins of genus `0`, hence on dessins.
 
@@ -3658,7 +3821,7 @@ treating each genus separately, so a formalization that wants all genera does no
 from the genus-zero case for free; this milestone claims genus zero, which suffices for
 faithfulness on dessins.
 
-*Prerequisites:* Layers 9.8, 10.2, 10.3, 11.1, 12.3; Mathlib `Polynomial.derivative`,
+*Prerequisites:* Layers 9.8, 10.2, 10.3, 11.1, 12.4; Mathlib `Polynomial.derivative`,
 `Polynomial.roots`, `Polynomial.comp`.
 
 ### Layer 14: LMFDB assertion semantics
@@ -3724,12 +3887,29 @@ symmetric under the swap and therefore cannot verify it.
 (Layer 11.5), and the certificate keeps it distinct from the field of moduli (Layer 11.3).
 ⚠ No certificate equates them; Layer 11.6 is why.
 
-**Embeddings and orbit size.** `embeddings` and `orbit_size` are tied to Layer 11.7. The
-stored triples are indexed by the embeddings, position by position — the `i`-th triple is
-the monodromy of the `i`-th complex embedding of the base field — and the number of stored
-triples equals `orbit_size`. The certificate asserts that correspondence, which is Layer
-11.7's embeddings-to-triples statement; the floating-point embedding values themselves are a
-numerical annotation and are certified as nothing.
+**Embeddings and orbit size — two counts, kept apart.** Introduce
+
+```text
+trueOrbitSize c        := Nat.card (Gal(ℚ̄/ℚ) · c)                 -- Layer 11.7
+storedEmbeddingCount r := r.embeddings.length = r.triples.length   -- a schema fact
+```
+
+and state each assertion against the right one:
+
+- `trueOrbitSize c = [fieldOfModuli c : ℚ]` — Layer 11.7, a theorem about the class;
+- the stored triples are indexed by the stored embeddings position by position: the `i`-th
+  triple is the monodromy of the `i`-th complex embedding of the base field. Hence the
+  **schema assertion** is `r.orbit_size = storedEmbeddingCount r`;
+- the field-of-definition certificate of Layer 11.5 gives a **surjection** from stored
+  embedding entries onto the true orbit classes, by Layer 11.7's `G/H ↠ G/S`;
+- ⚠ **that map need not be injective, so `r.orbit_size = trueOrbitSize c` is not asserted.**
+  It requires a separate certificate — that `H = S`, equivalently that the stored base field
+  is the field of moduli — which Layer 11.6 shows is not automatic. `PROVENANCE.md` records
+  frozen records where several stored embeddings yield simultaneously conjugate triples,
+  hence one class.
+
+The floating-point embedding values themselves are a numerical annotation and are certified
+as nothing.
 
 ⚠ **The stored cycle notation omits fixed points**, and the identity is stored as `"()"`.
 Recovering `lambdas` from `triples_cyc` therefore needs padding to a partition of the
@@ -3750,27 +3930,69 @@ Classify every field of 14.1 and 14.2 into exactly one of:
 - **intrinsic theorem** — provable from the pair or the triple alone;
 - **finite certificate** — checkable from supplied finite data;
 - **orbit certificate** — needs supplied Galois or descent data;
+- **frozen-table aggregation** — a statement about a set of stored rows, true of the frozen
+  table and asserting nothing intrinsic about any one record;
 - **carrier only** — the roadmap says what the value means but certifies no value;
 - **outside scope** — a computational or completeness claim not proved here.
 
-The classification is a table, one row per field, so that no consumer overreads a record.
+The classification is a **table with five columns** — parsed carrier, mathematical meaning,
+certification level, exact certificate data, and the theorem relating it to an earlier layer
+— one row per field, so that no consumer overreads a record. Fields whose level is
+carrier-only have no theorem column entry, and that absence is the point.
 
-Three cross-field statements belong here, and the layer's value is as much in the one it
-**refuses** as in the two it asserts:
+The rows that are easy to get wrong, and what they must say:
 
-- `num_orbits` equals the number of map records sharing the passport label — an
-  intrinsic consequence of Layer 11.2's orbit decomposition;
-- `maxdegbf` equals the largest `orbit_size` among them;
-- ⚠ **`Σ orbit_size = pass_size` is false in general and is not asserted.** It fails
-  exactly when the per-embedding triples of a single Galois orbit are simultaneously
-  conjugate to one another, so that one isomorphism class is reached by several embeddings;
-  `PROVENANCE.md` records the two witnesses in the current database. The correct statement
-  is the definitional one — `pass_size` counts simultaneous-conjugacy classes (Layer 1.2) —
-  and a certificate that assumed the sum formula would be unsound on real records.
+| field | level | what the certificate must supply |
+| --- | --- | --- |
+| `group` / `nTj` | finite certificate | an **exact parser** for the `nTj` string and a proof that the parsed index's `referenceSubgroup` is conjugate to the passport's monodromy group (Layer 1.6) — not a string comparison |
+| `aut_group` | finite certificate **or** carrier only | either parse its generators and prove the generated subgroup equals the triple's centralizer (Layer 0.4), or mark it carrier-only; the roadmap does not accept the name alone as evidence |
+| `curve`, `map` | finite certificate | a parsed algebraic Belyi pair over the stored base field (Layer 9.1) whose invariants match the record; without the parse, carrier-only |
+| `primitivization` | finite certificate | a block system, the quotient triple it induces (Layer 1.4), and a proof that the quotient's passport is the referenced record's — not a label lookup |
+| `pass_size` | intrinsic theorem | Layer 1.2's `passportSize` through Layer 3.4 |
+| `orbit_size` | finite schema field | `r.orbit_size = storedEmbeddingCount r` (14.2); equality with `trueOrbitSize` is a **separate** orbit certificate |
+| `num_orbits` | frozen-table aggregation | the number of map rows sharing the passport label; ⚠ this is a fact about the table, not a theorem about one passport record |
+| `maxdegbf` | frozen-table aggregation | the largest **stored** `orbit_size` among those rows; ⚠ despite the name it is not a base-field degree, and it aggregates stored counts, not fields of moduli |
+| trailing label letter | carrier only | external enumeration (14.5) |
+| `embeddings` values | carrier only | floating-point annotations |
 
-*Prerequisites:* Layers 14.1, 14.2.
+⚠ **`Σ orbit_size = pass_size` is false in general and is not asserted.** With 14.2's two
+counts the failure is exactly describable: `Σ_r storedEmbeddingCount r` counts stored
+embedding entries, while `pass_size` counts simultaneous-conjugacy classes, and the map from
+the former to the latter is surjective but not injective. It fails precisely when the
+per-embedding triples of a single Galois orbit are simultaneously conjugate to one another;
+`PROVENANCE.md` records the two witnesses in the current database. A certificate that
+assumed the sum formula would be unsound on real records.
 
-#### 14.4 Label semantics
+*Prerequisites:* Layers 0.4, 1.2, 1.4, 1.6, 3.4, 9.1, 11.7, 14.1, 14.2.
+
+#### 14.4 The tabulated `S₃` representative
+
+The database does **not** tabulate one row per ordered passport. It chooses one ordered
+passport from each `S₃`-orbit (Layer 2.6) and retains all simultaneous-conjugacy classes
+inside that chosen ordered passport. This milestone certifies that convention, separately
+from the intrinsic ordered passport, and refuses to manufacture a canonical choice.
+
+- **The certificate.** A `TabulatedPassport` record carries a stored ordered passport
+  together with a proof that it is admissible (Layer 1.1); the assertion it supports is
+  membership in the `S₃`-orbit of a given ordered passport, and nothing stronger.
+- **What is proved.** The stored classes are exactly the classes of the **stored** ordered
+  passport — not of its orbit: the orbit generally contains other ordered passports with
+  their own classes, and Layer 2.6's action moves between them. State the bijection between
+  the classes of two ordered passports in one orbit, so that a consumer can transport a
+  count without confusing the two.
+- **What is refused.** The database's choice of representative is a total order on labels
+  that has no stable mathematical description; the milestone classifies the representative
+  choice and the trailing label letters as **carrier-only** data (14.3's level) and derives
+  neither. ⚠ Manufacturing a canonical representative — "the lexicographically least ordered
+  passport in the orbit" — would be a definition this roadmap invented, and it would agree
+  with the database only by luck.
+
+*Source:* Musty–Schiavone–Sijsling–Voight, *A database of Belyi maps*, **Algorithm 2.3.1**,
+which is where the one-representative-per-`S₃`-orbit tabulation is specified.
+
+*Prerequisites:* Layers 1.1, 1.2, 2.6, 3.5, 14.1–14.3.
+
+#### 14.5 Label semantics
 
 The grammar of passport and map labels, with the mathematical meaning of each component:
 degree, the `nTj` group through Layer 1.6, and the three partitions. Prove that a valid
@@ -3780,13 +4002,13 @@ classification — and is never derived from the mathematics; the frozen `5T1-5_
 whose three orbits carry the letters `a`, `b`, `c` in an order fixed by the database and not
 by any invariant, is the witness.
 
-*Prerequisites:* Layers 1.6, 14.1–14.3.
+*Prerequisites:* Layers 1.6, 14.1–14.4.
 
-#### 14.5 The frozen acceptance suite
+#### 14.6 The frozen acceptance suite
 
 The five frozen records of `PROVENANCE.md` — genus zero, positive genus, primitive,
 imprimitive, a passport with three Galois orbits, and links to both an elliptic and a
-genus-two curve — each carried through 14.1–14.4 at the highest certification level its data
+genus-two curve — each carried through 14.1–14.5 at the highest certification level its data
 admits. ⚠ The database itself is complete only through degree `6` by its own account, and
 carries a handful of records its maintainers' own consistency script rejects; neither fact
 affects what a certificate asserts, and both are reasons Layer 14 certifies records rather
@@ -3799,7 +4021,7 @@ distinct classes, and the four imprimitive ones all primitivize to `2T1-2_2_1.1-
 reconciliation is one-directional by design: it does not claim that every enumerated class
 appears in the database.
 
-*Prerequisites:* Layers 3.5, 14.1–14.4.
+*Prerequisites:* Layers 3.5, 14.1–14.5.
 
 ## Explicit scope exclusions
 
@@ -3833,7 +4055,7 @@ the reader already knows: `cyclicTriple n` (the monodromy of `z ↦ zⁿ`: genus
 spherical, defined over `ℚ`, trivial passport structure) and `torusTriple` (degree `4`,
 genus `1`, Euclidean, regular with deck group `ℤ/4`, imprimitive, realized on an elliptic
 curve). The per-layer example obligations appear inside the milestones (0.8, 2.7, 3.5, 4.4,
-6.4, 10.8, 14.5); a layer introducing a new carrier without instantiating both threaded
+6.4, 10.8, 14.6); a layer introducing a new carrier without instantiating both threaded
 examples on it is incomplete.
 
 ## Ordering
@@ -3847,9 +4069,10 @@ Two tracks, independent until Layer 12:
   Layer 11, consuming Track A only through Layer 0's vocabulary (6.1), Layer 2 (7.6), and
   Layer 3.1 (10.6).
 - **The summit:** Layer 12 consumes both tracks (6.3, 7.1, 9–11), except for its opening
-  milestones 12.1 and 12.2, which are generic profinite group theory depending on nothing
-  else in this roadmap and startable at any time. Layer 13 follows Layer 12. Layer 14's
-  finite milestones (14.1 partially, 14.4) need only Track A; its orbit milestones need
+  milestones 12.1, 12.2 and 12.3 — the profinite integers as a ring, the exponentiation
+  calculus, and its pro-`ℓ` comparison — which are generic profinite algebra depending on
+  nothing else in this roadmap and startable at any time. Layer 13 follows Layer 12. Layer
+  14's finite milestones (14.1 partially, 14.5) need only Track A; its orbit milestones need
   Layer 11.
 
 The layer numbering is the citation order; the two-track structure is the parallelism.
@@ -3862,7 +4085,7 @@ are verified against the copies recorded in `PROVENANCE.md` before any milestone
 - E. Girondo, G. González-Diez, *Introduction to Compact Riemann Surfaces and Dessins
   d'Enfants*, LMS Student Texts 79, CUP 2012 — the analytic theory at this roadmap's exact
   generality, cited at Layers 0.6, 4.1, 4.4, 4.5, 5, 6.1, 6.3, 6.5, 7.4, 8.1, 8.3, 8.5, 9.2,
-  9.3, 9.5, 10.6 and 12.4. ⚠ Two of its routes are deliberately not followed: its separating
+  9.3, 9.5, 10.6 and 12.5. ⚠ Two of its routes are deliberately not followed: its separating
   function comes from uniformization (Layer 9.3), and its fundamental group of the
   thrice-punctured sphere comes from `Γ(2)` (Layer 5).
 - S. K. Lando, A. K. Zvonkin, *Graphs on Surfaces and Their Applications*, Encyclopaedia
@@ -3888,7 +4111,7 @@ are verified against the copies recorded in `PROVENANCE.md` before any milestone
 - J.-P. Serre, *Topics in Galois Theory*, 2nd ed., A K Peters 2008 — Layers 12, 13
   context; rigidity.
 - J. Stix, "On cuspidal sections of algebraic fundamental groups", in *Galois–Teichmüller
-  Theory and Arithmetic Geometry*, ASPM 63 (2012) 519–563 — Layers 12.8–12.10: Definition
+  Theory and Arithmetic Geometry*, ASPM 63 (2012) 519–563 — Layers 12.9–12.11: Definition
   37(i) in §7 is the cyclotomic action on cuspidal inertia. ⚠ Cite the published version;
   the arXiv preprint leaves the statement unnumbered.
 - J.-M. Couveignes, "Calcul et rationalité de fonctions de Belyi en genre 0", Ann. Inst.

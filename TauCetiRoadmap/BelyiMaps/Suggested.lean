@@ -410,7 +410,7 @@ identity — the statement that forces the `S₃`-action onto `IsoClass n`. -/
 theorem swap1Inf_sq (t : PermutationTriple n) : swap1Inf (swap1Inf t) = t.σ1⁻¹ • t := by
   sorry
 
--- **Layer 12.11, the counterexample.** Componentwise powers of a triple are **not** a
+-- **Layer 12.12, the counterexample.** Componentwise powers of a triple are **not** a
 -- triple: raising the three entries of `s3Triple` to the fifth power destroys the product
 -- relation. This is why the finite branch-cycle statement is class-by-class and never a
 -- statement about the tuple of powers.
@@ -875,7 +875,7 @@ profinite completion of the free group on two generators. -/
 noncomputable abbrev freeProfiniteTwo : ProfiniteGrp :=
   ProfiniteGrp.profiniteCompletion.obj (GrpCat.of (FreeGroup (Fin 2)))
 
-/-- **Layer 12.5 / §Pinned conventions.** The peripheral element `P`. -/
+/-- **Layer 12.6 / §Pinned conventions.** The peripheral element `P`. -/
 noncomputable def periphP : freeProfiniteTwo :=
   ProfiniteGrp.ProfiniteCompletion.etaFn (GrpCat.of (FreeGroup (Fin 2))) (FreeGroup.of 0)
 
@@ -896,16 +896,81 @@ theorem opposite_third_peripheral {G : Type u} [Group G] (P T : G) :
 theorem periphC_mul_periphT_mul_periphP : periphC * periphT * periphP = 1 := by
   simp [periphC, mul_assoc]
 
+/-- **Layer 12.1.** The profinite integers as a topological commutative **ring**, as the
+subring of compatible systems inside `∀ n : ℕ+, ZMod n`.
+⚠ ProPGroups supplies the profinite completion of the infinite cyclic *group*; that is not
+enough for `(x ^ᶻ a) ^ᶻ b = x ^ᶻ (a * b)`, for `ẑˣ`, or for the `ℓ`-adic components, all of
+which Layers 12.2, 12.3 and 12.10 use. This milestone owns the ring.
+⚠ The index runs over `ℕ+`, not `ℕ`: `ZMod 0` is `ℤ`, every `n` divides `0`, and including
+it would collapse the limit to `ℤ`. -/
+def profiniteIntSubring : Subring (∀ n : ℕ+, ZMod (n : ℕ)) where
+  carrier := {f | ∀ (m n : ℕ+) (h : (n : ℕ) ∣ (m : ℕ)),
+    ZMod.castHom h (ZMod (n : ℕ)) (f m) = f n}
+  zero_mem' := by intro m n h; simp
+  one_mem' := by intro m n h; simp
+  add_mem' ha hb := by intro m n h; simp [map_add, ha m n h, hb m n h]
+  mul_mem' ha hb := by intro m n h; simp [map_mul, ha m n h, hb m n h]
+  neg_mem' ha := by intro m n h; simp [map_neg, ha m n h]
+
+/-- **Layer 12.1.** The carrier. -/
+def ProfiniteInt : Type := profiniteIntSubring
+
+noncomputable instance : CommRing ProfiniteInt :=
+  inferInstanceAs (CommRing profiniteIntSubring)
+
+instance : TopologicalSpace ProfiniteInt :=
+  inferInstanceAs (TopologicalSpace profiniteIntSubring)
+
+/-- **Layer 12.1.** The remaining structure — a topological ring, compact and totally
+disconnected — is the milestone; the pin has no profinite-integer development to consume. -/
+instance : IsTopologicalRing ProfiniteInt := sorry
+instance : CompactSpace ProfiniteInt := sorry
+instance : TotallyDisconnectedSpace ProfiniteInt := sorry
+
+/-- **Layer 12.1.** The projections to the finite rings, compatible under divisibility. -/
+def ProfiniteInt.toZMod (n : ℕ+) : ProfiniteInt →+* ZMod (n : ℕ) where
+  toFun a := (a : ∀ m : ℕ+, ZMod (m : ℕ)) n
+  map_one' := rfl
+  map_mul' _ _ := rfl
+  map_zero' := rfl
+  map_add' _ _ := rfl
+
+/-- **Layer 12.1.** Compatibility of the projections — the limit property in usable form. -/
+theorem ProfiniteInt.castHom_toZMod (m n : ℕ+) (h : (n : ℕ) ∣ (m : ℕ)) (a : ProfiniteInt) :
+    ZMod.castHom h (ZMod (n : ℕ)) (ProfiniteInt.toZMod m a) = ProfiniteInt.toZMod n a :=
+  (a : profiniteIntSubring).2 m n h
+
+/-- **Layer 12.1.** The `ℓ`-adic component, a **ring** homomorphism — this is the map
+Layer 12.3's comparison `x ^ᶻ a = x ^[ℓ] (component_ℓ a)` is stated with. -/
+noncomputable def ProfiniteInt.component (ℓ : ℕ) [Fact ℓ.Prime] :
+    ProfiniteInt →+* ℤ_[ℓ] := sorry
+
+/-- **Layer 12.1.** Unit criterion: an element is a unit iff every finite-level image is.
+This is what makes `ẑˣ` a usable target for the cyclotomic character of Layer 12.10. -/
+theorem ProfiniteInt.isUnit_iff (a : ProfiniteInt) :
+    IsUnit a ↔ ∀ n : ℕ+, IsUnit (ProfiniteInt.toZMod n a) := sorry
+
 /-- Local stand-in; supplier: ProPGroups Layer 0–2 `zHat`. The profinite completion of
-`ℤ`, the exponent object of the Layer 12.1 calculus. -/
+`ℤ` **as a group**; Layer 12.1's comparison theorem identifies it with the additive
+procyclic group of `ProfiniteInt`. -/
 noncomputable abbrev zhat : ProfiniteGrp :=
   ProfiniteGrp.profiniteCompletion.obj (GrpCat.of (Multiplicative ℤ))
 
-/-- **Layer 12.1.** The profinite power `x ^ᶻ a`: the image of `a` under the unique
+/-- **Layer 12.1, the comparison.** The ring's procyclic group is the supplier's `zHat`.
+Stated as a theorem, so that no milestone silently switches between the two structures. -/
+theorem profiniteInt_mulEquiv_zhat :
+    Nonempty (Multiplicative ProfiniteInt ≃ₜ* zhat) := sorry
+
+/-- **Layer 12.2.** The profinite power `x ^ᶻ a`: the image of `a` under the unique
 continuous homomorphism `ẑ → G` with `1 ↦ x`. The laws — agreement with integer powers,
-additivity, multiplicativity, continuity, and naturality under continuous homomorphisms
-(hence under conjugation) — are the Layer 12.1 milestones. -/
-noncomputable def zhatPow {G : ProfiniteGrp} (x : G) (a : zhat) : G := by
+additivity, multiplicativity **through 12.1's ring product**, continuity, and naturality
+under continuous homomorphisms (hence under conjugation) — are the Layer 12.2 milestones. -/
+noncomputable def zhatPow {G : ProfiniteGrp} (x : G) (a : ProfiniteInt) : G := by
+  sorry
+
+/-- **Layer 12.2.** The law that forces the ring milestone to come first. -/
+theorem zhatPow_zhatPow {G : ProfiniteGrp} (x : G) (a b : ProfiniteInt) :
+    zhatPow (zhatPow x a) b = zhatPow x (a * b) := by
   sorry
 
 /-- Local stand-in; supplier: ProPGroups Layer 3 `proPKernel`. -/
@@ -922,26 +987,28 @@ abbrev maximalProPQuotient (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
   G ⧸ proPKernel p G
 
 /-- **Layer 13.1.** The maximal pro-`ℓ` quotient of the profinite free group on two
-generators — ProPGroups' `freeProP ℓ (Fin 2)` once that roadmap lands. -/
-noncomputable abbrev DeltaL (ℓ : ℕ) : Type :=
+generators — ProPGroups' `freeProP ℓ (Fin 2)` once that roadmap lands. ⚠ Every Layer 13
+declaration carries `[Fact ℓ.Prime]`: neither `maximalProPQuotient` nor `ℤ_[ℓ]` is the
+intended object for composite `ℓ`. -/
+noncomputable abbrev DeltaL (ℓ : ℕ) [Fact ℓ.Prime] : Type :=
   maximalProPQuotient ℓ freeProfiniteTwo
 
 /-- **Layer 13.1.** The pro-`ℓ` peripheral element `P_ℓ`. -/
-noncomputable def periphPL (ℓ : ℕ) : DeltaL ℓ := QuotientGroup.mk periphP
+noncomputable def periphPL (ℓ : ℕ) [Fact ℓ.Prime] : DeltaL ℓ := QuotientGroup.mk periphP
 
 /-- The pro-`ℓ` peripheral element `T_ℓ`. -/
-noncomputable def periphTL (ℓ : ℕ) : DeltaL ℓ := QuotientGroup.mk periphT
+noncomputable def periphTL (ℓ : ℕ) [Fact ℓ.Prime] : DeltaL ℓ := QuotientGroup.mk periphT
 
 /-- The pro-`ℓ` peripheral element `C_ℓ`. -/
-noncomputable def periphCL (ℓ : ℕ) : DeltaL ℓ := QuotientGroup.mk periphC
+noncomputable def periphCL (ℓ : ℕ) [Fact ℓ.Prime] : DeltaL ℓ := QuotientGroup.mk periphC
 
-theorem periphCL_mul_periphTL_mul_periphPL (ℓ : ℕ) :
+theorem periphCL_mul_periphTL_mul_periphPL (ℓ : ℕ) [Fact ℓ.Prime] :
     periphCL ℓ * periphTL ℓ * periphPL ℓ = 1 := by
   sorry
 
-/-- **Layer 12.2.** The `ℤ_ℓ`-power on the maximal pro-`ℓ` quotient: the canonical
+/-- **Layer 12.3.** The `ℤ_ℓ`-power on the maximal pro-`ℓ` quotient: the canonical
 operation through which `zhatPow` factors on pro-`ℓ` groups, with the same laws. Not an
-arbitrary function argument — the comparison with `zhatPow` is the Layer 12.2 theorem. -/
+arbitrary function argument — the comparison with `zhatPow` is the Layer 12.3 theorem. -/
 noncomputable def padicPow {ℓ : ℕ} [Fact ℓ.Prime] (x : DeltaL ℓ) (u : ℤ_[ℓ]) :
     DeltaL ℓ := by
   sorry

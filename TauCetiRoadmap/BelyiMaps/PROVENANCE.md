@@ -91,11 +91,11 @@ implemented or pinned today.
   existence-form), and its own `PROVENANCE.md` notes an ambition to absorb a
   `ẑ`-exponentiation calculus into Layer 4 — but no such milestone is on its README, and
   "a statement that is not a row is not an interface" is that roadmap's own rule. Hence
-  the ownership decision here: BelyiMaps Layer 12.1 owns the calculus, in the generic
+  the ownership decision here: BelyiMaps Layer 12.2 owns the calculus, in the generic
   namespace, and a future ProPGroups revision absorbing it would be a rename.
   **Owner ruling (2026-08-08): the dependency is one-directional.** BelyiMaps cites
   ProPGroups; ProPGroups gains no row, no citation, and no dependency pointing here. Its
-  files are therefore untouched by this roadmap, and Layer 12.1 is written so that
+  files are therefore untouched by this roadmap, and Layer 12.2 is written so that
   ProPGroups never needs it.
 
 ## Decisions of record
@@ -129,12 +129,21 @@ implemented or pinned today.
    audit confirms the choice: its `geomtype` is a function of `abc` alone, agreeing with
    `1/a + 1/b + 1/c` against `1` on all 1111 records, and is independent of the genus.
 
-6. **The generic profinite exponentiation calculus opens Layer 12**, as milestones 12.1 and
-   12.2, rather than sitting in Layer 13. It was in Layer 13 in the first draft, which made
-   12.9 and 12.10 depend forwards on it — the only forward edge in the roadmap. Moving it
-   makes every prerequisite point strictly backwards in document order, which a mechanical
-   check now confirms (99 milestones, headings ascending, no forward or self references).
-   The calculus depends on nothing else in this roadmap, so it can still be built first.
+6. **The generic profinite algebra opens Layer 12**, as milestones 12.1, 12.2 and 12.3,
+   rather than sitting in Layer 13. The exponentiation calculus was in Layer 13 in the first
+   draft, which made 12.10 and 12.11 depend forwards on it. All three depend on nothing else
+   in this roadmap, so they can still be built first.
+
+   ⚠ **12.1, the profinite integers as a topological commutative ring, is this roadmap's,
+   because no supplier has it.** ProPGroups supplies the profinite completion of the
+   infinite cyclic *group*; Mathlib has no `ẑ` at all (§Mathlib pin audit, re-verified
+   2026-08-09 by grep for `ZHat`, `ProfiniteInt` and "profinite integers": no hits). But
+   `(x ^ᶻ a) ^ᶻ b = x ^ᶻ (a·b)` needs a multiplication of exponents, the cyclotomic
+   character needs `ẑˣ`, and the pro-`ℓ` comparison needs a ring map `ẑ → ℤ_[ℓ]`. An earlier
+   draft used all three while citing only the group; that is the gap this milestone closes.
+   `Suggested.lean` builds the carrier as the subring of compatible systems in
+   `∀ n : ℕ+, ZMod n`; the index runs over `ℕ+` because `ZMod 0 = ℤ` and every `n` divides
+   `0`, so including `0` would collapse the limit to `ℤ`.
 7. **The graph-cover engine is stated over a wedge of `k` circles**, so `k = 1` yields
    the punctured-disc classification (Layer 7.1) and `k = 2` the three-point theory, one
    construction serving both.
@@ -199,10 +208,10 @@ The dyadic instance (Layer 13.4) is sized for the `gq2` project's axiom B8
 this roadmap's `C_2`, handled by the Layer 13.3 transfer remark; the bundle's conjugation
 convention `x ^ c = c⁻¹xc` matches the statement here; and the bundle's `ι`-pinning
 (`hι_proj`: the `ẑ → ℤ_2` projection of the exponent is the unit) corresponds to the
-Layer 12.2 component comparison. The bundle's citation of record — Stix, ASPM 63 (2012),
+Layer 12.3 component comparison. The bundle's citation of record — Stix, ASPM 63 (2012),
 §3.3 and Definition 37, with Deligne (MSRI 16, 1989) as the classical origin, and the
 all-units form needing cyclotomic surjectivity — is decomposed here as
-Layer 12.10 (Stix's action) + Layer 13.2 (surjectivity). An adapter producing the `gq2`
+Layer 12.11 (Stix's action) + Layer 13.2 (surjectivity). An adapter producing the `gq2`
 bundle from Layer 13.4 is packaging, not mathematics, and lives outside this repository.
 
 ## Sources, verified
@@ -264,7 +273,7 @@ the standard orientation the tame character `σ ↦ σ(ⁿ√f)/ⁿ√f`.
 **Fried**, Comm. Algebra 5 (1977): the branch cycle lemma is **(5.2)**, with exponent
 `−c_γ` in his normalization (`γ(ζ_N) = ζ_N^{c_γ}`), the conjugation landing in
 `N_{S_n}(G)`, and the statement relating **conjugacy classes only**, never representatives.
-⚠ Völklein's restatement (p. 39) uses the opposite sign again. The roadmap's Layer 12.10 is
+⚠ Völklein's restatement (p. 39) uses the opposite sign again. The roadmap's Layer 12.11 is
 pinned by its own Kummer identity for exactly this reason.
 
 **Lando–Zvonkin**, *Graphs on Surfaces*: the genus statement is **Proposition 1.5.3**
@@ -288,7 +297,7 @@ Layer 11.6 carries the conic caveat.
 in `~/claude/references`; per-statement extracts are in `ggd-extract.md` and
 `forster-extract.md` beside them, and the numbers are folded into the README's `*Source:*`
 lines for Layers 4.1, 4.4, 4.5, 5, 6.1, 6.3, 6.5, 7.1, 7.4, 8.1–8.3, 8.5, 8.6, 9.2, 9.3,
-10.6, 12.11 and 13.5. Four findings changed the roadmap rather than annotating it:
+10.6, 12.12 and 13.5. Four findings changed the roadmap rather than annotating it:
 
 - **Girondo–González-Diez Theorem 4.49** proves faithfulness on genus-zero dessins by
   **Lenstra's** argument — the polynomial `p_α = ∫ x(x−1)²(x−α)³` with its three *pairwise
@@ -325,12 +334,12 @@ milestone:
 
 | Layer | Szamuely |
 | --- | --- |
-| 12.3 the `ℚ̄`/`ℂ` comparison | **Theorem 4.6.10**, **Corollary 4.6.11** (base change between algebraically closed fields of characteristic `0` is an equivalence on finite étale covers) |
-| 12.5 the comparison isomorphism | **Example 4.6.12(3)**: `π₁(ℙ¹ ∖ {0,1,∞})` is free profinite on two generators; **4.6.12(2)** is the Kummer case `≅ ẑ` |
-| 12.7 the exact sequence and outer action | **Proposition 4.7.1** and the definition of `ρ_U : Gal(k̄|k) → Out(π₁(U_k̄))` in §4.7 |
-| 12.8 peripheral inertia | **Lemma 4.7.2** (the stabilizer of a pro-point over a `k`-rational point is its inertia group) |
-| 12.9 the cyclotomic character | **Example 4.7.4** (constructed as `Gal(k̄|k) → Aut(ẑ) ≅ ẑ^×`) |
-| 12.10 the branch-cycle theorem | **Remark 4.7.5**: the action on inertia is by the cyclotomic character in characteristic zero, by Kummer theory on a local parameter |
+| 12.4 the `ℚ̄`/`ℂ` comparison | **Theorem 4.6.10**, **Corollary 4.6.11** (base change between algebraically closed fields of characteristic `0` is an equivalence on finite étale covers) |
+| 12.6 the comparison isomorphism | **Example 4.6.12(3)**: `π₁(ℙ¹ ∖ {0,1,∞})` is free profinite on two generators; **4.6.12(2)** is the Kummer case `≅ ẑ` |
+| 12.8 the exact sequence and outer action | **Proposition 4.7.1** and the definition of `ρ_U : Gal(k̄|k) → Out(π₁(U_k̄))` in §4.7 |
+| 12.9 peripheral inertia | **Lemma 4.7.2** (the stabilizer of a pro-point over a `k`-rational point is its inertia group) |
+| 12.10 the cyclotomic character | **Example 4.7.4** (constructed as `Gal(k̄|k) → Aut(ẑ) ≅ ẑ^×`) |
+| 12.11 the branch-cycle theorem | **Remark 4.7.5**: the action on inertia is by the cyclotomic character in characteristic zero, by Kummer theory on a local parameter |
 
 ⚠ **A fourth witness for the exponent, and it is non-inverted.** Example 4.7.4 fixes the
 direction explicitly: `σ` carries the automorphism `ⁿ√t ↦ ω_n·ⁿ√t` to `ⁿ√t ↦ σ(ω_n)·ⁿ√t`,
@@ -338,7 +347,7 @@ which with `σ(ω_n) = ω_n^{χ(σ)}` is `γ ↦ γ^{χ(σ)}`. That agrees with 
 Kummer computation and with Stix's Definition 37(i), against Fried's `−c_γ` and Völklein's
 opposite sign — the disagreement being conventions, not mathematics.
 
-⚠ **Corollary 4.7.3 corrected a warning in Layer 12.7.** When `U` has a `k`-rational point
+⚠ **Corollary 4.7.3 corrected a warning in Layer 12.8.** When `U` has a `k`-rational point
 the exact sequence *splits*, and `ℙ¹_ℚ ∖ {0,1,∞}` has many. So the earlier draft's "a lift
 exists only after choosing a rational or tangential basepoint, which is outside this roadmap"
 understated the situation: lifts exist and are easy; what fails is **canonicity**, since each
@@ -451,6 +460,16 @@ Four schema facts that a Lean-side record type must respect:
    `pass_size = 2`). An earlier draft of this file and of README Layer 14.3 asserted the
    identity; both are corrected.
 
+   ⚠ **Those two witnesses also refute `orbit_size = trueOrbitSize`.** The stored count is
+   `len(galmap.triples)`, verified 1111/1111 above — a count of **embedding entries**. On
+   the two records it exceeds the number of Belyi-pair isomorphism classes they reach,
+   because different stored embeddings give simultaneously conjugate triples and hence, by
+   the Riemann-existence dictionary, the same class. So the stored field cannot in general
+   be the cardinality of the Galois orbit of a class. README Layer 11.7 states the correct
+   relation as a surjection `G/H ↠ G/S` of coset spaces, and README Layer 14.2 keeps
+   `storedEmbeddingCount` and `trueOrbitSize` as two named quantities with one theorem
+   between them.
+
    The knowl `belyi.pass_size` reads "The number of isomorphism classes of Belyi maps
    belonging to a given passport", which is exactly Layer 1.2's `passportSize`, and an
    independent exhaustive enumeration confirms it: for every passport of degree ≤ 7,
@@ -473,7 +492,7 @@ Four schema facts that a Lean-side record type must respect:
    generator when rendering the `i`-th triple's curve and map. Layer 14.2's embeddings
    statement is about that correspondence, not about the values.
 
-### Frozen acceptance records (Layer 14.5)
+### Frozen acceptance records (Layer 14.6)
 
 Five records, covering genus zero, positive genus, primitive, imprimitive, a
 multiple-orbit passport, and links to both an elliptic and a genus-two curve.
@@ -559,6 +578,49 @@ genus-one acceptance example can be taken from frozen data rather than construct
 proves its own classification and checks that each frozen record matches exactly one
 enumerated class and distinct records match distinct classes; that every class appears in
 the database is not claimed, and Layer 14 excludes completeness by name.
+
+### The independent enumeration behind Layer 3.5
+
+Computed 2026-08-09 by exhaustive search over `Equiv.Perm (Fin n)²`, in this roadmap's
+convention `σinf = (σ1 · σ0)⁻¹` — the assertion `σinf · σ1 · σ0 = 1` is checked on every
+triple generated — keeping the connected ones and quotienting by simultaneous conjugation
+by all of `S_n`:
+
+```text
+degree                          1    2    3    4    5
+connected classes               1    3    7   26   97
+ordered passports (with G)      1    3    7   26   78
+ordered passports (without G)   1    3    7   26   70
+```
+
+**Every ordered passport in degree `≤ 4` has size exactly `1`**, under both readings — with
+the monodromy group as part of the passport datum, which is the LMFDB's convention since
+`plabel = dTj-λ₀_λ₁_λ∞`, and without it. So a milestone demanding a multi-class passport at
+those degrees is unsatisfiable, and Layer 3.5 no longer asks for one.
+
+The smallest multi-class passport is at **degree 5**: with the group, one passport of size
+`3` and seventeen of size `2`; without the group, one of size `4`, three of size `3` and
+eighteen of size `2`. The size-`3` witness is monodromy `C₅` with partitions
+`([5],[5],[5])`, and it can be checked by hand: writing a triple of powers of a `5`-cycle
+`r` as its exponent vector `(a,b,c)` with `a,b,c ∈ {1,2,3,4}` and `a + b + c ≡ 0 (mod 5)`,
+there are `12` such vectors; `N_{S₅}(C₅) = F₂₀` acts through `(ℤ/5)ˣ` by scaling, since the
+`C₅` part is inner and `C₅` is abelian; and scaling to `a = 1` leaves exactly
+`(1,1,3), (1,2,2), (1,3,1)` — that is `(r, r, r³)`, `(r, r², r²)`, `(r, r³, r)`. `12 / 4 = 3`.
+
+⚠ **A review of this roadmap reported `74` ordered passports at degree `5`.** That number
+is neither reading; the enumeration above gives `78` and `70`. Nothing downstream depends on
+it — the claim that matters, that degree `≤ 4` admits no multi-class passport, holds under
+both readings — but the roadmap does not carry `74`.
+
+⚠ `1 + 3 + 7 + 26 = 37` ordered classes in degrees `1` through `4`, against the database's
+**thirteen** frozen records at those degrees. The database is not incomplete here: it
+tabulates one ordered passport per `S₃`-orbit under the branch-point action (Layer 2.6),
+retaining all classes inside the chosen ordered passport. That is
+Musty–Schiavone–Sijsling–Voight, *A database of Belyi maps*, **Algorithm 2.3.1**, and it is
+why README Layer 14.4 certifies the tabulated representative as carrier-only data rather
+than deriving it. The comparison Layer 3.5 makes is therefore one-directional: every frozen
+record matches exactly one enumerated class, distinct records match distinct classes, and
+the records' passports form a set of `S₃`-orbit representatives.
 
 ## Open items tracked here
 
