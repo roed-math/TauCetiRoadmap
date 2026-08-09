@@ -130,6 +130,17 @@ theorem dual_eq_self {d : AnalyticLFunctionData}
     (hp : d.polarOrder.mapDomain (starRingEnd ℂ) = d.polarOrder) :
     d.dual = d := sorry
 
+/-- **Layer 0.2, agreement of two cards**: every field equal, with the coefficients compared
+away from `n = 0`. ⚠ That slot is irrelevant to `LSeries` (0.1), and a card built from an ideal
+weight inherits at `n = 0` the weight's value at the zero ideal, which no hypothesis
+constrains — while `idealCoeff` counts the zero ideal itself and gives `1` there. Record
+equality `d = e` between two such cards is therefore false exactly at the junk slot, and the
+instance tests of 3.10 and 6.4 are stated with this predicate instead. -/
+def EqOffZero (d e : AnalyticLFunctionData) : Prop :=
+  (∀ n : ℕ, n ≠ 0 → d.coeff n = e.coeff n) ∧ d.conductor = e.conductor ∧
+    d.gammaR = e.gammaR ∧ d.gammaC = e.gammaC ∧ d.rootNumber = e.rootNumber ∧
+    d.completed = e.completed ∧ d.polarOrder = e.polarOrder
+
 /-- **Layer 0.2, Dirichlet-series agreement.** Independent of continuation, functional
 equation, Euler product, and coefficient bounds, because instances satisfy different
 subsets. -/
@@ -414,7 +425,7 @@ concludes `toFun I = 1` under that vacuous premise is false at the trivial modul
 def IdealWeight.IsGood (χ : IdealWeight K) (I : Ideal (𝓞 K)) : Prop :=
   I ≠ ⊥ ∧ ∀ 𝔭 ∈ χ.bad, ¬ 𝔭.asIdeal ∣ I
 
-/-- **Layer 1.2, the norm twist of an ideal weight**, `χ ‖·‖^{it}`, which the argument on
+/-- **Layer 1.2, the norm twist of an ideal weight**, `χ 𝔑^{it}`, which the argument on
 `Re s = 1` needs and which the closure condition of 7.2 quantifies over. -/
 noncomputable def IdealWeight.normTwist (χ : IdealWeight K) (t : ℝ) : IdealWeight K where
   toFun I := χ.toFun I * ((Ideal.absNorm I : ℝ) : ℂ) ^ (Complex.I * (t : ℂ))
@@ -428,7 +439,7 @@ noncomputable def IdealWeight.normTwist (χ : IdealWeight K) (t : ℝ) : IdealWe
 
 ⚠ `HasCancellation χ` alone is not enough for any of 7.3, 7.4, 7.5, or 8B.5. The `3-4-1` argument
 uses `χ`, `χ²`, and the conjugate of `χ`, and the argument on `Re s = 1` uses the norm twists
-`χ ‖·‖^{it}`; cancellation for `χ` implies cancellation for none of them. So the hypotheses are
+`χ 𝔑^{it}`; cancellation for `χ` implies cancellation for none of them. So the hypotheses are
 stated once, over a **family**, and 7.3 and 7.4 are theorems about a `CancellingFamily`,
 instantiated in 7.5 by the ray-class characters and in 8B.2 by the cyclotomic ones. A
 single-weight statement would be false at the advertised generality. -/
@@ -712,6 +723,17 @@ theorem idealClass_surjective (𝔪 : Modulus K) (c : 𝔪.RayClassGroup) :
 /-- **Layer 1.7, divisibility of moduli**, which is the order induction runs along. -/
 def Dvd (𝔫 𝔪 : Modulus K) : Prop :=
   𝔫.finitePart ∣ 𝔪.finitePart ∧ 𝔫.infinitePart ⊆ 𝔪.infinitePart
+
+/-- **Layer 1.7, the trivial modulus** `(1)`, with empty infinite part. It divides every modulus,
+its ray class group is the class group, and it is the conductor of every norm quasicharacter of
+6.4. -/
+noncomputable def one : Modulus K where
+  finitePart := ⊤
+  finitePart_ne_bot := sorry
+  infinitePart := ∅
+  infinitePart_isReal := by simp
+
+theorem one_dvd (𝔪 : Modulus K) : Dvd one 𝔪 := sorry
 
 /-- **Layer 1.7, the canonical projection between the ray class groups of nested moduli.**
 Induction of characters in 5.4 is precomposition with this map, and primitivity in 5.1 is stated
@@ -1089,6 +1111,26 @@ poles; at `0` and `1` both sides are junk values of a total representative. -/
 theorem completedDedekindZeta_one_sub {s : ℂ} (h0 : s ≠ 0) (h1 : s ≠ 1) :
     completedDedekindZeta K (1 - s) = completedDedekindZeta K s := sorry
 
+/-- **Layer 3.10, the `ζ_K` instance card**: degree `[K:ℚ]` via `gammaR` the `r₁`-fold multiset
+`{0}` and `gammaC` the `r₂`-fold multiset `{0}`, conductor `|d_K|`, `ε = 1`, the completed
+function of 3.6, and exact simple poles at `0` and `1`. It is the record the trivial
+Grossencharacter card of 6.4 must equal, so it is a named definition and not an `example`. -/
+noncomputable def dedekindZetaData : AnalyticLFunctionData where
+  coeff := idealCoeff K
+  conductor := ⟨(|discr K| : ℤ).toNat, sorry⟩
+  gammaR := Multiset.replicate (nrRealPlaces K) 0
+  gammaC := Multiset.replicate (nrComplexPlaces K) 0
+  rootNumber := 1
+  completed := completedDedekindZeta K
+  polarOrder := Finsupp.single 0 1 + Finsupp.single 1 1
+
+/-- **Layer 3.10**: the degree of the card is `[K:ℚ]`, from the gamma multisets. -/
+theorem degree_dedekindZetaData : (dedekindZetaData K).degree = Module.finrank ℚ K := sorry
+
+/-- **Layer 3.10, self-duality**: real coefficients, real shifts, real root number, and the
+reflection-invariant polar divisor `{0, 1}`. -/
+theorem dual_dedekindZetaData : (dedekindZetaData K).dual = dedekindZetaData K := sorry
+
 /-! ## Layer 4: special values — the `ℚ(i)` factorization -/
 
 /-- The primitive quadratic character mod 4, with values in `ℂ` (the pin's `ZMod.χ₄`
@@ -1343,9 +1385,45 @@ noncomputable def IdealWeight.trivialOn (𝔪 : Modulus K) : IdealWeight K where
   norm_eq_one := sorry
   eq_zero_bad := sorry
 
+/-- **Layer 6.1, the normalized absolute value at an infinite place**: `(v x) ^ mult v`, so
+`v x` itself at a real place and `‖σ_v(x)‖²` at a complex one. It is the local absolute value
+for which the product formula reads `∏_v ‖x‖_v = |N_{K/ℚ}(x)|` with no multiplicities, which is
+Mathlib's `InfinitePlace.prod_eq_abs_norm`.
+
+⚠ Every archimedean radial exponent in this layer is an exponent of **this** function. Using the
+plain `v x` at a complex place halves the parameter: the compatibility law below would then give
+the norm twist `𝔑^{iu}` over `ℚ(i)` the parameter `t = 2u`, and its gamma shift would come out
+`−2iu` against the `ζ_K(s − iu)` its L-series is. -/
+noncomputable def normalizedAbs (v : InfinitePlace K) (x : K) : ℝ :=
+  (v x) ^ v.mult
+
+theorem normalizedAbs_of_isReal {v : InfinitePlace K} (hv : v.IsReal) (x : K) :
+    normalizedAbs v x = v x := sorry
+
+/-- At a complex place the normalized absolute value is the **square**; this factor of two is
+the multiplicity `mult v = 2` of `InfinitePlace.prod_eq_abs_norm`. -/
+theorem normalizedAbs_of_isComplex {v : InfinitePlace K} (hv : v.IsComplex) (x : K) :
+    normalizedAbs v x = (v x) ^ 2 := sorry
+
+/-- **Layer 6.1, the product formula in normalized form**, the bridge along which the
+compatibility law of the carrier is discharged for the norm characters. -/
+theorem finprod_normalizedAbs (x : K) :
+    ∏ᶠ v : InfinitePlace K, normalizedAbs v x = |Algebra.norm ℚ x| := sorry
+
 open scoped Classical in
 /-- **Layer 6.1, the unitary archimedean local character**, of absolute value `1` at every place:
-`sgn(x)^{ε_v} |x|_v^{i t_v}` at a real place, and `(z/|z|)^{m_v} |z|_v^{i t_v}` at a complex one.
+`sgn(x)^{ε_v} ‖x‖_v^{-i t_v}` at a real place, and `(z/|z|)^{m_v} ‖z‖_v^{-i t_v}` at a complex
+one, where `‖·‖_v` is `normalizedAbs`.
+
+⚠ The radial exponent carries a **negative** sign, and the sign is not a free choice: it is
+forced jointly by the compatibility law `χ_unit((α)) · ∏_v χ_v(α) = 1` and the gamma shifts
+`ε_v − i t_v` and `|m_v|/2 − i t_v` of 6.2. The witness is `K = ℚ` and the unitary norm twist
+`χ_unit((n)) = n^{iu}`: compatibility gives `n^{iu} · n^{-it} = 1`, so `t = u`, and the gamma
+shift is `−iu`, matching the completion `Gammaℝ(s − iu) ζ(s − iu)` of the L-series `ζ(s − iu)`.
+With a positive radial sign the same two conventions give the factor `Gammaℝ(s + iu)`, whose
+product with `ζ(s − iu)` has no pole at `s = iu` and infinitely many poles on `Re s < 0`, so the
+recorded polar divisor and the meromorphic-continuation predicate of the norm-twist card are
+both false.
 
 ⚠ The **unitary** data is what the carrier stores, and the radial part is not in it. An algebraic
 pair `(p_v, p̄_v)` at a complex place gives `z^{-p} z̄^{-p̄}`, of radial size `|z|^{-(p+p̄)}`, which
@@ -1355,9 +1433,11 @@ noncomputable def unitaryArchChar (ε m : InfinitePlace K → ℤ) (t : Infinite
     (v : InfinitePlace K) (x : K) : ℂ :=
   (if v.IsReal then (if (v.embedding x).re < 0 then (-1 : ℂ) ^ (ε v) else 1)
     else ((v.embedding x) / ((v x : ℝ) : ℂ)) ^ (m v)) *
-    ((v x : ℝ) : ℂ) ^ (Complex.I * (t v : ℂ))
+    ((normalizedAbs v x : ℝ) : ℂ) ^ (-(Complex.I * (t v : ℂ)))
 
-/-- **Layer 6.1, a Grossencharacter**, built rather than assumed.
+/-- **Layer 6.1, a Grossencharacter**, built rather than assumed, as in Neukirch VII (6.9): the
+unitary ideal weight, a real shift, the finite character `χ_f` of `(𝓞_K/𝔪₀)ˣ`, and the unitary
+archimedean data, glued by one law over **every** principal ideal prime to `𝔪₀`.
 
 ⚠ The **unitary** part is the `IdealWeight`, and the archimedean data is unitary too. Storing the
 full weight as an `IdealWeight` and also asserting `χ = χ_unit · 𝔑^{shift}` with `χ_unit` unitary
@@ -1372,14 +1452,37 @@ modulus `1`, and `χ = 𝔑^{σ}`: for a positive integer `n` the mixed law read
 `n^{σ} = 1` for every `n` and hence `σ = 0`. With the law on the unitary components alone, `shift`
 is free, and `normCharacter` below inhabits the carrier for every real `σ`.
 
+⚠ The finite character is a **field, and the law quantifies over every coprime `α`** — both
+halves are load-bearing, and each has its own witness.
+
+Without `χ_f`, the law `χ_unit((α)) · ∏_v χ_v(α) = 1` over all coprime `α` empties the carrier
+of every ramified character: for a nontrivial even Dirichlet character `χ` mod `5` and `α = 2`
+it reads `χ(2) · 1 = 1`, so only characters with trivial finite part survive, and the
+finite-order comparisons of 6.2 and 6.4 quantify over nothing. Restricting the `χ_f`-free law to
+`α ≡ 1 mod^× 𝔪` instead admits a non-character: over `ℚ` with modulus `∞`, the pair with trivial
+weight and parity `ε = 1` satisfies that restricted law (it only sees positive `α`), yet no
+idele-class character has trivial finite part and sign component `sgn`; its would-be completion
+`Gammaℝ(s+1) ζ(s)` satisfies no clean functional equation, so 6.4 would assert a false theorem
+about it. The law with `χ_f` over **all** coprime `α` admits every ray-class character
+(`ofRayClassCharacter` below) and rejects that pair, which needs `χ_f(α) = sgn(α)` — not a
+function of `α mod 𝔪₀`.
+
+⚠ Triviality of the archimedean part on the units congruent to `1 mod 𝔪₀` — the admissibility
+that 6.3's sum over unit orbits reads — is the **unit case of the law**, a theorem below and not
+a separate field: at a unit `u` the principal ideal is `(1)` and `χ_f(u) = 1`.
+
 ⚠ The exponent `shift` must be **real**. With a complex exponent the decomposition is ambiguous
-up to `‖·‖^{it}`, and the uniqueness theorem below is false. -/
+up to `𝔑^{it}`, and the uniqueness theorem below is false. -/
 structure Grossencharacter (𝔪 : Modulus K) where
   /-- The **unitary** component, which is the ideal weight. -/
   unitary : IdealWeight K
   unitary_bad : unitary.bad = {𝔭 : HeightOneSpectrum (𝓞 K) | 𝔭.asIdeal ∣ 𝔪.finitePart}
   /-- The real exponent of the unitary decomposition. It is constrained by nothing else. -/
   shift : ℝ
+  /-- The finite character `χ_f`, as a multiplicative map on the residue ring `𝓞_K/𝔪₀`; only its
+  values on the units of that ring are constrained, and those have absolute value `1` by the
+  law below. -/
+  finiteChar : ((𝓞 K) ⧸ 𝔪.finitePart) →* ℂ
   /-- The parity `ε_v ∈ {0, 1}` at a real place. -/
   parity : InfinitePlace K → ℤ
   parity_mem : ∀ v, v.IsReal → parity v ∈ ({0, 1} : Set ℤ)
@@ -1389,16 +1492,10 @@ structure Grossencharacter (𝔪 : Modulus K) where
   angular_real : ∀ v, v.IsReal → angular v = 0
   /-- The archimedean parameters `t_v`. -/
   archimedeanParam : InfinitePlace K → ℝ
-  /-- ⚠ **Admissibility**: the unitary archimedean part is trivial on the units. Without it the
-  archimedean data and the ideal weight need not come from one character. -/
-  admissible : ∀ u : (𝓞 K)ˣ,
-    ∏ᶠ v : InfinitePlace K,
-      unitaryArchChar parity angular archimedeanParam v
-        (algebraMap (𝓞 K) K (u : 𝓞 K)) = 1
-  /-- Compatibility of the **unitary** weight with the **unitary** archimedean components on
-  principal ideals prime to `𝔪₀`. -/
+  /-- Compatibility of the **unitary** weight with the finite character and the **unitary**
+  archimedean components, on every principal ideal prime to `𝔪₀`. -/
   compat : ∀ α : 𝓞 K, α ≠ 0 → 𝔪.IsCoprimeTo (Ideal.span {α}) →
-    unitary.toFun (Ideal.span {α}) *
+    unitary.toFun (Ideal.span {α}) * finiteChar (Ideal.Quotient.mk 𝔪.finitePart α) *
         ∏ᶠ v : InfinitePlace K,
           unitaryArchChar parity angular archimedeanParam v (algebraMap (𝓞 K) K α) = 1
 
@@ -1414,16 +1511,57 @@ noncomputable def normCharacter (𝔫 : Modulus K) (σ : ℝ) : Grossencharacter
   unitary := IdealWeight.trivialOn 𝔫
   unitary_bad := rfl
   shift := σ
+  finiteChar := 1
   parity _ := 0
   parity_mem := sorry
   parity_complex := sorry
   angular _ := 0
   angular_real := sorry
   archimedeanParam _ := 0
-  admissible := sorry
   compat := sorry
 
 theorem normCharacter_shift (𝔫 : Modulus K) (σ : ℝ) : (normCharacter 𝔫 σ).shift = σ := rfl
+
+/-- **Layer 6.1, the second mandatory non-vacuity test: the unitary norm twist** `𝔑^{iu}`, for an
+**arbitrary** real `u` — the character whose archimedean parameters are `t_v = u` at **every**
+place. ⚠ It is the only constructor that discharges the compatibility law at a nonzero
+`archimedeanParam`, along `finprod_normalizedAbs`: `𝔑((α))^{iu} · ∏_v ‖α‖_v^{-iu} = 1` is the
+product formula. A carrier (or a sign convention) under which this constructor forces `t = 0`, or
+gives it any parameter other than `t_v = u`, cannot state the shifted poles of 6.4; and its card
+below is the witness that fixes the sign of the gamma shift as `−iu`. -/
+noncomputable def unitaryNormCharacter (𝔫 : Modulus K) (u : ℝ) : Grossencharacter 𝔫 where
+  unitary := IdealWeight.normTwist K (IdealWeight.trivialOn 𝔫) u
+  unitary_bad := rfl
+  shift := 0
+  finiteChar := 1
+  parity _ := 0
+  parity_mem := sorry
+  parity_complex := sorry
+  angular _ := 0
+  angular_real := sorry
+  archimedeanParam _ := u
+  compat := sorry
+
+theorem unitaryNormCharacter_archimedeanParam (𝔫 : Modulus K) (u : ℝ) (v : InfinitePlace K) :
+    (unitaryNormCharacter 𝔫 u).archimedeanParam v = u := rfl
+
+/-- **Layer 6.1, the third mandatory non-vacuity test: every ray-class character embeds.** The
+weight is the derived weight of 5.1, the shift and the parameters are `0`, and the finite
+character and the parities are produced by decomposing `η([(α)])⁻¹` along residues mod `𝔪₀` and
+signs at `𝔪_∞`, which is the existence half of Neukirch VII (6.9).
+
+⚠ This constructor is what makes the finite-order comparisons of 6.2 and 6.4 quantify over
+something: without it, a compatibility law that a ramified character cannot satisfy would leave
+`rootNumber_eq_heckeRootNumber` and the finite-order card test true and empty, and no green build
+would notice. -/
+noncomputable def ofRayClassCharacter {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) :
+    Grossencharacter 𝔪 := sorry
+
+theorem ofRayClassCharacter_spec {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) :
+    (ofRayClassCharacter η).unitary.toFun = η.weight.toFun ∧
+      (ofRayClassCharacter η).shift = 0 ∧
+      (∀ v, (ofRayClassCharacter η).angular v = 0) ∧
+      (∀ v, (ofRayClassCharacter η).archimedeanParam v = 0) := sorry
 
 /-- **Layer 6.1, the full quasicharacter** `χ = χ_unit · 𝔑^{shift}`, *defined* from the two
 fields. It is a plain function on ideals and not an `IdealWeight`. -/
@@ -1461,27 +1599,119 @@ statement the mixed compatibility law violated. -/
 theorem norm_localChar (χ : Grossencharacter 𝔪) (v : InfinitePlace K) (x : Kˣ) :
     ‖((χ.localChar v x : ℂˣ) : ℂ)‖ = 1 := sorry
 
+/-- **Layer 6.1, the full archimedean local character**: the unitary one times
+`‖x‖_v^{-shift}`, with `‖·‖_v` the **normalized** absolute value `normalizedAbs`. The definition
+is what makes the prose's `‖x‖_v^{-σ}` unambiguous: at a complex place the radial factor is
+`(v x)^{-2σ}` and not `(v x)^{-σ}`. -/
+noncomputable def fullLocalChar (χ : Grossencharacter 𝔪) (v : InfinitePlace K) (x : K) : ℂ :=
+  unitaryArchChar χ.parity χ.angular χ.archimedeanParam v x *
+    ((normalizedAbs v x : ℝ) : ℂ) ^ (-(χ.shift : ℂ))
+
+/-- **Layer 6.1, the unit law**: at a unit the principal ideal is `(1)`, so the compatibility law
+collapses to `χ_f(u) · ∏_v χ_v(u) = 1`. -/
+theorem finiteChar_mul_arch_prod_of_unit (χ : Grossencharacter 𝔪) (u : (𝓞 K)ˣ) :
+    χ.finiteChar (Ideal.Quotient.mk 𝔪.finitePart (u : 𝓞 K)) *
+      ∏ᶠ v : InfinitePlace K,
+        unitaryArchChar χ.parity χ.angular χ.archimedeanParam v
+          (algebraMap (𝓞 K) K (u : 𝓞 K)) = 1 := sorry
+
+/-- **Layer 6.1, admissibility, now a theorem**: the unitary archimedean part is trivial on the
+units congruent to `1 mod 𝔪₀`. It is the unit case of the compatibility law, where
+`χ_f(u) = 1`, and it is the invariance that makes 6.3's sum over unit orbits well defined. -/
+theorem arch_prod_eq_one_of_unit (χ : Grossencharacter 𝔪) (u : (𝓞 K)ˣ)
+    (hu : Ideal.Quotient.mk 𝔪.finitePart ((u : 𝓞 K) - 1) = 0) :
+    ∏ᶠ v : InfinitePlace K,
+      unitaryArchChar χ.parity χ.angular χ.archimedeanParam v
+        (algebraMap (𝓞 K) K (u : 𝓞 K)) = 1 := sorry
+
 /-- **Layer 6.2, the gamma shifts**, from the unitary data: `ε_v − i t_v` at a real place and
 `|m_v|/2 − i t_v` at a complex one. ⚠ They are computed from the *unitary* angular exponent, not
 from an algebraic pair; the radial part of the pair lives in `shift` and is recentered away
-before the completion of 6.4 is formed. -/
+before the completion of 6.4 is formed.
+
+⚠ The `− i t_v` here and the `‖x‖_v^{-i t_v}` of `unitaryArchChar` are **one** sign convention:
+for the local character `‖·‖_v^{-it}` the local factor of `Gammaℝ`-type is `Gammaℝ(s − it)`.
+Flipping either sign alone breaks the norm-twist card of 6.4 at the ℚ-witness recorded on
+`unitaryArchChar`. -/
 noncomputable def gammaShiftReal (χ : Grossencharacter 𝔪) (v : InfinitePlace K) : ℂ :=
   ((χ.parity v : ℤ) : ℂ) - Complex.I * (χ.archimedeanParam v : ℂ)
 
 noncomputable def gammaShiftComplex (χ : Grossencharacter 𝔪) (v : InfinitePlace K) : ℂ :=
   ((|χ.angular v| : ℤ) : ℂ) / 2 - Complex.I * (χ.archimedeanParam v : ℂ)
 
-/-- **Layer 6.1, the algebraic infinity type**, a *derived* notion. At a complex place the pair
-`(p_v, p̄_v)` and the unitary data are related by `shift = (p_v + p̄_v)/2` and
-`m_v = p̄_v − p_v`. ⚠ The pair is not stored: an arbitrary pair is not unitary, and separating its
-radial exponent into the global shift is exactly what makes the carrier inhabitable. -/
-def HasInfinityType (χ : Grossencharacter 𝔪) (p pbar : InfinitePlace K → ℤ) : Prop :=
-  (∀ v, v.IsComplex → (2 : ℝ) * χ.shift = ((p v + pbar v : ℤ) : ℝ)) ∧
-    (∀ v, v.IsComplex → χ.angular v = pbar v - p v) ∧
-    (∀ v, v.IsReal → p v = χ.parity v ∧ pbar v = 0)
+/-- **Layer 6.1, the algebraic infinity type**, a *derived* notion: the statement that the full
+archimedean character is `x ↦ x^{-p_v}` on the positive reals at a real place and
+`z ↦ z^{-p_v} z̄^{-p̄_v}` at a complex place. The dictionary with the stored unitary data is
+placewise: at a real place `shift = p_v` (and `p̄_v = 0` by convention); at a complex place
+`2 · shift = p_v + p̄_v` and `m_v = p̄_v − p_v`.
 
-/-- **Layer 6.1, the `A₀` condition**, as a predicate. -/
-def IsAlgebraic (χ : Grossencharacter 𝔪) : Prop := ∀ v, χ.archimedeanParam v = 0
+⚠ The pair is not stored: an arbitrary pair is not unitary, and separating its radial exponent
+into the global shift is exactly what makes the carrier inhabitable.
+
+⚠ The real-place clause relates the pair to the **shift**, not to the parity. `𝔑²` has
+`shift = 2`, parity `0`, and infinity type `p_v = 2`; a clause `p_v = ε_v` confines the pair to
+`{0, 1}` and rejects it. And no parity clause belongs here at all: the parity is the sign
+datum of the finite-at-infinity part, not infinity-type data. The witness is `𝔑³`, the cube of
+the Tate character, with `shift = 3` and parity `0`: its full local character at a real place is
+`sgn(x)^{3} |x|^{-3}` **only on the negatives** — on the positive reals, where the infinity type
+lives, it is `x^{-3}` — so a clause `ε_v ≡ p_v (mod 2)` would reject `𝔑³`, which every
+classification counts as algebraic. -/
+def HasInfinityType (χ : Grossencharacter 𝔪) (p pbar : InfinitePlace K → ℤ) : Prop :=
+  (∀ v, v.IsReal → χ.shift = ((p v : ℤ) : ℝ) ∧ pbar v = 0) ∧
+    (∀ v, v.IsComplex →
+      (2 : ℝ) * χ.shift = ((p v + pbar v : ℤ) : ℝ) ∧ χ.angular v = pbar v - p v)
+
+/-- **Layer 6.1, the `A₀` condition**: the archimedean parameters vanish **and** an integral
+infinity type exists. ⚠ The first clause alone is not it: `𝔑^{√2}` has every `t_v = 0` and an
+irrational radial exponent, so it is not of type `A₀`, and the existence clause is what rejects
+it. -/
+def IsAlgebraic (χ : Grossencharacter 𝔪) : Prop :=
+  (∀ v, χ.archimedeanParam v = 0) ∧ ∃ p pbar, χ.HasInfinityType p pbar
+
+/-- **Layer 6.1, algebraicity test one**: every integer norm power is algebraic, with the
+constant pair `p_v = n` at real places and `p_v = p̄_v = n` at complex ones. `n = 2` is the case
+that a parity-valued pair rejects, and `n = 3` is the case that a parity-congruence clause
+rejects. -/
+theorem isAlgebraic_normCharacter_int (𝔫 : Modulus K) (n : ℤ) :
+    (normCharacter 𝔫 (n : ℝ)).IsAlgebraic := sorry
+
+/-- **Layer 6.1, algebraicity test two**: `𝔑^{√2}` is not algebraic, although every
+`archimedeanParam` vanishes. -/
+theorem not_isAlgebraic_normCharacter_sqrt_two (𝔫 : Modulus K) :
+    ¬ (normCharacter 𝔫 (Real.sqrt 2)).IsAlgebraic := sorry
+
+/-- **Layer 6.3, the harmonic factor at a complex place**, determined by the **unitary** angular
+exponent alone: `z^m` when `0 ≤ m`, and `z̄^{-m}` when `m < 0`. This, and not an algebraic pair,
+is the polynomial weight the theta series of 6.3 carries at a complex place; at a real place the
+factor is `x^{ε_v}`. -/
+noncomputable def harmonicFactor (m : ℤ) (z : ℂ) : ℂ :=
+  if 0 ≤ m then z ^ m.toNat else (starRingEnd ℂ z) ^ (-m).toNat
+
+/-- **Layer 6.3, the harmonic factor is the angular part**: on nonzero `z` it is
+`(z/|z|)^m · |z|^{|m|}`, which is how the Mellin exponent of 6.3 absorbs the radial power
+`|z|^{|m|}` while the character keeps the unitary factor `(z/|z|)^m`. -/
+theorem harmonicFactor_eq_angular (m : ℤ) {z : ℂ} (hz : z ≠ 0) :
+    harmonicFactor m z = (z / (‖z‖ : ℂ)) ^ m * (‖z‖ : ℂ) ^ (|m| : ℤ) := sorry
+
+/-- **Layer 6.3, the comparison with the algebraic description, complex places**: under
+`HasInfinityType p p̄` with vanishing parameters, the full local character at a complex place is
+exactly `z ↦ z^{-p_v} z̄^{-p̄_v}`. -/
+theorem fullLocalChar_of_hasInfinityType_isComplex (χ : Grossencharacter 𝔪)
+    {p pbar : InfinitePlace K → ℤ} (h : χ.HasInfinityType p pbar)
+    (ht : ∀ v, χ.archimedeanParam v = 0) {v : InfinitePlace K} (hv : v.IsComplex)
+    {x : K} (hx : x ≠ 0) :
+    χ.fullLocalChar v x =
+      (v.embedding x) ^ (-(p v)) * (starRingEnd ℂ (v.embedding x)) ^ (-(pbar v)) := sorry
+
+/-- **Layer 6.3, the comparison with the algebraic description, real places**: on the
+**positive** reals at `v`, the full local character is `x ↦ x^{-p_v}`. ⚠ Only there: on the
+negatives it carries the extra `sgn(x)^{ε_v - p_v}`, which is finite-part data — the reason
+`HasInfinityType` has no parity clause. -/
+theorem fullLocalChar_of_hasInfinityType_isReal (χ : Grossencharacter 𝔪)
+    {p pbar : InfinitePlace K → ℤ} (h : χ.HasInfinityType p pbar)
+    (ht : ∀ v, χ.archimedeanParam v = 0) {v : InfinitePlace K} (hv : v.IsReal)
+    {x : K} (hx : 0 < (v.embedding x).re) :
+    χ.fullLocalChar v x = (v.embedding x) ^ (-(p v)) := sorry
 
 /-- **Layer 6.4, the continued L-function of a Grossencharacter**, *defined* from the unitary one
 by the shift. Since `χ(𝔞) = χ_unit(𝔞) · 𝔑𝔞^{shift}`, the two Dirichlet series satisfy
@@ -1495,8 +1725,9 @@ theorem lFunctionC_eq (χ : Grossencharacter 𝔪) {s : ℂ} (hs : 1 + χ.shift 
 /-! #### Layer 6.1: induction, the conductor, and primitive reduction -/
 
 /-- **Layer 6.1, induction along a divisor of the modulus**, as a **constructor**: the unitary
-weight is restricted to the ideals prime to the larger modulus, and every infinite datum is
-carried across unchanged. -/
+weight is restricted to the ideals prime to the larger modulus, the finite character is composed
+with the residue projection `𝓞_K/𝔪₀ → 𝓞_K/𝔫₀`, and every infinite datum is carried across
+unchanged. -/
 noncomputable def induced {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) (ψ : Grossencharacter 𝔫) :
     Grossencharacter 𝔪 := sorry
 
@@ -1529,28 +1760,62 @@ structure PrimitiveData (χ : Grossencharacter 𝔪) where
   prim_isPrimitive : prim.IsPrimitive
   induces : Induces dvd prim χ
 
-/-- **Layer 6.1, existence and uniqueness of the primitive reduction.** ⚠ This is the central
-construction of the imprimitive theory. A relation `Induces ψ χ` together with a theorem
-conditional on a *supplied* `ψ` does not produce the primitive ancestor that the completion, the
-root number, the conductor of the card, and the Euler-factor correction all consume. -/
-theorem existsUnique_primitiveData (χ : Grossencharacter 𝔪) :
-    ∃ d : PrimitiveData χ, ∀ e : PrimitiveData χ,
-      e.conductor = d.conductor ∧ Induces d.dvd d.prim χ := sorry
+/-- **Layer 6.1, existence of the primitive reduction.** ⚠ This is the central construction of
+the imprimitive theory. A relation `Induces ψ χ` together with a theorem conditional on a
+*supplied* `ψ` does not produce the primitive ancestor that the completion, the root number, the
+conductor of the card, and the Euler-factor correction all consume. -/
+theorem nonempty_primitiveData (χ : Grossencharacter 𝔪) : Nonempty (PrimitiveData χ) := sorry
 
-noncomputable def primitiveData (χ : Grossencharacter 𝔪) : PrimitiveData χ := sorry
+/-- **Layer 6.1, genuine uniqueness of the primitive reduction**: any two bundles are equal —
+same conductor, and, across that equality of moduli, the same primitive character. ⚠ Uniqueness
+of the conductor alone is strictly weaker: it leaves two distinct primitive characters of the
+same conductor both claiming to induce `χ`, and every "canonical" object below would depend on
+the choice. The proof transports `e.prim` along the conductor equality and identifies the
+transported character with `d.prim` field by field; the divisibility and primitivity fields are
+proofs, so they carry no data. -/
+theorem primitiveData_unique (χ : Grossencharacter 𝔪) (d e : PrimitiveData χ) : d = e := sorry
+
+/-- **Layer 6.1, the canonical primitive reduction**, *defined* from existence; by
+`primitiveData_unique` it does not depend on the choice. -/
+noncomputable def primitiveData (χ : Grossencharacter 𝔪) : PrimitiveData χ :=
+  (nonempty_primitiveData χ).some
 
 /-- **Layer 6.1, the conductor**, which is the modulus every analytic invariant below is built
 from. ⚠ It is the *primitive* conductor, and not the modulus the character happens to be
 presented over. -/
 noncomputable def conductor (χ : Grossencharacter 𝔪) : Modulus K := χ.primitiveData.conductor
 
+/-- **Layer 6.1, the canonical primitive character** inducing `χ`, at the conductor. Every
+analytic invariant of 6.2 and 6.4 — root number, completion, polar divisor, Layer 0 card — is
+built from **this** character, and the presented `χ` keeps only its imprimitive L-series and the
+Euler-factor correction below. -/
+noncomputable def primitiveChar (χ : Grossencharacter 𝔪) : Grossencharacter χ.conductor :=
+  χ.primitiveData.prim
+
+theorem primitiveChar_isPrimitive (χ : Grossencharacter 𝔪) : χ.primitiveChar.IsPrimitive :=
+  χ.primitiveData.prim_isPrimitive
+
+theorem primitiveChar_induces (χ : Grossencharacter 𝔪) :
+    Induces χ.primitiveData.dvd χ.primitiveChar χ :=
+  χ.primitiveData.induces
+
+/-- **Layer 6.1, primitive reduction is the identity on a primitive character**: the conductor
+is the presented modulus. That the primitive character is then `χ` itself is
+`primitiveChar_induces` together with `primitiveData_unique`, which avoids a heterogeneous
+equality in the public signature. -/
+theorem conductor_eq_of_isPrimitive (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
+    χ.conductor = 𝔪 := sorry
+
 /-- **Layer 6.4, the imprimitive correction**, a finite product of Euler factors, exactly as in
-5.4. It is derived from the primitive reduction, not assumed alongside it. -/
+5.4. It is derived from the primitive reduction, not assumed alongside it. ⚠ The two sides are
+different functions when `𝔪₀` has primes off the conductor: the right factor vanishes at the
+zeros of the removed Euler factors, so the presented L-series must never be packaged with the
+primitive card's completion or polar divisor. -/
 theorem lFunctionC_eq_primitive (χ : Grossencharacter 𝔪) (s : ℂ) :
-    χ.lFunctionC s = χ.primitiveData.prim.lFunctionC s *
+    χ.lFunctionC s = χ.primitiveChar.lFunctionC s *
       ∏ᶠ 𝔭 : {𝔭 : HeightOneSpectrum (𝓞 K) //
           𝔭.asIdeal ∣ 𝔪.finitePart ∧ ¬ 𝔭.asIdeal ∣ (χ.conductor).finitePart},
-        (1 - χ.primitiveData.prim.unitary.toFun (𝔭 : HeightOneSpectrum (𝓞 K)).asIdeal *
+        (1 - χ.primitiveChar.unitary.toFun (𝔭 : HeightOneSpectrum (𝓞 K)).asIdeal *
           ((Ideal.absNorm (𝔭 : HeightOneSpectrum (𝓞 K)).asIdeal : ℝ) : ℂ) ^
             ((χ.shift : ℂ) - s)) := sorry
 
@@ -1561,20 +1826,23 @@ the unitary archimedean data inverted. ⚠ This, and not the complex conjugate, 
 functional equation reflects against at `1 − s`: conjugation leaves the real shift `σ` alone,
 while the reflection needs `−σ`.
 
-⚠ Real parity is **unchanged**. The local character there is `sgn(x)^{ε} |x|^{it}` with
+⚠ Real parity is **unchanged**. The local character there is `sgn(x)^{ε} |x|^{-it}` with
 `ε ∈ {0,1}`, and `sgn(x)^{-1} = sgn(x)`; negating `ε` would give `−1`, which the carrier forbids,
-and the inverse of every odd real character would be uninhabitable. -/
+and the inverse of every odd real character would be uninhabitable.
+
+⚠ The finite character of both involutions is the **conjugate** `χ_f ↦ conj ∘ χ_f`, which on the
+unit residues — the only values the law constrains — is the inverse, since `‖χ_f‖ = 1` there. -/
 noncomputable def inv (χ : Grossencharacter 𝔪) : Grossencharacter 𝔪 where
   unitary := IdealWeight.conjugate K χ.unitary
   unitary_bad := sorry
   shift := -χ.shift
+  finiteChar := (starRingEnd ℂ).toMonoidHom.comp χ.finiteChar
   parity := χ.parity
   parity_mem := χ.parity_mem
   parity_complex := χ.parity_complex
   angular v := -(χ.angular v)
   angular_real := sorry
   archimedeanParam v := -(χ.archimedeanParam v)
-  admissible := sorry
   compat := sorry
 
 /-- **Layer 6.4, the canonical conjugate Grossencharacter**: conjugate unitary part, the **same**
@@ -1588,13 +1856,13 @@ noncomputable def conj (χ : Grossencharacter 𝔪) : Grossencharacter 𝔪 wher
   unitary := IdealWeight.conjugate K χ.unitary
   unitary_bad := sorry
   shift := χ.shift
+  finiteChar := (starRingEnd ℂ).toMonoidHom.comp χ.finiteChar
   parity := χ.parity
   parity_mem := χ.parity_mem
   parity_complex := χ.parity_complex
   angular v := -(χ.angular v)
   angular_real := sorry
   archimedeanParam v := -(χ.archimedeanParam v)
-  admissible := sorry
   compat := sorry
 
 theorem inv_toFun (χ : Grossencharacter 𝔪) (I : Ideal (𝓞 K)) :
@@ -1659,10 +1927,36 @@ theorem isNormTwistOnGood_normTwistExponent (χ : Grossencharacter 𝔪)
     (h : χ.IsNormQuasicharacter) :
     IdealWeight.IsNormTwistOnGood K χ.unitary χ.normTwistExponent := sorry
 
-/-- **Layer 6.2, the root number of a Grossencharacter**, from the Gauss sum of 5.6 at the
-**primitive conductor** and the unitary infinity data of 6.2. ⚠ It depends on the finite
-character, the parity, the angular exponents, and the archimedean parameters; the root number of
-the trivial ray-class character does not mention `χ` and is not it. -/
+/-- The constructor of 6.1 inhabits the exception, with the exponent it names. -/
+theorem isNormQuasicharacter_unitaryNormCharacter (𝔫 : Modulus K) (u : ℝ) :
+    (unitaryNormCharacter 𝔫 u).IsNormQuasicharacter ∧
+      (unitaryNormCharacter 𝔫 u).normTwistExponent = u := sorry
+
+/-- **Layer 6.4, the ideal-weight condition determines the whole character.** ⚠ This is the
+theorem that makes `IsNormQuasicharacter` — a condition on the ideal weight alone — strong
+enough to key the polar divisor and the shifted-zeta identity below: through the compatibility
+law over all coprime `α`, a norm-twist weight forces trivial parity, trivial angular exponents,
+trivial finite character on the coprime residues, and the **normalized** archimedean parameter
+`t_v = u` at every place. The last conjunct is where the normalized absolute value earns its
+`mult`: with the un-normalized `v x` at a complex place the forced parameter would be `2u` there
+and the gamma data below would be wrong by that factor of two. -/
+theorem forced_of_isNormQuasicharacter (χ : Grossencharacter 𝔪)
+    (h : χ.IsNormQuasicharacter) :
+    (∀ v, χ.parity v = 0) ∧ (∀ v, χ.angular v = 0) ∧
+      (∀ v, χ.archimedeanParam v = χ.normTwistExponent) ∧
+      (∀ α : 𝓞 K, α ≠ 0 → 𝔪.IsCoprimeTo (Ideal.span {α}) →
+        χ.finiteChar (Ideal.Quotient.mk 𝔪.finitePart α) = 1) := sorry
+
+/-- **Layer 6.4, the conductor of a norm quasicharacter is trivial.** -/
+theorem conductor_of_isNormQuasicharacter (χ : Grossencharacter 𝔪)
+    (h : χ.IsNormQuasicharacter) : χ.conductor = Modulus.one := sorry
+
+/-- **Layer 6.2, the root number of a Grossencharacter**, from the Gauss sum of the finite
+character `χ_f` at the **primitive conductor**, as in 5.6, and the unitary infinity data of 6.2.
+⚠ It depends on `χ_f`, the parity, the angular exponents, and the archimedean parameters — and
+on nothing else: it never reads `shift`, which is what makes the conjugate/inverse comparison
+below unconditional. The root number of the trivial ray-class character does not mention `χ` and
+is not it. -/
 noncomputable def rootNumber (χ : Grossencharacter 𝔪) : ℂ := sorry
 
 theorem norm_rootNumber (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
@@ -1680,9 +1974,10 @@ theorem rootNumber_inv (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
 theorem rootNumber_inv_eq_conj (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
     χ.inv.rootNumber = starRingEnd ℂ χ.rootNumber := sorry
 
-/-- **Layer 6.2**: the conjugate has the same unitary part as the inverse, so the same root
-number. -/
-theorem rootNumber_conj (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
+/-- **Layer 6.2**: the conjugate and the inverse differ only in the shift, which the root number
+never reads, so their root numbers are equal — with no primitivity hypothesis, because this is a
+statement about the definition and not about the functional equation. -/
+theorem rootNumber_conj (χ : Grossencharacter 𝔪) :
     χ.conj.rootNumber = χ.inv.rootNumber := sorry
 
 /-- **Layer 6.2, the finite-order comparison**, with the infinite-place data included. ⚠ Agreement
@@ -1710,6 +2005,24 @@ theorem completedUnitary_eq (χ : Grossencharacter 𝔪) {s : ℂ} (hs : 1 < s.r
         (∏ᶠ v : {v : InfinitePlace K // v.IsComplex},
             Gammaℂ (s + χ.gammaShiftComplex (v : InfinitePlace K))) *
         continuedLFunctionOfWeight K χ.unitary s := sorry
+
+/-- **Layer 6.4, the unitary completion of a norm quasicharacter is the vertically shifted
+Dedekind completion**, up to the constant `|d_K|^{iu/2}` — and the constant is not optional:
+the completion carries the conductor power `A^{s/2}` at the trivial conductor `A = |d_K|`,
+while `completedDedekindZeta K (s − iu)` carries `|d_K|^{(s−iu)/2}`. This identity is what makes
+the recorded poles at `iu` and `1 + iu` genuine, and over `ℚ`, where `|d| = 1`, it is on-the-nose
+equality with `Λ(s − iu)`; the gamma factor it unfolds to is `Gammaℝ(s − iu)`, the sign the
+whole convention chain exists to produce.
+
+⚠ Stated for the **canonical primitive character**. For an imprimitive presentation the
+presented L-series carries the removed Euler factors of `lFunctionC_eq_primitive`, so the same
+identity for `completedUnitary χ` itself would be false at every modulus with a prime off the
+conductor. -/
+theorem completedUnitary_primitiveChar_of_isNormQuasicharacter (χ : Grossencharacter 𝔪)
+    (h : χ.IsNormQuasicharacter) (s : ℂ) :
+    completedUnitary χ.primitiveChar s =
+      ((|discr K| : ℤ) : ℂ) ^ (Complex.I * (χ.normTwistExponent : ℂ) / 2) *
+        completedDedekindZeta K (s - Complex.I * (χ.normTwistExponent : ℂ)) := sorry
 
 /-- **Layer 6.4, the completed function of the full quasicharacter**, *defined* by recentering.
 
@@ -1787,9 +2100,17 @@ theorem lFunctionC_of_normQuasicharacter (χ : Grossencharacter 𝔪)
 /-! #### Layer 6.4: the Layer 0 card -/
 
 open scoped Classical in
-/-- **Layer 6.4, the canonical Layer 0 card of a Grossencharacter**, built from the **unitary**
-part at the **primitive** conductor, with its gamma multisets written out so that the degree is a
-computation, and with its polar divisor recorded exactly.
+/-- **Layer 6.4, the Layer 0 card of a Grossencharacter's unitary part**, with its gamma
+multisets written out so that the degree is a computation, and with its polar divisor recorded
+exactly.
+
+⚠ Its fields are coherent **for a primitive character**, and every theorem below about this card
+takes that hypothesis. For an imprimitive `χ` the coefficients are the presented ones while the
+conductor is the primitive one — two different L-functions — so the canonical card of an
+arbitrary character is `primitiveUnitaryData` below, the card of `χ.primitiveChar`, and the
+presented L-series keeps only `lFunctionC_eq_primitive`. Giving the presented coefficients a
+card with this completion and polar divisor would assert a functional equation that the removed
+Euler factors falsify.
 
 ⚠ `polarOrder = 0` for every character is wrong. When the unitary part is the norm twist `𝔑^{iu}`,
 the recentered completion is a vertically shifted Dedekind completion, with simple poles at `iu`
@@ -1821,45 +2142,185 @@ theorem unitaryData_completed (χ : Grossencharacter 𝔪) (s : ℂ) :
     (χ.unitaryData).completed s =
       completedGrossencharacterLFunction χ (s + (χ.shift : ℂ)) := sorry
 
+/-- **Layer 6.4, the two involutions have the same card**: the conjugate and the inverse differ
+only in the shift, and no field of the unitary card reads the shift. -/
+theorem unitaryData_conj_eq_inv (χ : Grossencharacter 𝔪) :
+    χ.conj.unitaryData = χ.inv.unitaryData := sorry
+
+/-- **Layer 6.4, the central comparison: the card of the inverse is the dual record.** This is
+the theorem the whole involution API exists to feed, and it is an equality of records, so it
+says at once: conjugate coefficients (the conjugate weight), the same primitive conductor
+(`inv_conductor`), conjugated gamma shifts (the four comparisons of 6.2), the
+inverse-equals-conjugate root number (`rootNumber_inv_eq_conj`), the Schwarz-reflected completed
+function `s ↦ conj (Λ (conj s))`, and the polar divisor transported along `p ↦ conj p` — for a
+norm quasicharacter with exponent `u` the inverse has exponent `−u`, and `{iu, 1 + iu}` maps to
+`{−iu, 1 − iu}` under both descriptions.
+
+⚠ Primitivity is needed: the root-number field compares through the functional-equation
+involution `W(χ⁻¹) = conj W(χ)`, which is 6.2's statement for primitive characters. -/
+theorem unitaryData_inv_eq_dual (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
+    χ.inv.unitaryData = (χ.unitaryData).dual := sorry
+
 /-- **Layer 6.4, the card satisfies the four Layer 0 predicates.** ⚠ A type-correct record with
 inconsistent completion data validates nothing; these are the theorems that make the card the
-bridge to every downstream consumer of degree, gamma data, conductor, polar divisor, and zeros. -/
+bridge to every downstream consumer of degree, gamma data, conductor, polar divisor, and zeros.
+The functional equation is **unconditional given primitivity**: its dual-record comparison is
+`unitaryData_inv_eq_dual`, proved here and not supplied by the caller. -/
 theorem unitaryData_hasDirichletAgreement (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
     (χ.unitaryData).HasDirichletAgreement := sorry
 
 theorem unitaryData_hasMeromorphicContinuation (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
     (χ.unitaryData).HasMeromorphicContinuation := sorry
 
-theorem unitaryData_hasFunctionalEquation (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive)
-    (hself : χ.inv.unitaryData = (χ.unitaryData).dual) :
+theorem unitaryData_hasFunctionalEquation (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
     (χ.unitaryData).HasFunctionalEquation := sorry
 
 theorem unitaryData_hasAverageCoefficientBound (χ : Grossencharacter 𝔪) :
     (χ.unitaryData).HasAverageCoefficientBound := sorry
 
+/-! #### Layer 6.4: the canonical primitive card of an arbitrary character -/
+
+/-- **Layer 6.4, the canonical root number** of an arbitrary character: the root number of its
+canonical primitive character. For a primitive `χ` it is `χ.rootNumber` by
+`conductor_eq_of_isPrimitive` and uniqueness. -/
+noncomputable def primitiveRootNumber (χ : Grossencharacter 𝔪) : ℂ :=
+  χ.primitiveChar.rootNumber
+
+/-- **Layer 6.4, the canonical completion** of an arbitrary character. -/
+noncomputable def primitiveCompleted (χ : Grossencharacter 𝔪) : ℂ → ℂ :=
+  completedUnitary χ.primitiveChar
+
+/-- **Layer 6.4, the canonical Layer 0 card** of an arbitrary character: the card of
+`χ.primitiveChar`. The presented, possibly imprimitive, coefficients never enter it. -/
+noncomputable def primitiveUnitaryData (χ : Grossencharacter 𝔪) : AnalyticLFunctionData :=
+  χ.primitiveChar.unitaryData
+
+/-- **Layer 6.4, the canonical card of a primitive character is its own card.** -/
+theorem primitiveUnitaryData_of_isPrimitive (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
+    χ.primitiveUnitaryData = χ.unitaryData := sorry
+
+/-- **Layer 6.4, the four Layer 0 predicates for the canonical card, with no hypothesis at
+all**: the canonical primitive character is primitive, so the four theorems above apply to it.
+This is the form every downstream consumer instantiates, because it asks nothing of the
+presented character. -/
+theorem primitiveUnitaryData_hasDirichletAgreement (χ : Grossencharacter 𝔪) :
+    (χ.primitiveUnitaryData).HasDirichletAgreement :=
+  unitaryData_hasDirichletAgreement _ χ.primitiveChar_isPrimitive
+
+theorem primitiveUnitaryData_hasMeromorphicContinuation (χ : Grossencharacter 𝔪) :
+    (χ.primitiveUnitaryData).HasMeromorphicContinuation :=
+  unitaryData_hasMeromorphicContinuation _ χ.primitiveChar_isPrimitive
+
+theorem primitiveUnitaryData_hasFunctionalEquation (χ : Grossencharacter 𝔪) :
+    (χ.primitiveUnitaryData).HasFunctionalEquation :=
+  unitaryData_hasFunctionalEquation _ χ.primitiveChar_isPrimitive
+
+theorem primitiveUnitaryData_hasAverageCoefficientBound (χ : Grossencharacter 𝔪) :
+    (χ.primitiveUnitaryData).HasAverageCoefficientBound :=
+  unitaryData_hasAverageCoefficientBound _
+
+/-- **Layer 6.4, the dual comparison for the canonical card**, now for an **arbitrary**
+character: primitive reduction commutes with the inverse (`inv_conductor` and uniqueness), so
+the comparison transports along it. -/
+theorem primitiveUnitaryData_inv_eq_dual (χ : Grossencharacter 𝔪) :
+    χ.inv.primitiveUnitaryData = (χ.primitiveUnitaryData).dual := sorry
+
+variable (K) in
+/-- **Layer 6.4, the vertically shifted Dedekind-zeta card**: what the card of the unitary norm
+twist `𝔑^{iu}` must equal, field by field. ⚠ Two constants are forced and easy to lose. The
+completed function is `|d_K|^{iu/2} · Λ_K(s − iu)` and not `Λ_K(s − iu)`: the conductor power
+`|d_K|^{s/2}` of the card does not commute with the vertical shift. And the root number is
+`|d_K|^{iu}`, not `1`: applying `Λ_K(1−w) = Λ_K(w)` to the shifted completion leaves the ratio
+`|d_K|^{iu/2} / |d_K|^{-iu/2}`. Over `ℚ` both constants are `1`, which is why only a field with
+`|d_K| ≠ 1` can catch them. -/
+noncomputable def shiftedDedekindZetaData (u : ℝ) : AnalyticLFunctionData where
+  coeff n := idealCoeff K n * (n : ℂ) ^ (Complex.I * (u : ℂ))
+  conductor := ⟨(|discr K| : ℤ).toNat, sorry⟩
+  gammaR := Multiset.replicate (nrRealPlaces K) (-(Complex.I * (u : ℂ)))
+  gammaC := Multiset.replicate (nrComplexPlaces K) (-(Complex.I * (u : ℂ)))
+  rootNumber := ((|discr K| : ℤ) : ℂ) ^ (Complex.I * (u : ℂ))
+  completed s := ((|discr K| : ℤ) : ℂ) ^ (Complex.I * (u : ℂ) / 2) *
+    completedDedekindZeta K (s - Complex.I * (u : ℂ))
+  polarOrder :=
+    Finsupp.single (Complex.I * (u : ℂ)) 1 + Finsupp.single (1 + Complex.I * (u : ℂ)) 1
+
 /-- **Layer 6.4, card test one**: the trivial character over the trivial modulus recovers the
-Dedekind-zeta card of 3.10. -/
+Dedekind-zeta card of 3.10 — every named field, via the agreement predicate of 0.2, not one
+field of it. A completed-function comparison alone would pass with the wrong conductor, gamma
+multisets, root number, or polar divisor; and raw record equality is the wrong statement at the
+junk slot `n = 0`, where the weight's value at the zero ideal is unconstrained. -/
 theorem unitaryData_of_trivial (χ : Grossencharacter 𝔪) (h𝔪 : 𝔪.finitePart = 1)
     (hunit : IdealWeight.IsTrivialOnGood K χ.unitary) (hshift : χ.shift = 0)
     (hang : ∀ v, χ.angular v = 0) (hpar : ∀ v, χ.parity v = 0)
     (harch : ∀ v, χ.archimedeanParam v = 0) :
-    (χ.unitaryData).completed = completedDedekindZeta K := sorry
+    (χ.unitaryData).EqOffZero (dedekindZetaData K) := sorry
 
-/-- **Layer 6.4, card test two**: `𝔑^{iu}` recovers the vertically shifted zeta card, poles
-included. -/
-theorem unitaryData_of_normTwist (χ : Grossencharacter 𝔪) (h𝔪 : 𝔪.finitePart = 1) (u : ℝ)
+/-- **Layer 6.4, card test two**: `𝔑^{iu}` recovers the vertically shifted zeta card — again
+every named field. The archimedean data is not hypothesized: `forced_of_isNormQuasicharacter`
+produces it from the ideal-weight condition. -/
+theorem unitaryData_of_normTwist (χ : Grossencharacter 𝔪) (h𝔪 : 𝔪.finitePart = 1) {u : ℝ}
     (hu : IdealWeight.IsNormTwistOnGood K χ.unitary u) :
-    (χ.unitaryData).polarOrder =
-      Finsupp.single (Complex.I * (u : ℂ)) 1 + Finsupp.single (1 + Complex.I * (u : ℂ)) 1 :=
-  sorry
+    (χ.unitaryData).EqOffZero (shiftedDedekindZetaData K u) := sorry
 
-/-- **Layer 6.4, card test three**: a primitive nontrivial finite-order character recovers the
-Layer 5 completion. -/
+/-- **Layer 6.4, card test two over `ℚ`**, the field where the sign of the gamma shift is
+first visible: the single real gamma shift is `−iu` — not `+iu` — and the poles sit at `iu` and
+`1 + iu`. This is the mandatory witness for the radial sign convention of 6.1. -/
+theorem unitaryData_unitaryNormCharacter_rat (𝔫 : Modulus ℚ) (u : ℝ) :
+    (unitaryNormCharacter 𝔫 u).unitaryData.gammaR = {-(Complex.I * (u : ℂ))} ∧
+      (unitaryNormCharacter 𝔫 u).unitaryData.gammaC = 0 ∧
+      (unitaryNormCharacter 𝔫 u).unitaryData.polarOrder =
+        Finsupp.single (Complex.I * (u : ℂ)) 1 +
+          Finsupp.single (1 + Complex.I * (u : ℂ)) 1 := sorry
+
+/-- **Layer 6.4, card test two over `ℚ(i)`**, the field where the complex multiplicity is first
+visible: the place is complex, its normalized absolute value is the square
+(`normalizedAbs_of_isComplex`), and with that normalization the compatibility law gives the
+parameter `t = u` — not `2u` — so the single complex gamma shift is again `−iu` and the poles
+are again `iu` and `1 + iu`. -/
+theorem unitaryData_unitaryNormCharacter_gaussian (F : Type*) [Field F] [NumberField F]
+    [IsCyclotomicExtension {4} ℚ F] (𝔫 : Modulus F) (u : ℝ) :
+    (unitaryNormCharacter 𝔫 u).unitaryData.gammaR = 0 ∧
+      (unitaryNormCharacter 𝔫 u).unitaryData.gammaC = {-(Complex.I * (u : ℂ))} ∧
+      (unitaryNormCharacter 𝔫 u).unitaryData.polarOrder =
+        Finsupp.single (Complex.I * (u : ℂ)) 1 +
+          Finsupp.single (1 + Complex.I * (u : ℂ)) 1 := sorry
+
+open scoped Classical in
+/-- **Layer 6.4, card test three**: a nontrivial primitive finite-order character recovers the
+Layer 5 data, field by field: the coefficients of the derived weight, the level `|d_K| 𝔑𝔪₀` of
+5.7, gamma shifts read off the parity against `𝔪_∞` with none of them non-real, the Gauss-sum
+root number of 5.6, the completion of 5.8, and an empty polar divisor — nontriviality rules the
+norm quasicharacters out. -/
 theorem unitaryData_of_finiteOrder (χ : Grossencharacter 𝔪) (η : RayClassCharacter 𝔪)
-    (hprim : χ.IsPrimitive) (hshift : χ.shift = 0) (harch : ∀ v, χ.archimedeanParam v = 0)
-    (hang : ∀ v, χ.angular v = 0)
+    (hprim : χ.IsPrimitive) (hnt : η ≠ 1) (hshift : χ.shift = 0)
+    (harch : ∀ v, χ.archimedeanParam v = 0) (hang : ∀ v, χ.angular v = 0)
+    (hpar : ∀ v, v.IsReal → ((χ.parity v = 1) ↔ v ∈ 𝔪.infinitePart))
     (hη : ∀ I : Ideal (𝓞 K), χ.unitary.toFun I = η.weight.toFun I) :
-    (χ.unitaryData).completed = completedHeckeLFunction η := sorry
+    (χ.unitaryData).coeff = idealCoeffOfWeight K η.weight.toFun ∧
+      ((χ.unitaryData).conductor : ℕ) =
+        (|discr K| * Ideal.absNorm 𝔪.finitePart : ℤ).toNat ∧
+      (χ.unitaryData).gammaR =
+        ((Finset.univ.filter fun v : InfinitePlace K ↦ v.IsReal).val.map
+          fun v ↦ if v ∈ 𝔪.infinitePart then (1 : ℂ) else 0) ∧
+      (χ.unitaryData).gammaC = Multiset.replicate (nrComplexPlaces K) 0 ∧
+      (χ.unitaryData).rootNumber = heckeRootNumber η ∧
+      (χ.unitaryData).completed = completedHeckeLFunction η ∧
+      (χ.unitaryData).polarOrder = 0 := sorry
+
+/-- **Layer 6.4, the principal-character test**, which is what keeps the primitive and the
+presented objects apart. `normCharacter 𝔪 0` is the principal character modulo `𝔪`: its
+canonical primitive data is the trivial character of the trivial conductor, its canonical card
+is the Dedekind-zeta card, and its **presented** L-series is that primitive L-function times the
+removed Euler factors — `ζ(s)(1 − p^{-s})` over `ℚ` with `𝔪₀ = (p)` — which is why the
+presented series gets no card of its own. -/
+theorem principalCharacter_test (𝔪 : Modulus K) :
+    (normCharacter 𝔪 0).conductor = Modulus.one ∧
+      ((normCharacter 𝔪 0).primitiveUnitaryData).EqOffZero (dedekindZetaData K) ∧
+      ∀ s : ℂ, (normCharacter 𝔪 0).lFunctionC s =
+        (normCharacter 𝔪 0).primitiveChar.lFunctionC s *
+          ∏ᶠ 𝔭 : {𝔭 : HeightOneSpectrum (𝓞 K) // 𝔭.asIdeal ∣ 𝔪.finitePart},
+            (1 - ((Ideal.absNorm (𝔭 : HeightOneSpectrum (𝓞 K)).asIdeal : ℝ) : ℂ) ^ (-s)) :=
+  sorry
 
 end Grossencharacter
 

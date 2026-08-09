@@ -46,7 +46,10 @@ normative text.
   operations. Aligning the two vocabularies early makes that adapter short; the character
   vocabulary should also be aligned with Mathlib #40735 and #40736.
 - **Layer 6.1.** The same for the infinity-type carrier. ⚠ Any adapter must keep the unitary
-  weight and the full weight apart; see the correction recorded below.
+  weight and the full weight apart, and must carry the finite character: the carrier is the
+  ideal-side packaging of Neukirch VII (6.9), and the dictionary to an idele-side
+  `HeckeCharacter` in the shape of Mathlib #40736 is (6.11) to (6.14). See the corrections
+  recorded below.
 - **Layer 8.0.** The number field arithmetic roadmap is expected to own the Frobenius class. If
   it is accepted, `chosenPrimeOver` and `frobeniusClass` here become an adapter to its
   declaration, and `frobeniusClass_restrictNormalHom` and `frobeniusClass_pow_inertiaDeg` become
@@ -268,7 +271,7 @@ the logarithmic derivatives produce, so the orthogonality identity is not provab
 
 **The `3-4-1` argument needs the trivial-square branch, not cancellation of the square.** A
 nonvanishing package that demands `HasCancellation (χ²)` excludes every quadratic character, whose
-square is trivial on the good ideals, and also `η ‖·‖^{iu}` with `η` quadratic and `u ≠ 0`, which
+square is trivial on the good ideals, and also `η 𝔑^{iu}` with `η` quadratic and `u ≠ 0`, which
 is unitary of infinite order and whose square is trivial after the twist by `−2u`. The condition
 is a dichotomy at each boundary twist: trivial-on-good, or cancelling. The trivial branch is
 Landau's argument on `ζ_K(s)L(χ_t,s)`, which is why Landau's theorem is a milestone at all.
@@ -310,11 +313,12 @@ norm-twist-or-cancelling, with the `v ≠ 0` branch handled by nonvanishing of a
 one: `𝔑^{iu}` is nontrivial on good ideals but its twist by `−u` is trivial.
 
 **Inversion and conjugation act differently on the infinity type, and neither negates real
-parity.** At a real place `sgn(x)^{p}|x|^{iq}` has `sgn(x)^{-1} = sgn(x)`, so `p` is fixed by both
-and negating it would leave `p = −1`, outside `{0,1}` — the inverse of every odd real character
-would be uninhabitable. At a complex place inversion sends `(p,p̄) ↦ (−p,−p̄)` while conjugation
-**swaps**, `(p,p̄) ↦ (p̄,p)`, since `conj(z^{-p}z̄^{-p̄}) = z^{-p̄}z̄^{-p}`; both send `q ↦ −q`. The
-two agree only when `p = p̄`.
+parity.** At a real place the unitary local character `sgn(x)^{ε}‖x‖_v^{-iq}` has
+`sgn(x)^{-1} = sgn(x)`, so the parity `ε` is fixed by both, and negating it would leave
+`ε = −1`, outside `{0,1}` — the inverse of every odd real character would be uninhabitable; what
+inversion negates at a real place is the shift. At a complex place inversion sends
+`(p,p̄) ↦ (−p,−p̄)` while conjugation **swaps**, `(p,p̄) ↦ (p̄,p)`, since
+`conj(z^{-p}z̄^{-p̄}) = z^{-p̄}z̄^{-p}`; both send `q ↦ −q`. The two agree only when `p = p̄`.
 
 **A Hecke functional equation is a primitive-character statement, and the polar exception is the
 norm quasicharacters.** The principal character modulo a prime `p` over `ℚ` inhabits an
@@ -331,7 +335,7 @@ has to be computed from its gamma multisets, so the card must be constructed wit
 **A finite character family cannot contain a Grossencharacter.** A package indexed by a
 `Fintype` forces every good value of every member to satisfy `x^{#G} = 1`, hence to be a root of
 unity, because some positive power of each index element is `1`. A unitary Grossencharacter with a
-nonzero archimedean parameter, and every norm twist `‖·‖^{it}` with `t ≠ 0`, has infinite order.
+nonzero archimedean parameter, and every norm twist `𝔑^{it}` with `t ≠ 0`, has infinite order.
 Any roadmap that packages nonvanishing hypotheses over a finite character group has to state a
 second package for the infinite-order case, or its Grossencharacter export is empty.
 
@@ -354,6 +358,56 @@ many primes and hence `shift = 0`. The structure could therefore be inhabited on
 finite-order characters of Layer 5, which is exactly the case Layer 6 exists to go beyond. The
 unitary part is now the `IdealWeight`, and the full quasicharacter is defined from it and the
 shift. Any sibling roadmap that stores an infinity-type carrier meets the same trap.
+
+**A compatibility law without the finite character empties the carrier of ramified characters,
+and restricting it to the ray admits non-characters.** The law
+`χ_unit((α)) · ∏_v χ_v(α) = 1` over all coprime `α` forces, for a nontrivial even Dirichlet
+character mod `5` at `α = 2`, the false `χ(2) = 1` — so only finitely-unramified characters
+inhabit the carrier and every finite-order comparison quantifies over nothing. Weakening the
+quantifier to `α ≡ 1 mod^× 𝔪` instead admits the pair (trivial weight, parity `1`) over `ℚ` mod
+`∞`, which is no idele-class character and whose would-be completion `Γ_ℝ(s+1)ζ(s)` has no clean
+functional equation. Neukirch VII (6.9) is the resolution: carry the finite character `χ_f` of
+`(𝓞_K/𝔪₀)ˣ` as a field and state the law with it over **every** coprime `α`. Admissibility on
+the units then stops being a field (it is the unit case of the law), and the witness that the
+law is satisfiable in the ramified case is the embedding of every ray-class character. Any
+carrier that glues an ideal weight to archimedean data meets the same two-sided trap, and only
+constructing a ramified example detects the first side.
+
+**The archimedean radial sign, the compatibility law, and the gamma shifts are one convention
+with three visible ends, and the absolute value must be normalized.** With the law
+`χ_unit((α)) · χ_f(α) · ∏_v χ_v(α) = 1` and gamma shifts `ε_v − it_v`, `|m_v|/2 − it_v`, the
+radial part of the local character must be `‖x‖_v^{-it_v}` with the **negative** sign and
+`‖x‖_v = (v x)^{mult v}` the **normalized** absolute value. Witnesses: over `ℚ`, the unitary
+norm twist `𝔑^{iu}` gets `t = u` and gamma shift `−iu`, as `Γ_ℝ(s − iu)ζ(s − iu)` requires —
+with the positive sign the factor `Γ_ℝ(s + iu)` puts no pole at `iu` and infinitely many on
+`Re s < 0`, so the card's polar divisor and continuation predicate fail; over `ℚ(i)`, the
+un-normalized `v x` forces `t = 2u` and shift `−2iu` against the `ζ_{ℚ(i)}(s − iu)` the series
+is. A card equality can be green in one convention and false in the other, and only the two
+small fields see it.
+
+**The infinity type relates to the shift, not the parity.** At a real place the dictionary is
+`σ = p_v` (with `p̄_v = 0`); a clause `p_v = ε_v` confines the pair to `{0,1}` and rejects `𝔑²`,
+and the repaired `ε_v ≡ p_v (mod 2)` still rejects `𝔑³`, the cube of the Tate character, whose
+parity is `0`: the full local character agrees with `x^{-3}` on the positive reals, where the
+infinity type lives, and the `sgn(x)` discrepancy on the negatives is finite-part data. The `A₀`
+predicate needs both clauses — vanishing parameters **and** an integral pair — or `𝔑^{√2}`
+passes. At a complex place the dictionary `2σ = p_v + p̄_v`, `m_v = p̄_v − p_v` is exact, with no
+sign subtlety, because `ℂ^×` is connected.
+
+**Primitive uniqueness is an equality of bundles, and the canonical card must be built from the
+primitive character.** A uniqueness statement whose conclusion repeats a field of one bundle and
+never mentions the other proves only conductor uniqueness, and two primitive characters of one
+conductor could both claim the reduction. And pairing the primitive conductor with the presented
+imprimitive coefficients in one record asserts a functional equation the removed Euler factors
+falsify: the principal character mod `p` presents `ζ(s)(1 − p^{-s})`, whose canonical card is
+the ζ card and whose presented series gets no card. The dual-card comparison
+`(χ⁻¹)`-card `=` dual of `χ`-card is a theorem of the layer, not a caller-supplied hypothesis,
+or the Layer 0 functional-equation bridge is conditional everywhere downstream.
+
+**A vertically shifted zeta card carries two `|d_K|`-constants.** Including the conductor power
+`A^{s/2}` in the completion forces the `𝔑^{iu}` card to complete to
+`|d_K|^{iu/2} · Λ_K(s − iu)` and to carry root number `|d_K|^{iu}` — not `1`. Both constants are
+invisible over `ℚ`, so only a field with `|d_K| ≠ 1` tests them.
 
 ## Coordination ledger
 
