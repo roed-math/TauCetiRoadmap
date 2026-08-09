@@ -118,7 +118,7 @@ implemented or pinned today.
    triple" is the term of the LMFDB knowl and of Musty–Schiavone–Sijsling–Voight, and the
    object carries no Belyi structure.
 3. **`C := (T * P)⁻¹`** (so `C·T·P = 1`), matching the topological relation; a source or
-   consumer with `P·T·C = 1` names the conjugate `P⁻¹·C·P`, and Layer 13.3's remark
+   consumer with `P·T·C = 1` names the conjugate `P·C·P⁻¹`, and Layer 13.3's lemma
    records the two-line transfer.
 4. **Layer 12 is field-theoretic**: `π₁ᵍᵉᵒ := Gal(Ω/ℚ̄(t))` for `Ω` the maximal extension
    unramified outside the three marked places, so the carrier is Mathlib Galois theory
@@ -150,7 +150,7 @@ implemented or pinned today.
 The dyadic instance (Layer 13.4) is sized for the `gq2` project's axiom B8
 (`GQ2.PeripheralCyclotomicAction` in `roed-math/gq2-lean`, inspected 2026-08-08):
 `GQ2.Delta = maxProPQuotient 2 (FreeProfiniteGroup (Fin 2))` matches `Δ_2`;
-`GQ2.deltaP/T` match `P_2, T_2`; `GQ2.deltaC = (P·T)⁻¹` is the conjugate `P⁻¹·C_2·P` of
+`GQ2.deltaP/T` match `P_2, T_2`; `GQ2.deltaC = (P·T)⁻¹` is the conjugate `P·C_2·P⁻¹` of
 this roadmap's `C_2`, handled by the Layer 13.3 transfer remark; the bundle's conjugation
 convention `x ^ c = c⁻¹xc` matches the statement here; and the bundle's `ι`-pinning
 (`hι_proj`: the `ẑ → ℤ_2` projection of the exponent is the unit) corresponds to the

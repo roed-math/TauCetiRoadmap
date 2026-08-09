@@ -299,6 +299,57 @@ theorem cyclicTriple_isConnected (n : ℕ) (hn : n ≠ 0) : (cyclicTriple n).IsC
 theorem genus_torusTriple : torusTriple.genus = 1 := by
   sorry
 
+/-! ### Layer 2.6: the branch-point action
+
+The two adjacent transpositions, with the conjugators that make them preserve the pinned
+relation, and a `decide`-checked witness that the naive color swap does not. -/
+
+/-- **Layer 2.6.** Swap the roles of `0` and `1`. An involution on the nose. -/
+def swap01 (t : PermutationTriple n) : PermutationTriple n where
+  σ0 := t.σ1
+  σ1 := t.σ0
+  σinf := t.σ1⁻¹ * t.σinf * t.σ1
+  product_eq_one := by rw [t.σinf_eq]; group
+
+/-- **Layer 2.6.** Swap the roles of `1` and `∞`. ⚠ Its square is simultaneous conjugation
+by `σ1`, not the identity, which is why the `S₃`-action lives on isomorphism classes. -/
+def swap1Inf (t : PermutationTriple n) : PermutationTriple n where
+  σ0 := t.σ0
+  σ1 := t.σ1⁻¹ * t.σinf * t.σ1
+  σinf := t.σ1
+  product_eq_one := by rw [t.σinf_eq]; group
+
+/-- **Layer 2.6, the counterexample.** The naive color swap `(a,b,c) ↦ (b,a,a⁻¹ca)` does
+**not** preserve the relation: on `s3Triple` the would-be product is not `1`. -/
+example :
+    ¬ ((s3Triple.σ0⁻¹ * s3Triple.σinf * s3Triple.σ0) * s3Triple.σ0 * s3Triple.σ1 = 1) := by
+  decide
+
+/-- The corrected `swap01` does preserve it, on the same triple. -/
+example : (swap01 s3Triple).σinf * (swap01 s3Triple).σ1 * (swap01 s3Triple).σ0 = 1 :=
+  (swap01 s3Triple).product_eq_one
+
+/-- **Layer 2.6.** `swap01` is an involution on triples, on the nose. -/
+theorem swap01_involutive (t : PermutationTriple n) : swap01 (swap01 t) = t := by
+  sorry
+
+/-- **Layer 2.6.** `swap1Inf` squared is simultaneous conjugation by `σ1`, **not** the
+identity — the statement that forces the `S₃`-action onto `IsoClass n`. -/
+theorem swap1Inf_sq (t : PermutationTriple n) : swap1Inf (swap1Inf t) = t.σ1⁻¹ • t := by
+  sorry
+
+-- **Layer 12.11, the counterexample.** Componentwise powers of a triple are **not** a
+-- triple: raising the three entries of `s3Triple` to the fifth power destroys the product
+-- relation. This is why the finite branch-cycle statement is class-by-class and never a
+-- statement about the tuple of powers.
+set_option maxRecDepth 8000 in
+example : s3Triple.σinf ^ 5 * s3Triple.σ1 ^ 5 * s3Triple.σ0 ^ 5 ≠ 1 := by decide
+
+/-- **Layer 2.6.** The Coxeter braid relation, on isomorphism classes. -/
+theorem braid_on_isoClass (t : PermutationTriple n) :
+    Equivalent (swap01 (swap1Inf (swap01 (swap1Inf (swap01 (swap1Inf t)))))) t := by
+  sorry
+
 end PermutationTriple
 
 /-! ## Layer 1: passports -/
@@ -650,6 +701,12 @@ noncomputable def periphT : freeProfiniteTwo :=
 /-- The peripheral element `C := (T * P)⁻¹`, so that `C * T * P = 1` — the profinite image
 of the Layer 5.2 relation, in the pinned display order. -/
 noncomputable def periphC : freeProfiniteTwo := (periphT * periphP)⁻¹
+
+/-- **§Pinned conventions, P0.2.** The opposite-convention third peripheral element is the
+conjugate `P · C · P⁻¹`, **not** `P⁻¹ · C · P`. Stated on an abstract group, since it is a
+word identity. -/
+theorem opposite_third_peripheral {G : Type u} [Group G] (P T : G) :
+    (P * T)⁻¹ = P * ((T * P)⁻¹) * P⁻¹ := by group
 
 theorem periphC_mul_periphT_mul_periphP : periphC * periphT * periphP = 1 := by
   simp [periphC, mul_assoc]
