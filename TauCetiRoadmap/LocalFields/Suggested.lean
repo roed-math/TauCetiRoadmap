@@ -26,11 +26,14 @@ injectivity of the Artin map or the ordinary profinite completion of `Kˣ`, is
 mixed-characteristic.
 
 Definitions with a `sorry` body (`normalizedValuation`, `ramificationIndex`,
-`inertiaDegree`, `teichmuller`, `unitFiltration`, `muNRep`, `tateDual`, `artinMap`,
-`unramifiedCoordinate`, `kummerCupPairing`, `tateEvaluationPairing`, `tateH`, `tateCup`,
-`tateMap`) are suggested *names and types* for objects **this roadmap** builds, together with the
-characteristic lemmas that fix them. They are placeholders for data whose type is expressible
-now, and never for a condition we cannot state.
+`inertiaDegree`, `teichmuller`, `unitFiltration`, `frobeniusAlgEquiv`, `muNRep`, `tateDual`,
+`unitsRep`, `invMap`, `brRes`, `brCor`, `normResidue`, `artinMap`, `unramifiedCoordinate`,
+`kummerCupPairing`, `tateEvaluationPairing`, `tateH`, `tateCup`, `tateMap`) are suggested
+*names and types* for objects **this roadmap** builds, together with the characteristic lemmas
+that fix them. They are placeholders for data whose type is expressible now, and never for a
+condition we cannot state. `absoluteRamificationIndex`, `normGroup`, `conductorExponent`,
+`conductorIdeal` and `characterConductorExp` carry real bodies instead; what they owe is the
+laws stated beside them.
 
 ## The cohomology of a profinite group comes from one supplier
 
@@ -286,7 +289,7 @@ example (π : 𝒪[K]) (_hπ : Irreducible π) (x : Kˣ) :
 /-- **Layer 1, power classes in the prime-to-residue-characteristic regime.** If `n` is a unit
 in the valuation ring, the count is exact and holds in either characteristic: the factor
 `q ^ v_K(n)` of the general formula is `1`, which is where the hypothesis is used. -/
-example (n : ℕ) (_hn : n ≠ 0) (_hn' : IsUnit (n : ↥𝒪[K])) :
+theorem card_powerClasses_of_isUnit (n : ℕ) (_hn : n ≠ 0) (_hn' : IsUnit (n : ↥𝒪[K])) :
     Nat.card (Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range)
       = n * Nat.card (rootsOfUnity n K) :=
   sorry
@@ -296,11 +299,29 @@ formula holds for every `n ≠ 0`, including `p ∣ n`, with the extra factor
 `q ^ v_K(n) = ‖n‖_K⁻¹` written here as the (finite) cardinality of `𝒪[K]/n𝒪[K]`, which avoids
 an integer-to-natural coercion. ⚠ This must not be generalized to equal characteristic: at
 `K = 𝔽_q((t))` and `n = p` the left-hand side is infinite. -/
-example (p : ℕ) [Fact p.Prime] [Algebra ℚ_[p] K] [Module.Finite ℚ_[p] K]
+theorem card_powerClasses_mixed (p : ℕ) [Fact p.Prime] [Algebra ℚ_[p] K] [Module.Finite ℚ_[p] K]
     (n : ℕ) (_hn : n ≠ 0) :
     Nat.card (Kˣ ⧸ (powMonoidHom n : Kˣ →* Kˣ).range)
       = n * Nat.card (rootsOfUnity n K)
         * Nat.card (↥𝒪[K] ⧸ Ideal.span {(n : ↥𝒪[K])}) :=
+  sorry
+
+/-- **Layer 1, the square classes away from residue characteristic `2`.** The specialization of
+`card_powerClasses_of_isUnit` at `n = 2`: the hypothesis makes `2` invertible in `𝒪[K]`, hence
+in `K`, so `μ_2(K) = {±1}` has order `2` and the count is `2 · 2 · 1`. -/
+theorem card_squareClasses_of_isUnit (_h2 : IsUnit (2 : ↥𝒪[K])) :
+    Nat.card (Kˣ ⧸ (powMonoidHom 2 : Kˣ →* Kˣ).range) = 4 :=
+  sorry
+
+/-- **Layer 1, the square classes at residue characteristic `2`, in the `4 · q^e` form.** The
+specialization of `card_powerClasses_mixed` at `p = n = 2`, with `q = Nat.card 𝓀[K]` and
+`e = absoluteRamificationIndex K 2`. It is `2 · #μ_2(K) · q^e` with `#μ_2(K) = 2`, and
+`q ^ e = Nat.card (𝒪[K] ⧸ 2𝒪[K])`. For `K/ℚ_2` of degree `N` it reads `2 ^ (N + 2)`, and at
+`K = ℚ_2` it reads `8`. ⚠ The factor `q ^ e` is not `1` here, so this is not the count of
+`card_squareClasses_of_isUnit` with a different proof; the two hypotheses are exclusive. -/
+theorem card_squareClasses_dyadic [Algebra ℚ_[2] K] [Module.Finite ℚ_[2] K] :
+    Nat.card (Kˣ ⧸ (powMonoidHom 2 : Kˣ →* Kˣ).range)
+      = 4 * Nat.card 𝓀[K] ^ absoluteRamificationIndex K 2 :=
   sorry
 
 /-- **Layer 1, the two spellings of the square classes.** Mathlib's `Subgroup.square Kˣ` is the
@@ -317,12 +338,86 @@ assume `p ≠ 2`. -/
 example : Nat.card (ℚ_[2]ˣ ⧸ (powMonoidHom 2 : ℚ_[2]ˣ →* ℚ_[2]ˣ).range) = 8 :=
   sorry
 
+/-- **Layer 1, the local square theorem, sharp form.** For `K/ℚ_2` finite and
+`e = absoluteRamificationIndex K 2`, every unit of depth `2e+1` is a square. ⚠ This is **not** an
+instance of the counts above, which decide how many square classes there are and not which
+subgroup lies inside the squares. ⚠ The hypothesis is mixed characteristic: in equal
+characteristic `2` the image of `2` is `0`, `absoluteRamificationIndex` takes its junk value, and
+the displayed statement is a different assertion. -/
+theorem unitFiltration_le_range_powMonoidHom_two [Algebra ℚ_[2] K] [Module.Finite ℚ_[2] K] :
+    unitFiltration K (2 * absoluteRamificationIndex K 2 + 1)
+      ≤ (powMonoidHom 2 : Kˣ →* Kˣ).range :=
+  sorry
+
+/-- **Layer 1, sharpness of the local square theorem.** The threshold `2e+1` cannot be lowered,
+over any finite extension of `ℚ_2` and not only over `ℚ_2`: `U(K, 2e)` always meets the
+complement of the squares. The obstruction is the Artin–Schreier map `t ↦ t² + t` of `𝓀[K]`,
+which is `𝔽_2`-linear with kernel `𝔽_2` and therefore has image of index `2`; since
+`𝓂[K]^{2e} = 4 · 𝒪[K]`, a unit `1 + 4c` is a square exactly when the residue of `c` is in that
+image, so any `c` outside it is a witness. -/
+theorem not_unitFiltration_le_range_powMonoidHom_two [Algebra ℚ_[2] K] [Module.Finite ℚ_[2] K] :
+    ¬ unitFiltration K (2 * absoluteRamificationIndex K 2)
+      ≤ (powMonoidHom 2 : Kˣ →* Kˣ).range :=
+  sorry
+
 /-- **Layer 1, worked example: the dyadic deep-square bound.** Units of `ℤ_2` congruent to
-`1 mod 8` are squares (`U(K, 2e+1) ⊆ (Kˣ)²` at `K = ℚ_2`, `e = 1`; the threshold is sharp). -/
+`1 mod 8` are squares (`U(K, 2e+1) ⊆ (Kˣ)²` at `K = ℚ_2`, `e = 1`), and `1 + 4ℤ_2` are not, so
+the threshold is sharp there. -/
 example (u : ℤ_[2]ˣ) (_hu : (8 : ℤ_[2]) ∣ ((u : ℤ_[2]) - 1)) : IsSquare u :=
   sorry
 
 /-! ## Layer 2: unramified extensions and Frobenius -/
+
+/-- **Layer 2, the Frobenius element** of a finite unramified extension: the preimage of the
+arithmetic Frobenius `x ↦ x^q` of the residue extension under the residue correspondence
+`Gal(L/K) ≃* Gal(𝓀[L]/𝓀[K])`. It generates `Gal(L/K)`, which is cyclic of order `f`. The
+unramifiedness hypothesis is `ramificationIndex K L = 1`; separability of the residue extension,
+which the general definition of an unramified extension of valued fields also carries, is
+automatic here because `𝓀[K]` is finite. `IsGalois K L` is likewise automatic for an unramified
+`L/K`, which is generated over `K` by the `(q^f − 1)`-st roots of unity and so is the splitting
+field of a separable polynomial; it is carried because the residue correspondence is stated for
+a Galois extension. ⚠ Arithmetic, never geometric: the inverse `(frobeniusAlgEquiv K L h)⁻¹` is
+the geometric Frobenius, and no statement of this roadmap uses the unqualified word for it. -/
+noncomputable def frobeniusAlgEquiv [Algebra K L] [ValuativeExtension K L] [Module.Finite K L]
+    [IsGalois K L] (_h : ramificationIndex K L = 1) : L ≃ₐ[K] L :=
+  sorry
+
+/-- **Layer 2, the characteristic property of Frobenius:** `σ(y) ≡ y^q mod 𝓂[L]` on `𝒪[L]`,
+with `q = Nat.card 𝓀[K]`. This is the equation that fixes `frobeniusAlgEquiv`, and it is stated
+on the valuation rather than on the residue field so that it needs no separate name for the
+induced action on `𝓀[L]`; `valuation L x < 1` is membership in `𝓂[L]`. -/
+theorem valuation_frobeniusAlgEquiv_sub_pow [Algebra K L] [ValuativeExtension K L]
+    [Module.Finite K L] [IsGalois K L] (h : ramificationIndex K L = 1) (y : ↥𝒪[L]) :
+    valuation L (frobeniusAlgEquiv K L h (y : L) - (y : L) ^ Nat.card 𝓀[K]) < 1 :=
+  sorry
+
+/-- **The norm group** `N_{L/K}(Lˣ) : Subgroup Kˣ`, the image of the field norm. Layer 2 computes
+it for `L/K` unramified, and Layer 7 item 1 studies it for `L/K` finite abelian: openness, the
+index formula `[Kˣ : N_{L/K}Lˣ] = [L:K]`, and the lattice of norm groups. It is a definition and
+not a placeholder; the milestones are the laws about it. -/
+noncomputable def normGroup [Algebra K L] [Module.Finite K L] : Subgroup Kˣ :=
+  (Units.map (Algebra.norm K : L →* K)).range
+
+/-- **Layer 2, norms of units from an unramified extension.** `N_{L/K}(𝒪[L]ˣ) = 𝒪[K]ˣ`, written
+on the depth-zero step of the unit filtration, which `mem_unitFiltration_zero` identifies with
+the units of the valuation ring. ⚠ *False generalization:* for a ramified extension the norm of
+a unit is still a unit, but the image is a proper subgroup; at `L = ℚ_2(√2)` it has index `2` in
+`ℤ_2ˣ`. -/
+theorem map_norm_unitFiltration_zero [Algebra K L] [ValuativeExtension K L] [Module.Finite K L]
+    (_h : ramificationIndex K L = 1) :
+    Subgroup.map (Units.map (Algebra.norm K : L →* K)) (unitFiltration L 0) = unitFiltration K 0 :=
+  sorry
+
+/-- **Layer 2, the unramified norm group in norm-equation form.** `N_{L/K}(Lˣ) = π^{fℤ} × 𝒪[K]ˣ`,
+stated as the solvability criterion for the norm equation `N_{L/K}(y) = x`: with `e = 1` the
+valuation of a norm is `f · v_L(y)`, and units are norms by the milestone above, so `x` is a norm
+exactly when `f` divides `v_K(x)`. ⚠ `f` here is `inertiaDegree K L`, the residue degree of
+Layer 0, and never a conductor. -/
+theorem mem_normGroup_iff_dvd_normalizedValuation [Algebra K L] [ValuativeExtension K L]
+    [Module.Finite K L] (_h : ramificationIndex K L = 1) (x : Kˣ) :
+    x ∈ normGroup K L ↔
+      (inertiaDegree K L : ℤ) ∣ Multiplicative.toAdd (normalizedValuation K x) :=
+  sorry
 
 /-- **Layer 2, worked example: the unramified quadratic extension of `ℚ_2`.** The adjoined set
 is *all* cube roots of unity, so the intermediate field is the splitting field of `X³ − 1`
@@ -694,6 +789,73 @@ noncomputable def kummerEquiv_mixed (p : ℕ) [Fact p.Prime] (F : Type u) [Field
     Additive (Fˣ ⧸ (powMonoidHom n : Fˣ →* Fˣ).range) ≃+ H n F 1 (muNRep n F) :=
   sorry
 
+/-! ### Layer 5: the Brauer group and the invariant map
+
+The coefficient object here is the multiplicative module `(Kˢ)ˣ`, which this roadmap owns, and
+the coefficient ring is `ℤ` rather than `ZMod n`: `Br(K)` is not killed by any `n`. So these
+statements do not read through `GalRep`/`H`, which are the `ZMod n`-linear abbreviations, and
+`unitsRep` is a second **coefficient object**, never a second carrier: the carrier is still
+Mathlib's `continuousCohomology`. -/
+
+/-- `ℚ/ℤ`, the target of the invariant map, as the quotient of `ℚ` by the subgroup generated by
+`1`. ⚠ Not the circle group of the reals: the `n`-torsion subgroup `(1/n)ℤ/ℤ`, which is where
+Layer 8A reads the classes killed by `n`, has to be a subgroup of the target, and the invariant
+of a class of `Br(K)` is a rational number and not a real one. -/
+abbrev RatModInt : Type := ℚ ⧸ AddSubgroup.zmultiples (1 : ℚ)
+
+/-- **Layer 5, the multiplicative module `(Kˢ)ˣ`**, written additively, as a coefficient object
+for `G_F`. ⚠ The units are taken in the **separable** closure, as the pinned conventions require:
+over an imperfect field of equal characteristic the invariants of the units of the full algebraic
+closure are the units of the perfect closure, so `H⁰` would be wrong. The action of
+`Field.absoluteGaloisGroup F` is through `absoluteGaloisGroupComparison`. -/
+def unitsRep (F : Type u) [Field F] :
+    ProfiniteCohomology.TopRep ℤ (Field.absoluteGaloisGroup F) :=
+  sorry
+
+/-- **Layer 5, the Brauer group** `Br(F) = H²(G_F, (Fˢ)ˣ)`, in the one carrier this roadmap
+uses. Its identification with classes of central simple algebras belongs to the roadmap that
+owns those, and is not needed for anything below. -/
+noncomputable abbrev Br (F : Type u) [Field F] : Type _ :=
+  (continuousCohomology ℤ (Field.absoluteGaloisGroup F) 2).obj (unitsRep F)
+
+/-- **Layer 5, `inv_K`, the invariant map.** Every class of `Br(K)` is inflated from the
+unramified tower, and the resulting isomorphism `Br(K) ≃ ℚ/ℤ` is this map. Bijectivity is the
+`≃+`, so injectivity and surjectivity are its two components and not separate milestones. ⚠ The
+two squares below do not fix the normalization: they hold for `-inv` as well. What fixes it is
+the pinned convention, evaluation at the **arithmetic** Frobenius, which is the normalization
+lemma at an unramified class, stated in the README once Layer 5 has the fundamental classes:
+`inv_K(u_{L/K}) = 1/[L:K]`. -/
+noncomputable def invMap : Br K ≃+ RatModInt :=
+  sorry
+
+/-- **Layer 5, restriction on Brauer groups along a `K`-embedding of a finite separable
+extension.** ⚠ The embedding is data and not decoration: without one there is no map
+`G_L → G_K`, so no square below is a statement about an arbitrary pair of absolute Galois
+groups. This is the shape the supplier uses for `ProfiniteCohomology.kummerRes`, at the
+coefficient object of this layer. -/
+noncomputable def brRes [Algebra K L] [Module.Finite K L] [Algebra.IsSeparable K L]
+    (_ι : L →ₐ[K] SeparableClosure K) : Br K →+ Br L :=
+  sorry
+
+/-- **Layer 5, corestriction on Brauer groups along the same embedding**, which realizes `G_L` as
+an open subgroup of `G_K`. It is `ProfiniteCohomology.corestriction` at this coefficient object,
+and never the corestriction of group *homology*, which is a different map. -/
+noncomputable def brCor [Algebra K L] [Module.Finite K L] [Algebra.IsSeparable K L]
+    (_ι : L →ₐ[K] SeparableClosure K) : Br L →+ Br K :=
+  sorry
+
+/-- **Layer 5, the restriction square:** `inv_L(res α) = [L:K] · inv_K(α)`. -/
+theorem invMap_brRes [Algebra K L] [Module.Finite K L] [Algebra.IsSeparable K L]
+    (ι : L →ₐ[K] SeparableClosure K) (α : Br K) :
+    invMap L (brRes K L ι α) = Module.finrank K L • invMap K α :=
+  sorry
+
+/-- **Layer 5, the corestriction square:** `inv_K(cor β) = inv_L(β)`, with no degree factor. -/
+theorem invMap_brCor [Algebra K L] [Module.Finite K L] [Algebra.IsSeparable K L]
+    (ι : L →ₐ[K] SeparableClosure K) (β : Br L) :
+    invMap K (brCor K L ι β) = invMap L β :=
+  sorry
+
 /-- **Layer 8A, `h2MuEquivZMod_unit`**, the trace isomorphism away from the residue
 characteristic. ⚠ The hypotheses are the local-field hypotheses, `n ≠ 0`, and
 `IsUnit (n : 𝒪[K])`. Without them the statement is false: over an algebraically closed field
@@ -840,6 +1002,30 @@ theorem eulerCharacteristic_finrank_fp (p : ℕ) [Fact p.Prime] (F : Type u) [Fi
         + Module.finrank ℚ_[p] F * Module.finrank (ZMod p) A.V :=
   sorry
 
+/-! ### Layer 6: finite-level reciprocity -/
+
+/-- **Layer 6, the norm-residue isomorphism** `θ_{L/K} : Kˣ/N_{L/K}Lˣ ≃* Gal(L/K)^{ab}`, for
+`L/K` finite Galois. It is `tateNakayama_top` at `r = −2`, applied to the class formation whose
+distinguished class is the fundamental class `u_{L/K}`, in the direction and the normalization of
+the pinned conventions. The `Art_K` of Layer 7 is the limit of these maps, and not a second
+construction. -/
+noncomputable def normResidue [Algebra K L] [Module.Finite K L] [IsGalois K L] :
+    (Kˣ ⧸ normGroup K L) ≃* Abelianization (L ≃ₐ[K] L) :=
+  sorry
+
+/-- **Layer 6, the unramified normalization `θ(π) = Frob`.** For `L/K` unramified the class of a
+uniformizer of `K` goes to the **arithmetic** Frobenius. This is the compatibility between
+`inv_K(u_{L/K}) = 1/[L:K]` and the Frobenius normalization, and it is what makes `Art_K` send
+uniformizers to arithmetic Frobenius; it is a lemma of its own, not a corollary of the
+isomorphism. ⚠ Every uniformizer, with no choice made: the statement is quantified over the
+irreducible elements of `𝒪[K]`. -/
+theorem normResidue_uniformizer [Algebra K L] [ValuativeExtension K L] [Module.Finite K L]
+    [IsGalois K L] (h : ramificationIndex K L = 1) (π : ↥𝒪[K]) (_hπ : Irreducible π)
+    (hπ0 : (π : K) ≠ 0) :
+    normResidue K L (QuotientGroup.mk (Units.mk0 (π : K) hπ0))
+      = Abelianization.of (frobeniusAlgEquiv K L h) :=
+  sorry
+
 /-- **Layer 7, `artinMap`**, with the local-field hypotheses: there is no local Artin map over an
 arbitrary field. Continuous, with dense image, and with kernel the intersection of the norm
 groups. ⚠ It is not surjective, so it supports no `Nat.card` statement about its target. -/
@@ -964,7 +1150,48 @@ example [IsNonarchimedeanLocalField ℚ_[2]] (σ : Field.absoluteGaloisGroup ℚ
     cyclotomicCharacter (AlgebraicClosure ℚ_[2]) 2 σ.toRingEquiv = 1 :=
   sorry
 
-/-! ### Layer 7: the conductor of a continuous character of `Kˣ` -/
+/-! ### Layer 7: the conductor, of an abelian extension and of a character of `Kˣ` -/
+
+/-- **Layer 7, `conductorExponent`**, the conductor exponent `c(L/K)`: the least depth of the unit
+filtration inside the norm group. ⚠ The letter `f` keeps its Layer-0 meaning, the residue degree,
+and is never reused for a conductor. The definition is total, and the laws that make it the
+conductor carry the hypothesis that `L/K` is finite abelian:
+`unitFiltration_conductorExponent_le_normGroup` is attainment, and without a depth inside the
+norm group the infimum is the junk value `0`. -/
+noncomputable def conductorExponent [Algebra K L] [Module.Finite K L] : ℕ :=
+  sInf {n : ℕ | unitFiltration K n ≤ normGroup K L}
+
+/-- **Layer 7, `conductorIdeal`**, the conductor ideal `𝔣(L/K) = 𝓂[K]^{c(L/K)}`. It carries no
+information beyond the exponent, and exists because the consumers of this milestone multiply
+conductors as ideals. -/
+noncomputable def conductorIdeal [Algebra K L] [Module.Finite K L] : Ideal ↥𝒪[K] :=
+  𝓂[K] ^ conductorExponent K L
+
+/-- **Layer 7, the conductor exponent is attained.** The set of depths inside the norm group is
+not empty, because `N_{L/K}Lˣ` is open, so the infimum is a member of it. This is the first half
+of the defining property. -/
+theorem unitFiltration_conductorExponent_le_normGroup [Algebra K L] [Module.Finite K L]
+    [IsGalois K L] (_hab : ∀ σ τ : L ≃ₐ[K] L, σ * τ = τ * σ) :
+    unitFiltration K (conductorExponent K L) ≤ normGroup K L :=
+  sorry
+
+/-- **Layer 7, the second half of the defining property: minimality.** For a positive conductor
+exponent the previous depth is not inside the norm group. It is `Nat.notMem_of_lt_sInf`, and it
+is stated because a consumer that has only attainment cannot tell `c` from any larger depth. -/
+theorem not_unitFiltration_pred_le_normGroup [Algebra K L] [Module.Finite K L]
+    (hc : 0 < conductorExponent K L) :
+    ¬ unitFiltration K (conductorExponent K L - 1) ≤ normGroup K L :=
+  Nat.notMem_of_lt_sInf (s := {n : ℕ | unitFiltration K n ≤ normGroup K L})
+    (Nat.sub_lt hc Nat.one_pos)
+
+/-- **Layer 7, the unramified criterion.** `c(L/K) = 0` exactly when `L/K` is unramified. It is
+stated separately from minimality because `U(K,0)` is `𝒪[K]ˣ` and not a congruence subgroup, so
+the depth-zero case is the Layer 2 statement that units are norms exactly in the unramified
+direction, and not an instance of a general depth argument. -/
+theorem conductorExponent_eq_zero_iff [Algebra K L] [ValuativeExtension K L] [Module.Finite K L]
+    [IsGalois K L] (_hab : ∀ σ τ : L ≃ₐ[K] L, σ * τ = τ * σ) :
+    conductorExponent K L = 0 ↔ ramificationIndex K L = 1 :=
+  sorry
 
 /-- **Layer 7, `characterConductorExp`**, the conductor exponent `a(χ)` of a continuous character
 of `Kˣ`: the least depth of the unit filtration inside the kernel. `U(K,0)` is `𝒪[K]ˣ`, so `a(χ)`
