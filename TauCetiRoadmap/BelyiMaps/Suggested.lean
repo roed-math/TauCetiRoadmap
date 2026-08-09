@@ -95,6 +95,24 @@ theorem ext_of_two {t t' : PermutationTriple n} (h0 : t.σ0 = t'.σ0) (h1 : t.σ
   · exact h1
   · rw [t.σinf_eq, t'.σinf_eq, h0, h1]
 
+/-- **Layer 0.1.** A triple is exactly a pair of permutations: the third component is
+determined. This is the `Equiv` that carries the `Fintype` and `DecidableEq` instances, and
+the one Layer 3.1's enumeration runs on. -/
+def equivPair (n : ℕ) : PermutationTriple n ≃ Equiv.Perm (Fin n) × Equiv.Perm (Fin n) where
+  toFun t := (t.σ0, t.σ1)
+  invFun p := ofTwo p.1 p.2
+  left_inv _ := ext_of_two rfl rfl
+  right_inv _ := rfl
+
+/-- **Layer 0.1.** Finiteness, computably, through `equivPair`. -/
+instance : Fintype (PermutationTriple n) :=
+  Fintype.ofEquiv _ (equivPair n).symm
+
+/-- **Layer 0.1.** Decidable equality, computably, through `ext_of_two`. -/
+instance : DecidableEq (PermutationTriple n) := fun t t' =>
+  decidable_of_iff (t.σ0 = t'.σ0 ∧ t.σ1 = t'.σ1)
+    ⟨fun h => ext_of_two h.1 h.2, fun h => h ▸ ⟨rfl, rfl⟩⟩
+
 /-- **Layer 0.1, the opposite-convention translation.** Componentwise inversion is the
 bijection with triples for the rival relation `σ0 * σ1 * σinf = 1`; it preserves cycle
 types, monodromy, connectedness, and automorphisms (README, Layer 0.1). -/
@@ -180,6 +198,27 @@ pretransitivity is vacuous on `Fin 0`, and the genus formula fails there. -/
 def IsConnected (t : PermutationTriple n) : Prop :=
   n ≠ 0 ∧ MulAction.IsPretransitive (monodromyGroup t) (Fin n)
 
+/-- **Layer 0.2, 0.4.** Connectedness is invariant under relabeling — the lemma that makes
+`ConnectedTriple` an `Equiv.Perm (Fin n)`-set. -/
+theorem isConnected_smul (τ : Equiv.Perm (Fin n)) {t : PermutationTriple n}
+    (ht : t.IsConnected) : (τ • t).IsConnected := by
+  sorry
+
+/-- **Layer 3.1.** The closure of a set of labels under the two generators, one round. -/
+def orbitStep (t : PermutationTriple n) (s : Finset (Fin n)) : Finset (Fin n) :=
+  s ∪ s.image (fun i => t.σ0 i) ∪ s.image (fun i => t.σ1 i)
+
+/-- **Layer 3.1.** Connectedness, computably: `n` rounds of closure from each label
+saturate iff the monodromy group is transitive. `n` rounds suffice because a round that
+adds nothing is stationary and each earlier round adds at least one label. -/
+def isConnectedB (t : PermutationTriple n) : Bool :=
+  decide (n ≠ 0) && decide (∀ i : Fin n, (orbitStep t)^[n] {i} = Finset.univ)
+
+/-- **Layer 3.1.** Soundness of the computable connectedness test. -/
+theorem isConnectedB_eq_true_iff (t : PermutationTriple n) :
+    isConnectedB t = true ↔ t.IsConnected := by
+  sorry
+
 /-- **Layer 0.4.** The automorphism group is the stabilizer under relabeling —
 definitionally the simultaneous centralizer. -/
 def automorphismGroup (t : PermutationTriple n) : Subgroup (Equiv.Perm (Fin n)) :=
@@ -214,6 +253,33 @@ noncomputable def cycleCount {α : Type u} [Fintype α] (σ : Equiv.Perm α) : �
 
 theorem fullCycleType_sum {α : Type u} [Fintype α] (σ : Equiv.Perm α) :
     (fullCycleType σ).sum = Fintype.card α := by
+  sorry
+
+/-! **Layer 3.1: the computable cycle decomposition.** `fullCycleType` above is built from
+Mathlib's `Equiv.Perm.cycleType`, which goes through `cycleFactorsFinset` and is not an
+executable decomposition; every `#eval` and `decide` in Layers 3 and 14 runs on the
+definitions below instead, and `computedCycleType_eq_fullCycleType` is what licenses that. -/
+
+/-- **Layer 3.1.** The length of the cycle of `σ` through `i`: the least `k ≥ 1` with
+`σ ^ k i = i`, found by a bounded scan. -/
+def cycleLenOf (σ : Equiv.Perm (Fin n)) (i : Fin n) : ℕ :=
+  ((List.range n).find? fun k => decide ((σ ^ (k + 1)) i = i)).elim n (· + 1)
+
+/-- **Layer 3.1.** Whether `i` is the least label in its `σ`-orbit — the orbit
+representative the decomposition below selects. The quantifier is bounded, hence
+decidable. -/
+def isOrbitMin (σ : Equiv.Perm (Fin n)) (i : Fin n) : Bool :=
+  decide (∀ k < n, i ≤ (σ ^ k) i)
+
+/-- **Layer 3.1.** The full cycle type, computably: one part per orbit, fixed points
+included. -/
+def computedCycleType (σ : Equiv.Perm (Fin n)) : Multiset ℕ :=
+  (Finset.univ.filter fun i => isOrbitMin σ i = true).val.map (cycleLenOf σ)
+
+/-- **Layer 3.1, the comparison theorem.** The executable decomposition agrees with the
+abstract one. Without this, none of Layer 3's `#eval`s is evidence about `fullCycleType`. -/
+theorem computedCycleType_eq_fullCycleType (σ : Equiv.Perm (Fin n)) :
+    computedCycleType σ = fullCycleType σ := by
   sorry
 
 /-- **Layer 0.5, the transposition step lemma.** Multiplying by a transposition merges two
@@ -352,7 +418,28 @@ theorem braid_on_isoClass (t : PermutationTriple n) :
 
 end PermutationTriple
 
-/-! ## Layer 1: passports -/
+/-! ## Layer 1: passports
+
+⚠ Passports are attached to **connected** triples only (README, Layer 1.1). The carrier
+below is what every predicate and every function of this layer is stated on; none is stated
+on a bare triple and then hedged with a hypothesis. -/
+
+/-- **Layer 1.1.** The connected-triple carrier. -/
+def ConnectedTriple (n : ℕ) : Type :=
+  {t : PermutationTriple n // t.IsConnected}
+
+namespace ConnectedTriple
+
+variable {n : ℕ}
+
+instance : SMul (Equiv.Perm (Fin n)) (ConnectedTriple n) where
+  smul τ t := ⟨τ • t.1, PermutationTriple.isConnected_smul τ t.2⟩
+
+instance : MulAction (Equiv.Perm (Fin n)) (ConnectedTriple n) where
+  one_smul _ := Subtype.ext (one_smul _ _)
+  mul_smul _ _ _ := Subtype.ext (mul_smul _ _ _)
+
+end ConnectedTriple
 
 open PermutationTriple in
 /-- **Layer 1.1.** A passport specification: a reference transitive subgroup (up to the
@@ -367,31 +454,53 @@ namespace PassportSpec
 
 variable {n : ℕ}
 
-/-- **Layer 1.1.** Well-formedness: transitive reference, three partitions of `n`. -/
+/-- **Layer 1.1.** Well-formedness: nonzero degree, transitive reference, three partitions
+of `n` into positive parts. ⚠ `n ≠ 0` is part of admissibility for the same reason it is
+part of connectedness: `IsPretransitive` is vacuous on `Fin 0` and the empty multiset is a
+partition of `0`, so without it the degenerate specification is admissible and inhabited by
+nothing. -/
 def IsAdmissible (P : PassportSpec n) : Prop :=
-  MulAction.IsPretransitive P.G (Fin n) ∧
+  n ≠ 0 ∧
+    MulAction.IsPretransitive P.G (Fin n) ∧
     (P.lam0.sum = n ∧ ∀ i ∈ P.lam0, 0 < i) ∧
     (P.lam1.sum = n ∧ ∀ i ∈ P.lam1, 0 < i) ∧
     (P.laminf.sum = n ∧ ∀ i ∈ P.laminf, 0 < i)
 
-/-- **Layer 1.1.** Passport membership: conjugate monodromy (the exact
-PolynomialGaloisGroups spelling) and equal cycle data. -/
-def HasPassport (t : PermutationTriple n) (P : PassportSpec n) : Prop :=
+/-- **Layer 1.1.** Passport membership, on a **connected** triple: conjugate monodromy (the
+exact PolynomialGaloisGroups spelling) and equal cycle data. -/
+def HasPassport (t : ConnectedTriple n) (P : PassportSpec n) : Prop :=
   (∃ τ : Equiv.Perm (Fin n),
-      (PermutationTriple.monodromyGroup t).map (MulAut.conj τ).toMonoidHom = P.G) ∧
-    PermutationTriple.fullCycleType t.σ0 = P.lam0 ∧
-    PermutationTriple.fullCycleType t.σ1 = P.lam1 ∧
-    PermutationTriple.fullCycleType t.σinf = P.laminf
+      (PermutationTriple.monodromyGroup t.1).map (MulAut.conj τ).toMonoidHom = P.G) ∧
+    PermutationTriple.fullCycleType t.1.σ0 = P.lam0 ∧
+    PermutationTriple.fullCycleType t.1.σ1 = P.lam1 ∧
+    PermutationTriple.fullCycleType t.1.σinf = P.laminf
 
 end PassportSpec
+
+namespace ConnectedTriple
+
+variable {n : ℕ}
+
+/-- **Layer 1.5.** The passport of a connected triple. ⚠ The domain is `ConnectedTriple n`:
+on a disconnected triple this would produce an inadmissible specification. -/
+noncomputable def passportOf (t : ConnectedTriple n) : PassportSpec n :=
+  ⟨PermutationTriple.monodromyGroup t.1, PermutationTriple.fullCycleType t.1.σ0,
+    PermutationTriple.fullCycleType t.1.σ1, PermutationTriple.fullCycleType t.1.σinf⟩
+
+/-- **Layer 1.5.** `passportOf` lands in admissible specifications. -/
+theorem isAdmissible_passportOf (t : ConnectedTriple n) : (passportOf t).IsAdmissible := by
+  sorry
+
+/-- **Layer 1.5.** A connected triple has its own passport. -/
+theorem hasPassport_passportOf (t : ConnectedTriple n) :
+    PassportSpec.HasPassport t (passportOf t) := by
+  sorry
+
+end ConnectedTriple
 
 namespace PermutationTriple
 
 variable {n : ℕ}
-
-/-- **Layer 1.5.** The passport of a triple. -/
-noncomputable def passportOf (t : PermutationTriple n) : PassportSpec n :=
-  ⟨monodromyGroup t, fullCycleType t.σ0, fullCycleType t.σ1, fullCycleType t.σinf⟩
 
 /-- **Layer 1.4.** Primitivity of the monodromy action, Mathlib's notion. -/
 def IsPrimitive (t : PermutationTriple n) : Prop :=

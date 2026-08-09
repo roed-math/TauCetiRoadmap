@@ -578,27 +578,47 @@ these rather than inventing new ones:
 
 #### 1.1 Passport specifications
 
+Passports are attached to **connected** triples only, so the carrier comes first:
+
+```lean
+def ConnectedTriple (n : ℕ) := {t : PermutationTriple n // t.IsConnected}
+```
+
+with the relabeling action of Layer 0.2 restricted to it (connectedness is
+relabeling-invariant, Layer 0.2), its orbit relation, and the coercion to
+`PermutationTriple n`. Every predicate and every function of this layer is stated on
+`ConnectedTriple n`; none is stated on a bare triple and then hedged with a hypothesis.
+
 ```lean
 structure PassportSpec (n : ℕ) where
   G : Subgroup (Equiv.Perm (Fin n))
   λ0 λ1 λinf : Multiset ℕ
 ```
 
-with the well-formedness predicate `PassportSpec.IsAdmissible` (the reference subgroup is
-pretransitive; each multiset is a partition of `n`) and the membership predicate: a
-connected triple `t` has passport `P` when its monodromy group is conjugate to `P.G` (the
-spelling `∃ τ, Subgroup.map (MulAut.conj τ).toMonoidHom (monodromyGroup t) = P.G`, exactly
-as PolynomialGaloisGroups spells label membership) and its three full cycle types are the
-three partitions. Prove invariance of membership under relabeling, and that membership
-depends on `P.G` only through its conjugacy class.
+with the well-formedness predicate `PassportSpec.IsAdmissible` — `n ≠ 0`, the reference
+subgroup is pretransitive, and each multiset is a partition of `n` into positive parts —
+and the membership predicate: `t : ConnectedTriple n` has passport `P` when its monodromy
+group is conjugate to `P.G` (the spelling
+`∃ τ, Subgroup.map (MulAut.conj τ).toMonoidHom (monodromyGroup t) = P.G`, exactly as
+PolynomialGaloisGroups spells label membership) and its three full cycle types are the
+three partitions. Prove invariance of membership under relabeling, that membership depends
+on `P.G` only through its conjugacy class, and that a `P` with an inhabited membership
+predicate is admissible.
+
+⚠ `n ≠ 0` is part of admissibility for the same reason it is part of connectedness
+(Layer 0.4): `MulAction.IsPretransitive` is vacuous on `Fin 0`, and the empty multiset is
+a partition of `0`, so the degenerate specification would otherwise be admissible and
+inhabited by nothing.
 
 *Prerequisites:* Layers 0.2–0.5; PolynomialGaloisGroups Layer 0.
 
 #### 1.2 Passport classes and passport size
 
-The passport class set of `P` is the (finite) set of isomorphism classes of connected
-triples with passport `P`; `passportSize P` is its cardinality. Provide the `Fintype`
-instance through Layer 3.1's enumeration, and prove: `passportSize` is invariant under
+The passport class set of `P` is the (finite) set of isomorphism classes of
+`ConnectedTriple n` with passport `P`; `passportSize P` is its cardinality. The `Fintype`
+instance comes from Layer 0.1's `Fintype (PermutationTriple n)` and Layer 0.2's decidable
+orbit relation — both instances on the carrier itself, so **this milestone does not consume
+Layer 3.1** and Layer 3.1 is free to consume it. Prove: `passportSize` is invariant under
 conjugating the reference subgroup; isomorphic triples have equal passports; the passport
 determines degree, genus, `orderTriple`, and geometry type (each is computable from the
 partitions alone — with the genus through Layer 0.6's formula).
@@ -649,11 +669,14 @@ system), not as a derived value.
 
 #### 1.5 The passport of a triple
 
-`passportOf t : PassportSpec n` — the monodromy group itself as reference subgroup with the
-three full cycle types — with `HasPassport t (passportOf t)`, and the universal property:
-`t'` is in the passport class set of `passportOf t` iff `t'` is connected with the same
-degree, conjugate monodromy, and equal cycle data. This is the bridge every LMFDB-facing
-statement uses to pass from a stored triple to its passport row.
+`passportOf : ConnectedTriple n → PassportSpec n` — the monodromy group itself as reference
+subgroup with the three full cycle types — with `IsAdmissible (passportOf t)`,
+`HasPassport t (passportOf t)`, and the universal property: `t'` is in the passport class
+set of `passportOf t` iff `t'` has conjugate monodromy and equal cycle data. ⚠ The domain is
+`ConnectedTriple n`, not `PermutationTriple n`: `passportOf` of a disconnected triple would
+produce an inadmissible specification, and every consumer below takes a connected triple.
+This is the bridge every LMFDB-facing statement uses to pass from a stored triple to its
+passport row.
 
 *Prerequisites:* Layers 1.1, 1.2.
 
@@ -815,20 +838,37 @@ Euler characteristic computed by `decide`/`#eval`-friendly instances.
 
 #### 3.1 Executable enumeration
 
-For each fixed `n`, genuine `def`s (never `noncomputable`, never bare existence):
+Every invariant this roadmap attaches to a finite triple must be **computable on
+`Equiv.Perm (Fin n)`**, not merely definable. Mathlib's `Equiv.Perm.cycleType` is built
+through `cycleFactorsFinset`, which is not an executable decomposition, so the cycle data
+is recomputed here and compared:
 
-- the `Fintype` instance on `PermutationTriple n` through `ofTwo` (the third component is
-  determined);
-- decidable connectedness (pretransitivity of the closure is a finite orbit computation) and
-  decidable primitivity;
-- the `Finset` of connected triples; the partition of it into isomorphism classes (orbit
-  enumeration under the relabeling action); the passport fibers;
-- soundness and completeness as `Finset` equalities, so that `passportSize` and the class
-  lists are `#eval`-able at small degree, with `decide`-checked unit tests at `n ≤ 3`.
+- **Carrier instances.** `Fintype (PermutationTriple n)` and `DecidableEq
+  (PermutationTriple n)`, both through the `Equiv` with pairs `(σ0, σ1)` supplied by
+  `ofTwo` and Layer 0.1's extensionality (the third component is determined). These are
+  Layer 0.1's instance obligations; this milestone is where they are discharged
+  executably.
+- **The computable cycle decomposition.** `cycleLenOf σ i`, the least `k ≥ 1` with
+  `σ ^ k i = i`, found by scanning `k ∈ [1, n]`; the orbit-minimum predicate
+  `∀ k < n, i ≤ σ ^ k i`, decidable because the quantifier is bounded; and
+  `computedCycleType σ`, the multiset of `cycleLenOf σ i` over the orbit minima. Then the
+  comparison theorem `computedCycleType σ = fullCycleType σ`, which is what licenses every
+  later `#eval` and `decide`. Derive computable `cycleCount`, `orderTriple` (as the
+  multiset `lcm`, Layer 0.7), `eulerChar`, `genus`, and `geometryType` from it, each with
+  the theorem that it agrees with the Layer 0 definition.
+- **Decidable predicates.** Connectedness, as the Boolean `isConnectedB` computing the
+  closure of `{i}` under `σ0` and `σ1` by `n` rounds of `Finset` image-union, with
+  `isConnectedB t = true ↔ t.IsConnected`; and primitivity, by enumerating block systems
+  (Layer 1.4), with the analogous soundness theorem.
+- **Enumeration.** The `Finset` of connected triples; its partition into isomorphism
+  classes by orbit enumeration under the relabeling action; the passport fibers, and
+  `passportSize P` as the cardinality of a computed `Finset` — with soundness and
+  completeness stated as `Finset` equalities, so that the class lists and passport sizes
+  are `#eval`-able at small degree and `decide`-checked at `n ≤ 3`.
 
 Complexity is not a completion criterion; `n!·n!` enumeration is acceptable.
 
-*Prerequisites:* Layers 0.1–0.4, 1.1, 1.2, 1.4.
+*Prerequisites:* Layers 0.1–0.7, 1.1, 1.2, 1.4.
 
 #### 3.2 The Frobenius product-one formula
 
@@ -891,14 +931,45 @@ subgroup lattices.
 
 #### 3.4 From counts to passport sizes
 
-Combine Layers 1.3, 3.2, 3.3: the passport size is the number of
-`N_{S_n}(G)`-orbits of generating triples with the prescribed cycle data, computed from the
-generating counts refined over the `G`-classes inside each `S_n`-cycle-type and Burnside's
-lemma (`MulAction.sum_card_fixedBy_eq_card_orbits_mul_card_group`) for the normalizer
-action. Every ingredient is named; no step identifies a raw Frobenius count with
-`passportSize`.
+Combine Layers 1.3, 3.2, 3.3 into a formula, in these five steps, each its own statement:
 
-*Prerequisites:* Layers 1.3, 3.2, 3.3; Mathlib Burnside.
+1. **Cycle types refine into `G`-classes.** For a pretransitive `G ≤ S_n` and a partition
+   `λ` of `n`, the set `G_λ := {g ∈ G | fullCycleType g = λ}` is a union of `G`-conjugacy
+   classes; name the finite index set `classesOfType G λ : Finset (ConjClasses G)` and
+   prove `G_λ = ⋃_{C ∈ classesOfType G λ} carrier C`. ⚠ One `S_n`-cycle type can meet
+   several `G`-classes and can also meet none; both cases occur in small degree.
+2. **The generating count per class triple.** For `(C0, C1, Cinf)` a triple of
+   `G`-conjugacy classes, Layer 3.2 counts the product-one triples in
+   `C0 × C1 × Cinf` and Layer 3.3 subtracts the non-generating ones; write
+   `genCount G C0 C1 Cinf` for the result and
+   `genCountType G λ0 λ1 λinf := Σ genCount G C0 C1 Cinf` over
+   `classesOfType G λ0 × classesOfType G λ1 × classesOfType G λinf` — the number of
+   generating triples of `G` with the prescribed cycle data.
+3. **The normalizer action.** `N := N_{S_n}(G)` acts by simultaneous conjugation on that
+   finite set (Layer 1.3), and by Layer 1.3 the orbits are exactly the isomorphism classes
+   in the passport, so `passportSize P = ` the number of `N`-orbits.
+4. **Burnside, and the exact division that replaces it here.** In general the orbit count
+   is `MulAction.sum_card_fixedBy_eq_card_orbits_mul_card_group`:
+   `Σ_{τ ∈ N} #Fix(τ) = #orbits · |N|`, where `Fix(τ)` is the set of generating triples
+   fixed by conjugation by `τ`, i.e. those whose three components commute with `τ`.
+   But **on this set every stabilizer is the same group**: a `τ` fixing a generating triple
+   centralizes `⟨g0, g1⟩ = G`, so the stabilizer is `C_{S_n}(G)`, independent of the triple.
+   Prove that, and conclude the exact formula
+
+   ```text
+   passportSize P = genCountType G λ0 λ1 λinf * Nat.card (C_{S_n}(G)) / Nat.card N ,
+   ```
+
+   as an equality of natural numbers together with the divisibility that makes it one.
+   Burnside is then a cross-check, not the route.
+5. **The centralizer bound.** For pretransitive `G`, `C_{S_n}(G)` acts semiregularly on
+   `Fin n`, so its order divides `n` (Layer 0.4's freeness argument applied to `G` in place
+   of a triple's monodromy group); record this so the formula's right-hand side is bounded.
+
+Every ingredient is named; no step identifies a raw Frobenius count with `passportSize`.
+
+*Prerequisites:* Layers 0.4, 0.5, 1.2, 1.3, 3.2, 3.3; Mathlib Burnside,
+`Subgroup.centralizer`, `Subgroup.normalizer`.
 
 #### 3.5 The small complete tables
 
@@ -991,14 +1062,42 @@ the triangle group.
 
 #### 4.3 Dividing versus exact orders
 
-Separate the three statements a source can mean: orders dividing `(a,b,c)` (the universal
-property); orders exactly `(a,b,c)` (the LMFDB's `abc` datum, `orderTriple t = (a,b,c)`);
-and the monodromy group as a quotient of the triangle group. Provide the predicate for exact
-orders and the lemma that a triple with exact orders exists for `(a,b,c)` iff the evident
-divisibility and parity constraints admit it — stated as a constraint interface, with the
-constructions at small degree from Layer 0.8 as witnesses.
+Separate the three statements a source can mean, each as its own predicate on a connected
+triple `t` of degree `n`:
 
-*Prerequisites:* Layers 0.7, 4.2.
+- **dividing:** `t.σ0 ^ a = 1`, `t.σ1 ^ b = 1`, `t.σinf ^ c = 1` — the hypothesis of 4.2's
+  universal property, and the only one that makes `t` a representation of
+  `TriangleGroup a b c`;
+- **exact:** `orderTriple t = (a, b, c)` — the LMFDB's `abc` datum (Layer 0.7);
+- **surjective:** the induced `TriangleGroup a b c →* Equiv.Perm (Fin n)` of 4.2 has range
+  the whole monodromy group, i.e. the monodromy group is a quotient of the triangle group.
+
+Prove: exact implies dividing; dividing implies exact for the triple's own `orderTriple`;
+surjectivity is automatic from 4.2 and is recorded separately only because sources conflate
+it with exactness.
+
+**Necessary conditions for exact orders at degree `n`**, each proved, and none of them
+claimed sufficient:
+
+- each of `a, b, c` is the `lcm` of some partition of `n` — equivalently `Equiv.Perm (Fin n)`
+  contains an element of that exact order, which Mathlib's
+  `Equiv.Perm.exists_with_cycleType_iff` decides;
+- `cycleCount σ ≥ n / orderOf σ` for every `σ`, since each cycle length divides the order;
+  hence, in `ℚ`, `eulerChar t ≥ n · (1/a + 1/b + 1/c − 1)`;
+- combining with Layer 0.6's `eulerChar t ≤ 2`: **`n · (1/a + 1/b + 1/c − 1) ≤ 2`**. In the
+  spherical case this bounds the degree; in the Euclidean and hyperbolic cases it is
+  vacuous.
+
+⚠ **There is no simple general sufficiency criterion, and none is stated.** What replaces it
+is decidability: by Layer 3.1 the set of connected triples of degree `n` with exact orders
+`(a,b,c)` is a computed `Finset`, so existence at each fixed degree is decided, not
+characterized. The witnesses this roadmap actually uses are constructed rather than
+asserted: `cyclicTriple n` realizes `(n, 1, n)` at degree `n`; the `4z(1−z)` triple realizes
+`(1, 2, 2)` at degree `2`; `s3Triple` realizes `(3, 2, 2)` at degree `3`; and `torusTriple`
+realizes `(4, 4, 2)` at degree `4`.
+
+*Prerequisites:* Layers 0.5–0.7, 3.1, 4.2; Mathlib `Equiv.Perm.exists_with_cycleType_iff`,
+`Multiset.lcm`.
 
 #### 4.4 The trichotomy: spherical and Euclidean cases
 
@@ -1007,15 +1106,65 @@ its sign matches Layer 0.7's geometry type of any connected triple with exact or
 `(a,b,c)`. Then:
 
 - **Spherical classification, proved.** For `χᵒʳᵇ > 0` with `1 ≤ a ≤ b ≤ c`, the parameter
-  triples are `(1, m, m)`, `(2, 2, m)`, `(2, 3, 3)`, `(2, 3, 4)`, `(2, 3, 5)`; the triangle
-  group is finite of order `2/χᵒʳᵇ` — cyclic, dihedral, `A₄`, `S₄`, `A₅` respectively —
-  proved via explicit permutation representations (the Layer 0.8 suite supplies the cyclic
-  case; the polyhedral cases get explicit triples) and a bound forcing the order.
+  triples are exactly `(1, m, m)`, `(2, 2, m)`, `(2, 3, 3)`, `(2, 3, 4)`, `(2, 3, 5)` — an
+  elementary finite case analysis on `1/a + 1/b + 1/c > 1`. In each case the triangle group
+  is finite of order `2/χᵒʳᵇ`:
+
+  ```text
+  (1, m, m)   Multiplicative (ZMod m)   order m
+  (2, 2, m)   DihedralGroup m           order 2m
+  (2, 3, 3)   A₄                        order 12
+  (2, 3, 4)   S₄                        order 24
+  (2, 3, 5)   A₅                        order 60
+  ```
+
+  The two infinite families are settled by presentation comparison alone:
+
+  - `(1, m, m)`: the relator `x ^ 1` makes `x = 1`, the third generator becomes `y⁻¹`, and
+    the presentation collapses to `⟨y | y ^ m⟩`, giving
+    `TriangleGroup 1 m m ≃* Multiplicative (ZMod m)`.
+  - `(2, 2, m)`: substituting `r := y · x` rewrites the presentation as
+    `⟨x, r | x², r^m, x r x = r⁻¹⟩`, which is Mathlib's `DihedralGroup m`; the isomorphism
+    is a presentation comparison and gives the order `2m` outright. ⚠ Do **not** substitute
+    the degree-`m` permutation representation here: it is unfaithful at `m ≤ 2`, where
+    `TriangleGroup 2 2 2` has order `4` and its image in `Equiv.Perm (Fin 2)` has order `2`.
+
+  The three polyhedral cases need two halves. The **lower** bound is an explicit
+  permutation representation through 4.1's universal property:
+
+  ```text
+  (2, 3, 3)   x = (0 1)(2 3)   y = (0 1 2)   y·x = (0 2 3)     ⟨x,y⟩ = A₄  in S₄
+  (2, 3, 4)   x = (0 1)        y = (1 2 3)   y·x = (0 2 3 1)   ⟨x,y⟩ = S₄  in S₄
+  (2, 3, 5)   x = (0 1)(2 3)   y = (0 4 2)   y·x = (0 1 4 2 3) ⟨x,y⟩ = A₅  in S₅
+  ```
+
+  (permutations `0`-indexed and composed as in §Pinned conventions, so the third generator
+  is `z = (y·x)⁻¹`). Each row is three `decide`-able finite checks — the orders of `x`, `y`
+  and `y·x`, and the identification of `⟨x, y⟩` — and yields a surjection
+  `TriangleGroup a b c ↠ Q`.
+
+  The **upper** bound is an explicit **coset enumeration of `⟨y⟩`**, of index `4`, `8`, `20`
+  respectively. The milestone owns the coset table: a list of `index`-many words `w_i` in
+  `x` and `y`, and the `2 · index` identities `⟨y⟩ w_i x = ⟨y⟩ w_{μ(i,x)}` and
+  `⟨y⟩ w_i y = ⟨y⟩ w_{μ(i,y)}` derived from the relators, which together prove
+  `TriangleGroup a b c = ⋃_i ⟨y⟩ w_i` and hence `Nat.card ≤ index · 3`, that is `12`, `24`,
+  `60`. Surjection plus matching bound is the isomorphism.
+
+  ⚠ **A representation gives only a lower bound**, and a bound on *finite quotients* is not
+  a substitute for a bound on the group. From Layer 4.3's inequality applied to the regular
+  action of a finite quotient `Q` one gets `Nat.card Q ≤ 2 / χᵒʳᵇ(a,b,c)` for **every**
+  finite quotient; that statement is available in all three geometries and proves finiteness
+  in none of them.
 - **Euclidean infiniteness, proved.** For `χᵒʳᵇ = 0` — parameters `(3,3,3)`, `(2,4,4)`,
   `(2,3,6)` — the triangle group is infinite, by the explicit affine representation: `x` and
   `y` map to rotations of `ℂ` about `0` and `1` through `2π/a`, `2π/b` as elements of the
   affine group `z ↦ αz + β`, the relation is a computation in that group, and the
-  commutator `[x, y]` is a nontrivial translation, of infinite order.
+  commutator `[x, y]` is a nontrivial translation, of infinite order. Concretely, with
+  `ω := exp(2πi/a)` and `η := exp(2πi/b)`, take `x : z ↦ ω z` and `y : z ↦ η (z − 1) + 1`;
+  the linear part of `y·x` is `ωη = exp(2πi(1/a + 1/b))`, which is a primitive `c`-th root
+  of unity exactly when `1/a + 1/b + 1/c = 1`, so `y·x` is a rotation of order `c`, and
+  `x y x⁻¹ y⁻¹` has linear part `1` and translation part `(η − 1)(1 − ω)`, nonzero because
+  `a, b ≥ 2`.
 
 *Source:* Girondo–González-Diez, **Remark 2.30**, which states the trichotomy qualitatively —
 the group is infinite in the Euclidean case and finite in the spherical case — and constructs
@@ -1025,17 +1174,67 @@ groups with the cyclic, dihedral, `A₄`, `S₄` and `A₅` families is **not** 
 only case it names is `Γ_{2,2,2} ≅ (ℤ/2)²`. The classification above is therefore this
 roadmap's own work, and the explicit permutation representations are what prove it.
 
-*Prerequisites:* Layers 0.7, 4.1, 4.2; Mathlib `ℚ`, complex affine maps.
+*Prerequisites:* Layers 0.7, 4.1–4.3; Mathlib `ℚ`, `DihedralGroup`, `ZMod`, `PresentedGroup`,
+complex affine maps.
 
 #### 4.5 Hyperbolic infiniteness
 
-For `χᵒʳᵇ < 0`, `TriangleGroup a b c` is infinite. The route is an explicit representation
-into `PSL₂(ℝ)`: rotations through `2π/a` and `2π/b` about two points at the hyperbolic
-distance the angle sum forces, written as explicit real matrices whose entries involve
-`cos(π/a)`, `cos(π/b)`, `cos(π/c)`; the relations are trigonometric identities; and the image
-contains an element of trace `> 2`, hence of infinite order, which is what infiniteness
-reduces to. The milestone owns the matrices and the identities, and **faithfulness of the
-representation is not claimed and not needed** — only that the image is infinite.
+For `χᵒʳᵇ < 0`, `TriangleGroup a b c` is infinite, by an explicit representation into
+`SL(2,ℝ)`. Write `c₁ = cos(π/a)`, `s₁ = sin(π/a)`, and likewise `c₂, s₂` for `b` and
+`c₃ = cos(π/c)`. The milestone owns these five statements, in this order:
+
+1. **The scale.** `κ := (c₁ c₂ + c₃) / (s₁ s₂)` and `μ := κ + √(κ² − 1)`. Prove `κ > 1` —
+   this is the hyperbolic hypothesis, by 2 below — so `μ > 1` is real and `μ + μ⁻¹ = 2κ`.
+2. **The trigonometric lemma.** For `α, β, γ ∈ (0, π/2]`,
+
+   ```text
+   cos²α + cos²β + cos²γ + 2 cos α cos β cos γ − 1
+     = (cos γ − cos(π − α − β)) · (cos γ + cos(α − β)) ,
+   ```
+
+   an identity provable by expanding both sides. Since `cos(α − β) > 0` and `cos γ ≥ 0` the
+   second factor is positive, so the left side is positive **iff** `γ < π − α − β`, that is
+   iff `α + β + γ < π`. Applied at `α = π/a`, `β = π/b`, `γ = π/c` this says: the left side
+   is positive iff `χᵒʳᵇ(a,b,c) < 0`. The same factorization gives `κ > 1` in that case,
+   since `κ − 1 = (c₁c₂ + c₃ − s₁s₂)/(s₁s₂)` and `c₁c₂ − s₁s₂ = cos(π/a + π/b)`.
+3. **The matrices.**
+
+   ```text
+   X := !![ c₁,  s₁ ; −s₁,  c₁ ]        Y := !![ c₂,  μ · s₂ ; −μ⁻¹ · s₂,  c₂ ]
+   ```
+
+   Both have determinant `1`. Prove `tr X = 2c₁`, `tr Y = 2c₂`, and
+   `tr (Y * X) = 2c₁c₂ − s₁s₂(μ + μ⁻¹) = −2c₃`, the last being exactly what the choice of
+   `κ` arranges. Hence in `PSL(2,ℝ)` the images satisfy `X^a = 1`, `Y^b = 1`,
+   `(Y·X)^c = 1` — each because an element of `SL(2,ℝ)` with trace `2cos θ` and `|θ| < π` is
+   conjugate to a rotation by `2θ` — so 4.1's universal property gives a homomorphism
+   `TriangleGroup a b c →* PSL(2,ℝ)`.
+4. **The Fricke trace identity.** For `A, B ∈ SL(2,ℝ)`,
+
+   ```text
+   tr (A * B * A⁻¹ * B⁻¹) = (tr A)² + (tr B)² + (tr (A*B))² − tr A · tr B · tr (A*B) − 2 ,
+   ```
+
+   proved by expanding both sides in the eight matrix entries subject to
+   `det A = det B = 1`. Substituting the three traces of 3 gives
+
+   ```text
+   tr (X Y X⁻¹ Y⁻¹) = 4 (c₁² + c₂² + c₃² + 2 c₁ c₂ c₃) − 2 ,
+   ```
+
+   which by 2 is `> 2` exactly in the hyperbolic case.
+5. **Trace `> 2` forces infinite order.** An `A ∈ SL(2,ℝ)` with `|tr A| > 2` has real
+   eigenvalues `λ, λ⁻¹` with `|λ| > 1`, so `tr (A ^ n) = λⁿ + λ⁻ⁿ` is unbounded and
+   `A ^ n ≠ ±1` for `n ≠ 0`. Hence the image of `X Y X⁻¹ Y⁻¹` in `PSL(2,ℝ)` has infinite
+   order, so the image of the representation is infinite, so `TriangleGroup a b c` is
+   infinite.
+
+**Faithfulness of the representation is not claimed and not needed** — only that the image
+is infinite. ⚠ The element exhibited must be the **commutator**. The obvious shorter words
+are not hyperbolic in general: `X` and `Y` are elliptic by construction, `tr (X·Y) = −2c₃`
+has absolute value `< 2` always, and `tr (X·Y⁻¹) = 4c₁c₂ + 2c₃` degenerates whenever
+`a = 2`, where `c₁ = 0`. At `(a,b,c) = (2,3,7)` those two traces are `∓2cos(π/7) ≈ ∓1.802`,
+while the commutator's is `4(cos²(π/3) + cos²(π/7)) − 2 ≈ 2.247`.
 
 *Source:* Girondo–González-Diez §2.4 is the classical treatment, and it takes a different
 route: a hyperbolic triangle with angles `π/a, π/b, π/c`, the three reflections in its sides,
@@ -1051,7 +1250,8 @@ and Poincaré's theorem — a development no roadmap owns and this one does not 
 infinite needs one element of infinite order; discreteness of the image, and faithfulness,
 are strictly stronger and are where the geometric route's real work lies.
 
-*Prerequisites:* Layers 4.1, 4.4; Mathlib `Matrix.SpecialLinearGroup`, real trigonometry.
+*Prerequisites:* Layers 4.1, 4.4; Mathlib `Matrix.SpecialLinearGroup`, `Matrix.trace`,
+`Real.cos`, `Real.sin`, `Real.sqrt`.
 
 #### 4.6 Regular triples and normal subgroups
 
