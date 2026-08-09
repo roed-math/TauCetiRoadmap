@@ -388,7 +388,7 @@ The load-bearing imports, against the pinned Mathlib (`9caeba1000`, Lean `v4.31.
 | Jordan theorems | `Equiv.Perm.subgroup_eq_top_of_isPreprimitive_of_isSwap_mem`, `alternatingGroup_le_of_isPreprimitive_of_isThreeCycle_mem` |
 | Free groups | `FreeGroup`, `FreeGroup.lift`, `IsFreeGroup`, `FreeGroupBasis`, `PresentedGroup`, `PresentedGroup.toGroup`, Nielsen–Schreier |
 | Topology | `FundamentalGroup`, `FundamentalGroupoid`, `Path`, `IsCoveringMap` (`Topology/Covering/Basic.lean`), `IsQuotientCoveringMap`, `liftPath`, `liftHomotopy`, `IsCoveringMap.monodromy`, `monodromyFunctor`, `monodromy_trans_apply`, `injective_path_homotopic_map`, the lifting criterion `existsUnique_continuousMap_lifts_of_range_le`, `LocPathConnectedSpace`, `isCoveringMap_exp`, `isCoveringMapOn_zpow` |
-| Galois categories | `PreGaloisCategory`, `FiberFunctor`, the profinite topology on `Aut F`, `IsGalois` objects, `functorToContAction` with `IsEquivalence`, `IsFundamentalGroup` with `toAutMulEquiv` |
+| Galois categories | `PreGaloisCategory`, `FiberFunctor`, the profinite topology on `Aut F`, `IsGalois` objects, `functorToContAction` with `IsEquivalence`, `IsFundamentalGroup` with `toAutMulEquiv` and `toAutMulEquiv_isHomeomorph` |
 | Profinite | `ProfiniteGrp`, `ProfiniteGrp.profiniteCompletion` with `eta`, `lift`, adjunction; `ContinuousMulEquiv` (`≃ₜ*`); `PadicInt` |
 | Arithmetic | `Field.absoluteGaloisGroup`, Krull topology, `AlgebraicClosure`, `modularCyclotomicCharacter`, `cyclotomicCharacter`, cyclotomic polynomials irreducible over `ℚ`, `IsPrimitiveRoot` |
 | Complex analysis | `analyticOrderAt`, `MeromorphicAt/On`, `MeromorphicNFAt`, open mapping, identity theorem, `TendstoLocallyUniformlyOn`, `OnePoint ℂ` with `OnePoint.equivProjectivization` and the `GL(2)` Möbius action |
@@ -3452,7 +3452,8 @@ goes through fiber functors, and every bridge is a separate target:
 4. **Automorphism groups of fiber functors.** The induced continuous isomorphism
    `Aut(Fib_alg) ≃ₜ* Aut(Fib_top)`, through Mathlib's Galois-category API
    (`PreGaloisCategory`, `FiberFunctor`, the profinite topology on `Aut F`,
-   `IsFundamentalGroup.toAutMulEquiv`).
+   `IsFundamentalGroup.toAutMulEquiv` with `toAutMulEquiv_isHomeomorph` — the latter is
+   what upgrades the `MulEquiv` to the `≃ₜ*` this milestone claims).
 5. **Identification of both sides.** `Aut(Fib_alg) ≃ₜ* π₁ᵍᵉᵒ` — the fiber functor of the
    Galois category of finite subextensions has automorphism group the Galois group — and
    `Aut(Fib_top) ≃ₜ* profiniteCompletion (FreeGroup (Fin 2))`, through Layer 5.6's free
