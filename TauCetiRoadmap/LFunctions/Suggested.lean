@@ -486,6 +486,12 @@ noncomputable def IdealWeight.conjugate (χ : IdealWeight K) : IdealWeight K whe
   norm_eq_one := sorry
   eq_zero_bad := sorry
 
+/-- **Layer 1.2, a weight that is trivial on its good ideals.** This is the branch condition of
+the `3-4-1` argument, and it is a real condition: the square of a quadratic character satisfies
+it. -/
+def IdealWeight.IsTrivialOnGood (χ : IdealWeight K) : Prop :=
+  ∀ I : Ideal (𝓞 K), IdealWeight.IsGood K χ I → χ.toFun I = 1
+
 /-- **Layer 7.2, the hypothesis package for a single, possibly infinite-order, unitary
 character.**
 
@@ -497,17 +503,32 @@ twist `𝔑^{it}` with `t ≠ 0`, so neither can be a member of a finite family.
 keep the finite package, because their character groups really are finite; Layer 7.7 is stated
 over this one.
 
-The fields are exactly what the `3-4-1` argument consumes: `χ`, `χ²`, the conjugate, and the norm
-twists of `χ` and `χ²`. The trivial factor is `ζ_K`, whose pole is
-`meromorphicOrderAt_dedekindZetaC_one` and whose boundary nonvanishing is
-`meromorphicOrderAt_dedekindZetaC_one_add`, so it is a citation and not a field. -/
+The fields are what the `3-4-1` argument consumes at each boundary point: cancellation for the
+twist itself, the conjugate, and a **dichotomy** on the square of the twist. The trivial factor is
+`ζ_K`, whose pole is `meromorphicOrderAt_dedekindZetaC_one` and whose boundary nonvanishing is
+`meromorphicOrderAt_dedekindZetaC_one_add`, so it is a citation and not a field.
+
+⚠ The square must **not** be required to cancel outright. That excludes the two commonest
+nonexceptional cases:
+
+- a nontrivial quadratic ray-class character `η` has `η² = 1` on the good ideals, so its partial
+  sums grow linearly and `HasCancellation (η²)` is false, while `L(η, ·)` is entire and nonzero
+  on `Re s = 1`;
+- `χ = η · 𝔑^{iu}` with `η` quadratic and `u ≠ 0` is unitary of **infinite** order and is not the
+  norm-character exception of 6.4, yet `χ² = 𝔑^{2iu}`, whose twist by `−2u` is the trivial
+  weight.
+
+The `3-4-1` proof has two branches, and the package has to carry both: when the twisted square
+cancels, use the product bound; when it is trivial on the good ideals, `χ` at that twist is real
+and the argument is Landau's, applied to the nonnegative coefficients of `ζ_K(s) L(χ_t, s)`. -/
 structure UnitaryCancelling (χ : IdealWeight K) : Prop where
   cancellation : HasCancellation K χ
-  cancellation_sq : HasCancellation K (IdealWeight.sq K χ)
   cancellation_conjugate : HasCancellation K (IdealWeight.conjugate K χ)
   cancellation_normTwist : ∀ t : ℝ, HasCancellation K (IdealWeight.normTwist K χ t)
-  cancellation_sq_normTwist : ∀ t : ℝ,
-    HasCancellation K (IdealWeight.normTwist K (IdealWeight.sq K χ) t)
+  /-- ⚠ The dichotomy, at every boundary twist. Either branch alone is insufficient. -/
+  square_twist : ∀ t : ℝ,
+    IdealWeight.IsTrivialOnGood K (IdealWeight.sq K (IdealWeight.normTwist K χ t)) ∨
+      HasCancellation K (IdealWeight.sq K (IdealWeight.normTwist K χ t))
 
 /-- **Layer 1.5, local Euler-factor data.** The local factors are *data*: an existential
 "there is a polynomial at each prime" cannot be referred to by a later theorem. The
@@ -1418,11 +1439,70 @@ quasicharacter. -/
 theorem lFunctionC_eq (χ : Grossencharacter 𝔪) {s : ℂ} (hs : 1 + χ.shift < s.re) :
     χ.lFunctionC s = LSeries (idealCoeffOfWeight K χ.toFun) s := sorry
 
+/-- **Layer 6.4, the inverse Grossencharacter**, with the unitary part conjugated and the shift
+**negated**. ⚠ This, and not the complex conjugate, is what the functional equation reflects
+against at `1 − s`: conjugation leaves the real shift `σ` alone, while the reflection needs
+`−σ`. -/
+noncomputable def inv (χ : Grossencharacter 𝔪) : Grossencharacter 𝔪 where
+  unitary := IdealWeight.conjugate K χ.unitary
+  unitary_bad := sorry
+  shift := -χ.shift
+  infinityType v := -(χ.infinityType v)
+  infinityType_isReal := sorry
+  archimedeanParam v := -(χ.archimedeanParam v)
+  admissible := sorry
+  compat := sorry
+
+theorem inv_toFun (χ : Grossencharacter 𝔪) (I : Ideal (𝓞 K)) :
+    χ.inv.toFun I = starRingEnd ℂ (χ.unitary.toFun I) * ((Ideal.absNorm I : ℝ) ^ (-χ.shift) : ℝ) :=
+  rfl
+
 /-- **Layer 6.4, continuation and the functional equation.** ⚠ The exceptional case is part of
 the statement: `Λ(χ, ·)` is entire **unless** `𝔪₀ = 1`, every `p_v = 0`, and `χ` is a power of
-the norm character, and there the poles are exactly at `s = Tr(−p + iq)/n` and
-`s = 1 + Tr(p + iq)/n`. -/
+the norm character, and there the poles are exactly at `s = σ + Tr(−p + iq)/n` and
+`s = 1 + σ + Tr(p + iq)/n`, shifted with the character. -/
 noncomputable def completedGrossencharacterLFunction (χ : Grossencharacter 𝔪) : ℂ → ℂ := sorry
+
+/-- **Layer 6.4, the functional equation of a Grossencharacter**, against the **inverse**
+character.
+
+⚠ The familiar `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)` is false as soon as `shift ≠ 0`, and the pure norm
+character `χ = 𝔑^σ` shows it. There `L(χ, s) = ζ_K(s − σ)`, so `Λ_χ(s) = Λ_K(s − σ)` has poles at
+`σ` and `1 + σ`; the character is real, so `χ̄ = χ`, and `Λ_χ(1 − s)` has poles at `−σ` and
+`1 − σ`. Those two sets are equal only when `σ = 0`. With the inverse character, whose shift is
+`−σ`, the right-hand side has poles at `σ` and `1 + σ` again, and the equation is true. The
+equivalent conjugate form reflects in `1 + 2σ − s`, and never in `1 − s`. -/
+theorem completedGrossencharacterLFunction_one_sub (χ : Grossencharacter 𝔪) (s : ℂ) :
+    completedGrossencharacterLFunction χ s =
+      heckeRootNumber (𝔪 := 𝔪) 1 * completedGrossencharacterLFunction χ.inv (1 - s) := sorry
+
+/-- **Layer 6.4, the same equation in conjugate form**, reflecting in `1 + 2σ − s`. The two are
+equivalent because `χ⁻¹ = χ̄ · 𝔑^{−2σ}`; recording both is what stops `1 − s` being written with
+the conjugate. -/
+theorem completedGrossencharacterLFunction_conj (χ : Grossencharacter 𝔪) (χbar : Grossencharacter 𝔪)
+    (hbar : ∀ I, χbar.toFun I = starRingEnd ℂ (χ.unitary.toFun I) *
+      ((Ideal.absNorm I : ℝ) ^ χ.shift : ℝ)) (s : ℂ) :
+    completedGrossencharacterLFunction χ s =
+      heckeRootNumber (𝔪 := 𝔪) 1 *
+        completedGrossencharacterLFunction χbar (1 + 2 * (χ.shift : ℂ) - s) := sorry
+
+/-- **Layer 6.4, the pure norm character**, the mandatory normalization test: `χ = 𝔑^σ` has
+`L(χ, s) = ζ_K(s − σ)` and poles exactly at `σ` and `1 + σ`. -/
+theorem lFunctionC_of_norm_character (χ : Grossencharacter 𝔪)
+    (hunit : IdealWeight.IsTrivialOnGood K χ.unitary) (s : ℂ) :
+    χ.lFunctionC s = dedekindZetaC K (s - (χ.shift : ℂ)) := sorry
+
+/-- **Layer 6.4, the Layer 0 card is the card of the *unitary* part.**
+
+⚠ The full quasicharacter is **not** an `AnalyticLFunctionData` instance unless it is recentered.
+Its coefficients `χ_unit(𝔞) 𝔑𝔞^σ` converge for `Re s > 1 + σ`, so `HasDirichletAgreement`, which
+is stated on `Re s > 1`, is about the wrong half-plane; and `AnalyticLFunctionData.dual`
+conjugates the coefficients, which leaves the real shift `σ` in place, while the `1 − s`
+functional equation needs `−σ`. Layer 0.1's record is analytic-normalized, and the unitary part is
+what is analytic-normalized here. -/
+theorem grossencharacterCard (χ : Grossencharacter 𝔪) (d : AnalyticLFunctionData)
+    (hcoeff : ∀ n : ℕ, d.coeff n = idealCoeffOfWeight K χ.unitary.toFun n) :
+    d.HasDirichletAgreement → d.degree = Module.finrank ℚ K := sorry
 
 theorem differentiable_completedGrossencharacterLFunction (χ : Grossencharacter 𝔪)
     (hexc : ¬ (𝔪.finitePart = 1 ∧ (∀ v, χ.infinityType v = (0, 0)) ∧
@@ -1506,6 +1586,36 @@ theorem continuedLFunctionOfWeight_ne_zero_one_of_unitary {χ : IdealWeight K}
 theorem meromorphicOrderAt_continuedLFunctionOfWeight_of_unitary {χ : IdealWeight K}
     (h : UnitaryCancelling K χ) (t : ℝ) :
     meromorphicOrderAt (continuedLFunctionOfWeight K χ) (1 + t * I) = (0 : WithTop ℤ) := sorry
+
+/-- **Layer 7.2, the quadratic regression test.** A nontrivial quadratic ray-class character
+inhabits the package: its square is trivial on the good ideals, so the dichotomy takes its first
+branch at `t = 0`. ⚠ It does **not** inhabit a package that demands `HasCancellation (χ²)`. -/
+theorem unitaryCancelling_of_quadratic {χ : IdealWeight K} (hcanc : HasCancellation K χ)
+    (hconj : HasCancellation K (IdealWeight.conjugate K χ))
+    (htw : ∀ t : ℝ, HasCancellation K (IdealWeight.normTwist K χ t))
+    (hsq : IdealWeight.IsTrivialOnGood K (IdealWeight.sq K χ))
+    (hsqtw : ∀ t : ℝ, t ≠ 0 →
+      HasCancellation K (IdealWeight.sq K (IdealWeight.normTwist K χ t))) :
+    UnitaryCancelling K χ := sorry
+
+/-- **Layer 7.2, the quadratic-times-norm-twist regression test.** For `χ = η · 𝔑^{iu}` with `η`
+quadratic and `u ≠ 0` the first branch of the dichotomy is taken at `t = −u`, and the second
+everywhere else. ⚠ This character is unitary of **infinite** order and is not the norm-character
+exception of 6.4, so it is exactly a case the single-character package exists for. -/
+theorem unitaryCancelling_of_quadratic_normTwist {η : IdealWeight K} (u : ℝ) (hu : u ≠ 0)
+    (hη : UnitaryCancelling K η) (hsq : IdealWeight.IsTrivialOnGood K (IdealWeight.sq K η)) :
+    UnitaryCancelling K (IdealWeight.normTwist K η u) := sorry
+
+/-- **Layer 7.7, the analytic premise of a Grossencharacter is constructed, not assumed.** Outside
+the norm-character exception of 6.4 the unitary part is nontrivial on the good ideals, and 7.5's
+cancellation for the ray-class family, extended along the archimedean twists of 6.1, supplies
+every field of the package.
+
+⚠ Without this theorem Layer 7.7 would take its own hypothesis as an input, and the advertised
+export would hold only for the characters a caller can already discharge it for. -/
+theorem unitaryCancelling_grossencharacter (𝔪 : Modulus K) (χ : Grossencharacter 𝔪)
+    (hexc : ¬ IdealWeight.IsTrivialOnGood K χ.unitary) :
+    UnitaryCancelling K χ.unitary := sorry
 
 /-- **Layer 7.7, the nonvanishing export for Grossencharacters.**
 
@@ -1934,13 +2044,32 @@ theorem cyclic_of_auxiliary (q : ℕ) (hq : q.Prime) (hex : q ∉ crossingExcept
     [IsCyclotomicExtension {q} K M] :
     Nat.card (M ≃ₐ[K] M) = q - 1 ∧ IsCyclic (M ≃ₐ[K] M) := sorry
 
+/-- **Layer 8C.2, `N` is the compositum of `L` and `M` over `K`**: no proper intermediate field
+contains both images. ⚠ This is a property of the **diagram**, not an arithmetic hypothesis, and
+that is the whole point of separating it. Injectivity of the restriction map and the degree count
+are *derived* from it together with `q ∉ crossingExceptional`; taking them as hypotheses instead
+would assume the linear disjointness the auxiliary prime is chosen to provide. -/
+def IsCompositumOf : Prop :=
+  ∀ E : IntermediateField K N,
+    (∀ x : L, algebraMap L N x ∈ E) → (∀ y : M, algebraMap M N y ∈ E) → E = ⊤
+
+/-- **Layer 8C.2, injectivity of the restriction map**, from `N = L·M`. An automorphism trivial
+on both generating subfields is trivial on the field they generate. -/
+theorem injective_crossingRestrict (hN : IsCompositumOf K L M N) :
+    Function.Injective ⇑(crossingRestrict K L M N) := sorry
+
+/-- **Layer 8C.2, the degree count**, which is where `q ∉ crossingExceptional K L` is spent: it is
+the linear disjointness `L ∩ K(ζ_q) = K`. -/
+theorem card_gal_compositum (q : ℕ) (hq : q.Prime) (hex : q ∉ crossingExceptional K L)
+    [IsCyclotomicExtension {q} K M] (hN : IsCompositumOf K L M N) :
+    Nat.card (N ≃ₐ[K] N) = Nat.card (L ≃ₐ[K] L) * Nat.card (M ≃ₐ[K] M) := sorry
+
 /-- **Layer 8C.2, the second intersection condition** `L ∩ K(ζ_q) = K`, in the form that the
-canonical restriction map is bijective. Injectivity is `N = L·M`, and the degree count is the
-disjointness. -/
+canonical restriction map is bijective. ⚠ Both halves are now proved from the diagram and the
+prime, and neither is a hypothesis. -/
 theorem bijective_crossingRestrict_of_auxiliary (q : ℕ) (hq : q.Prime)
     (hex : q ∉ crossingExceptional K L) [IsCyclotomicExtension {q} K M]
-    (hcomp : ∀ ν : N ≃ₐ[K] N, crossingRestrict K L M N ν = 1 → ν = 1)
-    (hcard : Nat.card (N ≃ₐ[K] N) = Nat.card (L ≃ₐ[K] L) * Nat.card (M ≃ₐ[K] M)) :
+    (hN : IsCompositumOf K L M N) :
     Function.Bijective ⇑(crossingRestrict K L M N) := sorry
 
 /-- **Layers 8C.1 to 8C.4, the canonical constructor of the crossing datum.**
@@ -1950,17 +2079,14 @@ typecheck. This is the declaration that turns 8C.1's auxiliary prime into the ex
 lower bound consumes, so the crossing route is not merely assumed. -/
 noncomputable def crossingDatumOfAuxiliary (q : ℕ) (hq : q.Prime)
     (hex : q ∉ crossingExceptional K L) [hcyc : IsCyclotomicExtension {q} K M]
-    (habel : ∀ a b : L ≃ₐ[K] L, a * b = b * a)
-    (hcomp : ∀ ν : N ≃ₐ[K] N, crossingRestrict K L M N ν = 1 → ν = 1)
-    (hcard : Nat.card (N ≃ₐ[K] N) = Nat.card (L ≃ₐ[K] L) * Nat.card (M ≃ₐ[K] M)) :
+    (habel : ∀ a b : L ≃ₐ[K] L, a * b = b * a) (hN : IsCompositumOf K L M N) :
     CrossingDatum K L M N where
   abelian_L := habel
   q := q
   q_prime := hq
   isCyclotomic := hcyc
   cyclic_M := (cyclic_of_auxiliary K L M q hq hex).2
-  bijective_restrict :=
-    bijective_crossingRestrict_of_auxiliary K L M N q hq hex hcomp hcard
+  bijective_restrict := bijective_crossingRestrict_of_auxiliary K L M N q hq hex hN
   frobenius_restrict := sorry
 
 /-- **Layer 8C.1, the level condition transfers.** From `q ≡ 1 mod f^r` and
@@ -2011,16 +2137,95 @@ from the auxiliary prime of 8C.1, so this theorem is the one that shows the cros
 Its proof is the composition, and carries no `sorry` of its own. -/
 theorem lowerDirichletDensityAtLeast_of_auxiliary (q : ℕ) (hq : q.Prime)
     (hex : q ∉ crossingExceptional K L) [IsCyclotomicExtension {q} K M]
-    (habel : ∀ a b : L ≃ₐ[K] L, a * b = b * a)
-    (hcomp : ∀ ν : N ≃ₐ[K] N, crossingRestrict K L M N ν = 1 → ν = 1)
-    (hcard : Nat.card (N ≃ₐ[K] N) = Nat.card (L ≃ₐ[K] L) * Nat.card (M ≃ₐ[K] M))
+    (habel : ∀ a b : L ≃ₐ[K] L, a * b = b * a) (hN : IsCompositumOf K L M N)
     (σ : L ≃ₐ[K] L) :
     LowerDirichletDensityAtLeast K
       {𝔭 : HeightOneSpectrum (𝓞 K) |
         IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ}
       (crossingConstant K L M (orderOf σ)) :=
   lowerDirichletDensityAtLeast_crossing K L M N
-    (crossingDatumOfAuxiliary K L M N q hq hex habel hcomp hcard) σ
+    (crossingDatumOfAuxiliary K L M N q hq hex habel hN) σ
+
+/-! ### Layer 8C.1 to 8C.4: the auxiliary diagram, bundled and constructed
+
+⚠ `crossingDatumOfAuxiliary` above is an adapter: it still receives the two field types and the
+statement that `N` is the compositum. The milestone is closed only by a declaration that produces
+those, so the public lower bound exposes no diagram hypotheses to its caller. That is the bundle
+below. -/
+
+/-- **Layers 8C.1 to 8C.4, the auxiliary diagram as one bundled object.** It carries the auxiliary
+prime, the cyclotomic field, the compositum, every instance the diagram needs, and the crossing
+datum built from them. -/
+structure AuxiliaryCrossing (σ : L ≃ₐ[K] L) (r : ℕ) where
+  /-- The auxiliary rational prime of 8C.1. -/
+  q : ℕ
+  q_prime : q.Prime
+  notExceptional : q ∉ crossingExceptional K L
+  /-- The level condition `q ≡ 1 mod f^r` of 8C.1. -/
+  level : q ≡ 1 [MOD orderOf σ ^ r]
+  /-- `M = K(ζ_q)`. -/
+  Cyc : Type*
+  /-- `N = L·M`. -/
+  Comp : Type*
+  [fieldCyc : Field Cyc]
+  [numberFieldCyc : NumberField Cyc]
+  [algebraKCyc : Algebra K Cyc]
+  [isGaloisKCyc : IsGalois K Cyc]
+  [isCyclotomicCyc : IsCyclotomicExtension {q} K Cyc]
+  [fieldComp : Field Comp]
+  [numberFieldComp : NumberField Comp]
+  [algebraKComp : Algebra K Comp]
+  [isGaloisKComp : IsGalois K Comp]
+  [algebraLComp : Algebra L Comp]
+  [algebraCycComp : Algebra Cyc Comp]
+  [towerL : IsScalarTower K L Comp]
+  [towerCyc : IsScalarTower K Cyc Comp]
+  /-- `Comp` really is the compositum, which is what `injective_crossingRestrict` consumes. -/
+  isCompositum : IsCompositumOf K L Cyc Comp
+  /-- The crossing datum of 8C.2 to 8C.4, **built** from the data above by
+  `crossingDatumOfAuxiliary`, not assumed. -/
+  datum : CrossingDatum K L Cyc Comp
+
+/-- **Layers 8C.1 to 8C.4, the auxiliary diagram exists at every level.** The proof is the
+milestone: pick `q` by `exists_auxiliaryPrime`; take `Cyc` to be Mathlib's `CyclotomicField`;
+build `Comp` as the join of the images of `L` and `Cyc` in an algebraic closure of `K`, which
+supplies both embeddings, both scalar towers, and `isCompositum`; derive injectivity from that
+and the degree count from `q ∉ crossingExceptional K L`; and assemble the datum with
+`crossingDatumOfAuxiliary`.
+
+⚠ This is what closes the crossing route. A constructor that receives the compositum and the
+linear disjointness as hypotheses turns the desired facts into a structure; it does not prove
+them, and the public lower bound is then still conditional on them. -/
+theorem exists_auxiliaryCrossing (habel : ∀ a b : L ≃ₐ[K] L, a * b = b * a) (σ : L ≃ₐ[K] L)
+    (r : ℕ) (hr : 1 ≤ r) : Nonempty (AuxiliaryCrossing K L σ r) := sorry
+
+namespace AuxiliaryCrossing
+
+variable {K L}
+
+/-- The crossing constant of 8C.6 attached to the bundled diagram. -/
+noncomputable def constant {σ : L ≃ₐ[K] L} {r : ℕ} (A : AuxiliaryCrossing K L σ r) : ℝ := by
+  letI := A.fieldCyc
+  letI := A.numberFieldCyc
+  letI := A.algebraKCyc
+  letI := A.isGaloisKCyc
+  exact crossingConstant K L A.Cyc (orderOf σ)
+
+/-- **Layer 8C.6, the lower bound over the bundled diagram**, which is the form 8C.8 consumes.
+⚠ Its statement mentions no compositum, no linear disjointness, and no auxiliary field: those are
+inside `A`, and `exists_auxiliaryCrossing` produces one. -/
+theorem lowerDirichletDensityAtLeast {σ : L ≃ₐ[K] L} {r : ℕ} (A : AuxiliaryCrossing K L σ r) :
+    LowerDirichletDensityAtLeast K
+      {𝔭 : HeightOneSpectrum (𝓞 K) |
+        IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ}
+      A.constant := sorry
+
+/-- **Layer 8C.7 over the bundle**: the constant approaches `1/#G` as the level grows. -/
+theorem constant_ge {σ : L ≃ₐ[K] L} {r : ℕ} (A : AuxiliaryCrossing K L σ r) :
+    (1 - ((orderOf σ).primeFactors.card : ℝ) * (2 : ℝ) ^ (-(r : ℤ))) /
+        (Nat.card (L ≃ₐ[K] L) : ℝ) ≤ A.constant := sorry
+
+end AuxiliaryCrossing
 
 /-- **Layer 8C.7, the exact cyclic-group count.** In a cyclic group of order `n` with `f ∣ n`,
 

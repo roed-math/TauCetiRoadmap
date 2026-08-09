@@ -260,6 +260,21 @@ inert `𝔭` the Frobenius is the nontrivial `g` while `g² = 1`, so the `𝔭²
 identity fibre. The version filtered on `Frob_𝔭 = σ` is nonnegative, but it is not the sequence
 the logarithmic derivatives produce, so the orthogonality identity is not provable for it.
 
+**The `3-4-1` argument needs the trivial-square branch, not cancellation of the square.** A
+nonvanishing package that demands `HasCancellation (χ²)` excludes every quadratic character, whose
+square is trivial on the good ideals, and also `η ‖·‖^{iu}` with `η` quadratic and `u ≠ 0`, which
+is unitary of infinite order and whose square is trivial after the twist by `−2u`. The condition
+is a dichotomy at each boundary twist: trivial-on-good, or cancelling. The trivial branch is
+Landau's argument on `ζ_K(s)L(χ_t,s)`, which is why Landau's theorem is a milestone at all.
+
+**A nonunitary Grossencharacter reflects against its inverse, not its conjugate.** With
+`χ = χ_unit·𝔑^σ` the conjugate keeps the real shift `σ` while the reflection at `1 − s` needs
+`−σ`. The pure norm character `χ = 𝔑^σ` is the witness: `Λ_χ(s) = Λ_K(s−σ)` has poles at `σ` and
+`1+σ`, and `Λ_χ(1−s)` has poles at `−σ` and `1−σ`. The correct forms are
+`Λ(χ,s) = W Λ(χ⁻¹, 1−s)` and `Λ(χ,s) = W Λ(χ̄, 1+2σ−s)`, equivalent because `χ⁻¹ = χ̄·𝔑^{−2σ}`.
+The same shift is why the full quasicharacter is not an analytic-normalized data record: its
+coefficients converge only for `Re s > 1+σ`, and conjugating them does not move the shift.
+
 **A finite character family cannot contain a Grossencharacter.** A package indexed by a
 `Fintype` forces every good value of every member to satisfy `x^{#G} = 1`, hence to be a root of
 unity, because some positive power of each index element is `1`. A unitary Grossencharacter with a

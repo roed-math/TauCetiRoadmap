@@ -1453,6 +1453,30 @@ milestone is in Layer 2. Admissibility, 6.1, is what makes the sum over unit orb
 so the continued L-function of a Grossencharacter is *defined* from the unitary one and nothing
 new has to be continued. State that translation first; 7.7 reads it.
 
+**The functional equation reflects against the inverse character**, whose shift is `−σ`:
+
+`Λ(χ, s) = W(χ) Λ(χ⁻¹, 1 − s)`, equivalently `Λ(χ, s) = W(χ) Λ(χ̄, 1 + 2σ − s)`.
+
+Define `χ⁻¹` explicitly: conjugate unitary part, negated shift, negated infinity type and
+archimedean parameters.
+
+⚠ *Nearby false statement:* `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)`, which is the finite-order formula of
+5.8 carried over unchanged. It is false as soon as `σ ≠ 0`, and the pure norm character
+`χ = 𝔑^{σ}` is the mandatory test. There `L(χ, s) = ζ_K(s − σ)`, so `Λ_χ(s) = Λ_K(s − σ)` has
+poles at `σ` and `1 + σ`; the character is real, so `χ̄ = χ`, and `Λ_χ(1 − s)` has poles at `−σ`
+and `1 − σ`. Those sets agree only when `σ = 0`. Against `χ⁻¹` the right-hand side has poles at
+`σ` and `1 + σ` again, and the equation holds. The two correct forms agree because
+`χ⁻¹ = χ̄ · ‖·‖^{−2σ}`.
+
+⚠ The poles of the exceptional case move with the character too: they are at
+`s = σ + Tr(−p + iq)/n` and `s = 1 + σ + Tr(p + iq)/n`.
+
+⚠ **The Layer 0 card of a Grossencharacter is the card of its unitary part.** The full shifted
+function is not an `AnalyticLFunctionData` instance unless it is recentered: its coefficients
+`χ_unit(𝔞)𝔑𝔞^{σ}` converge for `Re s > 1 + σ`, while `HasDirichletAgreement` is stated on
+`Re s > 1`; and `AnalyticLFunctionData.dual` conjugates the coefficients, which leaves the real
+shift `σ` alone, while the `1 − s` equation needs `−σ`. Say which object the card is, once.
+
 `Λ(χ, s)` is meromorphic and analytic away from its poles. It is entire **unless** `𝔪₀ = 1`, every `p_v = 0`, and `χ` is a power of the
 norm character. In that exceptional case the poles are exactly at `s = Tr(−p + iq)/n` and at
 `s = 1 + Tr(p + iq)/n`. The functional equation is `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)` with
@@ -1545,11 +1569,29 @@ member to satisfy `x^{#G} = 1`, hence to be a root of unity. A unitary Grossench
 nonzero archimedean parameter, and every norm twist `‖·‖^{it}` with `t ≠ 0`, has infinite order,
 so no such family contains them and Layer 7.7 cannot be an instance of 7.5's package.
 
-State a second package over a single unitary weight, carrying exactly what the `3-4-1` argument
-consumes: cancellation for `χ`, for `χ²`, for the conjugate, and for the norm twists of `χ` and
-`χ²`. The trivial factor is `ζ_K`, cited from 7.4 rather than carried. Milestones 7.3 and 7.4 are
-then proved twice, once over each package; 7.5 and 8B.2 instantiate the finite one, and 7.7 the
-single one.
+State a second package over a single unitary weight, carrying cancellation for `χ`, for the
+conjugate, and for every norm twist of `χ`, together with a **dichotomy** on the square of each
+boundary twist:
+
+for every real `t`, either `(χ ‖·‖^{it})²` is trivial on the good ideals, or it cancels.
+
+The trivial factor is `ζ_K`, cited from 7.4 rather than carried. Milestones 7.3 and 7.4 are then
+proved twice, once over each package; 7.5 and 8B.2 instantiate the finite one, and 7.7 the single
+one.
+
+⚠ Do **not** demand cancellation of the square outright. That excludes the two commonest
+nonexceptional characters:
+
+- a nontrivial quadratic ray-class character `η` has `η² = 1` on the good ideals, so its partial
+  sums grow linearly and cancellation of `η²` is false, while `L(η, ·)` is entire and nonzero on
+  `Re s = 1`;
+- `χ = η ‖·‖^{iu}` with `η` quadratic and `u ≠ 0` is unitary of **infinite** order, and is not the
+  norm-character exception of 6.4, yet `χ² = ‖·‖^{2iu}` and its twist by `−2u` is trivial.
+
+Both are mandatory tests. The `3-4-1` proof has two branches and the package has to carry both:
+in the cancelling branch, the product bound; in the trivial-square branch, `χ` at that twist is
+real and the argument is Landau's, applied to the nonnegative coefficients of `ζ_K(s) L(χ_t, s)`.
+That second branch is exactly why 7.1 proves Landau's theorem.
 
 Then 7.3 and 7.4 are theorems about a `CancellingFamily`, and are instantiated twice, in 7.5 and
 in 8B.2. A single-weight statement would be false at the advertised generality.
@@ -1621,6 +1663,13 @@ at `1 + σ`. State the `Re s = 1` form only under `σ = 0`; 7.8 uses that case, 
 ⚠ The finite family of 7.2 cannot be used here, for the reason recorded there: a unitary
 Grossencharacter with a nonzero archimedean parameter has infinite order and is in no finite
 character group.
+
+⚠ **Construct the premise; do not take it as a hypothesis.** This milestone owes a theorem
+producing the single-character package of 7.2 for every Grossencharacter outside the exact
+norm-character exception of 6.4, that is whenever the unitary part is nontrivial on the good
+ideals. A statement of the form "given the package, nonvanishing holds" leaves the advertised
+export true only for the characters a caller can already discharge it for, and 7.8 would then
+rest on nothing.
 
 ⚠ This is an export and not equidistribution. The Weyl criterion for a compact group is out of
 scope.
@@ -1884,10 +1933,26 @@ avoiding it is exactly what buys the two intersection conditions. State each con
 a later milestone can use: `K ∩ ℚ(ζ_q) = ℚ` as `#Gal(K(ζ_q)/K) = q − 1`, hence cyclic, and
 `L ∩ K(ζ_q) = K` as bijectivity of the canonical restriction map of 8C.2.
 
-⚠ Then **construct** the crossing datum of 8C.5 to 8C.6 from those conditions, as a named
-declaration. A package of correct hypotheses that nothing constructs shows only that the
-hypotheses typecheck; the milestone is closed when the lower bound of 8C.6 can be stated over a
-datum produced here rather than over one assumed.
+⚠ Then **construct** the whole diagram, and bundle it. A package of correct hypotheses that
+nothing constructs shows only that the hypotheses typecheck, and an adapter that receives the two
+auxiliary fields and the linear disjointness turns the desired facts into a structure rather than
+proving them. The milestone asks for:
+
+1. the cyclotomic field `M = K(ζ_q)`, taken from Mathlib's `CyclotomicField`;
+2. the compositum `N = L·M`, built as the join of the images of `L` and `M` in an algebraic
+   closure of `K`, which supplies both embeddings and both scalar towers;
+3. `N = L·M` recorded as a property of the diagram — no proper intermediate field contains both
+   images — from which injectivity of the restriction map follows;
+4. the degree count `#Gal(N/K) = #Gal(L/K)·#Gal(M/K)`, **proved** from
+   `q ∉ crossingExceptional`, which is where the linear disjointness `L ∩ K(ζ_q) = K` is spent;
+5. all of it bundled with the resulting crossing datum, and an existence theorem producing one
+   bundle for every level `r`.
+
+Milestone 8C.6 is then stated over the bundle, and its statement mentions no compositum, no
+disjointness, and no auxiliary field. Separating (3) from (4) is the point: being the compositum
+is a property of the diagram one constructs, while the disjointness is the arithmetic the
+auxiliary prime buys, and taking either as a hypothesis of the lower bound leaves the route
+conditional on the step it exists to take.
 
 ⚠ *Nearby false statement:* "`f` divides `[K(ζ_m):K]`" does not give an element of order
 divisible by `f`. Divisibility of the order of a finite group does not produce such an element
@@ -2386,6 +2451,18 @@ statements do not.
   translated by `σ`, so its boundary is `Re s = 1 + σ`. This test detects a nonvanishing export
   stated at `Re s = 1` for the full quasicharacter, and a nonvanishing package indexed by a finite
   group, which no infinite-order character belongs to.
+- **The quadratic character** (Layer 7.2). A nontrivial quadratic ray-class character `η` has
+  `η² = 1` on the good ideals, so `η²` has linear partial sums and does not cancel, while
+  `L(η, ·)` is entire and nonvanishing on `Re s = 1`. This test detects a nonvanishing package
+  that demands cancellation of the square outright.
+- **The quadratic times a norm twist** (Layer 7.2). `χ = η ‖·‖^{iu}` with `u ≠ 0` is unitary of
+  infinite order and is not the norm-character exception, yet `χ² = ‖·‖^{2iu}` is trivial after
+  the twist by `−2u`. This test detects the same defect inside the regime the single-character
+  package was introduced for, so finite order is not the issue.
+- **The pure norm character** (Layers 6.4, 7.7). `χ = 𝔑^{σ}` has `L(χ, s) = ζ_K(s − σ)`, so
+  `Λ_χ` has poles at `σ` and `1 + σ` while `Λ_χ(1 − s)` has poles at `−σ` and `1 − σ`. This test
+  detects a functional equation reflecting against the conjugate at `1 − s` instead of against
+  the inverse, and it is invisible whenever `σ = 0`.
 - **Wiener–Ikehara needs summability** (Layer 9.1). For a rapidly growing nonnegative `a`,
   Mathlib's `LSeries a` is the junk value `0` off the region of convergence, so `F = 0` and
   `κ = 0` satisfy an equality hypothesis while `∑_{n ≤ x} a n` is not `o(x)`. This test detects a
