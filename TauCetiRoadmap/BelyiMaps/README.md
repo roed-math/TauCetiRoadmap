@@ -208,10 +208,10 @@ definition, Weil descent, and `trueOrbitSize`.
 *Imports:* from A, exactly
 
 ```text
-0.1–0.6   triple vocabulary                     6.1, 7.x, 8.x
-2.1, 2.2, 2.4, 2.6   dessins and the S₃-action  6.3, 7.6, 8.6, 8.7
-3.1       the executable enumeration            10.6
-4.6       the normality criterion               6.5
+0.1–0.6, 0.8   triple vocabulary and the threaded examples   6.1, 7.x, 8.x
+2.1, 2.2, 2.4, 2.6   dessins and the S₃-action              6.3, 7.6, 8.6, 8.7
+3.1            the executable enumeration                   10.6
+4.6            the normality criterion                      6.5
 ```
 
 and nothing else; UniversalCovers; ConformalMapping L0; ModularForms Layer 10B;
@@ -338,10 +338,13 @@ connectedness, and the separation instances), with the Riemann sphere carried by
 `OnePoint ℂ`. Holomorphy of maps is the pin's manifold differentiability at analyticity
 exponent `ω`. No private "Riemann surface" structure is introduced.
 
-**Algebraic Belyi pairs.** Over a field `k`, the primary carrier is function-field-first,
-matching AlgebraicCurves: a function field `F/k` with exact constants
-(`IsIntegrallyClosedIn k F`) together with a finite separable `k`-embedding `k(t) ↪ F`
-unramified outside the three places `t = 0`, `t = 1`, `t = ∞` of `k(t)`. The
+**Algebraic Belyi pairs.** Over a field `k` **of characteristic zero**, the primary carrier
+is function-field-first, matching AlgebraicCurves: a function field `F/k` with exact
+constants (`IsIntegrallyClosedIn k F`) together with a finite `k`-embedding `k(t) ↪ F`
+unramified outside the three places `t = 0`, `t = 1`, `t = ∞` of `k(t)`. ⚠ Separability is
+**derived, not assumed**: Layer 9.1 carries `[CharZero k]` on the carrier and every finite
+extension in characteristic zero is separable, so a hypothesis of separability here would
+duplicate it and suggest the carrier is more general than it is. The
 morphism-of-curves form is the corollary through AlgebraicCurves Layer 12, not a second
 definition. "Branch locus contained in `{0,1,∞}`" is containment — a Belyi map may be
 unramified over any of the three points.
@@ -390,7 +393,7 @@ theorem (Layer 12.3), not a definition. No milestone raises a profinite element 
 `Field.absoluteGaloisGroup ℚ` with `ℚ̄ = AlgebraicClosure ℚ` fixed once. The cyclotomic
 characters are the pin's `modularCyclotomicCharacter n` and `cyclotomicCharacter ℓ`, whose
 defining convention is `g ζ = ζ ^ χ(g)` on `n`-th (respectively `ℓ`-power) roots of unity.
-The branch-cycle exponent in Layer 12.9 is `χ(σ)` in exactly this normalization; the
+The branch-cycle exponent in Layer 12.11 is `χ(σ)` in exactly this normalization; the
 milestone states the finite-level `ζ_n` identity explicitly so that a sign or inverse error
 cannot hide in prose. ⚠ Sources using the geometric (inverse) convention for the Galois
 action on covers state the theorem with `χ(σ)⁻¹`; each citation records the source's
@@ -439,9 +442,9 @@ lands. The mathematics always belongs to the supplier; only the spelling is loca
 | 5.1, 6.2 | UniversalCovers Stage 0.2 | semilocal simple connectivity | **no Mathlib class exists**; local interface: `class SemilocallySimplyConnectedSpace (X) [TopologicalSpace X] : Prop` with the "some neighbourhood's loops are nullhomotopic in `X`" field, in `Suggested.lean` |
 | 6.2 | UniversalCovers Stage 0.2, 0.3 | the universal cover, its covering map, and the free proper `π₁`-action | `UniversalCover x₀`, `proj`, `IsCoveringMap proj`, `SimplyConnectedSpace (UniversalCover x₀)`, `UniversalCover.isQuotientCoveringMap` |
 | 6.4 | UniversalCovers Stage 0.4, 1 | deck groups and `Deck ≅ (π₁)ᵐᵒᵖ` | `Deck`, `deckFundamentalGroupEquiv : Deck proj ≃* (FundamentalGroup X x₀)ᵐᵒᵖ` |
-| 6.3 | UniversalCovers Stage 2 | basepoint change, and the pointed/unpointed correspondence | `basepointChangeSubgroup`; for milestone 8 that roadmap pins no name, local interface: `pointedCoverEquivSubgroup (X) [TopologicalSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X] (x₀ : X) : Quotient (PointedCoverIso X x₀) ≃ Subgroup (FundamentalGroup X x₀)`, with `PointedCoverIso` the setoid on `PointedCover X x₀` of 6.1 and the map given by `p ↦ (p.proj).map (π₁ …)`; the unpointed statement is the induced `Quotient (CoverIso X) ≃ ConjClasses (Subgroup (FundamentalGroup X x₀))` |
+| 6.3 | UniversalCovers Stage 2 | basepoint change, and the pointed/unpointed correspondence | `basepointChangeSubgroup`; for milestone 8 that roadmap pins no name, local interface: `pointedCoverEquivSubgroup (x₀ : X) : Quot (PointedCoverIso x₀) ≃ Subgroup (FundamentalGroup X x₀)` under `[PathConnectedSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X]`, with `PointedCover` and `PointedCoverIso` both carried in `Suggested.lean`; the unpointed form quotients subgroups by the conjugation action, `subgroupConjSetoid := MulAction.orbitRel (ConjAct G) (Subgroup G)`. ⚠ **Not** `ConjClasses (Subgroup _)` — `ConjClasses` is a monoid's quotient by conjugation on *itself*, and `Subgroup G` is not `G` |
 | 8.2 | ConformalMapping L0 | the local degree of a holomorphic map | `TauCeti.exists_localDegree`, and the holomorphic branch-root extraction beside it |
-| 8.6, 9.3, 9.4 | ModularForms Layer 10B | Riemann–Roch and Riemann–Hurwitz for compact Riemann surfaces | that roadmap pins **no Riemann-surface carrier and no Lean names**; local interfaces, stated against Layer 8.1's hypothesis stack and against Layer 9.2's `M X`, with the divisor group and genus pinned here rather than assumed: `Divisor X := X →₀ ℤ` (finitely supported, which is where compactness enters), `deg (D : Divisor X) : ℤ := D.sum (fun _ m => m)`, `genusAn (X) : ℕ` the topological genus of the underlying surface via Layer 8.1, and then `riemannRochSpaceAn (D : Divisor X) : Submodule ℂ (M X)`, `ellAn (D) : ℕ`, `riemannRochAn : ellAn D - ellAn (K - D) = deg D + 1 - genusAn X`, `riemannHurwitzAn (f : X → Y) : 2 * genusAn X - 2 = deg f * (2 * genusAn Y - 2) + Σ (e x - 1)` |
+| 8.6, 9.3, 9.4 | ModularForms Layer 10B | Riemann–Roch and Riemann–Hurwitz for compact Riemann surfaces | that roadmap pins **no Riemann-surface carrier and no Lean names**; local interfaces, all carried in `Suggested.lean`: `MerField X` (Layer 9.2's carrier, with its `Field` and `Algebra ℂ` instances as milestones), `Divisor X := X →₀ ℤ` — an `abbrev`, so `Finsupp`'s subtraction is available — `Divisor.deg : Divisor X → ℤ`, `genusAn X : ℕ`, `riemannRochSpaceAn X (D) : Submodule ℂ (MerField X)`, `ellAn`, `canonicalDivisor`. ⚠ `genusAn` is **not** imported from a classification of topological surfaces: the roadmap has none and needs none; it is the genus appearing in Riemann–Roch. ⚠ Both identities are stated in `ℤ`, since `ℕ` subtraction would truncate `ℓ(D) - ℓ(K-D)` exactly when the second exceeds the first, plus `riemannRochAn` and `riemannHurwitzAn` themselves |
 | 9.1, 9.4, 9.6 | AlgebraicCurves Layers 0, 1, 6 | function fields, places, ramification and residue degrees | `IsFunctionField`, `IsIntegrallyClosedIn`, `Place`, `Divisor`, and the ramification data `e (P' ∣ P)`, `f (P' ∣ P)` with the fundamental identity `Σ e·f = n` |
 | 9.5, 10.7, 11.4 | AlgebraicCurves Layers 5, 8 | Riemann–Roch, genus, and constant-field extension | `riemannRochSpace`, `genus`, and the full faithfulness of constant-field extension in characteristic zero |
 | 9.1, 9.5 | AlgebraicCurves Layer 12 | the regular projective model and the anti-equivalence | that roadmap pins **no Lean names**; local interfaces: `regularModel (F) [Field F] [Algebra k F] (h : IsFunctionField k F) : Curve k` and `functionFieldEquiv : (Curve k)ᵒᵖ ≌ FunctionField k`, together with `regularModel_functionField : functionField (regularModel h) ≃ₐ[k] F`; **this roadmap never analytifies a scheme** — Layer 9.6 works with places, so only the place set and its `(e,f)` data are consumed, never a scheme-theoretic fiber |
@@ -973,13 +976,33 @@ is recomputed here and compared:
   the theorem that it agrees with the Layer 0 definition.
 - **Decidable predicates.** Connectedness, as the Boolean `isConnectedB` computing the
   closure of `{i}` under `σ0` and `σ1` by `n` rounds of `Finset` image-union, with
-  `isConnectedB t = true ↔ t.IsConnected`; and primitivity, by enumerating block systems
-  (Layer 1.4), with the analogous soundness theorem.
-- **Enumeration.** The `Finset` of connected triples; its partition into isomorphism
-  classes by orbit enumeration under the relabeling action; the passport fibers, and
-  `passportSize P` as the cardinality of a computed `Finset` — with soundness and
-  completeness stated as `Finset` equalities, so that the class lists and passport sizes
-  are `#eval`-able at small degree and `decide`-checked at `n ≤ 3`.
+  `isConnectedB t = true ↔ t.IsConnected`; and primitivity, by enumerating the subsets of
+  `Fin n` and deciding Mathlib's `IsBlock` for each, with the analogous soundness theorem
+  against `IsPreprimitive`.
+
+  ⚠ **Primitivity is not decided by closing a pair under the two generators.** That closure
+  is the orbit of a nonempty set, so on a connected triple it is always all of `Fin n` and
+  the test is vacuously `true`. Deciding blockhood also requires quantifying over the whole
+  monodromy group, not over the generators: "preserves `B` or is disjoint from `B`" is not
+  closed under multiplication. The milestone therefore includes a computable presentation of
+  the monodromy group as a `Finset`, and three acceptance checks that a wrong implementation
+  fails: `torusTriple` imprimitive with `{0,2}` a block, `s3Triple` primitive, and the
+  degree-one triple primitive.
+- **Enumeration.** The `Finset` of connected triples; its partition into isomorphism classes
+  as the `Finset` of relabeling **orbits** — not of chosen representatives, since
+  `PermutationTriple n` carries no order and a classification routed through an arbitrary
+  choice proves nothing about the classes; the passport fibers, and `passportSize P` as the
+  cardinality of a computed `Finset`, with soundness and completeness stated as `Finset`
+  equalities, so that the class lists and passport sizes are `#eval`-able at small degree and
+  `decide`-checked at `n ≤ 3`.
+
+  ⚠ For the passport fiber to be **computable** the monodromy group must enter as a `Finset`
+  of permutations, which is also how the database presents it; a `Subgroup` carries no
+  decidable equality. The milestone therefore states the fiber against that datum and adds
+  the bridge to `PassportSpec`, rather than declaring the fiber `noncomputable` and keeping
+  the `#eval` promise. The group is compared **up to conjugacy in `S_n`** — comparing literal
+  subgroups over-counts, and at degree `5` that is exactly the difference between the correct
+  `74` ordered passports and a larger wrong number.
 
 Complexity is not a completion criterion; `n!·n!` enumeration is acceptable.
 
@@ -2434,7 +2457,7 @@ uniqueness (Layer 7.4).
 holomorphic. A compact topological surface generally carries many inequivalent complex
 structures; it is the map, not the surface, that rigidifies the choice.
 
-*Prerequisites:* Layers 7.2, 7.3, 8.1, 8.2, 8.4; Mathlib removable singularities.
+*Prerequisites:* Layers 0.8, 6.4, 7.2, 7.3, 8.1, 8.2, 8.4; Mathlib removable singularities.
 
 #### 8.6 Analytic Riemann existence for three-point covers
 
@@ -2628,9 +2651,12 @@ constant, so the constant field of `M(X)` is `ℂ` whether or not `X` is compact
 is load-bearing for four other things, and each statement in this layer names which one it
 uses:
 
-- a noncompact surface carries **nonconstant global holomorphic functions** — `M(ℂ) ⊇ ℂ[z]`
-  — so the maximum principle of 8.1 fails, and with it every argument in 9.2–9.5 that
-  concludes a holomorphic function is constant from boundedness alone;
+- a noncompact surface **may** carry nonconstant global holomorphic functions — `ℂ` carries
+  `z` — so the maximum principle of 8.1 fails, and with it every argument in 9.2–9.5 that
+  concludes a holomorphic function is constant from boundedness alone. ⚠ Stated as "may",
+  with a witness: the universal statement for open Riemann surfaces is a theorem of
+  Behnke–Stein, which this roadmap neither proves nor lists as a dependency, and nothing
+  here needs it;
 - a meromorphic function may have **infinitely many poles** (`1/sin`, on `ℂ`);
 - the **polar divisor need not have finite support**, so "the divisor of `f`" is not a
   finitely supported function and the divisor-degree bookkeeping of 9.4–9.5 has nothing to
@@ -2866,10 +2892,10 @@ the two constructions inverse. Route, in proof order:
 3. **Extension over the unmarked bad points.** At each `p ∈ Δ ∖ {0,1,∞}`, 9.1 says `F` is
    unramified over `p`, so by **9.6 statement 5** the local monodromy at `p` is trivial and
    the covering extends across `p` as a covering. Iterating over the finitely many such `p`
-   gives a covering map over `OnePoint ℂ ∖ {0,1,∞}`. ⚠ This is where the old
-   "fill the discriminant fibers with all `e = 1` by removability" reasoning fails without
-   9.6: the plane model is singular there, and removability applies to functions, not to
-   the local structure of a possibly singular curve.
+   gives a covering map over `OnePoint ℂ ∖ {0,1,∞}`. ⚠ 9.6 is load-bearing here and cannot
+   be replaced by "fill the discriminant fibers with all `e = 1` by removability": the plane
+   model is singular at such a point, and removability is a statement about functions, not
+   about the local structure of a possibly singular curve.
 4. **Compactification.** Layers 7.2–7.4 and 8.5 compactify to an analytic Belyi pair, with
    the local degrees at the three marked points given by 9.6 statement 4 applied at `0`, `1`
    and `∞`.
@@ -4322,8 +4348,8 @@ to a prerequisite line that contradicts this section makes the section wrong.
 
 - **Track A (finite mathematics):** a chain, `Layer 0 → Layer 1 → Layer 2 → Layer 3 →
   Layer 4`. ⚠ Layers 2, 3 and 4 are **not** mutually independent: 3.1 needs 1.1–1.4 and
-  Layer 2's dessin vocabulary, and 4.3 needs 3.1 for the finite decision procedure it
-  reuses. Startable immediately; everything elaborates against the pin plus the two
+  1.1–1.4, and 3.5 needs 2.6's branch-point action to state the one-representative-per-orbit
+  comparison with the database; 4.3 needs 3.1 for the finite decision procedure it reuses. Startable immediately; everything elaborates against the pin plus the two
   finite-supplier roadmaps.
 - **Track B (geometry):** Layer 5 → Layer 6 → Layer 7 → Layer 8 → Layer 9 → Layer 10 →
   Layer 11. It imports from Track A at exactly four places:
@@ -4331,7 +4357,7 @@ to a prerequisite line that contradicts this section makes the section wrong.
   ```text
   Layer 6  ← 0.1–0.4  (triple vocabulary), 2.6 (branch-point action), 4.6 (regularity)
   Layer 7  ← 0.5, 2.2
-  Layer 8  ← 0.6, 2.1, 2.2, 2.4
+  Layer 8  ← 0.6, 0.8 (the threaded torus example), 2.1, 2.2, 2.4
   Layer 10 ← 3.1
   ```
 
