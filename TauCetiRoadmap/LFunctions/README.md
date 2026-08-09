@@ -244,7 +244,7 @@ nonzero.
 | Gamma factors | `Complex.Gammaℝ s = π ^ (-s/2) * Gamma (s/2)` and `Complex.Gammaℂ s = 2 * (2*π) ^ (-s) * Gamma s`, with `Gammaℝ_mul_Gammaℝ_add_one : Gammaℝ s * Gammaℝ (s+1) = Gammaℂ s`. ⚠ Sources differ here by constants. Lang's completed zeta uses `Γ(s/2)^{r₁} Γ(s)^{r₂}` and differs from this one by `2^{r₂}`. Such a factor does not change the functional equation, but it changes every other statement. Never mix two normalizations in one statement | `Mathlib/Analysis/SpecialFunctions/Gamma/Deligne.lean` |
 | Completed L-function | The conductor power is included: `Λ(s) = N^{s/2} · γ(s) · L(s)`, where `γ` is a product of factors `Gammaℝ (s + μ)` and `Gammaℂ (s + ν)`. The functional equation is then free of constants: `Λ(s) = ε · Λ^∨(1 − s)` with `‖ε‖ = 1` and `Λ^∨(s) = conj (Λ (conj s))`. Mathlib's `DirichletCharacter.completedLFunction` does not include `N^{s/2}`, and its functional equation carries `N ^ (s − 1/2)`. Layer 0.6 states the lemma that relates the two shapes | Layer 0; Neukirch VII (8.6) |
 | Completed Dedekind zeta | `Λ_K(s) = |d_K|^{s/2} · Gammaℝ(s)^{r₁} · Gammaℂ(s)^{r₂} · ζ_K(s)`, with `Λ_K(s) = Λ_K(1 − s)`, simple poles at `s = 0` and `s = 1` and nowhere else, and `Res_{s=1} ζ_K = 2^{r₁}(2π)^{r₂} h R / (w √|d_K|)`, which is Mathlib's `dedekindZeta_residue` | Layer 3; Neukirch VII (5.10), (5.11) |
-| Hecke L conductor | For `χ` primitive of conductor `𝔣₀` the completed level is `|d_K| · 𝔑(𝔣₀)`, so `Λ(χ, s) = (|d_K| 𝔑𝔣₀)^{s/2} L_∞(χ, s) L(χ, s)`, with `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)` and `‖W(χ)‖ = 1` | Layer 5; Neukirch VII (8.6) |
+| Hecke L conductor | For `χ` primitive of conductor `𝔣₀` the completed level is `|d_K| · 𝔑(𝔣₀)`, so `Λ(χ, s) = (|d_K| 𝔑𝔣₀)^{s/2} L_∞(χ, s) L(χ, s)`, with `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)` and `‖W(χ)‖ = 1`. ⚠ The conjugate at `1 − s` is right for a **finite-order** character, where `χ̄ = χ⁻¹`. Layer 6's shifted characters reflect against the inverse, or against the conjugate at `1 + 2σ − s`; do not carry this row past Layer 5 | Layer 5; Neukirch VII (8.6) |
 | Euler factors | At a finite prime `𝔭` of Galois type the factor is `det(1 − Frob_𝔭 · 𝔑𝔭^{-s} ∣ V^{I_𝔭})⁻¹` with **arithmetic** Frobenius. Unqualified "Frobenius" always means arithmetic, that is `x ↦ x^q` on residue fields. This is Mathlib's `IsArithFrobAt` and the local fields roadmap's convention. The geometric form is a translation lemma and never a second convention. For a ray-class character the factor is `(1 − χ(𝔭) 𝔑𝔭^{-s})⁻¹` at `𝔭 ∤ 𝔣₀` and `1` at `𝔭 ∣ 𝔣₀` | Local fields roadmap; Layer 1.5 |
 | Normalization of the data record | The record of Layer 0.1 is **analytic-normalized**, and its name says so. Its functional equation reflects in `s ↦ 1 − s`, Dirichlet agreement holds on `Re s > 1`, and the gamma shifts are the analytic ones. It carries no motivic weight. An arithmetic-normalized object reaches these predicates through Layer 0.4, which carries the weight `w` and fixes the shift as `L_arith(s) = L_an(s − w/2)`. Degree, conductor, root number, and zero multiplicities are invariant under that translation, and the invariance is a theorem | Layer 0 |
 | Spectral parameters | The gamma data is two multisets: `{μ_j}` for the factors `Gammaℝ(s + μ_j)`, and `{ν_k}` for the factors `Gammaℂ(s + ν_k)`. Then `degree = #μ + 2·#ν`. These are the LMFDB's `mu` and `nu` lists | Layer 0 |
@@ -1427,6 +1427,12 @@ archimedean data and the ideal weight need not come from one character, and 6.2 
 
 The `A₀` condition, that every `q_v` vanishes, is a predicate `IsAlgebraic` over the structure.
 
+**Induction and primitivity.** Define induction from a divisor `𝔫` of `𝔪` — the unitary weights
+agree on the ideals prime to `𝔪₀`, and every infinite datum is equal — and primitivity as not
+being induced from a proper divisor. Layer 6.4 is stated for primitive characters, and the
+imprimitive case is the finite Euler-factor correction. ⚠ Without this the carrier admits the
+principal character modulo a prime, whose completed L-function is not entire; see 6.4.
+
 *Source:* Neukirch VII (6.11) to (6.14).
 
 *Prerequisites:* Layers 1.2, 1.7, 5.1.
@@ -1445,48 +1451,97 @@ milestone is in Layer 2. Admissibility, 6.1, is what makes the sum over unit orb
 *Source:* Neukirch VII §7, in full generality.
 *Prerequisites:* Layers 2.9, 2.13, 6.1, 6.2.
 
-**6.4 The shift translation, continuation, poles, and the functional equation.** Since
-`χ(𝔞) = χ_unit(𝔞) · 𝔑𝔞^{σ}`, the two Dirichlet series satisfy
+**6.4 The shift translation, primitivity, poles, root number, and functional equation.** One
+consolidated specification; everything here is stated once.
+
+*The shift translation.* Since `χ(𝔞) = χ_unit(𝔞) · 𝔑𝔞^{σ}`, the two Dirichlet series satisfy
 
 `L(χ, s) = L(χ_unit, s − σ)`,
 
 so the continued L-function of a Grossencharacter is *defined* from the unitary one and nothing
-new has to be continued. State that translation first; 7.7 reads it.
+new has to be continued. State that translation first; everything below reads it.
 
-**The functional equation reflects against the inverse character**, whose shift is `−σ`:
+*Scope: primitive characters.* Define induction from a divisor of the modulus, and primitivity as
+not being induced from a proper divisor. Milestone 6.4 is stated for **primitive** characters, and
+the imprimitive case is the finite Euler-factor correction of 5.4 written for this layer.
+
+⚠ *Nearby false statement:* a clean completed functional equation, or entirety, for every term of
+the carrier. The principal character modulo a prime `p` over `ℚ` is such a term — unitary weight
+`1` away from `p` and `0` at `p`, trivial infinite data, shift `0` — and its L-function is
+`ζ(s)(1 − p^{-s})`, which still has a pole at `s = 1`. Its finite part is not `1`, so any
+exception predicate keyed on the modulus misses it. That character is a mandatory test.
+
+*The polar exception: the norm quasicharacters.* `Λ(χ, ·)` is entire for a primitive `χ` **unless**
+the unitary part is a pure norm twist on the good ideals, that is unless `χ = 𝔑^{σ+iu}`. Then the
+poles are at `s = σ + iu` and `s = 1 + σ + iu`, shifted with the character, and at conductor `1`
+the L-function is `ζ_K(s − σ − iu)`.
+
+⚠ *Nearby false statement:* "real powers of the norm with trivial modulus". A pure unitary norm
+twist `𝔑^{iu}` with `u ≠ 0` is nontrivial on the good ideals, so an exception keyed on triviality
+misses it, yet its L-function is a vertically shifted `ζ_K` and has a pole. It is a mandatory
+test, and it is also the character the nonvanishing package of 7.2 must exclude.
+
+⚠ At conductor `≠ 1` the identity with `ζ_K` carries the removed Euler factors. Write them.
+
+*The inverse and the conjugate, place by place.* Both are needed, and their infinite data are not
+the same:
+
+| | real `v` | complex `v` |
+|---|---|---|
+| `χ⁻¹` | `(p_v, 0) ↦ (p_v, 0)`, `q_v ↦ −q_v` | `(p_v, p̄_v) ↦ (−p_v, −p̄_v)`, `q_v ↦ −q_v` |
+| `χ̄` | `(p_v, 0) ↦ (p_v, 0)`, `q_v ↦ −q_v` | `(p_v, p̄_v) ↦ (p̄_v, p_v)`, `q_v ↦ −q_v` |
+
+with shift `−σ` for the inverse and `σ` for the conjugate.
+
+⚠ Real parity is **unchanged** by both. The local character is `sgn(x)^{p} |x|^{iq}` with
+`p ∈ {0,1}`, and `sgn(x)^{-1} = sgn(x)`; negating `p` gives `−1`, which the carrier forbids, so
+the inverse of every odd real character would be uninhabitable. ⚠ At a complex place conjugation
+**swaps** the two exponents, because `conj(z^{-p} z̄^{-p̄}) = z^{-p̄} z̄^{-p}`; negating them is the
+inverse, and the two agree only when `p_v = p̄_v`. Both constructions are milestones, with their
+local-character, ideal-weight, gamma-shift, and completion comparisons proved. An odd real
+character is the inverse test, and a complex place with `p_v ≠ p̄_v` is the conjugation test.
+
+*The root number.* Define `W(χ)` for a Grossencharacter, from the Gauss sum of 5.6 and the
+infinity type of 6.2, and prove `‖W(χ)‖ = 1`, its behaviour under inverse and conjugation, and
+that at shift `0` with trivial archimedean parameters it is Layer 5's `W(χ)` for the corresponding
+ray-class character. ⚠ It depends on the finite character, the infinity type, and the archimedean
+parameters. The root number of the *trivial* ray-class character does not mention `χ` and is not
+it.
+
+*The functional equation*, for a primitive `χ`:
 
 `Λ(χ, s) = W(χ) Λ(χ⁻¹, 1 − s)`, equivalently `Λ(χ, s) = W(χ) Λ(χ̄, 1 + 2σ − s)`.
 
-Define `χ⁻¹` explicitly: conjugate unitary part, negated shift, negated infinity type and
-archimedean parameters.
+⚠ *Nearby false statement:* `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)`, the finite-order formula of 5.8 carried
+over unchanged. It is false as soon as `σ ≠ 0`, and the pure norm character `χ = 𝔑^{σ}` is the
+mandatory test: `Λ_χ(s) = Λ_K(s − σ)` has poles at `σ` and `1 + σ`, the character is real so
+`χ̄ = χ`, and `Λ_χ(1 − s)` has poles at `−σ` and `1 − σ`. Those sets agree only when `σ = 0`.
+Against `χ⁻¹` the right-hand side has poles at `σ` and `1 + σ` again. The two correct forms agree
+because `χ⁻¹ = χ̄ · ‖·‖^{−2σ}`. ⚠ Use the **canonical** conjugate above, not an arbitrary second
+character agreeing with `χ̄` on ideal values: that determines neither its infinity type, nor its
+gamma factors, nor its completion, and it is the defect already fixed in 5.8.
 
-⚠ *Nearby false statement:* `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)`, which is the finite-order formula of
-5.8 carried over unchanged. It is false as soon as `σ ≠ 0`, and the pure norm character
-`χ = 𝔑^{σ}` is the mandatory test. There `L(χ, s) = ζ_K(s − σ)`, so `Λ_χ(s) = Λ_K(s − σ)` has
-poles at `σ` and `1 + σ`; the character is real, so `χ̄ = χ`, and `Λ_χ(1 − s)` has poles at `−σ`
-and `1 − σ`. Those sets agree only when `σ = 0`. Against `χ⁻¹` the right-hand side has poles at
-`σ` and `1 + σ` again, and the equation holds. The two correct forms agree because
-`χ⁻¹ = χ̄ · ‖·‖^{−2σ}`.
+*The completion, and its identification.* `Λ(χ, ·)` must be identified on the convergence
+half-plane with `(|d_K| 𝔑𝔪₀)^{s/2}` times the gamma factor of 6.2 times `L(χ, ·)`. Without that
+theorem the completion is an unconstrained function and every statement about its poles, its
+entirety, and its functional equation is about nothing.
 
-⚠ The poles of the exceptional case move with the character too: they are at
-`s = σ + Tr(−p + iq)/n` and `s = 1 + σ + Tr(p + iq)/n`.
+*The Layer 0 card is the card of the **unitary** part.* Build it explicitly, with its coefficients,
+conductor, both gamma multisets, root number, completion, and polar divisor, and derive
+`degree = [K:ℚ]` from the **gamma multisets**.
 
-⚠ **The Layer 0 card of a Grossencharacter is the card of its unitary part.** The full shifted
-function is not an `AnalyticLFunctionData` instance unless it is recentered: its coefficients
-`χ_unit(𝔞)𝔑𝔞^{σ}` converge for `Re s > 1 + σ`, while `HasDirichletAgreement` is stated on
-`Re s > 1`; and `AnalyticLFunctionData.dual` conjugates the coefficients, which leaves the real
-shift `σ` alone, while the `1 − s` equation needs `−σ`. Say which object the card is, once.
+⚠ The degree does not follow from the coefficients. `HasDirichletAgreement` leaves `gammaR`,
+`gammaC` and `completed` free: for one coefficient function, choose any extra gamma factors and
+define `completed` by the displayed agreement on `Re s > 1`, and the record has whatever positive
+degree you like.
 
-`Λ(χ, s)` is meromorphic and analytic away from its poles. It is entire **unless** `𝔪₀ = 1`, every `p_v = 0`, and `χ` is a power of the
-norm character. In that exceptional case the poles are exactly at `s = Tr(−p + iq)/n` and at
-`s = 1 + Tr(p + iq)/n`. The functional equation is `Λ(χ, s) = W(χ) Λ(χ̄, 1 − s)` with
-`‖W(χ)‖ = 1`. The instance card has `degree = [K:ℚ]`, as in 5.9.
-
-⚠ The classification of the exceptional case is part of the statement. No milestone here writes
-"the exceptional case" without saying which case it is.
+⚠ The full shifted function is not an `AnalyticLFunctionData` instance unless it is recentered.
+Its coefficients `χ_unit(𝔞)𝔑𝔞^{σ}` converge for `Re s > 1 + σ`, while `HasDirichletAgreement` is
+stated on `Re s > 1`; and `AnalyticLFunctionData.dual` conjugates the coefficients, which leaves
+the real shift `σ` alone, while the `1 − s` equation needs `−σ`.
 
 *Source:* Neukirch VII (8.5), (8.6).
-*Prerequisites:* Layers 2.14, 6.2, 6.3.
+*Prerequisites:* Layers 2.14, 5.4, 5.6, 6.2, 6.3.
 
 ### Layer 7: Landau's theorem, the analytic premise, and nonvanishing
 
@@ -1569,15 +1624,12 @@ member to satisfy `x^{#G} = 1`, hence to be a root of unity. A unitary Grossench
 nonzero archimedean parameter, and every norm twist `‖·‖^{it}` with `t ≠ 0`, has infinite order,
 so no such family contains them and Layer 7.7 cannot be an instance of 7.5's package.
 
-State a second package over a single unitary weight, carrying cancellation for `χ`, for the
-conjugate, and for every norm twist of `χ`, together with a **dichotomy** on the square of each
-boundary twist:
-
-for every real `t`, either `(χ ‖·‖^{it})²` is trivial on the good ideals, or it cancels.
-
-The trivial factor is `ζ_K`, cited from 7.4 rather than carried. Milestones 7.3 and 7.4 are then
-proved twice, once over each package; 7.5 and 8B.2 instantiate the finite one, and 7.7 the single
-one.
+State a second package over a single unitary weight, carrying: that `χ` is **not** a pure norm
+twist on its good ideals; cancellation for `χ`, for the conjugate, and for every norm twist of
+`χ`; and, for every real `t`, that `(χ ‖·‖^{it})²` is either a pure norm twist `‖·‖^{iv}` on the
+good ideals, or cancels. The trivial factor is `ζ_K`, cited from 7.4 rather than carried.
+Milestones 7.3 and 7.4 are then proved twice, once over each package; 7.5 and 8B.2 instantiate the
+finite one, and 7.7 the single one.
 
 ⚠ Do **not** demand cancellation of the square outright. That excludes the two commonest
 nonexceptional characters:
@@ -1586,12 +1638,26 @@ nonexceptional characters:
   sums grow linearly and cancellation of `η²` is false, while `L(η, ·)` is entire and nonzero on
   `Re s = 1`;
 - `χ = η ‖·‖^{iu}` with `η` quadratic and `u ≠ 0` is unitary of **infinite** order, and is not the
-  norm-character exception of 6.4, yet `χ² = ‖·‖^{2iu}` and its twist by `−2u` is trivial.
+  norm-quasicharacter exception of 6.4, yet `χ² = ‖·‖^{2iu}`.
 
-Both are mandatory tests. The `3-4-1` proof has two branches and the package has to carry both:
-in the cancelling branch, the product bound; in the trivial-square branch, `χ` at that twist is
-real and the argument is Landau's, applied to the nonnegative coefficients of `ζ_K(s) L(χ_t, s)`.
-That second branch is exactly why 7.1 proves Landau's theorem.
+⚠ Nor is *trivial-or-cancelling* enough, and the second example is again the witness. The square
+of its twist at `t` is `‖·‖^{2i(u+t)}`, which is trivial only at `t = −u`; at every other `t` it
+is a **nontrivial** norm twist, and those do not cancel either. From
+`#{𝔞 ∣ 𝔑𝔞 ≤ X} = ρ_K X + O(X^{1−1/d})`, partial summation gives
+`∑_{𝔑𝔞 ≤ X} 𝔑𝔞^{iv} = ρ_K X^{1+iv}/(1+iv) + O(X^{1−1/d})`, of magnitude comparable to `X`. So the
+square has three cases, and the condition above merges the first two.
+
+The `3-4-1` proof splits the same way. Cancelling branch: the product bound. Norm-twist branch
+with `v = 0`: `χ` at that twist is real, and the argument is Landau's, applied to the nonnegative
+coefficients of `ζ_K(s) L(χ_t, s)` — which is exactly why 7.1 proves Landau's theorem. Norm-twist
+branch with `v ≠ 0`: the series is a vertically shifted `ζ_K`, and the input is 7.4's nonvanishing
+of `ζ_K` at `1 + iv`.
+
+⚠ "`χ` is not a pure norm twist" is a field of the package, not a remark. If `χ = ‖·‖^{iu}` then
+its twist by `−u` is the trivial weight and cancellation fails there; the norm quasicharacters are
+exactly the polar exception of 6.4, so they are excluded rather than left as unsatisfiable
+fields. Both mandatory tests must be stated so that their hypotheses are ones a ray-class
+character actually satisfies.
 
 Then 7.3 and 7.4 are theorems about a `CancellingFamily`, and are instantiated twice, in 7.5 and
 in 8B.2. A single-weight statement would be false at the advertised generality.
@@ -1665,11 +1731,16 @@ Grossencharacter with a nonzero archimedean parameter has infinite order and is 
 character group.
 
 ⚠ **Construct the premise; do not take it as a hypothesis.** This milestone owes a theorem
-producing the single-character package of 7.2 for every Grossencharacter outside the exact
-norm-character exception of 6.4, that is whenever the unitary part is nontrivial on the good
-ideals. A statement of the form "given the package, nonvanishing holds" leaves the advertised
-export true only for the characters a caller can already discharge it for, and 7.8 would then
-rest on nothing.
+producing the single-character package of 7.2 for every Grossencharacter outside the
+norm-quasicharacter exception of 6.4, that is whenever the unitary part is **not a pure norm
+twist** on the good ideals. A statement of the form "given the package, nonvanishing holds" leaves
+the advertised export true only for the characters a caller can already discharge it for, and 7.8
+would then rest on nothing.
+
+⚠ The exclusion is "not a pure norm twist", and not "not trivial". A unitary `‖·‖^{iu}` with
+`u ≠ 0` is nontrivial on the good ideals, yet its twist by `−u` is the trivial weight, so
+cancellation fails for it, and its L-function is a vertically shifted `ζ_K`, which has a pole. It
+is the exception, not a member.
 
 ⚠ This is an export and not equidistribution. The Weyl criterion for a compact group is out of
 scope.
@@ -2463,6 +2534,22 @@ statements do not.
   `Λ_χ` has poles at `σ` and `1 + σ` while `Λ_χ(1 − s)` has poles at `−σ` and `1 − σ`. This test
   detects a functional equation reflecting against the conjugate at `1 − s` instead of against
   the inverse, and it is invisible whenever `σ = 0`.
+- **The odd real character has an inverse** (Layer 6.4). At a real place with `p_v = 1`, the
+  inverse local character is `sgn(x)^{-1}|x|^{-iq} = sgn(x)|x|^{-iq}`, so the parity is unchanged.
+  This test detects an inverse that negates the infinity type, which would give `p_v = −1` and
+  make the inverse of every odd real character uninhabitable.
+- **The conjugate swaps at a complex place** (Layer 6.4). `conj(z^{-p}z̄^{-p̄}) = z^{-p̄}z̄^{-p}`, so
+  conjugation exchanges the two exponents while inversion negates them. This test detects the two
+  constructions being identified, which is invisible whenever `p_v = p̄_v`.
+- **The principal character modulo `p`** (Layers 6.1, 6.4). Over `ℚ` it is a term of the carrier
+  with trivial infinite data and shift `0`, and `L(s) = ζ(s)(1 − p^{-s})` has a pole at `s = 1`,
+  although its finite part is not `1`. This test detects an entirety claim made for every term
+  instead of for the primitive ones, and an identity with `ζ_K` that omits the removed Euler
+  factors.
+- **The vertical norm twist** (Layers 6.4, 7.2). `𝔑^{iu}` with `u ≠ 0` is nontrivial on the good
+  ideals, but its L-function is `ζ_K(s − iu)`, with a pole at `1 + iu`. This test detects a polar
+  exception restricted to real powers, and a nonvanishing package whose exclusion is "not
+  trivial" instead of "not a pure norm twist".
 - **Wiener–Ikehara needs summability** (Layer 9.1). For a rapidly growing nonnegative `a`,
   Mathlib's `LSeries a` is the junk value `0` off the region of convergence, so `F = 0` and
   `κ = 0` satisfy an equality hypothesis while `∑_{n ≤ x} a n` is not `o(x)`. This test detects a

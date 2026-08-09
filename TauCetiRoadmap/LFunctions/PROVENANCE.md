@@ -275,6 +275,33 @@ Landau's argument on `ζ_K(s)L(χ_t,s)`, which is why Landau's theorem is a mile
 The same shift is why the full quasicharacter is not an analytic-normalized data record: its
 coefficients converge only for `Re s > 1+σ`, and conjugating them does not move the shift.
 
+**The square of a boundary twist has three cases, not two.** For `χ = η·𝔑^{iu}` with `η`
+quadratic, `(χ𝔑^{it})² = 𝔑^{2i(u+t)}` is trivial only at `t = −u` and is a *nontrivial* norm twist
+elsewhere — and those do not cancel: `∑_{𝔑𝔞≤X} 𝔑𝔞^{iv} = ρ_K X^{1+iv}/(1+iv) + O(X^{1−1/d})`, of
+magnitude `≍ X`. So a trivial-or-cancelling dichotomy is still too weak; the condition is
+norm-twist-or-cancelling, with the `v ≠ 0` branch handled by nonvanishing of a vertically shifted
+`ζ_K`. The character to exclude from such a package is a pure norm twist, not merely a trivial
+one: `𝔑^{iu}` is nontrivial on good ideals but its twist by `−u` is trivial.
+
+**Inversion and conjugation act differently on the infinity type, and neither negates real
+parity.** At a real place `sgn(x)^{p}|x|^{iq}` has `sgn(x)^{-1} = sgn(x)`, so `p` is fixed by both
+and negating it would leave `p = −1`, outside `{0,1}` — the inverse of every odd real character
+would be uninhabitable. At a complex place inversion sends `(p,p̄) ↦ (−p,−p̄)` while conjugation
+**swaps**, `(p,p̄) ↦ (p̄,p)`, since `conj(z^{-p}z̄^{-p̄}) = z^{-p̄}z̄^{-p}`; both send `q ↦ −q`. The
+two agree only when `p = p̄`.
+
+**A Hecke functional equation is a primitive-character statement, and the polar exception is the
+norm quasicharacters.** The principal character modulo a prime `p` over `ℚ` inhabits an
+unrestricted Grossencharacter carrier with trivial infinite data and shift `0`, and has
+`L(s) = ζ(s)(1−p^{-s})`, still with a pole — so an entirety claim for every term is false, and an
+exception keyed on the modulus misses it. Separately, `𝔑^{iu}` with `u ≠ 0` is nontrivial on good
+ideals and has a pole at `1+iu`, so an exception keyed on real powers misses it too.
+
+**`HasDirichletAgreement` does not determine the degree.** It leaves `gammaR`, `gammaC` and
+`completed` free: for one coefficient function, choose extra gamma factors and define `completed`
+by the displayed agreement on `Re s > 1`, and the record has any positive degree. A card's degree
+has to be computed from its gamma multisets, so the card must be constructed with them.
+
 **A finite character family cannot contain a Grossencharacter.** A package indexed by a
 `Fintype` forces every good value of every member to satisfy `x^{#G} = 1`, hence to be a root of
 unity, because some positive power of each index element is `1`. A unitary Grossencharacter with a
