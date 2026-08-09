@@ -384,7 +384,7 @@ def swap01 (t : PermutationTriple n) : PermutationTriple n where
   product_eq_one := by rw [t.σinf_eq]; group
 
 /-- **Layer 2.6.** Swap the roles of `1` and `∞`. ⚠ Its square is simultaneous conjugation
-by `σ1`, not the identity, which is why the `S₃`-action lives on isomorphism classes. -/
+by `σ0`, not the identity, which is why the `S₃`-action lives on isomorphism classes. -/
 def swap1Inf (t : PermutationTriple n) : PermutationTriple n where
   σ0 := t.σ0
   σ1 := t.σ1⁻¹ * t.σinf * t.σ1
@@ -405,10 +405,25 @@ example : (swap01 s3Triple).σinf * (swap01 s3Triple).σ1 * (swap01 s3Triple).σ
 theorem swap01_involutive (t : PermutationTriple n) : swap01 (swap01 t) = t := by
   sorry
 
-/-- **Layer 2.6.** `swap1Inf` squared is simultaneous conjugation by `σ1`, **not** the
-identity — the statement that forces the `S₃`-action onto `IsoClass n`. -/
-theorem swap1Inf_sq (t : PermutationTriple n) : swap1Inf (swap1Inf t) = t.σ1⁻¹ • t := by
+/-- **Layer 2.6.** `swap1Inf` squared is simultaneous conjugation by **`σ0`**, not the
+identity — the statement that forces the `S₃`-action onto `IsoClass n`.
+
+The computation is forced by the pinned relation. Writing `t = (a, b, c)` with `c * b * a = 1`,
+one application gives `(a, b⁻¹ * c * b, b)` and a second gives
+`(a, b⁻¹ * c⁻¹ * b * c * b, b⁻¹ * c * b)`; since `a = (c * b)⁻¹ = b⁻¹ * c⁻¹`, those last two
+entries are exactly `a * b * a⁻¹` and `a * c * a⁻¹`. -/
+theorem swap1Inf_sq (t : PermutationTriple n) : swap1Inf (swap1Inf t) = t.σ0 • t := by
   sorry
+
+/-- **Layer 2.6, the witness that fixes the conjugator.** `σ0` is not interchangeable with
+the two conjugators one might guess instead: on `s3Triple` both `σ1⁻¹ • t` and `σ1 • t`
+differ from `swap1Inf²`, so the theorem above is not merely one presentation among several.
+(Exhaustively, `σ0` is correct on all 576 triples in `S₄` while `σ1⁻¹` fails on 456.) -/
+example : swap1Inf (swap1Inf s3Triple) = s3Triple.σ0 • s3Triple := by decide
+
+example : swap1Inf (swap1Inf s3Triple) ≠ s3Triple.σ1⁻¹ • s3Triple := by decide
+
+example : swap1Inf (swap1Inf s3Triple) ≠ s3Triple.σ1 • s3Triple := by decide
 
 -- **Layer 12.12, the counterexample.** Componentwise powers of a triple are **not** a
 -- triple: raising the three entries of `s3Triple` to the fifth power destroys the product

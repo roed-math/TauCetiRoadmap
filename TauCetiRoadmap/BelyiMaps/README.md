@@ -86,8 +86,12 @@ groups are identified with `(π₁)ᵐᵒᵖ` (its milestone 5), and basepoint c
 subgroups by conjugation (its milestone 7). The constructive direction this roadmap needs — a
 cover of the base built *from* a permutation action — is Layer 6.2's associated cover
 `(Ũ × S)/π₁`, which needs from that roadmap only the universal cover and the free proper
-discontinuity of the deck action, and gets the covering property from Mathlib's
-`IsQuotientCoveringMap`.
+discontinuity of the deck action. ⚠ Mathlib's `IsQuotientCoveringMap` supplies only **half**
+of the covering property: it gives `Ũ × S → assocCover S`, the quotient by the free proper
+action, and with it the topology on `assocCover S` and the universal property for maps out
+of it. It says nothing about the projection `assocCover S → X`, which is the map this
+roadmap actually needs to be a covering; that is Layer 6.2's own equivariant sheet
+computation, and the two maps have different groups in play.
 
 The pin has no Seifert–van Kampen theorem in any form, and this roadmap does not build a
 general one. Layer 5.5 builds the single case the fundamental-group computation needs — two
@@ -201,9 +205,19 @@ and `TopBranchedCover`; the compact-Riemann-surface hypothesis stack, the Rieman
 `AlgebraicBelyiPair` with its local `(e,f)` data; the local algebraic-to-analytic comparison
 and the comparison contract; Belyi's theorem in both directions; fields of moduli and of
 definition, Weil descent, and `trueOrbitSize`.
-*Imports:* from A, exactly Layer 0's vocabulary (6.1), Layers 2.2 and 2.4 (7.6, 8.6), Layer
-2.6 (6.3), and Layer 3.1 (10.6) — and nothing else; UniversalCovers; ConformalMapping L0;
-ModularForms Layer 10B; AlgebraicCurves.
+*Imports:* from A, exactly
+
+```text
+0.1–0.6   triple vocabulary                     6.1, 7.x, 8.x
+2.1, 2.2, 2.4, 2.6   dessins and the S₃-action  6.3, 7.6, 8.6, 8.7
+3.1       the executable enumeration            10.6
+4.6       the normality criterion               6.5
+```
+
+and nothing else; UniversalCovers; ConformalMapping L0; ModularForms Layer 10B;
+AlgebraicCurves. ⚠ `4.6` belongs on this list: Layer 6.5 classifies regular covers by
+normality of the point stabilizer, which is Layer 4.6's criterion, so section B is not
+independent of Layer 4.
 
 **C. Arithmetic and database semantics — Layers 12–14.**
 *Exports:* `ProfiniteInt` as a topological ring, the profinite exponentiation calculus and
@@ -212,9 +226,15 @@ orientation; the arithmetic exact sequence and outer action; peripheral inertia;
 `ẑ`-cyclotomic character; the branch-cycle theorem and its finite Nielsen-class corollary;
 the pro-`ℓ` peripheral-power theorem and its dyadic instance; faithfulness; the LMFDB
 record certificates.
-*Imports:* from A, Layers 0.5, 0.6, 1.1, 1.2, 1.4, 1.6, 2.6, 3.4 and 3.5; from B, Layers
-6.1, 6.3, 7.1, 8.6, 8.7, 9.1, 9.8, 10.2, 10.3, 10.7 and 11.1–11.7; ProPGroups; Mathlib's
-Galois categories and cyclotomic characters.
+*Imports:*
+
+```text
+from A   0.1, 0.4–0.7, 1.1–1.6, 2.6, 3.4, 3.5
+from B   5.6, 6.1, 6.3, 7.1, 8.7, 9.1, 9.5–9.8, 10.2, 10.3, 10.7,
+         11.1, 11.3, 11.5, 11.7
+```
+
+plus ProPGroups and Mathlib's Galois categories and cyclotomic characters.
 
 ⚠ The boundary between B and C is **not** the boundary between geometry and arithmetic:
 Layers 10 and 11 are already arithmetic, and they sit in B because they consume the analytic
@@ -877,8 +897,18 @@ in Lean, not asserted as rewriting folklore. In particular `t ∘ s` is the cycl
 - *Constructors.* The two generators as maps `PermutationTriple n → PermutationTriple n`,
   each carrying its proof of the relation; the six named composites.
 - *Comparison lemmas.* `swap01` is an involution **on the nose**. `swap1Inf ∘ swap1Inf` is
-  **not** the identity on triples — it is simultaneous conjugation by `b` — which is why the
-  `S₃`-action is stated on isomorphism classes.
+  **not** the identity on triples — it is simultaneous conjugation by **`a`** — which is why
+  the `S₃`-action is stated on isomorphism classes:
+
+  ```text
+  t² (a, b, c) = (a, a · b · a⁻¹, a · c · a⁻¹) = a • (a, b, c)
+  ```
+
+  ⚠ The conjugator is `a`, not `b`. Two applications give
+  `(a, b⁻¹ · c⁻¹ · b · c · b, b⁻¹ · c · b)` directly, and it is the relation — in the form
+  `a = (c · b)⁻¹ = b⁻¹ · c⁻¹` — that rewrites those entries as conjugates by `a`. Conjugating
+  by `b` or `b⁻¹` instead moves the first component, which `t²` fixes; `Suggested.lean`
+  carries all three as `decide`-checked witnesses on `s3Triple`.
 - *Functoriality.* Each operation commutes with relabeling, hence descends to `IsoClass n`.
 - *The action.* On `IsoClass n` the induced maps satisfy the Coxeter relations `s² = 1`,
   `t² = 1`, `(st)³ = 1`, and therefore define an `S₃`-action. Prove the three relations
@@ -1842,8 +1872,12 @@ The milestone owns these statements, each named:
    the second factor, whence `p ⁻¹' V ≃ V × S`. ⚠ This does **not** follow from
    `IsQuotientCoveringMap` alone: that theorem describes `Ũ × S → assocCover S`, not
    `assocCover S → X`, and the two maps have different groups in play.
-3. **The fiber equivalence.** `ν_S : S ≃ p ⁻¹' {x}`, `s ↦ ⟦ũ₀, s⟧`, using that `π₁` acts
-   simply transitively on `q ⁻¹' {x}`.
+3. **The fiber equivalence.** `ν_S : p ⁻¹' {x} ≃ S`, the inverse of `s ↦ ⟦ũ₀, s⟧`, using
+   that `π₁` acts simply transitively on `q ⁻¹' {x}`. ⚠ **This direction is forced**, and it
+   is the same direction as the numbering `ν` in 6.1: `Equiv.permCongr` transports
+   `Equiv.Perm` along an equivalence, so only `ν_S : p ⁻¹' {x} ≃ S` sends the monodromy
+   permutation of the fiber to a permutation of `S`. Written the other way the next formula
+   does not typecheck, and `ν_S.symm.permCongr` would be needed instead.
 4. **The monodromy calculation.** `ν_S.permCongr (monodromyHom p x γ) = act γ` for every
    `γ`, **with no inverse and no `ᵐᵒᵖ`**. Proof: lift `γ` in `Ũ` from `ũ₀`; the path
    `t ↦ ⟦γ̃ t, s⟧` lifts it in `assocCover S` and ends at
@@ -1891,12 +1925,42 @@ between the carrier of 6.1 and its combinatorial counterpart:
 3. **Pointed covers ↔ subgroups, equivalently triples with a marked label.** Connected
    pointed covers of `(U, b)` up to pointed isomorphism correspond to transitive
    `π₁`-sets with a distinguished point, equivalently to subgroups of `π₁(U, b)` of index
-   `n` (UniversalCovers milestone 8), equivalently to pairs `(t, i)` with `t` a connected
-   `PermutationTriple n` and `i : Fin n`, modulo the action of the stabilizer of `i` in
-   `Equiv.Perm (Fin n)`. The subgroup attached to `(t, i)` is the stabilizer of `i` under
-   the monodromy action. ⚠ **Do not identify this quotient with literal triples.** Fixing
-   one label leaves `(n−1)!` relabelings, and for `n ≥ 3` the quotient is strictly coarser
-   than the set of triples and strictly finer than `IsoClass n`.
+   `n` (UniversalCovers milestone 8), equivalently to the quotient
+
+   ```text
+   (ConnectedTriple n × Fin n) ⧸ Equiv.Perm (Fin n),   τ • (t, i) := (τ • t, τ i)
+   ```
+
+   by the **diagonal** action — the marked label moves with the relabeling. The subgroup
+   attached to `(t, i)` is the stabilizer of `i` under the monodromy action, and this is
+   the milestone: that map is a bijection onto the index-`n` subgroups.
+
+   Equivalently, fix the marked label once and take
+
+   ```text
+   ConnectedTriple n ⧸ Stabilizer (Equiv.Perm (Fin n)) 0
+   ```
+
+   Prove the two agree; the second is the more convenient carrier and the first is the one
+   whose functoriality is visible. ⚠ **The relabeling must act on the label too.** Quotienting
+   pairs `(t, i)` by only the stabilizer of `i` is not this quotient and not any useful one:
+   it never identifies pairs with different marked labels, so it is not even coarser than the
+   set of triples — at `n = 3` it has `39` elements against `26` triples.
+
+   ⚠ **Do not identify this quotient with literal triples either.** For `n ≥ 3` it is
+   strictly coarser than the triples and strictly finer than `IsoClass n`. The three counts
+   are a usable check on any implementation:
+
+   ```text
+   n                    2      3      4      5
+   ConnectedTriple      3     26    426  11064
+   pointed             (3)    13     71    461
+   IsoClass             3      7     26     97
+   ```
+
+   The middle row is the number of index-`n` subgroups of a free group of rank `2` — Hall's
+   numbers `1, 3, 13, 71, 461` — which is an independent confirmation of the identification
+   with subgroups of `π₁(U, b)`.
 
 All three are compatible with the free-group description of 5.6: transitive
 `FreeGroup (Fin 2)`-sets of cardinality `n` correspond to connected triples by evaluating
@@ -2125,18 +2189,46 @@ structure of 8.5 supplies the orientation.
 The object Layer 8.6 classifies, defined here so that "isomorphism classes of connected
 topological branched covers of the sphere with branch values in `{0,1,∞}`" names something.
 
-```text
+```lean
+/-- The marked points, as a set, so that `U` below names the same thing as in Layer 5.1. -/
+def marked : Set (OnePoint ℂ) := {0, 1, ∞}
+
 structure TopBranchedCover (n : ℕ) where
-  Z    : Type              -- compact, connected, Hausdorff, second countable, locally ℂ
-  π    : Z → OnePoint ℂ    -- continuous, proper, surjective
-  ...  -- π restricted over OnePoint ℂ ∖ {0,1,∞} is a covering map of degree n
-       -- at each point of π ⁻¹' {0,1,∞}, π is w ↦ w ^ e in some charts, with e ≥ 1
+  Z : Type
+  [instTop : TopologicalSpace Z]
+  [instCompact : CompactSpace Z]
+  [instConn : ConnectedSpace Z]
+  [instT2 : T2Space Z]
+  [instSecond : SecondCountableTopology Z]
+  [instCharted : ChartedSpace ℂ Z]
+  π : C(Z, OnePoint ℂ)
+  surj : Function.Surjective π
+  /-- Off the three marked points, `π` is an honest covering map of degree `n`. -/
+  isCovering : IsCoveringMap (marked.restrictPreimage π)
+  degree : ∀ y ∈ (marked : Set (OnePoint ℂ))ᶜ, Nat.card (π ⁻¹' {y}) = n
+  /-- Over each marked point, `π` is `w ↦ w ^ e` in some chart at the source and some
+  chart at the target, with a positive exponent. -/
+  localPower : ∀ z ∈ π ⁻¹' marked, ∃ e : ℕ, 0 < e ∧
+    ∃ (φ : PartialHomeomorph Z ℂ) (ψ : PartialHomeomorph (OnePoint ℂ) ℂ),
+      z ∈ φ.source ∧ π z ∈ ψ.source ∧ φ z = 0 ∧ ψ (π z) = 0 ∧
+      ∀ w ∈ φ.target, ψ (π (φ.symm w)) = w ^ e
 ```
 
+⚠ The `ChartedSpace ℂ Z` instance is what "locally `ℂ`" means and is a **field**, not a
+side condition: without it `localPower` has no charts to quantify over. Properness is not a
+field — it follows from `CompactSpace Z` and `T2Space (OnePoint ℂ)` — and is proved, not
+assumed.
+
 An **isomorphism** is a homeomorphism `Z ≃ₜ Z'` commuting with `π` and `π'`. Prove: the
-local degree `e` at a point is well defined (independent of the charts); the fibers over the
-three marked points are finite; `Σ e = n` over each of them; and the restriction of an
-isomorphism to the unbranched part is an isomorphism of covers in the sense of 6.1.
+local degree `e` at a point is well defined (independent of the two charts, since any two
+choices differ by units and `w ↦ w^e` determines `e` as the order of vanishing); the fibers
+over the three marked points are finite; `Σ e = n` over each of them; and the restriction of
+an isomorphism to the unbranched part is an isomorphism of covers in the sense of 6.1.
+
+⚠ *Nearby false statement:* `degree` cannot be stated as a single `Nat.card (π ⁻¹' {y}) = n`
+for **all** `y`. It fails at exactly the branch points, which is the entire content of the
+object; the hypothesis is restricted to the complement of `marked` above, and the marked
+fibers are governed by `localPower` and `Σ e = n` instead.
 
 7.2 and 7.3 construct a `TopBranchedCover n` from a connected finite cover of `U`, and 7.4
 says that construction is unique up to a unique isomorphism. Conversely, restricting `π`
@@ -4136,14 +4228,27 @@ and algebraic model, `y⁴ = t(t−1)` with `β = t`.
 
 ## Ordering
 
-Two tracks, independent until Layer 12:
+Two tracks, joined at Layer 12. The lists below are **derived from the per-milestone
+`Prerequisites:` lines**, with ranges expanded, not asserted independently of them; a change
+to a prerequisite line that contradicts this section makes the section wrong.
 
-- **Track A (finite mathematics):** Layer 0 → Layer 1 → {Layer 2, Layer 3, Layer 4}, the
-  last three mutually independent. Startable immediately; everything elaborates against the
-  pin plus the two finite-supplier roadmaps.
+- **Track A (finite mathematics):** a chain, `Layer 0 → Layer 1 → Layer 2 → Layer 3 →
+  Layer 4`. ⚠ Layers 2, 3 and 4 are **not** mutually independent: 3.1 needs 1.1–1.4 and
+  Layer 2's dessin vocabulary, and 4.3 needs 3.1 for the finite decision procedure it
+  reuses. Startable immediately; everything elaborates against the pin plus the two
+  finite-supplier roadmaps.
 - **Track B (geometry):** Layer 5 → Layer 6 → Layer 7 → Layer 8 → Layer 9 → Layer 10 →
-  Layer 11, consuming Track A only through Layer 0's vocabulary (6.1), Layer 2 (7.6), and
-  Layer 3.1 (10.6).
+  Layer 11. It imports from Track A at exactly four places:
+
+  ```text
+  Layer 6  ← 0.1–0.4  (triple vocabulary), 2.6 (branch-point action), 4.6 (regularity)
+  Layer 7  ← 0.5, 2.2
+  Layer 8  ← 0.6, 2.1, 2.2, 2.4
+  Layer 10 ← 3.1
+  ```
+
+  ⚠ Track B is therefore **not** independent of Layer 4: 6.5 consumes 4.6's normality
+  criterion for regular covers.
 - **The summit:** Layer 12 consumes both tracks (6.3, 7.1, 9–11), except for its opening
   milestones 12.1, 12.2 and 12.3 — the profinite integers as a ring, the exponentiation
   calculus, and its pro-`ℓ` comparison — which are generic profinite algebra depending on

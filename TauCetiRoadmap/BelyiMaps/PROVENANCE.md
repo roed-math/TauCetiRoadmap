@@ -589,28 +589,37 @@ by all of `S_n`:
 ```text
 degree                          1    2    3    4    5
 connected classes               1    3    7   26   97
-ordered passports (with G)      1    3    7   26   78
+ordered passports (with G)      1    3    7   26   74
 ordered passports (without G)   1    3    7   26   70
 ```
+
+The monodromy group enters **up to conjugacy in `S_n`**, which is the only way it is defined
+on a simultaneous-conjugacy class. At degree `5` exactly four cycle-type passports split
+once it is added — `([4,1],[4,1],[5])` and its two rotations, into `F₂₀` and `S₅`, and
+`([5],[5],[5])` into `C₅` and `A₅` — so `70 + 4 = 74`.
 
 **Every ordered passport in degree `≤ 4` has size exactly `1`**, under both readings — with
 the monodromy group as part of the passport datum, which is the LMFDB's convention since
 `plabel = dTj-λ₀_λ₁_λ∞`, and without it. So a milestone demanding a multi-class passport at
 those degrees is unsatisfiable, and Layer 3.5 no longer asks for one.
 
-The smallest multi-class passport is at **degree 5**: with the group, one passport of size
-`3` and seventeen of size `2`; without the group, one of size `4`, three of size `3` and
-eighteen of size `2`. The size-`3` witness is monodromy `C₅` with partitions
+The smallest multi-class passport is at **degree 5**: with the group, fifty-two of size `1`,
+twenty-one of size `2` and one of size `3`, so `52 + 2·21 + 3 = 97` classes in `74`
+passports. The size-`3` witness is monodromy `C₅` with partitions
 `([5],[5],[5])`, and it can be checked by hand: writing a triple of powers of a `5`-cycle
 `r` as its exponent vector `(a,b,c)` with `a,b,c ∈ {1,2,3,4}` and `a + b + c ≡ 0 (mod 5)`,
 there are `12` such vectors; `N_{S₅}(C₅) = F₂₀` acts through `(ℤ/5)ˣ` by scaling, since the
 `C₅` part is inner and `C₅` is abelian; and scaling to `a = 1` leaves exactly
 `(1,1,3), (1,2,2), (1,3,1)` — that is `(r, r, r³)`, `(r, r², r²)`, `(r, r³, r)`. `12 / 4 = 3`.
 
-⚠ **A review of this roadmap reported `74` ordered passports at degree `5`.** That number
-is neither reading; the enumeration above gives `78` and `70`. Nothing downstream depends on
-it — the claim that matters, that degree `≤ 4` admits no multi-class passport, holds under
-both readings — but the roadmap does not carry `74`.
+⚠ **An earlier revision of this file recorded `78` here, and defended it against a review
+that said `74`. The review was right.** The error was in canonicalising the monodromy group:
+taking `min` over a Python `frozenset` of conjugates uses the **subset** relation, a partial
+order, so conjugate subgroups were never identified and the four splitting passports above
+were each counted twice. Canonicalise with a genuine total order — `min` over
+`tuple(sorted(…))` — and the count is `74`. The arithmetic offered no protection: the wrong
+distribution `60 + 2·17 + 3` and the right one `52 + 2·21 + 3` both total `97`. Anything
+resting on a count of orbits under conjugacy should be checked the same way.
 
 ⚠ `1 + 3 + 7 + 26 = 37` ordered classes in degrees `1` through `4`, against the database's
 **thirteen** frozen records at those degrees. The database is not incomplete here: it
