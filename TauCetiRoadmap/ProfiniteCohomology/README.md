@@ -166,20 +166,24 @@ colimit theorem" or "the six cup shapes" is not a citable export, and no row con
 | the graded cup | 12 | `TopPairing`, `cupCochain`, `cupCochain_leibniz`, `cup`, `cup_add_left`, `cup_add_right`, `cup_one_left`, `cup_one_right`, `cup_assoc`, `cup_gradedComm`, `cup_res`, `cup_infl`, `cup_coeffMap`, `cup_projection` | `Hᵐ × Hⁿ → H^{m+n}` |
 | agreement of the two cups | 12 | `ofDiscreteModulePairing`, `explicitIso_cup` | commuting square in bidegree `(1,1)` |
 | the evaluation pairing for duality | 0, 12 | `homAction`, `evalPairing`, `evalPairing_equivariant`, `TopPairing`, `ofDiscreteModulePairing`, `cup`, `cup_add_left`, `cup_add_right` | `Hⁱ(G, M →+ N) × H^{2-i}(G, M) → H²(G, N)` |
-| the Kummer isomorphism | 9 | `AbsoluteGaloisGroup`, `KummerCoeff`, `powerClassQuotient`, `kummerMap`, `kummerIso`, `kummerIsoTransport`, `kummerIso_res`, `kummerIso_norm`, `kummerMapCanonical`, `explicitIso_kummerMap` | `Kˣ ⧸ (Kˣ)ⁿ ≃* Multiplicative (H¹(AbsoluteGaloisGroup K, KummerCoeff K n))` |
+| the Kummer isomorphism | 9 | `AbsoluteGaloisGroup`, `KummerCoeff`, `kummerCoeff_continuousSMul`, `powerClassQuotient`, `kummerMap`, `kummerIso`, `kummerIsoTransport`, `kummerIso_res`, `kummerIso_norm`, `kummerMapCanonical`, `explicitIso_kummerMap` | `Kˣ ⧸ (Kˣ)ⁿ ≃* Multiplicative (H¹(AbsoluteGaloisGroup K, KummerCoeff K n))` |
+| the multiplicative coefficients, the Kummer sequence and Hilbert 90 | 9 | `UnitsCoeff`, `unitsCoeff_continuousSMul`, `kummerCoeffIncl`, `unitsCoeffPow`, `kummerShortExact`, `kummerShortExact_incl`, `kummerShortExact_proj`, `hilbert90`, `kummerCoeffToUnits`, `h2KummerToUnits`, `h2KummerToUnits_injective`, `h2KummerToUnits_range` | `H¹(G_K, (Kˢ)ˣ) = 0`, and `H²(G_K, μₙ) ↪ H²(G_K, (Kˢ)ˣ)` with image the `n`-torsion |
+| the field-extension bridge | 9, with 10 and 13 | `galoisSubgroup`, `galoisSubgroup_index`, `galoisSubgroupEquiv`, `galoisF2Iso`, `galoisRes`, `galoisCor`, `galoisEvens`, `galoisConj`, `galoisRes_comp`, `galoisSubgroup_conj`, `galoisRes_embedding_independent`, `galoisCor_embedding_independent`, `galoisEvens_embedding_independent` | restriction, corestriction and the index-two norm for a finite separable `L/K` |
 | cohomological dimension | 11 | `IsPPrimaryTorsion`, `CohomologicalDimensionLE`, `StrictCohomologicalDimensionLE`, `cd_p`, `scd_p`, `cd`, `cd_p_le_iff`, `scd_p_le_iff`, `cohomologicalDimensionLE_iff_torsion`, `cd_p_le_iff_finite_pPrimary`, `cd_p_le_iff_boundedExponent`, `cd_p_le_scd_p`, `scd_p_le_cd_p_add_one`, `cd_p_le_of_isClosed`, `cd_p_eq_of_index_not_dvd` | `ℕ∞`-valued invariants |
-| the Evens norm | 13 | `evensNorm`, `evensNormIndexTwo`, `evensGraphCochain`, `graphClass`, `evensConj`, `evensNorm_eq_graphClass` | `H^q(U, 𝔽₂) → H^{l q}(G, 𝔽₂)` for open `U` of index `l` |
+| the Evens norm | 13 | `evensNorm`, `evensNormIndexTwo`, `evensGraphCochain`, `graphClass`, `graphClass_eq_cochainClass`, `evensConj`, `evensConj_eq_conjMapOf`, `evensNorm_eq_graphClass` | `H^q(U, 𝔽₂) → H^{l q}(G, 𝔽₂)` for open `U` of index `l` |
 | the four index-2 Evens identities | 13 | `evensNorm_res`, `evensNorm_polarization`, `evensNorm_cor_shapiro`, `evensNorm_identity_infl` | identities of classes in `H²(G, 𝔽₂)` |
 
-Two points about that last row, because they are exact and easy to get wrong. The identities are
+Three points about that last row, because they are exact and easy to get wrong. The identities are
 statements about **cohomology classes**, not about the graph cochain, and `Suggested.lean` states
-them that way. And the polarization is
+them that way. The polarization is
 ```
 N(α + β) - N(α) - N(β) = cor (α ⌣ (s · β)),
 ```
 with the **conjugate** class on the right. Dropping the conjugate gives a different statement, and
 this roadmap does not supply it; a consumer that wants the unconjugated form must prove the two
-equivalent under stated hypotheses.
+equivalent under stated hypotheses. And the conjugate `s · β` is `evensConj`, which is defined
+without choosing `s`: none of the four identities mentions an element outside `U`, so none of them
+is a statement about a choice.
 
 ### The comparisons carry the operations, not only the groups
 
@@ -241,6 +245,19 @@ cited in Layer 7.
   coefficients and a restriction-of-scalars compatibility theorem; state that refinement only
   where the `k`-action exists, and never add a `Module k` hypothesis to a statement about
   profinite groups that does not need it.
+- **Universes.** The group and its coefficient modules live in one universe; the coefficient
+  **ring** lives in another, so that a small ring such as `ZMod n` in `Type 0` is usable over a
+  Galois group in any universe. The first half is forced by the pin: the canonical resolution is
+  built from `C(G, -)`, so a coefficient module of `TopRep R G` cannot live below the universe of
+  `G`. Where a `Type 0` object is needed as coefficients over a group in a higher universe, as
+  `𝔽₂` is for the Evens norm, it is lifted (`trivialF2` carries `ULift (ZMod 2)`). The **only**
+  declarations pinned to `Type 0` are the three comparisons with Mathlib's discrete
+  `groupCohomology`, `explicitH0IsoGroupCohomology` and its two siblings, because `Rep k G` puts
+  `k` and `G` in one universe (Mathlib #33608) and `k` here is `ℤ`; they carry their own binders,
+  and lifting that restriction upstream makes them polymorphic by deleting those binders.
+  ⚠ Do not restrict any other statement to `Type 0` to make an
+  elaboration problem go away: the arithmetic consumers instantiate `K` in an arbitrary universe,
+  and a `Type 0` signature here forces a `Type 0` section on each of them.
 - **Left actions throughout**, written `g • m`. A right-module statement, if one ever arises, is
   phrased through `Gᵐᵒᵖ`.
 - **Cochains are plain functions with continuity as a predicate.** `C¹(G,M)` is the subgroup of
@@ -1123,6 +1140,11 @@ layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
   ```
   induced by the algebra map and the fixed-field theorem. Name it, prove it, and use that exact
   map wherever `Kˣ` is the source of a cohomological construction; do not write the two as equal.
+  As a coefficient module `(Kˢ)ˣ` is fixed once, as `UnitsCoeff K = Additive (Kˢ)ˣ` with the
+  transported action, the discrete topology and continuity of the action installed as instances,
+  exactly as for `KummerCoeff`. This is the module Hilbert 90 and the cohomological Brauer group
+  are stated at, and a consumer that needs `H^i(G_K, (Kˢ)ˣ)` names it rather than building a
+  second one.
 - **The Kummer coefficient module.** `μₙ` carries the natural `G_K`-action, which is in general
   nontrivial, and continuous cohomology depends on that action. So the coefficient object is fixed
   once, as `KummerCoeff K n = Additive μₙ` with the transported action and the discrete topology,
@@ -1144,7 +1166,8 @@ layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
   Prove it by Layer 4's colimit from the pin's finite-level `groupCohomology.hilbert90`
   (`H1ofAutOnUnitsUnique`) through Layer 3's finite comparison and the dictionary above, citing the
   named quotient and fixed-field equivalences rather than "by Layer 4". Then specialize to
-  `L = Kˢ`. Layer 4 makes this proof possible. Write the proof so that a reader can see this.
+  `L = Kˢ`, which is the exported `hilbert90`, stated at `UnitsCoeff K` against the canonical
+  carrier. Layer 4 makes this proof possible. Write the proof so that a reader can see this.
   ⚠ The pin's `Rep` universe restriction (`k` and `G` in one universe, tracked in Mathlib #33608)
   touches exactly this comparison. Keep the profinite statement universe-clean and confine any
   workaround to the finite-level step.
@@ -1153,7 +1176,10 @@ layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
   1. Surjectivity of the `n`-th power map on `(Kˢ)ˣ`: for `a ≠ 0`, `Xⁿ - a` is separable when `n`
      is invertible, and `Kˢ` is separably closed (`SeparableClosure.isSepClosed`).
   2. The short exact sequence `1 → μₙ → (Kˢ)ˣ → (Kˢ)ˣ → 1` of discrete `G_K`-modules, with `μₙ` the
-     `n`-torsion subgroup, named as a type used by the rest of the layer.
+     `n`-torsion subgroup, as `kummerShortExact`, a `DiscreteShortExact` whose two maps are pinned
+     to the named `kummerCoeffIncl` and `unitsCoeffPow`. Its long exact sequence is what puts
+     `H²(G_K, μₙ)` inside the cohomological Brauer group: `h2KummerToUnits` is injective by
+     Hilbert 90, with image the `n`-torsion.
   3. The subgroup of `n`-th powers `(Kˣ)ⁿ = (powMonoidHom n : Kˣ →* Kˣ).range` and the quotient
      type `Kˣ ⧸ (Kˣ)ⁿ`, again named.
   4. The connecting map `δ⁰ : Kˣ → H¹(G_K, μₙ)` from Layer 5, and the explicit cocycle description:
@@ -1182,6 +1208,24 @@ layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
   explicitly. These are the compatibilities that
   the Local Fields roadmap and
   the Quadratic Form Invariants roadmap consume.
+- **The field-extension bridge.** The operations of Layers 1, 10 and 13 are indexed by a
+  **subgroup** of the ambient group, and a finite separable `L/K` supplies one only after an
+  embedding is chosen. Both halves of the passage are targets here, not a consumer's work:
+  `galoisSubgroup K L σ`, the open subgroup cut out by the embedding, with `galoisSubgroup_index`
+  saying its index is `[L : K]`; and `galoisSubgroupEquiv`, the isomorphism of **topological**
+  groups `G_L ≃ₜ* galoisSubgroup K L σ`, from which `galoisF2Iso` transports `𝔽₂`-cohomology.
+  On top of those, `galoisRes`, `galoisCor` and `galoisEvens` are Layer 1's `res`, Layer 10's
+  `corestriction` and Layer 13's `evensNormIndexTwo` read through the transport, each with a real
+  body so that no second copy of those operations exists, together with `galoisConj` for the
+  conjugate class of a quadratic extension. Their laws are targets too: the two cup
+  compatibilities, functoriality in a tower, and independence of the embedding
+  (`galoisRes_embedding_independent` and its two companions), which is what makes every statement
+  downstream a statement about `L/K` rather than about a chosen `σ`. A consumer that built these
+  adapters itself would be building restriction, corestriction and the norm a second time, with
+  nothing saying that its copies agreed with these. The coefficients are the trivial `𝔽₂` object,
+  because that is where the Evens norm lives; at other coefficients a consumer uses `res` and
+  `corestriction` at `galoisSubgroup` directly, together with whatever coefficient comparison its
+  own modules need.
 - **The mod-2 specialization.** Under `h2 : IsUnit (2 : K)`, with `μ₂ = {±1} ⊆ K` carrying the
   trivial action and `𝔽₂ = ZMod 2` written additively: the Kummer class `[a] ∈ H¹(G_K, 𝔽₂)` with
   cocycle `g ↦ 0` if `g √a = √a` and `1` otherwise, the square-class isomorphism
@@ -1478,6 +1522,11 @@ Layer 12.
   `evensCorCochain`, `evensGraphCochain` with its cocycle theorem, and the class `graphClass`,
   which the general norm's index-2 specialization `evensNormIndexTwo` agrees with by
   `evensNorm_eq_graphClass`. Independence of the choice of `s`, as an explicit coboundary.
+  ⚠ The element `s` is data of the **cochain** formulas and of nothing else. `graphClass` and the
+  four identities below take only `(G : U) = 2`, and `graphClass_eq_cochainClass` ties the class to
+  the cochain at every `s ∉ U` rather than at one. Do not bundle `(G : U) = 2` with a chosen `s`
+  into a structure and carry it in the exported signatures: that makes every identity a statement
+  about the choice, and independence of the choice is a theorem here.
   ⚠ `b₁` and `b_s` are **cochains and not cocycles**, so neither has a class in `H¹(G, 𝔽₂)`. For
   `G = C₄ = ⟨σ⟩`, `U = ⟨σ²⟩` and `α ≠ 0`, the values of `b₁` at `1, σ, σ², σ³` are `0, 1, 1, 0`,
   so `b₁(σ · σ) = 1` while `b₁(σ) + b₁(σ) = 0`. Only the sum is a cocycle, so identity 3 below is
@@ -1493,6 +1542,13 @@ Layer 12.
   3. `evensNorm_cor_shapiro`, `cor¹ α = b₁ + b_s`, agreeing with Layer 6's transversal formula at
      the transversal `{1, s}`;
   4. `evensNorm_identity_infl`, compatibility with inflation.
+
+  The conjugate `s · α` in the first two is `evensConj`, defined as `res ∘ cor - id` on
+  `H^n(U, 𝔽₂)`. That is what makes it choice-free: at index two `res ∘ cor` is `1 + s` for either
+  element of the nontrivial coset, so the difference is the conjugation and nothing in it depends
+  on a representative. The identification with conjugation by a named element is
+  `evensConj_eq_conjMapOf`, against Layer 10's `conjMapOf`, and it holds for every `s ∉ U`. Only
+  identity 3 mentions an element outside `U`, because its right-hand side is a cochain formula.
 
   These four are all that
   the Quadratic Form Invariants roadmap's
