@@ -23,6 +23,7 @@ body:
         - ContourIntegration
         - Exchangeability
         - GeometricTopology
+        - GlobalQuadraticForms
         - HeegaardFloer
         - JacobianChallenge
         - ModularForms
