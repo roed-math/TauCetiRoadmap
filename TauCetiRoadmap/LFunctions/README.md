@@ -346,10 +346,28 @@ Specialize `ArithmeticDirichletSeries.landau` to the finite-order Hecke family. 
 `3-4-1` nonnegative coefficient combination and use it to show that a nontrivial primitive
 finite-order Hecke L-function has no zero on `Re s = 1`.
 
+Retain the two reviewed hypothesis packages rather than hiding their assumptions in this
+specialization. `CancellingFamily` is indexed by a finite commutative character group, is closed
+under products and conjugation, and requires cancellation of every norm twist of each
+**nontrivial** member. Its identity law applies only to good ideals, where good explicitly includes
+`I ≠ ⊥`. `UnitaryCancelling` treats one possibly infinite-order unitary character: it excludes pure
+norm twists and allows the square of each boundary twist either to be another norm twist or to
+cancel. Requiring the square always to cancel incorrectly excludes quadratic characters; requiring
+the trivial member's nonzero norm twists to cancel makes the finite-family package uninhabitable.
+
 The square twist has three cases: nontrivial, trivial because the character has order two, and a
 nonunitary norm twist. The trivial-square case contributes a zeta pole; it cannot be discarded by
 an invalid cancellation. State the Grossencharacter boundary as `Re s = 1+shift` and reduce it to
 the unitary statement by recentering.
+
+Keep nonvanishing in meromorphic-order form at poles: `dedekindZetaC K` has order `-1` at `1` and
+order `0` at `1+it` for `t ≠ 0`; a nontrivial family member has order `0` for every real `t`.
+Construct the `UnitaryCancelling` premise for every Grossencharacter outside the pure-norm-twist
+exception rather than taking that premise as an extra hypothesis.
+
+As the load-bearing acceptance example, prove Hecke's angular equidistribution of Gaussian primes
+using the infinite-order characters `𝔞 ↦ (α/|α|)^(4k)`. This example cannot be discharged through a
+finite character family and detects an infinity-type interface that merely typechecks.
 
 This layer proves no zero-free region, no zero counting, and no explicit formula. Those are
 downstream uses of the named nonvanishing theorem and completed cards.
@@ -407,6 +425,15 @@ Add examples over `ℚ`, `ℚ(i)`, a real quadratic field, and an `S₃` extensi
 exercise a convention that is invisible in the easiest case: an odd real gamma factor, a complex
 place multiplicity, a nontrivial dual, an imprimitive Euler factor, or a genuinely nonabelian
 Artin representation.
+
+Retain two number-field zeta specializations of the shared arithmetic-series infrastructure:
+
+- on `Re s > 1`, the norm-regrouped ideal von Mangoldt series is exactly
+  `-ζ'_K(s)/ζ_K(s)`, with the summability required by Tauberian consumers;
+- Mertens' product has constant `exp(γ) * κ_K`, where
+  `κ_K = Res_(s=1) ζ_K(s)`. The generic sum/product transfer belongs to Arithmetic Dirichlet
+  Series, but this residue specialization belongs here. The mandatory non-rational test is
+  `K = ℚ(√-5)`, where `κ_K = π/√5`; omitting the residue passes the rational test and is false.
 
 ## Ordering and parallelism
 

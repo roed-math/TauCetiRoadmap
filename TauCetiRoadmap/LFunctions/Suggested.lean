@@ -26,7 +26,9 @@ noncomputable section
 universe u v w
 
 namespace ADS
-export TauCetiRoadmap.ArithmeticDirichletSeries (IdealWeight normCoeff EulerProductData)
+export TauCetiRoadmap.ArithmeticDirichletSeries
+  (IdealWeight normCoeff EulerProductData idealVonMangoldt HasCancellation
+    continuedLFunctionOfWeight)
 end ADS
 
 namespace GNF
@@ -377,6 +379,41 @@ noncomputable def grossenFullWeight
 noncomputable def grossenArchimedeanFactor
     (infinityType : GNF.InfinityType K) (shift : ℝ) (x : Kˣ) : ℂ := sorry
 
+/-- The finite-family hypotheses used by the `3-4-1` argument. Cancellation of norm twists is
+required only for nontrivial members; the identity member supplies the zeta pole. -/
+structure CancellingFamily (G : Type*) [CommGroup G] [Fintype G]
+    (w : G → ADS.IdealWeight K) : Prop where
+  map_mul : ∀ g h : G, ∀ I : Ideal (𝓞 K),
+    (w (g * h)).toFun I = (w g).toFun I * (w h).toFun I
+  map_one : ∀ I : Ideal (𝓞 K),
+    TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.IsGood K (w 1) I →
+      (w 1).toFun I = 1
+  cancellation : ∀ g : G, g ≠ 1 → ADS.HasCancellation K (w g)
+  conj : ∀ g : G, ∃ h : G, ∀ I : Ideal (𝓞 K),
+    (w h).toFun I = starRingEnd ℂ ((w g).toFun I)
+  cancellation_normTwist : ∀ g : G, g ≠ 1 → ∀ t : ℝ,
+    ADS.HasCancellation K
+      (TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.normTwist K (w g) t)
+
+/-- Hypotheses for one possibly infinite-order unitary character. The square of a twist may be a
+pure norm twist or may cancel; requiring cancellation in all cases excludes quadratic examples. -/
+structure UnitaryCancelling (χ : ADS.IdealWeight K) : Prop where
+  not_normTwist : ∀ u : ℝ,
+    ¬ TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.IsNormTwistOnGood K χ u
+  cancellation : ADS.HasCancellation K χ
+  cancellation_conj : ADS.HasCancellation K
+    (TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.conj K χ)
+  cancellation_normTwist : ∀ t : ℝ, ADS.HasCancellation K
+    (TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.normTwist K χ t)
+  square_twist : ∀ t : ℝ,
+    (∃ u : ℝ,
+      TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.IsNormTwistOnGood K
+        (TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.sq K
+          (TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.normTwist K χ t)) u) ∨
+      ADS.HasCancellation K
+        (TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.sq K
+          (TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.normTwist K χ t))
+
 /-- Analytic presentation of the imported Hecke-character carrier. -/
 structure Grossencharacter
     (K : Type u) [Field K] [NumberField K] (𝔪 : GNF.Modulus K) where
@@ -457,6 +494,48 @@ theorem heckeLFunction_ne_zero_of_one_le_re
     {𝔪 : GNF.Modulus K} (χ : GNF.RayClassCharacter 𝔪)
     (hχ : χ.IsPrimitive) (hχ1 : χ ≠ 1) {s : ℂ} (hs : 1 ≤ s.re) :
     heckeLFunctionC K χ s ≠ 0 := sorry
+
+theorem three_four_one_nonneg (θ : ℝ) :
+    0 ≤ 3 + 4 * Real.cos θ + Real.cos (2 * θ) := sorry
+
+theorem meromorphicOrderAt_dedekindZetaC_one_add {t : ℝ} (ht : t ≠ 0) :
+    meromorphicOrderAt (dedekindZetaC K) (1 + t * I) = (0 : WithTop ℤ) := sorry
+
+/-- Outside the pure-norm-twist exception, the reviewed single-character premise is constructed
+from the ray-class and archimedean inputs rather than assumed by the final theorem. -/
+theorem Grossencharacter.unitaryCancelling
+    {𝔪 : GNF.Modulus K} (χ : Grossencharacter K 𝔪)
+    (hexc : ∀ u : ℝ,
+      ¬ TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.IsNormTwistOnGood K
+        χ.unitaryWeight u) :
+    UnitaryCancelling K χ.unitaryWeight := sorry
+
+theorem Grossencharacter.meromorphicOrderAt_lFunctionC
+    {𝔪 : GNF.Modulus K} (χ : Grossencharacter K 𝔪)
+    (h : UnitaryCancelling K χ.unitaryWeight) (t : ℝ) :
+    meromorphicOrderAt (Grossencharacter.lFunctionC K χ)
+      ((1 : ℂ) + (χ.shift : ℂ) + t * I) = (0 : WithTop ℤ) := sorry
+
+/-- Hecke's angular equidistribution of Gaussian primes, the infinite-order acceptance test for
+the Grossencharacter interface. -/
+theorem equidistribution_gaussianPrimes (F : Type*) [Field F] [NumberField F]
+    [IsCyclotomicExtension {4} ℚ F] (v : InfinitePlace F) (hv : v.IsComplex)
+    (a b : ℝ) (ha : 0 ≤ a) (hab : a ≤ b) (hb : b ≤ Real.pi / 2) :
+    Tendsto
+      (fun x : ℝ ↦
+        (Nat.card {𝔭 : HeightOneSpectrum (𝓞 F) // (Ideal.absNorm 𝔭.asIdeal : ℝ) ≤ x ∧
+            ∃ α : 𝓞 F, 𝔭.asIdeal = Ideal.span {α} ∧
+              (v.embedding (algebraMap (𝓞 F) F α)).arg ∈ Set.Icc a b} : ℝ) /
+          (Nat.card {𝔭 : HeightOneSpectrum (𝓞 F) //
+            (Ideal.absNorm 𝔭.asIdeal : ℝ) ≤ x} : ℝ))
+      atTop (𝓝 ((b - a) / (Real.pi / 2))) := sorry
+
+/-- Dedekind-zeta specialization of the generic ideal von Mangoldt transform. -/
+theorem dedekindZeta_logDeriv_eq {s : ℂ} (hs : 1 < s.re) :
+    (∑' I : Ideal (𝓞 K),
+      ADS.idealVonMangoldt K (TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.one K) I /
+        (Ideal.absNorm I : ℂ) ^ s) =
+      -deriv (dedekindZeta K) s / dedekindZeta K s := sorry
 
 /-! ## Layer 8: Artin L-functions and formalism -/
 
