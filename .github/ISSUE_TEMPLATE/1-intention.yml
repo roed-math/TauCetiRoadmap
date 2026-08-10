@@ -23,14 +23,19 @@ body:
         - ContourIntegration
         - Exchangeability
         - GeometricTopology
+        - GlobalClassFieldTheory
         - HeegaardFloer
         - JacobianChallenge
+        - LFunctions
+        - LocalFields
         - ModularForms
         - Multiquadratic
+        - NumberFieldArithmetic
         - OneParameterSemigroups
         - OptimalTransport
         - OrthogonalL2Bases
         - PDE
+        - ProfiniteCohomology
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers
