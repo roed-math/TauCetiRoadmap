@@ -33,28 +33,42 @@ its authors, and make the corresponding statement a milestone here.
 
 ## Migration: what a later supplier would replace, and how
 
-**None of this is normative.** The README's dependency table lists only the accepted modular
-forms roadmap and Mathlib, and every milestone is executable against those. This section records
-what could later be deleted, so that the roadmap does not carry merge instructions in its
-normative text.
+**None of this is normative.** This section records the dated state of the ecosystem around the
+roadmap, and the migrations it has already made.
 
-- **Layer 5.1 and Layer 1.7's ray class group.** The global class field theory roadmap is
-  expected to own the ray class group and its characters. If it is accepted, `Modulus`,
-  `Modulus.coprimeIdeals`, `Modulus.rayPrincipal`, `Modulus.RayClassGroup`, `Modulus.classMap`
-  and `RayClassCharacter` here become named adapters to its carrier, and every statement of 5.2
-  to 5.9 stands unchanged, because they are stated in terms of the derived `weight` and of `→*`
-  operations. Aligning the two vocabularies early makes that adapter short; the character
-  vocabulary should also be aligned with Mathlib #40735 and #40736.
-- **Layer 6.1.** The same for the infinity-type carrier. ⚠ Any adapter must keep the unitary
-  weight and the full weight apart, and must carry the finite character: the carrier is the
-  ideal-side packaging of Neukirch VII (6.9), and the dictionary to an idele-side
-  `HeckeCharacter` in the shape of Mathlib #40736 is (6.11) to (6.14). See the corrections
-  recorded below.
-- **Layer 8.0.** The number field arithmetic roadmap is expected to own the Frobenius class. If
-  it is accepted, `chosenPrimeOver` and `frobeniusClass` here become an adapter to its
-  declaration, and `frobeniusClass_restrictNormalHom` and `frobeniusClass_pow_inertiaDeg` become
-  citations. Everything in 8A to 8E is stated against the named `frobeniusClass` and takes no
-  interface parameter, so nothing else changes.
+**The three carrier migrations are DONE, 2026-08-09**, from the group review of the open
+roadmaps, which ruled that constructing the carriers here was duplicate ownership rather than
+independence. The README's contract sections are the normative record; this is the dated context.
+
+- **Layers 1.7 and 5.1.** The prediction below was right, and the migration cost what it
+  predicted. `Modulus`, `RayClassGroup`, `idealClass`, `classMap`, `finiteUnitsMap`,
+  `finite_rayClassGroup` and `RayClassCharacter` with `induced`, `IsPrimitive` and
+  `not_isPrimitive_one` are Global Class Field Theory's, and the aliases here are reducible
+  abbreviations of them. Every statement of 5.2 to 5.9 stood unchanged, because they are stated
+  in terms of the derived `weight` and of `→*` operations — which is why aligning the two
+  vocabularies early was worth doing. The supplier gained the names in one commit; none of its
+  statements moved. The character vocabulary should still be aligned with Mathlib #40735 and
+  #40736.
+  ⚠ One adapter was genuinely needed and is owned here: the supplier types the infinite part of a
+  modulus by **real places**, as a subtype, and the archimedean data of Layers 5 and 6 is indexed
+  by all infinite places. `Modulus.realPlaces` is the image, defined from the supplier's field.
+- **Layer 6.1.** Migrated differently from the prediction, and better. The carrier here is not an
+  adapter to `HeckeCharacter`: it is a **presentation** of one, in the sense of Neukirch VII
+  (6.9), with `toHeckeCharacter` to the object presented, `toHeckeCharacter_shift` against the
+  supplier's 3.5 decomposition, `exists_presentation` for the surjectivity half of (6.9), and
+  `toHeckeCharacter_ofRayClassCharacter` tying it to Layer 5. The warning below held: the
+  presentation keeps the unitary weight and the full weight apart and carries the finite
+  character, and every correction recorded further down survives in its fields. The idele-side
+  dictionary in the shape of Mathlib #40736 is (6.11) to (6.14).
+- **Layer 8.0.** `chosenPrimeOver` and `mem_frobeniusClass_iff` are **deleted**. `frobeniusClass`
+  is defined as Number Field Arithmetic's `artinSymbol`, and `frobeniusClass_restrictNormalHom`
+  and `isArithFrobAt_pow_inertiaDeg` are closed proofs of that roadmap's
+  `artinSymbol_map_restrictNormalHom` and `exists_isArithFrobAt_pow_inertiaDeg`, which its Layer
+  2.4 had promised in prose and now names. Everything in 8A to 8E is stated against
+  `frobeniusClass` and takes no interface parameter, so the only other change is that the
+  unramifiedness proof became an argument of the definition and the density sets became
+  dependent existentials — a total class would need a junk value at ramified primes, and every
+  density set would have silently contained it.
 - **Layer 8A.1.** `primeIdealZetaSum` and `HasDirichletDensity` are built in the exact shape of
   Mathlib's `NumberTheory/NumberField/DirichletDensity.lean`, namespace `NumberField.Set`. When
   the project pin advances past that file, delete the two definitions here and import Mathlib's.
@@ -68,9 +82,10 @@ normative text.
 The README states mathematics and nothing else. These are the conversations that should happen
 around it, and none of them is a prerequisite of any milestone.
 
-- **Before Layer 5**, agree the ray-class character vocabulary with the global class field theory
-  roadmap.
-- **Before Layer 6**, the same for the infinity-type carrier and milestone 6.1.
+- **Before Layer 5**, the ray-class character vocabulary is settled: it is Global Class Field
+  Theory's, consumed by name, and the README's contract section is the list.
+- **Before Layer 6**, the same for milestone 6.1: the Hecke character is that roadmap's, and what
+  is built here is a presentation of one.
 - **Before Layer 8**, contact the people working on Chebotarev in Lean, listed below.
 - **Before Layer 9**, contact PrimeNumberTheoremAnd about Wiener–Ikehara, milestone 9.1.
 - **Milestone 8E has one proof**, the analytic one. The classical second proof runs through Artin
