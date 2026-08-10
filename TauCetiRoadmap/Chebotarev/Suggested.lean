@@ -32,19 +32,19 @@ noncomputable def pow {G : Type*} [Monoid G] (C : ConjClasses G) (j : ℕ) : Con
   sorry
 
 theorem mem_pow_iff {G : Type*} [Monoid G] (C : ConjClasses G) (j : ℕ) (τ : G) :
-    τ ∈ C.pow j ↔ ∃ σ ∈ C, σ ^ j = τ := sorry
+    τ ∈ (pow C j).carrier ↔ ∃ σ ∈ C.carrier, σ ^ j = τ := sorry
 
-@[simp] theorem pow_zero {G : Type*} [Monoid G] (C : ConjClasses G) : C.pow 0 = 1 := sorry
+@[simp] theorem pow_zero {G : Type*} [Monoid G] (C : ConjClasses G) : pow C 0 = 1 := sorry
 
-@[simp] theorem pow_one {G : Type*} [Monoid G] (C : ConjClasses G) : C.pow 1 = C := sorry
+@[simp] theorem pow_one {G : Type*} [Monoid G] (C : ConjClasses G) : pow C 1 = C := sorry
 
 theorem pow_mul {G : Type*} [Monoid G] (C : ConjClasses G) (i j : ℕ) :
-    (C.pow i).pow j = C.pow (i * j) := sorry
+    pow (pow C i) j = pow C (i * j) := sorry
 
 /-- **Layer 11 regression**, the nonidentity square in `C₄`. A quadratic group cannot test this
 case because it has no proper nonidentity square. -/
 theorem pow_two_cyclicFour :
-    (ConjClasses.mk (Multiplicative.ofAdd (1 : ZMod 4))).pow 2 =
+    pow (ConjClasses.mk (Multiplicative.ofAdd (1 : ZMod 4))) 2 =
       ConjClasses.mk (Multiplicative.ofAdd (2 : ZMod 4)) := sorry
 
 end ConjClasses
@@ -69,7 +69,7 @@ theorem disjoint_frobeniusPrimeSet {C D : ConjClasses (L ≃ₐ[K] L)} (h : C �
     Disjoint (frobeniusPrimeSet K L C) (frobeniusPrimeSet K L D) := sorry
 
 /-- **Layer 2**, the finite exceptional set. -/
-noncomputable def ramifiedPrimes : Finset (HeightOneSpectrum (𝓞 K)) := sorry
+noncomputable def ramifiedPrimes (_L : Type*) : Finset (HeightOneSpectrum (𝓞 K)) := sorry
 
 theorem mem_ramifiedPrimes_iff (𝔭 : HeightOneSpectrum (𝓞 K)) :
     𝔭 ∈ ramifiedPrimes K L ↔
@@ -130,7 +130,7 @@ variable (K L : Type*) [Field K] [NumberField K] [Field L] [NumberField L]
   [Algebra K L] [IsGalois K L]
 
 /-- **Layers 7--8**, elements of the auxiliary cyclic group whose order is divisible by `f`. -/
-def taggedElements {H : Type*} [Group H] [Fintype H] (f : ℕ) : Finset H :=
+noncomputable def taggedElements {H : Type*} [Group H] [Fintype H] (f : ℕ) : Finset H :=
   Finset.univ.filter fun τ => f ∣ orderOf τ
 
 /-- **Layer 8**, the lower-bound constant from one auxiliary prime. -/
@@ -169,7 +169,8 @@ noncomputable def frobeniusVonMangoldtCoeff (C : ConjClasses (L ≃ₐ[K] L)) (n
       Ideal.absNorm p.1.asIdeal ^ p.2 = n ∧
       ∃ (hur : ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver p.1.asIdeal],
           Algebra.IsUnramifiedAt (𝓞 K) Q),
-        (TauCetiRoadmap.NumberFieldArithmetic.artinSymbol p.1.asIdeal hur).pow p.2 = C},
+        TauCetiRoadmap.Chebotarev.ConjClasses.pow
+          (TauCetiRoadmap.NumberFieldArithmetic.artinSymbol p.1.asIdeal hur) p.2 = C},
     Real.log (Ideal.absNorm (p : HeightOneSpectrum (𝓞 K) × ℕ).1.asIdeal)
 
 theorem frobeniusVonMangoldtCoeff_nonneg (C : ConjClasses (L ≃ₐ[K] L)) (n : ℕ) :
