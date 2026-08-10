@@ -24,8 +24,10 @@ stating a milestone:
 Every carrier and every cross-subject interface in this file compiles as a named declaration.
 That includes `artinSymbol` with `artinSymbol_map_restrictNormalHom` and
 `exists_isArithFrobAt_pow_inertiaDeg`, the carrier `idealsAway` with `idealsAwayInclusion`,
-`artinHomAway`
-with `integralIdealsAway` and `artinHomAwayIntegral`, `exists_gal_fullCycleType_eq_factorizationType`,
+`artinHomAway` with its four properties `artinHomAway_apply_prime`,
+`artinHomAway_eq_of_apply_prime`, `artinHomAway_mono` and `artinHomAway_restrict`,
+`integralIdealsAway` with `integralIdealsAwayHom`, `artinHomAwayIntegral` with
+`artinHomAwayIntegral_apply_prime`, `exists_gal_fullCycleType_eq_factorizationType`,
 `relDiscr`, `ramifiedSupport`, the three
 Layer 5 comparison maps, `localRamificationGroup`, and the unit-certificate candidate sets
 `unitCandidates` and `cubicUnitCandidates`. Where a comparison needs an object that a
@@ -293,8 +295,11 @@ variable {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
   (hur : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
     ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q)
 
-/-- **Layer 2.5, the value at a prime.** -/
-example (I : idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉ S)
+/-- **Layer 2.5, the value at a prime.** Consumed by name: the global class field theory roadmap
+imports this map rather than building a second one, and recognizes its own construction through
+this equation and the uniqueness below. -/
+theorem artinHomAway_apply_prime (I : idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K))
+    (hv : v ∉ S)
     (hI : ((I : (FractionalIdeal (𝓞 K)⁰ K)ˣ) : FractionalIdeal (𝓞 K)⁰ K) =
       (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K))
     (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal] (σ : L ≃ₐ[K] L)
@@ -304,7 +309,7 @@ example (I : idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉
 
 /-- **Layer 2.5, the values on primes determine the map.** With the generation statement above,
 this is what lets a reciprocity layer recognize its own construction as this one. -/
-example (φ : idealsAway (K := K) S →* (L ≃ₐ[K] L))
+theorem artinHomAway_eq_of_apply_prime (φ : idealsAway (K := K) S →* (L ≃ₐ[K] L))
     (hφ : ∀ (I : idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K)), v ∉ S →
       ((I : (FractionalIdeal (𝓞 K)⁰ K)ˣ) : FractionalIdeal (𝓞 K)⁰ K) =
         (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K) →
@@ -317,7 +322,7 @@ example (φ : idealsAway (K := K) S →* (L ≃ₐ[K] L))
 smaller carrier, as homomorphisms on `idealsAway S'`. This is the statement that a reciprocity
 layer needs when it enlarges the excluded set to the support of a modulus, and an inequality of
 carriers is not a substitute for it. -/
-example (S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S')
+theorem artinHomAway_mono (S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S')
     (hur' : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S' →
       ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q) :
     artinHomAway (L := L) hab S' hur' =
@@ -330,8 +335,8 @@ map of `L/K` to the Artin map of `M/K` on the same carrier. ⚠ There is one exc
 unramified hypothesis: the right-hand side takes the *derived*
 `isUnramifiedAway_of_intermediateField M S hur`, not a second assumption. Its proof also needs
 Layer 2.4, which is what relates a Frobenius of `L/K` to a Frobenius of `M/K`. -/
-example (M : IntermediateField K L) [NumberField M] [Normal K M] [IsGalois K M]
-    (habM : ∀ σ τ : M ≃ₐ[K] M, Commute σ τ) :
+theorem artinHomAway_restrict (M : IntermediateField K L) [NumberField M] [Normal K M]
+    [IsGalois K M] (habM : ∀ σ τ : M ≃ₐ[K] M, Commute σ τ) :
     (AlgEquiv.restrictNormalHom (F := K) M).comp (artinHomAway (L := L) hab S hur) =
       artinHomAway (L := M) habM S (isUnramifiedAway_of_intermediateField M S hur) :=
   sorry
@@ -345,7 +350,7 @@ noncomputable def artinHomAwayIntegral :
 
 /-- **Layer 2.5, the value of the integral Artin homomorphism at a prime.** With the generation
 statement above, this determines it. -/
-example (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉ S)
+theorem artinHomAwayIntegral_apply_prime (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉ S)
     (hmem : v.asIdeal ∈ integralIdealsAway (K := K) S)
     (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal] (σ : L ≃ₐ[K] L)
     (hσ : IsArithFrobAt (𝓞 K) σ Q) :

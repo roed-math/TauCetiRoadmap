@@ -109,7 +109,9 @@ What this roadmap supplies to other subjects:
 - the polynomial-side Dedekind theorem `exists_gal_fullCycleType_eq_factorizationType`
   (Layer 3.10);
 - the `S_n`-embedding of the Galois closure of a number field (Layer 7);
-- the ideal-theoretic Artin map `artinHomAway` (Layer 2);
+- the ideal-theoretic Artin map `artinHomAway`, with `artinHomAway_apply_prime`,
+  `artinHomAway_eq_of_apply_prime`, `artinHomAway_mono`, `artinHomAway_restrict`, and the integral
+  form `artinHomAwayIntegral` with `artinHomAwayIntegral_apply_prime` (Layer 2.5);
 - the Artin symbol `artinSymbol` with its functoriality, `artinSymbol_map_restrictNormalHom` and
   `exists_isArithFrobAt_pow_inertiaDeg` (Layers 2.3 and 2.4);
 - the local-field instance on `v.adicCompletion K`, and the localization of the different
@@ -714,8 +716,15 @@ Milestones, in order:
 - *Comparison lemmas and naturality.* The value at a prime, which determines the map.
 - *Edge cases.* `S = ∅`, allowed only when `L/K` is unramified everywhere; `L = K`, where the map
   is trivial.
-- *Downstream interfaces.* A global class field theory roadmap uses this map without change.
-  For that reason the carrier is `(FractionalIdeal (𝓞 K)⁰ K)ˣ`, and not a new type.
+- *Downstream interfaces.* The global class field theory roadmap uses this map without change,
+  and by name. For that reason the carrier is `(FractionalIdeal (𝓞 K)⁰ K)ˣ`, and not a new type.
+
+**These are consumed by name, so items 4 to 7 carry Lean names**, and their signatures are a
+contract: `artinHomAway_apply_prime`, `artinHomAway_eq_of_apply_prime`, `artinHomAway_mono`,
+`artinHomAway_restrict`, and `artinHomAwayIntegral_apply_prime`. ⚠ The consumer's abelian
+hypothesis is `[IsAbelianGalois K L]` and this roadmap's is `[IsGalois K L]` together with an
+explicit `hab : ∀ σ τ, Commute σ τ`. Those are two presentations of one hypothesis, and
+translating between them is the consumer's adapter, not a second Artin map here.
 
 Its kernel, its image, and its factorization through ray class groups are not stated here.
 
