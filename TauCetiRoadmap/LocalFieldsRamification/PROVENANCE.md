@@ -34,24 +34,34 @@ corresponding implementation work begins.
 ### `kbuzzard/ClassFieldTheory`
 
 Revision `ccc3323c6750abca25b49b35106f54eb3a398509` (checked 2026-08-06), Apache-2.0.
-The project contains substantial local-field and unramified-extension infrastructure. Work that
-has landed in Mathlib is consumed from Mathlib. Any adaptation of unmerged code or proof
-structure requires maintainer contact and an explicit record of the outcome. Its finite Tate,
-class-formation, and reciprocity work is now relevant to the separate `ClassFieldTheory`
-roadmap, not to this one.
+At that revision the project had sorry-free local-field instances, the valuation exact sequence,
+canonical finite unramified extensions and `maximalUnramified`, the Teichmuller character, and
+the `IsNonarchimedeanLocalField ℚ_[p]` instance. Positive-degree vanishing for unramified
+units, the local-unit Herbrand quotient, the fundamental class, and the Artin map were still
+open. The relevant files were `IsNonarchimedeanLocalField/ValuationExactSequence.lean`,
+`IsNonarchimedeanLocalField/Unramified.lean`, `LocalCFT/Teichmuller.lean`, and `Qp.lean`.
+
+Work that has landed in Mathlib is consumed from Mathlib. Any adaptation of unmerged code or
+proof structure requires maintainer contact and an explicit record of the outcome. Its finite
+Tate, class-formation, and reciprocity work is now relevant to the separate
+`ClassFieldTheory` roadmap, not to this one.
 
 ### `Akwardbro/RamificationGroup`
 
 Revision `c3fd8515a8e35c2876057ab59f4751be6638f3ab` (checked 2026-08-06). No licence file was found.
-The repository is prior art for lower and upper ramification groups and Herbrand functions, but
-no code, comments, or project-specific organization may be transferred without licence
-clarification and author permission.
+The repository is prior art for lower and upper ramification groups and Herbrand functions. At
+that revision it was built on the `mariainesdff` stack rather than
+`IsNonarchimedeanLocalField`, development had stopped in March 2026, and roughly 27 of 41 files
+still contained `sorry`. No code, comments, or project-specific organization may be transferred
+without licence clarification and author permission.
 
 ### `mariainesdff/LocalClassFieldTheory`
 
 Revision `9ebdafa0b464df096037c10a2597c40f7e046602` (checked 2026-08-06). No licence file was found.
-Its valuation-extension work that landed in Mathlib is consumed there. Unmerged code remains
-citation-only unless the licence and permission are clarified.
+At that revision it had complete-DVR local fields and uniqueness of valuation extension, an
+empty `ClassFormation.lean`, and no Lubin–Tate theory; development had stopped in July 2025. Its
+valuation-extension and spectral-norm work that landed in Mathlib is consumed there. Unmerged
+code remains citation-only unless the licence and permission are clarified.
 
 ### `davidturturean/gq2-lean-turturean`
 
@@ -65,6 +75,13 @@ The roadmap follows Mathlib's `ValuativeRel` and `IsNonarchimedeanLocalField` vo
 but no complete upstream implementation of higher ramification groups or Herbrand functions.
 An open Mathlib pull request is never a reason to block a milestone: implement the agreed Tau
 Ceti API, then replace it with an upstream declaration when one lands.
+
+The 2026-08-06 source audit tracked the `ValuativeRel` work in Mathlib PRs #26886, #26885,
+#26827, #40309, #36769, #40315, #30135, #27181, #27180, and #38009; the ring-level
+ramification/inertia work in #41591, #35808, #36843, #35991, #36733, #37031, #40955, #40387,
+and #40952; and the formal-group work in #38213, #36167, and #41710. These are dated watch
+items, not dependencies. No open Mathlib pull request implementing the higher ramification
+groups or Herbrand functions required here was found in that audit.
 
 The accepted continuous-cohomology carrier belongs to `ProfiniteCohomology`; this roadmap does
 not create a competing carrier. Abstract pro-`p` Sylow and free-group theory belongs to
