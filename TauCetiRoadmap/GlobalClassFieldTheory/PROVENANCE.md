@@ -191,6 +191,20 @@ would not have grounded them.
   supplied here in cyclic form by 5.5), 58:7 (quaternary descent along `K(√d)`), 63:14 (unit-entry
   isotropy at a non-dyadic place), 42:11 and 42:12 (representation and subspace isotropy).
 
+Two further clarifications from the source, both now in the normative route and neither obvious
+from a summary of the theorem.
+
+- **42:12 is the input to the quaternary square-discriminant subcase**, and it is field-generic: a
+  regular ternary subspace of a regular quaternary space of discriminant `1` is isotropic exactly
+  when the quaternary space is. So the subspace may be taken arbitrary, and no local
+  classification is involved — an earlier revision here attributed the step to "the local rank
+  list", which is the wrong reason for a true statement.
+- **The rank-`≥ 5` induction approximates the coordinates of a vector, not a scalar.** O'Meara
+  writes `β_p = Q(ξ_p x₁ + η_p x₂)`, approximates `ξ` and `η` in `F`, and *defines* `β` as
+  `Q(ξ x₁ + η x₂)`; that is what makes `β` globally represented by the binary summand. Choosing a
+  global scalar in the prescribed local square classes supplies only `-β = Q(y)` and leaves
+  `β = Q(x)` unproved, and the isotropic vector needs both.
+
 Two findings from reading it, both now in the normative text.
 
 1. **The quaternary case is not an instance of the general induction.** That induction needs

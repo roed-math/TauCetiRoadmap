@@ -1024,7 +1024,14 @@ Suggested name for the implementation: `TauCeti.NumberField.QuadraticForm.hasseM
 insufficient — `⟨1, 1, -3⟩` over `ℚ` is indefinite, hence isotropic over `ℝ`, and anisotropic over
 `ℚ` because it is anisotropic over `ℚ₃`. Isotropy at all **but one** place is insufficient too:
 by Hilbert reciprocity the local obstructions multiply to `1`, so a single missing place carries
-the whole failure. -/
+the whole failure.
+
+⚠ Two traps in the proof route, which `README.md` writes out in four cases. The quaternary case is
+not an instance of the rank-`≥ 5` induction, because that induction needs the complement to have
+rank at least `3`. And in that induction the approximation is applied to the **coordinates of a
+vector** of the binary summand, with the scalar defined from the result: approximating a scalar in
+the right local square classes gives only half of the pair `β = Q x`, `-β = Q y` that the
+isotropic vector needs. -/
 theorem hasseMinkowski_isotropic [FiniteDimensional K V] (Q : QuadraticForm K V)
     (hQ : Q.Nondegenerate) :
     ¬ Q.Anisotropic ↔ IsLocallyIsotropic Q :=

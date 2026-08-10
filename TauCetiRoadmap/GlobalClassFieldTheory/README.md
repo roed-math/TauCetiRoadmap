@@ -668,6 +668,10 @@ Route: first prove Artin–Whaples weak approximation, in the form "the image of
 `∏_{v ∈ S} K_v` for a finite set `S` of pairwise inequivalent places". Then read off the
 congruence-and-sign form. The archimedean case is Mathlib's
 `InfinitePlace.denseRange_algebraMap_pi`, and it is the model for the general proof.
+
+**Both forms are deliverables of this milestone**, and the density form is not merely a step of
+the proof. Milestone 11.6 consumes it directly, to approximate the coordinates of a vector at a
+finite set of places that contains real ones, where the congruence-and-sign form would not apply.
 *Source.* Artin–Whaples, as in Janusz IV, Theorem 1.1, p. 137, and Cassels–Fröhlich Ch. II §6.
 *False generalization.* Strong approximation is a different statement. It is false to ask for one
 element that meets the congruence conditions and is integral at every other place. The obstruction
@@ -1828,18 +1832,77 @@ The route is **four cases**, and the case division is part of the milestone.
    `E = K(√θ)` everywhere. The **cyclic Hasse norm theorem of 5.5** then makes `α` a global norm,
    and `Q` is isotropic. This is the step that makes the whole theorem a consequence of class
    field theory.
-3. **Quaternary.** First `d Q = 1`: a regular ternary subspace `U` has `U_v` isotropic wherever
-   `Q_v` is, by the local rank list, so case 3 applies. Then general `d Q`: pass to
-   `E = K(√(d Q))`, where the discriminant becomes a square, and use that a quaternary form is
-   isotropic over `K` exactly when it is isotropic over `K(√(d Q))` — O'Meara 58:7.
+3. **Quaternary.** First the subcase `d Q = 1`. Take **any** regular ternary subspace `U` of `Q`.
+   Then `U_v` is isotropic wherever `Q_v` is, and the reason is O'Meara 42:12, not the local
+   classification: for a regular ternary `U` inside a regular quaternary `V` of discriminant `1`,
+   `V` is isotropic if and only if `U` is. That proposition is **field-generic** — write
+   `V = U ⊥ ⟨α⟩`, get `−α ∈ Q(U)` from the representation criterion, split `U = P ⊥ ⟨−α⟩`, and
+   read `d V = 1` as `d P = −1`, so `P` is a hyperbolic plane — so it applies at every completion
+   at once and nothing local is invoked. The **ternary case, item 2 above**, then makes `U`
+   isotropic over `K`, and so is `Q`.
+
+   Then the general `d Q`: pass to `E = K(√(d Q))`, where the discriminant becomes a square, and
+   use that a quaternary form is isotropic over `K` exactly when it is isotropic over
+   `K(√(d Q))` — O'Meara 58:7.
+
+   ⚠ 42:12 is the ingredient this subcase rests on, and it is an internal statement of this
+   milestone: it is two lines from the consumed representation criterion of Quadratic Form
+   Invariants Layer 0 and the hyperbolic-plane criterion `d P = −1` of its Layer 1, and it is
+   proved once over an arbitrary field rather than at each completion.
 4. **Rank at least five.** Split `Q = U ⊥ W` with `U` binary. The set
    `T = {v : W_v anisotropic}` is **finite**: at almost every finite place the entries of a fixed
    diagonalization are units and the residue characteristic is odd, and a unit-entry form of rank
    at least `3` is isotropic there — O'Meara 63:14, which the consumed 6D isotropy list gives
-   through `hilbertSymbol_unramified`. At each `v ∈ T` pick `β_v` represented by `U_v` and with
-   `−β_v` represented by `W_v`. Use **weak approximation, 0.2**, to find one global `β` in the
-   prescribed square class at every `v ∈ T`. Then `⟨β⟩ ⊥ W` is locally isotropic everywhere, so
-   isotropic by induction, and so is `Q`.
+   through `hilbertSymbol_unramified`. The archimedean places are finitely many, so they cost
+   nothing.
+
+   At each `v ∈ T` choose `x_v ∈ U_v` and `y_v ∈ W_v` with
+
+   ```text
+   β_v := Q(x_v) = − Q(y_v) ≠ 0
+   ```
+
+   — possible because `Q_v` is isotropic, and because a hyperbolic plane is universal when `U_v`
+   is itself isotropic.
+
+   ⚠ **Approximate the vector, not the scalar.** Choose a neighbourhood `N_v` of `x_v` in `U_v`
+   on which `Q(z)/β_v` is a square and `Q(z) ≠ 0`, then use **weak approximation** on the two
+   coordinates of `U` to find a single
+
+   ```text
+   x ∈ U(K)   with image in N_v for every v ∈ T,   and set   β := Q(x).
+   ```
+
+   Both halves now hold. `β` is **globally** represented by `U`, by construction; and `β/β_v` is
+   a square at every `v ∈ T`, so scaling `y_v` by a square root shows `−β` is represented by
+   `W_v` there. Off `T`, `W_v` is already isotropic, hence universal, so it represents `−β` too.
+   So `⟨β⟩ ⊥ W` is locally isotropic everywhere, and the induction hypothesis at rank `n − 1`
+   gives `y ∈ W(K)` with `Q(y) = −β`. The pair `(x, y)` is a nonzero isotropic vector of
+   `Q = U ⊥ W`.
+
+   ⚠ Choosing a global **scalar** `β` in the prescribed local square classes is not enough, and
+   the gap is not a technicality: it delivers `−β = Q(y)` and says nothing about `β = Q(x)`,
+   while the isotropic vector needs both. This is why the approximation is applied to the
+   coordinates of a vector of `U` and `β` is *defined* from the result.
+
+   The ingredients, named rather than left inside "sufficiently close":
+
+   - **weak approximation in its density form** — the image of `K` is dense in `∏_{v ∈ T} K_v`
+     for a finite set `T` of pairwise inequivalent places. This is 0.2, whose route proves
+     exactly that statement before reading off the congruence-and-sign form; 11.6 consumes the
+     density form directly, and `T` contains real places, so the finite-place-only form would not
+     do;
+   - **continuity of `Q_v` on `U_v`**, which is a polynomial map of the coordinates after base
+     change. Internal to this milestone;
+   - **openness of `(K_vˣ)²`**. Internal to this milestone, and it has two cases. At odd residue
+     characteristic `U(K_v, 1) ⊆ (K_vˣ)²` by Hensel; at a dyadic place it is the consumed
+     `unitFiltration_le_range_powMonoidHom_two`, at the threshold `2e + 1` of
+     `absoluteRamificationIndex`. In both, openness follows because the unit filtration is a
+     neighbourhood basis of `1`. At a real place the square subgroup is `ℝ_{>0}`. ⚠ The consumed
+     Local Fields declaration carries the hypothesis `[Algebra ℚ₂ K]`, so the odd-residue case is
+     **not** an instance of it and is proved separately;
+   - **stability of represented values under squares**, `Q(c x) = c² Q(x)`, which is what turns
+     `β/β_v ∈ (K_vˣ)²` into a representation of `−β` by `W_v`.
 
 ⚠ **The quaternary case is genuinely separate, and folding it into case 4 is an error.** Case 4
 needs `T` finite, and `T` is finite only because `dim W ≥ 3`. At `dim Q = 4` the complement `W` is
@@ -1857,9 +1920,17 @@ nothing to approximate at.
 - Nothing here is stated in characteristic `2`. The standing `[Invertible (2 : K)]` of the
   consumed local theory is in force.
 
-*Prerequisites:* L 11.5, L 0.2, L 5.5, L 7.3; R Quadratic Form Invariants `hilbertSymbol`,
-R Quadratic Form Invariants `hilbertSymbol_unramified`, R Quadratic Form Invariants `localHasse`,
-R Quadratic Form Invariants `6D: the classification` with its isotropy list; M `QuadraticForm`.
+*Prerequisites:* L 11.5, L 0.2 **in its density form**, L 5.5, L 7.3; R Quadratic Form
+Invariants `hilbertSymbol`, R Quadratic Form Invariants `hilbertSymbol_unramified`,
+R Quadratic Form Invariants `localHasse`, R Quadratic Form Invariants `6D: the classification`
+with its isotropy list, R Quadratic Form Invariants `0: the representation criterion`,
+R Quadratic Form Invariants `1: hyperbolic planes`, R Local Fields
+`unitFiltration_le_range_powMonoidHom_two`, R Local Fields `absoluteRamificationIndex`;
+M `QuadraticForm`, M `Hensel's lemma`.
+
+Three ingredients of the route are internal to this milestone, and are listed rather than left
+implicit: O'Meara 42:12 for the quaternary subcase, continuity of a base-changed form on the
+coordinates, and openness of `(K_vˣ)²` at each place of `T`.
 
 **11.7. The representation theorem.** Suggested names:
 `represents_iff_locally_represents` for the scalar case and
