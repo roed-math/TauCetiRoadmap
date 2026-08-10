@@ -30,3 +30,5 @@ import TauCetiRoadmap.OrthogonalL2Bases.Suggested
 import TauCetiRoadmap.OptimalTransport.Suggested
 import TauCetiRoadmap.AdelicAlgebraicGroups.Suggested
 import TauCetiRoadmap.NumberFieldArithmetic.Suggested
+import TauCetiRoadmap.ProfiniteCohomology.Suggested
+import TauCetiRoadmap.LocalFieldsRamification.Suggested
