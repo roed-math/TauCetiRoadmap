@@ -159,6 +159,26 @@ through a row.
 | 3.3 | `RayClassCharacter.induced`, `RayClassCharacter.IsPrimitive`, `RayClassCharacter.not_isPrimitive_one` | induction as precomposition with `classMap`, primitivity stated **against that map**, and the fact that the trivial character of a nontrivial modulus is imprimitive |
 | 3.5 | `HeckeCharacter.shift`, `HeckeCharacter.unitaryPart`, `norm_unitaryPart`, `shift_eq_zero_iff`, `shift_ofRayClassCharacter` | the unique **real** exponent `σ` with `|χ| = ‖·‖^σ`, its unitary complement, and the compatibility that a finite-order character has `σ = 0` |
 
+## What the Integral Lattices roadmap consumes from this roadmap
+
+This roadmap is the canonical owner of orders in a number field, their proper ideals, their
+Picard groups — wide and narrow — and their ring class fields. The binary-form dictionary of the
+Integral Lattices roadmap lands in those groups rather than in a copy of them, so that Gauss
+composition and the ring class field are statements about one object. The edge is one-way, and
+that roadmap merges after this one.
+
+| Supplying layer | Declaration | What the consumer relies on |
+|---|---|---|
+| 10B.1, 10B.2 | `NumberFieldOrder`, `NumberFieldOrder.conductor` | an order as a `Subalgebra ℤ K` finite over `ℤ` and spanning `K` over `ℚ`, with `K` as its fraction field; and `𝔠(O)` as the largest `𝓞_K`-ideal inside it |
+| 10B.3 | `NumberFieldOrder.properIdeals` | the group of **proper** fractional ideals, `{x ∈ K ∣ xI ⊆ I} = O`, which for a nonmaximal order is strictly smaller than the fractional ideals and is the invertible ones |
+| 10B.4 | `Pic`, `NumberFieldOrder.mkPic`, `mkPic_surjective`, `finite_pic` | the Picard group of the order, as Mathlib's `ClassGroup` of it, with the class of a proper ideal and its surjectivity |
+| 10B.4 | `NarrowPic`, `NumberFieldOrder.narrowPrincipal`, `narrowPic_surjective`, `finite_narrowPic` | the narrow Picard group, the quotient by the principal ideals with a generator of **positive norm**, and its surjection onto `Pic O`. ⚠ This is the target for positive discriminant, and it is not `Pic O` |
+| 10C.1 | `ringClassField`, `gal_ringClassField_equiv_pic` | `Gal(H_O/K) ≅ Pic O`, which the consumer composes with its form-class dictionary |
+
+⚠ **The narrow group is owned here.** A consumer that needs the real-quadratic case consumes
+`NarrowPic` and defines no second narrow quotient. Two narrow quotients of the same order are two
+objects, and the composition law would not transfer between them.
+
 Two boundary statements, because they are what keep the ownership single.
 
 - **There is one Hecke character carrier, and it is `HeckeCharacter`.** A structure that stores an
@@ -1488,25 +1508,38 @@ archimedean elements in general.
 Mathlib has no theory of nonmaximal orders in a number field. The Dedekind-generic machinery of
 Layers 0 and 1 does not apply to them, because an order is usually not integrally closed.
 
-**10B.1. Orders.** Define an order `O ⊆ 𝓞 K` as a subring that is free of rank `[K:ℚ]` over `ℤ` and
-has `K` as its field of fractions. Give the equivalent description as a full-rank subring, in the
+**10B.1. Orders.** Define `NumberFieldOrder K`: a subring that is free of rank `[K:ℚ]` over `ℤ` and
+has `K` as its field of fractions, carried as a `Subalgebra ℤ K` with finiteness over `ℤ` and the
+`ℚ`-spanning condition as separate fields, plus the `IsFractionRing` instance that every
+fractional-ideal statement below needs. Give the equivalent description as a full-rank subring, in the
 vocabulary of `Module.Finite` and `IsFractionRing`. Give the basic examples, including `ℤ[√−n]` and
 `ℤ + f𝓞_K`.
 *Prerequisites:* M `Module.Finite`, M `IsFractionRing`, M `NumberField.RingOfIntegers`.
 
-**10B.2. The conductor.** Define `𝔠(O) = {x ∈ K | x 𝓞_K ⊆ O}`, and prove that it is the largest
-`𝓞_K`-ideal contained in `O`. Prove the annihilator characterization, and the index formula `disc O
+**10B.2. The conductor.** Define `NumberFieldOrder.conductor`, `𝔠(O) = {x ∈ K | x 𝓞_K ⊆ O}`, and
+prove that it is the largest `𝓞_K`-ideal contained in `O`. Prove the annihilator characterization, and the index formula `disc O
 = [𝓞_K : O]² disc 𝓞_K`.
 *Source.* Cox, *Primes of the Form x² + ny²*, §7.
 *Prerequisites:* L 10B.1, M `Algebra.discr`.
 
-**10B.3. Proper fractional ideals.** Define a proper fractional `O`-ideal as an `I` with `{x ∈ K |
-xI ⊆ I} = O`. Prove the equivalence with invertibility, and that they form a group.
+**10B.3. Proper fractional ideals.** Define `NumberFieldOrder.properIdeals`, the subgroup of
+proper fractional `O`-ideals, those `I` with `{x ∈ K | xI ⊆ I} = O`. Prove the equivalence with
+invertibility, and that they form a group. ⚠ For a nonmaximal order this is strictly stronger than
+being a fractional ideal, and the dictionary of the next milestone is false over all fractional
+ideals.
 *Prerequisites:* L 10B.1.
 
-**10B.4. The Picard group.** Identify Mathlib's generic `ClassGroup O` with the group of 10B.3
-modulo principal ideals. If the generic definition does not agree, say which object is the target
-and prove the comparison.
+**10B.4. The Picard group.** Define `Pic O` as Mathlib's generic `ClassGroup` of the order, and
+identify it with the group of 10B.3 modulo principal ideals, through `NumberFieldOrder.mkPic` and
+its surjectivity. If the generic definition does not agree, say which object is the target and
+prove the comparison.
+
+Define also the **narrow** Picard group `NarrowPic O`, the proper ideals modulo
+`NumberFieldOrder.narrowPrincipal`, the principal ones with a generator of positive norm, together
+with the surjection onto `Pic O`. This roadmap owns the narrow group as well as the wide one: the
+binary-form dictionary of a consumer needs it for positive discriminant, and two narrow quotients
+would be two objects. For a totally imaginary `K` the two agree, which is an instance and not a
+second definition.
 *Prerequisites:* L 10B.3, M `ClassGroup`.
 **Basic API.**
 - *Constructors:* the class of a proper fractional `O`-ideal; the class of an ideal prime to
@@ -1540,10 +1573,12 @@ the class field of 10C.1 reduces to the Hilbert class field.
 
 ### Layer 10C: ring class fields and representation by quadratic forms
 
-**10C.1. Ring class fields.** Let `O` be an order in `K` with conductor `𝔠`. Define the ring class
-field `H_O` as the abelian extension of `K` inside `K̄` that corresponds to the congruence subgroup
-of 10B.6, through 7.3. Prove three statements: `Gal(H_O/K) ≅ Pic O`; the ramification divides `𝔠`;
-and `H_{𝓞_K} = H`. The definitions are for all `K`. The worked examples are imaginary quadratic.
+**10C.1. Ring class fields.** Let `O` be an order in `K` with conductor `𝔠`. Define
+`ringClassField O`, the abelian extension of `K` inside `K̄` that corresponds to the congruence
+subgroup of 10B.6, through 7.3. Prove three statements: `gal_ringClassField_equiv_pic`, that
+`Gal(H_O/K) ≅ Pic O`; that the ramification divides `𝔠`; and that `H_{𝓞_K} = H`. The first is
+consumed by name: the Integral Lattices roadmap composes it with its binary-form dictionary to
+read a form class as an element of a Galois group. The definitions are for all `K`. The worked examples are imaginary quadratic.
 *Prerequisites:* L 10B.6, L 7.3, L 7.4.
 
 **10C.2. The `x² + ny²` theorem.** Fix `n ≥ 1` and write `n = f²d` with `d > 0` squarefree. Then `K
