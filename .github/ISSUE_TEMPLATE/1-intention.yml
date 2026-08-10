@@ -24,10 +24,12 @@ body:
         - ContourIntegration
         - Exchangeability
         - GeometricTopology
+        - GlobalNumberFields
         - HeegaardFloer
         - JacobianChallenge
         - ModularForms
         - Multiquadratic
+        - NumberFieldArithmetic
         - OneParameterSemigroups
         - OptimalTransport
         - OrthogonalL2Bases
