@@ -5,6 +5,27 @@ evidence, audit results, and decisions, so that reviewers can check the roadmap'
 without redoing the searches, and so that stale facts can be re-verified against their
 dates.
 
+## Portfolio restructuring record
+
+This retained roadmap is the refactoring of PR #13 at source revision
+`d7ebb2e91eacb6cdc84342a7bf34183751d8e23d`. The review's mathematical content,
+convention fixes, LMFDB audits, and source routes remain in place; the restructuring changes
+only portfolio ownership and the corresponding Lean interfaces.
+
+The dependency arrows are now one-way from BelyiMaps to the final supplier namespaces:
+`TauCetiRoadmap.AlgebraicCurves`, `TauCetiRoadmap.PolynomialGaloisGroups`, and
+`TauCetiRoadmap.ProfiniteProPGroups`. The local `fullCycleType` prototype was removed in
+favour of `PolynomialGaloisGroups.fullCycleType`; transitive-group labels use
+`PolynomialGaloisGroups.TransitiveGroupIndex`, `referenceSubgroup`, and
+`TransitiveGroupLabel`; and the local free-profinite/free-pro-`p`, `proPKernel`,
+`maximalProPQuotient`, and `zHat` carriers were removed in favour of their
+`ProfiniteProPGroups` declarations. `Suggested.lean` imports the exact supplier files, so
+these contracts fail visibly if a supplier spelling or carrier changes.
+
+BelyiMaps continues to own the branch-cycle theorem and the generic pro-`ℓ`
+peripheral-power theorem. It has no dependency on `LocalGaloisGroups`, `ClassFieldTheory`,
+or a `PeripheralActions` roadmap.
+
 ## Mathlib pin audit
 
 Pin `9caeba1000` (2026-06-03), audited 2026-08-08 by grep over the checked-out package.
@@ -47,10 +68,10 @@ Conventions verified in source, 2026-08-08 (these justify the pinned product rel
 Together they make the fiber monodromy a `MonoidHom` and force
 `σinf * σ1 * σ0 = 1` as the relation matching "γ0 then γ1 then γ∞ nullhomotopic".
 
-## Supplier state
+## Supplier contract after restructuring
 
-Dated 2026-08-08. The README cites layers, which are specifications; this records what is
-implemented or pinned today.
+Dated 2026-08-10. The README cites layers, which are specifications; this records the exact
+portfolio interfaces consumed after the PR restructuring.
 
 - **CharacterTheory** (merged): Layers 0–2 implemented in TauCeti
   (`TauCeti/RepresentationTheory/CharacterTable/`); Layer 3 (character table,
@@ -76,27 +97,21 @@ implemented or pinned today.
   chain (Forster §§14–17 route) in prose for general compact Riemann surfaces; its
   `Suggested.lean` pins no Riemann-surface carrier (verified by grep), which is why this
   roadmap owns the carrier conventions (README §Boundaries).
-- **AlgebraicCurves** (open PR, branch `roadmap/algebraic-curves`, head `ff1a984`):
-  Layers 0–5 partially prototyped in its `Suggested.lean`; Layers 6–8 and 12
-  (ramification, the different, Riemann–Hurwitz, the scheme dictionary) are README-only.
-  Its contract table already names BelyiMaps as consumer of Layers 6–8 and 12.
-- **PolynomialGaloisGroups** (open PR, branch `roadmap/polynomial-galois-groups`, head
-  `edc908b`): `fullCycleType` (whose definition the local stand-in here mirrors exactly),
-  `TransitiveGroupIndex`, `referenceSubgroup`, `TransitiveGroupLabel` all pinned in its
-  `Suggested.lean`/`TransitiveGroupData.lean`.
-- **ProPGroups** (open PR, branch `roadmap/pro-p-demushkin`, head `62017de`):
-  `freeProfiniteGroup`, `proPKernel`, `maximalProPQuotient`, the universal properties, and
-  kernel characteristicity under `ContinuousMulEquiv` all pinned; `zHat` is a stress-test
-  object there. Its exponentiation stops at abelian pro-`p` groups (Layer 4,
-  existence-form), and its own `PROVENANCE.md` notes an ambition to absorb a
-  `ẑ`-exponentiation calculus into Layer 4 — but no such milestone is on its README, and
-  "a statement that is not a row is not an interface" is that roadmap's own rule. Hence
-  the ownership decision here: BelyiMaps Layer 12.2 owns the calculus, in the generic
-  namespace, and a future ProPGroups revision absorbing it would be a rename.
-  **Owner ruling (2026-08-08): the dependency is one-directional.** BelyiMaps cites
-  ProPGroups; ProPGroups gains no row, no citation, and no dependency pointing here. Its
-  files are therefore untouched by this roadmap, and Layer 12.2 is written so that
-  ProPGroups never needs it.
+- **AlgebraicCurves** is the final supplier of `IsFunctionField`, `Place`, `Divisor`,
+  `riemannRochSpace`, `genus`, ramification data, and the regular-model/function-field
+  interfaces consumed by Layers 9–11. BelyiMaps owns only the analytic comparison.
+- **PolynomialGaloisGroups** is the final supplier of
+  `PolynomialGaloisGroups.fullCycleType`, `numTransitiveGroups`,
+  `TransitiveGroupIndex`, `referenceSubgroup`, and `TransitiveGroupLabel`. The old local
+  cycle-type carrier has been deleted rather than retained as an alias.
+- **ProfiniteProPGroups** is the final supplier of `freeProfiniteGroup` with `.of` and
+  `.lift`, `proPKernel`, `maximalProPQuotient`, `freeProP` with `.of`, `zHat`, and
+  `maximalProPQuotient_zHat_equiv_padicInt`. Its exponentiation stops at abelian pro-`p`
+  groups, so BelyiMaps Layer 12.2 still owns the generic profinite exponent ring and power
+  calculus needed by the branch-cycle application.
+  **Owner ruling (2026-08-08, retained): the dependency is one-directional.** BelyiMaps
+  cites ProfiniteProPGroups; ProfiniteProPGroups gains no row, citation, or dependency
+  pointing here.
 
 ## Decisions of record
 
@@ -135,7 +150,7 @@ implemented or pinned today.
    in this roadmap, so they can still be built first.
 
    ⚠ **12.1, the profinite integers as a topological commutative ring, is this roadmap's,
-   because no supplier has it.** ProPGroups supplies the profinite completion of the
+   because no supplier has it.** ProfiniteProPGroups supplies the profinite completion of the
    infinite cyclic *group*; Mathlib has no `ẑ` at all (§Mathlib pin audit, re-verified
    2026-08-09 by grep for `ZHat`, `ProfiniteInt` and "profinite integers": no hits). But
    `(x ^ᶻ a) ^ᶻ b = x ^ᶻ (a·b)` needs a multiplication of exponents, the cyclotomic

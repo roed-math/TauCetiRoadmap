@@ -58,15 +58,22 @@ and nothing else is allowed:
 - **Layer n.m.** An earlier milestone of this roadmap.
 - **Roadmap, Layer n.** A named layer of another roadmap in this repository.
 
-No milestone waits on a Mathlib pull request, a future pin, or an external repository. Where a
-consumed roadmap is not yet implemented in the code repository, the citation is to its layer,
-which is the definitive specification of the object; `Suggested.lean` carries local
-elaboration stand-ins for the carriers this roadmap needs before those layers land, each
-marked with the supplier it will be replaced by.
+No milestone waits on a Mathlib pull request, a future pin, or an external repository. The three
+portfolio suppliers are imported under their final namespaces:
+`TauCetiRoadmap.AlgebraicCurves`, `TauCetiRoadmap.PolynomialGaloisGroups`, and
+`TauCetiRoadmap.ProfiniteProPGroups`. `Suggested.lean` uses their actual carriers and defines no
+replacement `fullCycleType`, transitive-group label, free profinite group, free pro-`p` group,
+`proPKernel`, or maximal pro-`p` quotient. A local interface remains only where an accepted
+non-portfolio supplier has not pinned a Lean name, and is marked with that supplier.
 
 ## Boundaries
 
 Seven roadmaps supply material to this one. The boundaries are stated once here.
+
+There is no dependency on `LocalGaloisGroups`, `ClassFieldTheory`, or a proposed
+`PeripheralActions` roadmap. The branch-cycle theorem and generic pro-`ℓ` peripheral-power
+theorem are Belyi milestones below; their abstract free-group carriers come from
+`ProfiniteProPGroups`.
 
 **Character theory.** Class functions, irreducible characters, the character table, both
 orthogonality relations, class sums, structure constants, and central characters belong to
@@ -139,11 +146,12 @@ second cycle-type-with-fixed-points definition. Blocks, primitivity, and transit
 always Mathlib's `MulAction.IsBlock`, `MulAction.IsPreprimitive`, `MulAction.IsPretransitive`,
 as there.
 
-**Pro-p groups.** The free profinite group on a finite set (`freeProfiniteGroup`, `.of`,
+**Profinite and pro-p groups.** The free profinite group on a finite set (`freeProfiniteGroup`, `.of`,
 `.lift`), the maximal pro-`p` quotient (`proPKernel`, `maximalProPQuotient`) with its
 universal property and the characteristicity of its kernel under continuous automorphisms,
 the free pro-`p` group `freeProP`, and the identification
-`maximalProPQuotient p zHat ≃ₜ* Multiplicative ℤ_[p]` belong to the ProPGroups roadmap (its
+  `maximalProPQuotient_zHat_equiv_padicInt` belong to the
+ProfiniteProPGroups roadmap (its
 Layers 3 and 4). Layers 12 and 13 consume them. ⚠ **What that roadmap supplies is the
 profinite completion of the infinite cyclic *group*, and Layers 12–13 need a *ring*.** There
 is no multiplication of two profinite exponents there, no `ẑˣ`, and no `ℓ`-adic component
@@ -157,9 +165,9 @@ comparison between the two (Layers 12.2, 12.3), that roadmap's exponentiation st
 abelian pro-`p` groups; and the **continuous-outer-automorphism carrier** (Layer 12.7), which
 no roadmap and no Mathlib file owns.
 
-AlgebraicCurves, PolynomialGaloisGroups and ProPGroups live at
+AlgebraicCurves, PolynomialGaloisGroups and ProfiniteProPGroups live at
 `../AlgebraicCurves/README.md`, `../PolynomialGaloisGroups/README.md` and
-`../ProPGroups/README.md`.
+`../ProfiniteProPGroups/README.md`.
 
 What this roadmap supplies to other subjects:
 
@@ -234,7 +242,7 @@ from B   5.6, 6.1, 6.3, 7.1, 8.7, 9.1, 9.5–9.8, 10.2, 10.3, 10.7,
          11.1, 11.3, 11.5, 11.7
 ```
 
-plus ProPGroups and Mathlib's Galois categories and cyclotomic characters.
+plus ProfiniteProPGroups and Mathlib's Galois categories and cyclotomic characters.
 
 ⚠ The boundary between B and C is **not** the boundary between geometry and arithmetic:
 Layers 10 and 11 are already arithmetic, and they sit in B because they consume the analytic
@@ -427,15 +435,14 @@ schemes, and any ribbon-graph or triangle-group object.
 **Every consumed theorem gets a name or a signature, and no row cites a layer range.** A
 local agent cannot implement against "the Layer 10B chain" or "the milestone-8
 correspondence": it has to know what to `apply`. So each row below carries either the
-supplier's exact declaration name, or — where the supplier has specified the object in prose
-and pinned no Lean name — an **exact local interface signature**, which `Suggested.lean`
-carries as a stand-in and which is deleted in favour of the supplier's declaration when it
-lands. The mathematics always belongs to the supplier; only the spelling is local.
+supplier's exact declaration name, or — only for accepted non-portfolio suppliers that have
+specified an object in prose and pinned no Lean name — an **exact local interface signature**.
+The three final portfolio suppliers have no stand-ins here.
 
 | Consumer | Supplier | Object | Exact name, or local interface signature |
 | --- | --- | --- | --- |
-| 0.5, 1.1 | PolynomialGaloisGroups Layer 0 | cycle type with fixed points | `fullCycleType (σ : Equiv.Perm α) : Multiset ℕ` — name pinned there; stand-in in `Suggested.lean` |
-| 1.6, 14.1, 14.5 | PolynomialGaloisGroups Layers 6, 7 | transitive reference data and the label predicate | `numTransitiveGroups`, `TransitiveGroupIndex`, `referenceSubgroup`, `TransitiveGroupLabel` — all four names pinned there |
+| 0.5, 1.1 | `PolynomialGaloisGroups` Layer 0 | cycle type with fixed points | `PolynomialGaloisGroups.fullCycleType` |
+| 1.6, 14.1, 14.5 | `PolynomialGaloisGroups` Layers 6, 7 | transitive reference data and the label predicate | `PolynomialGaloisGroups.numTransitiveGroups`, `PolynomialGaloisGroups.TransitiveGroupIndex`, `PolynomialGaloisGroups.referenceSubgroup`, `PolynomialGaloisGroups.TransitiveGroupLabel` |
 | 3.2 | CharacterTheory Layer 1 | class sums and structure constants | `classSum`, `structureConstant`, `classSum_mul` |
 | 3.2 | CharacterTheory Layer 3 | the character table and column orthogonality | `characterTable`, `char_column_orthogonality` |
 | 3.2 | CharacterTheory Layer 4 | central characters, and the conversion to class sizes | `centralCharacter`, `centralCharacter_coordinate`, and the conversion of `ω_χ` on a class sum into class size times character value over degree, for which that roadmap pins **no Lean name**; local interface: `centralCharacter_eq_card_mul_div (χ) (j) : centralCharacter χ (classSum j) = (Nat.card (carrier j) : ℂ) * χ (rep j) / χ 1` |
@@ -445,14 +452,13 @@ lands. The mathematics always belongs to the supplier; only the spelling is loca
 | 6.3 | UniversalCovers Stage 2 | basepoint change, and the pointed/unpointed correspondence | `basepointChangeSubgroup`; for milestone 8 that roadmap pins no name, local interface: `connectedPointedCoverEquivSubgroup (x₀ : X) : Quot (ConnectedPointedCoverIso x₀) ≃ Subgroup (FundamentalGroup X x₀)` under `[PathConnectedSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X]`, with `ConnectedPointedCover` (carrying `PathConnectedSpace E` as a **field**) and `ConnectedPointedCoverIso` in `Suggested.lean`; unpointed, `connectedCoverEquivSubgroupOrbit : Quot ConnectedCoverIso ≃ Quotient subgroupConjSetoid`. ⚠ **Connectedness is required**: a disconnected pointed cover recovers only the subgroup of the component containing the chosen point, so adjoining an unrelated component would leave the subgroup fixed and the map would not be injective. ⚠ The subgroup side is the conjugation-**orbit** quotient, `MulAction.orbitRel (ConjAct G) (Subgroup G)`, not `ConjClasses (Subgroup _)` — `ConjClasses` is a monoid's quotient by conjugation on *itself*, and `Subgroup G` is not `G` |
 | 8.2 | ConformalMapping L0 | the local degree of a holomorphic map | `TauCeti.exists_localDegree`, and the holomorphic branch-root extraction beside it |
 | 8.6, 9.3, 9.4 | ModularForms Layer 10B | Riemann–Roch and Riemann–Hurwitz for compact Riemann surfaces | that roadmap pins **no Riemann-surface carrier and no Lean names**; local interfaces, all carried in `Suggested.lean`: `MerField X`, `Divisor X := X →₀ ℤ` — an `abbrev`, so `Finsupp`'s subtraction is available — `Divisor.deg : Divisor X → ℤ`, `genusAn X : ℕ`, `riemannRochSpaceAn`, `ellAn`, `canonicalDivisor`, `riemannRochAn`; and for Riemann–Hurwitz the map-derived `degreeAn f hf hne`, `ramificationIndexAn f hf hne x`, `ramifiedPointsAn f hf hne`, with contracts `ramificationIndexAn_localNormalForm`, `ramificationIndexAn_pos`, `ramificationIndexAn_eq_one_iff`, `ramificationLocus_discrete`, `mem_ramifiedPointsAn_iff`, `degreeAn_eq_fiber_sum`. ⚠ **`hf` and `hne` are arguments, not context.** Layer 8.2 defines the index only for a nonconstant holomorphic map between connected surfaces; a version taking a bare `f : X → Y` would have to return an undocumented junk value, and `ramificationIndexAn_pos` would then commit the roadmap to that junk being positive. ⚠ **The local index carries no compactness** — Layer 8.2's `e` is local. Compactness enters only for `degreeAn`, for packaging the branch locus as a `Finset`, and for the two identities. ⚠ `MerField X` is a **field for connected** Riemann surfaces — `[ConnectedSpace X]`, not `[CompactSpace X]`: on a disjoint union the meromorphic functions are a *product* of fields and have zero divisors. Compactness enters at divisors, finite polar sets, and finite-dimensional `L(D)`, and is carried on those declarations. ⚠ Riemann–Hurwitz must **not** quantify over a free `deg`, `ram` and `e`: that is not a weaker theorem but a false one, since a caller may supply any numbers. Every quantity is derived from `f`. ⚠ `genusAn` is not imported from a classification of topological surfaces — the roadmap has none and needs none. ⚠ Both identities are stated in `ℤ`, since `ℕ` subtraction truncates `ℓ(D) − ℓ(K−D)` exactly when the second exceeds the first |
-| 9.1, 9.4, 9.6 | AlgebraicCurves Layers 0, 1, 6 | function fields, places, ramification and residue degrees | `IsFunctionField`, `IsIntegrallyClosedIn`, `Place`, `Divisor`, and the ramification data `e (P' ∣ P)`, `f (P' ∣ P)` with the fundamental identity `Σ e·f = n` |
-| 9.5, 10.7, 11.4 | AlgebraicCurves Layers 5, 8 | Riemann–Roch, genus, and constant-field extension | `riemannRochSpace`, `genus`, and the full faithfulness of constant-field extension in characteristic zero |
-| 9.1, 9.5 | AlgebraicCurves Layer 12 | the regular projective model and the anti-equivalence | that roadmap pins **no Lean names**; local interfaces: `regularModel (F) [Field F] [Algebra k F] (h : IsFunctionField k F) : Curve k` and `functionFieldEquiv : (Curve k)ᵒᵖ ≌ FunctionField k`, together with `regularModel_functionField : functionField (regularModel h) ≃ₐ[k] F`; **this roadmap never analytifies a scheme** — Layer 9.6 works with places, so only the place set and its `(e,f)` data are consumed, never a scheme-theoretic fiber |
-| 12.1, 12.3, 13.1 | ProPGroups Layers 0, 3, 4 | free profinite group, maximal pro-`p` quotient, `zHat` **as a group** | `freeProfiniteGroup`, `freeProfiniteGroup.of`, `freeProfiniteGroup.lift`, `proPKernel`, `maximalProPQuotient`, `freeProP`, `zHat`, `maximalProPQuotient p zHat ≃ₜ* Multiplicative ℤ_[p]` |
+| 9.1, 9.4, 9.6 | `AlgebraicCurves` Layers 0, 1, 6 | function fields, places, ramification and residue degrees | `AlgebraicCurves.IsFunctionField`, `AlgebraicCurves.IsIntegrallyClosedIn`, `AlgebraicCurves.Place`, `AlgebraicCurves.Divisor`, and the supplier's ramification index, residue degree, and fundamental identity |
+| 9.5, 10.7, 11.4 | `AlgebraicCurves` Layers 5, 8 | Riemann–Roch, genus, and constant-field extension | `AlgebraicCurves.riemannRochSpace`, `AlgebraicCurves.genus`, and the supplier's full-faithfulness theorem for constant-field extension in characteristic zero |
+| 9.1, 9.5 | `AlgebraicCurves` Layer 12 | the regular projective model and the anti-equivalence | the exact Layer-12 milestones `regularModel`, `functionFieldEquiv`, and `regularModel_functionField`; **this roadmap never analytifies a scheme** — Layer 9.6 works with places, so only the place set and its `(e,f)` data are consumed, never a scheme-theoretic fiber |
+| 12.1, 12.3, 13.1 | `ProfiniteProPGroups` Layers 0, 3, 4 | free profinite group, maximal pro-`p` quotient, `zHat` **as a group** | `ProfiniteProPGroups.freeProfiniteGroup`, `ProfiniteProPGroups.freeProfiniteGroup.of`, `ProfiniteProPGroups.freeProfiniteGroup.lift`, `ProfiniteProPGroups.proPKernel`, `ProfiniteProPGroups.maximalProPQuotient`, `ProfiniteProPGroups.freeProP`, `ProfiniteProPGroups.freeProP.of`, `ProfiniteProPGroups.zHat`, `ProfiniteProPGroups.maximalProPQuotient_zHat_equiv_padicInt` |
 
-⚠ An open pull request is not an executable dependency, and neither is a prose row on a
-supplier's README. Every entry above is either a name that exists, or a signature written
-here; nothing is left as "the supplier will have something like this".
+Every exact portfolio name above is imported by `Suggested.lean`; a spelling or carrier change
+therefore breaks this roadmap instead of silently selecting a local replacement.
 
 ## The build, in layers
 
@@ -3439,7 +3445,7 @@ shortens one, but it is not the definition.
 
 #### 12.1 The profinite integers as a topological ring
 
-⚠ **The supplier provides a group, and this layer needs a ring.** ProPGroups supplies the
+⚠ **The supplier provides a group, and this layer needs a ring.** ProfiniteProPGroups supplies the
 profinite completion of the infinite cyclic **group** and its maximal pro-`p` quotients.
 That gives no multiplication of two profinite exponents, no unit group, and no compatible
 projections to finite rings — yet 12.2's law `(x ^ᶻ a) ^ᶻ b = x ^ᶻ (a·b)`, 12.10's character
@@ -3447,15 +3453,14 @@ projections to finite rings — yet 12.2's law `(x ^ᶻ a) ^ᶻ b = x ^ᶻ (a·b
 builds them, in the generic `TauCeti/GroupTheory/Profinite/` home, and everything below
 consumes it.
 
-**New object: `ProfiniteInt`.** Either constructed here as `lim (ZMod n)` over the divisibility
-order, or taken as the accepted supplier spelling if ProPGroups later owns it; the roadmap
-cites the name and the API, not the construction. Required:
+**New object: `ProfiniteInt`.** Constructed here as `lim (ZMod n)` over the divisibility
+order. The roadmap cites the name and the API, not the construction. Required:
 
 - *Carrier and instances.* A topological commutative ring structure: `CommRing ProfiniteInt`,
   `TopologicalSpace`, `IsTopologicalRing`, compactness, total disconnectedness, and
   `T2Space`.
 - *The group comparison.* A `ContinuousMulEquiv` between the additive/procyclic group of
-  `ProfiniteInt` and ProPGroups' `zHat`, so that `ẑ` in this roadmap means one object with
+  `ProfiniteInt` and ProfiniteProPGroups' `zHat`, so that `ẑ` in this roadmap means one object with
   two structures and no milestone silently switches. State it as a named theorem, not as a
   definitional identification.
 - *Projections.* Continuous ring homomorphisms `ProfiniteInt →+* ZMod n` for every `n`, with
@@ -3473,15 +3478,15 @@ cites the name and the API, not the construction. Required:
   injective with dense image.
 
 *Prerequisites:* Mathlib `ZMod`, `PadicInt`, `ProfiniteGrp`, inverse limits of topological
-rings; ProPGroups Layers 0, 4 for `zHat` and its group API.
+rings; ProfiniteProPGroups Layers 0, 4 for `zHat` and its group API.
 
 #### 12.2 The profinite exponentiation calculus
 
-Owned here, in the generic profinite namespace, and exported for reuse; ProPGroups stops at
+Owned here, in the generic profinite namespace, and exported for reuse; ProfiniteProPGroups stops at
 abelian pro-`p` groups and gains no dependency on this roadmap. Neither this milestone nor
 the next mentions Belyi maps.
 
-Carrier: `ẑ := ProfiniteInt` of 12.1, whose underlying procyclic group is ProPGroups' `zHat`
+Carrier: `ẑ := ProfiniteInt` of 12.1, whose underlying procyclic group is ProfiniteProPGroups' `zHat`
 by 12.1's comparison. For a profinite group `G` and `x : G`, define `x ^ᶻ a` for `a : ẑ` as
 the image of `a` under the unique continuous homomorphism `ẑ → G` sending `1` to `x` — the
 completion's universal property applied to `n ↦ xⁿ`, which lands in the closed procyclic
@@ -3511,12 +3516,12 @@ property, never by a choice. Nor is `(xy) ^ᶻ a = x ^ᶻ a · y ^ᶻ a` — tha
 to commute.
 
 *Prerequisites:* Layer 12.1; Mathlib `ProfiniteGrp.profiniteCompletion` with `lift` and the
-adjunction; ProPGroups Layers 0, 4 for `zHat` and its API.
+adjunction; ProfiniteProPGroups Layers 0, 4 for `zHat` and its API.
 
 #### 12.3 Pro-`ℓ` powers and the component comparison
 
 On a pro-`ℓ` group the power depends only on the `ℓ`-adic component of the exponent. Using
-ProPGroups Layer 4's `maximalProPQuotient ℓ zHat ≃ₜ* Multiplicative ℤ_[ℓ]`, define the
+ProfiniteProPGroups Layer 4's `maximalProPQuotient_zHat_equiv_padicInt`, define the
 `ℤ_ℓ`-power `x ^[ℓ] u` for `u : ℤ_[ℓ]` on a pro-`ℓ` group, prove it satisfies the same laws
 as 12.2, and prove the comparison
 
@@ -3525,7 +3530,7 @@ x ^ᶻ a = x ^[ℓ] (component_ℓ a)
 ```
 
 by factoring the powering homomorphism `ẑ → G` through the maximal pro-`ℓ` quotient of `ẑ`
-— legitimate by ProPGroups Layer 3's universal property, since `G` is pro-`ℓ` — and
+— legitimate by ProfiniteProPGroups Layer 3's universal property, since `G` is pro-`ℓ` — and
 identifying that quotient with `ℤ_[ℓ]` compatibly with 12.1's component map, so that
 `component_ℓ` here is the ring homomorphism of 12.1 and not a second unrelated projection.
 
@@ -3537,7 +3542,7 @@ otherwise.
 general profinite group the `ℓ`-adic component of `a` does not determine `x ^ᶻ a`, and no
 milestone applies `^[ℓ]` outside a pro-`ℓ` group.
 
-*Prerequisites:* Layers 12.1, 12.2; ProPGroups Layers 3, 4; Mathlib `Fact`, `PadicInt`.
+*Prerequisites:* Layers 12.1, 12.2; ProfiniteProPGroups Layers 3, 4; Mathlib `Fact`, `PadicInt`.
 
 #### 12.4 The `ℚ̄`/`ℂ` comparison of finite covers
 
@@ -3673,7 +3678,7 @@ finite group is the Galois group of a cover étale outside the three points. **E
 4.6.12(2)** is the Kummer case `π₁(ℙ¹_k ∖ {0,∞}) ≅ ẑ`, realized by normalizing in `xⁿ = t`,
 which is the tower Layers 12.9 and 12.11 compute with.
 
-*Prerequisites:* Layers 5.6, 6.1, 6.3, 12.4, 12.5; ProPGroups Layers 0, 4; Mathlib
+*Prerequisites:* Layers 5.6, 6.1, 6.3, 12.4, 12.5; ProfiniteProPGroups Layers 0, 4; Mathlib
 `PreGaloisCategory`, `FiberFunctor`, `functorToContAction`, `IsFundamentalGroup` with
 `toAutMulEquiv`, the profinite topology on `Aut F`, `ProfiniteGrp.profiniteCompletion` with
 its adjunction.
@@ -3938,11 +3943,12 @@ and three orbits. Layer 14 never treats `pass_size` and `orbit_size` as the same
 
 For a **prime** `ℓ` — every statement of Layer 13 carries `[Fact ℓ.Prime]`, since neither
 `maximalProPQuotient` nor `ℤ_[ℓ]` is the intended object otherwise — define
-`Δ_ℓ := maximalProPQuotient ℓ (profiniteCompletion (FreeGroup (Fin 2)))`, which is
-ProPGroups Layer 4's `freeProP ℓ (Fin 2)`, cited not restated, with `P_ℓ, T_ℓ, C_ℓ` the
-images of the peripheral elements and the relation `C_ℓ * T_ℓ * P_ℓ = 1`.
+`Δ_ℓ := ProfiniteProPGroups.freeProP ℓ (Fin 2)` directly, with `P_ℓ, T_ℓ, C_ℓ` the images
+of the supplier's canonical generators and the relation `C_ℓ * T_ℓ * P_ℓ = 1`. The
+supplier defines this carrier as the maximal pro-`ℓ` quotient of the free profinite group;
+this roadmap neither redefines that quotient nor introduces an isomorphic replacement.
 
-The outer action descends: `proPKernel ℓ` is topologically characteristic (ProPGroups Layer
+The outer action descends: `proPKernel ℓ` is topologically characteristic (ProfiniteProPGroups Layer
 3), so 12.7's functoriality gives
 
 ```text
@@ -3951,7 +3957,7 @@ The outer action descends: `proPKernel ℓ` is topologically characteristic (Pro
 
 and 12.11's statements descend with `^ᶻ` becoming `^[ℓ]` by 12.3.
 
-*Prerequisites:* Layers 12.7, 12.11, 12.2, 12.3; ProPGroups Layers 3, 4.
+*Prerequisites:* Layers 12.7, 12.11, 12.2, 12.3; ProfiniteProPGroups Layers 3, 4.
 
 #### 13.2 Cyclotomic surjectivity
 

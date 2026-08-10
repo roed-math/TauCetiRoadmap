@@ -1,4 +1,7 @@
 import Mathlib
+import TauCetiRoadmap.AlgebraicCurves.Suggested
+import TauCetiRoadmap.PolynomialGaloisGroups.Suggested
+import TauCetiRoadmap.ProfiniteProPGroups.Suggested
 
 /-!
 # Belyi maps, dessins d'enfants, and three-point covers: target signatures
@@ -24,10 +27,9 @@ Conventions, recorded in `README.md` (§Pinned conventions):
   `σinf * σ1 * σ0 = 1`, and the monodromy homomorphism of Layer 5.3 is a genuine
   `MonoidHom` with no `ᵐᵒᵖ`. The `z ↦ z²` example below pins the interpretation.
 * Relabeling is the left conjugation `MulAction`; isomorphism is `MulAction.orbitRel`.
-* Cycle data always includes fixed points: `fullCycleType` below is a local stand-in for
-  the PolynomialGaloisGroups declaration of the same name and definition, and is replaced
-  by it when that roadmap lands. Mathlib's bare `Equiv.Perm.cycleType` is never compared
-  with a partition of `n`.
+* Cycle data always includes fixed points: every occurrence uses the imported
+  `PolynomialGaloisGroups.fullCycleType`. Mathlib's bare `Equiv.Perm.cycleType` is never
+  compared with a partition of `n`.
 * Connectedness of a triple includes `n ≠ 0`; `MulAction.IsPretransitive` alone is
   vacuously true on `Fin 0`.
 * The genus is defined only after the Euler-characteristic bounds; the `Int.toNat` in
@@ -47,10 +49,9 @@ Conventions, recorded in `README.md` (§Pinned conventions):
 * `SemilocallySimplyConnectedSpace` below is a local stand-in for UniversalCovers
   Stage 0.2's class of the same name, absent from the pinned Mathlib. Layer 6.2's
   associated-cover theorem carries it because the universal-cover construction requires it.
-* `proPKernel` and `maximalProPQuotient` below are local elaboration stand-ins mirroring
-  the ProPGroups roadmap's pinned shapes (its Layer 3), and are replaced by that roadmap's
-  declarations when it lands, as are `freeProfiniteTwo` (its `freeProfiniteGroup (Fin 2)`)
-  and `zhat` (its `zHat`).
+* Free profinite and free pro-`ℓ` groups, `proPKernel`, `maximalProPQuotient`, and `zHat`
+  are the imported `ProfiniteProPGroups` declarations. This file defines only the marked
+  peripheral elements and the Belyi-specific power theorem on those supplier carriers.
 -/
 
 open scoped Manifold ContDiff Topology Pointwise
@@ -249,28 +250,22 @@ theorem card_automorphismGroup_dvd (t : PermutationTriple n) (ht : t.IsConnected
 
 /-! ### Layer 0.5: cycle data
 
-`fullCycleType` is a local stand-in for the PolynomialGaloisGroups Layer 0 declaration of
-the same name and definition (its `Suggested.lean`); it is replaced by that roadmap's copy
-when it lands. -/
-
-open scoped Classical in
-/-- Local stand-in; supplier: PolynomialGaloisGroups Layer 0 `fullCycleType`. The cycle
-type *with* fixed points: a partition of `Fintype.card α`. -/
-noncomputable def fullCycleType {α : Type u} [Fintype α] (σ : Equiv.Perm α) : Multiset ℕ :=
-  σ.cycleType + Multiset.replicate (Fintype.card α - σ.support.card) 1
+The carrier is `PolynomialGaloisGroups.fullCycleType`, imported above. This roadmap adds the
+lemmas about it needed for passports and branch cycles, but defines no second cycle type. -/
 
 /-- **Layer 0.5.** The number of cycles, fixed points included. -/
 noncomputable def cycleCount {α : Type u} [Fintype α] (σ : Equiv.Perm α) : ℕ :=
-  (fullCycleType σ).card
+  (@PolynomialGaloisGroups.fullCycleType α _ (Classical.decEq α) σ).card
 
 theorem fullCycleType_sum {α : Type u} [Fintype α] (σ : Equiv.Perm α) :
-    (fullCycleType σ).sum = Fintype.card α := by
+    (@PolynomialGaloisGroups.fullCycleType α _ (Classical.decEq α) σ).sum
+      = Fintype.card α := by
   sorry
 
-/-! **Layer 3.1: the computable cycle decomposition.** `fullCycleType` above is built from
-Mathlib's `Equiv.Perm.cycleType`, which goes through `cycleFactorsFinset` and is not an
-executable decomposition; every `#eval` and `decide` in Layers 3 and 14 runs on the
-definitions below instead, and `computedCycleType_eq_fullCycleType` is what licenses that. -/
+/-! **Layer 3.1: the computable cycle decomposition.** The imported `fullCycleType` is built
+from Mathlib's `Equiv.Perm.cycleType`, which goes through `cycleFactorsFinset` and is not an
+executable decomposition; every `#eval` and `decide` in Layers 3 and 14 runs on the definitions
+below instead, and `computedCycleType_eq_fullCycleType` is what licenses that. -/
 
 /-- **Layer 3.1.** The length of the cycle of `σ` through `i`: the least `k ≥ 1` with
 `σ ^ k i = i`, found by a bounded scan. -/
@@ -291,7 +286,7 @@ def computedCycleType (σ : Equiv.Perm (Fin n)) : Multiset ℕ :=
 /-- **Layer 3.1, the comparison theorem.** The executable decomposition agrees with the
 abstract one. Without this, none of Layer 3's `#eval`s is evidence about `fullCycleType`. -/
 theorem computedCycleType_eq_fullCycleType (σ : Equiv.Perm (Fin n)) :
-    computedCycleType σ = fullCycleType σ := by
+    computedCycleType σ = PolynomialGaloisGroups.fullCycleType σ := by
   sorry
 
 /-- **Layer 0.5, the transposition step lemma.** Multiplying by a transposition merges two
@@ -444,7 +439,8 @@ follows from these two finite facts alone. Powering by a unit modulo the order p
 full cycle type... -/
 theorem fullCycleType_pow_of_coprime {α : Type u} [Fintype α] [DecidableEq α]
     (σ : Equiv.Perm α) {u : ℕ} (hu : Nat.Coprime u (orderOf σ)) :
-    fullCycleType (σ ^ u) = fullCycleType σ := by
+    PolynomialGaloisGroups.fullCycleType (σ ^ u) =
+      PolynomialGaloisGroups.fullCycleType σ := by
   sorry
 
 /-- ...and it does not change the generated subgroup, which is why the monodromy group is a
@@ -510,14 +506,21 @@ def IsAdmissible (P : PassportSpec n) : Prop :=
     (P.lam1.sum = n ∧ ∀ i ∈ P.lam1, 0 < i) ∧
     (P.laminf.sum = n ∧ ∀ i ∈ P.laminf, 0 < i)
 
+/-- **Layer 1.6.** The reference group has the supplier's transitive-group label. This is a
+thin use of the canonical predicate, not a local label carrier or a duplicate conjugacy
+condition. -/
+def HasTransitiveGroupLabel (P : PassportSpec n)
+    (j : PolynomialGaloisGroups.TransitiveGroupIndex n) : Prop :=
+  PolynomialGaloisGroups.TransitiveGroupLabel j P.G
+
 /-- **Layer 1.1.** Passport membership, on a **connected** triple: conjugate monodromy (the
 exact PolynomialGaloisGroups spelling) and equal cycle data. -/
 def HasPassport (t : ConnectedTriple n) (P : PassportSpec n) : Prop :=
   (∃ τ : Equiv.Perm (Fin n),
       (PermutationTriple.monodromyGroup t.1).map (MulAut.conj τ).toMonoidHom = P.G) ∧
-    PermutationTriple.fullCycleType t.1.σ0 = P.lam0 ∧
-    PermutationTriple.fullCycleType t.1.σ1 = P.lam1 ∧
-    PermutationTriple.fullCycleType t.1.σinf = P.laminf
+    PolynomialGaloisGroups.fullCycleType t.1.σ0 = P.lam0 ∧
+    PolynomialGaloisGroups.fullCycleType t.1.σ1 = P.lam1 ∧
+    PolynomialGaloisGroups.fullCycleType t.1.σinf = P.laminf
 
 end PassportSpec
 
@@ -528,8 +531,10 @@ variable {n : ℕ}
 /-- **Layer 1.5.** The passport of a connected triple. ⚠ The domain is `ConnectedTriple n`:
 on a disconnected triple this would produce an inadmissible specification. -/
 noncomputable def passportOf (t : ConnectedTriple n) : PassportSpec n :=
-  ⟨PermutationTriple.monodromyGroup t.1, PermutationTriple.fullCycleType t.1.σ0,
-    PermutationTriple.fullCycleType t.1.σ1, PermutationTriple.fullCycleType t.1.σinf⟩
+  ⟨PermutationTriple.monodromyGroup t.1,
+    PolynomialGaloisGroups.fullCycleType t.1.σ0,
+    PolynomialGaloisGroups.fullCycleType t.1.σ1,
+    PolynomialGaloisGroups.fullCycleType t.1.σinf⟩
 
 /-- **Layer 1.5.** `passportOf` lands in admissible specifications. -/
 theorem isAdmissible_passportOf (t : ConnectedTriple n) : (passportOf t).IsAdmissible := by
@@ -1382,26 +1387,23 @@ end CompactInvariants
 
 /-! ## Layers 12, 13: profinite peripheral objects
 
-Local stand-ins mirroring the ProPGroups roadmap's pinned shapes; each is replaced by that
-roadmap's declaration when it lands. Layers 9–11 have no prototypes here (see the header).
+The carriers in this section are imported from `ProfiniteProPGroups`. The marked peripheral
+elements, profinite exponent ring, branch-cycle application, and generic pro-`ℓ` peripheral
+theorem are owned here. Layers 9–11 have no prototypes here (see the header).
 -/
 
-/-- Local stand-in; supplier: ProPGroups Layer 4 `freeProfiniteGroup (Fin 2)`. The
-profinite completion of the free group on two generators. -/
-noncomputable abbrev freeProfiniteTwo : ProfiniteGrp :=
-  ProfiniteGrp.profiniteCompletion.obj (GrpCat.of (FreeGroup (Fin 2)))
-
 /-- **Layer 12.6 / §Pinned conventions.** The peripheral element `P`. -/
-noncomputable def periphP : freeProfiniteTwo :=
-  ProfiniteGrp.ProfiniteCompletion.etaFn (GrpCat.of (FreeGroup (Fin 2))) (FreeGroup.of 0)
+noncomputable def periphP : ProfiniteProPGroups.freeProfiniteGroup (Fin 2) :=
+  ProfiniteProPGroups.freeProfiniteGroup.of 0
 
 /-- The peripheral element `T`. -/
-noncomputable def periphT : freeProfiniteTwo :=
-  ProfiniteGrp.ProfiniteCompletion.etaFn (GrpCat.of (FreeGroup (Fin 2))) (FreeGroup.of 1)
+noncomputable def periphT : ProfiniteProPGroups.freeProfiniteGroup (Fin 2) :=
+  ProfiniteProPGroups.freeProfiniteGroup.of 1
 
 /-- The peripheral element `C := (T * P)⁻¹`, so that `C * T * P = 1` — the profinite image
 of the Layer 5.2 relation, in the pinned display order. -/
-noncomputable def periphC : freeProfiniteTwo := (periphT * periphP)⁻¹
+noncomputable def periphC : ProfiniteProPGroups.freeProfiniteGroup (Fin 2) :=
+  (periphT * periphP)⁻¹
 
 /-- **§Pinned conventions, P0.2.** The opposite-convention third peripheral element is the
 conjugate `P · C · P⁻¹`, **not** `P⁻¹ · C · P`. Stated on an abstract group, since it is a
@@ -1414,7 +1416,7 @@ theorem periphC_mul_periphT_mul_periphP : periphC * periphT * periphP = 1 := by
 
 /-- **Layer 12.1.** The profinite integers as a topological commutative **ring**, as the
 subring of compatible systems inside `∀ n : ℕ+, ZMod n`.
-⚠ ProPGroups supplies the profinite completion of the infinite cyclic *group*; that is not
+⚠ ProfiniteProPGroups supplies the profinite completion of the infinite cyclic *group*; that is not
 enough for `(x ^ᶻ a) ^ᶻ b = x ^ᶻ (a * b)`, for `ẑˣ`, or for the `ℓ`-adic components, all of
 which Layers 12.2, 12.3 and 12.10 use. This milestone owns the ring.
 ⚠ The index runs over `ℕ+`, not `ℕ`: `ZMod 0` is `ℤ`, every `n` divides `0`, and including
@@ -1462,16 +1464,19 @@ This is what makes `ẑˣ` a usable target for the cyclotomic character of Layer
 theorem ProfiniteInt.isUnit_iff (a : ProfiniteInt) :
     IsUnit a ↔ ∀ n : ℕ+, IsUnit (ProfiniteInt.toZMod n a) := sorry
 
-/-- Local stand-in; supplier: ProPGroups Layer 0–2 `zHat`. The profinite completion of
-`ℤ` **as a group**; Layer 12.1's comparison theorem identifies it with the additive
-procyclic group of `ProfiniteInt`. -/
-noncomputable abbrev zhat : ProfiniteGrp :=
-  ProfiniteGrp.profiniteCompletion.obj (GrpCat.of (Multiplicative ℤ))
-
 /-- **Layer 12.1, the comparison.** The ring's procyclic group is the supplier's `zHat`.
 Stated as a theorem, so that no milestone silently switches between the two structures. -/
 theorem profiniteInt_mulEquiv_zhat :
-    Nonempty (Multiplicative ProfiniteInt ≃ₜ* zhat) := sorry
+    Nonempty (Multiplicative ProfiniteInt ≃ₜ* ProfiniteProPGroups.zHat) := sorry
+
+/-- **Layer 12.3, supplier contract.** The maximal pro-`ℓ` quotient of the imported
+procyclic group is the multiplicative group of `ℤ_ℓ`. This closed check deliberately cites
+the supplier theorem instead of introducing a BelyiMaps alias or local stand-in. -/
+example (ℓ : ℕ) [Fact ℓ.Prime] :
+    Nonempty
+      (ProfiniteProPGroups.maximalProPQuotient ℓ ProfiniteProPGroups.zHat ≃ₜ*
+        Multiplicative ℤ_[ℓ]) :=
+  ProfiniteProPGroups.maximalProPQuotient_zHat_equiv_padicInt ℓ
 
 /-- **Layer 12.2.** The profinite power `x ^ᶻ a`: the image of `a` under the unique
 continuous homomorphism `ẑ → G` with `1 ↦ x`. The laws — agreement with integer powers,
@@ -1485,34 +1490,24 @@ theorem zhatPow_zhatPow {G : ProfiniteGrp} (x : G) (a b : ProfiniteInt) :
     zhatPow (zhatPow x a) b = zhatPow x (a * b) := by
   sorry
 
-/-- Local stand-in; supplier: ProPGroups Layer 3 `proPKernel`. -/
-def proPKernel (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G] : Subgroup G :=
-  ⨅ U : {U : OpenNormalSubgroup G // IsPGroup p (G ⧸ U.1.toSubgroup)}, U.1.toSubgroup
-
-/-- Local stand-in; supplier: ProPGroups Layer 3 `proPKernel_normal`. -/
-instance proPKernel_normal (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G] :
-    (proPKernel p G).Normal := by
-  sorry
-
-/-- Local stand-in; supplier: ProPGroups Layer 3 `maximalProPQuotient`. -/
-abbrev maximalProPQuotient (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G] : Type u :=
-  G ⧸ proPKernel p G
-
 /-- **Layer 13.1.** The maximal pro-`ℓ` quotient of the profinite free group on two
-generators — ProPGroups' `freeProP ℓ (Fin 2)` once that roadmap lands. ⚠ Every Layer 13
-declaration carries `[Fact ℓ.Prime]`: neither `maximalProPQuotient` nor `ℤ_[ℓ]` is the
-intended object for composite `ℓ`. -/
+generators, using the supplier's canonical `freeProP`. ⚠ Every Layer 13 declaration carries
+`[Fact ℓ.Prime]`: neither a maximal quotient at composite `ℓ` nor `ℤ_[ℓ]` is the intended
+object. -/
 noncomputable abbrev DeltaL (ℓ : ℕ) [Fact ℓ.Prime] : Type :=
-  maximalProPQuotient ℓ freeProfiniteTwo
+  ProfiniteProPGroups.freeProP ℓ (Fin 2)
 
 /-- **Layer 13.1.** The pro-`ℓ` peripheral element `P_ℓ`. -/
-noncomputable def periphPL (ℓ : ℕ) [Fact ℓ.Prime] : DeltaL ℓ := QuotientGroup.mk periphP
+noncomputable def periphPL (ℓ : ℕ) [Fact ℓ.Prime] : DeltaL ℓ :=
+  ProfiniteProPGroups.freeProP.of ℓ 0
 
 /-- The pro-`ℓ` peripheral element `T_ℓ`. -/
-noncomputable def periphTL (ℓ : ℕ) [Fact ℓ.Prime] : DeltaL ℓ := QuotientGroup.mk periphT
+noncomputable def periphTL (ℓ : ℕ) [Fact ℓ.Prime] : DeltaL ℓ :=
+  ProfiniteProPGroups.freeProP.of ℓ 1
 
 /-- The pro-`ℓ` peripheral element `C_ℓ`. -/
-noncomputable def periphCL (ℓ : ℕ) [Fact ℓ.Prime] : DeltaL ℓ := QuotientGroup.mk periphC
+noncomputable def periphCL (ℓ : ℕ) [Fact ℓ.Prime] : DeltaL ℓ :=
+  (periphTL ℓ * periphPL ℓ)⁻¹
 
 theorem periphCL_mul_periphTL_mul_periphPL (ℓ : ℕ) [Fact ℓ.Prime] :
     periphCL ℓ * periphTL ℓ * periphPL ℓ = 1 := by
