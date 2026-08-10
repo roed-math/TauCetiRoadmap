@@ -57,11 +57,11 @@ noncomputable def normTwist (χ : IdealWeight K) (t : ℝ) : IdealWeight K := so
 noncomputable def sq (χ : IdealWeight K) : IdealWeight K := pointwiseMul K χ χ
 
 def IsNormTwistOnGood (χ : IdealWeight K) (u : ℝ) : Prop :=
-  ∀ I : Ideal (𝓞 K), χ.IsGood I →
+  ∀ I : Ideal (𝓞 K), IsGood K χ I →
     χ I = ((Ideal.absNorm I : ℝ) : ℂ) ^ (Complex.I * (u : ℂ))
 
 def IsTrivialOnGood (χ : IdealWeight K) : Prop :=
-  ∀ I : Ideal (𝓞 K), χ.IsGood I → χ I = 1
+  ∀ I : Ideal (𝓞 K), IsGood K χ I → χ I = 1
 
 end IdealWeight
 
