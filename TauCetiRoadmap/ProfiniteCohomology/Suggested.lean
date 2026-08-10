@@ -202,12 +202,12 @@ def homAction {G : Type*} [Group G] {M N : Type*} [AddCommGroup M] [AddCommGroup
 /-- **Layer 0, the evaluation pairing.** The biadditive map `(M →+ N) →+ M →+ N` sending `φ` and
 `m` to `φ m`, which is the pairing the duality package of Layer 8 feeds to the cup products. It is
 named rather than written inline at each use, because the duality pairings of Layer 8 and of the
-Local Fields roadmap are instances of the six-shape cup API **at this pairing** and at no other. -/
+Class Field Theory roadmap are instances of the six-shape cup API **at this pairing** and at no other. -/
 def evalPairing (M N : Type*) [AddCommGroup M] [AddCommGroup N] : (M →+ N) →+ M →+ N :=
   AddMonoidHom.id (M →+ N)
 
 /-- **Layer 0, evaluation is equivariant.** The statement that makes the duality cup pairings of
-Layer 8 well typed, and the one the Local Fields roadmap names when it states local Tate duality.
+Layer 8 well typed, and the one the Class Field Theory roadmap names when it states local Tate duality.
 It is proved rather than assumed, because it is what fixes the sign of the conjugation action. -/
 theorem evalPairing_equivariant {G : Type*} [Group G] (M N : Type*) [AddCommGroup M]
     [AddCommGroup N] [DistribMulAction G M] [DistribMulAction G N] (g : G) (φ : M →+ N) (m : M) :
