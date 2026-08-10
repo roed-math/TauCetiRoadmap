@@ -53,17 +53,24 @@ part of the specification, and nothing in it is a prerequisite for a milestone.
 In scope: the arithmetic of integral lattices over `ℤ` and `ℤ_p`, as listed in the layers
 below.
 
+The direct roadmap dependencies are exactly `QuadraticFormInvariants`,
+`GlobalQuadraticForms`, `GlobalNumberFields`, `ClassFieldTheory`,
+`AdelicAlgebraicGroups`, `OrthogonalSpinGroups`, and `LFunctions`. Their field-level,
+global-form, order/class-field, adelic, spin, and analytic inputs are consumed; none is
+repackaged as a private lattice-side carrier.
+
 Out of scope, with the owner of each subject:
 
 | Subject | Owner |
 | --- | --- |
-| square classes, Witt theory, Cartan–Dieudonné, Hasse invariants, the Hilbert symbol, classification of forms over a field | [Quadratic Form Invariants](https://github.com/roed-math/TauCetiRoadmap/pull/4) |
-| the groups `O(Q)` and `SO(Q)` of a quadratic space over a field, and the comparison of `Spin` with `SO` | [Spin Representations](../RepresentationTheory/SpinRepresentations/README.md) |
-| the spinor norm, local point groups, finite adelic point groups, strong approximation, the Tamagawa volume of `SO` | Orthogonal and Spin Groups |
-| structure theory of local fields | [Local Fields](https://github.com/roed-math/TauCetiRoadmap/pull/2) |
+| local quadratic forms, square classes, Witt/Brauer/Hasse/Clifford invariants, the Hilbert symbol, and dyadic classification | [Quadratic Form Invariants](../QuadraticFormInvariants/README.md) |
+| Hasse--Minkowski and global classification, representation, and realization of rational forms | [Global Quadratic Forms](../GlobalQuadraticForms/README.md) |
+| the groups `O(Q)`, `SO(Q)`, and `Spin(Q)`, the spinor norm, local and adelic spin groups, and the orthogonal Tamagawa theorem | [Orthogonal and Spin Groups](../OrthogonalSpinGroups/README.md) |
+| generic restricted products, adelic quotients, strong approximation, and Tamagawa measures | [Adelic Algebraic Groups](../AdelicAlgebraicGroups/README.md) |
 | root systems, Weyl groups, `DynkinType`, the ADE classification | [Root Systems](../RepresentationTheory/RootSystems/README.md) |
-| Poisson summation and the Gaussian theta transformation for a lattice in a real vector space | [L-functions](https://github.com/roed-math/TauCetiRoadmap/pull/8) |
-| orders in a number field, their conductors, their proper fractional ideals, their Picard groups — wide and narrow — and ring class fields | [Global Class Field Theory](https://github.com/roed-math/TauCetiRoadmap/pull/6) |
+| Poisson summation and the real-parameter Gaussian theta transformation | [L-functions](../LFunctions/README.md) |
+| orders, conductors, proper fractional ideals, `Pic`, and `NarrowPic` | [Global Number Fields](../GlobalNumberFields/README.md) |
+| ring class fields and their Artin isomorphisms | [Class Field Theory](../ClassFieldTheory/README.md) |
 | modular forms of integral weight, Hecke theory, newforms | [Modular Forms](../ModularForms/README.md) |
 
 The following subjects have no owner and are not part of this roadmap. They are listed so
@@ -74,7 +81,6 @@ that a reader can see the boundary.
   stops after the transformation law.
 - The analytic proof of the mass formula, which uses Siegel Eisenstein series, the Weil
   representation and Siegel–Weil. Layer 7 uses the adelic volume of `SO(V)` instead.
-- Tamagawa measure theory for a general reductive group.
 - Lattices over the ring of integers of a number field. Every statement here is over `ℤ`
   or `ℤ_p`.
 - Lattice reduction algorithms beyond the bounds that finiteness needs.
@@ -267,73 +273,33 @@ is unimodularity and not nondegeneracy.
 
 ## What other roadmaps supply
 
-Each row is one interface, consumed by the milestone in the first column. A milestone cites
-a row, and never a whole roadmap. The fourth column gives the declaration the supplier owns.
-Where a supplier has not yet fixed a Lean name, the table gives the provisional name that
-both roadmaps use, marked with an asterisk, and the supplier owns the final choice.
+Each row fixes an owner and, where one exists, the exact Lean declaration consumed. A
+README-only supplier milestone stays a milestone here; `Suggested.lean` does not fabricate a
+structure or carrier for it.
 
-| Consumer milestone | Supplier | Supplier milestone | Declaration | Type |
-| --- | --- | --- | --- | --- |
-| 0C, 3H | Quadratic Form Invariants | Layer 3 | `discr`, `signedDiscr`, `hasseInvariant` | invariants of a form over a field |
-| 3H | Quadratic Form Invariants | Layer 6 | `hilbertSymbol` | `(a b : Kˣ) → ℤˣ` for a nonarchimedean local field `K` |
-| 3H | Quadratic Form Invariants | Layer 6 | the classification over `ℚ_p` | `(dim, d±, s)` determines the form |
-| 4C | Quadratic Form Invariants | Layer 0 | `SquareClass`, `squareClassOfUnit` | `Kˣ ⧸ Subgroup.square Kˣ`, `Kˣ →* SquareClass K` |
-| 3G | Global Class Field Theory | Layer 11 | `hilbertProductFormula`\* | `∀ a b : ℚˣ, (a,b)_ℝ · ∏_p (a,b)_p = 1` |
-| B1 | Global Class Field Theory | 10B.1, 10B.2 | `NumberFieldOrder`, `NumberFieldOrder.conductor` | an order as a `Subalgebra ℤ K` finite over `ℤ` and spanning `K` over `ℚ`, with `K` as its fraction field; `𝔠(O)` the largest `𝓞_K`-ideal inside it |
-| B2, B3 | Global Class Field Theory | 10B.3 | `NumberFieldOrder.properIdeals` | the group of **proper** fractional ideals, `{x ∈ K ∣ xI ⊆ I} = O` |
-| B2, B3, B4, B5 | Global Class Field Theory | 10B.4 | `Pic`, `NumberFieldOrder.mkPic`, `mkPic_surjective`, `finite_pic` | the Picard group of the order, with the class of a proper ideal, its surjectivity, and finiteness |
-| B2, B3, B4, B5 | Global Class Field Theory | 10B.4 | `NarrowPic`, `NumberFieldOrder.narrowPrincipal`, `narrowPic_surjective`, `finite_narrowPic` | the narrow Picard group, the quotient by the principal ideals with a generator of **positive norm**, with its surjection onto `Pic O` and finiteness |
-| B3 | Global Class Field Theory | 10C.1 | `ringClassField`, `gal_ringClassField_equiv_pic` | `Gal(H_O/K) ≅ Pic O` |
-| 4B | Orthogonal and Spin Groups | 0C | `orthogonalGroup`, with `Q.polarBilin` as the pinned un-halved polar form, so that `B x x = 2 • Q x` | `Subgroup (V ≃ₗ[K] V)`, together with the comparison to the isometry group of `Q.polarBilin` when `2` is invertible, which that roadmap's 0C owns |
-| 4B | Orthogonal and Spin Groups | 3B | `orthogonalBaseChange`, `orthogonalBaseChangeReal` | `orthogonalGroup Q →* orthogonalGroup (localForm Q p)` at each finite place, and its real analogue |
-| 4C | Orthogonal and Spin Groups | Layer 1 | `spinorNorm` | `[FiniteDimensional K V] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) : orthogonalGroup Q →* SquareClass K` |
-| 4C | Orthogonal and Spin Groups | Layer 1 | `spinorNorm_reflection` | value of `spinorNorm` on `⟨reflection Q hv, reflection_mem Q hv⟩` |
-| 4C | Orthogonal and Spin Groups | Layer 2 | local point groups | `orthogonalGroup (Q.baseChange ℚ_[p])` with its topology |
-| 4B, 7B | Orthogonal and Spin Groups | 3C, 3D | `CompatibleCompactOpens` with `soPart`, and `finiteAdelicOrthogonal` | the compact-open family at every finite place, with its two eventual-integrality fields; and the restricted product of the local orthogonal groups relative to it |
-| 4D | Orthogonal and Spin Groups | 4E | `strongApproximation_finiteAdelicSpin` | `Spin(V)(𝔸^S) = Spin(V)(ℚ)·U`, at a **noncompact** place and not merely an indefinite form |
-| 4F | Orthogonal and Spin Groups | 2C | `transvection`, with `transvection_apply`, `transvection_mem`, `transvection_add_smul` and `transvectionLiftHom` | `E_{u,w}(x) = x + B(x,u)w − B(x,w)u − Q(w)B(x,u)u`, additive in `w ∈ u^⊥/Ku`, with the lift to `Spin` |
-| 7B, 7F, B7 | Orthogonal and Spin Groups | 5G, 5I | `specialOrthogonal_tamagawaVolume`\* | `vol(SO(V)(ℚ) \ SO(V)(𝔸)) = 2` of its 5I, with the compact-open volume comparison of its 5G. ⚠ Still provisional: that roadmap's `Suggested.lean` has no Tamagawa declaration at its current head, and its 5I value depends on the dimension — `2` for `dim ≥ 3` only |
-| 6C, 6G | Root Systems | Layer 5 | the ADE classification and `Nat.card P.weylGroup` | a root system of rank 8 with the `E₈` Cartan matrix is of type `E₈` |
-| 8D | L-functions | Layer 2 | `ZLattice.dual`\* | `AnalyticLattice n → AnalyticLattice n` |
-| 8D | L-functions | Layer 2 | `ZLattice.dual_dual`\* | `dual (dual Λ) = Λ` |
-| 8D | L-functions | Layer 2 | `ZLattice.covolume_mul_covolume_dual`\* | `covolume Λ * covolume (dual Λ) = 1` |
-| 8E | L-functions | Layer 2 | `ZLattice.gaussianTheta_one_div`\* | `0 < t → Θ Λ (1/t) = t^(n/2)·(covolume Λ)⁻¹·Θ (dual Λ) t` |
-
-`Suggested.lean` carries one structure for each of the three suppliers whose declarations do
-not exist yet, with exactly these fields, so that a consumer statement is written once and
-does not change when the supplier lands.
-
-### The one-way edge to the L-functions roadmap
-
-The dependency runs in **one direction only**: this roadmap consumes four declarations of
-L-functions Layer 2, and that roadmap consumes nothing from this one. Nothing crosses the
-boundary except through a row below. The supplier owns each name, and the consumer cites the
-name instead of restating the object. The carrier is the bundled analytic lattice: a submodule
-of a Euclidean space together with its discreteness and its `IsZLattice` proof.
-
-| Consumer layer | Supplier layer | Exact object or theorem | Agreed provisional name |
+| Consumer milestones | Supplier | Exact declaration or milestone | Contract |
 | --- | --- | --- | --- |
-| Integral Lattices 8D | L-functions Layer 2, item 1 | the dual of a bundled analytic lattice, characterized by integrality of the inner products | `ZLattice.dual` |
-| Integral Lattices 8D | L-functions Layer 2, item 2 | biduality `dual (dual Λ) = Λ` | `ZLattice.dual_dual` |
-| Integral Lattices 8D | L-functions Layer 2, item 3 | `covolume Λ * covolume (dual Λ) = 1` | `ZLattice.covolume_mul_covolume_dual` |
-| Integral Lattices 8E | L-functions Layer 2, item 8 | `Θ_Λ(1/t) = t^{n/2} (covolume Λ)⁻¹ Θ_{dual Λ}(t)` for real `t > 0` | `ZLattice.gaussianTheta_one_div` |
+| 0C, 3H | Quadratic Form Invariants | `hasseInvariant`, `hilbertSymbol`, `localHasse`, `exists_of_realization`; Layer 6D classification | field and nonarchimedean local invariants, including the dyadic classification |
+| 3G | Quadratic Form Invariants | `hilbertSymbol_eq_cohomological`, `hilbertSymbol_productFormula` | the norm-equation symbol agrees with CFT's pairing and inherits Hilbert reciprocity |
+| 3H, 4A | Global Quadratic Forms | `atFinitePlace`, `atRealPlace`, `hasseMinkowski_equivalent`, `equivalent_of_locallyEquivalent` | localization and global equivalence of the underlying rational quadratic spaces |
+| B1--B5 | Global Number Fields | `NumberFieldOrder`, `NumberFieldOrder.conductor`, `NumberFieldOrder.properIdeals`, `Pic`, `NumberFieldOrder.mkPic`, `NumberFieldOrder.mkPic_surjective`, `NarrowPic`, `NumberFieldOrder.narrowPrincipal`, `narrowPic_surjective`, `finite_pic`, `finite_narrowPic` | orders and their wide and narrow Picard groups; no order or ideal-class carrier is rebuilt here |
+| B3 | Class Field Theory | Layer 6, ring class fields and `Gal(H_O/K) ≃ Pic O` | the class-field interpretation of the form-class dictionary; CFT consumes the GNF order and Picard carrier |
+| 3G | Class Field Theory | `hilbertProductFormula` | cohomological Hilbert reciprocity, reached on classical symbols through QFI's comparison |
+| 4B, 7B | Adelic Algebraic Groups | `FiniteAdelicPoints`, `AdelicPoints`, `rationalDiagonal`; Layers 3, 6, and 7 quotient/Tamagawa milestones | generic restricted products, rational diagonals, quotient measures, and Tamagawa normalization |
+| 4B--4F, 7B, 7F, B7 | Orthogonal and Spin Groups | `orthogonalGroup`, `orthogonalBaseChange`, `orthogonalBaseChangeReal`, `spinorNorm`, `spinorNorm_reflection`, `CompatibleCompactOpens`, `finiteAdelicOrthogonal`, `strongApproximation_finiteAdelicSpin`, `transvection`, `transvectionLiftHom`; Layer 5 orthogonal Tamagawa theorem | orthogonal/spin-specific algebra and approximation; the volume of `SO` feeds the lattice mass formula and never consumes it |
+| 8D--8E | L-functions | Layer 1 Poisson summation, analytic dual/covolume identities, and Gaussian theta transformation; `FEPairWithLevel` for the resulting real-parameter functional equation | analytic Gaussian transformation only; the arithmetic upper-half-plane theta remains here |
+| 6C, 6G | Root Systems | Layer 5 ADE classification and `Nat.card P.weylGroup` | the rank-eight root system with the `E8` Cartan matrix is of type `E8` |
 
-Poisson summation for a lattice is an L-functions target and is not consumed here, so it has
-no row.
-
-⚠ An earlier revision of this section carried two further rows, making L-functions Layer 2
-consume `IntegralLattice.dual` and `IntegralLattice.analyticDual_eq_dual` from 1B and 8D, and
-claimed the block was byte-identical in both documents. **Both claims were obsolete.** The
-L-functions roadmap formulates its trace-to-Euclidean comparison through Mathlib's
-`FractionalIdeal.dual`, so no dual of an integral bilinear form enters its Layer 2 at all, and
-its own table is an export list of these four names and nothing else. The two rows are deleted
-here, the byte-identical claim with them, and the edge is
+The dependency on `LFunctions` is strictly one-way:
 
 ```text
-L-functions Layer 2 → Integral Lattices Layers 8D–8E
+LFunctions -> IntegralLattices.
 ```
 
-and not a two-way item-level cycle. No milestone of L-functions Layer 2 cites this roadmap.
+L-functions owns Poisson summation and the Gaussian real-parameter identity. Integral
+Lattices identifies the analytic dual with its arithmetic dual lattice, rewrites covolume by
+the Gram determinant, and owns the holomorphic theta and its arithmetic consequences. No
+L-functions milestone imports a lattice-side theorem.
 
 ---
 
@@ -590,8 +556,8 @@ rational equivalence together with the integral local data gives membership in o
 | 3D | L 3B |
 | 3E | L 3D |
 | 3F | L 0E, 3C, 3D |
-| 3G | L 3E, 3F; R Global Class Field Theory Layer 11 |
-| 3H | L 3F; R Quadratic Form Invariants Layers 1, 3 and 6 |
+| 3G | L 3E, 3F; R Class Field Theory `hilbertProductFormula`; R Quadratic Form Invariants `hilbertSymbol_eq_cohomological`, `hilbertSymbol_productFormula` |
+| 3H | L 3F; R Quadratic Form Invariants Layers 1, 3 and 6; R Global Quadratic Forms `hasseMinkowski_equivalent`, `equivalent_of_locallyEquivalent` |
 
 ### Layer B: binary lattices and quadratic orders
 
@@ -602,12 +568,11 @@ only; in particular B8 proves the rank-2 passage from the proper mass to the ful
 here, rather than waiting for 7A. Mathlib has `Zsqrtd` and Pell's equation, and it has no
 theory of non-maximal quadratic orders or of binary form classes.
 
-⚠ **The order and its class groups are consumed, not built.** Global Class Field Theory
-Layer 10B owns orders in a number field, their conductors, their proper fractional ideals,
-their Picard groups — wide and narrow — and Layer 10C owns the ring class field; the supplier
-table above lists every declaration. This layer owns the **binary** side: the norm form, the
-content and the discriminant, the map from a form to an ideal, the composition law, the
-automorphism groups, and the rank-2 mass. The dictionary lands in the supplier's groups, so
+⚠ **The order and its class groups are consumed, not built.** Global Number Fields Layer 11
+owns orders, conductors, proper fractional ideals, `Pic`, and `NarrowPic`. Class Field Theory
+Layer 6 owns ring class fields and their Artin isomorphisms. This layer owns the **binary**
+side: the norm form, content and discriminant, the map from a form to an ideal, composition,
+automorphism groups, and the rank-2 mass. The dictionary lands in the GNF groups, so
 that Gauss composition is multiplication in `Pic O` and not in a copy of it, and so that B3's
 ring-class-field corollary is a statement about one Galois group.
 
@@ -624,7 +589,7 @@ orientation of `L` and proves that `c`, `f` and `Δ` do not depend on the chosen
 The construction **returns a `NumberFieldOrder K_Δ`**, the supplier's type, and proves that its
 `conductor` is the conductor `f_Δ` of `𝒪_Δ` in the maximal order of `K_Δ`. It defines no order
 type of its own. ⚠ `𝒪_Δ` is nonmaximal whenever `Δ` is not a fundamental discriminant, which is
-the whole reason the supplier's Layer 10B exists: the Dedekind-generic ray class machinery does
+the whole reason Global Number Fields' order API exists: Dedekind-generic ray class machinery does
 not apply to it, and neither does `ClassGroup (𝓞 K)`.
 
 **B2. Forms and ideal classes.** Fix `Δ ≡ 0` or `1 (mod 4)`, and let `f = (a, b, c)` be a
@@ -661,8 +626,8 @@ available and is a milestone here:
 Gal(H_{𝒪_Δ}/K_Δ) ≃ Pic 𝒪_Δ ≃ proper equivalence classes of primitive forms of discriminant Δ
 ```
 
-for `Δ < 0`, the first isomorphism being the consumed `gal_ringClassField_equiv_pic` and the
-second the dictionary of B2. This roadmap proves the composite, and neither half. It is the
+for `Δ < 0`, the first isomorphism being Class Field Theory's ring-class-field milestone and
+the second the dictionary of B2. This roadmap proves the composite, and neither half. It is the
 statement that makes the classical `x² + ny²` criteria a fact about binary forms, and it is
 exactly what a copy of the Picard group would not have delivered.
 
@@ -755,19 +720,21 @@ proves that these values agree with the Conway–Sloane normalization of 7H in r
 
 | Milestone | Direct prerequisites |
 | --- | --- |
-| B1 | M `Matrix.det`, `Zsqrtd`; L 0A, 0C; R Global CFT `NumberFieldOrder`, `NumberFieldOrder.conductor` |
-| B2 | M `Ideal`, `Submodule`; L B1; R Global CFT `NumberFieldOrder.properIdeals`, `Pic`, `NumberFieldOrder.mkPic`, `NarrowPic` |
-| B3 | L 3F, B2; R Global CFT `Pic`, `NarrowPic`, `ringClassField`, `gal_ringClassField_equiv_pic` |
+| B1 | M `Matrix.det`, `Zsqrtd`; L 0A, 0C; R Global Number Fields `NumberFieldOrder`, `NumberFieldOrder.conductor` |
+| B2 | M `Ideal`, `Submodule`; L B1; R Global Number Fields `NumberFieldOrder.properIdeals`, `Pic`, `NumberFieldOrder.mkPic`, `NarrowPic` |
+| B3 | L 3F, B2; R Global Number Fields `Pic`, `NarrowPic`; R Class Field Theory Layer 6 ring class field and Artin isomorphism |
 | B4 | M `Pell.Solution₁`, `Pell.exists_of_not_isSquare`; L 2C, B1, B2, B3 |
-| B5 | L B2; R Global CFT `finite_pic`, `finite_narrowPic` |
+| B5 | L B2; R Global Number Fields `finite_pic`, `finite_narrowPic` |
 | B6 | M `ℤ_[p]`, `ℚ_[p]`, `LinearMap.BilinForm.baseChange`; L 3A, B4 |
-| B7 | M `MeasureTheory.Measure.haar`; L B6; R Orthogonal and Spin Groups Layer 5 |
+| B7 | M `MeasureTheory.Measure.haar`; L B6; R Adelic Algebraic Groups Layers 3, 6, 7; R Orthogonal and Spin Groups Layer 5 |
 | B8 | L 2C, 3F, B2, B3, B4, B5 |
 
 ### Layer 4: classes, spinor genera, Eichler's theorem, and neighbors
 
-The Orthogonal and Spin Groups roadmap owns the groups and the approximation theorem. This
-layer owns their specialization to integral lattices.
+Orthogonal and Spin Groups owns the quadratic-space groups, spinor norm, and
+orthogonal-specific approximation theorem. Adelic Algebraic Groups owns the generic
+restricted-product, rational-diagonal, quotient, and measure substrate. This layer owns their
+specialization to integral lattices.
 
 **4A. Class sets.** The class `cls L`, the proper class `cls⁺ L`, the genus `gen L`, and
 the proper genus, with the inclusions `cls ⊆ spn ⊆ gen` once 4C defines the middle term.
@@ -890,9 +857,9 @@ claimed, and no consumer may infer a complete list of classes from neighbor step
 | Milestone | Direct prerequisites |
 | --- | --- |
 | 4A | L 2C, 2G, 3F, B2, B5 |
-| 4B | L 3A, 3B, 4A; R Orthogonal and Spin Groups Layers 0, 2 and 3 |
+| 4B | L 3A, 3B, 4A; R Adelic Algebraic Groups Layers 1--3; R Orthogonal and Spin Groups Layers 0, 2 and 3 |
 | 4C | T `squareClass`; L 3C, 3D, 4B; R Orthogonal and Spin Groups Layers 1 and 2 |
-| 4D | L 4B, 4C; R Orthogonal and Spin Groups Layer 4 |
+| 4D | L 4B, 4C; R Adelic Algebraic Groups Layer 5; R Orthogonal and Spin Groups Layer 4 |
 | 4E | L 4C, 4D, B2, B5 |
 | 4F | L 0E, 2C, B4; R Orthogonal and Spin Groups Layer 2 |
 | 4G | M `Submodule.basisOfPid`; L 0C, 3F |
@@ -1121,8 +1088,9 @@ gives the values there.
 There is no product formula for the mass of a direct sum, and that non-statement is
 recorded. The mass of a twist `L(a)` is stated for `a > 0` only.
 
-**7B. The adelic decomposition.** The inputs are the measure and the volume theorem of
-Orthogonal and Spin Groups Layer 5, and the dictionary of 4B. The quotient
+**7B. The adelic decomposition.** The inputs are Adelic Algebraic Groups' quotient and
+Tamagawa-measure substrate, Orthogonal and Spin Groups' volume theorem, and the dictionary
+of 4B. The quotient
 `SO(V)(ℚ) \ SO(V)(𝔸)` is decomposed into measurable pieces, indexed by the proper classes.
 The piece of the class of `M` has volume
 
@@ -1277,11 +1245,11 @@ equality `1/|O(E₈²)| + 1/|O(D₁₆⁺)| = m₁₆` and the finiteness of the
 | Milestone | Direct prerequisites |
 | --- | --- |
 | 7A | L 2C, 2G, 4A |
-| 7B | L 4B, 7A; R Orthogonal and Spin Groups Layers 3 and 5 |
+| 7B | L 4B, 7A; R Adelic Algebraic Groups Layers 3, 6 and 7; R Orthogonal and Spin Groups Layers 3 and 5 |
 | 7C | L 3B, 3C, 4B |
 | 7D | L 3D, 3E, 4B |
 | 7E | M `Real.Gamma`, sphere volumes; L 2D |
-| 7F | R Orthogonal and Spin Groups Layer 5 |
+| 7F | R Adelic Algebraic Groups Layers 6 and 7; R Orthogonal and Spin Groups Layer 5 |
 | 7G | L 2C, 4A, 7A, B6, B7, B8 |
 | 7H | L 2C, 6C, 6D, 6G, 7B, 7C, 7D, 7E, 7F, 7G |
 | 7I | L 2G, 6D, 6G, 7H |
@@ -1321,8 +1289,8 @@ For unimodular `L` this becomes `Θ_L(−1/τ) = (τ/i)^{n/2} Θ_L(τ)`.
 | 8A | M `IsZLattice`, `EuclideanSpace`; L 0E, 2A |
 | 8B | M `Mathlib/Algebra/Module/ZLattice/Summable.lean`; L 2B, 8A |
 | 8C | M `jacobiTheta`; L 0A, 8B |
-| 8D | M `ZLattice.covolume`; L 1B, 2D, 8A; R L-functions `ZLattice.dual`, `ZLattice.dual_dual`, `ZLattice.covolume_mul_covolume_dual` |
-| 8E | L 8B, 8D; R L-functions `ZLattice.gaussianTheta_one_div` |
+| 8D | M `ZLattice.covolume`; L 1B, 2D, 8A; R L-functions Layer 1 analytic dual and covolume milestones |
+| 8E | L 8B, 8D; R L-functions Layer 1 Gaussian theta transformation |
 
 ### Layer 9: what the LMFDB lattice columns assert
 
@@ -1579,14 +1547,15 @@ Layer 0 comes first. After it, three groups of milestones are independent of eac
 The rest of the order follows the prerequisite tables:
 
 - milestones 3F to 3H need Layer 1 and the two suppliers named in their table;
-- Layer B needs Layers 0 to 3 and the order and Picard carriers of Global Class Field Theory
-  Layers 10B and 10C, and Layers 4 and 7 use it for rank 2;
+- Layer B needs Layers 0 to 3, the order and Picard carriers of Global Number Fields, and
+  Class Field Theory's ring-class-field milestone; Layers 4 and 7 use it for rank 2;
 - Layer 4 needs Layers 2, 3 and B, and the Orthogonal and Spin Groups roadmap;
 - Layer 5 needs Layers 1 and 3;
 - Layer 6 needs Layers 1, 2 and 5, and milestone 6C also needs Root Systems;
 - Layer 7 needs Layers 2, 3, 4 and B, the volume theorem, and 6C, 6D and 6G for its
   checks, and 7I closes rank 16 after 7H;
-- milestones 8A to 8C need Layers 0 to 2; 8D needs the three dual declarations of L-functions Layer 2 and 8E its theta transformation, and neither supplies anything back;
+- milestones 8A to 8C need Layers 0 to 2; 8D and 8E consume L-functions Layer 1's
+  analytic dual/covolume and Gaussian theta milestones, and L-functions consumes nothing back;
 - Layer 9 comes last.
 
 The shortest route to the K3 results is `0 → 1 → 5`, together with the comparison 5A. That

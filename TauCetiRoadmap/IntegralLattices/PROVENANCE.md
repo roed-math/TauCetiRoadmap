@@ -5,6 +5,23 @@ here is a prerequisite for a milestone. This file holds information that changes
 time: which Mathlib version the roadmap was checked against, which external work overlaps
 it, and which upstream data model it serves. Each entry carries the date it was checked.
 
+## Portfolio restructuring snapshot
+
+- Source retained roadmap branch: PR #7 at
+  `71613dd19beb202e4a2d8f42e2e6c77943141a08` (2026-08-10).
+- Final direct suppliers: `QuadraticFormInvariants`, `GlobalQuadraticForms`,
+  `GlobalNumberFields`, `ClassFieldTheory`, `AdelicAlgebraicGroups`,
+  `OrthogonalSpinGroups`, and `LFunctions`.
+- Integral Lattices retains integral and local lattice arithmetic, genera and spinor
+  genera, lattice local-global theorems, Nikulin theory, mass/genus material, and the
+  arithmetic theta series.
+- Field-level local/dyadic invariants, global rational-form classification, order/Picard
+  carriers, ring class fields, generic adelic/Tamagawa machinery, spin-specific theory,
+  and Gaussian Poisson/theta identities are consumed from their final owners.
+- The refactor removed the private spinor-norm, Hilbert-symbol, and analytic/theta
+  supplier interfaces. README-only supplier milestones remain prose
+  dependencies rather than placeholder Lean carriers.
+
 ## Mathlib versions: built against, and audited against
 
 The repository builds against the Mathlib commit named in `lake-manifest.json`, which is
@@ -106,19 +123,15 @@ outside the roadmap and is recorded here.
 
 ## The theta division with the L-functions roadmap
 
-Settled 2026-08-07, jointly with that roadmap. The L-functions roadmap owns the
-real-parameter Gaussian theta and its transformation, with Poisson summation; those cross
-through the export table in `README.md`. This roadmap owns the holomorphic theta on the upper
-half-plane, its agreement with the real-parameter theta on the imaginary axis, and its
-modular transformation law, in Layer 8. Neither roadmap states the other's half.
+The L-functions roadmap owns real-parameter Gaussian theta transformation and Poisson
+summation. This roadmap owns the arithmetic holomorphic theta on the upper half-plane, its
+agreement with the real-parameter theta on the imaginary axis, and the resulting lattice
+transformation law. The dependency is only `LFunctions -> IntegralLattices`.
 
-Revised 2026-08-09, after the group review of the open roadmaps. The division above is
-unchanged; what was wrong was the shape of the edge. This document's table had six rows and
-claimed to be byte-identical with the L-functions one, with the last two rows making that
-roadmap consume `IntegralLattice.dual` and `IntegralLattice.analyticDual_eq_dual`. Its Layer 2
-formulates the trace-to-Euclidean comparison through Mathlib's `FractionalIdeal.dual` and needs
-no dual of an integral bilinear form, so those two rows had no consumer and the claim of a
-two-way item-level relation was false. Four rows remain, all in one direction.
+At the inspected L-functions head, the generic Gaussian lattice transformation is a
+README-level Layer 1 milestone rather than a Lean declaration. Accordingly,
+`IntegralLattices/Suggested.lean` contains no local analytic-lattice or Gaussian-theta
+substitute. When the supplier publishes the declaration, Layer 8 will consume it directly.
 
 ## Consumers
 
@@ -127,23 +140,21 @@ impose no convention beyond the Conway–Sloane genus symbols, which the convent
 fixes. The K3 pipeline uses milestones 5G to 5I, milestone 5E, and the mass certificates
 of Layer 7.
 
-## The order and Picard-group boundary with Global Class Field Theory
+## The order, Picard-group, and ring-class-field boundary
 
-Settled 2026-08-09, from the group review of the open roadmaps. Layer B previously constructed
-the quadratic order of a primitive binary form and stated its dictionary onto "proper ideal
-classes of `𝒪_Δ`", writing the target as `Pic(𝒪_Δ)` and, for positive discriminant, as "the
-narrow class group". Neither name referred to anything: Global Class Field Theory owns orders and
-their Picard groups, and its Layer 10B had them in prose only.
+Global Number Fields owns `NumberFieldOrder`, `NumberFieldOrder.conductor`,
+`NumberFieldOrder.properIdeals`, `Pic`, and `NarrowPic`, including the wide/narrow
+finiteness theorems. Layer B returns and consumes those exact carriers. It defines no
+quadratic-order or Picard-group copy.
 
-Both sides moved. That roadmap named `NumberFieldOrder`, `conductor`, `properIdeals`, `Pic`,
-`NarrowPic` and `ringClassField` with `gal_ringClassField_equiv_pic`; this one now returns the
-supplier's order from B1, states B2's equivalence into the supplier's groups, and gains the
-composite
+Class Field Theory owns the ring class field and the Artin isomorphism
+`Gal(H_O/K) ≃ Pic O`, currently as its Layer 6 README milestone. Composing it with the
+form-side dictionary gives
 
 ```text
 Gal(H_{𝒪_Δ}/K_Δ) ≃ Pic 𝒪_Δ ≃ proper form classes of discriminant Δ
 ```
 
-as a B3 milestone. The narrow group is the supplier's, deliberately: two narrow quotients of one
-order would be two objects, and a composition law proved for one would not transfer to the other.
-
+as a B3 milestone. There is no local `ringClassField` declaration in the suggested Lean
+file until CFT exports one. The narrow group remains GNF's exact `NarrowPic O`, so the
+positive-discriminant dictionary cannot drift to the wide class group.
