@@ -1,4 +1,5 @@
 import Mathlib
+import TauCetiRoadmap.NumberFieldArithmetic.Suggested
 import TauCetiRoadmap.PolynomialGaloisGroups.TransitiveGroupData
 
 /-!
@@ -13,6 +14,13 @@ layer nor the roadmap.
 should not be confused. In an `example` it marks a milestone of this roadmap. In a `def` it
 marks data that a frozen export supplies, and not a proof that anybody owes.
 
+Two declarations in the Layer 5 block carry **closed** proofs, and they state something about
+the supplier contract rather than a milestone anybody owes. Dedekind's factorization theorem is
+not proved here: it is `NumberFieldArithmetic.exists_gal_fullCycleType_eq_factorizationType`,
+and `README.md`'s contract section is the record. Those two declarations apply it. Their point
+is that they stop elaborating if the supplier's signature moves or if `fullCycleType` or
+`factorDegrees` is redefined, so the contract is checked by the build and not asserted in prose.
+
 The pinned Mathlib has:
 
 * `Polynomial.Gal`, with its faithful action on the roots, transitive for irreducible
@@ -20,7 +28,7 @@ The pinned Mathlib has:
 * the permutation action library of A. Chambert-Loir, with `IsBlock`, `IsPreprimitive`,
   multiple transitivity, and Jordan's theorems for a transposition and for a 3-cycle;
 * `Polynomial.discr` in Sylvester form, without the root-product formula;
-* arithmetic Frobenius elements, as `IsArithFrobAt`.
+* the finite fields, with the minimal polynomial over them.
 
 Every carrier type of the roadmap therefore elaborates at that version, and this file spans
 Layers 0 to 6, and Layers 8 and 9.
@@ -51,13 +59,18 @@ local instance factSplitsSplittingField {F : Type u} [Field F] (p : F[X]) :
 
 section Prototypes
 
-open scoped Classical in
 /-- **Pinned convention (README, "Cycle types count fixed points").** The cycle type of a
 permutation *including* its fixed points as parts equal to `1`: Mathlib's
 `Equiv.Perm.cycleType` lists only the cycle lengths `≥ 2`, while Dedekind factorization
 types are partitions of `n` with their `1`-parts. Every Frobenius or factorization
-comparison below is stated with `fullCycleType`, never with a bare `cycleType`. -/
-noncomputable def fullCycleType {α : Type u} [Fintype α] (σ : Equiv.Perm α) : Multiset ℕ :=
+comparison below is stated with `fullCycleType`, never with a bare `cycleType`.
+
+⚠ The `DecidableEq α` argument is deliberate, and this definition is not `noncomputable`.
+Closing it over `Classical.propDecidable` instead would make `fullCycleType g` disagree
+*syntactically* with the same multiset written at the ambient instance, which is what the
+supplied factorization theorem of Layer 5 is stated with, and the contract check there would
+not close. -/
+def fullCycleType {α : Type u} [Fintype α] [DecidableEq α] (σ : Equiv.Perm α) : Multiset ℕ :=
   σ.cycleType + Multiset.replicate (Fintype.card α - σ.support.card) 1
 
 /-- **Layer 1 carrier.** The action of `Equiv.Perm ι` on the functions `ι → D`, by permutation
@@ -739,83 +752,67 @@ section Frobenius
 attribute [local instance] Polynomial.Gal.splits_ℚ_ℂ
 
 open scoped Classical in
-open scoped Classical in
 /-- **Layer 5 carrier.** The multiset of degrees of the monic irreducible factors of the
-reduction of `f` modulo `p`. This is the object that Dedekind's theorem compares with a cycle
-type, and the object that a certificate claims. Both sides of the comparison are defined here,
-so no milestone of this roadmap waits on a name that is fixed elsewhere. -/
+reduction of `f` modulo `p`. This is the object that a certificate claims, and it is the
+right-hand side of the imported factorization theorem with this definition unfolded. -/
 noncomputable def factorDegrees (f : ℤ[X]) (p : ℕ) [Fact p.Prime] : Multiset ℕ :=
   Multiset.map Polynomial.natDegree
     (UniqueFactorizationMonoid.normalizedFactors (f.map (Int.castRingHom (ZMod p))))
 
-/-- **Layer 5, first step.** For monic `f` and a prime `p` that does not divide `f.discr`, the
-reduction of `f` modulo `p` is separable. The proof is base change of the discriminant, from
-Layer 3, and the criterion `discr ≠ 0 ↔ Separable`. -/
+/-- **Layer 5, carrier API: multiplicity one.** For monic `f` and a prime `p` that does not
+divide `f.discr`, the reduction of `f` modulo `p` is separable, so no factor repeats and
+`factorDegrees f p` is the multiset of degrees of *distinct* factors. This is what lets the
+checker of Layer 8 read a certificate that lists distinct factors; it is one line from the base
+change of `discr` in Layer 3, and it is not a step of the imported theorem. -/
 example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr) :
     (f.map (Int.castRingHom (ZMod p))).Separable :=
   sorry
 
-/-- **Layer 5, second step: the input from finite fields.** For an element `α` of an extension
-of `ZMod q`, the degree of the minimal polynomial is the size of the orbit of `α` under
-`x ↦ x ^ q`. This statement mentions no Galois theory over `ℚ`. Together with the reduction of
-the roots, it turns the factor degrees of `f mod p` into the cycle lengths of one
-permutation. -/
+/-- **Layer 5, the finite-field input to Layer 8.** For an element `α` of an extension of
+`ZMod q`, the degree of the minimal polynomial is the size of the orbit of `α` under `x ↦ x ^ q`.
+This statement mentions no Galois theory over `ℚ`, and it is not a step of the imported theorem
+either. It is Lemma 1 of Rabin's paper, which is what makes the irreducibility test of Layer 8's
+checker sound, so this roadmap keeps it and Layer 8 discharges it. -/
 example (q : ℕ) [Fact q.Prime] {K : Type u} [Field K] [Algebra (ZMod q) K] (α : K)
     (hα : IsIntegral (ZMod q) α) (n : ℕ) (hn : 0 < n) :
     (minpoly (ZMod q) α).natDegree = n ↔
       (α ^ q ^ n = α ∧ ∀ m, 0 < m → m < n → α ^ q ^ m ≠ α) :=
   sorry
 
-/-! ### The bridge that Dedekind's theorem is assembled from
+/-! ### Dedekind's factorization theorem, imported
 
-Layer 5 owns this theorem, so the objects its proof compares must be visible here and not only
-in prose.
+This roadmap does **not** prove it. `NumberFieldArithmetic.exists_gal_fullCycleType_eq_factorizationType`
+is the theorem, and `README.md`'s contract section is the record. Its statement is the one
+below with `fullCycleType` and `factorDegrees` unfolded, so the two declarations here are
+**closed**: they break if the supplier's signature moves or if either abbreviation is redefined.
+There is no second Dedekind theorem in this file, and no `sorry` stands for one.
 -/
 
-/-- **Layer 5.** The subring of the splitting field generated by the roots of `f`. The
-decomposition group acts on its residue fields, and this is the ring the Frobenius element of
-Mathlib lives over. -/
-def rootOrder (f : ℤ[X]) : Subalgebra ℤ (f.map (Int.castRingHom ℚ)).SplittingField :=
-  sorry
-
-/-- `rootOrder f` is a finite `ℤ`-module for monic `f`, so its quotients by maximal ideals are
-finite fields and `IsArithFrobAt.exists_of_isInvariant` applies. -/
-example (f : ℤ[X]) (hf : f.Monic) : Module.Finite ℤ (rootOrder f) :=
-  sorry
-
-/-- The Galois group acts on `rootOrder f`, and the action is transitive on the maximal ideals
-over a given prime. This is the `Algebra.IsInvariant` hypothesis in Mathlib's vocabulary. -/
-example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] :
-    ∃ 𝔪 : Ideal (rootOrder f), 𝔪.IsMaximal ∧ (p : rootOrder f) ∈ 𝔪 :=
-  sorry
-
-/-- **Layer 5, the root reduction is injective.** For `p ∤ f.discr`, distinct roots of `f` stay
-distinct modulo a maximal ideal over `p`. This is what makes the inertia subgroup trivial, and
-it is the step that uses the root-product formula of Layer 3. -/
-example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr)
-    (𝔪 : Ideal (rootOrder f)) (h𝔪 : 𝔪.IsMaximal) (hp𝔪 : (p : rootOrder f) ∈ 𝔪)
-    (x y : rootOrder f)
-    (hx : (x : (f.map (Int.castRingHom ℚ)).SplittingField) ∈
-      (f.map (Int.castRingHom ℚ)).rootSet (f.map (Int.castRingHom ℚ)).SplittingField)
-    (hy : (y : (f.map (Int.castRingHom ℚ)).SplittingField) ∈
-      (f.map (Int.castRingHom ℚ)).rootSet (f.map (Int.castRingHom ℚ)).SplittingField)
-    (hxy : x - y ∈ 𝔪) : x = y :=
-  sorry
-
-/-- **Layer 5, Dedekind's factorization theorem.** Let `f : ℤ[X]` be monic, and let `p` be a
-prime that does not divide `f.discr`. Then some element of the Galois group has, on the roots,
-a fixed-point-completed cycle type equal to the factor degrees of `f mod p`.
-
-This roadmap owns this theorem. Layer 5 of `README.md` gives the proof route: reduction is
-separable, the roots reduce injectively, the decomposition group at a maximal ideal over `p`
-maps onto the Galois group of the residue extension with trivial inertia, and Mathlib's
-`IsArithFrobAt` supplies the element. Ramification theory of number fields is not developed
-here. -/
+/-- **Layer 5, the contract check.** The supplied theorem, spelled with this roadmap's two
+abbreviations. Nothing owes a proof here: the proof is the supplier's declaration, applied. -/
 example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr) :
     ∃ σ : (f.map (Int.castRingHom ℚ)).Gal,
       fullCycleType (Polynomial.Gal.galActionHom (f.map (Int.castRingHom ℚ)) ℂ σ) =
-        factorDegrees f p :=
-  sorry
+        factorDegrees f p := by
+  simpa only [fullCycleType, factorDegrees] using
+    NumberFieldArithmetic.exists_gal_fullCycleType_eq_factorizationType f hf p hp
+
+/-- **Layer 5, the membership statement.** The first theorem of this layer that this roadmap
+owns. The factor degrees of `f mod p` are exhibited by an element *of the Galois image*, which
+is the shape `RegisteredDeduction.valid` consumes: its hypothesis is `∀ t ∈ requiredCycleTypes,
+∃ g ∈ K, fullCycleType g = t`, with `K` the image. Everything downstream — the irreducibility
+criterion, the recognition theorems, the certificate checker, and Layer 9 — is applied to this
+form, and none of it mentions a prime ideal or a Frobenius element.
+
+The criterion is applied to an `f` that is not yet known to be irreducible, which is why the
+supplied theorem has to cover reducible `f`. -/
+theorem factorDegrees_mem_fullCycleType_galImage (f : ℤ[X]) (hf : f.Monic) (p : ℕ)
+    [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr) :
+    ∃ g ∈ (Polynomial.Gal.galActionHom (f.map (Int.castRingHom ℚ)) ℂ).range,
+      fullCycleType g = factorDegrees f p := by
+  obtain ⟨σ, hσ⟩ :=
+    NumberFieldArithmetic.exists_gal_fullCycleType_eq_factorizationType f hf p hp
+  exact ⟨_, ⟨σ, rfl⟩, by simpa only [fullCycleType, factorDegrees] using hσ⟩
 
 /-- **Layer 5, the membership statement run backwards** (worked instance): `x⁴ + 1` has Galois
 group `V₄`, which contains no 4-cycle, so it is reducible modulo *every* prime. This is the

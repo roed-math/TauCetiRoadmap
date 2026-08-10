@@ -21,6 +21,13 @@ This roadmap builds that material in two halves. The first half is permutation g
 reusable without any field theory. The second half is Galois theory, stated against
 `Polynomial.Gal`. The two halves can be implemented at the same time.
 
+One of those gaps is filled elsewhere. The factorization-type theorem is ramification theory of
+number fields, and the [Number Field Arithmetic](../NumberFieldArithmetic/README.md) roadmap owns
+it and states it in `Polynomial.Gal` vocabulary. This roadmap consumes that one declaration and
+proves the polynomial and permutation consequences: which cycle types a factorization exhibits,
+what those exhibitions recognize, what a certificate may claim from them, and the three-prime
+realization of `Sₙ`. It does not develop a second route to the theorem.
+
 ## Scope
 
 The boundary is part of the specification.
@@ -35,10 +42,13 @@ The boundary is part of the specification.
   that the certificate checker is sound. It does not claim that the list of reference subgroups
   is complete. A certificate in these degrees concludes a label only by a proof of conjugacy to
   the named reference subgroup.
-- **Dedekind's factorization theorem on the polynomial side.** Let `f : ℤ[X]` be monic, and let
-  `p` be a prime that does not divide `disc f`. The degrees of the irreducible factors of
-  `f mod p` are then the cycle lengths of one element of the Galois group. Layer 5 proves this
-  from Mathlib.
+- **The consequences of Dedekind's factorization theorem.** Let `f : ℤ[X]` be monic, and let `p`
+  be a prime that does not divide `disc f`. The degrees of the irreducible factors of `f mod p`
+  are then the cycle lengths of one element of the Galois group. That theorem is **not** proved
+  here: Number Field Arithmetic Layer 3.10 owns it, and Layer 5 imports it. What is in scope is
+  everything the theorem is used for — the membership of a factorization type in the set of
+  Galois cycle types, the recognition theorems it feeds, the certificate fields that record it,
+  and their soundness.
 - **One theorem of inverse Galois theory.** `Sₙ` is a Galois group over `ℚ` for every `n`, by
   the three-prime construction. The theorem is a constructive existence statement: it produces a
   polynomial from the three prescribed reductions. It is not a closed formula, and the roadmap
@@ -54,8 +64,10 @@ The following subjects are outside this roadmap. They are not later milestones o
 - Completeness of the classification of transitive subgroups in degrees 6 to 11.
 - Chebotarev density. Certificate soundness does not use it. See the conventions below.
 - Ramification theory of number fields: the different, the relative discriminant ideal,
-  decomposition fields, and inertia fields. Layer 5 uses Mathlib's Frobenius elements directly
-  and proves one statement about polynomials.
+  decomposition fields, and inertia fields. It is Number Field Arithmetic that owns them, and
+  that owns the factorization-type theorem they prove. Layer 5 here holds no Frobenius element,
+  no ring of integers, and no prime ideal; it imports one declaration whose statement mentions
+  only `Polynomial.Gal`, a root action, and a factorization over `ZMod p`.
 - Data about abstract groups, such as character tables and abstract group names. This roadmap
   owns only the permutation data of `nTj`.
 - The replacement for the discriminant test in characteristic 2, which is Berlekamp's
@@ -78,7 +90,7 @@ keeps the permutation material available to customers who want no field theory.
 
 ## How to read the milestone lists
 
-Each milestone records its direct prerequisites. Each prerequisite has exactly one of four
+Each milestone records its direct prerequisites. Each prerequisite has exactly one of five
 kinds.
 
 | Mark | Kind |
@@ -87,11 +99,17 @@ kinds.
 | **(Tau Ceti)** | A declaration that exists in Tau Ceti. |
 | **(Layer k)** | An earlier milestone of this roadmap. |
 | **(*Roadmap*, Layer k)** | A named layer of another merged roadmap. |
+| **(R *Roadmap*, `decl`)** | An exact declaration of a roadmap that is earlier in the merge order. |
+
+The last kind has exactly one supplier and exactly one row, and both are in the contract section
+below. A subject is never a prerequisite of this kind: "Dedekind's theorem" is not one,
+`exists_gal_fullCycleType_eq_factorizationType` is.
 
 No milestone depends on anything else. In particular, no milestone depends on any of these:
 
 - a branch;
-- an open pull request, in Mathlib or in this repository;
+- a pull request that this roadmap does not follow in the merge order;
+- a Mathlib pull request;
 - a future version of Mathlib;
 - an external repository;
 - a roadmap that does not exist yet.
@@ -102,6 +120,38 @@ Dated information about the surrounding ecosystem is not part of the specificati
 "The pinned Mathlib" means the version in the repository's `lake-manifest.json`. Every claim
 below about what Mathlib has was checked against it. `PROVENANCE.md` records the date of that
 check.
+
+## What this roadmap consumes from the Number Field Arithmetic roadmap
+
+Dedekind's factorization theorem is a theorem of ramification theory. Its proof needs the ring
+generated by the roots, a maximal ideal over `p`, the surjection from a decomposition group onto
+a residue Galois group, and the triviality of inertia. That is the subject of the
+[Number Field Arithmetic](../NumberFieldArithmetic/README.md) roadmap, which owns those objects
+and proves the theorem in the form a polynomial roadmap can use, over a **reducible** `f` and
+with the fixed points restored. This roadmap does not prove it a second time.
+
+The exchange is one declaration, and it is the whole of the exchange. That roadmap is earlier in
+the merge order; nothing there depends on anything here.
+
+| Consumer here | Supplier layer | Exact declaration | Statement relied on |
+|---|---|---|---|
+| 5, the membership statement, and through it Layers 6, 8 and 9 | 3.10 | `exists_gal_fullCycleType_eq_factorizationType` | for `f : ℤ[X]` monic and `p` prime with `¬ (p : ℤ) ∣ f.discr`, there is `σ : (f.map (Int.castRingHom ℚ)).Gal` with `(galActionHom (f.map (Int.castRingHom ℚ)) ℂ σ).cycleType + Multiset.replicate (Fintype.card (rootSet ℂ) − support.card) 1` equal to `Multiset.map natDegree (normalizedFactors (f.map (Int.castRingHom (ZMod p))))` |
+
+The backticked name lives in the namespace `TauCetiRoadmap.NumberFieldArithmetic`, in
+`TauCetiRoadmap/NumberFieldArithmetic/Suggested.lean`.
+
+Two things about that row are worth stating, because they are what make it an exact contract and
+not a gesture at a subject.
+
+- The hypothesis is `p ∤ f.discr`, on the discriminant of the **polynomial**, and not on
+  ramification in the field of a root. The two differ, and §Layer 5 records the standard
+  counterexample.
+- The two sides of the supplied equation are, definitionally, `fullCycleType` of the root action
+  and `factorDegrees f p`. Those two abbreviations are defined here, in Layers 0 and 5, and the
+  supplier does not use them. `Suggested.lean` therefore carries a **closed** proof that the
+  supplied statement implies the abbreviated one. If either definition drifts, or the supplier's
+  signature changes, that proof stops elaborating and the build fails. No milestone of this
+  roadmap restates the supplied theorem.
 
 ## Conventions
 
@@ -207,6 +257,13 @@ fullCycleType σ = σ.cycleType + Multiset.replicate (n - σ.support.card) 1
 
 Every comparison below between a factor-degree multiset and a permutation uses `fullCycleType`.
 A factor-degree multiset is never compared with a bare `cycleType`.
+
+`fullCycleType` takes the `DecidableEq` of its carrier as an argument, and is therefore not
+`noncomputable`. This is not decoration. Closing the definition over `Classical.propDecidable`
+gives a term that is equal, but not syntactically equal, to the same multiset written at the
+carrier's own instance — which is what the supplied factorization theorem of Layer 5 is stated
+with. The contract check in `Suggested.lean` does not close under the classical spelling, and it
+does under this one.
 
 ### Discriminant
 
@@ -334,19 +391,12 @@ Each item was checked in the pinned Mathlib.
   `RingTheory/Discriminant.lean` has `Algebra.discr`, the discriminant of a basis for the trace
   form, with `discr_powerBasis_eq_prod''` in the form `∏ (σᵢ x − σⱼ x)²`, and
   `discr_powerBasis_eq_norm`.
-- **Arithmetic input for Layer 5.** `NumberTheory/KummerDedekind.lean` has
-  `normalizedFactorsMapEquivNormalizedFactorsMinPolyMk`, which compares the factorization of
-  `p·𝒪` with that of `f mod p` when `p` does not divide the conductor.
-  `RingTheory/Frobenius.lean` has `IsArithFrobAt` in both its `AlgHom` and group-element forms,
-  with existence as `IsArithFrobAt.exists_of_isInvariant`, uniqueness modulo inertia, and
-  conjugacy. `RingTheory/Invariant/Defs.lean` has the class `Algebra.IsInvariant`.
-  `RingTheory/Invariant/Basic.lean` has `Ideal.Quotient.stabilizerHom_surjective`, and
-  transitivity of the Galois action on the primes above `p`. `RingTheory/Ideal/Over.lean` has
-  `Ideal.Quotient.stabilizerHom` itself, and `Ideal.primesOver`.
-  `FieldTheory/Galois/IsGaloisGroup.lean` has the predicate `IsGaloisGroup G A B`.
-  `NumberTheory/RamificationInertia/` has `e` and `f`, `sum_ramification_inertia`, the Galois
-  case, and `HilbertTheory.lean`. `FieldTheory/Finite/` has the finite fields and the cyclicity
-  of their Galois groups.
+- **Finite fields, for Layer 5.** `FieldTheory/Finite/` has the finite fields, the cyclicity of
+  their Galois groups, and the minimal polynomial over them. That is the whole of what Layer 5
+  takes from Mathlib. The ramification input that Dedekind's theorem needs —
+  `NumberTheory/KummerDedekind.lean`, `RingTheory/Frobenius.lean` with `IsArithFrobAt`,
+  `RingTheory/Invariant/`, and `NumberTheory/RamificationInertia/` — is consumed by the supplier
+  of that theorem and not here; see §What this roadmap consumes.
 - **Cyclotomic Galois groups.** `NumberTheory/Cyclotomic/Gal.lean` has
   `IsCyclotomicExtension.autEquivPow`, `galCyclotomicEquivUnitsZMod`, and
   `galXPowEquivUnitsZMod`, so `Gal(Φₙ) ≃* (ZMod n)ˣ`. The abelian examples `4T1` and `4T2` use
@@ -366,7 +416,8 @@ Everything that concerns labels. At the pinned version there is:
 - no root-product formula for the discriminant, and therefore no test for `Aₙ`;
 - no resolvent in the Galois-theoretic sense;
 - no theorem that identifies the factorization type of `f mod p` with a cycle type, although
-  Frobenius elements exist and `KummerDedekind` compares the two factorizations;
+  Frobenius elements exist and `KummerDedekind` compares the two factorizations. This is the one
+  gap in the list that another roadmap fills; every other line is built here;
 - no general wreath product, only `RegularWreathProduct`;
 - no theorem of Jordan for a `p`-cycle;
 - no classification of the transitive subgroups of `Sₙ` for any `n ≥ 3`;
@@ -882,13 +933,19 @@ levels of data are kept apart throughout. The soundness of Layer 8 depends on th
 
 ### Layer 5: Frobenius specialization
 
-This layer proves Dedekind's factorization theorem on the polynomial side. It uses Mathlib's
-Frobenius elements. It does not develop ramification theory. The different, the relative
-discriminant ideal, decomposition fields, and inertia fields are outside this roadmap.
+This layer does **not** prove Dedekind's factorization theorem. Number Field Arithmetic Layer
+3.10 owns it, as `exists_gal_fullCycleType_eq_factorizationType`, and §What this roadmap consumes
+records the contract. That theorem is ramification theory: its proof needs the ring generated by
+the roots, a maximal ideal over `p`, the surjection of a decomposition group onto a residue
+Galois group, and the triviality of inertia, and none of those objects appears in this roadmap.
+
+What this layer owns is the polynomial and permutation half: the carrier a certificate claims,
+the finite-field input its irreducibility test rests on, and the membership statement that every
+recognition theorem downstream is applied to.
 
 - **`factorDegrees`, with its basic API.** Define `factorDegrees f p` as the multiset of degrees
-  of the monic irreducible factors of `f mod p`. This is the object that Dedekind's theorem
-  compares with a cycle type, and the object that a certificate claims. The API:
+  of the monic irreducible factors of `f mod p`. This is the object the imported theorem compares
+  with a cycle type, and the object that a certificate claims. The API:
 
   - *Constructor:* the defining equation, through `UniqueFactorizationMonoid.normalizedFactors`
     over `ZMod p`. This is the mathematical multiset, and it is noncomputable. The checker of
@@ -903,48 +960,47 @@ discriminant ideal, decomposition fields, and inertia fields are outside this ro
     multiplicity is 1 and the multiset is the set of degrees of the distinct factors.
   - *Edge cases:* `p` divides `f.discr`, where a factor can repeat and no theorem below applies;
     `f` not monic, where the degree can drop.
-  - *Downstream interfaces:* Dedekind's theorem below; the checker of Layer 8.
+  - *Downstream interfaces:* the membership statement below; the checker of Layer 8; and the
+    right-hand side of the imported theorem, which is this multiset with the definition unfolded.
+
+  The multiplicity-one comparison lemma is not a step of Dedekind's theorem, and it is not a
+  second proof of anything the supplier proves. It is what lets the checker of Layer 8 read a
+  certificate that lists distinct factors, and it is one line from the base change of `discr` in
+  Layer 3.
 
   *Needs:* `UniqueFactorizationMonoid.normalizedFactors` over a finite field (Mathlib);
-  `Polynomial.map` along `ℤ → ZMod p` (Mathlib).
-
-- **Reduction is separable.** For monic `f : ℤ[X]` and a prime `p` that does not divide
-  `f.discr`, the reduction `f mod p` is separable in `(ZMod p)[X]`. The proof is base change of
-  the discriminant, and the criterion `discr ≠ 0 ↔ Separable`.
-  *Needs:* base change of `discr` and the separability criterion (Layer 3);
-  `factorDegrees` (Layer 5).
+  `Polynomial.map` along `ℤ → ZMod p` (Mathlib); base change of `discr` and the criterion
+  `discr ≠ 0 ↔ Separable`, for the multiplicity-one lemma (Layer 3).
 
 - **Factor degrees are Frobenius orbit sizes.** Let `g` be a squarefree monic polynomial over a
   finite field `𝔽_q`. Let the map `x ↦ x^q` act on the roots of `g` in an algebraic closure. The
   degrees of the monic irreducible factors of `g` are then exactly the sizes of the orbits. This
-  is a statement about finite fields only. It uses no Galois theory over `ℚ`.
+  is a statement about finite fields only. It uses no Galois theory over `ℚ`, and it is not a
+  step of the imported theorem.
+
+  It is kept because Layer 8 needs it. Rabin's irreducibility test decides whether a monic `g` of
+  degree `d` over `𝔽_p` is irreducible by evaluating `X^(p^d) mod g` and the gcds at the prime
+  divisors of `d`, and Lemma 1 of that paper is exactly the statement above in its
+  minimal-polynomial form: the degree of `minpoly 𝔽_q α` is the least `n` with `α^(q^n) = α`.
+  Layer 8's soundness proof is where it is discharged.
+
   *Needs:* `FiniteField` and `GaloisField` (Mathlib); the minimal polynomial over a finite field
   (Mathlib).
 
-- **Roots reduce injectively.** Let `L` be the splitting field of `f` over `ℚ`. Let `𝔪` be a
-  maximal ideal over `p` in the subring of `L` generated by the roots. Assume that `p` does not
-  divide `f.discr`. Then reduction modulo `𝔪` is a bijection from the roots of `f` in `L` to the
-  roots of `f mod p` in the residue field. In the proof, a collision would put a difference of
-  two roots in `𝔪`, and therefore put `p` in the discriminant.
-  *Needs:* the root-product formula (Layer 3); the reduction of separable polynomials above
-  (Layer 5).
+- **Dedekind's factorization theorem, imported.** Let `f : ℤ[X]` be monic, and let `p` be a prime
+  that does not divide `f.discr`. Then some `σ ∈ (f over ℚ).Gal` has a `fullCycleType` on the
+  roots equal to `factorDegrees f p`. **This roadmap does not prove that.** It is
+  `exists_gal_fullCycleType_eq_factorizationType` of Number Field Arithmetic Layer 3.10, and the
+  milestone here is to record that its statement, spelled with the abbreviations of Layers 0 and
+  5, is the abbreviated form — a proof with no `sorry`, so that a change on either side of the
+  contract fails the build.
 
-- **The decomposition group acts as the residue Galois group.** The stabilizer of `𝔪` surjects
-  onto the Galois group of the residue field extension. Under the hypothesis `p ∤ f.discr` the
-  inertia subgroup is trivial, by the injectivity above. Mathlib supplies the surjection and the
-  existence of an arithmetic Frobenius element.
-  *Needs:* `Algebra.IsInvariant` and `Ideal.Quotient.stabilizerHom_surjective` (Mathlib);
-  `IsArithFrobAt` with `IsArithFrobAt.exists_of_isInvariant` (Mathlib); the injectivity above
-  (Layer 5).
-
-- **Dedekind's factorization theorem.** Let `f : ℤ[X]` be monic, and let `p` be a prime that does
-  not divide `f.discr`. Then some `σ ∈ (f over ℚ).Gal` has a `fullCycleType` on the roots equal
-  to the multiset of degrees of the monic irreducible factors of `f mod p`. Assemble the four
-  milestones above.
-
-  - *Source:* Dedekind; see Cohen, §6.3.2, and van der Waerden, *Algebra* I, §61.
+  - *Source:* Dedekind; see Cohen, §6.3.2, and van der Waerden, *Algebra* I, §61. The proof is
+    the supplier's, and its route is written out there.
   - *Hypotheses:* `f` monic over `ℤ`, `p` prime, and `p ∤ f.discr`. The hypothesis is on the
-    discriminant of the polynomial, and not on ramification in the field of a root.
+    discriminant of the polynomial, and not on ramification in the field of a root. In particular
+    the supplier's statement covers **reducible** `f`, which is what the irreducibility criterion
+    below applies it to.
   - *False generalization:* "`p` unramified in `ℚ[x]/(f)`" is not enough. Dedekind's cubic
     `x³ + x² − 2x + 8` has `disc f = −2012 = −2²·503` and field discriminant `−503`, so the index
     is 2. The prime 2 splits into three distinct primes in the field, but no monic cubic over
@@ -952,20 +1008,26 @@ discriminant ideal, decomposition fields, and inertia fields are outside this ro
     factorization type of `f mod 2` cannot describe the splitting of 2, for any generator. The
     hypothesis `p ∤ f.discr` excludes 2 here, because `2 ∣ 2012`.
 
-  *Needs:* the four milestones above (Layer 5); `fullCycleType` (Layer 0).
+  *Needs:* `exists_gal_fullCycleType_eq_factorizationType`
+  (R *Number Field Arithmetic*, Layer 3.10); `fullCycleType` (Layer 0);
+  `factorDegrees` (Layer 5).
 
-- **The membership statement.** The multiset of factor degrees of `f mod p` belongs to the set
-  `{ fullCycleType g | g in the Galois image }`. Consequences, each a named theorem, through the
-  recognition theorems of Layer 1:
+- **The membership statement.** This is the first theorem of the layer that this roadmap owns.
+  The multiset of factor degrees of `f mod p` belongs to the set
+  `{ fullCycleType g | g in the Galois image }`. It is the imported theorem with the existential
+  read as membership, and it is the form every recognition theorem is applied to; nothing
+  downstream of here mentions a prime ideal or a Frobenius element. Consequences, each a named
+  theorem, through the recognition theorems of Layer 1:
 
   - if `f mod p` is irreducible, then the Galois group contains an `n`-cycle, so it acts
     transitively, so `f` is irreducible over `ℚ`. This is the classical criterion for
-    irreducibility modulo `p`;
+    irreducibility modulo `p`. It is applied to an `f` not yet known to be irreducible, which is
+    why the imported statement has to cover reducible `f`;
   - factorization type `(1,…,1,2)` in prime degree, with transitivity, gives `S_p`;
   - factorization type `(1,…,1,3)` with primitivity gives a group that contains `Aₙ`.
 
   Recognition that reads a low-degree table is in Layer 6, which is where that table is proved.
-  *Needs:* Dedekind's theorem above (Layer 5); the recognition theorems (Layer 1).
+  *Needs:* the imported theorem above (Layer 5); the recognition theorems (Layer 1).
 
 - **What factorization types do and do not give.** An exhibited element of order `m` proves that
   `m` divides the order of the group, so factorization types do give lower bounds on the order.
@@ -1238,9 +1300,9 @@ constructs a field whose value is a proof.
     273-280, Lemma 1.
   - *Hypotheses:* `p` prime, `g` monic of degree `d ≥ 1`.
 
-  *Needs:* Dedekind's theorem (Layer 5); the discriminant test (Layer 3); the resolvent
-  specifications and the factorization theorem (Layer 4); the label API (Layer 6); polynomial
-  arithmetic over `ZMod p` (Mathlib).
+  *Needs:* the membership statement and the finite-field orbit lemma (Layer 5); the discriminant
+  test (Layer 3); the resolvent specifications and the factorization theorem (Layer 4); the label
+  API (Layer 6); polynomial arithmetic over `ZMod p` (Mathlib).
 
 - **The group-theoretic deduction.** An exhibited cycle type proves that its order divides the
   order of the group, so cycle types do give lower bounds on the order. What they do not give is
@@ -1278,7 +1340,7 @@ constructs a field whose value is a proof.
   factor degrees `(2,1,1,1)`. Then `f` has full `S₅` Galois group. The proof is transitivity,
   plus a transposition, in prime degree. A downstream certificate for one explicit quintic
   instantiates this theorem.
-  *Needs:* Dedekind's theorem (Layer 5); `subgroup_eq_top_of_swap_mem` (Mathlib); the
+  *Needs:* the membership statement (Layer 5); `subgroup_eq_top_of_swap_mem` (Mathlib); the
   transposition-extraction theorem (Layer 1).
 
 ### Layer 9: `Sₙ` as a Galois group over `ℚ`
@@ -1416,7 +1478,7 @@ The layer numbering is a topological order. No layer depends on a later one.
 | 2 | 0, 1 | the field and permutation dictionary |
 | 3 | 0 | discriminants and the alternating group |
 | 4 | 0, 3 | resolvents, and the quartic and quintic specifications |
-| 5 | 0, 1, 3 | Dedekind's factorization theorem on the polynomial side |
+| 5 | 0, 1, 3, and Number Field Arithmetic 3.10 | the factorization-degree carrier, the finite-field orbit lemma, and the membership statement derived from the imported theorem |
 | 6 | 1, 2, 3, 4, 5 | the classification for `n ≤ 5`, the label predicates, and the decision procedures |
 | 7 | 1, 6 | degrees 6 to 11 as reference data |
 | 8 | 3, 4, 5, 6, 7 | the certificate checker |
@@ -1426,6 +1488,11 @@ Layers 0 and 1 have no dependency inside the roadmap, so they can start at once 
 parallel. Layer 9 needs only Layers 1 and 5, so it can be done before Layers 6 to 8. Layer 7 can
 be done one degree at a time.
 
+Layer 5 is the only layer with a dependency outside the roadmap, and it is one declaration.
+This roadmap therefore follows Number Field Arithmetic in the merge order, and nothing else in
+the order changes: Layers 0 to 4, 6 and 7 can be implemented before that supplier lands, and
+only the membership statement of Layer 5 and its consumers in Layers 8 and 9 wait on it.
+
 Two rules keep the graph acyclic, and both are worth stating because the natural way to write
 this material breaks them. Any theorem whose proof reads the table of Layer 6 belongs to Layer 6,
 even when its statement mentions only permutations. Any theorem that concludes `HasGaloisLabel`
@@ -1434,7 +1501,8 @@ belongs to Layer 6 or later, even when the mathematics behind it is in Layer 3 o
 Three deliverables are worth early attention. Other work depends on their shape rather than on
 their proofs.
 
-- The statement of Dedekind's theorem, in Layer 5.
+- The membership statement of Layer 5, whose shape is fixed by the supplied theorem and can be
+  written down before that theorem is proved.
 - The tables in degree at most 5, in Layer 6.
 - The certificate types, in Layer 8.
 
@@ -1442,6 +1510,10 @@ their proofs.
 
 This roadmap serves the LMFDB section `galois_groups`.
 
+- The [Number Field Arithmetic](../NumberFieldArithmetic/README.md) roadmap owns Dedekind's
+  factorization theorem and the ramification theory behind it. This is the one upstream
+  relation, it is a single declaration, and §What this roadmap consumes is the contract. That
+  roadmap merges first.
 - The merged [Modular Forms](../ModularForms/README.md) roadmap, Layer 9, asks for a checker for
   Galois-group certificates rather than a search. Layer 8 here supplies that interface, and
   Layer 8's generic quintic theorem is the theorem that its example needs. This is a downstream
@@ -1489,9 +1561,10 @@ instead.
   document. Sections 3 and 4.5 of Serre, on thin sets, Hilbert irreducibility, and the
   realization of `Aₙ`, describe material that this roadmap places outside its scope.
 - H. Cohen, *A Course in Computational Algebraic Number Theory*, GTM 138, Springer, 1993, §6.3.
-  The resolvent method and the decision trees in degrees up to 7, and the statement of Dedekind's
-  theorem in §6.3.2. *Not inspected for this pass.* The dependent milestones are written out in
-  Layers 4 and 5, with their proof routes.
+  The resolvent method and the decision trees in degrees up to 7. *Not inspected for this pass.*
+  The dependent milestones are written out in Layer 4, with their proof routes. §6.3.2 is the
+  traditional citation for Dedekind's theorem, which this roadmap does not prove; its source
+  entry belongs to the supplier.
 - D. S. Dummit, *Solving solvable quintics*, Math. Comp. 57 (1991) 387-401. The closed
   coefficient formula for the resolvent sextic. *Not inspected for this pass*, and no milestone
   depends on it. Layer 4 defines `resolventSextic` as the orbit resolvent of an invariant that is
