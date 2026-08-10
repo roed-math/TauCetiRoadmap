@@ -22,7 +22,9 @@ stating a milestone:
   elaborate.
 
 Every carrier and every cross-subject interface in this file compiles as a named declaration.
-That includes `artinSymbol`, the carrier `idealsAway` with `idealsAwayInclusion`, `artinHomAway`
+That includes `artinSymbol` with `artinSymbol_map_restrictNormalHom` and
+`exists_isArithFrobAt_pow_inertiaDeg`, the carrier `idealsAway` with `idealsAwayInclusion`,
+`artinHomAway`
 with `integralIdealsAway` and `artinHomAwayIntegral`, `exists_gal_fullCycleType_eq_factorizationType`,
 `relDiscr`, `ramifiedSupport`, the three
 Layer 5 comparison maps, `localRamificationGroup`, and the unit-certificate candidate sets
@@ -168,6 +170,45 @@ functoriality. -/
 example {M : Type*} [Field M] [NumberField M] [IsGalois ℚ M] (K : IntermediateField ℚ M)
     [Normal ℚ K] {σ : M ≃ₐ[ℚ] M} {Q : Ideal (𝓞 M)} (hσ : IsArithFrobAt ℤ σ Q) :
     IsArithFrobAt ℤ (σ.restrictNormal K) (Q.under (𝓞 K)) :=
+  sorry
+
+/-- **Layer 2.4, functoriality of the Artin symbol along restriction**, at the level of the
+conjugacy class. This is the class-level half that 2.3 defers to 2.4, and it is consumed by
+name: the L-functions roadmap's Chebotarev argument reduces a general extension to a cyclotomic
+one along exactly this square, so the declaration is a contract and not an internal step.
+
+⚠ The unramified hypothesis for `M/K` is *derived* from the one for `L/K`, through
+`isUnramifiedAway_of_intermediateField` below. Taking an unrelated second hypothesis would state
+something weaker, namely that two separately-defined symbols agree, rather than that one symbol
+restricts to the other. -/
+theorem artinSymbol_map_restrictNormalHom {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    [IsGalois K L] (M : IntermediateField K L) [NumberField M] [IsGalois K M]
+    (𝔭 : Ideal (𝓞 K)) [𝔭.IsMaximal]
+    (hur : ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver 𝔭], Algebra.IsUnramifiedAt (𝓞 K) Q)
+    (hurM : ∀ (Q : Ideal (𝓞 M)) [Q.IsPrime] [Q.LiesOver 𝔭], Algebra.IsUnramifiedAt (𝓞 K) Q) :
+    ConjClasses.map (AlgEquiv.restrictNormalHom (F := K) M) (artinSymbol 𝔭 hur) =
+      artinSymbol 𝔭 hurM :=
+  sorry
+
+/-- **Layer 2.4, the tower formula**, `Frob_{L/M}(Q) = Frob_{L/K}(Q)^{f(Q ∩ M / 𝔭)}` for
+`K ⊆ M ⊆ L`. It is stated **relative to one prime `Q` of `L`**, and that is the whole content of
+the statement.
+
+⚠ A version taking an arbitrary representative of `artinSymbol 𝔭 hur` and a fixed prime of `M`
+is false when `M/K` is not normal: a conjugate representative need not stabilize `Q`, so its
+`f`-th power need not fix `M` pointwise and is then the restriction of nothing in `Gal(L/M)`.
+The class-level statement is a corollary of this one and never a replacement for it.
+
+⚠ `𝔭` must be unramified. At a ramified prime a Frobenius lift is determined only modulo
+inertia, so no equality of automorphisms is available; the ramified statement would have to live
+in the quotient by inertia, or be a statement about a coset. -/
+theorem exists_isArithFrobAt_pow_inertiaDeg {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    [IsGalois K L] (M : IntermediateField K L) [NumberField M]
+    {𝔭 : Ideal (𝓞 K)} [𝔭.IsMaximal] {Q : Ideal (𝓞 L)} [Q.IsPrime] [Q.LiesOver 𝔭]
+    [Algebra.IsUnramifiedAt (𝓞 K) Q] {σ : L ≃ₐ[K] L} (hσ : IsArithFrobAt (𝓞 K) σ Q) :
+    ∃ τ : L ≃ₐ[M] L,
+      τ.restrictScalars K = σ ^ Ideal.inertiaDeg 𝔭 (Q.under (𝓞 M)) ∧
+        IsArithFrobAt (𝓞 M) τ Q :=
   sorry
 
 /-- **Layer 2.5, the carrier `J^S`.** The fractional ideals with valuation zero at every prime
