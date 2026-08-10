@@ -26,6 +26,12 @@ groups with the Hurwitz `84(g−1)` bound, and — as a definite later layer —
 between function fields and regular projective curves, where the comparison contracts with
 the scheme-cohomological world live.
 
+**Portfolio ownership.** This roadmap is the sole owner of general function-field places,
+divisors and `L(D)`, Weil differentials and Riemann–Roch, extension ramification and
+Riemann–Hurwitz, regular projective models, and the curve/function-field anti-equivalence.
+`BelyiMaps` consumes these exact carriers for algebraization and Belyi-specific constructions;
+it does not define a parallel place, divisor, or Riemann–Roch theory.
+
 **Route decision (pinned).** The development is **function-field-first**, following
 Stichtenoth: a curve *is* its field of algebraic functions, places are normalized discrete
 valuations, and Riemann–Roch is proved by Weil's repartition argument — linear algebra over
@@ -93,7 +99,7 @@ Note also the pin's notation collision: `F⟮X⟯` is scoped notation for `RatFu
 - **Hyperelliptic arithmetic invariants** (Igusa invariants, minimal models, cluster
   pictures) → a future HyperellipticCurves roadmap; here hyperelliptic function fields are
   a model class (existence of the separable degree-2 rational subfield, the genus formula).
-- **Belyi maps and dessins** → a future BelyiMaps roadmap, which would consume this
+- **Belyi maps and dessins** → the BelyiMaps roadmap, which consumes this
   roadmap's extension/ramification layers and Riemann–Hurwitz.
 
 ## Standing hypotheses
@@ -675,7 +681,7 @@ Stichtenoth III.1–III.3. `F′/k′` over `F/k`, `[F′ : F] < ∞`.
   (Cor. 3.7.2); decomposition groups. (The finer inertia/ramification filtration
   appears in Layer 8, scoped; the *local* filtration theory — Herbrand, upper
   numbering, Hasse–Arf — belongs to the
-  [Local Fields roadmap (PR #2, in preparation)](https://github.com/roed-math/TauCetiRoadmap/pull/2),
+  [Local Fields and Ramification roadmap (PR #2)](https://github.com/roed-math/TauCetiRoadmap/pull/2),
   bridged at completions.)
 
 ### Layer 7: the different and the Hurwitz genus formula
@@ -773,7 +779,7 @@ one** — this layer states them.
   **Hilbert's different formula `d(P′∣P) = ∑_{i≥0} (|G_i| − 1)`** (Thm. 3.8.7 — no
   perfectness consumed). ⚠ Scope wall, pinned: lower numbering only, at the
   function-field level; Herbrand functions, upper numbering, and Hasse–Arf are the
-  [Local Fields PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s ramification-filtration layer — the completion bridge
+  [Local Fields and Ramification PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s ramification-filtration layer — the completion bridge
   (`G_i` here = `G_i` of the local extension at `P′`) is stated once and the local
   theory is never redeveloped.
 - **Composita** (III.9): **Abhyankar's lemma** (Thm. 3.9.1: `F′ = F₁F₂` with one of
@@ -928,7 +934,7 @@ Stichtenoth VI.1–VI.3; Fulton Chs. 5, 8 for the plane-curve computations.
   by `p`, it is **not** in reduced form at `P` and the formula does not apply to it as
   written). Only then: `d(P′∣P) = (p − 1)(m_P + 1)`, wildness at every ramified place,
   and the genus formula. These two families are the acceptance tests for the tame and
-  wild halves of Layer 7, and the substrate future BelyiMaps and
+  wild halves of Layer 7, and the substrate the BelyiMaps roadmap and
   CurvesOverFiniteFields roadmaps would cite (Hermitian curves are VI.4/§7.4
   instances).
 
@@ -1157,10 +1163,10 @@ end.
 | Supplier | Supplied milestone | Consumer |
 |---|---|---|
 | This roadmap, Layers 0–5 | normalized places, residue degrees, `Finsupp` divisors, exact constants, Riemann–Roch, and the genus-one ladder `ℓ(n·[0]) = n` | the merged [EllipticCurves](../EllipticCurves/README.md) roadmap's Layer-0 place/divisor interface instantiates the general theory here; the ladder is a reusable consequence with no further current consumer (any relative base-change upgrade is JacobianChallenge Layer-C territory, not this roadmap's) |
-| This roadmap, Layers 6–8 | function-field extensions, ramification indices/residue degrees, the different, Riemann–Hurwitz, and lower ramification groups | future CurvesOverFiniteFields and BelyiMaps roadmaps; these are consumers, not prerequisites of this roadmap |
+| This roadmap, Layers 6–8 | function-field extensions, ramification indices/residue degrees, the different, Riemann–Hurwitz, and lower ramification groups | future CurvesOverFiniteFields and the BelyiMaps roadmap; these are consumers, not prerequisites of this roadmap |
 | This roadmap, Layers 9–10 | Kähler/Weil differential comparison and the elliptic function-field/place/class-group dictionary | the merged [EllipticCurves](../EllipticCurves/README.md) roadmap's named comparison interfaces |
 | This roadmap, Layer 12 plus merged JacobianChallenge Layers A–B | divisors, `H^0 = L(D)`, equality of cohomological and function-field genus, and dualizing-sheaf/canonical-class comparison | both routes; neither re-proves the other's Riemann–Roch theorem |
-| [Local Fields roadmap (PR #2, in preparation)](https://github.com/roed-math/TauCetiRoadmap/pull/2), ramification-filtration layer | upper numbering, Herbrand, and Hasse–Arf | no theorem in this roadmap: Layer 8 stops at lower numbering and proves only the completion bridge, so there is no scheduling dependency |
+| [Local Fields and Ramification roadmap (PR #2)](https://github.com/roed-math/TauCetiRoadmap/pull/2), ramification-filtration layer | upper numbering, Herbrand, and Hasse–Arf | no theorem in this roadmap: Layer 8 stops at lower numbering and proves only the completion bridge, so there is no scheduling dependency |
 
 The function-field Riemann–Roch chain itself has no sibling-roadmap prerequisite.
 
@@ -1286,11 +1292,11 @@ states the standing division of labor.
   roadmap would consume Layers 0–8 wholesale (its zeta rationality/functional equation
   are RR corollaries; the `Cl⁰` finiteness over finite `k` and strong approximation are
   supplied here); a **HyperellipticCurves** roadmap, Layer 10's model class and
-  Layer 7's Hurwitz; a **BelyiMaps** roadmap, Layers 6–7 (ramification, RH) and
+  Layer 7's Hurwitz; the **BelyiMaps** roadmap, Layers 6–7 (ramification, RH) and
   Layer 12's dictionary; higher-genus genus/automorphism data semantics rest
   on Layers 10–11.
 - **Siblings**: the
-  [Local Fields roadmap (PR #2, in preparation)](https://github.com/roed-math/TauCetiRoadmap/pull/2)
+  [Local Fields and Ramification roadmap (PR #2)](https://github.com/roed-math/TauCetiRoadmap/pull/2)
   owns the *local* ramification
   filtration (lower/upper numbering, Herbrand, Hasse–Arf); this roadmap's Layer 8 keeps
   the function-field-level `G_i` and Hilbert's different formula (Stichtenoth 3.8.7)
