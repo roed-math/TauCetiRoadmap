@@ -1,4 +1,5 @@
 import Mathlib
+import TauCetiRoadmap.GlobalClassFieldTheory.Suggested
 
 /-!
 # Integral quadratic forms and lattices: target signatures
@@ -731,5 +732,57 @@ example (c : StoredGenusCertificate) (H : Matrix (Fin c.dim) (Fin c.dim) ℤ)
   sorry
 
 end Layer9
+
+/-! ## Layer B: the consumed order and Picard carriers
+
+Layer B builds the binary theory — the norm form, the content and the discriminant, the map from
+a form to an ideal, composition, the automorphism groups, and the rank-2 mass. It does **not**
+build a quadratic order or a class group of one: Global Class Field Theory Layers 10B and 10C own
+those, and `README.md`'s supplier table lists every declaration consumed.
+
+Layer B has no suggested Lean form here, because its carriers rest on milestones of Layers 0 to 3
+that are themselves still targets. What this section does carry is the **contract check**: each
+declaration below is applied at the shape B1 to B5 use it, with a closed proof. Nothing here is a
+milestone and nothing owes a `sorry`; the point is that the build fails, rather than the documents
+drifting silently, if a supplier signature moves.
+-/
+
+section LayerBContract
+
+open GlobalClassFieldTheory
+open scoped NumberField nonZeroDivisors
+
+variable {K : Type u} [Field K] [NumberField K]
+
+/-- **B1 consumes 10B.1 and 10B.2.** The order attached to a binary lattice is a term of this
+type, and its conductor is this ideal. -/
+noncomputable example (O : NumberFieldOrder K) : Ideal (𝓞 K) := O.conductor
+
+/-- **B2 consumes 10B.3.** `𝔞_f` is exhibited as a member of this group, and not of the fractional
+ideals: for a nonmaximal order the two differ, and only the proper ones are invertible. -/
+noncomputable example (O : NumberFieldOrder K) :
+    Subgroup (FractionalIdeal (O.toSubalgebra)⁰ K)ˣ :=
+  O.properIdeals
+
+/-- **B2 consumes 10B.4**, for `Δ < 0`. The dictionary lands in this group. -/
+noncomputable example (O : NumberFieldOrder K) (I : O.properIdeals) : Pic O := O.mkPic I
+
+/-- **B2 consumes 10B.4**, for `Δ > 0`. ⚠ The positive-discriminant target is the **narrow**
+group, and it is a different type from `Pic O`. A dictionary stated into `Pic` for `Δ > 0` is
+false; `Δ = 12` is the smallest witness. -/
+example (O : NumberFieldOrder K) : Type u := NarrowPic O
+
+/-- **B5 consumes 10B.4's finiteness**, for both groups. Layer B owns the form-side reduction
+route and the explicit list of reduced forms, and not these two theorems. -/
+example (O : NumberFieldOrder K) : Finite (Pic O) ∧ Finite (NarrowPic O) :=
+  ⟨finite_pic O, finite_narrowPic O⟩
+
+/-- **B3 consumes 10C.1.** Composed with B2's dictionary this is the ring-class-field statement
+`Gal(H_O/K) ≃ Pic O ≃ proper form classes of discriminant Δ`, which is a milestone of B3. -/
+example (O : NumberFieldOrder K) :
+    Nonempty ((ringClassField O ≃ₐ[K] ringClassField O) ≃* Pic O) :=
+  gal_ringClassField_equiv_pic O
+
+end LayerBContract
 
 end TauCetiRoadmap.IntegralLattices
