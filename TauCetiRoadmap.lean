@@ -27,3 +27,5 @@ import TauCetiRoadmap.ContourIntegration.Suggested
 import TauCetiRoadmap.ConformalMapping.Suggested
 import TauCetiRoadmap.OrthogonalL2Bases.Suggested
 import TauCetiRoadmap.OptimalTransport.Suggested
+import TauCetiRoadmap.NumberFieldArithmetic.Suggested
+import TauCetiRoadmap.PolynomialGaloisGroups.Suggested

@@ -23,10 +23,12 @@ body:
         - JacobianChallenge
         - ModularForms
         - Multiquadratic
+        - NumberFieldArithmetic
         - OneParameterSemigroups
         - OptimalTransport
         - OrthogonalL2Bases
         - PDE
+        - PolynomialGaloisGroups
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers
