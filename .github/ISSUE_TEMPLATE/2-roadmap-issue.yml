@@ -22,7 +22,7 @@ body:
         - GeometricTopology
         - HeegaardFloer
         - JacobianChallenge
-        - LocalFields
+        - LocalFieldsRamification
         - ModularForms
         - Multiquadratic
         - NumberFieldArithmetic
