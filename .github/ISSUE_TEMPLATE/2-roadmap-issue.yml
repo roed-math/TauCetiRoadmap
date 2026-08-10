@@ -24,6 +24,7 @@ body:
         - JacobianChallenge
         - ModularForms
         - Multiquadratic
+        - NumberFieldArithmetic
         - OneParameterSemigroups
         - OptimalTransport
         - OrthogonalL2Bases
