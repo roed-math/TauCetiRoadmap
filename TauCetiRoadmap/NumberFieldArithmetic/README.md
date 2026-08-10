@@ -88,10 +88,12 @@ The one local object this roadmap needs is the **finite** local lower ramificati
 `L_w/K_v`, and **this roadmap owns it**. Layer 6.1 defines it and gives its API; Layer 6.2
 compares it with the global filtration. It is a mandatory deliverable, not a placeholder.
 
-**Global class field theory.** Reciprocity, ray class groups, the narrow class group, and the
-abelian conductor–discriminant formula belong to that subject. This roadmap proves none of them.
-Layer 2 constructs the ideal-theoretic Artin map. Its carrier is chosen so that a reciprocity
-layer can use the map without change. Layer 2 proves nothing about its kernel or its image.
+**Global number fields and class field theory.** Moduli, ray and narrow class groups, adeles,
+ideles, Hecke-character carriers, orders, and Picard groups belong to `GlobalNumberFields`.
+Reciprocity, class fields, and the abelian conductor–discriminant formula belong to
+`ClassFieldTheory`. This roadmap proves none of them. Layer 2 constructs the ideal-theoretic
+Artin map. Its carrier is chosen so that both roadmaps can use the map without change. Layer 2
+proves nothing about its kernel or its image.
 
 **Polynomial Galois groups.** Resolvents, the classification of transitive groups, and the `nTj`
 label semantics belong to that subject. This roadmap proves none of them. Layer 3 proves the
@@ -116,6 +118,14 @@ What this roadmap supplies to other subjects:
   `exists_isArithFrobAt_pow_inertiaDeg` (Layers 2.3 and 2.4);
 - the local-field instance on `v.adicCompletion K`, and the localization of the different
   (Layer 5).
+
+The stable consumers are `GlobalNumberFields`, `ClassFieldTheory`,
+`PolynomialGaloisGroups`, and `Chebotarev`. In particular, Chebotarev consumes
+`artinSymbol`; it never defines a second Frobenius-class carrier. The frozen contract is
+`artinSymbol`, `artinSymbol_map_restrictNormalHom`,
+`exists_isArithFrobAt_pow_inertiaDeg`, `idealsAway`, `artinHomAway`,
+`artinHomAway_apply_prime`, `artinHomAway_eq_of_apply_prime`, `artinHomAway_mono`,
+`artinHomAway_restrict`, and `artinHomAwayIntegral`.
 
 ## Standing hypotheses
 
@@ -648,7 +658,7 @@ to here:
 - the tower formula `Frob_{L/M}(Q) = Frob_{L/K}(Q)^{f(Q∩M/𝔭)}`, for `K ⊆ M ⊆ L`, as
   `exists_isArithFrobAt_pow_inertiaDeg`.
 
-Both carry Lean names because the L-functions roadmap consumes them: its Chebotarev proof reduces
+Both carry Lean names because the Chebotarev roadmap consumes them: its proof reduces
 a general extension to a cyclotomic one along the restriction square, and its fixed-field step
 uses the tower formula. Their signatures are contracts.
 

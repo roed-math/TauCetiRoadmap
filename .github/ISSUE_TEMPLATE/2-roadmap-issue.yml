@@ -20,6 +20,7 @@ body:
         - ContourIntegration
         - Exchangeability
         - GeometricTopology
+        - GlobalNumberFields
         - HeegaardFloer
         - JacobianChallenge
         - LocalFieldsRamification

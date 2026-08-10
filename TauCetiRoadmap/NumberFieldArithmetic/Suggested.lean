@@ -670,7 +670,8 @@ nothing to be about, and `Nonempty (… ≃ …)` does not even do that. -/
 local compactness, which is one of its corollaries. ⚠ Stated once
 `ValuativeRel (v.adicCompletion K)` is available through the `Valued`-compatibility layer;
 the `Valued → ValuativeRel` migration must be a refactor of this instance, not a re-proof. -/
-example (v : HeightOneSpectrum (𝓞 K)) [ValuativeRel (v.adicCompletion K)] :
+theorem isNonarchimedeanLocalField_adicCompletion
+    (v : HeightOneSpectrum (𝓞 K)) [ValuativeRel (v.adicCompletion K)] :
     IsNonarchimedeanLocalField (v.adicCompletion K) :=
   sorry
 
