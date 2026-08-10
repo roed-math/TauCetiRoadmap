@@ -260,7 +260,8 @@ noncomputable def artinMap : Kˣ →* Field.absoluteGaloisGroupAbelianization K 
 theorem cyclotomicCharacter_artinMap (p : ℕ) [Fact p.Prime]
     (F : Type u) [Field F] [ValuativeRel F] [TopologicalSpace F]
     [IsNonarchimedeanLocalField F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F]
-    (u : Fˣ) (_hu : valuation F (u : F) = 1) (σ : Field.absoluteGaloisGroup F)
+    (u : Fˣ) (_hu : ValuativeRel.valuation F (u : F) = 1)
+    (σ : Field.absoluteGaloisGroup F)
     (_hσ : (QuotientGroup.mk σ : Field.absoluteGaloisGroupAbelianization F) = artinMap F u) :
     Units.map (algebraMap ℤ_[p] ℚ_[p]).toMonoidHom
         (cyclotomicCharacter (AlgebraicClosure F) p σ.toRingEquiv)
