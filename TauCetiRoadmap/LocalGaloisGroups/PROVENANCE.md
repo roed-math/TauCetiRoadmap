@@ -83,10 +83,17 @@ implementations of the abstract supplier and the arithmetic bridge. Project-spec
 and word-complex arguments are not themselves public carriers for this roadmap. The roadmap
 states the mathematical results intrinsically and does not prescribe that source's file layout.
 
+## External consumer map
+
+The `gq2-lean` label `B3c` corresponds to the normalized marked theorem
+`absoluteGaloisGroupProP_two_ratPadic_marked`, together with the supplier-owned generators
+`d0A`, `d0S`, `d0Y` and `standardD0Orientation`, its values
+`(-1, 1, (-3)⁻¹)`, and its uniqueness from topological generation. This map is a reading aid,
+not an additional milestone or dependency.
+
 ## References inherited from the sources
 
 The mathematical source of record for the local classification is Labute, §5 and Theorems 7–9,
 with NSW VII (7.5.11)–(7.5.12) as a modern formulation. Shafarevich supplies the free case.
 Jarden–Shusterman Theorem 2.1 and NSW VII (7.4.1) supply the exact rank of the full absolute
 Galois group. Complete bibliographic entries appear in the normative README.
-
