@@ -21,6 +21,7 @@ body:
         - Exchangeability
         - GeometricTopology
         - GlobalClassFieldTheory
+        - GlobalNumberFields
         - HeegaardFloer
         - JacobianChallenge
         - LFunctions

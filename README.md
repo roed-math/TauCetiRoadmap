@@ -21,6 +21,7 @@ If you want to write or review a roadmap, start with [CONTRIBUTING.md](CONTRIBUT
 - [Exchangeability and de Finetti](TauCetiRoadmap/Exchangeability/README.md)
 - [Geometric topology and the Kirby-list problems](TauCetiRoadmap/GeometricTopology/README.md)
 - [Global class field theory](TauCetiRoadmap/GlobalClassFieldTheory/README.md)
+- [Global number fields, ray classes, adeles, and Hecke characters](TauCetiRoadmap/GlobalNumberFields/README.md)
 - [Heegaard Floer homology, analytically](TauCetiRoadmap/HeegaardFloer/README.md)
 - [L-functions: completions, functional equations, and Artin formalism](TauCetiRoadmap/LFunctions/README.md)
 - [Local fields, ramification, and local class field theory](TauCetiRoadmap/LocalFields/README.md)
