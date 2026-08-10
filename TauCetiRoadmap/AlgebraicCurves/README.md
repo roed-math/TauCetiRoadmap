@@ -150,7 +150,7 @@ stated over an arbitrary field with the honest hypotheses above.
 |---|---|---|
 | function field | `IsFunctionField k F : Prop` — `∃ x : F, Transcendental k x ∧ FiniteDimensional k(x) F` (intrinsic; no chosen generator), passed explicitly as `hF`, not installed as a typeclass. Comparison lemmas to Mathlib's chosen-generator `FunctionField Fq F` and to `Algebra.trdeg k F = 1` (for f.g. `F`) are Layer-0 milestones, not definitions | Layer 0; `Mathlib/NumberTheory/FunctionField.lean` |
 | place | a **normalized** discrete valuation: `v : Valuation F ℤᵐ⁰` with `Function.Surjective v` and `v` trivial on `k` (`v (algebraMap k F c) = 1` for `c ≠ 0`; Mathlib's `Valuation.IsTrivialOn`). Normalization kills the equivalence-class quotient: place equality *is* valuation equality. The unnormalized view (equivalence classes of valuations / valuation subrings `k ⊆ 𝒪 ⊊ F`) is related by early milestones, aligned with the hypotheses of the pin's `RatFunc.valuation_isEquiv_infty_or_adic` (`IsRankOneDiscrete` + `IsTrivialOn`) | Layer 0 |
-| multiplicative vs additive | Mathlib's multiplicative convention: integers are `v ≤ 1`, uniformizers have `v π = exp (−1)` (matching `intValuation`); the additive order `ord_P = −WithZero.log ∘ v_P : F → ℤ` (junk value `0` at `f = 0`, flagged in every statement) with `ord_P π = 1`. The translation is one named lemma, as in the LocalFields sibling | `Mathlib/RingTheory/DedekindDomain/AdicValuation.lean` |
+| multiplicative vs additive | Mathlib's multiplicative convention: integers are `v ≤ 1`, uniformizers have `v π = exp (−1)` (matching `intValuation`); the additive order `ord_P = −WithZero.log ∘ v_P : F → ℤ` (junk value `0` at `f = 0`, flagged in every statement) with `ord_P π = 1`. The translation is one named lemma, matching the local-field convention | `Mathlib/RingTheory/DedekindDomain/AdicValuation.lean` |
 | valuation ring, residue field, degree | `𝒪_P` = the valuation subring of `v_P`; residue field `F_P := IsLocalRing.ResidueField 𝒪_P` (never a bespoke quotient); **`deg P := Module.finrank k F_P`**. Finiteness `Module.Finite k F_P` is a theorem (Layer 0), not part of the definition; `finrank`'s junk value `0` is guarded by it | Layer 0 |
 | divisor | **`Divisor k F := Place k F →₀ ℤ`** (`Finsupp`), with the pointwise partial order (`Mathlib/Data/Finsupp/Order.lean`), `D⁺/D⁻` decomposition, and support API for free. Effective means `0 ≤ D`. Never a quotient of formal sums, never a `Multiset` | Layer 3 |
 | degree of a divisor | `Divisor.degree : Divisor k F →+ ℤ`, `D ↦ ∑ P ∈ D.support, D P * deg P` (`Finsupp.liftAddHom`). ⚠ `deg` weights by residue degrees; the naive `∑ D P` is only correct over algebraically closed `k` and is never the definition | Layer 3 |
@@ -681,7 +681,7 @@ Stichtenoth III.1–III.3. `F′/k′` over `F/k`, `[F′ : F] < ∞`.
   (Cor. 3.7.2); decomposition groups. (The finer inertia/ramification filtration
   appears in Layer 8, scoped; the *local* filtration theory — Herbrand, upper
   numbering, Hasse–Arf — belongs to the
-  [Local Fields and Ramification roadmap (PR #2)](https://github.com/roed-math/TauCetiRoadmap/pull/2),
+  Local Fields and Ramification roadmap,
   bridged at completions.)
 
 ### Layer 7: the different and the Hurwitz genus formula
@@ -779,7 +779,7 @@ one** — this layer states them.
   **Hilbert's different formula `d(P′∣P) = ∑_{i≥0} (|G_i| − 1)`** (Thm. 3.8.7 — no
   perfectness consumed). ⚠ Scope wall, pinned: lower numbering only, at the
   function-field level; Herbrand functions, upper numbering, and Hasse–Arf are the
-  [Local Fields and Ramification PR #2](https://github.com/roed-math/TauCetiRoadmap/pull/2)'s ramification-filtration layer — the completion bridge
+  Local Fields and Ramification roadmap's ramification-filtration layer — the completion bridge
   (`G_i` here = `G_i` of the local extension at `P′`) is stated once and the local
   theory is never redeveloped.
 - **Composita** (III.9): **Abhyankar's lemma** (Thm. 3.9.1: `F′ = F₁F₂` with one of
@@ -1166,7 +1166,7 @@ end.
 | This roadmap, Layers 6–8 | function-field extensions, ramification indices/residue degrees, the different, Riemann–Hurwitz, and lower ramification groups | future CurvesOverFiniteFields and the BelyiMaps roadmap; these are consumers, not prerequisites of this roadmap |
 | This roadmap, Layers 9–10 | Kähler/Weil differential comparison and the elliptic function-field/place/class-group dictionary | the merged [EllipticCurves](../EllipticCurves/README.md) roadmap's named comparison interfaces |
 | This roadmap, Layer 12 plus merged JacobianChallenge Layers A–B | divisors, `H^0 = L(D)`, equality of cohomological and function-field genus, and dualizing-sheaf/canonical-class comparison | both routes; neither re-proves the other's Riemann–Roch theorem |
-| [Local Fields and Ramification roadmap (PR #2)](https://github.com/roed-math/TauCetiRoadmap/pull/2), ramification-filtration layer | upper numbering, Herbrand, and Hasse–Arf | no theorem in this roadmap: Layer 8 stops at lower numbering and proves only the completion bridge, so there is no scheduling dependency |
+| Local Fields and Ramification roadmap, ramification-filtration layer | upper numbering, Herbrand, and Hasse–Arf | no theorem in this roadmap: Layer 8 stops at lower numbering and proves only the completion bridge, so there is no scheduling dependency |
 
 The function-field Riemann–Roch chain itself has no sibling-roadmap prerequisite.
 
@@ -1215,7 +1215,7 @@ The function-field Riemann–Roch chain itself has no sibling-roadmap prerequisi
   S-integer/class-group bridges of Layer 2.
   *(Library list.)*
 - J.-P. Serre, *Local Fields* — the different and ramification background of Layers
-  6–8 (already the LocalFields sibling's primary source; cited here only for the
+  6–8 (already the local-field roadmap's primary source; cited here only for the
   trace-dual computations and the `G_i`).
 - P. Roquette, *Abschätzung der Automorphismenanzahl von Funktionenkörpern bei
   Primzahlcharakteristik* (Math. Z. 117, 1970); H. Stichtenoth, *Über die
@@ -1296,7 +1296,7 @@ states the standing division of labor.
   Layer 12's dictionary; higher-genus genus/automorphism data semantics rest
   on Layers 10–11.
 - **Siblings**: the
-  [Local Fields and Ramification roadmap (PR #2)](https://github.com/roed-math/TauCetiRoadmap/pull/2)
+  Local Fields and Ramification roadmap
   owns the *local* ramification
   filtration (lower/upper numbering, Herbrand, Hasse–Arf); this roadmap's Layer 8 keeps
   the function-field-level `G_i` and Hilbert's different formula (Stichtenoth 3.8.7)
