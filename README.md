@@ -13,13 +13,13 @@ If you want to write or review a roadmap, start with [CONTRIBUTING.md](CONTRIBUT
 
 ## Roadmaps
 
+- [Class field theory](TauCetiRoadmap/ClassFieldTheory/README.md)
 - [Combinatorial Heegaard Floer and grid homology](TauCetiRoadmap/CombinatorialHeegaardFloer/README.md)
 - [Conformal mapping and the geometric theory of holomorphic functions](TauCetiRoadmap/ConformalMapping/README.md)
 - [Continuous cohomology of profinite groups](TauCetiRoadmap/ProfiniteCohomology/README.md)
 - [Contour integration and the Hungerbühler–Wasem generalized residue theorem](TauCetiRoadmap/ContourIntegration/README.md)
 - [Exchangeability and de Finetti](TauCetiRoadmap/Exchangeability/README.md)
 - [Geometric topology and the Kirby-list problems](TauCetiRoadmap/GeometricTopology/README.md)
-- [Global class field theory](TauCetiRoadmap/GlobalClassFieldTheory/README.md)
 - [Heegaard Floer homology, analytically](TauCetiRoadmap/HeegaardFloer/README.md)
 - [Local fields, ramification, and local class field theory](TauCetiRoadmap/LocalFields/README.md)
 - [Modular forms — Hecke theory, newforms, and L-functions](TauCetiRoadmap/ModularForms/README.md)

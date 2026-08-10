@@ -18,6 +18,7 @@ body:
       label: Roadmap area
       description: Which roadmap does this intention sit in?
       options:
+        - ClassFieldTheory
         - CombinatorialHeegaardFloer
         - ConformalMapping
         - ContourIntegration
@@ -25,12 +26,15 @@ body:
         - GeometricTopology
         - HeegaardFloer
         - JacobianChallenge
+        - LocalFields
         - ModularForms
         - Multiquadratic
+        - NumberFieldArithmetic
         - OneParameterSemigroups
         - OptimalTransport
         - OrthogonalL2Bases
         - PDE
+        - ProfiniteCohomology
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers
