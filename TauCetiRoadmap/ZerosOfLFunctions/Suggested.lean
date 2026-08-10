@@ -1,4 +1,7 @@
 import Mathlib
+import TauCetiRoadmap.ArithmeticDirichletSeries.Suggested
+import TauCetiRoadmap.LFunctions.Suggested
+import TauCetiRoadmap.Chebotarev.Suggested
 import TauCetiRoadmap.ContourIntegration.Suggested
 
 /-!
@@ -15,20 +18,18 @@ vertical strip, branches of the logarithm on simply connected sets, and the disc
 order of an entire function, no Hadamard factorization, no zero counting, no zero-free region,
 and no way to say that a list of zeros is complete. We build that in `TauCeti/`.
 
-The file states pin-elaborating targets from **Layer 0** (order, the entire completion, and
+The file states representative targets from **Layer 0** (order, the entire completion, and
 vertical-strip growth), **Layer 1** (Stirling, the branch of `log Γ`, and the continued
 uncompleted L-function), **Layer 2** (the three conductors), **Layer 3** (the pole-cleared
 convexity route), **Layer 4** (the two counts through `MeromorphicOn.divisor`), **Layer 6**
 (the zero-free region), **Layer 7** (the rectangle contour and Riemann–von Mangoldt), and
-**Layer 9** (certificates and `GRH`), stated with `sorry` against the pinned Mathlib and,
-wherever possible, for the Riemann zeta function, whose completed form is the one instance
-that exists at the pin. Milestones whose statements need the L-functions roadmap's data record,
-or objects no layer has built yet — the generic `entireCompletion`, the generic `continuedL`
-and its dual record, `IsFiniteOrder`, the record-level `analyticConductorAt`, the
-normalization transport, Hadamard factorization, the explicit formula, and the Dedekind and
-Hecke instance bridges — are in `README.md` only. ⚠ They are not omitted by choice: that
-roadmap is not yet accepted, so this file cannot import it, and `PROVENANCE.md` records the
-exact list. Each is added here as the corresponding type becomes expressible.
+**Layer 9** (certificates and `GRH`), stated with `sorry` against the pinned suppliers.
+`LFunctions` supplies the analytic cards and completed functions;
+`ArithmeticDirichletSeries` supplies Abel summation, Perron's formula, and
+Wiener--Ikehara; `Chebotarev` supplies the exact Frobenius prime carriers and qualitative
+counts; and `ContourIntegration` supplies the general residue calculus. The declarations
+below specialize those interfaces to zero analysis and effective estimates. They do not
+redeclare generic summation, prime-counting, or Frobenius infrastructure.
 
 ⚠ Four conventions carry most of the weight, and all four are in the README's conventions
 table.
@@ -46,9 +47,13 @@ table.
    statement, because the supplier's curve regularity forbids a constant edge.
 -/
 
-namespace TauCetiRoadmap.LFunctionZeros
+namespace TauCetiRoadmap.ZerosOfLFunctions
 
 open Complex Filter Topology Asymptotics Bornology MeromorphicOn
+
+namespace ADS := TauCetiRoadmap.ArithmeticDirichletSeries
+namespace LF := TauCetiRoadmap.LFunctions
+namespace Cheb := TauCetiRoadmap.Chebotarev
 
 /-! ## Layer 0: growth predicates and the entire completion -/
 
@@ -73,6 +78,22 @@ def HasVerticalStripGrowth (f : ℂ → ℂ) : Prop :=
   ∀ σ₁ σ₂ : ℝ, σ₁ < σ₂ → ∃ C A T₀ : ℝ, 0 < C ∧ 0 ≤ A ∧ 0 ≤ T₀ ∧
     ∀ s : ℂ, σ₁ ≤ s.re → s.re ≤ σ₂ → T₀ ≤ |s.im| → ‖f s‖ ≤ C * (1 + |s.im|) ^ A
 
+/-- **Layer 0.2, generic entire completion.** This is the removable extension of the
+supplier's completed function after clearing exactly the finite polar divisor recorded by the
+analytic card. It is not the pointwise product at a pole. -/
+noncomputable def entireCompletion (d : LF.AnalyticLFunctionData)
+    (hc : d.HasMeromorphicContinuation) : ℂ → ℂ := sorry
+
+theorem differentiable_entireCompletion (d : LF.AnalyticLFunctionData)
+    (hc : d.HasMeromorphicContinuation) : Differentiable ℂ (entireCompletion d hc) := sorry
+
+/-- Away from the supplier-owned polar support, the removable extension agrees with the
+completed function times the exact clearing polynomial. -/
+theorem entireCompletion_eq (d : LF.AnalyticLFunctionData)
+    (hc : d.HasMeromorphicContinuation) {s : ℂ} (hs : d.polarOrder s = 0) :
+    entireCompletion d hc s =
+      (d.polarOrder.support.prod fun p m => (s - p) ^ m) * d.completed s := sorry
+
 /-- **Layer 0, the completed zeta function grows polynomially in vertical strips.** The pin
 proves neither this nor the finite order it follows from. Stated for the meromorphic `Λ`
 itself: the hypothesis `1 ≤ |s.im|` keeps the poles at `0` and `1` out of range. -/
@@ -93,6 +114,29 @@ example :
       g 0 ≠ 0 ∧ g 1 ≠ 0 ∧ OrderLE g 1 := sorry
 
 /-! ## Layer 1: Stirling asymptotics, and the continued L-function -/
+
+/-- **Layer 1.6, inverse gamma factor by meromorphic continuation.** At a gamma pole this is
+the analytic continuation of the reciprocal, not pointwise division by Mathlib's total
+representative. -/
+noncomputable def invGammaFactor (d : LF.AnalyticLFunctionData) : ℂ → ℂ := sorry
+
+/-- **Layer 1.6, the continued uncompleted L-function.** This is regularized across the gamma
+poles and agrees with the original Dirichlet series on `Re s > 1`. -/
+noncomputable def continuedL (d : LF.AnalyticLFunctionData)
+    (hc : d.HasMeromorphicContinuation) : ℂ → ℂ := sorry
+
+theorem completed_eq_gammaFactor_mul_continuedL (d : LF.AnalyticLFunctionData)
+    (hc : d.HasMeromorphicContinuation) {s : ℂ} (hs : d.gammaFactor s ≠ 0) :
+    d.completed s = ((d.conductor : ℕ) : ℂ) ^ (s / 2) * d.gammaFactor s *
+      continuedL d hc s := sorry
+
+theorem continuedL_functionalEquation (d : LF.AnalyticLFunctionData)
+    (hc : d.HasMeromorphicContinuation) (hfe : d.HasFunctionalEquation) {s : ℂ}
+    (hs : d.gammaFactor s ≠ 0) (hs' : d.dual.gammaFactor (1 - s) ≠ 0) :
+    ((d.dual.conductor : ℕ) : ℂ) ^ ((1 - s) / 2) * d.dual.gammaFactor (1 - s) *
+        continuedL d.dual (LF.AnalyticLFunctionData.dual_hasMeromorphicContinuation hc) (1 - s) =
+      d.rootNumber⁻¹ * (((d.conductor : ℕ) : ℂ) ^ (s / 2) * d.gammaFactor s *
+        continuedL d hc s) := sorry
 
 /-- **Layer 1.1, a holomorphic branch of `log Γ` on a sector.** Route:
 `Complex.exists_continuousOn_eqOn_exp_comp` on the sector, which is open and simply connected
@@ -208,6 +252,10 @@ analytic normalization. The modular forms roadmap's `𝔮(f) = 𝔮(f, k/2)` is 
 the normalization translation, which is why the central point is `1/2` here and `k/2` there. -/
 noncomputable def centralAnalyticConductor (N : ℕ+) (gammaR gammaC : Multiset ℂ) : ℝ :=
   analyticConductorAt N gammaR gammaC (1 / 2)
+
+/-- The record-level analytic conductor used by every generic zero estimate. -/
+noncomputable def analyticConductorAtData (d : LF.AnalyticLFunctionData) (s : ℂ) : ℝ :=
+  analyticConductorAt d.conductor d.gammaR d.gammaC s
 
 /-- **Layer 2.2, the two-sided comparison on a strip.** ⚠ This replaces monotonicity in
 `|Im s|`, which is false for a complex shift: `‖s + μ‖ + 3` decreases as `Im s` approaches
@@ -601,15 +649,84 @@ theorem exists_argLift_rectBoundary {f : ℂ → ℂ} {B : Rect} (hB : B.Nondege
 /-! ## Layer 7: the Riemann–von Mangoldt formula -/
 
 /-- **Layer 7.4, Riemann–von Mangoldt for `ζ`**: `N(T) = (T/2π) log(T/2πe) + O(log T)`, with
-`N` counting `0 < Im ρ ≤ T` with multiplicity. The general form carries the degree and the
-conductor in the main term; that statement needs the L-functions roadmap's data record and so
-lives in `README.md` until the record is available here. The proof runs the argument principle
-on the entire completion, not on `Λ`, whose poles at `0` and `1` lie on the lower edge of the
-contour. -/
+`N` counting `0 < Im ρ ≤ T` with multiplicity. The proof runs the argument principle on the
+entire completion, not on `Λ`, whose poles at `0` and `1` lie on the lower edge of the contour. -/
 example :
     (fun T : ℝ ↦ (zeroCountUpTo completedRiemannZeta Set.univ T : ℝ) -
         T / (2 * Real.pi) * Real.log (T / (2 * Real.pi * Real.exp 1)))
       =O[atTop] Real.log := sorry
+
+/-- The conductor-and-degree main term in the generic Riemann--von Mangoldt formula. -/
+noncomputable def riemannVonMangoldtMainTerm (d : LF.AnalyticLFunctionData) (T : ℝ) : ℝ :=
+  T / (2 * Real.pi) *
+    Real.log (((d.conductor : ℕ) : ℝ) *
+      (T / (2 * Real.pi * Real.exp 1)) ^ d.degree)
+
+/-- **Layer 7.6, conductor-uniform Riemann--von Mangoldt.** The implied constant depends only
+on the degree and a bound for the archimedean shifts. The explicit bound on shifts is retained
+in the theorem because it is the parameter on which the uniformity depends. -/
+theorem riemannVonMangoldt_generic (d : LF.AnalyticLFunctionData)
+    (hc : d.HasMeromorphicContinuation) (hfe : d.HasFunctionalEquation)
+    (hgrowth : HasVerticalStripGrowth d.completed) (B : ℝ)
+    (hR : ∀ μ ∈ d.gammaR, ‖μ‖ ≤ B) (hC : ∀ ν ∈ d.gammaC, ‖ν‖ ≤ B) :
+    (fun T : ℝ => (zeroCountUpTo (entireCompletion d hc) Set.univ T : ℝ) -
+        riemannVonMangoldtMainTerm d T) =O[atTop]
+      (fun T : ℝ => Real.log (analyticConductorAtData d (T * I))) := sorry
+
+/-! ## Layer 8: effective prime and Chebotarev estimates
+
+The generic Abel, Perron, and Tauberian theorems are imported from
+`ArithmeticDirichletSeries`. The declarations here begin only after those theorems have been
+specialized to logarithmic derivatives and their contours shifted. Likewise the Frobenius
+coefficient and all three Frobenius counting functions below are the exact objects imported
+from `Chebotarev`; this roadmap introduces only the exceptional-zero contribution and the
+effective error estimates.
+-/
+
+section EffectiveChebotarev
+
+variable (K L : Type*) [Field K] [NumberField K] [Field L] [NumberField L]
+  [Algebra K L] [IsGalois K L]
+
+/-- **Layer 8.7**, the contribution of the unique possible exceptional real zero. It is zero
+when the relevant Artin/Hecke factors have no exceptional zero. -/
+noncomputable def exceptionalChebotarevTerm
+    (C : ConjClasses (L ≃ₐ[K] L)) (x : ℝ) : ℝ := sorry
+
+/-- The partial-summation transform of `exceptionalChebotarevTerm` appearing in the
+unweighted Frobenius prime count. -/
+noncomputable def exceptionalChebotarevPrimeCountTerm
+    (C : ConjClasses (L ≃ₐ[K] L)) (x : ℝ) : ℝ := sorry
+
+/-- **Layer 8.7, effective Chebotarev for the weighted prime-power count.** Constants may
+depend on the fixed extension `L/K`, but not on `x`; no conductor-uniform or fully numerical
+constant is claimed. -/
+theorem frobeniusPsi_effective (C : ConjClasses (L ≃ₐ[K] L)) :
+    ∃ c : ℝ, 0 < c ∧
+      (fun x : ℝ => Cheb.frobeniusPsi K L C x -
+          ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ)) * x +
+          exceptionalChebotarevTerm K L C x) =O[atTop]
+        (fun x : ℝ => x * Real.exp (-c * Real.sqrt (Real.log x))) := sorry
+
+/-- **Layer 8.7**, removal of prime powers on the supplier-owned Frobenius theta function. -/
+theorem frobeniusTheta_effective (C : ConjClasses (L ≃ₐ[K] L)) :
+    ∃ c : ℝ, 0 < c ∧
+      (fun x : ℝ => Cheb.frobeniusTheta K L C x -
+          ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ)) * x +
+          exceptionalChebotarevTerm K L C x) =O[atTop]
+        (fun x : ℝ => x * Real.exp (-c * Real.sqrt (Real.log x))) := sorry
+
+/-- **Layer 8.7**, partial summation on the supplier-owned Frobenius prime count. The
+qualitative limit remains `Chebotarev.tendsto_frobeniusPrimeCount`; this is its stronger,
+fixed-extension error estimate. -/
+theorem frobeniusPrimeCount_effective (C : ConjClasses (L ≃ₐ[K] L)) :
+    ∃ c : ℝ, 0 < c ∧
+      (fun x : ℝ => (Cheb.frobeniusPrimeCount K L C x : ℝ) -
+          ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ)) *
+            (x / Real.log x) + exceptionalChebotarevPrimeCountTerm K L C x) =O[atTop]
+        (fun x : ℝ => x * Real.exp (-c * Real.sqrt (Real.log x)) / Real.log x) := sorry
+
+end EffectiveChebotarev
 
 /-! ## Layer 9: certified zeros -/
 
@@ -695,4 +812,4 @@ example :
     (∀ ρ : ℂ, 0 < MeromorphicOn.divisor completedRiemannZeta Set.univ ρ → ρ.re = 1 / 2) ↔
       RiemannHypothesis := sorry
 
-end TauCetiRoadmap.LFunctionZeros
+end TauCetiRoadmap.ZerosOfLFunctions

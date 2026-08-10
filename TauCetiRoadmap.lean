@@ -32,4 +32,4 @@ import TauCetiRoadmap.LocalFields.Suggested
 import TauCetiRoadmap.NumberFieldArithmetic.Suggested
 import TauCetiRoadmap.GlobalClassFieldTheory.Suggested
 import TauCetiRoadmap.LFunctions.Suggested
-import TauCetiRoadmap.LFunctionZeros.Suggested
+import TauCetiRoadmap.ZerosOfLFunctions.Suggested
