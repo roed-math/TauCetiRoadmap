@@ -645,7 +645,7 @@ variable {L : Type u} [Field L] [NumberField L] [Algebra K L]
 
 /-- Local factor of the global Artin map at a finite place, using the unique local map owned by
 this roadmap. -/
-noncomputable def localArtinAt (v : HeightOneSpectrum (𝒪 K))
+noncomputable def localArtinAt (v : HeightOneSpectrum (𝓞 K))
     [ValuativeRel (v.adicCompletion K)]
     [IsNonarchimedeanLocalField (v.adicCompletion K)] :
     (v.adicCompletion K)ˣ →*
@@ -653,7 +653,7 @@ noncomputable def localArtinAt (v : HeightOneSpectrum (𝒪 K))
   artinMap (v.adicCompletion K)
 
 /-- Arithmetic unramified coordinate of the completion-local Artin factor. -/
-theorem unramifiedCoordinate_localArtinAt (v : HeightOneSpectrum (𝒪 K))
+theorem unramifiedCoordinate_localArtinAt (v : HeightOneSpectrum (𝓞 K))
     [ValuativeRel (v.adicCompletion K)]
     [IsNonarchimedeanLocalField (v.adicCompletion K)] (x : (v.adicCompletion K)ˣ) :
     unramifiedCoordinate (v.adicCompletion K) (localArtinAt v x)
