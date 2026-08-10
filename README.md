@@ -13,6 +13,7 @@ If you want to write or review a roadmap, start with [CONTRIBUTING.md](CONTRIBUT
 
 ## Roadmaps
 
+- [Algebraic curves: function fields, divisors, and Riemann–Roch](TauCetiRoadmap/AlgebraicCurves/README.md)
 - [Belyi maps, dessins d'enfants, and three-point covers](TauCetiRoadmap/BelyiMaps/README.md)
 - [Combinatorial Heegaard Floer and grid homology](TauCetiRoadmap/CombinatorialHeegaardFloer/README.md)
 - [Conformal mapping and the geometric theory of holomorphic functions](TauCetiRoadmap/ConformalMapping/README.md)
