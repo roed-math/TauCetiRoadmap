@@ -45,6 +45,24 @@ noncomputable def one : IdealWeight K := sorry
 noncomputable def conj (χ : IdealWeight K) : IdealWeight K := sorry
 noncomputable def pointwiseMul (χ ψ : IdealWeight K) : IdealWeight K := sorry
 
+/-- A good ideal is nonzero and prime to the finite bad set. The explicit nonzero condition is
+needed even when the bad set is empty. -/
+def IsGood (χ : IdealWeight K) (I : Ideal (𝓞 K)) : Prop :=
+  I ≠ ⊥ ∧ ∀ 𝔭 ∈ χ.bad, ¬ 𝔭.asIdeal ∣ I
+
+/-- The boundary twist `χ * N^(it)`. -/
+noncomputable def normTwist (χ : IdealWeight K) (t : ℝ) : IdealWeight K := sorry
+
+/-- Pointwise square, kept distinct from ideal convolution. -/
+noncomputable def sq (χ : IdealWeight K) : IdealWeight K := pointwiseMul K χ χ
+
+def IsNormTwistOnGood (χ : IdealWeight K) (u : ℝ) : Prop :=
+  ∀ I : Ideal (𝓞 K), χ.IsGood I →
+    χ I = ((Ideal.absNorm I : ℝ) : ℂ) ^ (Complex.I * (u : ℂ))
+
+def IsTrivialOnGood (χ : IdealWeight K) : Prop :=
+  ∀ I : Ideal (𝓞 K), χ.IsGood I → χ I = 1
+
 end IdealWeight
 
 /-- Layer 1: sum a weight over the finite fibre of the absolute norm. -/
@@ -53,6 +71,23 @@ noncomputable def normCoeff (χ : IdealWeight K) (n : ℕ) : ℂ := sorry
 theorem normCoeff_zero (χ : IdealWeight K) : normCoeff K χ 0 = 0 := sorry
 
 theorem normCoeff_one (χ : IdealWeight K) : normCoeff K χ 1 = 1 := sorry
+
+/-- The partial-sum estimate that supplies continuation into a strip. It is analytic input, not a
+consequence of the coefficient values lying in a finite group. -/
+def HasCancellation (χ : IdealWeight K) : Prop :=
+  (fun X : ℝ ↦ ∑ᶠ I : {I : Ideal (𝓞 K) // (Ideal.absNorm I : ℝ) ≤ X}, χ I)
+    =O[atTop] fun X : ℝ ↦ X ^ (1 - 1 / (Module.finrank ℚ K : ℝ))
+
+/-- The named continuation determined by Abel summation and uniqueness. -/
+noncomputable def continuedLFunctionOfWeight (χ : IdealWeight K) : ℂ → ℂ := sorry
+
+theorem continuedLFunctionOfWeight_eq (χ : IdealWeight K) {s : ℂ} (hs : 1 < s.re) :
+    continuedLFunctionOfWeight K χ s = LSeries (normCoeff K χ) s := sorry
+
+theorem analyticOnNhd_continuedLFunctionOfWeight
+    (χ : IdealWeight K) (hχ : HasCancellation K χ) :
+    AnalyticOnNhd ℂ (continuedLFunctionOfWeight K χ)
+      {s : ℂ | 1 - 1 / (Module.finrank ℚ K : ℝ) < s.re} := sorry
 
 /-- Layer 1: regroup an absolutely summable ideal series by norm into Mathlib's `LSeries`. -/
 theorem regroupByNorm (χ : IdealWeight K) (s : ℂ)
