@@ -846,8 +846,27 @@ would not agree with the standard `cd_p`.
   use the classification.
   *Needs:* L4 structure theorem; L5 presentations; L7 the predicate.
   *Source:* Labute p. 106.
+- **The prescription property.** For a continuous character `χ : G → ℤ_pˣ`, write
+  `I(χ)/p^i` for `ℤ/p^i` with action `g · x = χ(g)x`. When
+  `dim H¹(G, 𝔽_p) < ∞`, the following three conditions are equivalent (Labute Prop. 6):
+  1. the reduction map `H¹(G, I(χ)/p^i) → H¹(G, I(χ)/p)` is surjective for every
+     `i ≥ 1`;
+  2. `H²(G, I(χ)/p^i) → H²(G, I(χ)/p^{i-1})` is injective for every `i ≥ 2`,
+     equivalently the connecting map
+     `H¹(G, I(χ)/p^{i-1}) → H²(G, I(χ)/p)` is zero;
+  3. for a minimal generating tuple `g₁, …, g_n` and every
+     `(c₁, …, c_n) ∈ ℤ_p^n`, there is a compatible inverse system of continuous crossed
+     homomorphisms to `I(χ)/p^i` taking `g_j` to `c_j mod p^i`.
+
+  `HasPrescriptionProperty` uses condition 1. The finite coefficient modules are primary;
+  a crossed homomorphism valued directly in `I(χ)` is introduced only after constructing
+  the inverse limit. This equivalence is the bridge from Kummer-compatible finite
+  coefficients in downstream arithmetic applications to the marked character values used
+  by the abstract classification.
+  *Needs:* L5 coefficient objects; PC-5 connecting maps and exactness.
+  *Source:* Labute Prop. 6.
 - **The canonical character.** For `dim H¹(G, 𝔽_p) < ∞` the three prescription conditions
-  of the conventions are equivalent, and a free pro-`p` group satisfies them for every `χ`.
+  above are equivalent, and a free pro-`p` group satisfies them for every `χ`.
   **Theorem.** A Demushkin group has exactly one continuous `χ : G → ℤ_pˣ` with the
   prescription property. Define `demushkinCharacter G` to be that character. Prove that its
   image is closed, and that it is invariant under topological isomorphism; the second

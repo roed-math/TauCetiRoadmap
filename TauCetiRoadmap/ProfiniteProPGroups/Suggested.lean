@@ -1556,6 +1556,14 @@ example {p : ℕ} [Fact p.Prime] {G : Type u} [Group G] [TopologicalSpace G]
     ∃ g : G, Q = P.map (MulAut.conj g).toMonoidHom :=
   sorry
 
+/-- **Layer 2, Galois-group acceptance example.** The Galois group of any Galois extension,
+with its Krull topology, has a `p`-Sylow subgroup. This is the abstract group-theoretic half
+of the fixed-field statement that maximal prime-to-`p` subextensions exist; the fixed-field
+dictionary is deliberately left to a Galois-theory consumer. -/
+example (p : ℕ) [Fact p.Prime] {k K : Type u} [Field k] [Field K] [Algebra k K]
+    [IsGalois k K] : ∃ P : Subgroup (K ≃ₐ[k] K), IsProPSylow p P :=
+  sorry
+
 /-- **Layer 2, the `p`-Sylow subgroup of `ℤ̂`.** Every `p`-Sylow subgroup of the profinite
 completion of `ℤ` is isomorphic, as a topological group, to `ℤ_p`. Stated here, proved in
 Layer 4 through the chain of universal properties; in particular **not** through a product
