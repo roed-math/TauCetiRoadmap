@@ -33,3 +33,4 @@ import TauCetiRoadmap.ProfiniteCohomology.Suggested
 import TauCetiRoadmap.LocalFieldsRamification.Suggested
 import TauCetiRoadmap.NumberFieldArithmetic.Suggested
 import TauCetiRoadmap.ClassFieldTheory.Suggested
+import TauCetiRoadmap.QuadraticFormInvariants.Suggested
