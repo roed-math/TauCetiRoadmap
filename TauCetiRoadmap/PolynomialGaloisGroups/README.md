@@ -140,6 +140,14 @@ the merge order; nothing there depends on anything here.
 The backticked name lives in the namespace `TauCetiRoadmap.NumberFieldArithmetic`, in
 `TauCetiRoadmap/NumberFieldArithmetic/Suggested.lean`.
 
+## What this roadmap exports to Belyi Maps
+
+This roadmap is the sole owner of `fullCycleType`, `numTransitiveGroups`,
+`TransitiveGroupIndex`, `referenceSubgroup`, and `TransitiveGroupLabel`. The `BelyiMaps`
+roadmap imports these declarations for passports and database labels; it does not keep local
+stand-ins after this supplier is available. Conversely, branch cycles and peripheral-power
+theorems stay in `BelyiMaps` and create no dependency in this direction.
+
 Two things about that row are worth stating, because they are what make it an exact contract and
 not a gesture at a subject.
 
