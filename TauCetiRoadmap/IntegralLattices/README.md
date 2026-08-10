@@ -284,15 +284,15 @@ both roadmaps use, marked with an asterisk, and the supplier owns the final choi
 | B2, B3, B4, B5 | Global Class Field Theory | 10B.4 | `Pic`, `NumberFieldOrder.mkPic`, `mkPic_surjective`, `finite_pic` | the Picard group of the order, with the class of a proper ideal, its surjectivity, and finiteness |
 | B2, B3, B4, B5 | Global Class Field Theory | 10B.4 | `NarrowPic`, `NumberFieldOrder.narrowPrincipal`, `narrowPic_surjective`, `finite_narrowPic` | the narrow Picard group, the quotient by the principal ideals with a generator of **positive norm**, with its surjection onto `Pic O` and finiteness |
 | B3 | Global Class Field Theory | 10C.1 | `ringClassField`, `gal_ringClassField_equiv_pic` | `Gal(H_O/K) ≅ Pic O` |
-| 4B | Orthogonal and Spin Groups | 0C | `orthogonalGroup_mulEquiv_bilinear`\* | `orthogonalGroup Q ≃* O(Q.polarBilin)` when `2` is invertible |
-| 4B | Orthogonal and Spin Groups | 0C | `orthogonalMap_baseChange`\* | `O(β) →* O(β.baseChange S)` for a symmetric bilinear form over a commutative ring |
+| 4B | Orthogonal and Spin Groups | 0C | `orthogonalGroup`, with `Q.polarBilin` as the pinned un-halved polar form, so that `B x x = 2 • Q x` | `Subgroup (V ≃ₗ[K] V)`, together with the comparison to the isometry group of `Q.polarBilin` when `2` is invertible, which that roadmap's 0C owns |
+| 4B | Orthogonal and Spin Groups | 3B | `orthogonalBaseChange`, `orthogonalBaseChangeReal` | `orthogonalGroup Q →* orthogonalGroup (localForm Q p)` at each finite place, and its real analogue |
 | 4C | Orthogonal and Spin Groups | Layer 1 | `spinorNorm` | `[FiniteDimensional K V] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) : orthogonalGroup Q →* SquareClass K` |
 | 4C | Orthogonal and Spin Groups | Layer 1 | `spinorNorm_reflection` | value of `spinorNorm` on `⟨reflection Q hv, reflection_mem Q hv⟩` |
 | 4C | Orthogonal and Spin Groups | Layer 2 | local point groups | `orthogonalGroup (Q.baseChange ℚ_[p])` with its topology |
-| 4B, 7B | Orthogonal and Spin Groups | Layer 3 | `orthogonalFiniteAdelicPoints`\* | restricted product of the local point groups relative to a compact open family |
-| 4D | Orthogonal and Spin Groups | 4E | `spin_strongApproximation`\* | `Spin(V)(𝔸^S) = Spin(V)(ℚ)·U` |
-| 4F | Orthogonal and Spin Groups | 2C | `eichlerTransvection`\* | `E_{u,w}(x) = x + B(x,u)w − B(x,w)u − Q(w)B(x,u)u`, additive in `w ∈ u^⊥/Ku` |
-| 7B, 7F, B7 | Orthogonal and Spin Groups | 5G, 5I | `specialOrthogonal_tamagawaVolume`\* | `vol(SO(V)(ℚ) \ SO(V)(𝔸)) = 2` of its 5I, with the compact-open volume comparison of its 5G |
+| 4B, 7B | Orthogonal and Spin Groups | 3C, 3D | `CompatibleCompactOpens` with `soPart`, and `finiteAdelicOrthogonal` | the compact-open family at every finite place, with its two eventual-integrality fields; and the restricted product of the local orthogonal groups relative to it |
+| 4D | Orthogonal and Spin Groups | 4E | `strongApproximation_finiteAdelicSpin` | `Spin(V)(𝔸^S) = Spin(V)(ℚ)·U`, at a **noncompact** place and not merely an indefinite form |
+| 4F | Orthogonal and Spin Groups | 2C | `transvection`, with `transvection_apply`, `transvection_mem`, `transvection_add_smul` and `transvectionLiftHom` | `E_{u,w}(x) = x + B(x,u)w − B(x,w)u − Q(w)B(x,u)u`, additive in `w ∈ u^⊥/Ku`, with the lift to `Spin` |
+| 7B, 7F, B7 | Orthogonal and Spin Groups | 5G, 5I | `specialOrthogonal_tamagawaVolume`\* | `vol(SO(V)(ℚ) \ SO(V)(𝔸)) = 2` of its 5I, with the compact-open volume comparison of its 5G. ⚠ Still provisional: that roadmap's `Suggested.lean` has no Tamagawa declaration at its current head, and its 5I value depends on the dimension — `2` for `dim ≥ 3` only |
 | 6C, 6G | Root Systems | Layer 5 | the ADE classification and `Nat.card P.weylGroup` | a root system of rank 8 with the `E₈` Cartan matrix is of type `E₈` |
 | 8D | L-functions | Layer 2 | `ZLattice.dual`\* | `AnalyticLattice n → AnalyticLattice n` |
 | 8D | L-functions | Layer 2 | `ZLattice.dual_dual`\* | `dual (dual Λ) = Λ` |
