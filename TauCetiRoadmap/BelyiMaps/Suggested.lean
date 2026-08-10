@@ -746,11 +746,33 @@ def computedPassportOf (t : PermutationTriple n) : PassportData n :=
   ⟨computedCycleType t.σ0, computedCycleType t.σ1, computedCycleType t.σinf,
     monodromyElems t⟩
 
-/-- **Layer 3.1, an executable acceptance check.** Every ordered passport in degree `≤ 4` has
-size `1` (Layer 3.5), so the fiber through `torusTriple` is a single class. This is the
-smallest end-to-end run of the enumeration: classes, passport datum, fiber, cardinality. -/
-example : computedPassportSize 4 (computedPassportOf torusTriple) = 1 := by
-  sorry
+/-! **Layer 3.1, the executable acceptance checks.** These run the enumeration end to end —
+connected triples, relabeling orbits, passport datum, fiber, cardinality — and are proved by
+kernel reduction, so they are evidence and not annotation. The counts agree with the
+independent enumeration recorded in `PROVENANCE.md`.
+
+⚠ `native_decide` is deliberately not used anywhere in this file. It would discharge the
+degree-`4` case too, but at the cost of adding `Lean.ofReduceBool` — a trusted-compiler axiom
+— to a repository that currently has none, and the degree-`4` run exercises no code path that
+degree `3` does not. Kernel `decide` does not complete at degree `4` within ten minutes;
+`#eval` gives `26` classes and passport size `1` there, matching `PROVENANCE.md`, and that is
+recorded as a computation rather than promoted to a theorem. -/
+
+section AcceptanceCounts
+
+set_option maxRecDepth 1000000
+set_option maxHeartbeats 2000000
+
+example : (isoClasses 1).card = 1 := by decide
+example : (isoClasses 2).card = 3 := by decide
+example : (isoClasses 3).card = 7 := by decide
+
+/-- The end-to-end run: from a triple to the cardinality of its passport fiber. Every ordered
+passport in degree `≤ 4` has size `1` (Layer 3.5), and this is that statement at degree `3`,
+computed rather than assumed. -/
+example : computedPassportSize 3 (computedPassportOf s3Triple) = 1 := by decide
+
+end AcceptanceCounts
 
 end PermutationTriple
 
@@ -1065,38 +1087,67 @@ noncomputable def FiberNumberedCover.triple {n : ℕ}
     (c.ν.permCongr (monodromyHom c.isCoveringMap basePt periph0))
     (c.ν.permCongr (monodromyHom c.isCoveringMap basePt periph1))
 
-/-- **Layer 6.1.** A cover with one chosen point of the fiber. The carrier Layer 6.3
-classifies by subgroups — a different rigidification from `FiberNumberedCover`. -/
-structure PointedCover {X : Type u} [TopologicalSpace X] (x : X) where
+/-- **Layer 6.1.** A **connected** cover with one chosen point of the fiber. The carrier
+Layer 6.3 classifies by subgroups.
+
+⚠ Connectedness is a field, not a convenience. A disconnected pointed cover recovers only the
+subgroup of the component containing the chosen point, so adjoining any unrelated cover as a
+second component leaves the subgroup unchanged and the classification below would not be
+injective. -/
+structure ConnectedPointedCover {X : Type u} [TopologicalSpace X] (x : X) where
   E : Type u
   [topE : TopologicalSpace E]
+  [pathConnectedE : PathConnectedSpace E]
   p : E → X
   isCoveringMap : IsCoveringMap p
   e : ↥(p ⁻¹' {x})
 
-attribute [instance] PointedCover.topE
+attribute [instance] ConnectedPointedCover.topE ConnectedPointedCover.pathConnectedE
 
-/-- **Layer 6.3.** Isomorphism of pointed covers: a homeomorphism over `X` carrying the
-chosen point to the chosen point. -/
-def PointedCoverIso {X : Type u} [TopologicalSpace X] (x : X) :
-    PointedCover x → PointedCover x → Prop :=
+/-- **Layer 6.1.** A connected cover with no chosen point — the unpointed carrier. -/
+structure ConnectedCover {X : Type u} [TopologicalSpace X] where
+  E : Type u
+  [topE : TopologicalSpace E]
+  [pathConnectedE : PathConnectedSpace E]
+  p : E → X
+  isCoveringMap : IsCoveringMap p
+
+attribute [instance] ConnectedCover.topE ConnectedCover.pathConnectedE
+
+/-- **Layer 6.3.** Isomorphism of connected pointed covers: a homeomorphism over `X` carrying
+the chosen point to the chosen point. -/
+def ConnectedPointedCoverIso {X : Type u} [TopologicalSpace X] (x : X) :
+    ConnectedPointedCover x → ConnectedPointedCover x → Prop :=
   fun c c' => ∃ f : c.E ≃ₜ c'.E, (∀ y, c'.p (f y) = c.p y) ∧ f c.e.1 = c'.e.1
 
-/-- Local stand-in; supplier: UniversalCovers milestone 8, which pins no Lean name.
-Connected pointed covers of `(X, x₀)` up to pointed isomorphism biject with the subgroups of
-`π₁(X, x₀)`, the subgroup attached to a pointed cover being the image of its induced map. -/
-def pointedCoverEquivSubgroup {X : Type u} [TopologicalSpace X]
-    [PathConnectedSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X]
-    (x₀ : X) :
-    Quot (PointedCoverIso x₀) ≃ Subgroup (FundamentalGroup X x₀) :=
-  sorry
+/-- **Layer 6.3.** Isomorphism of connected covers: a homeomorphism over `X`. -/
+def ConnectedCoverIso {X : Type u} [TopologicalSpace X] :
+    @ConnectedCover X _ → @ConnectedCover X _ → Prop :=
+  fun c c' => ∃ f : c.E ≃ₜ c'.E, ∀ y, c'.p (f y) = c.p y
 
-/-- Local stand-in, unpointed form. ⚠ **Not** `ConjClasses (Subgroup _)`: `ConjClasses` is
-the quotient of a monoid by conjugation **on itself**, and `Subgroup G` is not `G`. The
-quotient wanted here is by the conjugation action of the group on its subgroups, which is
-the orbit relation of that action. -/
+/-- **Layer 6.3.** The conjugation action of a group on its subgroups, and the orbit relation
+it induces. ⚠ **Not** `ConjClasses (Subgroup G)`: `ConjClasses` is a monoid's quotient by
+conjugation **on itself**, and `Subgroup G` is not `G`. -/
 noncomputable def subgroupConjSetoid {G : Type u} [Group G] : Setoid (Subgroup G) :=
   MulAction.orbitRel (ConjAct G) (Subgroup G)
+
+/-- Local stand-in; supplier: UniversalCovers milestone 8, which pins no Lean name. Connected
+pointed covers of `(X, x₀)` up to pointed isomorphism biject with the subgroups of
+`π₁(X, x₀)`, the subgroup attached to a cover being the image of its induced map. -/
+def connectedPointedCoverEquivSubgroup {X : Type u} [TopologicalSpace X]
+    [PathConnectedSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X]
+    (x₀ : X) :
+    Quot (ConnectedPointedCoverIso x₀) ≃ Subgroup (FundamentalGroup X x₀) :=
+  sorry
+
+/-- Local stand-in, unpointed form: forgetting the basepoint is exactly passing to the
+conjugation orbit of the subgroup. -/
+noncomputable def connectedCoverEquivSubgroupOrbit {X : Type u} [TopologicalSpace X]
+    [PathConnectedSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X]
+    (x₀ : X) :
+    Quot (@ConnectedCoverIso X _) ≃
+      Quotient (@subgroupConjSetoid (FundamentalGroup X x₀) _) :=
+  sorry
 
 /-! ## Layer 8: analytic Belyi pairs
 
@@ -1144,27 +1195,38 @@ the Riemann–Roch statement the ModularForms roadmap owes has somewhere type-co
 ⚠ The supplier pins **no** Lean names for any of this, so these are stand-ins, not citations.
 -/
 
-/-- The Layer 8.1 hypothesis stack, abbreviated so the interfaces below can repeat it
-explicitly. ⚠ Section `variable`s are deliberately not used here: a `sorry`-bodied `def`
-whose *type* does not mention `X` silently drops it, which is how `genusAn` would end up a
-constant natural number shared by every surface. -/
-abbrev IsCompactRiemannSurface (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X] :=
-  IsManifold 𝓘(ℂ) ω X ∧ T2Space X ∧ CompactSpace X ∧ ConnectedSpace X
+/-! ### Layers 9.2, 9.4: the meromorphic field and the Riemann–Roch interface
+
+⚠ Hypotheses are carried as **typeclass binders**, one per declaration, not bundled into a
+single `IsCompactRiemannSurface X` conjunction. A conjunction does not install its components
+as instances, so downstream synthesis of `Field (MerField X)` would fail. The binders differ
+between declarations on purpose: connectedness is what makes `MerField X` a field, and
+compactness is what makes divisors finitely supported. -/
 
 /-- **Layer 9.2.** The meromorphic functions: holomorphic maps to the sphere other than the
 constant `∞`. -/
-def MerField (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X] : Type u :=
+def MerField (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X] [IsManifold 𝓘(ℂ) ω X] :
+    Type u :=
   {f : X → OnePoint ℂ // MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f ∧ f ≠ fun _ => OnePoint.infty}
 
 /-- **Layer 9.2, the milestone.** The field structure, whose operations are the named targets
-of README Layer 9.2 (each the unique holomorphic function agreeing with the chartwise
-operation off the polar sets). -/
+of README Layer 9.2 — each the unique holomorphic function agreeing with the chartwise
+operation off the polar sets.
+
+⚠ **`ConnectedSpace X` is required and `CompactSpace X` is not.** On a disjoint union of two
+Riemann surfaces the meromorphic functions form a *product* of fields and have zero divisors,
+so the instance would be false; on an empty `X` the carrier is empty and has no `1`. Existence
+and uniqueness of the operations come from removability and the identity theorem, which need
+the manifold structure and connectedness — not compactness. Compactness enters below, at
+divisors. -/
 noncomputable instance instFieldMerField (X : Type u) [TopologicalSpace X]
-    [ChartedSpace ℂ X] : Field (MerField X) := sorry
+    [ChartedSpace ℂ X] [IsManifold 𝓘(ℂ) ω X] [T2Space X] [ConnectedSpace X] :
+    Field (MerField X) := sorry
 
 /-- **Layer 9.2.** The constants embed, so `L(D)` below is a `ℂ`-subspace. -/
 noncomputable instance instAlgebraMerField (X : Type u) [TopologicalSpace X]
-    [ChartedSpace ℂ X] : Algebra ℂ (MerField X) := sorry
+    [ChartedSpace ℂ X] [IsManifold 𝓘(ℂ) ω X] [T2Space X] [ConnectedSpace X] :
+    Algebra ℂ (MerField X) := sorry
 
 /-- **Layer 9.4.** Divisors. An `abbrev` so that `Finsupp`'s group structure — in particular
 subtraction, which `riemannRochAn` needs — is found without transport. Finite support is
@@ -1175,39 +1237,99 @@ abbrev Divisor (X : Type u) : Type u := X →₀ ℤ
 def Divisor.deg {X : Type u} (D : Divisor X) : ℤ := D.sum fun _ m => m
 
 /-- **Layer 8.1/9.4.** The genus. ⚠ Not imported from a classification of topological
-surfaces — the roadmap has none and depends on none; this is the genus that appears in
+surfaces — the roadmap has none and needs none; this is the genus appearing in
 Riemann–Roch. -/
-def genusAn (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X] : ℕ := sorry
+def genusAn (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X] [IsManifold 𝓘(ℂ) ω X]
+    [T2Space X] [CompactSpace X] [ConnectedSpace X] : ℕ := sorry
 
 /-- **Layer 9.4.** The Riemann–Roch space `L(D)`. -/
 def riemannRochSpaceAn (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X]
+    [IsManifold 𝓘(ℂ) ω X] [T2Space X] [CompactSpace X] [ConnectedSpace X]
     (D : Divisor X) : Submodule ℂ (MerField X) := sorry
 
-/-- **Layer 9.4.** Its dimension. -/
-def ellAn (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X] (D : Divisor X) : ℕ := sorry
+/-- **Layer 9.4.** Its dimension, finite because `X` is compact. -/
+def ellAn (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X] [IsManifold 𝓘(ℂ) ω X]
+    [T2Space X] [CompactSpace X] [ConnectedSpace X] (D : Divisor X) : ℕ := sorry
 
 /-- **Layer 9.4.** A canonical divisor. -/
-def canonicalDivisor (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X] : Divisor X := sorry
+def canonicalDivisor (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X]
+    [IsManifold 𝓘(ℂ) ω X] [T2Space X] [CompactSpace X] [ConnectedSpace X] :
+    Divisor X := sorry
 
 /-- **Layer 9.4, the interface ModularForms Layer 10B owes.** ⚠ An identity in `ℤ`: the left
 side is a difference of dimensions and the right involves `deg D`, so `ℕ` subtraction would
 silently truncate exactly when `ℓ(K − D) > ℓ(D)`. -/
 theorem riemannRochAn (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X]
-    (_h : IsCompactRiemannSurface X) (D : Divisor X) :
+    [IsManifold 𝓘(ℂ) ω X] [T2Space X] [CompactSpace X] [ConnectedSpace X]
+    (D : Divisor X) :
     (ellAn X D : ℤ) - (ellAn X (canonicalDivisor X - D) : ℤ) =
       D.deg + 1 - (genusAn X : ℤ) :=
   sorry
 
-/-- **Layer 9.4, the Riemann–Hurwitz interface.** Also an identity in `ℤ`, with the
-ramification sum over the finitely many ramified points. -/
-theorem riemannHurwitzAn (X Y : Type u) [TopologicalSpace X] [ChartedSpace ℂ X]
-    [TopologicalSpace Y] [ChartedSpace ℂ Y]
-    (_hX : IsCompactRiemannSurface X) (_hY : IsCompactRiemannSurface Y)
-    (f : X → Y) (_hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f) (_hne : ∃ x y, f x ≠ f y)
-    (deg : ℕ) (ram : Finset X) (e : X → ℕ) :
-    2 * (genusAn X : ℤ) - 2 =
-      deg * (2 * (genusAn Y : ℤ) - 2) + ∑ x ∈ ram, ((e x : ℤ) - 1) :=
+/-! **Layer 8.2, 8.3: the invariants Riemann–Hurwitz is about.**
+
+⚠ These exist so that Riemann–Hurwitz is a theorem about `f`. Quantifying the formula over a
+free `deg : ℕ`, `ram : Finset X` and `e : X → ℕ` does not weaken it — it makes it **false**,
+because the caller may supply any numbers at all. Every quantity below is determined by `f`,
+and the companion contracts say what determines it. -/
+
+/-- **Layer 8.3.** The degree of a nonconstant holomorphic map of compact connected Riemann
+surfaces: the common fiber cardinality counted with multiplicity. -/
+def degreeAn {X Y : Type u} [TopologicalSpace X] [ChartedSpace ℂ X] [IsManifold 𝓘(ℂ) ω X]
+    [T2Space X] [CompactSpace X] [ConnectedSpace X]
+    [TopologicalSpace Y] [ChartedSpace ℂ Y] [IsManifold 𝓘(ℂ) ω Y]
+    [T2Space Y] [CompactSpace Y] [ConnectedSpace Y]
+    (f : X → Y) (_hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f) (_hne : ∃ x y, f x ≠ f y) : ℕ :=
   sorry
+
+/-- **Layer 8.2.** The ramification index of `f` at a point: the local degree, `e ≥ 1`, with
+`e = 1` exactly at the unramified points. -/
+def ramificationIndexAn {X Y : Type u} [TopologicalSpace X] [ChartedSpace ℂ X]
+    [IsManifold 𝓘(ℂ) ω X] [T2Space X] [CompactSpace X] [ConnectedSpace X]
+    [TopologicalSpace Y] [ChartedSpace ℂ Y] [IsManifold 𝓘(ℂ) ω Y]
+    [T2Space Y] [CompactSpace Y] [ConnectedSpace Y]
+    (f : X → Y) (x : X) : ℕ :=
+  sorry
+
+/-- **Layer 8.2.** The ramified points, a `Finset` because `X` is compact. -/
+def ramifiedPointsAn {X Y : Type u} [TopologicalSpace X] [ChartedSpace ℂ X]
+    [IsManifold 𝓘(ℂ) ω X] [T2Space X] [CompactSpace X] [ConnectedSpace X]
+    [TopologicalSpace Y] [ChartedSpace ℂ Y] [IsManifold 𝓘(ℂ) ω Y]
+    [T2Space Y] [CompactSpace Y] [ConnectedSpace Y]
+    (f : X → Y) : Finset X :=
+  sorry
+
+section RamificationContracts
+
+variable {X Y : Type u} [TopologicalSpace X] [ChartedSpace ℂ X] [IsManifold 𝓘(ℂ) ω X]
+  [T2Space X] [CompactSpace X] [ConnectedSpace X]
+  [TopologicalSpace Y] [ChartedSpace ℂ Y] [IsManifold 𝓘(ℂ) ω Y]
+  [T2Space Y] [CompactSpace Y] [ConnectedSpace Y]
+
+/-- The index is positive — junk-free, so the sum below cannot be gamed by `e x = 0`. -/
+theorem ramificationIndexAn_pos (f : X → Y) (x : X) : 0 < ramificationIndexAn f x := sorry
+
+/-- The ramified points are exactly where the index exceeds `1`. This is what ties the
+summation set to `f`. -/
+theorem mem_ramifiedPointsAn_iff (f : X → Y) (x : X) :
+    x ∈ ramifiedPointsAn f ↔ 1 < ramificationIndexAn f x := sorry
+
+/-- The degree is the fiber sum of ramification indices, at **every** point of the target —
+which is what makes `degreeAn` the degree rather than an arbitrary natural number. -/
+theorem degreeAn_eq_fiber_sum (f : X → Y) (hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f)
+    (hne : ∃ x y, f x ≠ f y) (y : Y) (fib : Finset X) (hfib : ∀ x, x ∈ fib ↔ f x = y) :
+    degreeAn f hf hne = ∑ x ∈ fib, ramificationIndexAn f x := sorry
+
+/-- **Layer 9.4, the Riemann–Hurwitz interface.** Every quantity is derived from `f`. An
+identity in `ℤ`, with the ramification sum over the finitely many ramified points. -/
+theorem riemannHurwitzAn (f : X → Y) (hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f)
+    (hne : ∃ x y, f x ≠ f y) :
+    2 * (genusAn X : ℤ) - 2 =
+      (degreeAn f hf hne : ℤ) * (2 * (genusAn Y : ℤ) - 2) +
+        ∑ x ∈ ramifiedPointsAn f, ((ramificationIndexAn f x : ℤ) - 1) :=
+  sorry
+
+end RamificationContracts
 
 /-! ## Layers 12, 13: profinite peripheral objects
 

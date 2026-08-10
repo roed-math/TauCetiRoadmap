@@ -442,9 +442,9 @@ lands. The mathematics always belongs to the supplier; only the spelling is loca
 | 5.1, 6.2 | UniversalCovers Stage 0.2 | semilocal simple connectivity | **no Mathlib class exists**; local interface: `class SemilocallySimplyConnectedSpace (X) [TopologicalSpace X] : Prop` with the "some neighbourhood's loops are nullhomotopic in `X`" field, in `Suggested.lean` |
 | 6.2 | UniversalCovers Stage 0.2, 0.3 | the universal cover, its covering map, and the free proper `π₁`-action | `UniversalCover x₀`, `proj`, `IsCoveringMap proj`, `SimplyConnectedSpace (UniversalCover x₀)`, `UniversalCover.isQuotientCoveringMap` |
 | 6.4 | UniversalCovers Stage 0.4, 1 | deck groups and `Deck ≅ (π₁)ᵐᵒᵖ` | `Deck`, `deckFundamentalGroupEquiv : Deck proj ≃* (FundamentalGroup X x₀)ᵐᵒᵖ` |
-| 6.3 | UniversalCovers Stage 2 | basepoint change, and the pointed/unpointed correspondence | `basepointChangeSubgroup`; for milestone 8 that roadmap pins no name, local interface: `pointedCoverEquivSubgroup (x₀ : X) : Quot (PointedCoverIso x₀) ≃ Subgroup (FundamentalGroup X x₀)` under `[PathConnectedSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X]`, with `PointedCover` and `PointedCoverIso` both carried in `Suggested.lean`; the unpointed form quotients subgroups by the conjugation action, `subgroupConjSetoid := MulAction.orbitRel (ConjAct G) (Subgroup G)`. ⚠ **Not** `ConjClasses (Subgroup _)` — `ConjClasses` is a monoid's quotient by conjugation on *itself*, and `Subgroup G` is not `G` |
+| 6.3 | UniversalCovers Stage 2 | basepoint change, and the pointed/unpointed correspondence | `basepointChangeSubgroup`; for milestone 8 that roadmap pins no name, local interface: `connectedPointedCoverEquivSubgroup (x₀ : X) : Quot (ConnectedPointedCoverIso x₀) ≃ Subgroup (FundamentalGroup X x₀)` under `[PathConnectedSpace X] [LocPathConnectedSpace X] [SemilocallySimplyConnectedSpace X]`, with `ConnectedPointedCover` (carrying `PathConnectedSpace E` as a **field**) and `ConnectedPointedCoverIso` in `Suggested.lean`; unpointed, `connectedCoverEquivSubgroupOrbit : Quot ConnectedCoverIso ≃ Quotient subgroupConjSetoid`. ⚠ **Connectedness is required**: a disconnected pointed cover recovers only the subgroup of the component containing the chosen point, so adjoining an unrelated component would leave the subgroup fixed and the map would not be injective. ⚠ The subgroup side is the conjugation-**orbit** quotient, `MulAction.orbitRel (ConjAct G) (Subgroup G)`, not `ConjClasses (Subgroup _)` — `ConjClasses` is a monoid's quotient by conjugation on *itself*, and `Subgroup G` is not `G` |
 | 8.2 | ConformalMapping L0 | the local degree of a holomorphic map | `TauCeti.exists_localDegree`, and the holomorphic branch-root extraction beside it |
-| 8.6, 9.3, 9.4 | ModularForms Layer 10B | Riemann–Roch and Riemann–Hurwitz for compact Riemann surfaces | that roadmap pins **no Riemann-surface carrier and no Lean names**; local interfaces, all carried in `Suggested.lean`: `MerField X` (Layer 9.2's carrier, with its `Field` and `Algebra ℂ` instances as milestones), `Divisor X := X →₀ ℤ` — an `abbrev`, so `Finsupp`'s subtraction is available — `Divisor.deg : Divisor X → ℤ`, `genusAn X : ℕ`, `riemannRochSpaceAn X (D) : Submodule ℂ (MerField X)`, `ellAn`, `canonicalDivisor`. ⚠ `genusAn` is **not** imported from a classification of topological surfaces: the roadmap has none and needs none; it is the genus appearing in Riemann–Roch. ⚠ Both identities are stated in `ℤ`, since `ℕ` subtraction would truncate `ℓ(D) - ℓ(K-D)` exactly when the second exceeds the first, plus `riemannRochAn` and `riemannHurwitzAn` themselves |
+| 8.6, 9.3, 9.4 | ModularForms Layer 10B | Riemann–Roch and Riemann–Hurwitz for compact Riemann surfaces | that roadmap pins **no Riemann-surface carrier and no Lean names**; local interfaces, all carried in `Suggested.lean`: `MerField X`, `Divisor X := X →₀ ℤ` — an `abbrev`, so `Finsupp`'s subtraction is available — `Divisor.deg : Divisor X → ℤ`, `genusAn X : ℕ`, `riemannRochSpaceAn`, `ellAn`, `canonicalDivisor`, `riemannRochAn`; and for Riemann–Hurwitz the map-derived `degreeAn f hf hne`, `ramificationIndexAn f x`, `ramifiedPointsAn f` with contracts `ramificationIndexAn_pos`, `mem_ramifiedPointsAn_iff`, `degreeAn_eq_fiber_sum`. ⚠ `MerField X` is a **field for connected** Riemann surfaces — `[ConnectedSpace X]`, not `[CompactSpace X]`: on a disjoint union the meromorphic functions are a *product* of fields and have zero divisors. Compactness enters at divisors, finite polar sets, and finite-dimensional `L(D)`, and is carried on those declarations. ⚠ Riemann–Hurwitz must **not** quantify over a free `deg`, `ram` and `e`: that is not a weaker theorem but a false one, since a caller may supply any numbers. Every quantity is derived from `f`. ⚠ `genusAn` is not imported from a classification of topological surfaces — the roadmap has none and needs none. ⚠ Both identities are stated in `ℤ`, since `ℕ` subtraction truncates `ℓ(D) − ℓ(K−D)` exactly when the second exceeds the first |
 | 9.1, 9.4, 9.6 | AlgebraicCurves Layers 0, 1, 6 | function fields, places, ramification and residue degrees | `IsFunctionField`, `IsIntegrallyClosedIn`, `Place`, `Divisor`, and the ramification data `e (P' ∣ P)`, `f (P' ∣ P)` with the fundamental identity `Σ e·f = n` |
 | 9.5, 10.7, 11.4 | AlgebraicCurves Layers 5, 8 | Riemann–Roch, genus, and constant-field extension | `riemannRochSpace`, `genus`, and the full faithfulness of constant-field extension in characteristic zero |
 | 9.1, 9.5 | AlgebraicCurves Layer 12 | the regular projective model and the anti-equivalence | that roadmap pins **no Lean names**; local interfaces: `regularModel (F) [Field F] [Algebra k F] (h : IsFunctionField k F) : Curve k` and `functionFieldEquiv : (Curve k)ᵒᵖ ≌ FunctionField k`, together with `regularModel_functionField : functionField (regularModel h) ≃ₐ[k] F`; **this roadmap never analytifies a scheme** — Layer 9.6 works with places, so only the place set and its `(e,f)` data are consumed, never a scheme-theoretic fiber |
@@ -994,7 +994,12 @@ is recomputed here and compared:
   choice proves nothing about the classes; the passport fibers, and `passportSize P` as the
   cardinality of a computed `Finset`, with soundness and completeness stated as `Finset`
   equalities, so that the class lists and passport sizes are `#eval`-able at small degree and
-  `decide`-checked at `n ≤ 3`.
+  `decide`-checked at `n ≤ 3`. The prototype carries those checks: `(isoClasses n).card` is
+  `1, 3, 7` for `n = 1, 2, 3` and one passport fiber has size `1`, all by kernel `decide`,
+  agreeing with the independent enumeration in `PROVENANCE.md`. ⚠ At `n = 4` kernel reduction
+  does not complete in reasonable time; `#eval` gives `26` there, and that is recorded as a
+  computation rather than promoted to a theorem — `native_decide` would prove it but would add
+  a trusted-compiler axiom to a repository that has none.
 
   ⚠ For the passport fiber to be **computable** the monodromy group must enter as a `Finset`
   of permutations, which is also how the database presents it; a `Subgroup` carries no
@@ -1946,8 +1951,12 @@ between the carrier of 6.1 and its combinatorial counterpart:
    isomorphism over `U` correspond to `IsoClass n`, Layer 0.2's quotient by simultaneous
    conjugation: forgetting the numbering on one side is exactly passing to the relabeling
    orbit on the other.
-3. **Pointed covers ↔ subgroups, equivalently triples with a marked label.** Connected
-   pointed covers of `(U, b)` up to pointed isomorphism correspond to transitive
+3. **Connected pointed covers ↔ subgroups, equivalently triples with a marked label.**
+   ⚠ **Connected** throughout: the carrier is `ConnectedPointedCover`, carrying
+   path-connectedness of the total space as a field. A disconnected pointed cover recovers
+   only the subgroup of the component containing the chosen point, so adjoining an unrelated
+   component would leave the subgroup fixed and the correspondence would not be injective.
+   Connected pointed covers of `(U, b)` up to pointed isomorphism correspond to transitive
    `π₁`-sets with a distinguished point, equivalently to subgroups of `π₁(U, b)` of index
    `n` (UniversalCovers milestone 8), equivalently to the quotient
 
@@ -1958,6 +1967,10 @@ between the carrier of 6.1 and its combinatorial counterpart:
    by the **diagonal** action — the marked label moves with the relabeling. The subgroup
    attached to `(t, i)` is the stabilizer of `i` under the monodromy action, and this is
    the milestone: that map is a bijection onto the index-`n` subgroups.
+
+   Forgetting the basepoint is passing to the conjugation **orbit** of the subgroup:
+   `connectedCoverEquivSubgroupOrbit : Quot ConnectedCoverIso ≃ Quotient subgroupConjSetoid`,
+   with `subgroupConjSetoid := MulAction.orbitRel (ConjAct G) (Subgroup G)`.
 
    Equivalently, fix the marked label once and take
 
@@ -2613,7 +2626,10 @@ maps.
 
 #### 9.2 The meromorphic function field
 
-**The carrier, exactly.** For a compact connected Riemann surface `X`,
+**The carrier, exactly.** ⚠ The **field** structure needs `X` connected, not compact: on a
+disjoint union the meromorphic functions form a *product* of fields and have zero divisors,
+and on an empty `X` the carrier has no `1`. Compactness is what the divisor bookkeeping of
+9.4–9.5 needs, and is carried there. For a connected Riemann surface `X`,
 
 ```lean
 def M (X) := {f : X → OnePoint ℂ // MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f ∧ f ≠ fun _ => ∞}
