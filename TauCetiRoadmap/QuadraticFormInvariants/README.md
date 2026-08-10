@@ -22,6 +22,13 @@ This roadmap builds that theory over a field with `2` invertible. The high point
 
 The last three layers state these invariants in mod-2 Galois cohomology.
 
+The ownership boundary is local and acyclic. This roadmap consumes
+`ProfiniteCohomology`, `LocalFieldsRamification`, and `ClassFieldTheory`. It owns the
+norm-equation/quaternion Hilbert symbol and the comparison with the cohomological
+pairing. Class Field Theory owns that pairing and Hilbert reciprocity; this roadmap
+derives the sign product formula from it. Hasse--Minkowski and every global
+classification or realization theorem belong to `GlobalQuadraticForms`.
+
 ## Suggested homes
 
 The homes below mirror Mathlib's directory conventions.
@@ -33,7 +40,7 @@ The homes below mirror Mathlib's directory conventions.
   package. Mathlib keeps its quaternion and Brauer material under `Algebra/`.
 - `TauCeti/NumberTheory/LocalField/QuadraticForm/` for the quadratic defect, the Hilbert
   symbol, and the local classification. The general local-field arithmetic these consume
-  lands where the local-fields roadmap puts it, and is not duplicated here.
+  lands where the local-fields-ramification roadmap puts it, and is not duplicated here.
 - `TauCeti/FieldTheory/QuadraticForm/` for the cohomological layers, that is the Brauer
   comparison, Stiefel-Whitney classes, and the relative formula. These sit next to
   the landed `TauCeti/FieldTheory/SquareClassGroup.lean` that they consume.
@@ -53,6 +60,10 @@ Excluded:
   statement that rests on them;
 - the cohomological invariant theory of Garibaldi-Merkurjev-Serre beyond
   Stiefel-Whitney classes;
+- Hasse--Minkowski, weak approximation for global forms, local-global isometry and
+  isotropy, and classification or realization of forms over number fields. Those are
+  owned by the `GlobalQuadraticForms` roadmap, which consumes the local invariants and
+  the two frozen Hilbert-symbol bridges supplied here;
 - graded mod-2 Galois cohomology in every degree. Layers 7 to 9 work in degrees `1`
   and `2`, which is what the Brauer comparison, the Hasse and Clifford comparisons, and
   the relative Stiefel-Whitney formula for a quadratic extension need. The total
@@ -336,13 +347,17 @@ improvement through their own review rather than duplicating them.
 
 ### From other roadmaps in this repository
 
-- The [local-fields roadmap](../LocalFields/README.md) owns the general arithmetic of a
+- The [local-fields-ramification
+  roadmap](../LocalFieldsRamification/README.md) owns the general arithmetic of a
   nonarchimedean local field: the normalized valuation, the unit filtration with its
   graded pieces, the Teichmüller section, the ramification and residue degrees, power
-  and square classes, unramified extensions with their norm groups, and the invariant
-  map of local class field theory. Layer 6A consumes those declarations rather than
-  defining a second valuation or a second filtration, and Layer 6E cites the invariant
-  map.
+  and square classes, and unramified extensions with their norm groups. Layer 6A
+  consumes those declarations rather than defining a second valuation or filtration.
+- The [class-field-theory roadmap](../ClassFieldTheory/README.md) owns local duality,
+  the invariant map, the cohomological Kummer-cup Hilbert pairing, and Hilbert
+  reciprocity. Layers 6E and 7C compare this imported pairing with the
+  norm-equation/quaternion symbol; the dependency is
+  `ClassFieldTheory -> QuadraticFormInvariants`, never the reverse.
 - The [profinite-cohomology roadmap](../ProfiniteCohomology/README.md) owns continuous
   cohomology and its operations: the carrier, the cup product, restriction, inflation,
   corestriction, Kummer theory, and the Evens norm at index two with its four
@@ -385,7 +400,7 @@ operation and falsifies the theorems.
   that definition.
 - **The local field.** The carrier is Mathlib's `IsNonarchimedeanLocalField`, and the
   valuation, the unit filtration and the absolute ramification index are the
-  local-fields roadmap's `normalizedValuation`, `unitFiltration` and
+  local-fields-ramification roadmap's `normalizedValuation`, `unitFiltration` and
   `absoluteRamificationIndex`, the last of which is read at the argument `2`, so that
   `e = v_K(2)` throughout. What Layer 6A adds is the one object that roadmap does not
   name, `IsUniformizer`, with its characterizing theorems. A uniformizer is a choice
@@ -414,8 +429,8 @@ declaration column says so. Such a row is still a contract, because the mileston
 named and its owner is fixed; what this roadmap then states locally is the specialized
 shape its own layers consume, marked as such at the point of use.
 
-**From the [local-fields roadmap](../LocalFields/README.md)**, namespace
-`TauCetiRoadmap.LocalFields`, over
+**From the [local-fields-ramification roadmap](../LocalFieldsRamification/README.md)**,
+namespace `TauCetiRoadmap.LocalFieldsRamification`, over
 `[Field K] [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]`.
 
 | Consumer milestone | Supplier layer | Exact declaration | Mathematical type |
@@ -431,8 +446,23 @@ shape its own layers consume, marked as such at the point of use.
 | Layer 6A, the local square theorem; 6B's list of unit defects | 1 | `unitFiltration_le_range_powMonoidHom_two`, `not_unitFiltration_le_range_powMonoidHom_two` | `U(K, 2e+1) ⊆ (Kˣ)²` for `K/ℚ_2` finite, and its sharpness `U(K, 2e) ⊄ (Kˣ)²`, which 6B's defect list needs in order to know the bound is attained |
 | Layer 6A, the unramified class; 6B's evaluation formula | 2 | `normGroup`, `map_norm_unitFiltration_zero`, `mem_normGroup_iff_dvd_normalizedValuation`; milestone *Existence and uniqueness* (no target signature) | the unramified norm group in norm-equation form, `x ∈ normGroup L/K ↔ f ∣ v_K(x)`, with `N_{L/K}(𝒪[L]ˣ) = 𝒪[K]ˣ`; and the unramified extension of each degree |
 | Layer 6, the `ℚ_p` acceptance suite | 0 | the non-vacuity milestone (worked example) | `IsNonarchimedeanLocalField ℚ_[p]` |
-| Layer 6C and Layer 7C, the symbol against local duality | 8 | `tateEvaluationPairing`, `tateDualityPairing`, `tateDualityPairing_perfect_mixed` | the evaluation pairing `A' × A → μ_n`, the duality pairing `Hⁱ(G_K, A') × H^{2−i}(G_K, A) → ZMod n`, and its perfectness |
-| Layer 6E, the invariant map | 5 | `unitsRep`, `Br`, `invMap`, `brRes`, `brCor`, `invMap_brRes`, `invMap_brCor` | `inv_K : Br K = H²(G_K, (Kˢ)ˣ) ≃+ ℚ/ℤ`, with `inv_L ∘ res = [L:K] · inv_K` and `inv_K ∘ cor = inv_L` at the two named maps, each taking a `K`-embedding `L ↪ Kˢ`. ⚠ The coefficient ring is `ℤ`, so `Br` is not a value of the supplier's `ZMod n`-linear `H` |
+
+**From the [class-field-theory roadmap](../ClassFieldTheory/README.md)**, namespace
+`TauCetiRoadmap.ClassFieldTheory`. These declarations are imported; QFI supplies comparison
+theorems only.
+
+| Consumer milestone | Supplier layer | Exact declaration | Mathematical type |
+|---|---|---|---|
+| Layers 6E and 7C, the local invariant normalization | 2--3 | `H`, `muNRep`, `h2MuEquivZMod_mixed`, `h2FpEquivZMod_of_mu` | continuous `H²(F, mu_n)` and its arithmetic invariant in `ZMod n`, including mixed characteristic |
+| Layer 7C, the cohomological Hilbert pairing | 3 | `kummerClass`, `kummerCupPairing`, `localSymbol` | Kummer classes and cup product followed by the local invariant; no quadratic-form definition occurs in CFT |
+| Layer 7C, nondegeneracy comparison | 3 | `tateDualityPairing`, `tateDualityPairing_perfect_mixed` | local Tate duality and perfectness, with the invariant normalization supplied by CFT |
+| `hilbertSymbol_productFormula`, exported to Global Quadratic Forms | 5 | `finiteHilbertInvariantAt`, `infiniteHilbertInvariantAt`, `finiteHilbertSupport`, `hilbertProductFormula` | finite support and the additive Hilbert reciprocity equation over all finite and infinite places |
+
+The two frozen QFI bridge names are `hilbertSymbol_eq_cohomological` and
+`hilbertSymbol_productFormula`. The first identifies QFI's norm-equation/quaternion symbol with
+`ClassFieldTheory.localSymbol`; the second is the multiplicative-sign translation of
+`ClassFieldTheory.hilbertProductFormula`. This is the only ownership direction: no CFT file
+imports QFI.
 
 **From the [profinite-cohomology roadmap](../ProfiniteCohomology/README.md)**, namespace
 `TauCetiRoadmap.ProfiniteCohomology`.
@@ -483,7 +513,8 @@ Everything below the linear algebra:
   at most 3;
 - the uniformizer predicate of Layer 6A, its square-class representatives in odd residue
   characteristic, and the binary norm form `b = x² − Δ y²` that Layers 6B to 6D apply,
-  each stated against the local-fields roadmap's valuation, filtration, and norm group;
+  each stated against the local-fields-ramification roadmap's valuation, filtration,
+  and norm group;
 - the quadratic defect, the Hilbert symbol over a nonarchimedean local field with the
   dyadic case, bimultiplicativity, and nondegeneracy, together with the identification
   of the symbol with the mod-2 specialization of the local duality pairing;
@@ -524,14 +555,15 @@ Each prerequisite carries one of these sources:
 - **[Mathlib]** for an existing Mathlib declaration;
 - **[Tau Ceti]** for an existing accepted Tau Ceti declaration;
 - **[Layer n]** for an earlier milestone of this roadmap;
-- **[Local Fields, Layer n]**, **[Profinite Cohomology, Layer n]**, and **[SSA Layer n]**
-  for a named layer of one of the three roadmaps this one consumes. Every such
+- **[Local Fields Ramification, Layer n]**, **[Profinite Cohomology, Layer n]**,
+  **[Class Field Theory, Layer n]**, and **[SSA Layer n]**
+  for a named layer of a roadmap this one consumes. Every such
   prerequisite appears as a row of the contract table above, with its exact declaration.
 
 Layers 0 to 6 use no cohomology, and only Layer 5 uses the Brauer group. There is one
 exception, stated where it occurs: the second milestone of sublayer 6E, which identifies
 the Hasse invariant with the invariant map of local class field theory, uses Layer 7B and
-the local-fields roadmap's `invMap`, so it is placed after Layer 7B in the build order.
+Class Field Theory's degree-two invariant, so it is placed after Layer 7B in the build order.
 
 ### Layer 0: square classes, diagonal calculus, and chain equivalence
 
@@ -1013,7 +1045,7 @@ is stated at the end of 6C, with its own prerequisites.
 #### 6A. The local-field substrate, consumed
 
 The general arithmetic of a nonarchimedean local field belongs to the
-[local-fields roadmap](../LocalFields/README.md), and this sublayer consumes it. The
+[local-fields-ramification roadmap](../LocalFieldsRamification/README.md), and this sublayer consumes it. The
 normalized valuation is that roadmap's `normalizedValuation`, the unit filtration is its
 `unitFiltration`, the absolute ramification index `e = v_K(2)` is its
 `absoluteRamificationIndex K 2`, and the graded pieces, the power-class counts with the
@@ -1039,19 +1071,19 @@ Prerequisites:
 
 - **[Mathlib]** `IsNonarchimedeanLocalField`, `ValuativeRel`, `𝒪[K]`, `𝓂[K]`, `𝓀[K]`,
   `ℚ_[p]`, `ℤ_[p]`, `PadicInt.toZModPow`, Hensel's lemma;
-- **[Local Fields, Layer 0]** `normalizedValuation` with `normalizedValuation_surjective`,
+- **[Local Fields Ramification, Layer 0]** `normalizedValuation` with `normalizedValuation_surjective`,
   `normalizedValuation_eq_one_iff` and `normalizedValuation_irreducible`;
   `ramificationIndex`, `inertiaDegree`, `card_residueField`,
   `ramificationIndex_mul_inertiaDegree`; `absoluteRamificationIndex` with
   `normalizedValuation_natCast` and `absoluteRamificationIndex_eq_zero_iff`;
-- **[Local Fields, Layer 1]** `unitFiltration` with `mem_unitFiltration_zero`,
+- **[Local Fields Ramification, Layer 1]** `unitFiltration` with `mem_unitFiltration_zero`,
   `mem_unitFiltration_succ_congr`, `mem_unitFiltration_succ_valuation`,
   `unitFiltration_antitone` and `iInf_unitFiltration`; `square_eq_range_powMonoidHom`;
   `teichmuller` with `teichmuller_section`; `card_powerClasses_of_isUnit`,
   `card_powerClasses_mixed`, `card_squareClasses_of_isUnit`, `card_squareClasses_dyadic`;
   `unitFiltration_le_range_powMonoidHom_two` with
   `not_unitFiltration_le_range_powMonoidHom_two`; the milestone *Graded pieces*;
-- **[Local Fields, Layer 2]** `normGroup`, `map_norm_unitFiltration_zero` and
+- **[Local Fields Ramification, Layer 2]** `normGroup`, `map_norm_unitFiltration_zero` and
   `mem_normGroup_iff_dvd_normalizedValuation`; the milestone *Existence and uniqueness*;
 - **[Layer 0]** the square-class calculus and the `Nat.card` finiteness API.
 
@@ -1061,7 +1093,7 @@ Milestones:
   and one exists. It is a predicate and not a component of a package, because an element
   of valuation one is not unique: over `ℚ_2` both `2` and `−2` are uniformizers. A theorem
   that needs a uniformizer takes it, and a theorem whose statement is independent of the
-  choice says so. The local-fields roadmap pins uniformizers through `Irreducible` in
+  choice says so. The local-fields-ramification roadmap pins uniformizers through `Irreducible` in
   `𝒪[K]` and proves one direction in `normalizedValuation_irreducible`; the equivalence of
   the two descriptions is a single named lemma here, and every later statement uses
   whichever side is convenient.
@@ -1072,7 +1104,7 @@ Milestones:
   defined here; the supplier's defining equation and vanishing criterion are what the
   statements below use.
 - **The square-class dictionary, consumed.** This roadmap takes square classes in
-  `Subgroup.square Kˣ`, and both the local-fields power-class count and the
+  `Subgroup.square Kˣ`, and both the local-fields-ramification power-class count and the
   profinite-cohomology Kummer isomorphism are stated at `(powMonoidHom n).range`. The
   identification at `n = 2` is the supplier's `square_eq_range_powMonoidHom`, and it is
   what lets the counts below rest on the supplier's theorem and Layer 7A's Kummer
@@ -1100,7 +1132,7 @@ Milestones:
 - **The unramified quadratic extension, in the norm-equation form 6B and 6C consume.**
   There is a nonsquare unit `Δ` such that `K(√Δ)/K` is the unramified quadratic extension,
   and `b` is a norm from it exactly when `v_K(b)` is even; equivalently every unit is a
-  norm and a uniformizer is not. The local-fields roadmap owns the unramified extension
+  norm and a uniformizer is not. The local-fields-ramification roadmap owns the unramified extension
   and the norm group, and states the criterion at `mem_normGroup_iff_dvd_normalizedValuation`,
   namely `x ∈ normGroup L/K ↔ f ∣ v_K(x)`; at `f = 2` that is the parity condition above.
   What this statement adds is the passage to the norm equation `b = x² − Δ y²`, which is
@@ -1144,7 +1176,8 @@ Prerequisites:
 
 - **[Mathlib]** `FractionalIdeal`, `FractionalIdeal.spanSingleton`, the `Lattice` and
   `OrderBot` instances on `FractionalIdeal`, `IsFractionRing 𝒪[K] K`;
-- **[Local Fields, Layers 0 and 1]** `normalizedValuation` and `unitFiltration`, which
+- **[Local Fields Ramification, Layers 0 and 1]** `normalizedValuation` and
+  `unitFiltration`, which
   every statement below is written against;
 - **[Layer 6A]** the absolute ramification index, the local square theorem in its sharp
   form, and the unramified norm description.
@@ -1316,20 +1349,21 @@ whatever route a later implementer takes to bimultiplicativity.
 norm-criterion description of the mod-2 pairing, which is stated in Layer 7C over any
 field in which `2` is invertible. The second half is the identification of that
 description with the classical `{±1}`-valued symbol over a nonarchimedean local field,
-which is this sublayer's. The local-fields roadmap owns the local duality pairing, its
-perfectness, and the invariant map, and states no comparison with the symbol, defines no
-quadratic form and no quaternion algebra; the comparison is therefore stated here, against
-that roadmap's `tateEvaluationPairing` and `tateDualityPairing`, as the contract row
-["Layer 6C and Layer 7C, the symbol against local
-duality"](#cross-roadmap-contract). No milestone of that roadmap depends on it.
+which is this sublayer's. The class-field-theory roadmap owns the local invariant and
+the cohomological Kummer-cup pairing and defines no quadratic form or quaternion algebra.
+The comparison is the frozen declaration `hilbertSymbol_eq_cohomological`; no CFT
+milestone depends on it. The frozen `hilbertSymbol_productFormula` then translates
+`ClassFieldTheory.hilbertProductFormula` into multiplicative signs.
 
 Prerequisites:
 
 - **[Layer 2]** the four-fold splitting criterion;
 - **[Layer 3]** the binary quaternion lemma and the chain-induction lemmas;
-- **[Local Fields, Layers 0 and 1]** `normalizedValuation` and `unitFiltration`;
-- **[Local Fields, Layer 8]** `tateEvaluationPairing`, `tateDualityPairing`, and
-  `tateDualityPairing_perfect_mixed`, for the duality milestone below;
+- **[Local Fields Ramification, Layers 0 and 1]** `normalizedValuation` and
+  `unitFiltration`;
+- **[Class Field Theory, Layers 2--3]** `H`, `muNRep`, `kummerClass`,
+  `h2MuEquivZMod_mixed`, `kummerCupPairing`, `localSymbol`, and
+  `tateDualityPairing_perfect_mixed`, for the comparison below;
 - **[Layer 6A]** the uniformizer predicate, the absolute ramification index, the local
   square theorem, the square-class counts, and the unramified norm description;
 - **[Layer 6B]** the defect computations.
@@ -1371,17 +1405,17 @@ Milestones, in this order:
 9. **The `8 × 8` table over `ℚ_2`** on the representatives `{±1, ±5, ±2, ±10}`, as a
    family of decidable computations. The table is the test that the dyadic formula is
    correct.
-10. **The symbol is the mod-2 specialization of the local duality pairing.** The
-    local-fields roadmap builds the pairing
-    `Hⁱ(G_K, A') × H^{2−i}(G_K, A) → ZMod n` as `tateDualityPairing`, at the coefficient
-    pairing `tateEvaluationPairing`, and proves it perfect. At `n = 2` and `i = 1` the
-    coefficient identification `μ₂ ⊗ μ₂ ≅ μ₂` is canonical, so that pairing is a
-    `ZMod 2`-valued pairing on `H¹(G_K, μ₂)` with no chosen root of unity. The milestone
-    is that it agrees with `hilbertSymbol` under the unique isomorphism `ℤˣ ≃ ZMod 2` of
-    the value dictionary, so that nondegeneracy of the symbol and perfectness of the
-    pairing are the same statement. It is stated after Layer 7C, because the
-    identification of the two sides runs through the Kummer isomorphism.
-11. **The two Hasse invariants agree**, which is stated after Layer 6D as sublayer 6E,
+10. **The symbol is the mod-2 specialization of the CFT pairing.** Class Field Theory
+    builds `localSymbol` from `kummerClass`, `kummerCupPairing`, and the arithmetic
+    invariant on `H²(G_K, μ₂)`, and proves the corresponding local duality pairing
+    perfect. The milestone `hilbertSymbol_eq_cohomological` says that it agrees with
+    `hilbertSymbol` after the dictionary `0 -> +1`, `1 -> -1`. It is stated after Layer
+    7C, because the comparison runs through the Kummer cup--norm theorem.
+11. **The global product formula is inherited.** Apply the sign dictionary to
+    `ClassFieldTheory.hilbertProductFormula`. The resulting frozen declaration
+    `hilbertSymbol_productFormula` is an export to `GlobalQuadraticForms`, not a local-
+    global classification theorem here.
+12. **The two Hasse invariants agree**, which is stated after Layer 6D as sublayer 6E,
     because it consumes the classification.
 
 Basic API:
@@ -1485,9 +1519,8 @@ Prerequisites:
 - **[Layer 6C]** `localHasse`;
 - **[Layer 6D]** the uniqueness of the quaternion division algebra;
 - **[Layer 7B]** the 2-torsion comparison `ι`, for the second milestone only;
-- **[Local Fields, Layer 5]** the invariant map `invMap`, whose injectivity and
-  surjectivity are the two halves of the `≃+`, with the functoriality squares
-  `invMap_brRes` and `invMap_brCor`, for the second milestone only.
+- **[Class Field Theory, Layers 2--3]** the local invariant normalization
+  `h2MuEquivZMod_mixed` and its `localSymbol`, for the second milestone only.
 
 Milestone 1. The subgroup `Q(K) ≤ BrauerGroup K` generated by the quaternion classes is
 `{1, [D]}`, where `D` is the quaternion division algebra of 6D, so the map
@@ -1502,19 +1535,20 @@ termwise from Layer 2's four-fold criterion. This milestone needs no cohomology:
 builds `localHasse` from the Hilbert symbol alone, and Layer 5 builds `hasseInvariant`
 from the Brauer group alone. Layer 7C's local specialization consumes it.
 
-Milestone 2. `ε` is the local invariant map of class field theory. Precisely,
-`Q(K) = Br(K)[2]`, and under the identification `Br(K)[2] ≅ H²(G_K, μ₂)` of Layer 7B the
-composite with the local-fields roadmap's `invMap : Br K ≃+ ℚ/ℤ`, where `Br K` is that
-roadmap's `H²(G_K, (Kˢ)ˣ)`, is the injection
-of `(1/2)ℤ/ℤ`, which carries `[D]` to `1/2`. So
+Milestone 2. `ε` is the degree-two local invariant of Class Field Theory. Precisely,
+`Q(K) = Br(K)[2]`, and under the identification `Br(K)[2] ≅ H²(G_K, μ₂)` of Layer 7B,
+`h2MuEquivZMod_mixed` carries the division class to the nonzero element of `ZMod 2`.
+Equivalently, the usual embedding in `ℚ/ℤ` carries `[D]` to `1/2`. So
 
 ```text
-invMap [(a,b)] = 0   if and only if   (a,b)_K = +1,
+localSymbol (a) (b) = 0   if and only if   (a,b)_K = +1,
 ```
 
-and the Hasse invariant of a form is the invariant map of its Brauer class. The
-local-fields roadmap owns the invariant map and states no theorem about quaternion
-algebras or quadratic forms, so this identification, which mentions both, is stated here.
+and the Hasse invariant of a form is the local invariant of its Brauer class. The
+cohomological carrier and normalization are imported from CFT; this roadmap proves only
+the quaternion/quadratic-form comparison. Class Field Theory owns the invariant map and
+states no theorem about quaternion algebras or quadratic forms, so this identification,
+which mentions both, is stated here.
 
 This second milestone is the one place in Layers 0 to 6 that uses cohomology, and it comes
 after Layer 7B in the build order; the ordering section says so. Its two ingredients are
@@ -2033,12 +2067,12 @@ and not a group without them. It also needs the quaternion central-simplicity th
 which is proved here.
 
 Layer 6 has this internal order: 6A, then 6B, then 6C, then 6D, then 6E. Sublayer 6A
-consumes the local-fields roadmap, and 6B to 6D depend on Layers 0 to 3 and on nothing
+consumes the local-fields-ramification roadmap, and 6B to 6D depend on Layers 0 to 3 and on nothing
 else outside this roadmap. Sublayer 6E has two milestones with different prerequisites:
 the first depends on Layer 5 and on 6D, and the second additionally on Layer 7B and on
-the local-fields roadmap's invariant map, so it is built after Layer 7B. Layer 6C's
-duality milestone likewise comes after Layer 7C, because the identification of the two
-sides runs through the Kummer isomorphism.
+Class Field Theory's invariant normalization, so it is built after Layer 7B. Layer 6C's
+comparison milestone likewise comes after Layer 7C, because the identification of the
+two sides runs through the Kummer cup--norm theorem.
 
 Layer 7A consumes the profinite-cohomology roadmap and depends on Layer 0 for the
 square-class language and on 6A for the square-class dictionary. Layer 7B depends on
@@ -2110,12 +2144,13 @@ subject matter belongs and built where its prerequisites are ready.
 - The [multiquadratic roadmap](../Multiquadratic/README.md) owns multi-root towers of
   quadratic extensions. This roadmap owns the form theory of one quadratic step. The
   shared language is `TauCeti.SquareClassGroup`.
-- The [local-fields roadmap](../LocalFields/README.md) owns the general arithmetic of a
+- The [local-fields-ramification
+  roadmap](../LocalFieldsRamification/README.md) owns the general arithmetic of a
   nonarchimedean local field. Sublayer 6A consumes it through the exact contract above:
   the normalized valuation, the unit filtration and its graded pieces, the Teichmüller
   section, the ramification and residue degrees, the power-class counts, the unramified
-  extensions and their norm groups, the local duality pairing, and the invariant map are
-  all that roadmap's. This roadmap defines no second valuation and no second filtration.
+  extensions and their norm groups are all that roadmap's. This roadmap defines no
+  second valuation and no second filtration.
   What 6A adds is the uniformizer predicate, the choice of square-class representatives in
   odd residue characteristic, and the passage from that roadmap's norm-equation criterion
   to the binary form `b = x² − Δ y²` that 6B and 6C apply. The local square theorem in its
@@ -2133,19 +2168,26 @@ subject matter belongs and built where its prerequisites are ready.
   Brauer comparison, the Stiefel-Whitney classes, and the Scharlau transfer with the
   relative formula. In particular the Hilbert symbol is owned here in both halves, the
   norm-criterion description of the mod-2 pairing and its identification with the
-  classical `{±1}`-valued symbol over a local field; the local-fields roadmap supplies
-  the duality pairing and its perfectness and states no comparison with the symbol.
+  classical `{±1}`-valued symbol over a local field; Class Field Theory supplies the
+  cohomological pairing and its arithmetic normalization and states no comparison with
+  the norm-equation symbol.
 - **Local class field theory is consumed, not rebuilt.** The invariant map is the
-  local-fields roadmap's, in its Layer 5. Sublayer 6E's second milestone consumes it to
+  class-field-theory roadmap's. Sublayer 6E's second milestone consumes it to
   identify the two-element group of quaternion classes with `Br(K)[2]` and the Hasse
   invariant with the invariant map. Nothing here reproves reciprocity, the Artin map, or
   the existence theorem, and no statement here is an alternative construction of the
-  invariant map.
-- Other formalizations cover overlapping ground, in particular a Hasse-Minkowski
-  development over `ℚ` and a staging repository for the Brauer group. This roadmap
-  states its milestones independently. Their revisions, licences, and the conditions for
-  any code adaptation are recorded in [PROVENANCE.md](PROVENANCE.md), which is not
-  normative.
+  invariant map. The exact imported reciprocity theorem is
+  `ClassFieldTheory.hilbertProductFormula`; the exact QFI consequences are
+  `hilbertSymbol_eq_cohomological` and `hilbertSymbol_productFormula`. No Class Field
+  Theory declaration imports or depends on QFI.
+- **Global form theory is downstream.** `GlobalQuadraticForms` owns Hasse--Minkowski,
+  local-global isotropy and isometry, and global classification and realization. This
+  roadmap exports local invariants and the two Hilbert-symbol bridge declarations to it,
+  but supplies none of those global theorems.
+- Other formalizations cover overlapping ground, including a Hasse--Minkowski
+  development over `ℚ` and a staging repository for the Brauer group. They are evidence
+  and provenance only, not ownership claims. Their revisions, licences, and adaptation
+  conditions are recorded in [PROVENANCE.md](PROVENANCE.md), which is not normative.
 - Single-purpose formalizations of several of these targets over dyadic bases exist
   outside this repository. They are evidence that the statements are formalizable, and
   not prescriptions of form. The map is in [PROVENANCE.md](PROVENANCE.md), which is not

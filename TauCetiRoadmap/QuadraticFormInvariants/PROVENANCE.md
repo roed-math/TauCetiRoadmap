@@ -7,6 +7,25 @@ external formalizations that cover overlapping ground, and the conditions that a
 before any code crosses a project boundary. Re-run the searches and update the dates at
 implementation time.
 
+## Portfolio restructuring snapshot
+
+- Source retained PR: TauCetiRoadmap PR #4 at
+  `687a9156dc61af4c029395bc7ebd9c8d442a5293` (2026-08-09).
+- Restructured on 2026-08-10 under the arithmetic-portfolio master plan.
+- Retained here: local quadratic-form invariants and classification (including the
+  dyadic case), quaternion/norm Hilbert symbols, the Brauer/cohomological comparison,
+  the Kummer cup--norm theorem, `w1`, `w2`, Scharlau transfer, and the relative
+  Evens--Kahn formula.
+- Rewired suppliers: `ProfiniteCohomology`, `LocalFieldsRamification`, and
+  `ClassFieldTheory`. The first two supply continuous-cohomology and ramification
+  interfaces; CFT supplies the local invariant, the cohomological Hilbert pairing, and
+  Hilbert reciprocity.
+- Frozen bridge exports: `hilbertSymbol_eq_cohomological` and
+  `hilbertSymbol_productFormula`. The latter is derived from
+  `ClassFieldTheory.hilbertProductFormula`; there is no reverse dependency from CFT.
+- Removed from this roadmap's ownership: Hasse--Minkowski and all global classification,
+  realization, isotropy, and isometry theorems. Their owner is `GlobalQuadraticForms`.
+
 ## Mathlib inspection
 
 - Roadmap pin: `9caeba1000`, 2026-06-03. Toolchain `leanprover/lean4:v4.31.0-rc1`.
@@ -24,8 +43,8 @@ implementation time.
   the same subject; compare the two before building on either.
 - `Mathlib/NumberTheory/LocalField/Basic.lean` supplies `IsNonarchimedeanLocalField` at
   the pin. It does not supply a normalized valuation, a unit filtration, or the
-  square-class count. The local-fields roadmap builds them on that class, and Layer 6A
-  consumes them from there.
+  square-class count. The local-fields-ramification roadmap builds them on that class,
+  and Layer 6A consumes them from there.
 
 ## Related Mathlib work
 
@@ -76,18 +95,21 @@ on 2026-08-06. No external contact was made, and no ownership agreement is claim
   contiguous-orthogonal-bases chain in `QuadraticForm/Chain.lean` stated with
   `[Invertible (2 : k)]`, and the Hasse-Minkowski invariant with the rank-by-rank case
   analysis.
-- **Overlap.** Chain equivalence, the Hilbert symbol, `p`-adic squares, and
-  Hasse-Minkowski invariants.
+- **Overlap.** Chain equivalence, the Hilbert symbol, and `p`-adic squares. Its
+  Hasse--Minkowski material now overlaps the downstream `GlobalQuadraticForms` roadmap,
+  not this roadmap's owned scope.
 - **Difference.** Their target is the global theorem over `ℚ`. This roadmap's target is
   the general-field invariant theory, the classification over every nonarchimedean local
-  field including the dyadic ones, and the cohomological layers. Their `hilbertSym` is
+  field including the dyadic ones, and the cohomological comparison. Global form theory
+  is routed to `GlobalQuadraticForms`. Their `hilbertSym` is
   `0` on a zero argument; the symbol here is total on `Kˣ × Kˣ`, and the comparison
   lemma between the two conventions belongs to the coordination.
 - **Contact status:** not contacted. **Agreed ownership:** none recorded.
 - **Condition.** Before adapting code, proof organization, or project-specific statement
-  shapes, contact the maintainers and record the division of work. State the milestones
-  of this roadmap independently, and consume their files only after those files land in
-  Mathlib or after explicit coordination.
+  shapes, contact the maintainers and record the division of work. Keep QFI adaptations
+  restricted to local invariant and symbol material; route Hasse--Minkowski adaptations
+  to `GlobalQuadraticForms`. Consume their files only after those files land in Mathlib
+  or after explicit coordination.
 
 Prior art in the same direction: the 2023 Lorentz-Center workshop project on
 Hasse-Minkowski by A. Best, K. Buzzard, M. Streng, H. Wiersema, and R. Winter.
@@ -158,15 +180,22 @@ This section is a dated record, not a specification: the normative statement of 
 roadmap consumes is the contract table in [README.md](README.md), which names every
 supplier declaration exactly.
 
-Two roadmaps in this repository supply material that this one used to define for itself.
+Three roadmaps in this repository supply material that this one used to define or cite
+through the former combined Local Fields roadmap.
 
-- The **[local-fields roadmap](../LocalFields/README.md)** owns the normalized valuation,
-  the absolute ramification index, the unit filtration, local power and square classes
-  with the identification of the two spellings of the square classes, unramified
-  extensions, norm groups, local duality, and the invariant map. Layer 6A consumes them.
+- The **[local-fields-ramification
+  roadmap](../LocalFieldsRamification/README.md)** owns the normalized valuation, the
+  absolute ramification index, the unit filtration, local power and square classes with
+  the identification of the two spellings of the square classes, unramified extensions,
+  and norm groups. Layer 6A consumes them.
 - The **[profinite-cohomology roadmap](../ProfiniteCohomology/README.md)** owns continuous
   cohomology in all degrees, with cup products, Kummer theory, restriction,
   corestriction, and the Evens norm. Layer 7A consumes them.
+- The **[class-field-theory roadmap](../ClassFieldTheory/README.md)** owns the local
+  invariant normalization, the cohomological Kummer-cup Hilbert pairing, local duality,
+  and Hilbert reciprocity. QFI imports those declarations and owns only their comparison
+  with the norm-equation/quaternion symbol. This gives the strict direction
+  `ClassFieldTheory -> QuadraticFormInvariants`.
 
 Where a supplier owns a milestone but exports no target signature for it, this roadmap
 states the specialized shape its own layers consume, as a theorem about the supplier's
@@ -174,10 +203,11 @@ objects rather than as a second definition. Those, at the heads inspected on 202
 are: the local square theorem `U(K, 2e+1) ⊆ (Kˣ)²` in its sharp general form; the
 square-class counts in the `4 · q^e` shape Layer 6D consumes; the unramified norm group
 phrased through the norm equation `b = x² − Δ y²`; and the filtration quotients, which
-6A cites rather than restates. If the local-fields roadmap later names any of them, the
+6A cites rather than restates. If the local-fields-ramification roadmap later names any of them, the
 local statement is deleted and the contract table gains a declaration.
 
-One object is this roadmap's because neither supplier names it: `IsUniformizer` in its
+One object is this roadmap's because the ramification supplier does not name it:
+`IsUniformizer` in its
 valuation form. One more is this roadmap's because it is specific to `μ₂`: `mu2EquivZMod2`
 with the triviality of the Galois action on `μ₂`, and the mod-2 map `h2MuToUnits` read
 through it. The coefficient object `Additive Kˢˣ` and the passage from a field embedding to

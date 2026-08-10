@@ -1,5 +1,7 @@
 import Mathlib
-import TauCetiRoadmap.LocalFields.Suggested
+import TauCetiRoadmap.ProfiniteCohomology.Suggested
+import TauCetiRoadmap.LocalFieldsRamification.Suggested
+import TauCetiRoadmap.ClassFieldTheory.Suggested
 import TauCetiRoadmap.RepresentationTheory.SemisimpleAlgebras.Suggested
 
 /-!
@@ -24,7 +26,7 @@ This file fixes the design decisions that are most likely to fork two implementa
 * the binary normal forms (Layer 0);
 * the four-fold splitting criterion (Layer 2);
 * the Brauer-group data and the Hasse invariant built on it (Layer 5);
-* the local-field toolkit (Layer 6A);
+* the quadratic-form adapters to the imported local-field toolkit (Layer 6A);
 * the fractional-ideal carrier of the quadratic defect and its exponent (Layer 6B);
 * the Hilbert symbol as a `{±1}`-valued function of the norm equation, and the local
   Hasse invariant built from it (Layer 6C);
@@ -32,15 +34,13 @@ This file fixes the design decisions that are most likely to fork two implementa
 * the operations on mod-2 Galois cohomology (Layer 7A);
 * the Scharlau transfer and the degree-2 Evens-Kahn identity (Layer 9).
 
-**Carriers are canonical, and only the missing operations are hypotheses.** Three objects
-that this roadmap consumes are incomplete in Mathlib: the group structure on
-`BrauerGroup K`, the arithmetic of a nonarchimedean local field, and the low-degree API
-of continuous Galois cohomology. Each is carried by a structure whose fields are
-milestones. The types on which those structures act are the real ones:
-`BrauerGroup K` itself, Mathlib's `IsNonarchimedeanLocalField`, and Mathlib's
-`continuousCohomology`. So a theorem stated for an arbitrary term of a structure is a
-theorem about the intended objects, and a development that supplies the missing
-operations replaces the structure field by field.
+**Supplier carriers are canonical.** This roadmap imports the final declarations from
+`ProfiniteCohomology`, `LocalFieldsRamification`, and `ClassFieldTheory`; it does not package
+private substitutes for their cohomology, valuation, ramification, reciprocity, or local-duality
+interfaces. The only adapters below are specific to quadratic forms and to the coefficient
+identification `mu₂ ≃ ZMod 2`. In particular, Class Field Theory owns the cohomological Hilbert
+pairing and reciprocity, while this roadmap owns the norm-equation/quaternion symbol and proves
+the comparison. Hasse--Minkowski and global classification belong to `GlobalQuadraticForms`.
 
 Layer-6 conventions follow Serre (*A Course in Arithmetic*, ch. III and IV) and O'Meara
 (§63). The symbol is defined by the norm equation `b = x² − a·y²`, which needs no
@@ -511,14 +511,14 @@ theorem cliffordHomI2_eq_zero [Invertible (2 : K)] (x : ↥(fundamentalIdeal K ^
     cliffordHomI2 x = 0 :=
   sorry
 
-/-! ## Layer 6A: consuming the Local Fields substrate
+/-! ## Layer 6A: consuming the Local Fields Ramification substrate
 
 The general arithmetic of a nonarchimedean local field belongs to the
-[Local Fields roadmap](../LocalFields/README.md), and this sublayer consumes it rather than
+[Local Fields Ramification roadmap](../LocalFieldsRamification/README.md), and this sublayer consumes it rather than
 building a second copy. The normalized valuation is
-`TauCetiRoadmap.LocalFields.normalizedValuation`, the unit filtration is
-`TauCetiRoadmap.LocalFields.unitFiltration`, the absolute ramification index `e = v_K(2)` is
-`TauCetiRoadmap.LocalFields.absoluteRamificationIndex K 2`, and the identification of the two
+`TauCetiRoadmap.LocalFieldsRamification.normalizedValuation`, the unit filtration is
+`TauCetiRoadmap.LocalFieldsRamification.unitFiltration`, the absolute ramification index
+`e = v_K(2)` is `TauCetiRoadmap.LocalFieldsRamification.absoluteRamificationIndex K 2`, and the identification of the two
 spellings of the square classes is that roadmap's `square_eq_range_powMonoidHom`. All four are
 opened by name below, and no valuation, no filtration and no ramification index is defined here.
 
@@ -526,12 +526,12 @@ What remains is the quadratic-form-facing arithmetic, stated against those objec
 uniformizer predicate in its valuation form together with the lemma comparing it with the
 supplier's `Irreducible` convention, the sharp local square theorem, the square-class counts in
 the `4·q^e` shape that 6D consumes, and the unramified norm description in the shape 6C consumes.
-Each of the last three carries a remark naming the Local Fields milestone it rests on. -/
+Each of the last three carries a remark naming the Local Fields Ramification milestone it rests on. -/
 
 section LocalField
 
 open scoped ValuativeRel
-open TauCetiRoadmap.LocalFields (normalizedValuation unitFiltration absoluteRamificationIndex
+open TauCetiRoadmap.LocalFieldsRamification (normalizedValuation unitFiltration absoluteRamificationIndex
   square_eq_range_powMonoidHom)
 
 variable (K)
@@ -547,7 +547,7 @@ def IsUniformizer (π : Kˣ) : Prop :=
 
 variable (K)
 
-/-- **Layer 6A, the two descriptions of a uniformizer agree.** The Local Fields roadmap pins
+/-- **Layer 6A, the two descriptions of a uniformizer agree.** The Local Fields Ramification roadmap pins
 uniformizers through `Irreducible` in `𝒪[K]`, and its `normalizedValuation_irreducible` gives
 one direction. This is the equivalence, and it is the single lemma that relates the predicate
 above to that convention; every later statement uses whichever side is convenient. -/
@@ -560,7 +560,7 @@ theorem exists_isUniformizer : ∃ π : Kˣ, IsUniformizer (K := K) π :=
   sorry
 
 /-- **Layer 6A, the local square theorem in its sharp form** (O'Meara 63:1):
-`U(K, 2e+1) ⊆ (Kˣ)²`. The Local Fields roadmap owns this mathematics, in its Layer 1 milestone
+`U(K, 2e+1) ⊆ (Kˣ)²`. The Local Fields Ramification roadmap owns this mathematics, in its Layer 1 milestone
 *Deep units are squares, in mixed characteristic*, and carries the dyadic instance
 `1 + 8ℤ_2 ⊆ (ℚ_2ˣ)²` as a worked example; it exports no target signature for the general
 statement, so the form that 6B and 6C consume is stated here, against the supplier's
@@ -576,14 +576,14 @@ theorem not_unitFiltration_le_square [Invertible (2 : K)] :
     ¬ (unitFiltration K (2 * absoluteRamificationIndex K 2) ≤ Subgroup.square Kˣ) :=
   sorry
 
-/-- **Layer 6A, the square-class group is finite.** A corollary of the Local Fields Layer 1
+/-- **Layer 6A, the square-class group is finite.** A corollary of the Local Fields Ramification Layer 1
 milestone *Power classes, the primary statement*, through `square_eq_range_powMonoidHom`. -/
 instance squareClass_finite [Invertible (2 : K)] : Finite (Kˣ ⧸ Subgroup.square Kˣ) :=
   sorry
 
 /-- **Layer 6A, the square-class count in odd residue characteristic**, together with the
 representatives `1, u, π, uπ` for a uniformizer `π` and a unit `u` whose residue is a
-nonsquare. This is the Local Fields Layer 1 count
+nonsquare. This is the Local Fields Ramification Layer 1 count
 `#(Kˣ/(Kˣ)ⁿ) = n · #μ_n(K) · q^{v_K(n)}` at `n = 2` with `e = 0`, in the shape 6D consumes. -/
 theorem card_squareClass_of_odd [Invertible (2 : K)]
     (hodd : absoluteRamificationIndex K 2 = 0) :
@@ -593,8 +593,8 @@ theorem card_squareClass_of_odd [Invertible (2 : K)]
 /-- **Layer 6A, the square-class count in residue characteristic two**, stated
 intrinsically as `4 · q^e` with `q = #𝓀[K]` and `e = v_K(2)`. For a finite extension of
 `ℚ_2` of degree `N = e·f` this is `2^{N+2}`, and over `ℚ_2` itself it is `8`, on the
-basis `−1, 2, 5`. It is the same Local Fields count at `n = 2`, where `#μ_2(K) = 2` because
-`2` is invertible; the Local Fields roadmap exports the general formula as a milestone and the
+basis `−1, 2, 5`. It is the same Local Fields Ramification count at `n = 2`, where `#μ_2(K) = 2` because
+`2` is invertible; the Local Fields Ramification roadmap exports the general formula as a milestone and the
 `ℚ_2` instance as a worked example, so the `4·q^e` shape that 6D consumes is stated here. -/
 theorem card_squareClass_of_dyadic [Invertible (2 : K)]
     (h2 : absoluteRamificationIndex K 2 ≠ 0) :
@@ -606,7 +606,7 @@ theorem card_squareClass_of_dyadic [Invertible (2 : K)]
 unit `Δ` such that `K(√Δ)/K` is the unramified quadratic extension, and an element is a
 norm from it exactly when its valuation is even. The statement is phrased through the
 norm equation, so it needs no extension-building API, and that is the shape 6B's evaluation
-formula and 6C's symbol computation consume. It rests on the Local Fields Layer 2 milestones
+formula and 6C's symbol computation consume. It rests on the Local Fields Ramification Layer 2 milestones
 *Existence and uniqueness* and *Norms*, which own the unramified extension and the equality
 `N_{L/K}(Lˣ) = π^{fℤ} × 𝒪[K]ˣ`; that roadmap exports no target signature phrased through the
 norm equation. -/
@@ -628,7 +628,8 @@ unbounded. -/
 section Defect
 
 open scoped ValuativeRel
-open TauCetiRoadmap.LocalFields (normalizedValuation unitFiltration absoluteRamificationIndex)
+open TauCetiRoadmap.LocalFieldsRamification
+  (normalizedValuation unitFiltration absoluteRamificationIndex)
 
 variable [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
 
@@ -725,7 +726,7 @@ noncomputable def localHasse {n : ℕ} (w : Fin n → Kˣ) : ℤˣ :=
 section LocalSymbol
 
 open scoped ValuativeRel
-open TauCetiRoadmap.LocalFields (normalizedValuation unitFiltration)
+open TauCetiRoadmap.LocalFieldsRamification (normalizedValuation unitFiltration)
 
 variable [ValuativeRel K] [TopologicalSpace K] [IsNonarchimedeanLocalField K]
   [Invertible (2 : K)]
@@ -1120,15 +1121,45 @@ theorem cup_kummerClass_eq_zero_iff_isotropic [Invertible (2 : K)] (a b : Kˣ) :
   sorry
 
 /-- **Layer 7C, the cup against the `{±1}`-valued Hilbert symbol**, over a nonarchimedean local
-field. This roadmap owns both halves of the symbol: the norm-criterion description of the mod-2
-pairing, which is `cup_kummerClass_eq_zero_iff` above and holds over any field with `2`
-invertible, and this identification with the classical symbol of Layer 6C. The Local Fields
-roadmap owns the duality pairing and its perfectness and states no comparison with the symbol,
-so this is the statement of record. -/
+field. The norm-equation criterion belongs here; the continuous cup product is imported from
+Profinite Cohomology. -/
 theorem cup_kummerClass_eq_zero_iff_hilbertSymbol [ValuativeRel K] [TopologicalSpace K]
     [IsNonarchimedeanLocalField K] [Invertible (2 : K)] (a b : Kˣ) :
     cup (f2Pairing (AbsoluteGaloisGroup K)) 1 1 (kummerClass a) (kummerClass b) = 0 ↔
       hilbertSymbol a b = 1 :=
+  sorry
+
+/-- Translate the additive `ZMod 2` normalization used by Class Field Theory to the classical
+`{+1,-1}` normalization. This is a value adapter, not a second Hilbert pairing. -/
+noncomputable def hilbertSign (x : ZMod 2) : ℤˣ :=
+  if x = 0 then 1 else -1
+
+/-- **Frozen QFI--CFT bridge.** The norm-equation/quaternion Hilbert symbol agrees with Class
+Field Theory's Kummer-cup symbol after translating its additive invariant to a sign. Class Field
+Theory supplies `kummerClass`, `kummerCupPairing`, and `localSymbol`; no theorem in that roadmap
+depends on this comparison. -/
+theorem hilbertSymbol_eq_cohomological [ValuativeRel K] [TopologicalSpace K]
+    [IsNonarchimedeanLocalField K] [Invertible (2 : K)]
+    (ζ : K) (hζ : IsPrimitiveRoot ζ 2)
+    (tr : ClassFieldTheory.H 2 K 2 (ClassFieldTheory.muNRep 2 K) ≃+ ZMod 2)
+    (a b : Kˣ) :
+    hilbertSymbol a b =
+      hilbertSign
+        (ClassFieldTheory.localSymbol (ClassFieldTheory.kummerCupPairing ζ hζ) tr
+          (ClassFieldTheory.kummerClass 2 K a) (ClassFieldTheory.kummerClass 2 K b)) :=
+  sorry
+
+/-- **Frozen global bridge.** This is the multiplicative-sign form of
+`ClassFieldTheory.hilbertProductFormula`. At every finite place the factor is the local
+norm-equation/quaternion symbol by `hilbertSymbol_eq_cohomological`; the infinite factors use
+Class Field Theory's real/complex normalization. Thus this theorem derives reciprocity from CFT
+and does not make CFT depend on quadratic forms. -/
+theorem hilbertSymbol_productFormula [NumberField K] (a b : Kˣ) :
+    (∏ v ∈ ClassFieldTheory.finiteHilbertSupport a b,
+        hilbertSign (ClassFieldTheory.finiteHilbertInvariantAt v a b)) *
+      ∏ w : InfinitePlace K,
+        hilbertSign (ClassFieldTheory.infiniteHilbertInvariantAt w a b) = 1 := by
+  have hcoh := ClassFieldTheory.hilbertProductFormula a b
   sorry
 
 /-- **Layer 7C, the Steinberg corollary.** -/
