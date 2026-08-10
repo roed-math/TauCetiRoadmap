@@ -494,6 +494,23 @@ Minkowski finiteness, and the multiplicative sequel is 2A.5. -/
 example : CompactSpace (AdeleRing (𝓞 K) K ⧸ AdeleRing.principalSubgroup (𝓞 K) K) :=
   sorry
 
+/-- **2A.3, additive strong approximation**: `K` is dense in its **finite** adeles, that is in
+the adeles with the archimedean components omitted. This is the one-omitted-place form of the
+classical statement, taken at the archimedean place, and it is the form a consumer uses to
+approximate an adelic point by a global one away from a fixed finite set.
+
+⚠ This is a **third** statement about `K` inside its adeles, and it is neither of the other two.
+It is not weak approximation, 0.2, which is a statement about finitely many completions and says
+nothing about integrality at the remaining places. It is not the discreteness–cocompactness pair
+above: `K` is discrete in the full adele ring, so no density statement holds there, and omitting
+a place is exactly what makes density possible. A consumer that cites "strong approximation from
+Layer 0" is citing 0.2, whose own note says that strong approximation is a different statement;
+this is the declaration to cite instead.
+
+The multiplicative `S`-idele form is Layer 5 and is a different theorem again. -/
+theorem denseRange_algebraMap_finiteAdeleRing :
+    DenseRange (algebraMap K (FiniteAdeleRing (𝓞 K) K)) := sorry
+
 /-- **2A.7, the class group as an idele-class quotient.** The quotient of the finite ideles by
 the everywhere-integral units and the principal ideles is the ideal class group. The map is
 `x ↦ ∏_v v^{ord_v(x_v)}` and the kernel analysis is the moving lemma. This is the special case

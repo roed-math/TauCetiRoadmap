@@ -159,6 +159,20 @@ through a row.
 | 3.3 | `RayClassCharacter.induced`, `RayClassCharacter.IsPrimitive`, `RayClassCharacter.not_isPrimitive_one` | induction as precomposition with `classMap`, primitivity stated **against that map**, and the fact that the trivial character of a nontrivial modulus is imprimitive |
 | 3.5 | `HeckeCharacter.shift`, `HeckeCharacter.unitaryPart`, `norm_unitaryPart`, `shift_eq_zero_iff`, `shift_ofRayClassCharacter` | the unique **real** exponent `σ` with `|χ| = ‖·‖^σ`, its unitary complement, and the compatibility that a finite-order character has `σ = 0` |
 
+## What the Orthogonal and Spin Groups roadmap consumes from this roadmap
+
+Two declarations, and they are unrelated to each other.
+
+| Supplying layer | Declaration | What the consumer relies on |
+|---|---|---|
+| 2A.3 | `denseRange_algebraMap_finiteAdeleRing` | `K` is dense in its finite adeles. ⚠ Its Layer 4B needs *this*, and not the weak approximation of 0.2 nor the discreteness of `K` in the full adele ring |
+| 11.4 | `hilbertProductFormula` | `∏_v (a,b)_v = 1` over `ℚ`, with the finite symbols from the consumed `hilbertSymbol` and the real one from 2C.8. Its Layer 5H reads it for the spinor-norm obstruction |
+
+⚠ `hilbertProductFormula` has no Lean form in `Suggested.lean` yet, because its statement needs
+the consumed `hilbertSymbol` and the Quadratic Form Invariants roadmap is a merge prerequisite
+that has not landed here. The name is fixed, and the Integral Lattices roadmap already cites it;
+the Lean statement is owed once that merge happens.
+
 ## What the Integral Lattices roadmap consumes from this roadmap
 
 This roadmap is the canonical owner of orders in a number field, their proper ideals, their
@@ -711,9 +725,21 @@ discrete in `IdeleGroup (𝓞 K) K`, so that `IdeleClassGroup (𝓞 K) K` is a l
 group. Prove that `K` is discrete in `𝔸_K`, and that the quotient
 `𝔸_K/K` is compact. These are the additive local-global finiteness statements that the rest of the
 layer uses.
+
+Prove also **additive strong approximation**, `denseRange_algebraMap_finiteAdeleRing`: `K` is
+dense in its **finite** adeles, that is in the adeles with the archimedean components omitted.
+It is consumed by name.
+
+⚠ That is a third statement about `K` inside its adeles, and it is neither of the other two.
+It is not the weak approximation of 0.2, which is about finitely many completions and says
+nothing about integrality at the remaining places, and whose own note records that strong
+approximation is a different statement. It is not discreteness and cocompactness: `K` is discrete
+in the **full** adele ring, so no density statement holds there, and omitting a place is exactly
+what makes density possible. A consumer citing "strong approximation, Layer 0" is citing 0.2 and
+is citing the wrong thing.
 *Source.* Cassels–Fröhlich Ch. II §§14–16; Weil, *Basic Number Theory*, Ch. IV.
 *Prerequisites:* M `NumberField.AdeleRing`, M `NumberField.canonicalEmbedding`,
-M `Mathlib/NumberTheory/NumberField/CanonicalEmbedding/`.
+M `Mathlib/NumberTheory/NumberField/CanonicalEmbedding/`, M `FiniteAdeleRing`.
 
 **2A.4. The idele norm and the norm-one subgroup.** Define `‖·‖ : IdeleGroup →* ℝ_{>0}` in the
 pinned normalization. Prove the product formula `‖x‖ = 1` for principal `x`, from `prod_abs_eq_one`.
@@ -1640,7 +1666,8 @@ K̄_vˣ) → ℚ/ℤ → 0` in invariant-map coordinates. The local invariants c
 statement `∑_v inv_v(α) = 0` for a global class.
 *Prerequisites:* L 11.1, L 11.2, R Local Fields `invMap`, R Local Fields `Br`, L 2C.6.
 
-**11.4. Hilbert reciprocity.** Prove `∏_v (a, b)_v = 1` for `a, b ∈ Kˣ`, with the local symbols from
+**11.4. Hilbert reciprocity**, as `hilbertProductFormula` — the name two consumers already use
+for it. Prove `∏_v (a, b)_v = 1` for `a, b ∈ Kˣ`, with the local symbols from
 the consumed `hilbertSymbol` at the finite places and from 2C.8 at the real places. Derive quadratic reciprocity over
 `ℚ`
 as the worked example, and compare with Mathlib's `legendreSym` reciprocity.
