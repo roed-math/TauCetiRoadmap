@@ -82,6 +82,7 @@ that otherwise survive every coprimality-guarded or off-endpoint theorem.
 | density predicates | 7 | `HasDirichletDensity`, `HasNaturalDensity`, `LowerDirichletDensity`, `UpperDirichletDensity` | ratio normalization by the corresponding all-prime sum or count |
 | Abel summation | 6 | `abelSummation` | exact finite identity plus an asymptotic corollary |
 | Perron summation | 6 | `perronFormula` | truncated kernel, endpoint value, and an arithmetic summatory form |
+| cancellation and continuation | 6 | `HasCancellation`, `continuedLFunctionOfWeight` | a named continuation into the strip supplied by the ideal partial-sum estimate |
 | Landau positivity | 8 | `landau` | singularity at the abscissa for nonnegative coefficients |
 | Wiener–Ikehara | 9 | `wienerIkehara` | continuous boundary remainder on `Re s ≥ 1`, not a subtraction evaluated at the pole |
 | generic PNT transfer | 10 | `primeNumberTheoremTransfer` | logarithmic derivative to `ψ`, prime-power removal to `ϑ`, and Abel transfer to `π` |
@@ -199,6 +200,14 @@ its error away from `x = 1`. Prove separately that the exact value at `x = 1` is
 obtain a truncated summatory formula. State both the off-norm form and the limiting half-weight
 form. `ZerosOfLFunctions` consumes this theorem for explicit formulas.
 
+**6.5 Cancellation and a named continuation.** Define `HasCancellation χ` by the uniform
+`O(X^(1-1/[K:ℚ]))` bound for ideal partial sums. Use Abel summation to construct
+`continuedLFunctionOfWeight χ`, prove agreement with the norm-regrouped series on `Re s > 1`,
+and analyticity on `Re s > 1-1/[K:ℚ]`. Finiteness of a coefficient quotient is not a substitute:
+the prime values of a finite quotient of the free ideal group can be arbitrary. Export good-ideal,
+conjugation, pointwise-square, and norm-twist operations used by character-family consumers; a
+good ideal explicitly excludes `⊥`, even when the bad set is empty.
+
 ### Layer 7: Dirichlet density
 
 **7.1 The predicates.** For `S : Set (HeightOneSpectrum (𝓞 K))`, define `P_S(s)` for real `s > 1`
@@ -227,6 +236,10 @@ analytic continuation. Include the meromorphic-order corollary used by nonvanish
 **8.2 Positive combinations.** Package the `3-4-1` trigonometric nonnegativity argument as a
 finite nonnegative coefficient combination, keeping analytic input separate from the positivity
 lemma. `LFunctions` supplies character-specific continuation and applies this package.
+
+The package does not assert cancellation for the trivial weight or its nonzero norm twists. Their
+partial sums have linear size and their series are shifted Dedekind zeta functions with a pole;
+this is the required rejection test for downstream character-family hypotheses.
 
 ### Layer 9: Wiener–Ikehara
 
@@ -277,7 +290,7 @@ analytic boundary statement.
 0 → 1 → 2 → 3
           ├────→ 7 → 8
 1 → 4 → 5 ├────→ 9 → 10
-      └→ 6 ┘            
+      └→ 6 ┘
 ```
 
 Layer 6 can be developed after Layers 1 and 4. Layer 7 needs the Euler product of Layer 3.
