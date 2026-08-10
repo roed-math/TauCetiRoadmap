@@ -30,7 +30,7 @@ This roadmap has four direct roadmap dependencies.
   theorem. This roadmap owns the rectangle package and the localization and canonical-
   representative bridges needed to apply that theorem to meromorphic L-functions.
 
-There is deliberately no direct dependency on `GlobalClassFieldTheory` or
+There is deliberately no direct dependency on `ClassFieldTheory` or
 `GlobalNumberFields`: any algebraic or character-theoretic input reaches this roadmap through
 the L-functions or Chebotarev interfaces above.
 
