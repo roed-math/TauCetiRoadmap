@@ -51,10 +51,6 @@ namespace TauCetiRoadmap.ZerosOfLFunctions
 
 open Complex Filter Topology Asymptotics Bornology MeromorphicOn
 
-namespace ADS := TauCetiRoadmap.ArithmeticDirichletSeries
-namespace LF := TauCetiRoadmap.LFunctions
-namespace Cheb := TauCetiRoadmap.Chebotarev
-
 /-! ## Layer 0: growth predicates and the entire completion -/
 
 /-- **Layer 0, order at most `A`** for an entire function: `f` is dominated by
@@ -81,18 +77,18 @@ def HasVerticalStripGrowth (f : ℂ → ℂ) : Prop :=
 /-- **Layer 0.2, generic entire completion.** This is the removable extension of the
 supplier's completed function after clearing exactly the finite polar divisor recorded by the
 analytic card. It is not the pointwise product at a pole. -/
-noncomputable def entireCompletion (d : LF.AnalyticLFunctionData)
+noncomputable def entireCompletion (d : TauCetiRoadmap.LFunctions.AnalyticLFunctionData)
     (hc : d.HasMeromorphicContinuation) : ℂ → ℂ := sorry
 
-theorem differentiable_entireCompletion (d : LF.AnalyticLFunctionData)
+theorem differentiable_entireCompletion (d : TauCetiRoadmap.LFunctions.AnalyticLFunctionData)
     (hc : d.HasMeromorphicContinuation) : Differentiable ℂ (entireCompletion d hc) := sorry
 
 /-- Away from the supplier-owned polar support, the removable extension agrees with the
 completed function times the exact clearing polynomial. -/
-theorem entireCompletion_eq (d : LF.AnalyticLFunctionData)
+theorem entireCompletion_eq (d : TauCetiRoadmap.LFunctions.AnalyticLFunctionData)
     (hc : d.HasMeromorphicContinuation) {s : ℂ} (hs : d.polarOrder s = 0) :
     entireCompletion d hc s =
-      (d.polarOrder.support.prod fun p m => (s - p) ^ m) * d.completed s := sorry
+      (d.polarOrder.support.prod fun p => (s - p) ^ d.polarOrder p) * d.completed s := sorry
 
 /-- **Layer 0, the completed zeta function grows polynomially in vertical strips.** The pin
 proves neither this nor the finite order it follows from. Stated for the meromorphic `Λ`
@@ -118,23 +114,28 @@ example :
 /-- **Layer 1.6, inverse gamma factor by meromorphic continuation.** At a gamma pole this is
 the analytic continuation of the reciprocal, not pointwise division by Mathlib's total
 representative. -/
-noncomputable def invGammaFactor (d : LF.AnalyticLFunctionData) : ℂ → ℂ := sorry
+noncomputable def invGammaFactor
+    (d : TauCetiRoadmap.LFunctions.AnalyticLFunctionData) : ℂ → ℂ := sorry
 
 /-- **Layer 1.6, the continued uncompleted L-function.** This is regularized across the gamma
 poles and agrees with the original Dirichlet series on `Re s > 1`. -/
-noncomputable def continuedL (d : LF.AnalyticLFunctionData)
+noncomputable def continuedL (d : TauCetiRoadmap.LFunctions.AnalyticLFunctionData)
     (hc : d.HasMeromorphicContinuation) : ℂ → ℂ := sorry
 
-theorem completed_eq_gammaFactor_mul_continuedL (d : LF.AnalyticLFunctionData)
+theorem completed_eq_gammaFactor_mul_continuedL
+    (d : TauCetiRoadmap.LFunctions.AnalyticLFunctionData)
     (hc : d.HasMeromorphicContinuation) {s : ℂ} (hs : d.gammaFactor s ≠ 0) :
     d.completed s = ((d.conductor : ℕ) : ℂ) ^ (s / 2) * d.gammaFactor s *
       continuedL d hc s := sorry
 
-theorem continuedL_functionalEquation (d : LF.AnalyticLFunctionData)
+theorem continuedL_functionalEquation
+    (d : TauCetiRoadmap.LFunctions.AnalyticLFunctionData)
     (hc : d.HasMeromorphicContinuation) (hfe : d.HasFunctionalEquation) {s : ℂ}
     (hs : d.gammaFactor s ≠ 0) (hs' : d.dual.gammaFactor (1 - s) ≠ 0) :
     ((d.dual.conductor : ℕ) : ℂ) ^ ((1 - s) / 2) * d.dual.gammaFactor (1 - s) *
-        continuedL d.dual (LF.AnalyticLFunctionData.dual_hasMeromorphicContinuation hc) (1 - s) =
+        continuedL d.dual
+          (TauCetiRoadmap.LFunctions.AnalyticLFunctionData.dual_hasMeromorphicContinuation hc)
+          (1 - s) =
       d.rootNumber⁻¹ * (((d.conductor : ℕ) : ℂ) ^ (s / 2) * d.gammaFactor s *
         continuedL d hc s) := sorry
 
@@ -254,7 +255,8 @@ noncomputable def centralAnalyticConductor (N : ℕ+) (gammaR gammaC : Multiset 
   analyticConductorAt N gammaR gammaC (1 / 2)
 
 /-- The record-level analytic conductor used by every generic zero estimate. -/
-noncomputable def analyticConductorAtData (d : LF.AnalyticLFunctionData) (s : ℂ) : ℝ :=
+noncomputable def analyticConductorAtData
+    (d : TauCetiRoadmap.LFunctions.AnalyticLFunctionData) (s : ℂ) : ℝ :=
   analyticConductorAt d.conductor d.gammaR d.gammaC s
 
 /-- **Layer 2.2, the two-sided comparison on a strip.** ⚠ This replaces monotonicity in
@@ -657,7 +659,8 @@ example :
       =O[atTop] Real.log := sorry
 
 /-- The conductor-and-degree main term in the generic Riemann--von Mangoldt formula. -/
-noncomputable def riemannVonMangoldtMainTerm (d : LF.AnalyticLFunctionData) (T : ℝ) : ℝ :=
+noncomputable def riemannVonMangoldtMainTerm
+    (d : TauCetiRoadmap.LFunctions.AnalyticLFunctionData) (T : ℝ) : ℝ :=
   T / (2 * Real.pi) *
     Real.log (((d.conductor : ℕ) : ℝ) *
       (T / (2 * Real.pi * Real.exp 1)) ^ d.degree)
@@ -665,7 +668,8 @@ noncomputable def riemannVonMangoldtMainTerm (d : LF.AnalyticLFunctionData) (T :
 /-- **Layer 7.6, conductor-uniform Riemann--von Mangoldt.** The implied constant depends only
 on the degree and a bound for the archimedean shifts. The explicit bound on shifts is retained
 in the theorem because it is the parameter on which the uniformity depends. -/
-theorem riemannVonMangoldt_generic (d : LF.AnalyticLFunctionData)
+theorem riemannVonMangoldt_generic
+    (d : TauCetiRoadmap.LFunctions.AnalyticLFunctionData)
     (hc : d.HasMeromorphicContinuation) (hfe : d.HasFunctionalEquation)
     (hgrowth : HasVerticalStripGrowth d.completed) (B : ℝ)
     (hR : ∀ μ ∈ d.gammaR, ‖μ‖ ≤ B) (hC : ∀ ν ∈ d.gammaC, ‖ν‖ ≤ B) :
@@ -703,7 +707,7 @@ depend on the fixed extension `L/K`, but not on `x`; no conductor-uniform or ful
 constant is claimed. -/
 theorem frobeniusPsi_effective (C : ConjClasses (L ≃ₐ[K] L)) :
     ∃ c : ℝ, 0 < c ∧
-      (fun x : ℝ => Cheb.frobeniusPsi K L C x -
+      (fun x : ℝ => TauCetiRoadmap.Chebotarev.frobeniusPsi K L C x -
           ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ)) * x +
           exceptionalChebotarevTerm K L C x) =O[atTop]
         (fun x : ℝ => x * Real.exp (-c * Real.sqrt (Real.log x))) := sorry
@@ -711,7 +715,7 @@ theorem frobeniusPsi_effective (C : ConjClasses (L ≃ₐ[K] L)) :
 /-- **Layer 8.7**, removal of prime powers on the supplier-owned Frobenius theta function. -/
 theorem frobeniusTheta_effective (C : ConjClasses (L ≃ₐ[K] L)) :
     ∃ c : ℝ, 0 < c ∧
-      (fun x : ℝ => Cheb.frobeniusTheta K L C x -
+      (fun x : ℝ => TauCetiRoadmap.Chebotarev.frobeniusTheta K L C x -
           ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ)) * x +
           exceptionalChebotarevTerm K L C x) =O[atTop]
         (fun x : ℝ => x * Real.exp (-c * Real.sqrt (Real.log x))) := sorry
@@ -721,7 +725,7 @@ qualitative limit remains `Chebotarev.tendsto_frobeniusPrimeCount`; this is its 
 fixed-extension error estimate. -/
 theorem frobeniusPrimeCount_effective (C : ConjClasses (L ≃ₐ[K] L)) :
     ∃ c : ℝ, 0 < c ∧
-      (fun x : ℝ => (Cheb.frobeniusPrimeCount K L C x : ℝ) -
+      (fun x : ℝ => (TauCetiRoadmap.Chebotarev.frobeniusPrimeCount K L C x : ℝ) -
           ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ)) *
             (x / Real.log x) + exceptionalChebotarevPrimeCountTerm K L C x) =O[atTop]
         (fun x : ℝ => x * Real.exp (-c * Real.sqrt (Real.log x)) / Real.log x) := sorry
