@@ -29,8 +29,6 @@ import TauCetiRoadmap.ConformalMapping.Suggested
 import TauCetiRoadmap.OrthogonalL2Bases.Suggested
 import TauCetiRoadmap.OptimalTransport.Suggested
 import TauCetiRoadmap.ProfiniteCohomology.Suggested
-import TauCetiRoadmap.LocalFields.Suggested
 import TauCetiRoadmap.NumberFieldArithmetic.Suggested
-import TauCetiRoadmap.GlobalClassFieldTheory.Suggested
 import TauCetiRoadmap.LFunctions.Suggested
 import TauCetiRoadmap.ArithmeticDirichletSeries.Suggested
