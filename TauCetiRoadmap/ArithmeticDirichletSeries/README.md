@@ -290,7 +290,7 @@ analytic boundary statement.
 0 → 1 → 2 → 3
           ├────→ 7 → 8
 1 → 4 → 5 ├────→ 9 → 10
-      └→ 6 ┘            
+      └→ 6 ┘
 ```
 
 Layer 6 can be developed after Layers 1 and 4. Layer 7 needs the Euler product of Layer 3.
