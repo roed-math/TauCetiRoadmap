@@ -3,11 +3,18 @@
 ## Scope
 
 This roadmap builds global class field theory for number fields. It starts from Mathlib's adele
-ring, class group and cyclotomic theory, and from the Local Fields roadmap, which owns local class
-field theory and the generic finite-group Tate and class-formation machinery. It ends with the
-reciprocity law, the existence theorem, the Hilbert class field, Kronecker–Weber, ring class fields,
-and the global class formation. Every layer carries the basic theory of the objects it introduces,
-and not only the named theorem.
+ring, class group and cyclotomic theory, from the Local Fields roadmap, which owns local class
+field theory and the generic finite-group Tate and class-formation machinery, and from the Number
+Field Arithmetic roadmap, which owns the ideal-theoretic Artin map. It ends with the global class
+formation, Hilbert reciprocity, and one focused application of it: the Hasse–Minkowski theorem
+over an arbitrary number field. On the way it builds the reciprocity law, the existence theorem,
+the Hilbert class field, Kronecker–Weber and ring class fields. Every layer carries the basic
+theory of the objects it introduces, and not only the named theorem.
+
+The local theory and the local classification of quadratic forms belong to the Quadratic Form
+Invariants roadmap. This roadmap owns only the global local-to-global theorem, because its proof
+consumes weak approximation, the Hasse norm theorem and Hilbert reciprocity, all constructed
+here.
 
 Mathlib has the adele ring of a number field. It has no object of global class field theory. It has
 none of the following:
@@ -21,7 +28,11 @@ none of the following:
 
 The section "What Mathlib supplies" names the declarations that do exist.
 
-Suggested home: `TauCeti/NumberTheory/ClassFieldTheory/Global/`. Use one subdirectory for each
+Suggested home: `TauCeti/NumberTheory/ClassFieldTheory/Global/`, with one exception. Layer 11's
+Hasse–Minkowski milestones belong in `TauCeti/NumberTheory/QuadraticForm/HasseMinkowski.lean`,
+outside the class-field-theory tree: the ownership is this roadmap's, because the proof consumes
+its class field theory, but the statements are about quadratic forms and a later extraction should
+not have to rename them. Otherwise use one subdirectory for each
 layer: `Modulus/`, `RayClass/`, `IdeleClass/`, `Archimedean/`, `HeckeCharacter/`, `NormIndex/`,
 `Reciprocity/`, `Existence/`, `RayClassField/`, `HilbertClassField/`, `KroneckerWeber/`,
 `Grossencharacter/`, `ClassFormation/`, and `LocalDictionary/` for Layer D. The name follows
@@ -188,12 +199,28 @@ under a different typeclass spelling.
 
 ## What the Orthogonal and Spin Groups roadmap consumes from this roadmap
 
-Two declarations, and they are unrelated to each other.
+Three declarations, and they are unrelated to each other.
 
 | Supplying layer | Declaration | What the consumer relies on |
 |---|---|---|
 | 2A.3 | `denseRange_algebraMap_finiteAdeleRing` | `K` is dense in its finite adeles. ⚠ Its Layer 4B needs *this*, and not the weak approximation of 0.2 nor the discreteness of `K` in the full adele ring |
 | 11.4 | `hilbertProductFormula` | `∏_v (a,b)_v = 1` over `ℚ`, with the finite symbols from the consumed `hilbertSymbol` and the real one from 2C.8. Its Layer 5H reads it for the spinor-norm obstruction |
+| 11.8 | `hasseMinkowski_equivalent`, with `LocallyEquivalent` of 11.5 | regular quadratic forms over a number field are isometric exactly when they are isometric at every finite completion and every real completion |
+
+**On the last row.** Its Layer 5H needs `Ш¹(ℚ, SO_Q) = 1`, which *is* the Hasse principle for
+quadratic forms. Three things are worth stating.
+
+- That roadmap consumes the **`K = ℚ` specialization**; the theorem here is over an arbitrary
+  number field, and `Suggested.lean` carries the specialization as a closed application so that
+  the shape it needs is checked rather than asserted.
+- The **pointed-set and `Ш¹` formulation is that roadmap's**. This one defines no `H¹(K, SO(Q))`,
+  no Tate–Shafarevich set, and no nonabelian cohomology; the translation from a statement about
+  forms to a statement about a Galois-cohomology kernel is made there.
+- The edge is **one-way**. Nothing here depends on that roadmap.
+
+⚠ An earlier revision of that roadmap cited this theorem to Quadratic Form Invariants Layer 6,
+which is the classification of forms over a *nonarchimedean local* field — a different theorem, and
+local. Hasse–Minkowski is global, and 11.8 is where it lives.
 
 ⚠ `hilbertProductFormula` has no Lean form in `Suggested.lean` yet, because its statement needs
 the consumed `hilbertSymbol` and the Quadratic Form Invariants roadmap is a merge prerequisite
@@ -473,9 +500,9 @@ R Local Fields `normalizedValuation`, R Local Fields `Layer 0: the normalized va
 - *Downstream interface:* Layers 2B, 2C, 3, 5, 6, 7, 9 and 11 reach the consumed theory only
   through this milestone.
 
-**D.2. The Artin-map adapter.** The ideal-theoretic Artin map is Number Field Arithmetic's, by
-the contract in §What this roadmap consumes from the Number Field Arithmetic roadmap. This
-milestone owns one thing, and it is a hypothesis translation.
+*D.2 is the Artin-map adapter, and it is three milestones.* The ideal-theoretic Artin map is
+Number Field Arithmetic's, by the contract in §What this roadmap consumes from the Number Field
+Arithmetic roadmap. What D.2 owns is one thing, and it is a hypothesis translation.
 
 **D.2.1. The abelian hypothesis, translated.** `[IsAbelianGalois K L]` is a Galois extension whose
 group is commutative, and it supplies both `[IsGalois K L]` and pairwise commutativity of
@@ -1745,6 +1772,152 @@ the consumed `hilbertSymbol` at the finite places and from 2C.8 at the real plac
 as the worked example, and compare with Mathlib's `legendreSym` reciprocity.
 *Prerequisites:* L 11.3, R Quadratic Form Invariants `hilbertSymbol`, L 2C.8, M `legendreSym`.
 
+**11.5. Localization of a quadratic form at the places of `K`.** One canonical way to extend a
+form to a place, and nothing else. At a finite place `v` it is the base change of `Q` to
+`v.adicCompletion K`, as `atFinitePlace`. At a real place `w` it is the base change along
+`InfinitePlace.embedding_of_isReal`, as `atRealPlace`; that is the archimedean vocabulary Layers 0
+and 2C already use, and there is no second real-place carrier.
+
+Define the two predicates that everything below is stated against:
+
+```text
+IsLocallyIsotropic Q  :  Q_v isotropic at every finite v, and Q_w isotropic at every real w
+LocallyEquivalent Q R :  Q_v ≃ R_v at every finite v,      and Q_w ≃ R_w at every real w
+```
+
+⚠ **The complex places are absent by theorem, not by oversight.** Over an algebraically closed
+field a regular form of rank at least `2` is isotropic, and the rank is a complete invariant. Both
+halves are named milestones — `not_anisotropic_complex` and `equivalent_of_finrank_eq_complex` —
+so a complex clause in either predicate would be vacuous. Stating them is what makes the omission
+a fact rather than a convention.
+
+*Basic API.* Scalar extension of an isometry; compatibility with orthogonal sums, with negation
+and with scaling; preservation of rank and of regularity; the discriminant and the consumed
+`localHasse` under base change at a finite place; the real signature; and repeated base change in
+a tower.
+
+⚠ Localization is `QuadraticForm.baseChange` along an actual completion or embedding. A field of
+type "a form at each place" in an interface structure is an arbitrary family: it need not be a
+base change of anything, and every milestone below is false for some term of such a structure.
+
+*Prerequisites:* M `QuadraticForm.baseChange`, M `HeightOneSpectrum.adicCompletion`,
+M `InfinitePlace.embedding_of_isReal`, M `QuadraticMap.Anisotropic`,
+M `QuadraticMap.Equivalent`; L D.1; R Quadratic Form Invariants `localHasse`.
+
+**11.6. Hasse–Minkowski for isotropy.** Suggested name:
+`TauCeti.NumberField.QuadraticForm.hasseMinkowski_isotropic`.
+
+For a finite-dimensional regular `Q` over a number field `K`:
+
+```text
+Q is isotropic over K  ↔  IsLocallyIsotropic Q.
+```
+
+*Source.* O'Meara, *Introduction to Quadratic Forms*, **66:1**, over an arbitrary global field.
+Inspected for this pass; the proof route below is his, case by case.
+
+The route is **four cases**, and the case division is part of the milestone.
+
+1. **Binary.** `d(Q_v) = −1` at every `v`, so `−a₁a₂` is a square at every place, so it is a
+   square in `K` — this is the **global square theorem**, that an element of `K` which is a square
+   at almost every place is a square, O'Meara 65:15. Then `d Q = −1` and `Q` is a hyperbolic
+   plane. Name the global square theorem; it is a milestone of this layer and follows from 7.3
+   applied to a quadratic extension.
+2. **Ternary.** Split `Q ≅ ⟨−α⟩ ⊥ P` with `P ≅ ⟨1⟩ ⊥ ⟨−θ⟩` and `θ` a nonsquare. Local isotropy
+   says `P_v` represents `α` at every `v`, which says `α` is a local norm from
+   `E = K(√θ)` everywhere. The **cyclic Hasse norm theorem of 5.5** then makes `α` a global norm,
+   and `Q` is isotropic. This is the step that makes the whole theorem a consequence of class
+   field theory.
+3. **Quaternary.** First `d Q = 1`: a regular ternary subspace `U` has `U_v` isotropic wherever
+   `Q_v` is, by the local rank list, so case 3 applies. Then general `d Q`: pass to
+   `E = K(√(d Q))`, where the discriminant becomes a square, and use that a quaternary form is
+   isotropic over `K` exactly when it is isotropic over `K(√(d Q))` — O'Meara 58:7.
+4. **Rank at least five.** Split `Q = U ⊥ W` with `U` binary. The set
+   `T = {v : W_v anisotropic}` is **finite**: at almost every finite place the entries of a fixed
+   diagonalization are units and the residue characteristic is odd, and a unit-entry form of rank
+   at least `3` is isotropic there — O'Meara 63:14, which the consumed 6D isotropy list gives
+   through `hilbertSymbol_unramified`. At each `v ∈ T` pick `β_v` represented by `U_v` and with
+   `−β_v` represented by `W_v`. Use **weak approximation, 0.2**, to find one global `β` in the
+   prescribed square class at every `v ∈ T`. Then `⟨β⟩ ⊥ W` is locally isotropic everywhere, so
+   isotropic by induction, and so is `Q`.
+
+⚠ **The quaternary case is genuinely separate, and folding it into case 4 is an error.** Case 4
+needs `T` finite, and `T` is finite only because `dim W ≥ 3`. At `dim Q = 4` the complement `W` is
+binary, and a binary form is anisotropic at infinitely many places — `⟨1, 1⟩` over `ℚ` is
+anisotropic at every `p ≡ 3 (mod 4)` and at `∞` — so `T` is infinite and weak approximation has
+nothing to approximate at.
+
+*Nearby false statements.*
+
+- Isotropy at every **real** completion is not enough. `⟨1, 1, −3⟩` over `ℚ` is indefinite, hence
+  isotropic over `ℝ`, and anisotropic over `ℚ`; see W12.
+- Isotropy at all **but one** completion is not enough. By 11.4 the local obstructions multiply to
+  `1`, so a single omitted place carries the whole failure.
+- Indefiniteness at one real embedding does not give isotropy over `K`.
+- Nothing here is stated in characteristic `2`. The standing `[Invertible (2 : K)]` of the
+  consumed local theory is in force.
+
+*Prerequisites:* L 11.5, L 0.2, L 5.5, L 7.3; R Quadratic Form Invariants `hilbertSymbol`,
+R Quadratic Form Invariants `hilbertSymbol_unramified`, R Quadratic Form Invariants `localHasse`,
+R Quadratic Form Invariants `6D: the classification` with its isotropy list; M `QuadraticForm`.
+
+**11.7. The representation theorem.** Suggested names:
+`represents_iff_locally_represents` for the scalar case and
+`represented_iff_locally_represented` for the general one.
+
+The scalar case is 11.6 applied to `⟨−a⟩ ⊥ Q`: a regular `Q` represents a nonzero `a ∈ K` exactly
+when it does at every finite and every real completion. The general case, that `Q` is represented
+by `R` exactly when `Q_v` is represented by `R_v` everywhere, is induction on `dim Q`: pick a
+nonzero value `α` of `Q`, represent it in `R` by the scalar case, split `⟨α⟩` off both sides by
+Witt's theorem, and induct.
+
+*Source.* O'Meara **66:3**. Inspected for this pass.
+
+⚠ **This replaces a Witt-class formulation, deliberately.** The natural-looking statement "the two
+forms have the same global Witt class" cannot be written down here: the Quadratic Form Invariants
+roadmap's `wittRing K` is a prototype whose carrier is still a target, so an equality of classes
+in it would be an equality in a type with no content, and this family's review discipline rejects
+a statement whose carrier is junk. The representation theorem is the statement O'Meara actually
+uses to get 66:4, it needs no global Witt group, and the hyperbolicity form — that `Q ⊥ (−R)`
+hyperbolic at every completion is hyperbolic over `K` — is its special case at
+`R = ⟨1, −1⟩^{⊥ k}`.
+
+*Prerequisites:* L 11.6; R Quadratic Form Invariants `1: Witt cancellation`, R Quadratic Form
+Invariants `1: Witt's extension theorem`.
+
+**11.8. Local-global equivalence of forms.** Suggested name:
+`TauCeti.NumberField.QuadraticForm.hasseMinkowski_equivalent`.
+
+For finite-dimensional regular `Q` and `R` over a number field `K`:
+
+```text
+Q ≃ R over K  ↔  LocallyEquivalent Q R.
+```
+
+Forward, scalar extension of an isometry. Reverse: local equivalence gives equal rank, 11.7 gives
+a representation of `Q` by `R`, and a representation between regular forms of equal dimension is
+an isometry.
+
+*Source.* O'Meara **66:4**, the Hasse–Minkowski theorem, over an arbitrary global field. Inspected
+for this pass. His 66:5 records the resulting complete invariant list — dimension, discriminant,
+the Hasse symbols at the discrete places, and the positive indices at the real places — which is
+the sanity check that 11.5's two predicates quantify over the right places.
+
+⚠ This is the theorem the Orthogonal and Spin Groups roadmap consumes, at `K = ℚ`. It does not
+need `H¹(K, SO(Q))` or a Tate–Shafarevich set, and none is defined here; that roadmap makes the
+translation into its own group-scheme language.
+
+*Prerequisites:* L 11.7, L 11.5; R Quadratic Form Invariants `1: Witt cancellation`.
+
+**Scope note on Hasse–Minkowski.** Four milestones, and no more. Out of scope, and not later
+milestones of this roadmap: a presentation of `W(K)`; surjectivity onto compatible families of
+local Witt classes; an exact sequence of global and local Witt groups; nonabelian `H¹` as a
+general theory; arbitrary homogeneous spaces; global function fields; characteristic two; a second
+local classification; and quaternion-algebra classification beyond what the consumed Hilbert
+symbol supplies. The local theory of quadratic forms stays in the Quadratic Form Invariants
+roadmap. This roadmap owns only the global local-to-global theorem, because its proof consumes
+weak approximation, the Hasse norm theorem, and Hilbert reciprocity, all constructed here.
+
 **Scope note.** Everything in this layer is stated in Galois cohomology. The translation to central
 simple algebras, division algebras and a Brauer-group API is out of scope. This layer supplies the
 `H²` half of the statement "division algebras over `K` correspond to local invariants that sum to
@@ -1822,6 +1995,23 @@ there is Gauss's criterion: `p = x² + 27y²` exactly when `p ≡ 1 (mod 3)` and
 modulo `p`. The second example is the one that exercises Layer 10B, because the order is not
 maximal.
 
+**W12. Hasse–Minkowski detects a non-archimedean obstruction** (Layer 11). Take
+`q = ⟨1, 1, −3⟩` over `ℚ`. It is **isotropic over `ℝ`**, because it is indefinite. It is
+**anisotropic over `ℚ`**. The obstruction is at `3`: a primitive integral solution of
+`x² + y² = 3z²` forces `3 ∣ x` and `3 ∣ y`, because `−1` is not a square modulo `3`, hence `9 ∣
+3z²` and `3 ∣ z`, contradicting primitivity — so `q` is anisotropic over `ℚ₃`, and 11.6 then gives
+anisotropy over `ℚ`.
+
+The point of the example is the direction of the inference. Checking archimedean signatures alone
+concludes the opposite, so W12 is what exercises the finite half of `IsLocallyIsotropic`; the
+elementary descent over `ℚ` is a check on the answer and not the acceptance statement. In the
+invariant language of 11.8 the obstruction is the Hasse symbol at `3`.
+
+The positive companion: `⟨1, 1, 1⟩` and `⟨1, 1, 4⟩` over `ℚ` have the same dimension, the same
+discriminant class, and the same Hasse symbol at every place, and `⟨1, 1, 4⟩ ≅ ⟨1, 1, 1⟩` because
+`4` is a square. 11.8 is what turns "the same local data" into an isometry over `ℚ`, and this is
+the smallest instance where it is applied in the useful direction.
+
 ## Ordering and parallelism
 
 The table is generated from the direct prerequisites of the milestones, and the milestone numbers
@@ -1860,7 +2050,7 @@ started.
 | 10A | continuous and algebraic infinity types | 3, 7 |
 | 10B | orders, conductors, Picard groups | 1 |
 | 10C | ring class fields, `x² + ny²` | 7, 10B |
-| 11 | class formation, the `H²` sequence, Hilbert reciprocity | Local Fields, Quadratic Form Invariants, 2C, 5, 6, 7 |
+| 11 | class formation, the `H²` sequence, Hilbert reciprocity, Hasse–Minkowski over number fields | Local Fields, Quadratic Form Invariants, Number Field Arithmetic, 0, 2C, 5, 6, 7 |
 
 Layer 6 is where the consumed local reciprocity becomes essential, and D.1 is what makes it
 applicable to a completion. Everything before Layer 6 uses the contract only through 2B, 2C, 3 and
@@ -1890,6 +2080,20 @@ applicable to a completion. Everything before Layer 6 uses the contract only thr
   which is 11.3.
 - J. Neukirch, A. Schmidt, K. Wingberg, *Cohomology of Number Fields*, 2nd ed. Ch. VIII, the global
   formation and the `H²` invariants, which is the normalization source for Layer 11.
+- O. T. O'Meara, *Introduction to Quadratic Forms* (Grundlehren 117). **The source for 11.5 to
+  11.8, inspected for this pass**, and stated there over an arbitrary **global** field rather than
+  over `ℚ`. §66: **66:1** is the isotropy theorem of 11.6, with the four-case proof written out in
+  that milestone; **66:3** is the representation theorem of 11.7; **66:4** is the Hasse–Minkowski
+  theorem of 11.8; and **66:5** lists the resulting complete invariants — dimension, discriminant,
+  the Hasse symbols at the discrete places, and the positive indices at the real places — which is
+  the check that 11.5's predicates quantify over the right places. The supporting statements 11.6
+  cites by number are **65:15**, the global square theorem; **65:23**, the Hasse norm theorem for a
+  quadratic extension, which 5.5 supplies in its cyclic form; **58:7**, isotropy of a quaternary
+  space over `K(√(d))`; and **63:14**, isotropy of a unit-entry space of rank at least `3` over a
+  non-dyadic local field, which the consumed 6D isotropy list gives.
+  ⚠ Cassels, *Rational Quadratic Forms*, and Serre, *A Course in Arithmetic*, prove the theorem
+  over `ℚ` only. Either is a good companion for W12 and neither grounds 11.6 or 11.8, whose
+  statements are over an arbitrary number field.
 - Cassels–Fröhlich (eds.), *Algebraic Number Theory*. Ch. II for adeles, approximation and
   compactness, used by Layers 0 and 2A. Ch. VII, Tate, "Global class field theory", the idelic
   statements that Layers 2, 6 and 7 are checked against. Exercise 5.3, p. 360, the biquadratic

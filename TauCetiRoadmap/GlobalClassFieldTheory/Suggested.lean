@@ -44,7 +44,7 @@ namespace TauCetiRoadmap.GlobalClassFieldTheory
 
 open NumberField IsDedekindDomain
 
-open scoped nonZeroDivisors ValuativeRel
+open scoped nonZeroDivisors ValuativeRel TensorProduct
 
 universe u
 
@@ -948,6 +948,152 @@ example (χ : ContinuousMonoidHom ℂˣ ℂˣ) :
     ∃! p : ℤ × ℂ, ∀ z : ℂˣ,
       (χ z : ℂ) = ((z : ℂ) / (‖(z : ℂ)‖ : ℂ)) ^ p.1 * (‖(z : ℂ)‖ : ℂ) ^ p.2 :=
   sorry
+
+/-! ## Layer 11: Hasse–Minkowski over number fields
+
+The local theory and the local classification of quadratic forms are the Quadratic Form Invariants
+roadmap's. What is here is the one **global** theorem, because its proof consumes weak
+approximation (0.2), the cyclic Hasse norm theorem (5.5), and Hilbert reciprocity (11.4), all
+constructed in this roadmap.
+
+⚠ Every localization below is an actual `QuadraticForm.baseChange` along an actual completion or
+real embedding. Nothing here is a free function in an interface structure, and no predicate is a
+`Prop := sorry`. -/
+
+section HasseMinkowski
+
+variable {K : Type u} [Field K] [NumberField K]
+  {V : Type v} [AddCommGroup V] [Module K V]
+
+/-- **11.5, localization at a finite place.** The base change of `Q` to `K_v`. -/
+noncomputable def atFinitePlace (Q : QuadraticForm K V) (v : HeightOneSpectrum (𝓞 K)) :
+    QuadraticForm (v.adicCompletion K) (v.adicCompletion K ⊗[K] V) :=
+  Q.baseChange (v.adicCompletion K)
+
+/-- **11.5, localization at a real place.** The base change along the real embedding of `w`,
+which is the archimedean vocabulary Layers 0 and 2C already use. There is no second real-place
+carrier. -/
+noncomputable def atRealPlace (Q : QuadraticForm K V)
+    (w : {w : InfinitePlace K // w.IsReal}) :
+    letI := (InfinitePlace.embedding_of_isReal w.2).toAlgebra
+    QuadraticForm ℝ (ℝ ⊗[K] V) :=
+  letI := (InfinitePlace.embedding_of_isReal w.2).toAlgebra
+  Q.baseChange ℝ
+
+/-- **11.5, local isotropy.** ⚠ The complex places are **absent by theorem**, not by oversight:
+`not_anisotropic_complex` below says a regular form of rank at least `2` over an algebraically
+closed field is isotropic, so a complex clause would be vacuous. The finite and the real clauses
+are both load-bearing, and dropping either makes 11.6 false. -/
+def IsLocallyIsotropic (Q : QuadraticForm K V) : Prop :=
+  (∀ v : HeightOneSpectrum (𝓞 K), ¬ (atFinitePlace Q v).Anisotropic) ∧
+    ∀ w : {w : InfinitePlace K // w.IsReal}, ¬ (atRealPlace Q w).Anisotropic
+
+/-- **11.5, local equivalence.** Same quantification, and the same reason for it:
+`equivalent_of_finrank_eq_complex` makes the complex clause a consequence of equal rank. -/
+def LocallyEquivalent {W : Type v} [AddCommGroup W] [Module K W]
+    (Q : QuadraticForm K V) (R : QuadraticForm K W) : Prop :=
+  (∀ v : HeightOneSpectrum (𝓞 K), (atFinitePlace Q v).Equivalent (atFinitePlace R v)) ∧
+    ∀ w : {w : InfinitePlace K // w.IsReal},
+      (atRealPlace Q w).Equivalent (atRealPlace R w)
+
+/-- **11.5, complex-place automaticity, the isotropy half.** Over an algebraically closed field a
+regular form of rank at least `2` is isotropic. This is why `IsLocallyIsotropic` has no complex
+clause. -/
+theorem not_anisotropic_complex {W : Type v} [AddCommGroup W] [Module ℂ W]
+    [FiniteDimensional ℂ W] (Q : QuadraticForm ℂ W) (hQ : Q.Nondegenerate)
+    (h : 2 ≤ Module.finrank ℂ W) : ¬ Q.Anisotropic :=
+  sorry
+
+/-- **11.5, complex-place automaticity, the isometry half.** Over an algebraically closed field
+the rank is a complete invariant of a regular form. This is why `LocallyEquivalent` has no complex
+clause: at a complex place, equal rank already gives equivalence. -/
+theorem equivalent_of_finrank_eq_complex {W₁ W₂ : Type v} [AddCommGroup W₁] [Module ℂ W₁]
+    [FiniteDimensional ℂ W₁] [AddCommGroup W₂] [Module ℂ W₂] [FiniteDimensional ℂ W₂]
+    (Q : QuadraticForm ℂ W₁) (R : QuadraticForm ℂ W₂) (hQ : Q.Nondegenerate)
+    (hR : R.Nondegenerate) (h : Module.finrank ℂ W₁ = Module.finrank ℂ W₂) :
+    Q.Equivalent R :=
+  sorry
+
+/-- **11.6, the Hasse–Minkowski theorem for isotropy** (O'Meara 66:1). A regular form over a
+number field is isotropic exactly when it is isotropic at every finite completion and every real
+completion.
+
+Suggested name for the implementation: `TauCeti.NumberField.QuadraticForm.hasseMinkowski_isotropic`.
+
+⚠ Neither half of the local hypothesis may be dropped. Isotropy at every **real** place alone is
+insufficient — `⟨1, 1, -3⟩` over `ℚ` is indefinite, hence isotropic over `ℝ`, and anisotropic over
+`ℚ` because it is anisotropic over `ℚ₃`. Isotropy at all **but one** place is insufficient too:
+by Hilbert reciprocity the local obstructions multiply to `1`, so a single missing place carries
+the whole failure. -/
+theorem hasseMinkowski_isotropic [FiniteDimensional K V] (Q : QuadraticForm K V)
+    (hQ : Q.Nondegenerate) :
+    ¬ Q.Anisotropic ↔ IsLocallyIsotropic Q :=
+  sorry
+
+/-- **11.7, the scalar representation theorem.** `Q` represents a nonzero `a` over `K` exactly
+when it does over every finite and every real completion. It is 11.6 applied to `⟨-a⟩ ⊥ Q`, and
+not an independent statement. -/
+theorem represents_iff_locally_represents [FiniteDimensional K V] (Q : QuadraticForm K V)
+    (hQ : Q.Nondegenerate) (a : K) (ha : a ≠ 0) :
+    (∃ x : V, Q x = a) ↔
+      ((∀ v : HeightOneSpectrum (𝓞 K), ∃ x, atFinitePlace Q v x = algebraMap K _ a) ∧
+        ∀ w : {w : InfinitePlace K // w.IsReal},
+          ∃ x, atRealPlace Q w x = InfinitePlace.embedding_of_isReal w.2 a) :=
+  sorry
+
+/-- **11.7, the representation theorem for forms** (O'Meara 66:3), by induction on `dim W₁` from
+the scalar case together with Witt cancellation. This is the statement 11.8 is a corollary of, and
+it is derived from 11.6 rather than assumed beside it. -/
+theorem represented_iff_locally_represented [FiniteDimensional K V] {W : Type v} [AddCommGroup W]
+    [Module K W] [FiniteDimensional K W] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate)
+    (R : QuadraticForm K W) (hR : R.Nondegenerate) :
+    (∃ f : V →ₗ[K] W, Function.Injective f ∧ ∀ x, R (f x) = Q x) ↔
+      ((∀ v : HeightOneSpectrum (𝓞 K), ∃ f : _ →ₗ[v.adicCompletion K] _,
+          Function.Injective f ∧ ∀ x, atFinitePlace R v (f x) = atFinitePlace Q v x) ∧
+        ∀ w : {w : InfinitePlace K // w.IsReal},
+          letI := (InfinitePlace.embedding_of_isReal w.2).toAlgebra
+          ∃ f : _ →ₗ[ℝ] _, Function.Injective f ∧
+            ∀ x, atRealPlace R w (f x) = atRealPlace Q w x) :=
+  sorry
+
+/-- **11.8, the Hasse–Minkowski theorem for isometry** (O'Meara 66:4). Two regular forms over a
+number field are isometric exactly when they are isometric at every finite completion and every
+real completion. This is the theorem the Orthogonal and Spin Groups roadmap consumes, at `K = ℚ`.
+
+Suggested name for the implementation:
+`TauCeti.NumberField.QuadraticForm.hasseMinkowski_equivalent`.
+
+The forward direction is scalar extension of an isometry. The reverse is 11.7 at equal rank: a
+representation between regular forms of the same dimension is an isometry. -/
+theorem hasseMinkowski_equivalent [FiniteDimensional K V] {W : Type v} [AddCommGroup W]
+    [Module K W] [FiniteDimensional K W] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate)
+    (R : QuadraticForm K W) (hR : R.Nondegenerate) :
+    Q.Equivalent R ↔ LocallyEquivalent Q R :=
+  sorry
+
+end HasseMinkowski
+
+section HasseMinkowskiRat
+
+/-- **The `K = ℚ` specialization**, in the shape the Orthogonal and Spin Groups roadmap consumes
+at its 5H: two regular forms over `ℚ` of the same dimension that are isometric over every finite
+and every real completion are isometric over `ℚ`. This is a **closed** application — the theorem
+above is the milestone, and this says that its statement already has the shape that consumer
+needs, with every coercion elaborating. -/
+example {V W : Type} [AddCommGroup V] [Module ℚ V] [FiniteDimensional ℚ V]
+    [AddCommGroup W] [Module ℚ W] [FiniteDimensional ℚ W]
+    (Q : QuadraticForm ℚ V) (hQ : Q.Nondegenerate) (R : QuadraticForm ℚ W)
+    (hR : R.Nondegenerate) (h : LocallyEquivalent Q R) :
+    Q.Equivalent R :=
+  (hasseMinkowski_equivalent Q hQ R hR).2 h
+
+/-- **W12, the acceptance instance**: `⟨1, 1, -3⟩` over `ℚ` is anisotropic, while it is isotropic
+over `ℝ`. The obstruction is at `3`, and 11.6 is what turns the local statement into the global
+one; checking archimedean signatures alone would have concluded the opposite. -/
+example : (QuadraticMap.weightedSumSquares ℚ ![(1 : ℚ), 1, -3]).Anisotropic :=
+  sorry
+
+end HasseMinkowskiRat
 
 /-! ## Acceptance shapes for Layers 8 to 10
 
