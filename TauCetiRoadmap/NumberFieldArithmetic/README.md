@@ -110,6 +110,8 @@ What this roadmap supplies to other subjects:
   (Layer 3.10);
 - the `S_n`-embedding of the Galois closure of a number field (Layer 7);
 - the ideal-theoretic Artin map `artinHomAway` (Layer 2);
+- the Artin symbol `artinSymbol` with its functoriality, `artinSymbol_map_restrictNormalHom` and
+  `exists_isArithFrobAt_pow_inertiaDeg` (Layers 2.3 and 2.4);
 - the local-field instance on `v.adicCompletion K`, and the localization of the different
   (Layer 5).
 
@@ -639,8 +641,22 @@ the only restriction statement there, and it is not about Frobenius elements.
 With it, complete the functoriality half of the Artin symbol's basic API, which Layer 2.3 defers
 to here:
 
-- compatibility with `AlgEquiv.restrictNormalHom`, at the level of the conjugacy class;
-- the tower formula `Frob_{L/M}(Q) = Frob_{L/K}(Q)^{f(Q∩M/𝔭)}`, for `K ⊆ M ⊆ L`.
+- compatibility with `AlgEquiv.restrictNormalHom`, at the level of the conjugacy class, as
+  `artinSymbol_map_restrictNormalHom`;
+- the tower formula `Frob_{L/M}(Q) = Frob_{L/K}(Q)^{f(Q∩M/𝔭)}`, for `K ⊆ M ⊆ L`, as
+  `exists_isArithFrobAt_pow_inertiaDeg`.
+
+Both carry Lean names because the L-functions roadmap consumes them: its Chebotarev proof reduces
+a general extension to a cyclotomic one along the restriction square, and its fixed-field step
+uses the tower formula. Their signatures are contracts.
+
+⚠ The tower formula is stated **relative to one prime `Q` of `L`**, and the unramified hypothesis
+on `𝔭` is not decoration. Taking an arbitrary representative of the conjugacy class and a fixed
+prime of `M` gives a false statement when `M/K` is not normal: a conjugate representative need
+not stabilize `Q`, so its `f`-th power need not fix `M` pointwise, and it is then the restriction
+of nothing in `Gal(L/M)`. At a ramified `𝔭` a Frobenius lift is determined only modulo inertia,
+so no equality of automorphisms is available at all. The class-level statement is a corollary of
+the prime-relative one and never a replacement for it.
 
 *Prerequisites:* Mathlib `AlgEquiv.restrictNormal`, `AlgEquiv.restrictNormalHom`, `Ideal.under`,
 `Ideal.inertiaDeg`; Layers 2.1 and 2.3.
