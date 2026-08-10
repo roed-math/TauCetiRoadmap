@@ -18,12 +18,14 @@ body:
       label: Roadmap area
       description: Which roadmap does this intention sit in?
       options:
+        - ArithmeticDirichletSeries
         - CombinatorialHeegaardFloer
         - ConformalMapping
         - ContourIntegration
         - Exchangeability
         - GeometricTopology
         - GlobalClassFieldTheory
+        - GlobalNumberFields
         - HeegaardFloer
         - JacobianChallenge
         - LFunctions

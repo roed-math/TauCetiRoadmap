@@ -22,6 +22,7 @@ import TauCetiRoadmap.PDE.Suggested
 import TauCetiRoadmap.CombinatorialHeegaardFloer.Suggested
 import TauCetiRoadmap.HeegaardFloer.Suggested
 import TauCetiRoadmap.GeometricTopology.Suggested
+import TauCetiRoadmap.GlobalNumberFields.Suggested
 import TauCetiRoadmap.Exchangeability.Suggested
 import TauCetiRoadmap.ContourIntegration.Suggested
 import TauCetiRoadmap.ConformalMapping.Suggested
@@ -33,3 +34,4 @@ import TauCetiRoadmap.NumberFieldArithmetic.Suggested
 import TauCetiRoadmap.GlobalClassFieldTheory.Suggested
 import TauCetiRoadmap.LFunctions.Suggested
 import TauCetiRoadmap.ZerosOfLFunctions.Suggested
+import TauCetiRoadmap.ArithmeticDirichletSeries.Suggested
