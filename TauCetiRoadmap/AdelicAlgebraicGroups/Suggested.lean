@@ -1,14 +1,17 @@
 import Mathlib
+import TauCetiRoadmap.GlobalNumberFields.Suggested
+import TauCetiRoadmap.LocalFieldsRamification.Suggested
+import TauCetiRoadmap.ReductiveGroups.Suggested
 
 /-!
 # Adelic algebraic groups: target signatures
 
 **This file is not the roadmap and is not exhaustive.** `README.md` is the definitive
 specification. The generic restricted-product declarations below elaborate against the repository
-pin. Scheme-level targets such as `LocalPointGroup`, `strongApproximation`, and
-`tamagawaMeasure` are recorded in the README until the accepted Reductive Groups and
-GlobalNumberFields carriers can be imported; this file does not replace them with an arbitrary
-interface structure.
+pin. The final supplier namespaces are imported above. Scheme-level targets such as
+`LocalPointGroup`, `strongApproximation`, and `tamagawaMeasure` remain fully specified in the
+README until Reductive Groups publishes the required functor-of-points carrier; this file does
+not replace that missing accepted carrier with an arbitrary private interface structure.
 -/
 
 namespace TauCetiRoadmap.AdelicAlgebraicGroups
