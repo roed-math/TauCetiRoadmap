@@ -63,6 +63,7 @@ Out of scope, with the owner of each subject:
 | structure theory of local fields | [Local Fields](https://github.com/roed-math/TauCetiRoadmap/pull/2) |
 | root systems, Weyl groups, `DynkinType`, the ADE classification | [Root Systems](../RepresentationTheory/RootSystems/README.md) |
 | Poisson summation and the Gaussian theta transformation for a lattice in a real vector space | [L-functions](https://github.com/roed-math/TauCetiRoadmap/pull/8) |
+| orders in a number field, their conductors, their proper fractional ideals, their Picard groups — wide and narrow — and ring class fields | [Global Class Field Theory](https://github.com/roed-math/TauCetiRoadmap/pull/6) |
 | modular forms of integral weight, Hecke theory, newforms | [Modular Forms](../ModularForms/README.md) |
 
 The following subjects have no owner and are not part of this roadmap. They are listed so
@@ -90,7 +91,11 @@ prerequisites. Every prerequisite has one of four kinds:
 - **M**: a declaration that exists in Mathlib.
 - **T**: a declaration that exists in Tau Ceti.
 - **L**: an earlier milestone of this roadmap.
-- **R**: a named layer of another roadmap.
+- **R**: a prerequisite from another roadmap. Where that roadmap has fixed a Lean name, the
+  row names the **declaration**, and §What other roadmaps supply carries its type; a subject is
+  then never a prerequisite, so "the Picard group of an order" is not one and `Pic` is. Where the
+  supplier has fixed a milestone but no name, the row cites the layer, and the supplier table
+  gives the provisional name marked with an asterisk.
 
 No prerequisite has any other kind. A Mathlib pull request, an external repository, a
 branch, and a future Mathlib version are all excluded. `PROVENANCE.md` records such
@@ -274,6 +279,11 @@ both roadmaps use, marked with an asterisk, and the supplier owns the final choi
 | 3H | Quadratic Form Invariants | Layer 6 | the classification over `ℚ_p` | `(dim, d±, s)` determines the form |
 | 4C | Quadratic Form Invariants | Layer 0 | `SquareClass`, `squareClassOfUnit` | `Kˣ ⧸ Subgroup.square Kˣ`, `Kˣ →* SquareClass K` |
 | 3G | Global Class Field Theory | Layer 11 | `hilbertProductFormula`\* | `∀ a b : ℚˣ, (a,b)_ℝ · ∏_p (a,b)_p = 1` |
+| B1 | Global Class Field Theory | 10B.1, 10B.2 | `NumberFieldOrder`, `NumberFieldOrder.conductor` | an order as a `Subalgebra ℤ K` finite over `ℤ` and spanning `K` over `ℚ`, with `K` as its fraction field; `𝔠(O)` the largest `𝓞_K`-ideal inside it |
+| B2, B3 | Global Class Field Theory | 10B.3 | `NumberFieldOrder.properIdeals` | the group of **proper** fractional ideals, `{x ∈ K ∣ xI ⊆ I} = O` |
+| B2, B3, B4, B5 | Global Class Field Theory | 10B.4 | `Pic`, `NumberFieldOrder.mkPic`, `mkPic_surjective`, `finite_pic` | the Picard group of the order, with the class of a proper ideal, its surjectivity, and finiteness |
+| B2, B3, B4, B5 | Global Class Field Theory | 10B.4 | `NarrowPic`, `NumberFieldOrder.narrowPrincipal`, `narrowPic_surjective`, `finite_narrowPic` | the narrow Picard group, the quotient by the principal ideals with a generator of **positive norm**, with its surjection onto `Pic O` and finiteness |
+| B3 | Global Class Field Theory | 10C.1 | `ringClassField`, `gal_ringClassField_equiv_pic` | `Gal(H_O/K) ≅ Pic O` |
 | 4B | Orthogonal and Spin Groups | 0C | `orthogonalGroup_mulEquiv_bilinear`\* | `orthogonalGroup Q ≃* O(Q.polarBilin)` when `2` is invertible |
 | 4B | Orthogonal and Spin Groups | 0C | `orthogonalMap_baseChange`\* | `O(β) →* O(β.baseChange S)` for a symmetric bilinear form over a commutative ring |
 | 4C | Orthogonal and Spin Groups | Layer 1 | `spinorNorm` | `[FiniteDimensional K V] (Q : QuadraticForm K V) (hQ : Q.Nondegenerate) : orthogonalGroup Q →* SquareClass K` |
@@ -293,14 +303,13 @@ both roadmaps use, marked with an asterisk, and the supplier owns the final choi
 not exist yet, with exactly these fields, so that a consumer statement is written once and
 does not change when the supplier lands.
 
-### Shared layer-DAG table: Integral Lattices ↔ L-functions
+### The one-way edge to the L-functions roadmap
 
-The two roadmaps consume each other at different layers. This table is the whole
-interface, and it is byte-identical in both `README.md` files. Nothing crosses between the
-two roadmaps except through a row of this table. The supplier owns each name, and the
-consumer cites the name instead of restating the object. The carrier is the bundled analytic
-lattice: a submodule of a Euclidean space together with its discreteness and its `IsZLattice`
-proof.
+The dependency runs in **one direction only**: this roadmap consumes four declarations of
+L-functions Layer 2, and that roadmap consumes nothing from this one. Nothing crosses the
+boundary except through a row below. The supplier owns each name, and the consumer cites the
+name instead of restating the object. The carrier is the bundled analytic lattice: a submodule
+of a Euclidean space together with its discreteness and its `IsZLattice` proof.
 
 | Consumer layer | Supplier layer | Exact object or theorem | Agreed provisional name |
 | --- | --- | --- | --- |
@@ -308,13 +317,23 @@ proof.
 | Integral Lattices 8D | L-functions Layer 2, item 2 | biduality `dual (dual Λ) = Λ` | `ZLattice.dual_dual` |
 | Integral Lattices 8D | L-functions Layer 2, item 3 | `covolume Λ * covolume (dual Λ) = 1` | `ZLattice.covolume_mul_covolume_dual` |
 | Integral Lattices 8E | L-functions Layer 2, item 8 | `Θ_Λ(1/t) = t^{n/2} (covolume Λ)⁻¹ Θ_{dual Λ}(t)` for real `t > 0` | `ZLattice.gaussianTheta_one_div` |
-| L-functions Layer 2, items 10 to 13 | Integral Lattices 1B | the dual lattice of an integral bilinear form, and the vocabulary for it | `IntegralLattice.dual` |
-| L-functions Layer 2, items 10 to 13 | Integral Lattices 8D | the analytic dual of the realization of `L` equals `IntegralLattice.dual` | `IntegralLattice.analyticDual_eq_dual` |
 
 Poisson summation for a lattice is an L-functions target and is not consumed here, so it has
-no row. The dependency is acyclic at item level: L-functions items 1, 2, 3 and 8 use nothing
-from this roadmap; Integral Lattices 8D and 8E use those four items; and L-functions items 10
-to 13 use 1B and 8D.
+no row.
+
+⚠ An earlier revision of this section carried two further rows, making L-functions Layer 2
+consume `IntegralLattice.dual` and `IntegralLattice.analyticDual_eq_dual` from 1B and 8D, and
+claimed the block was byte-identical in both documents. **Both claims were obsolete.** The
+L-functions roadmap formulates its trace-to-Euclidean comparison through Mathlib's
+`FractionalIdeal.dual`, so no dual of an integral bilinear form enters its Layer 2 at all, and
+its own table is an export list of these four names and nothing else. The two rows are deleted
+here, the byte-identical claim with them, and the edge is
+
+```text
+L-functions Layer 2 → Integral Lattices Layers 8D–8E
+```
+
+and not a two-way item-level cycle. No milestone of L-functions Layer 2 cites this roadmap.
 
 ---
 
@@ -581,10 +600,19 @@ numbers, and 7G for the mass. Its theory is the arithmetic of quadratic orders, 
 not the theory the other ranks use. This layer builds it, and its inputs are Layers 0 to 3
 only; in particular B8 proves the rank-2 passage from the proper mass to the full mass
 here, rather than waiting for 7A. Mathlib has `Zsqrtd` and Pell's equation, and it has no
-theory of non-maximal quadratic orders or of binary form classes, so B1 to B5 are built
-here.
+theory of non-maximal quadratic orders or of binary form classes.
 
-**B1. The order of a binary lattice.** Let `L` be nondegenerate of rank 2, with Gram matrix
+⚠ **The order and its class groups are consumed, not built.** Global Class Field Theory
+Layer 10B owns orders in a number field, their conductors, their proper fractional ideals,
+their Picard groups — wide and narrow — and Layer 10C owns the ring class field; the supplier
+table above lists every declaration. This layer owns the **binary** side: the norm form, the
+content and the discriminant, the map from a form to an ideal, the composition law, the
+automorphism groups, and the rank-2 mass. The dictionary lands in the supplier's groups, so
+that Gauss composition is multiplication in `Pic O` and not in a copy of it, and so that B3's
+ring-class-field corollary is a statement about one Galois group.
+
+**B1. The order of a binary lattice**, as a term of the consumed carrier. Let `L` be
+nondegenerate of rank 2, with Gram matrix
 `!![A, B; B, C]` in a basis. Its norm form is `N_L(x, y) = A x² + 2B x y + C y²`, an integral
 binary quadratic form with even middle coefficient and discriminant
 `disc N_L = 4B² − 4AC = −4 det L`. Write `N_L = c·f` with `c > 0` the content and `f`
@@ -593,18 +621,50 @@ primitive. Then `Δ(L) := disc f` satisfies `Δ ≡ 0` or `1 (mod 4)`, is negati
 the order is `𝒪(L) = ℤ[(Δ + √Δ)/2] ⊆ K_Δ`, of discriminant `Δ`. The milestone also fixes an
 orientation of `L` and proves that `c`, `f` and `Δ` do not depend on the chosen basis.
 
+The construction **returns a `NumberFieldOrder K_Δ`**, the supplier's type, and proves that its
+`conductor` is the conductor `f_Δ` of `𝒪_Δ` in the maximal order of `K_Δ`. It defines no order
+type of its own. ⚠ `𝒪_Δ` is nonmaximal whenever `Δ` is not a fundamental discriminant, which is
+the whole reason the supplier's Layer 10B exists: the Dedekind-generic ray class machinery does
+not apply to it, and neither does `ClassGroup (𝓞 K)`.
+
 **B2. Forms and ideal classes.** Fix `Δ ≡ 0` or `1 (mod 4)`, and let `f = (a, b, c)` be a
 primitive form of discriminant `Δ`. Send it to the `𝒪_Δ`-submodule
 `𝔞_f = aℤ + ((−b + √Δ)/2)ℤ` of `K_Δ`. This map is a bijection from proper equivalence
-classes of primitive forms of discriminant `Δ` to proper ideal classes of `𝒪_Δ`. For `Δ < 0` the source is the set of positive definite classes and the
-target is `Pic(𝒪_Δ)`. For `Δ > 0` the target is the narrow class group, in which two proper
-ideals are identified when they differ by a principal ideal with a generator of positive norm.
+classes of primitive forms of discriminant `Δ` to proper ideal classes of `𝒪_Δ`. The ideal
+`𝔞_f` is exhibited as a member of the consumed `NumberFieldOrder.properIdeals`, and the
+equivalence is proved **into the consumed group**, not into a target defined here:
+
+- for `Δ < 0` the source is the set of positive definite classes and the target is
+  `Pic 𝒪_Δ`, through the consumed `NumberFieldOrder.mkPic`;
+- for `Δ > 0` the target is the consumed `NarrowPic 𝒪_Δ`, the quotient by the principal ideals
+  with a generator of positive norm.
+
+⚠ The positive-discriminant target is `NarrowPic` and never `Pic`. The two differ exactly when
+the fundamental unit has norm `+1`, and `Δ = 12` is the smallest witness: `Pic 𝒪_{12}` is
+trivial while `NarrowPic 𝒪_{12}` has order 2, and the forms `x² − 3y²` and `−x² + 3y²` are
+inequivalent properly while representing the same ideal class. A dictionary stated into `Pic`
+for `Δ > 0` is false, and the ownership of the narrow group is the supplier's so that no second
+narrow quotient exists to state it into.
+
 Cox, *Primes of the form x²+ny²*, Theorem 7.7 and its narrow analogue is the source.
 
-**B3. Compatibility.** The bijection of B2 carries Gauss composition to multiplication of
-classes, the opposite form to the inverse class, and the principal form to the trivial
-class. It carries the genus of `L`, in the sense of 3F, to a coset of the subgroup of
-squares. Discriminants agree on both sides.
+**B3. Compatibility, and the ring class field.** The bijection of B2 carries Gauss composition
+to multiplication **in the consumed group** — in `Pic 𝒪_Δ` for `Δ < 0` and in `NarrowPic 𝒪_Δ`
+for `Δ > 0` — the opposite form to the inverse class, and the principal form to the trivial
+class. It carries the genus of `L`, in the sense of 3F, to a coset of the subgroup of squares.
+Discriminants agree on both sides.
+
+Because the target is the supplier's group and not a copy of it, one further statement is
+available and is a milestone here:
+
+```text
+Gal(H_{𝒪_Δ}/K_Δ) ≃ Pic 𝒪_Δ ≃ proper equivalence classes of primitive forms of discriminant Δ
+```
+
+for `Δ < 0`, the first isomorphism being the consumed `gal_ringClassField_equiv_pic` and the
+second the dictionary of B2. This roadmap proves the composite, and neither half. It is the
+statement that makes the classical `x² + ny²` criteria a fact about binary forms, and it is
+exactly what a copy of the Picard group would not have delivered.
 
 **B4. Automorphisms, ambiguous classes, and the Pell criterion.** For nondegenerate binary
 `L`,
@@ -620,7 +680,8 @@ milestone proves
 
     [O(L) : SO(L)] = 2  ⟺  f and f⁻ are properly equivalent  ⟺  [𝔞_f]² = 1,
 
-the class being taken in `Pic(𝒪_Δ)` for `Δ < 0` and in the narrow class group for `Δ > 0`.
+the class being taken in the consumed `Pic 𝒪_Δ` for `Δ < 0` and in the consumed `NarrowPic 𝒪_Δ`
+for `Δ > 0`.
 A class satisfying this is called ambiguous, and an improper automorphism is then obtained
 by composing the reflection `σ(x, y) = (x, −y)`, which carries `f` to `f⁻`, with any proper
 equivalence from `f⁻` back to `f`.
@@ -630,7 +691,7 @@ The witness for the other case is `!![4, 1; 1, 6]`, of determinant 23, whose nor
 of that norm are `±e₁`, so an isometry sends `e₁` to `±e₁`, and preserving `β e₁ e₂` and
 the norm of `e₂` then forces `±I`, the integrality of the remaining coefficient being what
 rules out the other solution. Hence `O(L) = SO(L) = {±I}` has order 2, while `#𝒪ˣ = 2` and
-`2·#𝒪ˣ = 4`. The class of `(2, 1, 3)` has order 3 in `Pic(𝒪_{−23}) ≅ ℤ/3`, so it is not
+`2·#𝒪ˣ = 4`. The class of `(2, 1, 3)` has order 3 in `Pic 𝒪_{−23} ≅ ℤ/3`, so it is not
 ambiguous, which is the same statement on the ideal side.
 
 Three cases follow:
@@ -645,10 +706,13 @@ Three cases follow:
   and `O(L)` is finite. The hyperbolic plane `U` has content 2, primitive part `xy`, so
   `Δ = 1` and `𝒪 = ℤ × ℤ`; its class is ambiguous and `|O(U)| = 4 = 2·|SO(U)|`.
 
-**B5. Finiteness of the class group.** `Pic(𝒪_Δ)` and its narrow analogue are finite. The
-route is reduction of binary forms: for `Δ < 0` the reduced forms satisfy `|b| ≤ a ≤ c`, and
-for `Δ > 0` the reduced forms fall into finitely many cycles under the continued-fraction
-step. Both give an explicit finite list of classes for each `Δ`.
+**B5. Reduction of forms, and the class number.** Finiteness of `Pic 𝒪_Δ` and of
+`NarrowPic 𝒪_Δ` is the consumed `finite_pic` and `finite_narrowPic`, and is not proved again
+here. What this milestone owns is the **form-side** route, which the supplier does not have and
+which is what a class-number computation runs: for `Δ < 0` the reduced forms satisfy
+`|b| ≤ a ≤ c`, and for `Δ > 0` the reduced forms fall into finitely many cycles under the
+continued-fraction step. Both give an explicit finite list of classes for each `Δ`, and B2
+transports the count to the consumed group.
 
 **B6. The norm-one torus and its points.** For a binary lattice `L` with algebra `K_Δ`, the
 norm-one group is `T_L(R) = {u ∈ (K_Δ ⊗ R)ˣ : N(u) = 1}` for `R = ℚ`, `ℚ_p`, `ℝ` and `ℤ_p`,
@@ -691,11 +755,11 @@ proves that these values agree with the Conway–Sloane normalization of 7H in r
 
 | Milestone | Direct prerequisites |
 | --- | --- |
-| B1 | M `Matrix.det`, `Zsqrtd`; L 0A, 0C |
-| B2 | M `Ideal`, `Submodule`; L B1 |
-| B3 | L 3F, B2 |
+| B1 | M `Matrix.det`, `Zsqrtd`; L 0A, 0C; R Global CFT `NumberFieldOrder`, `NumberFieldOrder.conductor` |
+| B2 | M `Ideal`, `Submodule`; L B1; R Global CFT `NumberFieldOrder.properIdeals`, `Pic`, `NumberFieldOrder.mkPic`, `NarrowPic` |
+| B3 | L 3F, B2; R Global CFT `Pic`, `NarrowPic`, `ringClassField`, `gal_ringClassField_equiv_pic` |
 | B4 | M `Pell.Solution₁`, `Pell.exists_of_not_isSquare`; L 2C, B1, B2, B3 |
-| B5 | L B2 |
+| B5 | L B2; R Global CFT `finite_pic`, `finite_narrowPic` |
 | B6 | M `ℤ_[p]`, `ℚ_[p]`, `LinearMap.BilinForm.baseChange`; L 3A, B4 |
 | B7 | M `MeasureTheory.Measure.haar`; L B6; R Orthogonal and Spin Groups Layer 5 |
 | B8 | L 2C, 3F, B2, B3, B4, B5 |
@@ -1257,8 +1321,8 @@ For unimodular `L` this becomes `Θ_L(−1/τ) = (τ/i)^{n/2} Θ_L(τ)`.
 | 8A | M `IsZLattice`, `EuclideanSpace`; L 0E, 2A |
 | 8B | M `Mathlib/Algebra/Module/ZLattice/Summable.lean`; L 2B, 8A |
 | 8C | M `jacobiTheta`; L 0A, 8B |
-| 8D | M `ZLattice.covolume`; L 1B, 2D, 8A; R L-functions Layer 2 |
-| 8E | L 8B, 8D; R L-functions Layer 2 |
+| 8D | M `ZLattice.covolume`; L 1B, 2D, 8A; R L-functions `ZLattice.dual`, `ZLattice.dual_dual`, `ZLattice.covolume_mul_covolume_dual` |
+| 8E | L 8B, 8D; R L-functions `ZLattice.gaussianTheta_one_div` |
 
 ### Layer 9: what the LMFDB lattice columns assert
 
@@ -1515,13 +1579,14 @@ Layer 0 comes first. After it, three groups of milestones are independent of eac
 The rest of the order follows the prerequisite tables:
 
 - milestones 3F to 3H need Layer 1 and the two suppliers named in their table;
-- Layer B needs Layers 0 to 3, and Layers 4 and 7 use it for rank 2;
+- Layer B needs Layers 0 to 3 and the order and Picard carriers of Global Class Field Theory
+  Layers 10B and 10C, and Layers 4 and 7 use it for rank 2;
 - Layer 4 needs Layers 2, 3 and B, and the Orthogonal and Spin Groups roadmap;
 - Layer 5 needs Layers 1 and 3;
 - Layer 6 needs Layers 1, 2 and 5, and milestone 6C also needs Root Systems;
 - Layer 7 needs Layers 2, 3, 4 and B, the volume theorem, and 6C, 6D and 6G for its
   checks, and 7I closes rank 16 after 7H;
-- milestones 8A to 8C need Layers 0 to 2, and 8D and 8E also need L-functions Layer 2;
+- milestones 8A to 8C need Layers 0 to 2; 8D needs the three dual declarations of L-functions Layer 2 and 8E its theta transformation, and neither supplies anything back;
 - Layer 9 comes last.
 
 The shortest route to the K3 results is `0 → 1 → 5`, together with the comparison 5A. That

@@ -108,9 +108,17 @@ outside the roadmap and is recorded here.
 
 Settled 2026-08-07, jointly with that roadmap. The L-functions roadmap owns the
 real-parameter Gaussian theta and its transformation, with Poisson summation; those cross
-through the shared layer-DAG table. This roadmap owns the holomorphic theta on the upper
+through the export table in `README.md`. This roadmap owns the holomorphic theta on the upper
 half-plane, its agreement with the real-parameter theta on the imaginary axis, and its
 modular transformation law, in Layer 8. Neither roadmap states the other's half.
+
+Revised 2026-08-09, after the group review of the open roadmaps. The division above is
+unchanged; what was wrong was the shape of the edge. This document's table had six rows and
+claimed to be byte-identical with the L-functions one, with the last two rows making that
+roadmap consume `IntegralLattice.dual` and `IntegralLattice.analyticDual_eq_dual`. Its Layer 2
+formulates the trace-to-Euclidean comparison through Mathlib's `FractionalIdeal.dual` and needs
+no dual of an integral bilinear form, so those two rows had no consumer and the claim of a
+two-way item-level relation was false. Four rows remain, all in one direction.
 
 ## Consumers
 
@@ -118,3 +126,24 @@ The LMFDB lattice section and the K3 surface pipeline motivated the layer bounda
 impose no convention beyond the Conway–Sloane genus symbols, which the convention table
 fixes. The K3 pipeline uses milestones 5G to 5I, milestone 5E, and the mass certificates
 of Layer 7.
+
+## The order and Picard-group boundary with Global Class Field Theory
+
+Settled 2026-08-09, from the group review of the open roadmaps. Layer B previously constructed
+the quadratic order of a primitive binary form and stated its dictionary onto "proper ideal
+classes of `𝒪_Δ`", writing the target as `Pic(𝒪_Δ)` and, for positive discriminant, as "the
+narrow class group". Neither name referred to anything: Global Class Field Theory owns orders and
+their Picard groups, and its Layer 10B had them in prose only.
+
+Both sides moved. That roadmap named `NumberFieldOrder`, `conductor`, `properIdeals`, `Pic`,
+`NarrowPic` and `ringClassField` with `gal_ringClassField_equiv_pic`; this one now returns the
+supplier's order from B1, states B2's equivalence into the supplier's groups, and gains the
+composite
+
+```text
+Gal(H_{𝒪_Δ}/K_Δ) ≃ Pic 𝒪_Δ ≃ proper form classes of discriminant Δ
+```
+
+as a B3 milestone. The narrow group is the supplier's, deliberately: two narrow quotients of one
+order would be two objects, and a composition law proved for one would not transfer to the other.
+
