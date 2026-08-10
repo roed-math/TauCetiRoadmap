@@ -110,7 +110,7 @@ theorem hasDirichletDensity_of_finite
 
 theorem hasDirichletDensity_of_symmDiff_finite
     (S T : Set (HeightOneSpectrum (𝓞 K))) (δ : ℝ)
-    (h : (S ∆ T).Finite) (hS : HasDirichletDensity K S δ) :
+    (h : ((S \ T) ∪ (T \ S)).Finite) (hS : HasDirichletDensity K S δ) :
     HasDirichletDensity K T δ := sorry
 
 /-- Layer 6: exact Abel summation for finite sequences. The interval is inclusive at the upper
@@ -138,7 +138,8 @@ theorem perronFormula_endpoint (c T : ℝ) (hc : 0 < c) (hT : 0 ≤ T) :
 theorem landau {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) {σ : ℝ}
     (hsum : ∀ s : ℂ, σ < s.re → LSeriesSummable (fun n ↦ (a n : ℂ)) s) :
     ¬ ∃ F : ℂ → ℂ, AnalyticAt ℂ F σ ∧
-      ∀ᶠ s : ℂ in 𝓝[>] σ, F s = LSeries (fun n ↦ (a n : ℂ)) s := sorry
+      ∀ᶠ s : ℂ in 𝓝[ {z : ℂ | σ < z.re} ] (σ : ℂ),
+        F s = LSeries (fun n ↦ (a n : ℂ)) s := sorry
 
 /-- Layer 9: Wiener–Ikehara with a separately named continuous boundary remainder. -/
 theorem wienerIkehara (a : ℕ → ℝ) (F G : ℂ → ℂ) (κ : ℝ)
