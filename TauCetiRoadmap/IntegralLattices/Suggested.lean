@@ -70,7 +70,7 @@ stated once and extended by that substitution.
 
 namespace TauCetiRoadmap.IntegralLattices
 
-open QuadraticMap MeasureTheory
+open QuadraticMap MeasureTheory NumberField
 open scoped Real
 
 universe u v
