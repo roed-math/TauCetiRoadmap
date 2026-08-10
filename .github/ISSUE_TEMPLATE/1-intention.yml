@@ -32,7 +32,6 @@ body:
         - OptimalTransport
         - OrthogonalL2Bases
         - PDE
-        - ProfiniteCohomology
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers
