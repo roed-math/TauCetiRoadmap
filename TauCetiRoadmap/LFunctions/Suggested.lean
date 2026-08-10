@@ -1,4 +1,6 @@
 import Mathlib
+import TauCetiRoadmap.NumberFieldArithmetic.Suggested
+import TauCetiRoadmap.GlobalClassFieldTheory.Suggested
 
 /-!
 # L-functions — axiomatics, Dedekind zeta, Hecke L-functions, and density theorems: target signatures
@@ -26,15 +28,25 @@ nonvanishing in meromorphic-order form), **Layer 8** (the density predicates, th
 class, the crossing constant, and Chebotarev over a general base field), and **Layer 9**
 (Wiener–Ikehara, `ψ_K`, `θ_K`, `π_K`, the Frobenius-fibre count, and Mertens), with `sorry`.
 
-⚠ **No milestone here is stated over an interface structure supplied by another roadmap.** An
-object that a sibling roadmap will eventually own is *constructed* here, from the modulus and
-the ray quotient in Layer 5.1, from the unitary weight, the finite character, and the
-parity-supported archimedean data in Layer 6.1, and
-from Mathlib's `arithFrobAt` in Layer 8.0. A theorem quantified over `(F : SomeInterface)` is
-conditional on an arbitrary term of that structure, and unrelated terms satisfy the fields of a
-small structure, so the public theorems below take no such parameter.
-[`PROVENANCE.md`](PROVENANCE.md) records which sibling roadmap each construction is expected to
-be replaced by, and how.
+⚠ **No milestone here is stated over an interface structure supplied by another roadmap, and no
+arithmetic carrier is built here either.** Those are different things, and this file does both.
+
+The modulus, the ray class group, the ray class character and the Hecke character are Global
+Class Field Theory's, and the Frobenius class is Number Field Arithmetic's. They are **imported
+and applied**, by the exact names in `README.md`'s two contract sections; the aliases in the
+Layer 1.7 block are reducible abbreviations of the supplier's declarations and not copies of
+them. Layer 8.0's `frobeniusClass` and its two compatibility theorems carry **closed** proofs, so
+a change to the supplier's signature fails the build rather than drifting silently.
+
+What Layer 6.1 builds is a *presentation* of a Hecke character in the sense of Neukirch VII
+(6.9) — a unitary weight, a real shift, a finite `MulChar`, and parity-supported archimedean data
+— together with `toHeckeCharacter`, the map to the object presented. That is analytic
+coordinates on a consumed object, not a second carrier.
+
+A theorem quantified over `(F : SomeInterface)` remains forbidden: it is conditional on an
+arbitrary term of that structure, unrelated terms satisfy the fields of a small structure, and
+the public theorems below take no such parameter. Consuming a named declaration of an earlier
+roadmap is the opposite of that, because the object then has one owner and one definition.
 
 Per the honest-`sorry` rule, a milestone whose *statement* needs API that does not exist at
 the pin is not stated here, and lives in `README.md` only. That applies to the lattice theta
@@ -655,22 +667,23 @@ example (c : ClassGroup (𝓞 K)) :
         NumberField.dedekindZeta_residue K / (Nat.card (ClassGroup (𝓞 K)) : ℝ) * x)
       =O[atTop] fun x : ℝ ↦ x ^ (1 - 1 / (Module.finrank ℚ K : ℝ)) := sorry
 
-/-! ### Layers 1.7 and 1.8: moduli, the ray class group, and partial zeta functions
+/-! ### Layers 1.7 and 1.8: the consumed ray-class API, and partial zeta functions
 
-The carriers named in the prose of 1.7 — the modulus, `J^{𝔪₀}`, `P^𝔪`, and the quotient — are
-built here, because Layers 5, 7.5, 8E, and 9.11 all read them. Nothing below is stated over an
-interface: a ray-class character in Layer 5.1 is a character of the quotient constructed here. -/
+The modulus, `J^{𝔪₀}`, `P^𝔪` and the quotient are **not** built here. The Global Class Field
+Theory roadmap owns them, and `README.md`'s contract section with that roadmap lists every
+declaration consumed, with the statement relied on. The three aliases below are aliases and not
+copies: each is a reducible abbreviation of the supplier's declaration, so a term of one is a
+term of the other with no coercion, and the only reason they exist is that this roadmap's
+analytic API — the derived ideal weight, the local signs, the partial zeta functions — is
+reached by dot notation off them.
 
-/-- **Layer 1.7, a modulus** `𝔪 = 𝔪₀ 𝔪_∞`. ⚠ The finite part and the infinite part are separate
-data, and neither may be dropped: the gamma factor of 5.5 reads `𝔪_∞`, and the level of 5.7
-reads `𝔪₀`. -/
-structure Modulus where
-  /-- The finite part `𝔪₀`. -/
-  finitePart : Ideal (𝓞 K)
-  finitePart_ne_bot : finitePart ≠ ⊥
-  /-- The infinite part `𝔪_∞`, a set of **real** places. -/
-  infinitePart : Finset (InfinitePlace K)
-  infinitePart_isReal : ∀ v ∈ infinitePart, v.IsReal
+What is built here is the analytic material: the partial zeta function of a ray class, its
+summability, and its residue. -/
+
+/-- **Consumed, Global CFT 0.1.** A modulus `𝔪 = 𝔪₀ 𝔪_∞`. ⚠ The infinite part is a `Finset` of
+**real places**, typed as a subtype; `Modulus.realPlaces` below is its image among all infinite
+places, which is the indexing this roadmap's gamma factors use. -/
+abbrev Modulus (K : Type*) [Field K] [NumberField K] := GlobalClassFieldTheory.Modulus K
 
 section RayClass
 
@@ -678,102 +691,48 @@ variable {K}
 
 namespace Modulus
 
-/-- **Layer 1.7, `J^{𝔪₀}`**, the group of fractional ideals prime to the finite part, realized as
-the subgroup of the ideal group generated by the primes that do not divide `𝔪₀`. -/
-noncomputable def coprimeIdeals (𝔪 : Modulus K) : Subgroup (FractionalIdeal (𝓞 K)⁰ K)ˣ :=
-  Subgroup.closure {I : (FractionalIdeal (𝓞 K)⁰ K)ˣ | ∃ 𝔭 : HeightOneSpectrum (𝓞 K),
-    ¬ 𝔭.asIdeal ∣ 𝔪.finitePart ∧
-      (I : FractionalIdeal (𝓞 K)⁰ K) = (𝔭.asIdeal : FractionalIdeal (𝓞 K)⁰ K)}
+open scoped Classical in
+/-- The places of `𝔪_∞`, among all infinite places. The supplier types the infinite part by real
+places, which is right there; the archimedean data of Layers 5 and 6 is indexed by
+`InfinitePlace K`, so this is the image. It is an adapter and not a second infinite part: it is
+defined from the supplier's field and has no independent content. -/
+noncomputable def realPlaces (𝔪 : Modulus K) : Finset (InfinitePlace K) :=
+  𝔪.infinitePart.image Subtype.val
 
-/-- **Layer 1.7, `P^𝔪`**, the ray subgroup: generated by the principal ideals `(α)` with
-`α ≡ 1 mod 𝔪₀` and `α` positive at every place of `𝔪_∞`.
+theorem isReal_of_mem_realPlaces {𝔪 : Modulus K} {v : InfinitePlace K} (hv : v ∈ 𝔪.realPlaces) :
+    v.IsReal := sorry
 
-⚠ It is the **subgroup generated by** those, and it is a group of *fractional* ideals. A
-condition written only on integral `α` is not a subgroup of the ideal group, and a weight
-trivial on such a set of integral elements need not factor through the quotient below. That is
-the defect a field named `trivial_on_congruence` on an ideal weight has. -/
-noncomputable def rayPrincipal (𝔪 : Modulus K) : Subgroup (FractionalIdeal (𝓞 K)⁰ K)ˣ :=
-  Subgroup.closure {I : (FractionalIdeal (𝓞 K)⁰ K)ˣ | ∃ α : 𝓞 K, α ≠ 0 ∧
-    α - 1 ∈ 𝔪.finitePart ∧
-    (∀ v ∈ 𝔪.infinitePart, 0 < (v.embedding (algebraMap (𝓞 K) K α)).re) ∧
-    (I : FractionalIdeal (𝓞 K)⁰ K) = ((Ideal.span {α} : Ideal (𝓞 K)) : FractionalIdeal (𝓞 K)⁰ K)}
+theorem card_realPlaces (𝔪 : Modulus K) : 𝔪.realPlaces.card = 𝔪.infinitePart.card := sorry
 
-theorem rayPrincipal_le_coprimeIdeals (𝔪 : Modulus K) :
-    𝔪.rayPrincipal ≤ 𝔪.coprimeIdeals := sorry
+/-! #### The consumed declarations, aliased
 
-/-- **Layer 1.7, the ray class group** `J^{𝔪₀}/P^𝔪`, as an explicit quotient of explicit
-subgroups. Layer 5.1's characters are characters of this group. -/
-noncomputable def RayClassGroup (𝔪 : Modulus K) : Type _ :=
-  𝔪.coprimeIdeals ⧸ 𝔪.rayPrincipal.subgroupOf 𝔪.coprimeIdeals
+Each abbreviation below **is** the supplier's declaration, reducibly. None of them is a second
+definition: a term of the left-hand side is a term of the right-hand side with no coercion, and
+the elaborator sees through every one. They exist so that this roadmap's own analytic API is
+reachable by dot notation off the same carrier, and so that every use site names its supplier. -/
 
-noncomputable instance (𝔪 : Modulus K) : CommGroup 𝔪.RayClassGroup :=
-  inferInstanceAs (CommGroup (𝔪.coprimeIdeals ⧸ 𝔪.rayPrincipal.subgroupOf 𝔪.coprimeIdeals))
+/-- **Consumed, Global CFT 1.2.** `Cl_𝔪 K = J^{𝔪₀} ⧸ P_𝔪`. -/
+abbrev RayClassGroup (𝔪 : Modulus K) := GlobalClassFieldTheory.RayClassGroup 𝔪
 
-/-- **Layer 1.7, finiteness of the ray class group.** It is what makes 1.7's sum over `Q` finite
-and every character of 5.1 of finite order. -/
-theorem finite_rayClassGroup (𝔪 : Modulus K) : Finite 𝔪.RayClassGroup := sorry
+/-- **Consumed, Global CFT 1.2.** The ray class of an integral ideal prime to `𝔪₀`. -/
+noncomputable abbrev idealClass (𝔪 : Modulus K) (I : Ideal (𝓞 K)) : RayClassGroup 𝔪 :=
+  GlobalClassFieldTheory.idealClass 𝔪 I
 
-/-- **Layer 1.7, coprimality to the modulus**, as one predicate used by everything below. -/
-def IsCoprimeTo (𝔪 : Modulus K) (I : Ideal (𝓞 K)) : Prop :=
-  I ≠ ⊥ ∧ ∀ 𝔭 : HeightOneSpectrum (𝓞 K), 𝔭.asIdeal ∣ 𝔪.finitePart → ¬ 𝔭.asIdeal ∣ I
+/-- **Consumed, Global CFT 0.1.** The trivial modulus `((1), ∅)`. -/
+abbrev one (K : Type*) [Field K] [NumberField K] : Modulus K :=
+  GlobalClassFieldTheory.Modulus.one K
 
-/-- **Layer 1.7, the ray class of an integral ideal prime to `𝔪₀`.** The value on an ideal that
-is not prime to `𝔪₀` is not used; the three theorems below are the whole interface. -/
-noncomputable def idealClass (𝔪 : Modulus K) (I : Ideal (𝓞 K)) : 𝔪.RayClassGroup := sorry
+/-- **Consumed, Global CFT 1.4.** The transition map `Cl_𝔪 ↠ Cl_𝔫` for `𝔫 ∣ 𝔪`. Induction of
+characters in 5.4 is precomposition with it, and primitivity in 5.1 is stated against it. -/
+noncomputable abbrev classMap {𝔫 𝔪 : Modulus K} (h : 𝔫 ∣ 𝔪) :
+    RayClassGroup 𝔪 →* RayClassGroup 𝔫 :=
+  GlobalClassFieldTheory.classMap h
 
-theorem idealClass_mul (𝔪 : Modulus K) {I J : Ideal (𝓞 K)}
-    (hI : 𝔪.IsCoprimeTo I) (hJ : 𝔪.IsCoprimeTo J) :
-    𝔪.idealClass (I * J) = 𝔪.idealClass I * 𝔪.idealClass J := sorry
-
-/-- **Layer 1.7**: the class map kills exactly the ray-principal ideals. This is what "the weight
-factors through the ray class group" means, and it is a theorem about a canonical map rather than
-a field on an arbitrary function. -/
-theorem idealClass_eq_one_iff (𝔪 : Modulus K) {I : Ideal (𝓞 K)} (hI : 𝔪.IsCoprimeTo I) :
-    𝔪.idealClass I = 1 ↔
-      ∃ α β : 𝓞 K, α ≠ 0 ∧ β ≠ 0 ∧ α - 1 ∈ 𝔪.finitePart ∧ β - 1 ∈ 𝔪.finitePart ∧
-        (∀ v ∈ 𝔪.infinitePart, 0 < (v.embedding (algebraMap (𝓞 K) K α)).re) ∧
-        (∀ v ∈ 𝔪.infinitePart, 0 < (v.embedding (algebraMap (𝓞 K) K β)).re) ∧
-        I * Ideal.span {β} = Ideal.span {α} := sorry
-
-/-- **Layer 1.7**: every class contains an integral ideal prime to `𝔪₀`. This is the surjectivity
-that makes the fibres of `idealClass` a partition of those ideals, and it is what 5.6's choice of
-ray-class representatives rests on. -/
-theorem idealClass_surjective (𝔪 : Modulus K) (c : 𝔪.RayClassGroup) :
-    ∃ I : Ideal (𝓞 K), 𝔪.IsCoprimeTo I ∧ 𝔪.idealClass I = c := sorry
-
-/-- **Layer 1.7, divisibility of moduli**, which is the order induction runs along. -/
-def Dvd (𝔫 𝔪 : Modulus K) : Prop :=
-  𝔫.finitePart ∣ 𝔪.finitePart ∧ 𝔫.infinitePart ⊆ 𝔪.infinitePart
-
-/-- **Layer 1.7, the trivial modulus** `(1)`, with empty infinite part. It divides every modulus,
-its ray class group is the class group, and it is the conductor of every norm quasicharacter of
-6.4. -/
-noncomputable def one : Modulus K where
-  finitePart := ⊤
-  finitePart_ne_bot := sorry
-  infinitePart := ∅
-  infinitePart_isReal := by simp
-
-theorem one_dvd (𝔪 : Modulus K) : Dvd one 𝔪 := sorry
-
-/-- **Layer 1.7, the canonical reduction map on residue units** along a divisibility of moduli:
-`Ideal.Quotient.factor` on the residue rings, restricted to the unit groups. It is the map the
-finite-character square of 6.1's induction relation commutes along. -/
-noncomputable def finiteUnitsMap {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) :
+/-- **Consumed, Global CFT 1.4.** The reduction map on residue units along `𝔫 ∣ 𝔪`. ⚠ It is the
+units-pullback and never a ring composition; the witness is `3 mod 6 ↦ 1 mod 2`. -/
+noncomputable abbrev finiteUnitsMap {𝔫 𝔪 : Modulus K} (h : 𝔫 ∣ 𝔪) :
     ((𝓞 K) ⧸ 𝔪.finitePart)ˣ →* ((𝓞 K) ⧸ 𝔫.finitePart)ˣ :=
-  Units.map (Ideal.Quotient.factor (Ideal.le_of_dvd h.1)).toMonoidHom
-
-/-- **Layer 1.7, the canonical projection between the ray class groups of nested moduli.**
-Induction of characters in 5.4 is precomposition with this map, and primitivity in 5.1 is stated
-against it, so it is a named declaration and not an existential. -/
-noncomputable def classMap {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) :
-    𝔪.RayClassGroup →* 𝔫.RayClassGroup := sorry
-
-theorem classMap_idealClass {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) {I : Ideal (𝓞 K)}
-    (hI : 𝔪.IsCoprimeTo I) : classMap h (𝔪.idealClass I) = 𝔫.idealClass I := sorry
-
-theorem classMap_surjective {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) :
-    Function.Surjective (classMap h) := sorry
+  GlobalClassFieldTheory.finiteUnitsMap h
 
 /-- **Layer 1.7, the ray partial zeta function** on an exact carrier: the fibre of `idealClass`
 over `c`, taken over the integral ideals prime to `𝔪₀`.
@@ -1259,12 +1218,12 @@ not as "there is no function `ψ` agreeing with `χ` away from a divisor": a bar
 not required to be a character, so the negation of its existence is a much weaker condition than
 primitivity, and 5.6 and 5.8 are false under it. -/
 def IsPrimitive {𝔪 : Modulus K} (χ : RayClassCharacter 𝔪) : Prop :=
-  ∀ (𝔫 : Modulus K) (h : 𝔫.Dvd 𝔪), 𝔫 ≠ 𝔪 →
+  ∀ (𝔫 : Modulus K) (h : 𝔫 ∣ 𝔪), 𝔫 ≠ 𝔪 →
     ¬ ∃ ψ : RayClassCharacter 𝔫, ψ.comp (Modulus.classMap h) = χ
 
 /-- **Layer 5.4, induction from a divisor of the modulus**, which is composition with the
 projection and therefore automatically a character. -/
-noncomputable def induced {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) (ψ : RayClassCharacter 𝔫) :
+noncomputable def induced {𝔫 𝔪 : Modulus K} (h : 𝔫 ∣ 𝔪) (ψ : RayClassCharacter 𝔫) :
     RayClassCharacter 𝔪 :=
   ψ.comp (Modulus.classMap h)
 
@@ -1288,10 +1247,10 @@ theorem weight_apply {𝔪 : Modulus K} (χ : RayClassCharacter 𝔪) {I : Ideal
 ⚠ In the interface version this was a field on an arbitrary ideal weight, quantified over
 integral `α` only. That condition does not make the weight factor through the ray class group,
 because the ideals prime to `𝔪₀` form a free group and a weight may be prescribed arbitrarily on
-its generators; here it is a consequence of `Modulus.idealClass_eq_one_iff`. -/
+its generators; here it is a consequence of `GlobalClassFieldTheory.idealClass_eq_one_iff`. -/
 theorem weight_eq_one_of_ray {𝔪 : Modulus K} (χ : RayClassCharacter 𝔪) (α : 𝓞 K) (hα : α ≠ 0)
     (h₀ : α - 1 ∈ 𝔪.finitePart)
-    (hinf : ∀ v ∈ 𝔪.infinitePart, 0 < (v.embedding (algebraMap (𝓞 K) K α)).re) :
+    (hinf : ∀ v ∈ 𝔪.realPlaces, 0 < (v.embedding (algebraMap (𝓞 K) K α)).re) :
     χ.weight.toFun (Ideal.span {α}) = 1 := sorry
 
 /-- **Layer 5.1, finite order**, a theorem from the finiteness of the ray class group. -/
@@ -1311,7 +1270,7 @@ theorem weight_one {𝔪 : Modulus K} (I : Ideal (𝓞 K)) (hI : 𝔪.IsCoprimeT
 
 /-- **Layer 5.4, the induced weight agrees on the ideals prime to the larger modulus**; the
 L-function-level Euler-factor correction is `heckeLFunctionC_induced` in 5.3's block. -/
-theorem weight_induced {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) (ψ : RayClassCharacter 𝔫)
+theorem weight_induced {𝔫 𝔪 : Modulus K} (h : 𝔫 ∣ 𝔪) (ψ : RayClassCharacter 𝔫)
     {I : Ideal (𝓞 K)} (hI : 𝔪.IsCoprimeTo I) :
     (induced h ψ).weight.toFun I = ψ.weight.toFun I := sorry
 
@@ -1329,7 +1288,7 @@ theorem localSign_sq {𝔪 : Modulus K} (χ : RayClassCharacter 𝔪) {v : Infin
 primitive character. This is the theorem the gamma factor reads. -/
 theorem localSign_eq_neg_one_iff {𝔪 : Modulus K} {χ : RayClassCharacter 𝔪} (hχ : χ.IsPrimitive)
     {v : InfinitePlace K} (hv : v.IsReal) :
-    χ.localSign v = -1 ↔ v ∈ 𝔪.infinitePart := sorry
+    χ.localSign v = -1 ↔ v ∈ 𝔪.realPlaces := sorry
 
 end RayClassCharacter
 
@@ -1340,20 +1299,20 @@ quantified. A theorem of the shape "for every primitive `η` of this modulus …
 such `η` exists, so it cannot detect a carrier that accidentally trivializes the quotient or
 empties primitivity; these constructions are what the acceptance tests of 6.4 instantiate. -/
 
+open scoped Classical in
 /-- **Layer 5.1, the modulus `(4)∞` over `ℚ`**: finite part `(4)`, infinite part the real
-place. -/
+place. ⚠ The infinite part is a `Finset` of the supplier's real-place subtype, so `Finset.univ`
+here is the one real place of `ℚ` and not all infinite places. -/
 noncomputable def modulusFourInfinity : Modulus ℚ where
   finitePart := Ideal.span {(4 : 𝓞 ℚ)}
   finitePart_ne_bot := sorry
   infinitePart := Finset.univ
-  infinitePart_isReal := sorry
 
 /-- **Layer 5.1, the modulus `(5)` over `ℚ`**, with empty infinite part. -/
 noncomputable def modulusFive : Modulus ℚ where
   finitePart := Ideal.span {(5 : 𝓞 ℚ)}
   finitePart_ne_bot := sorry
   infinitePart := ∅
-  infinitePart_isReal := by simp
 
 /-- **Layer 5.1, the odd character modulo `(4)∞`, constructed**: the character of the ray class
 group of `modulusFourInfinity` whose value on the class of `(n)`, for odd positive `n`, is
@@ -1400,7 +1359,7 @@ theorem heckeLFunctionC_eq {𝔪 : Modulus K} (χ : RayClassCharacter 𝔪) {s :
 /-- **Layer 5.4, the imprimitive correction at the level of L-functions**: induction multiplies
 the continued L-function by the finite Euler factors at the primes of `𝔪₀` off `𝔫₀`. This, and
 not a second card, is what an imprimitive character owns. -/
-theorem heckeLFunctionC_induced {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) (ψ : RayClassCharacter 𝔫)
+theorem heckeLFunctionC_induced {𝔫 𝔪 : Modulus K} (h : 𝔫 ∣ 𝔪) (ψ : RayClassCharacter 𝔫)
     (s : ℂ) :
     heckeLFunctionC (RayClassCharacter.induced h ψ) s = heckeLFunctionC ψ s *
       ∏ᶠ 𝔭 : {𝔭 : HeightOneSpectrum (𝓞 K) //
@@ -1474,7 +1433,7 @@ noncomputable def heckeData {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) (h�
   coeff := idealCoeffOfWeight K η.weight.toFun
   conductor := ⟨(|discr K| * Ideal.absNorm 𝔪.finitePart : ℤ).toNat, sorry⟩
   gammaR := (Finset.univ.filter fun v : InfinitePlace K ↦ v.IsReal).val.map
-    fun v ↦ if v ∈ 𝔪.infinitePart then 1 else 0
+    fun v ↦ if v ∈ 𝔪.realPlaces then 1 else 0
   gammaC := Multiset.replicate (nrComplexPlaces K) 0
   rootNumber := heckeRootNumber η
   completed := completedHeckeLFunction η
@@ -1488,14 +1447,14 @@ theorem degree_heckeData {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) (hη :
 /-- **Layer 5.1, the trivial character of a nontrivial modulus is imprimitive**: it is induced
 from the trivial modulus along `Modulus.classMap`. It is therefore a character that has
 `heckeLFunctionC` and the correction below, and **no card**. -/
-theorem not_isPrimitive_one {𝔪 : Modulus K} (h : 𝔪 ≠ Modulus.one) :
+theorem not_isPrimitive_one {𝔪 : Modulus K} (h : 𝔪 ≠ Modulus.one K) :
     ¬ (1 : RayClassCharacter 𝔪).IsPrimitive := sorry
 
 /-- **Layer 5.9, the principal regression at Layer 5**: the trivial character at `𝔪₀ = (p)` is
 imprimitive, and its presented series is the Dedekind zeta function times the removed Euler
 factors. With `heckeData` primitive-scoped, no Layer 5 card exists for it at the presented
 modulus — the pair of statements that keeps presentation levels out of the conductor field. -/
-theorem principalHecke_test (𝔪 : Modulus K) (h : 𝔪 ≠ Modulus.one) :
+theorem principalHecke_test (𝔪 : Modulus K) (h : 𝔪 ≠ Modulus.one K) :
     ¬ (1 : RayClassCharacter 𝔪).IsPrimitive ∧
       ∀ s : ℂ, heckeLFunctionC (1 : RayClassCharacter 𝔪) s =
         dedekindZetaC K s *
@@ -1624,7 +1583,15 @@ primitivity hypothesis of any 6.4 comparison at its Layer 5 modulus `(4)∞`, an
 conductor would silently drop the real place that its gamma factor `Gammaℝ(s + 1)` reads.
 
 ⚠ The exponent `shift` must be **real**. With a complex exponent the decomposition is ambiguous
-up to `𝔑^{it}`, and the uniqueness theorem below is false. -/
+up to `𝔑^{it}`, and the uniqueness theorem below is false.
+
+⚠ **This is a presentation, not a second carrier.** The Hecke character itself is
+`GlobalClassFieldTheory.HeckeCharacter K`, a continuous character of the idele class group, and
+that roadmap owns it. What is built here is the Neukirch VII (6.9) presentation of one: the data
+from which the coefficients, the gamma factor, the completion and the root number are computed.
+`toHeckeCharacter` below is the map to the object presented, `toHeckeCharacter_shift` matches the
+two decompositions, and `exists_presentation` is the surjectivity half of (6.9). Nothing in this
+roadmap defines a second notion of Hecke character, and no theorem here quantifies over one. -/
 structure Grossencharacter (𝔪 : Modulus K) where
   /-- The **unitary** component, which is the ideal weight. -/
   unitary : IdealWeight K
@@ -1640,7 +1607,7 @@ structure Grossencharacter (𝔪 : Modulus K) where
   parity_complex : ∀ v, v.IsComplex → parity v = 0
   /-- Odd parity occurs only at places of `𝔪_∞`; an imprimitive presentation may carry extra
   places of `𝔪_∞` with parity `0`. -/
-  parity_supported : ∀ v, v.IsReal → parity v = 1 → v ∈ 𝔪.infinitePart
+  parity_supported : ∀ v, v.IsReal → parity v = 1 → v ∈ 𝔪.realPlaces
   /-- The angular exponent `m_v` at a complex place. -/
   angular : InfinitePlace K → ℤ
   angular_real : ∀ v, v.IsReal → angular v = 0
@@ -1656,6 +1623,45 @@ structure Grossencharacter (𝔪 : Modulus K) where
 namespace Grossencharacter
 
 variable {𝔪 : Modulus K}
+
+/-! #### The object presented: the consumed Hecke character
+
+The Global Class Field Theory roadmap owns `HeckeCharacter K`, the continuous characters of the
+idele class group, and its Layer 3.5 owns the unitary decomposition. What this layer owns is the
+presentation from which analytic data is computed. The three declarations below are the whole of
+the relation, and `README.md`'s contract section with that roadmap records them.
+
+⚠ The direction matters. Without `toHeckeCharacter` the structure above would be a second notion
+of Hecke character with an accidental resemblance to the first, and every theorem below would be
+about that second notion. With it, the structure is a presentation, its fields are choices of
+coordinates, and a statement about the presented character is a statement about the supplier's
+object. -/
+
+/-- **Layer 6.1, the presented character**, Neukirch VII (6.9): the idele-class character that
+this presentation presents. The finite character, the archimedean characters and the weight are
+its local components, and the compatibility law is exactly the condition that they glue to a
+character of the idele **class** group rather than of the ideles. -/
+noncomputable def toHeckeCharacter (χ : Grossencharacter 𝔪) :
+    GlobalClassFieldTheory.HeckeCharacter K := sorry
+
+/-- **Layer 6.1**: the two decompositions agree. The supplier's `HeckeCharacter.shift` is the
+unique real `σ` with `|χ| = ‖·‖^σ`; this presentation stores it as a field, and the two are the
+same number. Without this theorem the stored `shift` would be an unrelated parameter, and the
+gamma shifts of 6.2 would be computed from something the presented character does not have. -/
+theorem toHeckeCharacter_shift (χ : Grossencharacter 𝔪) :
+    (χ.toHeckeCharacter).shift = χ.shift := sorry
+
+/-- **Layer 6.1, the surjectivity half of (6.9)**: every Hecke character trivial on the ray
+subgroup of `𝔪` has a presentation at `𝔪`. Together with `toHeckeCharacter` this says that the
+analytic theory below is a theory of the supplier's characters and not of a subclass carved out
+by the shape of this structure.
+
+⚠ Without it the carrier could be empty of everything interesting and every theorem of Layers 6.2
+to 6.4 would still be true. The three constructors below are the concrete non-vacuity tests; this
+is the abstract one. -/
+theorem exists_presentation (ψ : GlobalClassFieldTheory.HeckeCharacter K)
+    (hψ : ∀ y ∈ GlobalClassFieldTheory.RaySubgroup 𝔪, ψ y = 1) :
+    ∃ χ : Grossencharacter 𝔪, χ.toHeckeCharacter = ψ := sorry
 
 /-- **Layer 6.1, the mandatory non-vacuity test**: the pure norm character `𝔑^{σ}`, for an
 **arbitrary** real `σ`. ⚠ A carrier in which this does not typecheck cannot state a shifted
@@ -1735,7 +1741,7 @@ places of `𝔪_∞`. For an imprimitive `η` only the forward support inclusion
 carrier law. -/
 theorem ofRayClassCharacter_parity {𝔪 : Modulus K} {η : RayClassCharacter 𝔪}
     (hη : η.IsPrimitive) (v : InfinitePlace K) (hv : v.IsReal) :
-    (ofRayClassCharacter η).parity v = 1 ↔ v ∈ 𝔪.infinitePart := sorry
+    (ofRayClassCharacter η).parity v = 1 ↔ v ∈ 𝔪.realPlaces := sorry
 
 /-- **Layer 6.1, the full quasicharacter** `χ = χ_unit · 𝔑^{shift}`, *defined* from the two
 fields. It is a plain function on ideals and not an `IdealWeight`. -/
@@ -1913,13 +1919,13 @@ zero is what the `MulChar` carrier makes canonical.
 ⚠ Induction cannot remove a place supporting odd parity, and needs no clause to say so: the
 smaller character's `parity_supported` already forbids a term over `𝔫` whose parity is odd off
 `𝔫_∞`. -/
-noncomputable def induced {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) (ψ : Grossencharacter 𝔫) :
+noncomputable def induced {𝔫 𝔪 : Modulus K} (h : 𝔫 ∣ 𝔪) (ψ : Grossencharacter 𝔫) :
     Grossencharacter 𝔪 := sorry
 
 /-- **Layer 6.1, the relation the constructor realizes**, including the exact finite-character
 square along `Modulus.finiteUnitsMap`. ⚠ Without that clause the relation transports every
 datum the Gauss sum reads except the one it evaluates. -/
-def Induces {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) (ψ : Grossencharacter 𝔫)
+def Induces {𝔫 𝔪 : Modulus K} (h : 𝔫 ∣ 𝔪) (ψ : Grossencharacter 𝔫)
     (χ : Grossencharacter 𝔪) : Prop :=
   (∀ I : Ideal (𝓞 K), 𝔪.IsCoprimeTo I → ψ.unitary.toFun I = χ.unitary.toFun I) ∧
     (∀ x : ((𝓞 K) ⧸ 𝔪.finitePart)ˣ,
@@ -1929,7 +1935,7 @@ def Induces {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) (ψ : Grossencharacter �
     ψ.shift = χ.shift ∧ ψ.parity = χ.parity ∧ ψ.angular = χ.angular ∧
     ψ.archimedeanParam = χ.archimedeanParam
 
-theorem induces_induced {𝔫 𝔪 : Modulus K} (h : 𝔫.Dvd 𝔪) (ψ : Grossencharacter 𝔫) :
+theorem induces_induced {𝔫 𝔪 : Modulus K} (h : 𝔫 ∣ 𝔪) (ψ : Grossencharacter 𝔫) :
     Induces h ψ (induced h ψ) := sorry
 
 /-- **Layer 6.1, primitivity.** ⚠ Without it Layer 6.4's clean functional equation and entirety
@@ -1938,14 +1944,14 @@ with trivial infinite data and shift `0`; its L-function is `ζ(s)(1 − p^{-s})
 pole at `s = 1`, while its finite part is not `1`, so any exception predicate keyed on the modulus
 misses it. -/
 def IsPrimitive (χ : Grossencharacter 𝔪) : Prop :=
-  ∀ (𝔫 : Modulus K) (h : 𝔫.Dvd 𝔪), 𝔫 ≠ 𝔪 → ¬ ∃ ψ : Grossencharacter 𝔫, Induces h ψ χ
+  ∀ (𝔫 : Modulus K) (h : 𝔫 ∣ 𝔪), 𝔫 ≠ 𝔪 → ¬ ∃ ψ : Grossencharacter 𝔫, Induces h ψ χ
 
 /-- **Layer 6.1, the primitive reduction of a Grossencharacter**: the conductor, the primitive
 character of that conductor, and the induction comparison. -/
 structure PrimitiveData (χ : Grossencharacter 𝔪) where
   /-- The conductor, the minimal modulus `χ` is induced from. -/
   conductor : Modulus K
-  dvd : conductor.Dvd 𝔪
+  dvd : conductor ∣ 𝔪
   /-- The primitive inducing character. -/
   prim : Grossencharacter conductor
   prim_isPrimitive : prim.IsPrimitive
@@ -2007,13 +2013,26 @@ forward inclusion is the carrier law; conversely a place of `𝔪_∞` with even
 to every field, so the character is induced from the modulus without it and is not primitive.
 This is the theorem that keeps the Layer 6 conductor of an odd character equal to its Layer 5
 conductor, infinite part included. -/
-theorem infinitePart_eq_paritySupport (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
-    𝔪.infinitePart = Finset.univ.filter fun v ↦ v.IsReal ∧ χ.parity v = 1 := sorry
+theorem realPlaces_eq_paritySupport (χ : Grossencharacter 𝔪) (hprim : χ.IsPrimitive) :
+    𝔪.realPlaces = Finset.univ.filter fun v ↦ v.IsReal ∧ χ.parity v = 1 := sorry
 
 /-- **Layer 6.1, the embedding of 5.1 preserves primitivity** — what lets the finite-order
 comparisons of 6.4 run over the canonical primitive card with no side conditions. -/
 theorem ofRayClassCharacter_isPrimitive {𝔪 : Modulus K} {η : RayClassCharacter 𝔪}
     (hη : η.IsPrimitive) : (ofRayClassCharacter η).IsPrimitive := sorry
+
+/-- **Layer 6.1, the embedding presents the supplier's own embedding.** The presentation built
+from a ray-class character `η` presents `HeckeCharacter.ofRayClassCharacter η`, which is the
+supplier's pullback along `rayClassQuotient`. This is what makes Layer 5 the finite-order case of
+Layer 6 rather than a parallel theory: the two roads from `η` to an idele-class character are the
+same road, so a theorem proved about `toHeckeCharacter` applies to the Layer 5 objects unchanged.
+
+⚠ Without it the finite-order comparisons of 6.2 and 6.4 would compare two analytic records built
+from the same `η` by two constructions with no stated relation, and the agreement would be a
+coincidence of the formulas rather than a statement about characters. -/
+theorem toHeckeCharacter_ofRayClassCharacter {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) :
+    (ofRayClassCharacter η).toHeckeCharacter =
+      GlobalClassFieldTheory.HeckeCharacter.ofRayClassCharacter η := sorry
 
 /-- **Layer 6.4, the imprimitive correction**, a finite product of Euler factors, exactly as in
 5.4. It is derived from the primitive reduction, not assumed alongside it. ⚠ The two sides are
@@ -2161,7 +2180,7 @@ theorem forced_of_isNormQuasicharacter (χ : Grossencharacter 𝔪)
 
 /-- **Layer 6.4, the conductor of a norm quasicharacter is trivial.** -/
 theorem conductor_of_isNormQuasicharacter (χ : Grossencharacter 𝔪)
-    (h : χ.IsNormQuasicharacter) : χ.conductor = Modulus.one := sorry
+    (h : χ.IsNormQuasicharacter) : χ.conductor = Modulus.one K := sorry
 
 /-- **Layer 6.2, the root number of a Grossencharacter**, from the Gauss sum of the finite
 character `χ_f` at the **primitive conductor**, as in 5.6, and the unitary infinity data of 6.2.
@@ -2206,7 +2225,7 @@ theorem rootNumber_eq_heckeRootNumber (χ : Grossencharacter 𝔪) (η : RayClas
     (hprim : χ.IsPrimitive) (hη_prim : η.IsPrimitive)
     (hshift : χ.shift = 0) (harch : ∀ v, χ.archimedeanParam v = 0)
     (hang : ∀ v, χ.angular v = 0)
-    (hpar : ∀ v, v.IsReal → ((χ.parity v = 1) ↔ v ∈ 𝔪.infinitePart))
+    (hpar : ∀ v, v.IsReal → ((χ.parity v = 1) ↔ v ∈ 𝔪.realPlaces))
     (hη : ∀ I : Ideal (𝓞 K), χ.unitary.toFun I = η.weight.toFun I) :
     χ.rootNumber = heckeRootNumber η := sorry
 
@@ -2535,7 +2554,7 @@ the Layer 6 card is. -/
 theorem unitaryData_of_finiteOrder (χ : Grossencharacter 𝔪) (η : RayClassCharacter 𝔪)
     (hprim : χ.IsPrimitive) (hη_prim : η.IsPrimitive) (hshift : χ.shift = 0)
     (harch : ∀ v, χ.archimedeanParam v = 0) (hang : ∀ v, χ.angular v = 0)
-    (hpar : ∀ v, v.IsReal → ((χ.parity v = 1) ↔ v ∈ 𝔪.infinitePart))
+    (hpar : ∀ v, v.IsReal → ((χ.parity v = 1) ↔ v ∈ 𝔪.realPlaces))
     (hη : ∀ I : Ideal (𝓞 K), χ.unitary.toFun I = η.weight.toFun I) :
     (χ.unitaryData hprim).EqOffZero (heckeData η hη_prim) := sorry
 
@@ -2601,7 +2620,7 @@ is the Dedekind-zeta card, and its **presented** L-series is that primitive L-fu
 removed Euler factors — `ζ(s)(1 − p^{-s})` over `ℚ` with `𝔪₀ = (p)` — which is why the
 presented series gets no card of its own. -/
 theorem principalCharacter_test (𝔪 : Modulus K) :
-    (normCharacter 𝔪 0).conductor = Modulus.one ∧
+    (normCharacter 𝔪 0).conductor = Modulus.one K ∧
       ((normCharacter 𝔪 0).primitiveUnitaryData).EqOffZero (dedekindZetaData K) ∧
       ∀ s : ℂ, (normCharacter 𝔪 0).lFunctionC s =
         (normCharacter 𝔪 0).primitiveChar.lFunctionC s *
@@ -2886,84 +2905,82 @@ section Chebotarev
 
 variable (L : Type*) [Field L] [NumberField L] [Algebra K L]
 
-/-- **Layer 8.0, unramifiedness**, as one shared predicate. Every statement of Layer 8 uses
-this and never an ad hoc test against a discriminant. -/
+/-- **Layer 8.0, unramifiedness**, as one shared predicate, in **exactly** the shape the consumed
+`NumberFieldArithmetic.artinSymbol` takes its hypothesis. Every statement of Layer 8 uses this and
+never an ad hoc test against a discriminant.
+
+⚠ It is a spelling and not an object: the supplier's Layer 1.2 rules out a Tau Ceti
+`IsUnramifiedIn` wrapper, so this unfolds to a quantified `Algebra.IsUnramifiedAt` and nothing
+else. Writing it as `ramificationIdxIn = 1` instead would force a translation at every use of the
+Artin symbol; `isUnramifiedAt_iff_ramificationIdxIn` is that comparison, stated once. -/
 def IsUnramifiedAt (𝔭 : HeightOneSpectrum (𝓞 K)) : Prop :=
-  Ideal.ramificationIdxIn 𝔭.asIdeal (𝓞 L) = 1
+  ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver 𝔭.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q
+
+theorem isUnramifiedAt_iff_ramificationIdxIn (𝔭 : HeightOneSpectrum (𝓞 K)) :
+    IsUnramifiedAt K L 𝔭 ↔ Ideal.ramificationIdxIn 𝔭.asIdeal (𝓞 L) = 1 := sorry
 
 variable [IsGalois K L]
 
-/-! ### Layer 8.0: the Frobenius class, constructed
+/-! ### Layer 8.0: the Frobenius class, consumed
+
+The Frobenius class is **not** built here. Number Field Arithmetic Layer 2.3 owns it, as
+`artinSymbol`, and Layer 2.4 owns its two functoriality statements; `README.md`'s contract
+section with that roadmap lists all three, with the statements relied on. What this layer adds is
+the named transport into the carrier Chebotarev is stated over, and nothing else: `frobeniusClass`
+below is a **definition**, not a `sorry`, and the two compatibility theorems are **closed**, so
+they stop elaborating if the supplier's signature moves.
 
 ⚠ Nothing in Layer 8 quantifies over an interface. A theorem of the shape
 `(F : FrobeniusInterface K L) → HasDirichletDensity …` is conditional on an arbitrary term of a
 small structure, and it gives the crossing and fixed-field proofs no access to the laws they use,
-because those laws are fields of a term the theorem does not construct. The class below is built
-from Mathlib's `arithFrobAt`, and restriction and tower compatibility are theorems about it. -/
+because those laws are fields of a term the theorem does not construct. Consuming a named
+supplier declaration is the opposite of that: the class is one object, with one owner. -/
 
-open scoped Classical in
-/-- The prime of `L` at which the Frobenius class is computed. Every prime over `𝔭` gives the
-same class, by `isConj_arithFrobAt`, so this choice is immaterial; `frobeniusClass_eq_mk` says so.
--/
-noncomputable def chosenPrimeOver (𝔭 : HeightOneSpectrum (𝓞 K)) : Ideal (𝓞 L) :=
-  if h : (Ideal.primesOver 𝔭.asIdeal (𝓞 L)).Nonempty then h.choose else ⊥
+/-- **Layer 8.0, the Frobenius class of a prime**, consumed. It is the supplier's `artinSymbol`
+at `𝔭.asIdeal`, transported to the `HeightOneSpectrum` indexing that the density statements of
+8A use.
 
-theorem chosenPrimeOver_mem (𝔭 : HeightOneSpectrum (𝓞 K)) :
-    chosenPrimeOver K L 𝔭 ∈ Ideal.primesOver 𝔭.asIdeal (𝓞 L) := sorry
+⚠ The unramifiedness hypothesis is an argument of the **definition**, and that is the supplier's
+design, not a convenience. At a ramified prime two Frobenius lifts at the same `Q` differ by an
+element of inertia, and in a totally ramified abelian extension every inertia element acts
+trivially on the residue field, so no conjugacy class is determined; a total `frobeniusClass` with
+a junk value at ramified primes would make every density set below silently include that junk.
 
-/-- **Layer 8.0, the Frobenius class of a prime**, constructed from Mathlib's `arithFrobAt` over
-`Algebra.IsInvariant`, and not assumed. ⚠ Frobenius here is **arithmetic**: 8B.1 tests the
+⚠ Frobenius here is **arithmetic**, which is the supplier's convention too: 8B.1 tests the
 orientation and 8B.5 is the numerical example that would detect an inverse. -/
-noncomputable def frobeniusClass (𝔭 : HeightOneSpectrum (𝓞 K)) : ConjClasses (L ≃ₐ[K] L) :=
-  haveI : (chosenPrimeOver K L 𝔭).IsPrime := sorry
-  haveI : Finite (𝓞 L ⧸ chosenPrimeOver K L 𝔭) := sorry
-  ConjClasses.mk (arithFrobAt (𝓞 K) (L ≃ₐ[K] L) (chosenPrimeOver K L 𝔭))
-
-/-- **Layer 8.0, well-definedness**: any prime of `L` over `𝔭` computes the same class. This is
-`isConj_arithFrobAt`, and it is why the choice above is harmless. -/
-theorem frobeniusClass_eq_mk (𝔭 : HeightOneSpectrum (𝓞 K)) (Q : Ideal (𝓞 L)) [Q.IsPrime]
-    [Finite (𝓞 L ⧸ Q)] (hQ : Q.under (𝓞 K) = 𝔭.asIdeal) :
-    frobeniusClass K L 𝔭 = ConjClasses.mk (arithFrobAt (𝓞 K) (L ≃ₐ[K] L) Q) := sorry
-
-/-- **Layer 8.0, the characterization**: at an **unramified** prime, `σ` lies in the class exactly
-when it is an arithmetic Frobenius at some prime of `L` over `𝔭`. This ties the construction to
-the pin's vocabulary.
-
-⚠ The unramifiedness hypothesis cannot be dropped. Two Frobenius lifts at the same `Q` differ by
-an element of the inertia group, and Mathlib's uniqueness (`IsArithFrobAt.eq_of_isUnramifiedAt`)
-assumes exactly that the prime is unramified. In a totally ramified abelian extension every
-inertia element acts trivially on the residue field, so the right-hand side holds for several
-distinct singleton conjugacy classes while `frobeniusClass` picks one of them; the equivalence is
-then false. -/
-theorem mem_frobeniusClass_iff (𝔭 : HeightOneSpectrum (𝓞 K)) (hur : IsUnramifiedAt K L 𝔭)
-    (σ : L ≃ₐ[K] L) :
-    σ ∈ (frobeniusClass K L 𝔭).carrier ↔
-      ∃ Q : Ideal (𝓞 L), Q.IsPrime ∧ Q.under (𝓞 K) = 𝔭.asIdeal ∧
-        ∀ x : 𝓞 L, σ • x - x ^ Nat.card (𝓞 K ⧸ 𝔭.asIdeal) ∈ Q := sorry
+noncomputable def frobeniusClass (𝔭 : HeightOneSpectrum (𝓞 K)) (hur : IsUnramifiedAt K L 𝔭) :
+    ConjClasses (L ≃ₐ[K] L) :=
+  haveI : 𝔭.asIdeal.IsMaximal := 𝔭.isMaximal
+  NumberFieldArithmetic.artinSymbol 𝔭.asIdeal hur
 
 /-- **Layer 8.0, a Frobenius element of a prime.** ⚠ In an **abelian** extension the class is a
 singleton and this is *the* Frobenius; in general it is a choice, and only the class is canonical.
 Layer 8B.1's cyclotomic weight reads it, and 8B.1 proves the group abelian first. -/
-noncomputable def frobeniusElt (𝔭 : HeightOneSpectrum (𝓞 K)) : L ≃ₐ[K] L := sorry
+noncomputable def frobeniusElt (𝔭 : HeightOneSpectrum (𝓞 K)) (hur : IsUnramifiedAt K L 𝔭) :
+    L ≃ₐ[K] L := sorry
 
-theorem frobeniusClass_eq_mk_frobeniusElt (𝔭 : HeightOneSpectrum (𝓞 K)) :
-    frobeniusClass K L 𝔭 = ConjClasses.mk (frobeniusElt K L 𝔭) := sorry
+theorem frobeniusClass_eq_mk_frobeniusElt (𝔭 : HeightOneSpectrum (𝓞 K))
+    (hur : IsUnramifiedAt K L 𝔭) :
+    frobeniusClass K L 𝔭 hur = ConjClasses.mk (frobeniusElt K L 𝔭 hur) := sorry
 
 /-- **Layer 8.0**: only finitely many primes ramify. -/
 theorem finite_ramified : {𝔭 : HeightOneSpectrum (𝓞 K) | ¬ IsUnramifiedAt K L 𝔭}.Finite := sorry
 
 /-- **Layer 8.0**: a prime that splits completely has the identity class, and conversely. -/
-theorem frobeniusClass_eq_one_iff (𝔭 : HeightOneSpectrum (𝓞 K)) (h : IsUnramifiedAt K L 𝔭) :
-    frobeniusClass K L 𝔭 = 1 ↔ Ideal.inertiaDegIn 𝔭.asIdeal (𝓞 L) = 1 := sorry
+theorem frobeniusClass_eq_one_iff (𝔭 : HeightOneSpectrum (𝓞 K)) (hur : IsUnramifiedAt K L 𝔭) :
+    frobeniusClass K L 𝔭 hur = 1 ↔ Ideal.inertiaDegIn 𝔭.asIdeal (𝓞 L) = 1 := sorry
 
 /-- **Layer 8.0, restriction compatibility**, against Mathlib's canonical restriction
 homomorphism `AlgEquiv.restrictNormalHom`, and as a **theorem** rather than a field or a separate
 proposition that no theorem assumes. Milestones 8C.3 and 8D.2 use exactly this square. -/
-theorem frobeniusClass_restrictNormalHom (E : IntermediateField K L) [Normal K E]
-    [NumberField E] [IsGalois K E]
-    (𝔭 : HeightOneSpectrum (𝓞 K)) (h : IsUnramifiedAt K L 𝔭) :
-    ConjClasses.map (AlgEquiv.restrictNormalHom (F := K) (K₁ := L) E) (frobeniusClass K L 𝔭) =
-      frobeniusClass K E 𝔭 := sorry
+theorem frobeniusClass_restrictNormalHom (E : Type*) [Field E] [NumberField E] [Algebra K E]
+    [Algebra E L] [IsScalarTower K E L] [IsGalois K E]
+    (𝔭 : HeightOneSpectrum (𝓞 K)) (hur : IsUnramifiedAt K L 𝔭) (hurE : IsUnramifiedAt K E 𝔭) :
+    ConjClasses.map (AlgEquiv.restrictNormalHom (F := K) (K₁ := L) E)
+        (frobeniusClass K L 𝔭 hur) =
+      frobeniusClass K E 𝔭 hurE :=
+  haveI : 𝔭.asIdeal.IsMaximal := 𝔭.isMaximal
+  NumberFieldArithmetic.artinSymbol_map_restrictNormalHom E 𝔭.asIdeal hur hurE
 
 /-- **Layer 8.0 and 8D.2, tower compatibility, relative to one prime of `L`.** For a prime `Q` of
 `L` lying over `𝔓` of `E` over `𝔭` of `K`, and `σ` an arithmetic Frobenius **at that `Q`**, the
@@ -2991,7 +3008,9 @@ theorem isArithFrobAt_pow_inertiaDeg (E : Type*) [Field E] [NumberField E] [Alge
     (hur : IsUnramifiedAt K L 𝔭)
     (σ : L ≃ₐ[K] L) (hσ : IsArithFrobAt (𝓞 K) σ Q.asIdeal) :
     ∃ τ : L ≃ₐ[E] L, IsArithFrobAt (𝓞 E) τ Q.asIdeal ∧
-      AlgEquiv.restrictScalars K τ = σ ^ Ideal.inertiaDeg 𝔭.asIdeal 𝔓.asIdeal := sorry
+      AlgEquiv.restrictScalars K τ = σ ^ Ideal.inertiaDeg 𝔭.asIdeal 𝔓.asIdeal :=
+  NumberFieldArithmetic.exists_isArithFrobAt_pow_inertiaDeg E Q.asIdeal 𝔓.asIdeal 𝔭.asIdeal
+    hQE hQK hur σ hσ
 
 /-- **Layer 8D.2, the class-level corollary**, derived from the prime-relative theorem above and
 not stated independently of it. The representative `σ` is still tied to `Q`. -/
@@ -3000,7 +3019,7 @@ theorem frobeniusClass_pow_inertiaDeg (E : Type*) [Field E] [NumberField E] [Alg
     (Q : HeightOneSpectrum (𝓞 L)) (𝔓 : HeightOneSpectrum (𝓞 E)) (𝔭 : HeightOneSpectrum (𝓞 K))
     (hQE : Q.asIdeal.under (𝓞 E) = 𝔓.asIdeal) (hQK : Q.asIdeal.under (𝓞 K) = 𝔭.asIdeal)
     (hur : IsUnramifiedAt K L 𝔭) (σ : L ≃ₐ[K] L) (hσ : IsArithFrobAt (𝓞 K) σ Q.asIdeal) :
-    ∃ τ : L ≃ₐ[E] L, τ ∈ (frobeniusClass E L 𝔓).carrier ∧
+    ∃ (hurE : IsUnramifiedAt E L 𝔓) (τ : L ≃ₐ[E] L), τ ∈ (frobeniusClass E L 𝔓 hurE).carrier ∧
       AlgEquiv.restrictScalars K τ = σ ^ Ideal.inertiaDeg 𝔭.asIdeal 𝔓.asIdeal := sorry
 
 /-- **Layer 8D.5, the Chebotarev density theorem over a general number field.**
@@ -3011,14 +3030,14 @@ unramifiedness is the shared predicate of 8.0, and the Frobenius class is the co
 else. -/
 theorem hasDirichletDensity_frobeniusClass (C : ConjClasses (L ≃ₐ[K] L)) :
     HasDirichletDensity K
-      {𝔭 : HeightOneSpectrum (𝓞 K) | IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = C}
+      {𝔭 : HeightOneSpectrum (𝓞 K) | ∃ h : IsUnramifiedAt K L 𝔭, frobeniusClass K L 𝔭 h = C}
       ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ)) := sorry
 
 /-- **Layer 8D.6, splitting completely**, as a corollary of the theorem above: the primes that
 split completely in `L` have Dirichlet density `1/#Gal(L/K)`. -/
 theorem hasDirichletDensity_splitsCompletely :
     HasDirichletDensity K
-      {𝔭 : HeightOneSpectrum (𝓞 K) | IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = 1}
+      {𝔭 : HeightOneSpectrum (𝓞 K) | ∃ h : IsUnramifiedAt K L 𝔭, frobeniusClass K L 𝔭 h = 1}
       (1 / (Nat.card (L ≃ₐ[K] L) : ℝ)) := sorry
 
 /-! ### Layers 8C.1 to 8C.8: the crossing argument, with its constant written out -/
@@ -3113,10 +3132,11 @@ structure CrossingDatum where
   bijective_restrict : Function.Bijective ⇑(crossingRestrict K L M N)
   /-- **8C.3**: Frobenius under restriction is the pair of the restricted Frobenius elements.
   This is `frobeniusClass_restrictNormalHom` applied twice, and 8C.5 and 8C.6 read it. -/
-  frobenius_restrict : ∀ 𝔭 : HeightOneSpectrum (𝓞 K), IsUnramifiedAt K N 𝔭 →
-    ∀ ν : N ≃ₐ[K] N, ν ∈ (frobeniusClass K N 𝔭).carrier →
-      (crossingRestrict K L M N ν).1 ∈ (frobeniusClass K L 𝔭).carrier ∧
-        (crossingRestrict K L M N ν).2 ∈ (frobeniusClass K M 𝔭).carrier
+  frobenius_restrict : ∀ (𝔭 : HeightOneSpectrum (𝓞 K)) (hur : IsUnramifiedAt K N 𝔭)
+    (hurL : IsUnramifiedAt K L 𝔭) (hurM : IsUnramifiedAt K M 𝔭) (ν : N ≃ₐ[K] N),
+      ν ∈ (frobeniusClass K N 𝔭 hur).carrier →
+      (crossingRestrict K L M N ν).1 ∈ (frobeniusClass K L 𝔭 hurL).carrier ∧
+        (crossingRestrict K L M N ν).2 ∈ (frobeniusClass K M 𝔭 hurM).carrier
 
 section CrossingDatumAPI
 
@@ -3223,7 +3243,7 @@ theorem hasDirichletDensity_taggedFibre (D : CrossingDatum K L M N)
     (σ : L ≃ₐ[K] L) (τ : M ≃ₐ[K] M) (hτ : orderOf σ ∣ orderOf τ) :
     HasDirichletDensity K
       {𝔭 : HeightOneSpectrum (𝓞 K) |
-        IsUnramifiedAt K N 𝔭 ∧ frobeniusClass K N 𝔭 = ConjClasses.mk (D.pair σ τ)}
+        ∃ h : IsUnramifiedAt K N 𝔭, frobeniusClass K N 𝔭 h = ConjClasses.mk (D.pair σ τ)}
       (1 / ((Nat.card (L ≃ₐ[K] L) : ℝ) * (Nat.card (M ≃ₐ[K] M) : ℝ))) := sorry
 
 /-- **Layer 8C.5, pairwise disjointness of the tagged fibres**, which is what makes the densities
@@ -3232,7 +3252,7 @@ two distinct conjugate `τ` give the *same* conjugacy class and hence the same s
 theorem taggedFibre_pairwiseDisjoint (D : CrossingDatum K L M N) (σ : L ≃ₐ[K] L) :
     Pairwise (Function.onFun Disjoint fun τ : M ≃ₐ[K] M ↦
       {𝔭 : HeightOneSpectrum (𝓞 K) |
-        IsUnramifiedAt K N 𝔭 ∧ frobeniusClass K N 𝔭 = ConjClasses.mk (D.pair σ τ)}) := sorry
+        ∃ h : IsUnramifiedAt K N 𝔭, frobeniusClass K N 𝔭 h = ConjClasses.mk (D.pair σ τ)}) := sorry
 
 /-- **Layer 8C.6, the lower bound from one auxiliary prime.**
 
@@ -3241,7 +3261,7 @@ the target set and need not exhaust it, so nothing stronger is available here. -
 theorem lowerDirichletDensityAtLeast_crossing (D : CrossingDatum K L M N) (σ : L ≃ₐ[K] L) :
     LowerDirichletDensityAtLeast K
       {𝔭 : HeightOneSpectrum (𝓞 K) |
-        IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ}
+        ∃ h : IsUnramifiedAt K L 𝔭, frobeniusClass K L 𝔭 h = ConjClasses.mk σ}
       (crossingConstant K L M (orderOf σ)) := sorry
 
 /-- **Layer 8C.6, the lower bound from a *constructed* auxiliary diagram**, which is the form
@@ -3254,7 +3274,7 @@ theorem lowerDirichletDensityAtLeast_of_auxiliary (q : ℕ) (hq : q.Prime)
     (σ : L ≃ₐ[K] L) :
     LowerDirichletDensityAtLeast K
       {𝔭 : HeightOneSpectrum (𝓞 K) |
-        IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ}
+        ∃ h : IsUnramifiedAt K L 𝔭, frobeniusClass K L 𝔭 h = ConjClasses.mk σ}
       (crossingConstant K L M (orderOf σ)) :=
   lowerDirichletDensityAtLeast_crossing K L M N
     (crossingDatumOfAuxiliary K L M N q hq hex habel hN) σ
@@ -3330,7 +3350,7 @@ inside `A`, and `exists_auxiliaryCrossing` produces one. -/
 theorem lowerDirichletDensityAtLeast {σ : L ≃ₐ[K] L} {r : ℕ} (A : AuxiliaryCrossing K L σ r) :
     LowerDirichletDensityAtLeast K
       {𝔭 : HeightOneSpectrum (𝓞 K) |
-        IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ}
+        ∃ h : IsUnramifiedAt K L 𝔭, frobeniusClass K L 𝔭 h = ConjClasses.mk σ}
       A.constant := sorry
 
 /-- **Layer 8C.7 over the bundle**: the constant approaches `1/#G` as the level grows. -/
@@ -3383,7 +3403,7 @@ theorem exists_level_crossingConstant (f : ℕ) (hf : 0 < f) (ε : ℝ) (hε : 0
 theorem hasDirichletDensity_abelian (hab : ∀ σ τ : L ≃ₐ[K] L, σ * τ = τ * σ) (σ : L ≃ₐ[K] L) :
     HasDirichletDensity K
       {𝔭 : HeightOneSpectrum (𝓞 K) |
-        IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ}
+        ∃ h : IsUnramifiedAt K L 𝔭, frobeniusClass K L 𝔭 h = ConjClasses.mk σ}
       (1 / (Nat.card (L ≃ₐ[K] L) : ℝ)) := sorry
 
 /-- **Layer 8D.4, the fibre count.** Each prime `𝔭` of `K` with Frobenius class `C = [σ]` has
@@ -3406,10 +3426,10 @@ theorem card_primesOver_fixedField (σ : L ≃ₐ[K] L) (E : Type*) [Field E] [N
     (σE : L ≃ₐ[E] L) (hσE : AlgEquiv.restrictScalars K σE = σ)
     (hgen : ∀ ρ : L ≃ₐ[E] L, ρ ∈ Subgroup.zpowers σE)
     (𝔭 : HeightOneSpectrum (𝓞 K)) (h : IsUnramifiedAt K L 𝔭)
-    (hC : frobeniusClass K L 𝔭 = ConjClasses.mk σ) :
+    (hur : IsUnramifiedAt K L 𝔭) (hC : frobeniusClass K L 𝔭 hur = ConjClasses.mk σ) :
     Nat.card {𝔓 : HeightOneSpectrum (𝓞 E) //
         𝔓.asIdeal.under (𝓞 K) = 𝔭.asIdeal ∧ Ideal.inertiaDeg 𝔭.asIdeal 𝔓.asIdeal = 1 ∧
-          frobeniusClass E L 𝔓 = ConjClasses.mk σE} =
+          ∃ h : IsUnramifiedAt E L 𝔓, frobeniusClass E L 𝔓 h = ConjClasses.mk σE} =
       Nat.card (L ≃ₐ[K] L) /
         (Nat.card (ConjClasses.mk σ).carrier * orderOf σ) := sorry
 
@@ -3427,12 +3447,14 @@ exists to separate the nonidentity fibre from the split-completely fibre, so it 
 the case where they coincide. -/
 theorem card_primesOver_fixedField_cyclic (σ : L ≃ₐ[K] L) (hσ : σ ≠ 1)
     (hgen : ∀ ρ : L ≃ₐ[K] L, ρ ∈ Subgroup.zpowers σ)
-    (𝔭 : HeightOneSpectrum (𝓞 K)) (h : IsUnramifiedAt K L 𝔭)
-    (hC : frobeniusClass K L 𝔭 = ConjClasses.mk σ) :
+    (𝔭 : HeightOneSpectrum (𝓞 K)) (hur : IsUnramifiedAt K L 𝔭)
+    (hC : frobeniusClass K L 𝔭 hur = ConjClasses.mk σ) :
     Nat.card {𝔓 : HeightOneSpectrum (𝓞 K) //
-        𝔓.asIdeal = 𝔭.asIdeal ∧ frobeniusClass K L 𝔓 = ConjClasses.mk σ} = 1 ∧
+        𝔓.asIdeal = 𝔭.asIdeal ∧
+          ∃ h : IsUnramifiedAt K L 𝔓, frobeniusClass K L 𝔓 h = ConjClasses.mk σ} = 1 ∧
       Nat.card {𝔓 : HeightOneSpectrum (𝓞 K) //
-        𝔓.asIdeal = 𝔭.asIdeal ∧ frobeniusClass K L 𝔓 = 1} = 0 := sorry
+        𝔓.asIdeal = 𝔭.asIdeal ∧
+          ∃ h : IsUnramifiedAt K L 𝔓, frobeniusClass K L 𝔓 h = 1} = 0 := sorry
 
 end Chebotarev
 
@@ -3518,7 +3540,8 @@ to: the twist is signed or complex, and 9.1 is a theorem about **nonnegative** c
 noncomputable def frobeniusFibreCoeff (σ : F ≃ₐ[K] F) (n : ℕ) : ℝ :=
   ∑ᶠ p : {p : HeightOneSpectrum (𝓞 K) × ℕ // 0 < p.2 ∧
       Ideal.absNorm p.1.asIdeal ^ p.2 = n ∧ IsUnramifiedAt K F p.1 ∧
-      ∃ ρ : F ≃ₐ[K] F, frobeniusClass K F p.1 = ConjClasses.mk ρ ∧ ρ ^ p.2 = σ},
+      ∃ (h : IsUnramifiedAt K F p.1) (ρ : F ≃ₐ[K] F),
+        frobeniusClass K F p.1 h = ConjClasses.mk ρ ∧ ρ ^ p.2 = σ},
     Real.log (Ideal.absNorm (p : HeightOneSpectrum (𝓞 K) × ℕ).1.asIdeal)
 
 theorem frobeniusFibreCoeff_nonneg (σ : F ≃ₐ[K] F) (n : ℕ) : 0 ≤ frobeniusFibreCoeff K F σ n :=
@@ -3541,7 +3564,7 @@ theorem cyclotomicWeight_bad (χ : (F ≃ₐ[K] F) →* ℂˣ) :
 
 theorem cyclotomicWeight_apply (χ : (F ≃ₐ[K] F) →* ℂˣ) {𝔭 : HeightOneSpectrum (𝓞 K)}
     (h : IsUnramifiedAt K F 𝔭) :
-    (cyclotomicWeight K F χ).toFun 𝔭.asIdeal = (χ (frobeniusElt K F 𝔭) : ℂ) := sorry
+    (cyclotomicWeight K F χ).toFun 𝔭.asIdeal = (χ (frobeniusElt K F 𝔭 h) : ℂ) := sorry
 
 /-- ⚠ It vanishes at the ramified primes. Without this the orthogonality identity below is false:
 its right-hand side runs over every prime, while `frobeniusFibreCoeff` excludes the ramified
@@ -3600,7 +3623,7 @@ theorem tendsto_count_frobeniusFibre (m : ℕ) [NeZero m] [IsCyclotomicExtension
     Tendsto
       (fun x : ℝ ↦
         (Nat.card {𝔭 : HeightOneSpectrum (𝓞 K) // (Ideal.absNorm 𝔭.asIdeal : ℝ) ≤ x ∧
-            IsUnramifiedAt K F 𝔭 ∧ frobeniusClass K F 𝔭 = ConjClasses.mk σ} : ℝ) /
+            ∃ h : IsUnramifiedAt K F 𝔭, frobeniusClass K F 𝔭 h = ConjClasses.mk σ} : ℝ) /
           (x / Real.log x))
       atTop (𝓝 (1 / (Nat.card (F ≃ₐ[K] F) : ℝ))) := sorry
 
@@ -3639,7 +3662,7 @@ theorem tendsto_count_abelian (hab : ∀ σ τ : L ≃ₐ[K] L, σ * τ = τ * �
     Tendsto
       (fun x : ℝ ↦
         (Nat.card {𝔭 : HeightOneSpectrum (𝓞 K) // (Ideal.absNorm 𝔭.asIdeal : ℝ) ≤ x ∧
-            IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = ConjClasses.mk σ} : ℝ) /
+            ∃ h : IsUnramifiedAt K L 𝔭, frobeniusClass K L 𝔭 h = ConjClasses.mk σ} : ℝ) /
           (x / Real.log x))
       atTop (𝓝 (1 / (Nat.card (L ≃ₐ[K] L) : ℝ))) := sorry
 
@@ -3649,14 +3672,14 @@ theorem tendsto_count_abelian (hab : ∀ σ τ : L ≃ₐ[K] L, σ * τ = τ * �
 and the roadmap asks for both because neither implies the other. -/
 theorem hasNaturalDensity_frobeniusClass (C : ConjClasses (L ≃ₐ[K] L)) :
     HasNaturalDensity K
-      {𝔭 : HeightOneSpectrum (𝓞 K) | IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = C}
+      {𝔭 : HeightOneSpectrum (𝓞 K) | ∃ h : IsUnramifiedAt K L 𝔭, frobeniusClass K L 𝔭 h = C}
       ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ)) := sorry
 
 theorem tendsto_count_frobeniusClass (C : ConjClasses (L ≃ₐ[K] L)) :
     Tendsto
       (fun x : ℝ ↦
         (Nat.card {𝔭 : HeightOneSpectrum (𝓞 K) // (Ideal.absNorm 𝔭.asIdeal : ℝ) ≤ x ∧
-            IsUnramifiedAt K L 𝔭 ∧ frobeniusClass K L 𝔭 = C} : ℝ) / (x / Real.log x))
+            ∃ h : IsUnramifiedAt K L 𝔭, frobeniusClass K L 𝔭 h = C} : ℝ) / (x / Real.log x))
       atTop (𝓝 ((Nat.card C.carrier : ℝ) / (Nat.card (L ≃ₐ[K] L) : ℝ))) := sorry
 
 end CountingChebotarev

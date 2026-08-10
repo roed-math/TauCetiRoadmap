@@ -133,25 +133,32 @@ rebuild it.
 ## How prerequisites are recorded
 
 Every milestone below states its direct prerequisites. Each prerequisite is in exactly one of
-four categories:
+five categories:
 
 - **Mathlib** — a named declaration that exists in the Mathlib the repository currently
   builds. Where a declaration exists only on Mathlib master, the milestone says so and
   builds it here in the master shape.
 - **Tau Ceti** — a named declaration that already exists in Tau Ceti.
 - **Layer n.m** — an earlier milestone of this roadmap.
-- **Roadmap X, Layer k** — a named layer of another roadmap.
+- **Roadmap X, Layer k** — a named layer of another merged roadmap.
+- **R Roadmap X, `decl`** — an exact declaration of a roadmap that is earlier in the merge order.
 
-No other category is permitted. In particular no milestone depends on a branch, an open pull
-request, a future pin, an external repository, or a roadmap that does not yet exist.
+No other category is permitted. In particular no milestone depends on a branch, on a pull request
+that this roadmap does not follow in the merge order, on a future pin, on an external repository,
+or on a roadmap that does not yet exist.
+
+The fifth category has exactly two suppliers, and both have a contract section below in which
+every consumed declaration is a row. A subject is never a prerequisite of this kind: "the ray
+class group" is not one, `RayClassGroup` is; "Frobenius" is not one, `artinSymbol` is.
 
 Two consequences follow.
 
-First, an object that a sibling roadmap may one day own is **built here**, as a milestone of
-this roadmap, from Mathlib and from earlier milestones. Layers 5.1, 6.1, and 8.0 are the three
-such objects: the ray class group and its characters, the Grossencharacter, and the Frobenius
-class. Each is a construction and not a structure of hypotheses, so no theorem here is
-conditional on an arbitrary term supplied from outside.
+First, an **arithmetic** object with an owner elsewhere is consumed by name, and never rebuilt.
+This roadmap owns the analytic theory of L-functions and nothing else. The modulus, the ray class
+group, the ray class character and the Hecke character are Global Class Field Theory's; the
+Frobenius class is Number Field Arithmetic's. What Layer 6.1 builds is a *presentation* of a
+Hecke character — the coordinates from which the coefficients, the gamma factor, the completion
+and the root number are computed — with a named map to the object presented.
 
 Second, Wiener–Ikehara is a milestone of Layer 9 and not an import. It is proved in
 PrimeNumberTheoremAnd. That project is neither Mathlib nor Tau Ceti, so it cannot be a
@@ -162,32 +169,75 @@ coordination obligation.
 
 | Supplier | Material consumed here | First consuming layer | Category |
 |---|---|---:|---|
+| [Global class field theory](../GlobalClassFieldTheory/README.md) | the modulus, the ray class group and its class map, the ray class character with induction and primitivity, and the Hecke character with its unitary decomposition | 1.7 | R |
+| [Number field arithmetic](../NumberFieldArithmetic/README.md) | the Artin symbol and its two functoriality statements | 8.0 | R |
 | [Modular forms](../ModularForms/README.md), Layer 7 | the newform L-series, its Euler product, its completion, its functional equation, and its analytic conductor | 0.7 | Roadmap |
 | Mathlib | `LSeries` and its convergence theory, `Gammaℝ`, `Gammaℂ`, `WeakFEPair`, `completedRiemannZeta`, `DirichletCharacter.LFunction`, `dedekindZeta`, `arithFrobAt`, `FractionalIdeal.dual`, `mixedEmbedding` | 0.1 | Mathlib |
 
-That table is the whole of it. The accepted modular forms roadmap is the only roadmap
-prerequisite, and it is consumed at one milestone.
+**Merge order.** This roadmap follows both R suppliers. Number Field Arithmetic has no supplier of
+its own and merges first; Global Class Field Theory follows it. Layers 0 to 4, and the analytic
+machinery of Layers 2, 7 and 9, are independent of both and can be implemented in parallel.
 
-Three remarks.
+## What this roadmap consumes from the Global Class Field Theory roadmap
 
-**The three carriers are built here.** Layer 5.1 constructs a modulus, the group `J^{𝔪₀}` of
-ideals prime to its finite part, the ray subgroup `P^𝔪`, the quotient, and a character of that
-quotient. Layer 6.1 constructs a Grossencharacter from a unitary ideal weight, a real shift, the
-finite character of `(𝓞_K/𝔪₀)ˣ` as a `MulChar`, and unitary archimedean data whose real parity
-is supported on `𝔪_∞`, glued by one law over every coprime principal ideal; the infinity type is
-derived. Layer 8.0 constructs the Frobenius class from Mathlib's `arithFrobAt`. None of
-the three is a hypothesis, and no later milestone quantifies over one. What a sibling roadmap
-would replace them by, and how, is recorded in [`PROVENANCE.md`](PROVENANCE.md), which is not
-normative.
+That roadmap is the canonical owner of the modulus, the ray class group, the ray class character
+and the Hecke character. Every use of them here is a row below. Backticked names live in the
+namespace `TauCetiRoadmap.GlobalClassFieldTheory`, in
+`TauCetiRoadmap/GlobalClassFieldTheory/Suggested.lean`. Nothing crosses the boundary except
+through a row, and nothing here is a hypothesis of a Lean statement: the declarations are
+imported and applied.
 
-**The Frobenius convention is stated here.** *Pinned conventions* fixes arithmetic Frobenius and
-the Euler factor at a ramified prime. That convention agrees with the local fields roadmap's, and
-no milestone here fails to typecheck if that roadmap does not exist, so it is a convention and
-not a prerequisite.
+| Consumer here | Supplier layer | Declaration | Type or law relied on |
+|---|---|---|---|
+| 1.7, and through it 5, 7.5, 8E and 9.11 | 0.1 | `Modulus`, `Modulus.exponent`, the `Dvd` instance, `Modulus.one` | a nonzero integral ideal together with a `Finset` of **real** places, typed as a subtype; `𝔫 ∣ 𝔪` exponentwise on the finite part and by inclusion on the infinite part. ⚠ The two components are separate data: the gamma factor of 5.5 reads `𝔪_∞` and the level of 5.7 reads `𝔪₀` |
+| 1.7, 1.8, 5.2, 5.3 | 1.1, 1.2, 1.3 | `Modulus.IsCoprimeTo`, `RayClassGroup`, `idealClass`, `idealClass_mul`, `idealClass_eq_one_iff`, `idealClass_surjective` | `Cl_𝔪 K = J^{𝔪₀} ⧸ P_𝔪`; the class of an integral ideal prime to `𝔪₀`, multiplicative, trivial exactly on the ray-principal ideals, and surjective. ⚠ `IsCoprimeTo` excludes `⊥`, so no law guarded by it constrains a value at the zero ideal |
+| 1.7, 5.4, 6.1 | 1.4 | `classMap`, `classMap_idealClass`, `classMap_surjective`, `finiteUnitsMap` | the transition `Cl_𝔪 ↠ Cl_𝔫`, compatible with `idealClass`; and the residue-unit reduction, which is the **units-pullback** and never a ring composition, with witness `3 mod 6 ↦ 1 mod 2` |
+| 1.7's finite sum over classes; the finite order of every character of 5.1 | 1.6 | `finite_rayClassGroup` | `Cl_𝔪 K` is finite |
+| 5.1 | 3.1 | `RayClassCharacter` | `Cl_𝔪 K →* ℂˣ`, carrying no further data and no further laws |
+| 5.1, 5.4, 5.9 | 3.3 | `RayClassCharacter.induced`, `RayClassCharacter.IsPrimitive`, `RayClassCharacter.not_isPrimitive_one` | induction as precomposition with `classMap`, primitivity **against that map**, and the imprimitivity of the trivial character of a nontrivial modulus, which 5.9's card demands and the principal regression reads. ⚠ Primitivity written against a bare function agreeing with `χ` away from a divisor is much weaker and is not what is consumed |
+| 6.1, and every milestone of 6.2 to 6.4 | 3.1, 2A.6, 2A.7 | `HeckeCharacter`, `HeckeCharacter.ofRayClassCharacter`, `ofRayClassCharacter_apply`, `RaySubgroup` | `HeckeCharacter K = ContinuousMonoidHom (IdeleClassGroup K) ℂˣ`, the object that 6.1's presentation presents; the pullback of a ray class character along `rayClassQuotient`; and the ray subgroup that `exists_presentation` is stated against |
+| 6.1's `shift`, and the shifted poles and functional equation of 6.2 to 6.4 | 3.5 | `HeckeCharacter.shift`, `HeckeCharacter.unitaryPart`, `norm_unitaryPart`, `shift_eq_zero_iff`, `shift_ofRayClassCharacter` | the unique **real** exponent with `|χ| = ‖·‖^σ`. ⚠ Real, not complex: with a complex exponent the decomposition is ambiguous up to `𝔑^{it}` and 6.1's uniqueness theorem is false |
 
-**No class field theory, and no Galois cohomology.** Layer 8 proves Chebotarev through cyclotomic
-extensions. Every milestone of Layer 8, including 8E, is independent of class field theory: 8E is
-proved analytically from 1.7, 1.8, 7.3, and 7.5.
+**What Layer 6.1 owns, and what it does not.** It owns the presentation: a unitary ideal weight, a
+real shift, the finite character of `(𝓞_K/𝔪₀)ˣ` as a `MulChar`, and unitary archimedean data
+whose real parity is supported on `𝔪_∞`, glued by one law over every coprime principal ideal, with
+the infinity type derived. It owns `toHeckeCharacter`, the map to the presented character;
+`toHeckeCharacter_shift`, which matches the stored shift with the supplier's; `exists_presentation`,
+the surjectivity half of Neukirch VII (6.9); and `toHeckeCharacter_ofRayClassCharacter`, which says
+that the two roads from a ray class character to an idele-class character are the same road. It
+does **not** own a notion of Hecke character, and no theorem here quantifies over one.
+
+## What this roadmap consumes from the Number Field Arithmetic roadmap
+
+Layer 8.0 holds no construction. The Artin symbol is that roadmap's, and so are its two
+functoriality statements; what is here is the named transport into the `HeightOneSpectrum`
+indexing that the density statements of 8A are written over. `Suggested.lean` carries **closed**
+proofs — no `sorry` — for the transport and for both compatibilities, so a change to the
+supplier's signature fails the build.
+
+| Consumer here | Supplier layer | Declaration | Type or law relied on |
+|---|---|---|---|
+| 8.0's `frobeniusClass`, and every density set of 8B to 8E and 9 | 2.3 | `artinSymbol` | for `𝔭` maximal in `𝓞 K` and unramified in `L/K` finite Galois, the conjugacy class in `Gal(L/K)` of the arithmetic Frobenius at any prime over `𝔭`. ⚠ The unramifiedness is an **argument of the definition**: at a ramified prime two lifts differ by inertia, and in a totally ramified abelian extension no class is determined, so a total Frobenius class would put junk into every density set |
+| 8C.3, 8D.2, and the `frobenius_restrict` field of the crossing datum | 2.4 | `artinSymbol_map_restrictNormalHom` | `ConjClasses.map (restrictNormalHom E)` carries the symbol of `L/K` to the symbol of `E/K` |
+| 8D.2's descent, and the fixed-field argument of 8D | 2.4 | `exists_isArithFrobAt_pow_inertiaDeg` | for `Q` over `𝔓` over `𝔭` and `σ` an arithmetic Frobenius **at that `Q`**, some `τ ∈ Gal(L/E)` with `restrictScalars K τ = σ^{f(𝔓/𝔭)}` is an arithmetic Frobenius at `Q`. ⚠ Prime-relative, and unramified. The class-level and arbitrary-representative forms are false when `E/K` is not normal, and at a ramified `𝔭` no equality of automorphisms exists at all |
+
+The unramifiedness predicate `IsUnramifiedAt` of 8.0 is a **spelling** of the supplier's
+hypothesis and not an object: it unfolds to the quantified `Algebra.IsUnramifiedAt` that
+`artinSymbol` takes, per that roadmap's Layer 1.2 rule against an `IsUnramifiedIn` wrapper. Its
+comparison with `ramificationIdxIn 𝔭 = 1` is stated once, as
+`isUnramifiedAt_iff_ramificationIdxIn`.
+
+Two remarks.
+
+**The Frobenius convention is the supplier's.** *Pinned conventions* fixes arithmetic Frobenius
+and the Euler factor at a ramified prime, and 8B.1 tests the orientation. That is the same
+convention the supplier fixes, which is now a fact about a consumed declaration and no longer a
+coincidence between two roadmaps.
+
+**No Galois cohomology, and no reciprocity.** Layer 8 proves Chebotarev through cyclotomic
+extensions, and no milestone of it uses the reciprocity law, the existence theorem or a norm
+index. What it consumes from Global Class Field Theory is Layers 0 to 3 only: moduli, ray class
+groups and characters. Layer 8E is proved analytically from 1.7, 1.8, 7.3 and 7.5.
 
 ### Shared layer-DAG table: Integral Lattices ↔ L-functions
 
@@ -428,7 +478,9 @@ Poisson summation for a general lattice, the Hecke theta transformation, and a f
 equation with a level.
 
 The ray class group itself. Mathlib has no modulus, no group of ideals prime to one, no ray
-subgroup, and no quotient, so Layer 1.7 builds all four before any character exists.
+subgroup, and no quotient. Layer 1.7 consumes all four from Global Class Field Theory before any
+character exists; the point of the paragraph is unchanged, namely that no milestone here reads a
+ray class character before the group it is a character of exists.
 
 Hecke L-series of ray-class characters and of Grossencharacters: Euler products, Gauss sums
 with `|τ(χ)| = √𝔑(𝔣₀)`, completed functional equations with root numbers, and induction of
@@ -821,24 +873,27 @@ fibres and the residue differ.
 `ζ(s, c) = ∑_{[𝔞] = c, 𝔞 integral nonzero} 𝔑𝔞^{-s}`. Then `dedekindZeta K = ∑_c ζ(·, c)`, a
 finite sum over `h_K` terms.
 
-*The ray case.* This is where the carrier that Layers 5, 7.5, 8E, and 9.11 read is built, so it
-is built and not assumed. A **modulus** `𝔪` is a nonzero ideal `𝔪₀` of `𝓞 K` together with a
-finite set `𝔪_∞` of real places. Define, as subgroups of the group of nonzero fractional ideals:
+*The ray case.* The carrier that Layers 5, 7.5, 8E, and 9.11 read is **consumed**, not built. A
+**modulus** `𝔪` is the `Modulus` of Global Class Field Theory 0.1: a nonzero ideal `𝔪₀` of `𝓞 K`
+together with a finite set `𝔪_∞` of real places. So are the subgroups `J^{𝔪₀}` and `P^𝔪` of the
+group of nonzero fractional ideals, the **ray class group** `Cl_𝔪 = J^{𝔪₀}/P^𝔪`, its finiteness,
+the class map `𝔞 ↦ [𝔞]` on the integral ideals prime to `𝔪₀` with its three laws — multiplicative,
+trivial exactly on the ray-principal ideals, and surjective — and the transition `Cl_𝔪 ↠ Cl_𝔫`
+for `𝔫 ∣ 𝔪`. The contract section names every one of them, with the law relied on.
 
-- `J^{𝔪₀}`, generated by the primes that do not divide `𝔪₀`;
-- `P^𝔪`, generated by the principal ideals `(α)` with `α ≡ 1 mod 𝔪₀` and `α` positive at every
-  place of `𝔪_∞`.
+Those laws are what 5.1's derived ideal weight and 5.6's choice of ray representatives rest on,
+and that transition is the map 5.1's primitivity and 5.4's induction are stated against. This
+milestone consumes them and states none of them again.
 
-Prove `P^𝔪 ≤ J^{𝔪₀}`, define the **ray class group** `Cl_𝔪 = J^{𝔪₀}/P^𝔪`, and prove it finite.
-Define the class map `𝔞 ↦ [𝔞]` on the integral ideals prime to `𝔪₀`, and prove three things about
-it: it is multiplicative, it sends `𝔞` to `1` exactly when `𝔞` is ray-principal, and every class
-contains such an `𝔞`. Those three are what 5.1's derived ideal weight and 5.6's choice of ray
-representatives rest on. Prove also that `Cl_𝔪 ↠ Cl_𝔫` for `𝔫 ∣ 𝔪`; that projection is the map
-5.1's primitivity and 5.4's induction are stated against.
+What it adds is one adapter and the analytic content. The adapter is `Modulus.realPlaces`, the
+places of `𝔪_∞` read among all infinite places: the supplier types the infinite part by real
+places, which is right there, and the archimedean data of Layers 5 and 6 is indexed by
+`InfinitePlace K`. It is defined from the supplier's field and has no independent content.
 
 ⚠ `P^𝔪` is a subgroup of a group of **fractional** ideals. A condition written only on integral
 `α` does not define a subgroup, so a weight required to be trivial on such a set of integral
-elements need not factor through `Cl_𝔪`.
+elements need not factor through `Cl_𝔪`. That is a property of the consumed carrier, and it is
+why the carrier is consumed rather than replaced by a congruence condition stated here.
 
 Put `ζ(s, c) = ∑_{[𝔞] = c, 𝔞 integral and prime to 𝔪₀} 𝔑𝔞^{-s}` for `c : Cl_𝔪`.
 
@@ -864,7 +919,10 @@ In both cases, and more generally for a finite quotient `Q` of `Cl_𝔪` and a c
 Basic API: the case `#Q = 1`; the behaviour under a surjection `Q ↠ Q'`; the abscissa of
 `ζ(·, c)`; the set of integral ideals in one fibre.
 
-*Prerequisites:* Layers 1.1, 1.2; Mathlib `FractionalIdeal`, `Subgroup`, `QuotientGroup`,
+*Prerequisites:* Layers 1.1, 1.2; `Modulus`, `Modulus.IsCoprimeTo`, `RayClassGroup`,
+`idealClass`, `idealClass_mul`, `idealClass_eq_one_iff`, `idealClass_surjective`,
+`finite_rayClassGroup`, `classMap`, `classMap_idealClass` (R *Global Class Field Theory*,
+Layers 0.1, 1.1 to 1.4, 1.6); Mathlib `FractionalIdeal`, `Subgroup`, `QuotientGroup`,
 `ClassGroup`, character orthogonality for a finite abelian group.
 
 **1.8 The residue of a partial zeta function.** Each `ζ(s, c)` has a simple pole at `s = 1`, and
@@ -1277,24 +1335,25 @@ smallest check that 4.3 and 4.5 agree with something known independently.
 
 The full analytic theory of the L-function of a finite-order Hecke character.
 
-**5.1 The ray-class character, as a character of the ray class group.** A `RayClassCharacter 𝔪`
-is a homomorphism
+**5.1 The ray-class character, consumed.** A `RayClassCharacter 𝔪` is a homomorphism
 
-`J^{𝔪₀}/P^𝔪 → ℂˣ`,
+`Cl_𝔪 K → ℂˣ`,
 
-for the quotient constructed in 1.7. It carries no further data and no further laws, because it
-does not need any: on that quotient the operations 5.2 to 5.9 use are the operations of a group
-of characters.
+for the ray class group of Global Class Field Theory 1.2. The type, the quotient it is a
+character of, induction and primitivity are all that roadmap's, by the contract above; **nothing
+in this milestone is a construction**. It carries no further data and no further laws, because it
+does not need any: on that quotient the operations 5.2 to 5.9 use are the operations of a group of
+characters. What this milestone owns is the *derived* ideal weight below and the local signs, which
+are analytic data and have no meaning in the supplier.
 
 - the **trivial** character is `1`;
 - the **product** of two characters of the same modulus is `χ · ψ`;
 - the **conjugate** is `χ⁻¹`, which agrees with the pointwise complex conjugate because the ray
-  class group is finite;
-- **induction** from a divisor `𝔫` of `𝔪` is composition with the canonical projection
-  `J^{𝔪₀}/P^𝔪 → J^{𝔫₀}/P^𝔫` of 1.7;
-- **primitivity** is the statement that `χ` is not induced along that projection from any proper
-  divisor of `𝔪`;
-- the **local component** at a real place is the sign of 5.5.
+  class group is finite, by the consumed `finite_rayClassGroup`;
+- **induction** from a divisor `𝔫` of `𝔪` is the consumed `RayClassCharacter.induced`, which is
+  composition with the consumed `classMap`;
+- **primitivity** is the consumed `RayClassCharacter.IsPrimitive`, stated against that same map;
+- the **local component** at a real place is the sign of 5.5, and is owned here.
 
 The ideal weight of 1.2 is then *derived*: `χ(𝔞)` is the character of the ray class of `𝔞` for
 `𝔞` prime to `𝔪₀`, and `0` otherwise. Triviality on the ray subgroup and finite order become
@@ -1324,7 +1383,10 @@ quotient at all.
 away from a divisor" is much weaker than primitivity, because a bare function is not required to
 be a character. State it against the projection of 1.7.
 
-*Prerequisites:* Layers 1.2, 1.7; Mathlib `Ideal`, `NumberField.InfinitePlace`, `MonoidHom`.
+*Prerequisites:* Layers 1.2, 1.7; `RayClassCharacter`, `RayClassCharacter.induced`,
+`RayClassCharacter.IsPrimitive`, `RayClassCharacter.not_isPrimitive_one`, `finite_rayClassGroup`
+(R *Global Class Field Theory*, Layers 1.6, 3.1, 3.3); Mathlib `Ideal`,
+`NumberField.InfinitePlace`, `MonoidHom`.
 
 **5.2 The L-series and its Euler-factor data.** `L(χ, s) = LSeries (idealCoeffOfWeight χ) s`,
 with the convention `χ 𝔞 = 0` when `𝔞` is not coprime to `𝔪₀`. The Euler product is
@@ -1422,8 +1484,19 @@ criterion.
 The infinite-order theory, which the LMFDB calls Hecke characters. It completes the family of
 degree-one instances over `K`.
 
-**6.1 The Grossencharacter, constructed here.** As in 5.1, the object is built rather than
-assumed, following Neukirch VII (6.9). First fix the **normalized absolute value** at an
+**6.1 The presentation of a Hecke character.** The Hecke character itself is the consumed
+`HeckeCharacter K` of Global Class Field Theory 3.1, a continuous character of the idele class
+group. What is built here is its **presentation** in the sense of Neukirch VII (6.9): the
+coordinates from which the coefficients of 6.2, the gamma factor, the completion and the root
+number are computed. `toHeckeCharacter` is the map to the object presented,
+`toHeckeCharacter_shift` matches the stored shift with the supplier's `HeckeCharacter.shift` of
+3.5, `exists_presentation` is the surjectivity half of (6.9), and
+`toHeckeCharacter_ofRayClassCharacter` says that the embedding of 5.1 presents the supplier's own
+pullback, so that Layer 5 is the finite-order case of this layer and not a parallel theory.
+
+⚠ A presentation is not a second carrier. No milestone of Layers 6.2 to 6.4 quantifies over a
+notion of Hecke character defined here; each is a statement about the presented character, reached
+through `toHeckeCharacter`. Following Neukirch VII (6.9): First fix the **normalized absolute value** at an
 infinite place, `‖x‖_v = (v x)^{mult v}` — the plain `v x` of Mathlib's `InfinitePlace` at a
 real place and its **square** at a complex one — so that the product formula reads
 `∏_v ‖x‖_v = |N_{K/ℚ}(x)|` with no multiplicities (`InfinitePlace.prod_eq_abs_norm`). Every
@@ -2077,24 +2150,30 @@ that 6.1 to 6.4 and 7.7 can be used.
 The main theorem of the roadmap. It is proved without class field theory, by the argument of
 Lenstra–Stevenhagen and of Sharifi Thm 7.2.2.
 
-**8.0 The Frobenius class, constructed here.** For number fields `K ⊆ L` with `L/K` finite
-Galois, this roadmap builds:
+**8.0 The Frobenius class, consumed.** For number fields `K ⊆ L` with `L/K` finite Galois, the
+Artin symbol is Number Field Arithmetic's, by the contract above. This milestone builds no
+Frobenius element, no conjugacy class, and no compatibility; it holds:
 
-- `IsUnramifiedAt K L 𝔭 : Prop` for `𝔭 : HeightOneSpectrum (𝓞 K)`, as
-  `Ideal.ramificationIdxIn 𝔭.asIdeal (𝓞 L) = 1`, together with finiteness of the ramified set;
-- `frobeniusClass K L 𝔭 : ConjClasses (L ≃ₐ[K] L)` for an unramified `𝔭`, **constructed** from
-  Mathlib's `arithFrobAt` and `isConj_arithFrobAt` over `Algebra.IsInvariant`, and not assumed.
-  `Algebra.isInvariant_of_isGalois` supplies the invariance hypothesis;
-- the characterization, **for an unramified `𝔭`**: `σ` lies in `frobeniusClass K L 𝔭` exactly
-  when there is a prime `Q` of `L` over `𝔭` with `σ • x ≡ x^{𝔑𝔭} mod Q` for every `x`. ⚠ The
-  hypothesis cannot be dropped. Two lifts at the same `Q` differ by an element of inertia, and
-  Mathlib's uniqueness assumes unramifiedness; in a totally ramified abelian extension every
-  inertia element acts trivially on the residue field, so the right-hand side holds for several
-  distinct singleton classes while `frobeniusClass` picks one;
-- **restriction compatibility**, stated against Mathlib's canonical restriction homomorphism
-  `AlgEquiv.restrictNormalHom` and not against an arbitrary parameter: for `K ⊆ E ⊆ L` with `E/K`
-  Galois, the image of `frobeniusClass K L 𝔭` is `frobeniusClass K E 𝔭`;
-- **tower compatibility, stated relative to one prime of `L`**: for `Q` a prime of `L` over `𝔓`
+- `IsUnramifiedAt K L 𝔭 : Prop` for `𝔭 : HeightOneSpectrum (𝓞 K)`, as the quantified
+  `Algebra.IsUnramifiedAt` over the primes of `𝓞 L` above `𝔭` — which is **exactly** the shape
+  `artinSymbol` takes its hypothesis, and per that roadmap's Layer 1.2 rule against an
+  `IsUnramifiedIn` wrapper. Its comparison with `ramificationIdxIn 𝔭.asIdeal (𝓞 L) = 1` is stated
+  once, as `isUnramifiedAt_iff_ramificationIdxIn`, together with finiteness of the ramified set;
+- `frobeniusClass K L 𝔭 hur : ConjClasses (L ≃ₐ[K] L)`, **defined as** the consumed
+  `artinSymbol 𝔭.asIdeal hur`, transported to the `HeightOneSpectrum` indexing that 8A's density
+  statements are written over. It is a definition and not a milestone: `Suggested.lean` closes it
+  with no `sorry`. ⚠ The unramifiedness proof is an argument, so a density set reads
+  `∃ h : IsUnramifiedAt K L 𝔭, frobeniusClass K L 𝔭 h = C` and never a conjunction with a total
+  class. A total class would need a junk value at ramified primes, and every set below would
+  silently contain it;
+- the characterization at an unramified `𝔭` — `σ` lies in the class exactly when there is a prime
+  `Q` of `L` over `𝔭` with `σ • x ≡ x^{𝔑𝔭} mod Q` for every `x` — which is the supplier's Layer
+  2.3 and is not restated here;
+- **restriction compatibility**, which is the consumed `artinSymbol_map_restrictNormalHom`
+  transported along `frobeniusClass`. The transport is a **closed** proof, so the two statements
+  cannot drift apart;
+- **tower compatibility**, which is the consumed `exists_isArithFrobAt_pow_inertiaDeg`, also
+  transported by a closed proof. It is stated relative to one prime of `L`: for `Q` over `𝔓`
   of `E` over `𝔭` of `K`, and `σ` an arithmetic Frobenius **at that `Q`**, the relative Frobenius
   at `Q/𝔓` is `σ^{f(𝔓/𝔭)}` when read in `Gal(L/K)`. The reason is one line of residue arithmetic:
   `σ^f` acts as `x ↦ x^{𝔑𝔭^f}` and `𝔑_E 𝔓 = 𝔑_K 𝔭^f`. ⚠ A version taking an arbitrary
@@ -2111,19 +2190,22 @@ Galois, this roadmap builds:
 - the value at a prime that splits completely, which is the identity class, and the cardinality
   of the class.
 
-Milestones 8C and 8D use restriction and tower compatibility directly, so both are theorems here
-rather than remarks. ⚠ Frobenius here is arithmetic; 8B.1 tests the orientation.
+Milestones 8C and 8D use restriction and tower compatibility directly, so both are named here,
+as transports of the two supplied theorems and not as second proofs of them. ⚠ Frobenius here is
+arithmetic, which is the supplier's convention; 8B.1 tests the orientation.
 
 ⚠ No statement of Layer 8 takes a Frobenius interface as a parameter. A theorem of the shape
 `(F : FrobeniusInterface K L) → HasDirichletDensity …` is conditional on an arbitrary term of a
 small structure: unrelated assignments of conjugacy classes to primes satisfy its fields, the
 theorem holds vacuously for them, and the crossing and fixed-field proofs cannot use restriction
 or tower compatibility because those are properties of a term the theorem does not construct.
-8D.5 is a theorem about `K` and `L`, and about nothing else.
+Consuming a named declaration of an earlier roadmap is the opposite of that, and 8D.5 remains a
+theorem about `K` and `L` and about nothing else.
 
-*Prerequisites:* Mathlib `arithFrobAt`, `IsArithFrobAt`, `isConj_arithFrobAt`,
-`Algebra.IsInvariant`, `Algebra.isInvariant_of_isGalois`, `Ideal.ramificationIdxIn`,
-`AlgEquiv.restrictNormalHom`.
+*Prerequisites:* `artinSymbol`, `artinSymbol_map_restrictNormalHom`,
+`exists_isArithFrobAt_pow_inertiaDeg` (R *Number Field Arithmetic*, Layers 2.3 and 2.4); Mathlib
+`Algebra.IsUnramifiedAt`, `Ideal.ramificationIdxIn`, `AlgEquiv.restrictNormalHom`,
+`AlgEquiv.restrictScalars`.
 
 #### 8A: the density calculus
 
