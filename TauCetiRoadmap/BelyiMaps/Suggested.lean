@@ -55,6 +55,12 @@ Conventions, recorded in `README.md` (§Pinned conventions):
 
 open scoped Manifold ContDiff Topology Pointwise
 
+/- ⚠ Auto-implicits are off. This file is a set of exact signatures, and with them on a
+Mathlib name that has been renamed at the pin is silently bound as a fresh variable rather
+than reported: `PartialHomeomorph` (`OpenPartialHomeomorph` at this pin) was caught only
+because it happened to be applied to arguments. -/
+set_option autoImplicit false
+
 namespace TauCetiRoadmap.BelyiMaps
 
 universe u v
@@ -1266,59 +1272,102 @@ theorem riemannRochAn (X : Type u) [TopologicalSpace X] [ChartedSpace ℂ X]
       D.deg + 1 - (genusAn X : ℤ) :=
   sorry
 
-/-! **Layer 8.2, 8.3: the invariants Riemann–Hurwitz is about.**
+/-! **Layers 8.2, 8.3: the invariants Riemann–Hurwitz is about.**
 
 ⚠ These exist so that Riemann–Hurwitz is a theorem about `f`. Quantifying the formula over a
 free `deg : ℕ`, `ram : Finset X` and `e : X → ℕ` does not weaken it — it makes it **false**,
-because the caller may supply any numbers at all. Every quantity below is determined by `f`,
-and the companion contracts say what determines it. -/
+because the caller may supply any numbers at all.
 
-/-- **Layer 8.3.** The degree of a nonconstant holomorphic map of compact connected Riemann
-surfaces: the common fiber cardinality counted with multiplicity. -/
-def degreeAn {X Y : Type u} [TopologicalSpace X] [ChartedSpace ℂ X] [IsManifold 𝓘(ℂ) ω X]
-    [T2Space X] [CompactSpace X] [ConnectedSpace X]
-    [TopologicalSpace Y] [ChartedSpace ℂ Y] [IsManifold 𝓘(ℂ) ω Y]
-    [T2Space Y] [CompactSpace Y] [ConnectedSpace Y]
-    (f : X → Y) (_hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f) (_hne : ∃ x y, f x ≠ f y) : ℕ :=
+⚠ **The nonconstancy and holomorphy of `f` are arguments, not context.** Layer 8.2 defines
+`ramificationIndex` only for a nonconstant holomorphic map between connected Riemann
+surfaces, and outside that class there is no local degree: a definition taking a bare
+`f : X → Y` would have to return an undocumented junk value, and `ramificationIndexAn_pos`
+below would then silently commit the roadmap to that junk being positive.
+
+⚠ **Compactness is not a hypothesis of the local index.** Layer 8.2's `e` is local. Compactness
+enters only to package the branch locus as a `Finset` and to state 8.3's degree and
+Riemann–Hurwitz, and is carried on exactly those declarations. -/
+
+section LocalIndex
+
+variable {X Y : Type u} [TopologicalSpace X] [ChartedSpace ℂ X] [IsManifold 𝓘(ℂ) ω X]
+  [T2Space X] [ConnectedSpace X]
+  [TopologicalSpace Y] [ChartedSpace ℂ Y] [IsManifold 𝓘(ℂ) ω Y]
+  [T2Space Y] [ConnectedSpace Y]
+
+/-- **Layer 8.2.** The ramification index of `f` at `x`: the `e` of the local normal form
+`w ↦ w ^ e`. No compactness. -/
+def ramificationIndexAn (f : X → Y) (_hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f)
+    (_hne : ∃ x y, f x ≠ f y) (x : X) : ℕ :=
   sorry
 
-/-- **Layer 8.2.** The ramification index of `f` at a point: the local degree, `e ≥ 1`, with
-`e = 1` exactly at the unramified points. -/
-def ramificationIndexAn {X Y : Type u} [TopologicalSpace X] [ChartedSpace ℂ X]
-    [IsManifold 𝓘(ℂ) ω X] [T2Space X] [CompactSpace X] [ConnectedSpace X]
-    [TopologicalSpace Y] [ChartedSpace ℂ Y] [IsManifold 𝓘(ℂ) ω Y]
-    [T2Space Y] [CompactSpace Y] [ConnectedSpace Y]
-    (f : X → Y) (x : X) : ℕ :=
+/-- **Layer 8.2, the defining property.** This is what makes `ramificationIndexAn` *the*
+ramification index rather than some positive number attached to each point: in suitable
+charts at `x` and at `f x`, `f` is exactly `w ↦ w ^ e`. Uniqueness of `e` is Layer 8.2's
+chart-independence statement. -/
+theorem ramificationIndexAn_localNormalForm (f : X → Y) (hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f)
+    (hne : ∃ x y, f x ≠ f y) (x : X) :
+    ∃ (φ : OpenPartialHomeomorph X ℂ) (ψ : OpenPartialHomeomorph Y ℂ),
+      x ∈ φ.source ∧ f x ∈ ψ.source ∧ φ x = 0 ∧ ψ (f x) = 0 ∧
+      ∀ w ∈ φ.target, ψ (f (φ.symm w)) = w ^ ramificationIndexAn f hf hne x :=
   sorry
 
-/-- **Layer 8.2.** The ramified points, a `Finset` because `X` is compact. -/
-def ramifiedPointsAn {X Y : Type u} [TopologicalSpace X] [ChartedSpace ℂ X]
-    [IsManifold 𝓘(ℂ) ω X] [T2Space X] [CompactSpace X] [ConnectedSpace X]
-    [TopologicalSpace Y] [ChartedSpace ℂ Y] [IsManifold 𝓘(ℂ) ω Y]
-    [T2Space Y] [CompactSpace Y] [ConnectedSpace Y]
-    (f : X → Y) : Finset X :=
+/-- The index is positive — junk-free, so the Riemann–Hurwitz sum cannot be gamed by an index
+of `0`. -/
+theorem ramificationIndexAn_pos (f : X → Y) (hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f)
+    (hne : ∃ x y, f x ≠ f y) (x : X) : 0 < ramificationIndexAn f hf hne x :=
   sorry
 
-section RamificationContracts
+/-- **Layer 8.2.** `e = 1` exactly at the points where `f` is a local biholomorphism. -/
+theorem ramificationIndexAn_eq_one_iff (f : X → Y) (hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f)
+    (hne : ∃ x y, f x ≠ f y) (x : X) :
+    ramificationIndexAn f hf hne x = 1 ↔
+      ∃ U : Set X, IsOpen U ∧ x ∈ U ∧ Set.InjOn f U :=
+  sorry
+
+/-- **Layer 8.2.** The branch locus is closed and discrete — the statement that becomes
+finiteness once `X` is compact. -/
+theorem ramificationLocus_discrete (f : X → Y) (hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f)
+    (hne : ∃ x y, f x ≠ f y) :
+    DiscreteTopology {x : X // 1 < ramificationIndexAn f hf hne x} :=
+  sorry
+
+end LocalIndex
+
+section CompactInvariants
 
 variable {X Y : Type u} [TopologicalSpace X] [ChartedSpace ℂ X] [IsManifold 𝓘(ℂ) ω X]
   [T2Space X] [CompactSpace X] [ConnectedSpace X]
   [TopologicalSpace Y] [ChartedSpace ℂ Y] [IsManifold 𝓘(ℂ) ω Y]
   [T2Space Y] [CompactSpace Y] [ConnectedSpace Y]
 
-/-- The index is positive — junk-free, so the sum below cannot be gamed by `e x = 0`. -/
-theorem ramificationIndexAn_pos (f : X → Y) (x : X) : 0 < ramificationIndexAn f x := sorry
+/-- **Layer 8.3.** The degree of a nonconstant holomorphic map of **compact** connected
+Riemann surfaces: the common fiber cardinality counted with multiplicity. Compactness is
+what makes it finite and constant. -/
+def degreeAn (f : X → Y) (_hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f) (_hne : ∃ x y, f x ≠ f y) : ℕ :=
+  sorry
 
-/-- The ramified points are exactly where the index exceeds `1`. This is what ties the
-summation set to `f`. -/
-theorem mem_ramifiedPointsAn_iff (f : X → Y) (x : X) :
-    x ∈ ramifiedPointsAn f ↔ 1 < ramificationIndexAn f x := sorry
+/-- **Layer 8.2/8.3.** The ramified points as a `Finset` — a `Finset` because the branch
+locus is discrete and `X` is compact. -/
+def ramifiedPointsAn (f : X → Y) (_hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f)
+    (_hne : ∃ x y, f x ≠ f y) : Finset X :=
+  sorry
 
-/-- The degree is the fiber sum of ramification indices, at **every** point of the target —
-which is what makes `degreeAn` the degree rather than an arbitrary natural number. -/
+/-- The ramified points are exactly where the index exceeds `1`. This ties the summation set
+to `f`. -/
+theorem mem_ramifiedPointsAn_iff (f : X → Y) (hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f)
+    (hne : ∃ x y, f x ≠ f y) (x : X) :
+    x ∈ ramifiedPointsAn f hf hne ↔ 1 < ramificationIndexAn f hf hne x :=
+  sorry
+
+/-- **Layer 8.3.** The degree is the fiber sum of ramification indices, at **every** point of
+the target — which is what makes `degreeAn` the degree rather than an arbitrary natural
+number. ⚠ Layer 8.2's warning applies: the fiber *cardinality* is not the index; it is the
+sum of the indices over the fiber. -/
 theorem degreeAn_eq_fiber_sum (f : X → Y) (hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ) f)
     (hne : ∃ x y, f x ≠ f y) (y : Y) (fib : Finset X) (hfib : ∀ x, x ∈ fib ↔ f x = y) :
-    degreeAn f hf hne = ∑ x ∈ fib, ramificationIndexAn f x := sorry
+    degreeAn f hf hne = ∑ x ∈ fib, ramificationIndexAn f hf hne x :=
+  sorry
 
 /-- **Layer 9.4, the Riemann–Hurwitz interface.** Every quantity is derived from `f`. An
 identity in `ℤ`, with the ramification sum over the finitely many ramified points. -/
@@ -1326,10 +1375,10 @@ theorem riemannHurwitzAn (f : X → Y) (hf : MDifferentiable 𝓘(ℂ) 𝓘(ℂ)
     (hne : ∃ x y, f x ≠ f y) :
     2 * (genusAn X : ℤ) - 2 =
       (degreeAn f hf hne : ℤ) * (2 * (genusAn Y : ℤ) - 2) +
-        ∑ x ∈ ramifiedPointsAn f, ((ramificationIndexAn f x : ℤ) - 1) :=
+        ∑ x ∈ ramifiedPointsAn f hf hne, ((ramificationIndexAn f hf hne x : ℤ) - 1) :=
   sorry
 
-end RamificationContracts
+end CompactInvariants
 
 /-! ## Layers 12, 13: profinite peripheral objects
 
