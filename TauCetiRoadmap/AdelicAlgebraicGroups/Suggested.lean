@@ -96,8 +96,8 @@ abbrev FiniteAdelicPoints (U : Π i, Subgroup (G i)) :=
   Πʳ i, [G i, (U i : Set (G i))]
 
 /-- The full adelic product once the finite archimedean product is supplied. -/
-abbrev AdelicPoints (G∞ : Type w) (U : Π i, Subgroup (G i)) :=
-  G∞ × FiniteAdelicPoints U
+abbrev AdelicPoints (Garch : Type w) (U : Π i, Subgroup (G i)) :=
+  Garch × FiniteAdelicPoints U
 
 end
 
