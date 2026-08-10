@@ -129,7 +129,7 @@ layer plan on Zulip before Layer 3 or Layer 8 work starts, since those are the t
 these theorems and in-flight upstream code touch the same objects. On the demand side, FLT's
 planning documents name continuous cohomology and the Galois cohomology of local fields (blueprint
 `ch_bestiary` §§13.4-13.9) among its blocking definitions, so this roadmap together with
-the Local Fields roadmap supplies what they
+the Class Field Theory roadmap supplies what they
 need.
 
 **Migration provenance.** The specifications above are the definition of done; the sources here
@@ -161,7 +161,7 @@ states only what is agreed, and this records what still has to be agreed with ro
 under review. Recorded 2026-08-07.
 
 - **Continuous cohomology has one owner: settled at the all-degree carrier, open in low degrees.**
-  The Pro-p Groups roadmap now states that Mathlib's `continuousCohomology` is the carrier of every
+  The Profinite Pro-`p` Groups roadmap now states that Mathlib's `continuousCohomology` is the carrier of every
   cohomological statement it makes, and that it defines no second cohomology theory: its `cd_p`,
   the rank interpretations, the Demushkin predicate and its Layer 11 inputs all read through that
   object. The earlier claim recorded here, that it carries a separate all-degree `contH`, no longer
@@ -172,7 +172,8 @@ under review. Recorded 2026-08-07.
   either roadmap is accepted, one of the two must consume the other's explicit model through the
   exported-interface table rather than restate it, or a transport of every operation used across
   the two must be stated. Until then no claim of composability in low degrees is made anywhere in
-  the roadmap. Recorded against Pro-p Groups head `62017de`.
+  the roadmap. The original audit was recorded against the pre-restructuring Pro-`p` Groups head
+  `62017de`; current consumers use `ProfiniteProPGroups`.
 - **The Evens polarization: resolved.** The Quadratic Form Invariants roadmap now states its
   `evens_add` with a `conjClass` factor, which matches the mathematical shape exported here,
   `N(α + β) - N(α) - N(β) = cor (α ⌣ (s · β))`, following Kozlowski's Lemma 2.4. What remains is
