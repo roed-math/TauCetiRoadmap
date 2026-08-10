@@ -1,81 +1,88 @@
-# Provenance and coordination
+# Provenance and restructuring record
 
-Non-normative. `README.md` is the roadmap and the only document a contributor is held to; this
-file carries the dated and revisable material that would otherwise make the roadmap untimeless:
-the Mathlib pin and when it was inspected, the upstream pull requests being tracked, the
-re-check-at-the-next-bump notes, and the coordination obligations with sibling roadmaps.
+This file is non-normative. `README.md` is the definitive roadmap. This file records the source
+revision, review decisions, supplier contracts, and ownership migration so that the corrected
+mathematics is not lost when generic adelic material moves out.
 
-## Mathlib
+## Source revision
 
-Pin `9caeba1000ef8f302920981f4a08651d325abc81` (2026-06-03), as recorded in `lake-manifest.json`.
-Toolchain `leanprover/lean4:v4.31.0-rc1`. Licence Apache-2.0.
+This is retained PR #12, refactored from source revision
+`3f5bb5adf840865b0e2772cc40d1cde4a7974321`
+(`roadmap(OrthogonalSpinGroups): name the supplier of Layer 5H's Hasse principle`). The
+Clifford-norm sign convention, reflection factor, finite-versus-full-adele distinction,
+noncompact-place formulation of strong approximation, split-torus normalization, and every
+low-dimensional `τ(SO_Q)` exception are preserved.
 
-The capability statements in `README.md`'s "What Mathlib already has" section were verified
-against that pin on 2026-08-07 by reading the source, and the commits touching the four relevant
-directories between the pin and master on that date were read as well. Those directories are
-`LinearAlgebra/CliffordAlgebra/`, `Topology/Algebra/RestrictedProduct/`,
-`LinearAlgebra/QuadraticForm/` and `NumberTheory/NumberField/AdeleRing.lean`, and the window
-contains 19 commits. All are refactors or chores except `#42134` (`IsApply` for `QuadraticMap`)
-and `#40535` (notation for adele rings), and none of them adds anything the roadmap names as
-missing.
+## Migration ledger for PR #12
 
-Two want re-checking at the next toolchain bump, because they move ground the roadmap stands on
-without changing what is available:
+| Source material | Destination | Status |
+| --- | --- | --- |
+| Layers 0--2: orthogonal/special-orthogonal groups, determinant, reflections, Clifford and spinor norms, exact kernel/image comparison, transvections and local spinor norms | OrthogonalSpinGroups | retained |
+| Layer 3A and 3C--3G: the orthogonal group schemes, specialized compact-open data, orthogonal/Spin adelic aliases, diagonals, adelic spinor norm and double cosets | OrthogonalSpinGroups | retained |
+| Layer 3B: generic restricted-product maps, congruence, integral subgroup and rational diagonal | AdelicAlgebraicGroups | replaced-by-contract |
+| Layer 3H: generic reduction theory, norm-one adelic subgroup, finite covolume and density | AdelicAlgebraicGroups | moved |
+| Layer 4: general strong approximation versus verification for `Spin_Q` and the finite-adelic/spinor-kernel corollaries | AdelicAlgebraicGroups / OrthogonalSpinGroups | split |
+| Layer 5A--5E: invariant forms, Haar/Tamagawa measures, convergence, central-isogeny comparison and the simply-connected semisimple theorem | AdelicAlgebraicGroups | moved |
+| Layer 5F--5I: orthogonal measures, the `Spin → SO` computation and `τ(SO_Q)` with dimensions 0, 1 and 2 separated | OrthogonalSpinGroups | retained |
 
-- `#37381` deprecates `IsOrtho` and its lemmas on sesquilinear forms.
-- `#40451` rewrites the definitional guts of `CliffordAlgebra` from `RingQuot` to
-  `RingCon.Quotient`.
+There is one public owner for every generic carrier. The old local `SquareClass` alias and generic
+square-class pushforward stand-ins were deleted; the spinor norm now uses
+`Kˣ ⧸ Subgroup.square Kˣ` directly, with square-class ownership documented in
+QuadraticFormInvariants.
 
-Three names in the roadmap are in the **root** namespace rather than where their file's
-documentation suggests, which is a recurring source of `unknown identifier` errors and is worth
-re-checking whenever the pin moves: `lipschitzGroup`, `pinGroup` and `spinGroup` are not under
-`CliffordAlgebra`, and `sigPos` and `sigNeg` are not under `QuadraticForm`.
+## Mathlib audit
 
-Mathlib owns its API decisions. Where this roadmap names an object the way an open Mathlib pull
-request does, the intent is that adopting the upstream version later is a deletion and an import
-rather than a rewrite. Nothing here is held back for upstream, and nothing here is waiting on it.
+Pin `9caeba1000ef8f302920981f4a08651d325abc81` (2026-06-03), toolchain
+`leanprover/lean4:v4.31.0-rc1`, licence Apache-2.0. The capability audit was performed
+2026-08-07 against `LinearAlgebra/CliffordAlgebra/`,
+`Topology/Algebra/RestrictedProduct/`, `LinearAlgebra/QuadraticForm/`, and
+`NumberTheory/NumberField/AdeleRing.lean`.
 
-## Sibling roadmaps, and what is owed
+The audit fixed three naming hazards: `lipschitzGroup`, `pinGroup`, and `spinGroup` are in
+the root namespace, as are `sigPos` and `sigNeg`. It also confirmed that Mathlib has no
+reflection determinant for `Module.reflection`, no restricted-product congruence API, no adelic
+point groups of algebraic groups, and no Tamagawa measure. The latter generic gaps are now owned
+by AdelicAlgebraicGroups rather than by this roadmap.
 
-- **Spin Representations** (accepted, `TauCetiRoadmap/RepresentationTheory/SpinRepresentations/`).
-  Supplies `orthogonalGroup`, `specialOrthogonalGroup`, `ιRangeEquiv`, `pinToOrthogonal`,
-  `spinToSpecialOrthogonal`, the double-cover kernel, the Clifford structure theorem over an
-  algebraically closed field, and the low-rank exceptional isomorphisms over an algebraically
-  closed field. Its Layer 2 and its standing conventions used to say that the general-field result
-  should be stated as the spinor-norm exact sequence "if at all", which left the theorem claimed in
-  two places; both now record that the general-field spinor norm and the image of `Spin → SO` are
-  `OrthogonalSpinGroups`'. That edit is in this pull request, and it is the only change it makes to
-  an accepted roadmap.
-- **Quadratic Form Invariants.** Supplies reflections, Cartan–Dieudonné, Witt theory, orthogonal
-  bases, the square-class calculus with its multiplicative avatar, and the local classification.
-  Its reflection formula and this roadmap's agree exactly.
-- **Local Fields.** Supplies local compactness and the power-class cardinality formula. It does not
-  state openness of `(Kˣ)²` on its own; its instance `U(K, 2e+1) ⊆ (Kˣ)²` supplies it, and Layer 2E
-  cites it in that form.
-- **Global Class Field Theory.** Supplies Hilbert reciprocity, consumed by Layer 5H alone.
-- **Reductive Groups** (accepted). Supplies the functor of points and the structure theory that
-  Layer 3A specializes. **Owed there, if its accepted text does not already expose them:** the
-  point-functor, semisimplicity, simple-connectedness and central-isogeny interfaces Layer 3A names.
-  Where it does not, Layer 3A owns the specialized versions for `O_Q`, `SO_Q` and `Spin_Q`.
-- **Integral Lattices.** The consumer, and nothing is owed there. Its contract table carries the
-  two Layer 0C rows, `orthogonalGroup Q ≃* O(Q.polarBilin)` and `O(β) →* O(β.baseChange S)`, which
-  are what place its bilinear-first `O(L)` inside the quadratic-form group `O(V_p)` its `K_p(L)` is
-  defined in, and its consume table attributes `O(Q)`, `SO(Q)` and the `Spin → SO` map to Spin
-  Representations and Cartan–Dieudonné to Quadratic Form Invariants.
+At the next toolchain bump recheck mathlib4 changes #37381 (the `IsOrtho` deprecation) and
+#40451 (the `CliffordAlgebra` quotient refactor).
 
-## Merge order
+## Final supplier contracts
 
-The quadratic form invariants, local fields and global class field theory roadmaps are cited by
-pull-request link rather than by relative path, because they are not yet accepted and a relative
-link to a file that does not exist would not resolve. When each is accepted, its citation here
-becomes a relative link and the exact consumed declarations replace the layer references. This
-roadmap is not gap-free until those three are accepted, and that is a merge-order obligation rather
-than a defect in the specification.
+- **QuadraticFormInvariants** supplies the raw multiplicative square-class quotient, reflection
+  and Cartan--Dieudonné input, Witt theory, `hilbertSymbol`, `localHasse`,
+  `hasseInvariant_eq_localHasse`, and local classification.
+- **LocalFieldsRamification** supplies local compactness, normalized valuations, unit filtrations,
+  square-class counts and the deep-squares theorem
+  `unitFiltration_le_range_powMonoidHom_two` with its sharpness.
+- **ClassFieldTheory** supplies `ClassFieldTheory.hilbertProductFormula`; it supplies no
+  quadratic-form or Hasse--Minkowski carrier.
+- **GlobalQuadraticForms** supplies `LocallyEquivalent`, `hasseMinkowski_equivalent`, and
+  `equivalent_of_locallyEquivalent`. This corrects the old attribution of Hasse--Minkowski to
+  source PR #6.
+- **AdelicAlgebraicGroups** supplies the generic restricted-product/adelic names checked in
+  `Suggested.lean`, and owns the README-level `LocalPointGroup`, `CompatibleCompactOpens`,
+  `AdelicPointsAway`, `strongApproximation`, and `tamagawaMeasure` contracts.
+- **ReductiveGroups** and **SpinRepresentations** remain accepted external suppliers for
+  structure theory and Clifford representation theory.
+- **IntegralLattices** is the downstream consumer.
 
-## The general Tamagawa machinery
+The dependency arrows are one-way. OrthogonalSpinGroups does not recreate a generic adelic group,
+measure, reduction theorem, or Hasse principle.
 
-Layer 5A to 5E is general Tamagawa theory for connected linear algebraic groups and is deliberately
-written to be independent of quadratic forms. It is kept in this roadmap so that Layer 5I rests on
-stated targets rather than on an assumed future document. Lifting it into a roadmap of its own is a
-clean follow-up and would need no mathematical rewriting: Layer 5F to 5I would then cite it, and
-this roadmap would keep only the orthogonal specialization.
+## Review decisions preserved
+
+- The reflection coefficient uses Mathlib's un-halved polar form:
+  `B(x,v) / Q(v) = 2 B(x,v) / B(v,v)`; the mixed coefficient
+  `2 B(x,v) / Q(v)` is rejected because it sends `v` to `-3v`.
+- The Clifford norm is `reverse g * g`, so a vector has norm exactly `Q(v)`. Mathlib's
+  `star` convention differs by a sign on odd Clifford degree, and that sign is not killed by
+  square classes in general.
+- Rational points are discrete in the full adelic group and need not be discrete in the finite
+  adelic group.
+- Strong approximation for Spin is controlled by a noncompact place for every almost-simple
+  factor. Indefiniteness is only the `S = {∞}` corollary.
+- The generic strong-approximation proof and generic Tamagawa construction are not duplicated
+  merely to keep the orthogonal application self-contained.
+- For dimension two the split norm-one torus uses a residue normalization, not a finite
+  `L(1, χ)`; dimensions zero and one both have Tamagawa number one.

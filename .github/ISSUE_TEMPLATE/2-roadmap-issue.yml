@@ -26,6 +26,7 @@ body:
         - OneParameterSemigroups
         - OptimalTransport
         - OrthogonalL2Bases
+        - OrthogonalSpinGroups
         - PDE
         - ReductiveGroups
         - RepresentationTheory

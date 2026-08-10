@@ -8,17 +8,18 @@ embedded copy of the underlying module; it has `Module.reflection` as a linear e
 attached to a functional; it has `QuadraticMap.IsometryEquiv`, carrying no group structure; it has
 `Matrix.orthogonalGroup`, which is the orthogonal group of the standard form only and which
 carries no topology; it has `RestrictedProduct` with its topology, the finite adele ring of a
-Dedekind domain, the adele ring of a number field, and Haar measure with quotient covolumes. What
-it has none of is the spinor norm, any adelic point group, strong approximation, or a Tamagawa
-measure. `spinGroup` has no consumer anywhere in the library.
+Dedekind domain, the adele ring of a number field, and Haar measure with quotient covolumes. It has
+none of the spinor norm or the orthogonal-specific arithmetic developed here. Generic adelic point
+groups, restricted-product maps, strong approximation, and Tamagawa measures are consumed from
+[AdelicAlgebraicGroups](../AdelicAlgebraicGroups/README.md), not rebuilt in this roadmap.
 
 This roadmap develops the arithmetic of the orthogonal and spin groups attached to a
 finite-dimensional nondegenerate quadratic space over a field of characteristic not two: the
-spinor norm through reflections, the Clifford comparison and its spinor kernel, local topological
-point groups, finite adelic restricted products, strong approximation for `Spin`, and the
-canonically normalized orthogonal Tamagawa-volume theorem. It supplies the reusable
-group-theoretic and adelic infrastructure consumed by the [integral lattices
-roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/7).
+spinor norm through reflections, the Clifford comparison and its spinor kernel, orthogonal
+transvections, local and adelic spinor norms, verification of the general strong-approximation
+hypotheses for `Spin`, and the canonically normalized orthogonal Tamagawa-volume theorem. It
+specializes the imported adelic infrastructure and supplies the orthogonal interfaces consumed by
+the [IntegralLattices roadmap](../IntegralLattices/README.md).
 
 Two theorems here are the reason the roadmap exists, and they are independent of each other.
 **Strong approximation for `Spin` is a noncompact-place theorem**: it requires each
@@ -30,22 +31,26 @@ global theorem**, with no isotropy hypothesis at all, and it is the input to the
 positive definite genera. Neither is a corollary of the other, no proof here derives one from the
 other, and no ordering statement below puts one after the other.
 
-**Scope exclusions** (choices, not omissions; each names its owner). **The Clifford algebra, the
-Pin and Spin groups, the orthogonal group of a quadratic form, and the low-rank exceptional
-isomorphisms over an algebraically closed field** belong to the [spin representations
-roadmap](../RepresentationTheory/SpinRepresentations/README.md); the general-field spinor norm,
-the general-field image of `Spin → SO`, and the twisted rational forms of the low-rank
-isomorphisms are this roadmap's. **Reflections, Cartan–Dieudonné, Witt decomposition, Witt
-cancellation, Witt's extension theorem, square classes, Hasse invariants, the Hilbert symbol, and
-the classification of forms over local fields** belong to the [quadratic form invariants
-roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/4). **Affine group schemes,
-representability, root data, and the classification of reductive groups** belong to the [reductive
-algebraic groups roadmap](../ReductiveGroups/README.md); Layer 3A consumes its functor of points
-and its structure theory to build the specialized schemes `O_Q`, `SO_Q` and `Spin_Q`, which Layers
-4 and 5 require. **Lattice stabilizers and their arithmetic**, isometry classes, genera, spinor
-genera, Eichler's theorem for lattice classes, local densities, and the mass formula belong to the
-[integral lattices roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/7); Layer 3E
-constructs the `ℤ`-span of a chosen basis and proves no arithmetic about it. **Characteristic
+**Scope exclusions** (choices, not omissions; each names its owner). The Mathlib Clifford,
+Lipschitz, Pin and Spin carriers and the accepted [SpinRepresentations
+roadmap](../RepresentationTheory/SpinRepresentations/README.md)'s algebraically closed structure
+theorems are inputs; this roadmap owns the general-field algebraic orthogonal/spin group API, the
+spinor norm, the image of `Spin → SO`, and the twisted rational forms of the low-rank
+isomorphisms. **Witt decomposition and cancellation, square classes, Hasse invariants, the Hilbert
+symbol, and classification over local fields** belong to
+[QuadraticFormInvariants](../QuadraticFormInvariants/README.md). **Hasse--Minkowski and global
+classification of forms over number fields** belong to
+[GlobalQuadraticForms](../GlobalQuadraticForms/README.md). **Local ramification and power-class
+facts** belong to [LocalFieldsRamification](../LocalFieldsRamification/README.md), and Hilbert
+reciprocity belongs to [ClassFieldTheory](../ClassFieldTheory/README.md). **Generic local/adelic
+point groups, compatible compact opens, rational diagonals, restricted-product functoriality,
+Haar/Tamagawa measures, reduction theory, and general strong approximation** belong to
+[AdelicAlgebraicGroups](../AdelicAlgebraicGroups/README.md). **Affine group schemes,
+representability, root data, and reductive structure theory** belong to
+[ReductiveGroups](../ReductiveGroups/README.md); the orthogonal specializations `O_Q`, `SO_Q` and
+`Spin_Q` stay here. **Lattice stabilizers and their arithmetic**, isometry classes, genera, spinor
+genera, Eichler's theorem for lattice classes, local densities, and the mass formula belong to
+[IntegralLattices](../IntegralLattices/README.md). **Characteristic
 two** is excluded: every field here has `2` invertible, and the Dickson invariant is not
 developed. **The connected components of the real orthogonal groups**, their maximal compacts and
 their symmetric spaces are outside. **Automorphic representations, the Weil representation, and the
@@ -59,20 +64,20 @@ and six `Spin_Q` **is** a symplectic or unitary group of an involution on the ev
 so 1F names those groups and 5E computes their Tamagawa numbers. What is excluded is developing
 them for their own sake, not naming the group `Spin_Q` turns out to be.
 
-The general Tamagawa machinery of Layer 5A to 5E is **in** scope, and is written to be independent
-of quadratic forms so that it can be lifted into a roadmap of its own without rewriting.
+The generic Tamagawa machinery formerly in Layers 5A--5E has moved to
+`AdelicAlgebraicGroups`. The orthogonal specialization and the calculation of `τ(SO_Q)` remain
+here, including every low-dimensional exception.
 
 Suggested homes, mirroring Mathlib's directory conventions:
 
 - `TauCeti/LinearAlgebra/QuadraticForm/OrthogonalGroup/` for Layers 0 and 1, the field-level
   algebra with no arithmetic in it, beside the ambient form theory the quadratic form invariants
   roadmap puts at `TauCeti/LinearAlgebra/QuadraticForm/`.
-- `TauCeti/NumberTheory/QuadraticForm/OrthogonalGroup/` for Layers 2 to 5: local point groups,
-  restricted products, approximation and measures.
-- `TauCeti/Topology/Algebra/RestrictedProduct/` for the generic restricted-product API of Layer 3,
-  which is about topological groups and not about quadratic forms. Every roadmap that eventually
-  wants the adelic points of a group will want it, and it should not be buried under a
-  quadratic-form namespace.
+- `TauCeti/NumberTheory/QuadraticForm/OrthogonalGroup/` for Layers 2 to 5: orthogonal local and
+  adelic specializations, the Spin approximation application, and the `SO` Tamagawa calculation.
+
+The generic restricted-product and Tamagawa files live in the homes specified by
+`AdelicAlgebraicGroups`, never under this quadratic-form namespace.
 
 ## Standing hypotheses and pinned conventions
 
@@ -102,17 +107,18 @@ Decided once here; every layer states its results against this table.
   `x : V` with `f x = 2` and returns `y ↦ y - f y • x`, and `f := (Q v)⁻¹ • polarBilin Q v` has
   `f v = B v v / Q v = 2` on the nose.
 - **Orthogonal group.** `O(Q)` is `orthogonalGroup Q : Subgroup (V ≃ₗ[K] V)` and `SO(Q)` is
-  `specialOrthogonalGroup Q`, both from the [spin representations
-  roadmap](../RepresentationTheory/SpinRepresentations/README.md). They are consumed, never
-  redefined, and no second notion of isometry is introduced beside Mathlib's
+  `specialOrthogonalGroup Q`. Their general-field algebraic API is owned here, built on Mathlib's
+  Clifford carriers and the accepted SpinRepresentations inputs. No second notion of isometry is
+  introduced beside Mathlib's
   `QuadraticMap.IsometryEquiv`. `Matrix.orthogonalGroup`, being the orthogonal group of the
   standard form, is a comparison target after choosing a basis and never a definition. We say
   **proper** for an element of `SO(Q)` and **improper** otherwise.
 - **`SO` means determinant one**, which is correct in characteristic not two. The determinant is
   `LinearEquiv.det` restricted to `O(Q)`.
 - **Square classes.** `Kˣ/(Kˣ)²` is the quadratic form invariants roadmap's, interoperating with
-  the landed `TauCeti.SquareClassGroup`; in quotient-free statements "same square class" is
-  `IsSquare (a * b)` for units. The spinor norm lands there and adds no third spelling.
+  the landed `TauCeti.SquareClassGroup`; its multiplicative carrier is written directly as
+  `Kˣ ⧸ Subgroup.square Kˣ`. In quotient-free statements "same square class" is
+  `IsSquare (a * b)` for units. The spinor norm lands there and adds no alias or third spelling.
 - **The Clifford action is twisted conjugation.** The Lipschitz, Pin and Spin groups act on `V`
   by `x ↦ involute g * x * g⁻¹`, matching Mathlib's `pinGroup` and `spinGroup`, which are defined
   through `involute`. Under this action an anisotropic `v` acts as `τ_v` exactly, with no sign.
@@ -132,7 +138,8 @@ Decided once here; every layer states its results against this table.
   ℚ and over `ℚ_p`, so the two conventions genuinely disagree on `O(Q)` at odd reflection length,
   and agree on `SO(Q)`. Every statement below uses the `reverse` norm.
 - **Places and adeles.** Over ℚ we write `ℚ_v` with `ℚ_∞ = ℝ`; for a number field the places are
-  as the global class field theory roadmap names them. `𝔸_f` is the finite adeles, `𝔸` the full
+  as GlobalNumberFields names them and AdelicAlgebraicGroups packages their point groups. `𝔸_f`
+  is the finite adeles, `𝔸` the full
   adeles, `𝔸^S` the adeles away from a finite set `S` of places. Which is meant is never left
   implicit: Layer 3 builds finite adelic groups, Layer 4 approximates away from a set containing
   the archimedean place, Layer 5 works with the full adeles.
@@ -232,141 +239,71 @@ the re-check notes are in [`PROVENANCE.md`](PROVENANCE.md).
 
 ## What Tau Ceti already has (consume)
 
-- **The [spin representations roadmap](../RepresentationTheory/SpinRepresentations/README.md)**,
-  consumed by name for the objects this roadmap builds on and does not restate: its Layer 1
-  Clifford structure theorem; its Layer 2 `orthogonalGroup Q` and `specialOrthogonalGroup Q` with
-  the comparison to `Matrix.orthogonalGroup` under a basis, `ιRangeEquiv`, `pinToOrthogonal`,
-  `spinToSpecialOrthogonal`, the theorem that a unit vector maps to a reflection, and the kernel
-  `{±1}` of the double cover; and its Layer 6 low-dimensional exceptional isomorphisms. That
-  roadmap proves surjectivity of the double cover over an algebraically closed field, and its
-  Clifford structure theorem is stated there too. ⚠ **Ownership of the general-field theory is
-  here, and is not shared**: the spinor norm, the graded centre over a general field (Layer 1B),
-  the image of `Spin → SO` at `K`-points, and the twisted rational forms of the low-rank
-  isomorphisms are this roadmap's targets, and the spin representations roadmap consumes them if
-  it needs them. Its algebraically closed structure theorem does not supply Layer 1B, which is why
-  Layer 1B is owned rather than cited. This roadmap also adds the theory of `O(Q)` the
-  representation theory has no reason to prove: the determinant, base change, and the bilinear
-  dictionary.
-- **The [quadratic form invariants
-  roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/4)**, consumed by name: its Layer 0
-  square-class calculus and orthogonal bases; its Layer 1 hyperbolic planes, Witt decomposition,
-  Witt cancellation, **Witt's extension theorem**, **reflections** with the formula pinned above,
-  and **Cartan–Dieudonné**, that every isometry of a regular `n`-dimensional space is a product of
-  at most `n` reflections; its Layer 3 `discr` and `signedDiscr`; its 6C `hilbertSymbol`,
-  `localHasse` and `hasseInvariant_eq_localHasse`, and its 6D classification of forms over a finite
-  extension of `ℚ_p` by `(dim, d, s)`, which is what makes the local spinor-norm images of Layer 2
-  computable. Its standing `[Invertible (2 : K)]` is this roadmap's too.
+The final portfolio dependencies are imports, not local interfaces.
 
-  ⚠ That roadmap is **local**: it stops at forms over a nonarchimedean local field. The
-  Hasse–Minkowski principle that Layer 5H needs is global and is not among its milestones. It is
-  global class field theory's, at 11.8, because its proof consumes that roadmap's weak
-  approximation, Hasse norm theorem and Hilbert reciprocity.
-- **The [local fields roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/2)**, for the local
-  structure Layer 2 needs: local compactness of a nonarchimedean local field with `𝒪[K]` compact
-  open and `Kˣ` locally compact (its Layer 0), and its `square_eq_range_powMonoidHom` with the
-  square-class counts `card_squareClasses_of_isUnit` and `card_squareClasses_dyadic`, which give
-  finiteness of `Kˣ/(Kˣ)²`. That roadmap does not state openness of `(Kˣ)²` on its own, and
-  openness is what makes the square-class group discrete and hence the spinor norm continuous;
-  `unitFiltration_le_range_powMonoidHom_two`, which is `U(K, 2e+1) ⊆ (Kˣ)²` at the `e` of
-  `absoluteRamificationIndex`, supplies it since the unit filtration is open, and Layer 2 below
-  cites it in that form. Its companion `not_unitFiltration_le_range_powMonoidHom_two` is the
-  sharpness, and is what stops the bound being read one step too far.
-- **The [global class field theory
-  roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/6)**, for three declarations. Its 11.4
-  `hilbertProductFormula`, Hilbert reciprocity `∏_v (a,b)_v = 1`: Layer 5's passage from the local
-  spinor-norm quotients to the global one is exactly a reciprocity statement, and it is consumed
-  from there rather than reproved. This is the same theorem, under the same name, that the integral
-  lattices roadmap consumes. And its 2A.3 `denseRange_algebraMap_finiteAdeleRing`, additive strong
-  approximation, which Layer 4B reduces adelic approximation to. ⚠ The second is **not** that
-  roadmap's Layer 0 weak approximation, which an earlier revision of this document cited; its own
-  note says strong approximation is a different statement. And its 11.8
-  `hasseMinkowski_equivalent`, the Hasse–Minkowski theorem, which Layer 5H reads at `K = ℚ`; that
-  roadmap states it over an arbitrary number field and defines no `H¹(K, SO(Q))`, so the passage
-  to the pointed-set form `Ш¹(ℚ, SO_Q) = 1` is 5H's own work.
-- **`TauCeti/FieldTheory/SquareClassGroup.lean`** (landed): `TauCeti.SquareClassGroup K`, the
-  **additive** avatar `Additive Kˣ ⧸ (Subgroup.square Kˣ).toAddSubgroup` as a `ZMod 2`-vector
-  space, with `squareClass` and its characterizations. ⚠ The spinor norm is multiplicative, so its
-  codomain is the **multiplicative** avatar `Kˣ ⧸ Subgroup.square Kˣ` that the quadratic form
-  invariants roadmap's Layer 0 adds, and the two are not interchangeable without a map. Four things
-  are pinned rather than left as "interoperating with": the unit-to-square-class homomorphism; the
-  named equivalence between the multiplicative avatar and the landed additive one; base change along
-  a field homomorphism, which is what the local and adelic codomains of Layers 2 and 3 are built
-  from; and the single spelling used by `spinorNorm`. Until that roadmap lands, this roadmap's
-  prototype carries the same name and type, so adoption is a deletion and an import.
-- **`TauCeti/LinearAlgebra/OrthogonalGroup.lean`** (landed):
-  `orthogonalGroupToLinearIsometryEquiv`, the Euclidean orthogonal group as linear isometries.
-  Layer 0's comparison for a positive definite real form lands next to it, and Layer 2's
-  compactness statement at the real place uses it.
-- **The [integral lattices roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/7)** is the
-  consumer, not a dependency. It takes four interfaces, named here so the two documents can be
-  checked against each other: the spinor norm on `O(V_p)` with `Spin → SO` and its image (Layers 1
-  and 2), finite adelic restricted products of the three point groups (Layer 3), the `S = {∞}`
-  corollary of strong approximation for `Spin(V)` with `V` indefinite of dimension at least 3
-  (Layer 4E), and canonical local Haar measures with `vol(SO(V)(ℚ) \ SO(V)(𝔸)) = 2` (Layers 5G
-  and 5I). ⚠ Its Layer 4B additionally needs Layer 0C, the identification of the automorphism
-  group of a symmetric bilinear form with that of its quadratic form, which is what places its
-  bilinear-first `O(L)` inside `O(V_p)`.
+- **[QuadraticFormInvariants](../QuadraticFormInvariants/README.md)** owns the canonical
+  multiplicative square-class quotient `Kˣ ⧸ Subgroup.square Kˣ`, reflection and
+  Cartan--Dieudonné input, Witt theory, `hilbertSymbol`, `localHasse`,
+  `hasseInvariant_eq_localHasse`, and local classification. This roadmap uses the raw quotient
+  directly and introduces no `SquareClass` alias or generic pushforward API.
+- **[GlobalQuadraticForms](../GlobalQuadraticForms/README.md)** owns localization and global
+  classification. Layer 5 consumes `GlobalQuadraticForms.LocallyEquivalent`,
+  `hasseMinkowski_equivalent`, and `equivalent_of_locallyEquivalent` at `K = ℚ`; it does not
+  restate the Hasse principle.
+- **[ClassFieldTheory](../ClassFieldTheory/README.md)** owns the cohomological Hilbert pairing and
+  `ClassFieldTheory.hilbertProductFormula`. It owns no quadratic-form carrier.
+- **[LocalFieldsRamification](../LocalFieldsRamification/README.md)** owns normalized valuations,
+  unit filtrations and the square-class finiteness/deep-squares inputs, including
+  `unitFiltration_le_range_powMonoidHom_two` and its sharpness.
+- **[AdelicAlgebraicGroups](../AdelicAlgebraicGroups/README.md)** owns generic local and adelic
+  point groups, restricted-product maps, rational diagonals, reduction theory, strong
+  approximation, invariant measures and Tamagawa measures. Its Lean-level contracts consumed in
+  `Suggested.lean` are `integralSubgroup`, `restrictedProductMap`,
+  `restrictedProductCongr`, `rationalDiagonal`, `FiniteAdelicPoints`, and
+  `AdelicPoints`. `LocalPointGroup`, `strongApproximation`, and `tamagawaMeasure` remain
+  exact README-level contracts until ReductiveGroups exposes the required point-functor carrier;
+  this roadmap supplies no placeholder replacement.
+- **[SpinRepresentations](../RepresentationTheory/SpinRepresentations/README.md)** and Mathlib
+  supply the Clifford-algebra representation theory and the algebraically closed low-rank
+  exceptional isomorphisms. This roadmap owns their general-field orthogonal/spin arithmetic
+  specialization.
+- **[ReductiveGroups](../ReductiveGroups/README.md)** supplies the point-functor and structural
+  algebraic-group theory used to verify that the specialized `O_Q`, `SO_Q`, and `Spin_Q`
+  satisfy the imported adelic theorems.
+- **[IntegralLattices](../IntegralLattices/README.md)** is the downstream consumer, not a
+  prerequisite.
 
 ### Dependencies, by milestone
 
-Each row is a theorem or interface consumed by name, not a whole roadmap.
-
-Where the supplier has fixed a Lean name at its current head, the **Consumed** column gives that
-name and the row is an exact contract. Where the supplier has fixed a milestone but no name, the
-row gives the milestone in the supplier's own citation form, and any provisional name both
-roadmaps use is marked with an asterisk. A subject is never a row: "Hilbert reciprocity" is not
-one, `hilbertProductFormula` is.
+Every row is either an exact Lean declaration or an exact README-level contract in the named
+supplier. The latter are explicitly marked; there is no local stand-in.
 
 | Consumed | From | Used by |
 | --- | --- | --- |
-| `orthogonalGroup Q`, `specialOrthogonalGroup Q`, the matrix comparison | Spin Representations, Layer 2 | Layers 0 to 5 |
-| `ιRangeEquiv`, `pinToOrthogonal`, `spinToSpecialOrthogonal`, kernel `{±1}` | Spin Representations, Layer 2 | Layer 1 |
-| the Clifford structure theorem | Spin Representations, Layer 1 | Layer 1 |
-| the low-dimensional exceptional isomorphisms | Spin Representations, Layer 6 | Layers 4, 5 |
-| reflections, with the pinned formula | Quadratic Form Invariants, Layer 1 | Layers 0, 1 |
-| Cartan–Dieudonné | Quadratic Form Invariants, Layer 1 | Layer 1 (well-definedness of `θ`) |
-| Witt cancellation and Witt's extension theorem | Quadratic Form Invariants, Layer 1 | Layers 0, 2 |
-| orthogonal bases over a field with `2` invertible | Quadratic Form Invariants, Layer 0 | Layers 0, 1 |
-| the landed `TauCeti.SquareClassGroup` with `TauCeti.squareClass_eq_zero_iff`, and the multiplicative avatar `Kˣ ⧸ Subgroup.square Kˣ` with its `ZMod 2`-module dictionary, pushforward and finiteness transfer, from the milestone `0: square-class interop`; and the Kummer comparison `kummerSquareClassEquiv` with `kummerSquareClassEquiv_kummerClass`. ⚠ `SquareClassGroup` is landed Tau Ceti code, not a target of that roadmap; what it supplies is the interop | Quadratic Form Invariants, Layer 0 | Layers 1, 2, 5 |
-| the Hilbert symbol `hilbertSymbol`, with `hilbertSymbol_comm`, `hilbertSymbol_mul`, `hilbertSymbol_unramified` and `exists_hilbertSymbol_eq_neg_one`; the local Hasse invariant `localHasse` with `hasseInvariant_eq_localHasse`; the plain discriminant of Layer 3; and, as a milestone, `6D: the classification` — two regular forms over a nonarchimedean local field are isometric exactly when `(dim, d, s)` agree | Quadratic Form Invariants, Layers 3, 6C, 6D | Layer 2 |
-| `normalizedValuation` with `normalizedValuation_surjective` and `normalizedValuation_eq_one_iff`; `unitFiltration` with `unitFiltration_antitone` and `iInf_unitFiltration`; the square subgroup `square_eq_range_powMonoidHom` with the square-class counts `card_squareClasses_of_isUnit` and `card_squareClasses_dyadic`; and the deep-squares pair `unitFiltration_le_range_powMonoidHom_two` and `not_unitFiltration_le_range_powMonoidHom_two`, which is `U(K,2e+1) ⊆ (Kˣ)²` **with its sharpness**; plus `absoluteRamificationIndex` for the `e` in that bound. ⚠ The bound is indexed by the prime, because "the absolute ramification index" is not a number attached to `K` alone | Local Fields, Layers 0, 1 | Layers 2, 3 |
-| local compactness of `K` and compact-openness of `𝒪[K]`, as `Layer 0: the valuation ring and its topology` | Local Fields, Layer 0 | Layers 2, 3 |
-| `hilbertProductFormula`\*, Hilbert reciprocity `∏_v (a,b)_v = 1` over ℚ, with the finite symbols from the consumed `hilbertSymbol` and the real one from that roadmap's 2C.8 | Global Class Field Theory, 11.4 | Layer 5H |
-| the functor of points of an affine group scheme, and morphisms of such | Reductive Groups, Layer 0 | Layer 3A |
-| smoothness, connectedness, semisimplicity, simple connectedness, central isogenies | Reductive Groups, Layers 3, 6 | Layer 3A |
-| the decomposition of a semisimple group into `K`-almost-simple factors | Reductive Groups, Layer 7 | Layers 3A, 4D |
-| finite-dimensionality of `CliffordAlgebra Q`, that is `dim = 2^n` | Spin Representations, Layer 0 | Layer 2A |
-| the multiplicative square-class avatar `Kˣ ⧸ Subgroup.square Kˣ` and its additive comparison | Quadratic Form Invariants, Layer 0 | Layers 1D, 2F, 3F |
-| `hasseMinkowski_equivalent`, with the `LocallyEquivalent` predicate of its 11.5: regular quadratic forms over a number field are isometric exactly when they are isometric at every finite completion and every real completion. This roadmap consumes the `K = ℚ` specialization, and derives the pointed-set and `Ш¹` formulation itself; the supplier defines no `H¹(K, SO(Q))` and no Tate–Shafarevich set. ⚠ **Not** Quadratic Form Invariants Layer 6, which an earlier revision of this row cited: that is the classification over a nonarchimedean *local* field, and Hasse–Minkowski is global | Global Class Field Theory, 11.8 | Layer 5H (`Ш¹(ℚ, SO_Q) = 1`) |
-| `denseRange_algebraMap_finiteAdeleRing`, additive strong approximation: `K` is dense in its **finite** adeles. ⚠ Not the weak approximation of that roadmap's 0.2, whose own note says strong approximation is a different statement, and not the discreteness of `K` in the full adele ring, where no density statement can hold | Global Class Field Theory, 2A.3 | Layer 4B |
+| Clifford, Lipschitz, Pin and Spin carriers; algebraically closed low-rank comparisons | Mathlib and SpinRepresentations | Layers 0, 1 |
+| raw `Kˣ ⧸ Subgroup.square Kˣ`; reflection/Cartan--Dieudonné/Witt inputs; `hilbertSymbol`, `localHasse`, `hasseInvariant_eq_localHasse`; local classification | QuadraticFormInvariants | Layers 0--3, 5 |
+| `normalizedValuation`, `unitFiltration`, `square_eq_range_powMonoidHom`, square-class counts, `unitFiltration_le_range_powMonoidHom_two`, `not_unitFiltration_le_range_powMonoidHom_two`, `absoluteRamificationIndex` | LocalFieldsRamification | Layers 2, 3 |
+| `GlobalQuadraticForms.LocallyEquivalent`, `hasseMinkowski_equivalent`, `equivalent_of_locallyEquivalent` | GlobalQuadraticForms | Layer 5 |
+| `ClassFieldTheory.hilbertProductFormula` | ClassFieldTheory | Layer 5 |
+| `AdelicAlgebraicGroups.integralSubgroup`, `restrictedProductMap`, `restrictedProductCongr`, `rationalDiagonal`, `FiniteAdelicPoints`, `AdelicPoints` | AdelicAlgebraicGroups | Layer 3 |
+| `LocalPointGroup`, `CompatibleCompactOpens`, `AdelicPointsAway`, `strongApproximation`, `tamagawaMeasure` (README-level contracts) | AdelicAlgebraicGroups | Layers 2--5 |
+| point functors, central isogenies, semisimple and simply connected structure, almost-simple factors | ReductiveGroups | Layers 3--5 |
 
 ## What is missing (build here)
 
-The spinor norm, which nothing upstream and no sibling defines: its construction from a reflection
-factorization, its independence of that factorization, its multiplicativity, its behaviour under
-equivalence and base change, and the identification of the spinor kernel as the image of `Spin`.
-The theory of `O(Q)` that the arithmetic needs and the representation theory does not: that the
-determinant lands in `μ₂` and `SO(Q)` has index exactly 2, base change along a field extension,
-functoriality, the identification of `O(Q)` with the automorphism group of the polar bilinear
-form, and the explicit reflection-transitivity lemmas that a spinor-norm computation runs on.
-Local topological point groups with the continuity of the determinant, the spinor norm and the
-Spin action, and sharp compactness criteria. A congruence API for restricted products, absent
-upstream, and the orthogonal specialization: the finite, away-`S` and full adelic points of all
-three groups, the maps between them, and the diagonal rational points of each. Eichler
-transvections and strong approximation for `Spin`, together with the reduction theory both later
-layers consume and the two literature inputs Layer 4C names, namely the openness of the closure of
-a nondiscrete Zariski-dense subgroup of a local point group and `SK₁ = 1` for a central division
-algebra over a `p`-adic field. Canonical Haar measures at every place with their invariance and
-product, finiteness of the adelic covolume, the measure comparison along `Spin → SO`, and the
-Tamagawa volume theorem. None of this exists upstream.
+This roadmap builds only the orthogonal/spin-specific material: the determinant and reflection
+calculus for `O(Q)` and `SO(Q)`; the reverse Clifford norm; the general-field spinor norm and
+the exact kernel/image comparison for `Spin → SO`; orthogonal transvections and their canonical
+Clifford lifts; the local and adelic spinor norms; the verification that `Spin_Q` meets the
+hypotheses of the imported strong-approximation theorem; the resulting arithmetic spinor-kernel
+statement; and the orthogonal specialization of the imported Tamagawa machinery culminating in
+`τ(SO_Q)`, with dimensions zero, one and two handled separately.
 
-`Suggested.lean` pins the load-bearing objects (`spinorNorm`, the reflection through
-`Module.reflection`, the determinant homomorphism, the restricted-product specialization) and the
-named milestones below as `sorry`-targets, so that each is claimable and the principal statements
-are machine-checked to be expressible against the pinned Mathlib. The Tamagawa statements of Layer 5
-stay in prose until Layer 3's adelic groups and Layer 5's measures exist in `TauCeti/`, at which
-point they are added there with `sorry`; nothing stands in for them in the meantime, since a
-`Prop`-valued placeholder would assert nothing.
+It does not build generic restricted products, adelic point carriers, rational diagonals,
+reduction theory, general strong approximation, invariant differential measures, or general
+Tamagawa numbers. Those are `AdelicAlgebraicGroups` contracts. `Suggested.lean` imports and
+uses every Lean-level supplier declaration currently available, while the scheme-level measure
+contracts remain prose until their accepted carrier exists.
 
 ---
 
@@ -375,21 +312,19 @@ point they are added there with `sorry`; nothing stands in for them in the meant
 ### Layer 0: the orthogonal group, and what the arithmetic needs from it
 
 **Direct prerequisites.** Mathlib: `QuadraticMap.IsometryEquiv`, `LinearEquiv.det`, `polarBilin`,
-`Module.reflection`, `BilinForm.baseChange`. Spin Representations Layer 2: `orthogonalGroup`,
-`specialOrthogonalGroup`. Quadratic Form Invariants Layer 0: orthogonal bases; Layer 1:
+`Module.reflection`, `BilinForm.baseChange`. SpinRepresentations supplies the Clifford action and
+matrix comparisons. QuadraticFormInvariants Layer 0 supplies orthogonal bases; Layer 1 supplies
 reflections, Cartan–Dieudonné, Witt's extension theorem. Internal: none.
 
-The objects are the spin representations roadmap's `orthogonalGroup Q` and
-`specialOrthogonalGroup Q`, and the reflections are the quadratic form invariants roadmap's. This
-layer proves what neither states.
+This layer fixes the general-field carriers `orthogonalGroup Q` and `specialOrthogonalGroup Q` and
+the arithmetic API around the imported reflection theory.
 
 **0A. The determinant, and the two spellings of `SO`.** `orthogonalDet : O(Q) →* Kˣ`, the
 restriction of `LinearEquiv.det`. For nondegenerate `Q`, `(orthogonalDet g)² = 1`, proved from the
 Gram congruence `Mᵀ G M = G` and `det G ≠ 0`, so the determinant lands in `μ₂`.
 
-⚠ The accepted `specialOrthogonalGroup Q` is a subgroup of `V ≃ₗ[K] V`, not of `O(Q)`, and this
-roadmap does not redefine it with a different type: a local redefinition could never be deleted in
-favour of an import. The determinant kernel is therefore a **separately named** subgroup
+⚠ `specialOrthogonalGroup Q` is a subgroup of `V ≃ₗ[K] V`, not of `O(Q)`. The determinant kernel
+is therefore a **separately named** subgroup
 `specialOrthogonalWithin Q : Subgroup (O(Q))`, together with the interface that ties the two
 together and that every later layer quotes: the inclusion
 `specialOrthogonalToOrthogonal : SO(Q) →* O(Q)`; the equality
@@ -455,15 +390,15 @@ this is the statement Layer 1B uses to prove that the Spin action has determinan
 
 **Direct prerequisites.** Mathlib: `lipschitzGroup`, `pinGroup`, `spinGroup`, `reverse`,
 `involute`, `star_ι`, `ι_sq_scalar`, `equivOfIsometry`, `evenOdd`, `invertibleιOfInvertible`.
-Spin Representations Layer 2: `ιRangeEquiv`, `pinToOrthogonal`, `spinToSpecialOrthogonal`.
+SpinRepresentations Layer 2: `ιRangeEquiv`, the Clifford action, and its algebraically closed
+comparison results.
 Quadratic Form Invariants Layer 0: orthogonal bases, the multiplicative square-class avatar;
 Layer 1: Cartan–Dieudonné. Internal: 0A, 0D, 0E, 0F.
 
-The Pin and Spin groups, the maps `pinToOrthogonal` and `spinToSpecialOrthogonal`, and the
-double-cover kernel over an algebraically closed field are the spin representations roadmap's.
-This layer owns the general-field theory that roadmap does not develop: the graded centre over a
-general field, the Clifford norm, the spinor norm, and the identification of the image of `Spin`
-in `SO` at `K`-points.
+Mathlib supplies the Pin and Spin carriers, while SpinRepresentations supplies the algebraically
+closed comparison theory. This layer owns the general-field maps and arithmetic: the graded
+centre, Clifford norm, spinor norm, and identification of the image of `Spin` in `SO` at
+`K`-points.
 
 **1A. The Clifford norm, with the two anti-involutions kept apart.** `N g := reverse g * g` for
 `g` in `lipschitzGroup Q`, with: the theorem that the value is a scalar, giving a homomorphism
@@ -570,7 +505,7 @@ two:
 endomorphism topology instances, `Module.End`. Spin Representations Layer 0:
 finite-dimensionality of `CliffordAlgebra Q`. Quadratic Form Invariants Layer 3, the plain
 discriminant, and Layers 6C and 6D: `hilbertSymbol`, `localHasse`, `hasseInvariant_eq_localHasse`,
-and the classification over `ℚ_p` by `(dim, d, s)`. Local Fields Layer 0: local compactness and `𝒪[K]`
+and the classification over `ℚ_p` by `(dim, d, s)`. LocalFieldsRamification Layer 0: local compactness and `𝒪[K]`
 compact open; Layer 1: `square_eq_range_powMonoidHom`, `card_squareClasses_of_isUnit`,
 `card_squareClasses_dyadic`, and the deep-squares pair `unitFiltration_le_range_powMonoidHom_two`
 with `not_unitFiltration_le_range_powMonoidHom_two`, which is `U(K, 2e+1) ⊆ (Kˣ)²` together with
@@ -612,7 +547,7 @@ module topology, so `IsModuleTopology` holds and rules nothing out.
 - **Openness of the squares.** Same topology, `Q x = a x²` with `a` a nonsquare. Then `O(Q)` is
   `{±1}` with the indiscrete topology and `ker θ` is the trivial subgroup, nonempty and proper and
   not open. So 2E needs `(Kˣ)²` open in `Kˣ`; that is the local-field input cited from the local
-  fields roadmap's Layer 1, and it does not follow from the module topology.
+  LocalFieldsRamification Layer 1, and it does not follow from the module topology.
 
 Local compactness of the point groups is carried the same way, as `LocallyCompactSpace K`. Over `ℝ`
 and over `ℚ_p` all three hold, so no generality is lost; what is gained is that the hypotheses are
@@ -690,11 +625,11 @@ norm of Layer 3 agree with the rational one on diagonal elements.
 
 ### Layer 3: the algebraic-group comparison, and adelic points
 
-**Direct prerequisites.** Mathlib: `RestrictedProduct` with its topology,
-`isOpenEmbedding_structureMap`, `locallyCompactSpace_of_group`, `FiniteAdeleRing`. Reductive
-Groups Layers 0, 3, 6, 7: the functor of points, smoothness, semisimplicity, simple
-connectedness, central isogenies, and the `K`-almost-simple decomposition. Internal: all of
-Layer 2, and 1F for the dimension-four factor structure.
+**Direct prerequisites.** AdelicAlgebraicGroups Layers 0--5, including the exact Lean-level
+restricted-product carriers and the README-level point-group and approximation contracts.
+ReductiveGroups Layers 0, 3, 6, 7 supplies the functor of points, smoothness, semisimplicity,
+simple connectedness, central isogenies, and the `K`-almost-simple decomposition. Internal: all
+of Layer 2, and 1F for the dimension-four factor structure.
 
 **3A. The affine group schemes, as a prerequisite and not an aside.** Layers 4 and 5 quantify over
 `ℚ`-almost-simple factors, use simple connectedness of `Spin`, use a central isogeny of algebraic
@@ -715,20 +650,11 @@ points and its structure theory. The targets:
    nonsplit cases of 1F;
 8. compatibility of all of it with base change.
 
-**3B. The generic restricted product.** For a family of locally compact topological groups `G_i`
-with chosen compact open subgroups `K_i`, built on Mathlib's `RestrictedProduct`: the evaluation
-homomorphisms, continuous; the everywhere-integral part as an actual **subgroup**, proved open and
-compact, rather than as a set; local compactness of the whole, from
-`locallyCompactSpace_of_group`; and functoriality along a family of continuous homomorphisms
-`G_i → H_i` carrying `K_i` into `L_i`.
-
-⚠ One item is not plumbing. Mathlib's `RestrictedProduct` has **no congruence API**: `map`,
-`mapAlong` and their monoid- and ring-hom versions are one-directional, and nothing produces an
-equivalence from componentwise data. So the comparison of the restricted products for two families
-`K_i` and `K'_i` agreeing at all but finitely many `i` has to be proved here, and as a **named
-canonical** equivalence induced by the identity on coordinates, with its evaluation formula, its
-inverse, continuity in both directions, and compatibility with the structure maps. A bare
-existence statement is not enough: the arithmetic needs to know which map it is holding.
+**3B. Imported generic adelic substrate.** This is a dependency checkpoint, not an owned
+milestone. Use `AdelicAlgebraicGroups.integralSubgroup`, `restrictedProductMap`,
+`restrictedProductCongr`, `rationalDiagonal`, `FiniteAdelicPoints`, and `AdelicPoints`
+directly. The orthogonal aliases of 3D are instantiations of these carriers, and no generic
+restricted-product declaration is introduced in this namespace.
 
 **3C. Compatible compact-open data.** ⚠ A single family `U_p ≤ O(V_p)` does not determine the
 reference subgroups for the other two groups or for the square-class codomain, so the parameter is
@@ -826,287 +752,77 @@ surjection of double-coset sets in the corresponding direction; conjugate compac
 canonical bijection; and a componentwise equivalence carrying one tuple to another transports the
 double-coset set along 3B's canonical equivalence. Finiteness of the set is not claimed here.
 
-**3H. Reduction theory, as the input Layers 4 and 5 share.** Both later layers need one theorem
-about the size of the arithmetic subgroups, and it is stated here so that neither consumes the
-other. For `G` either `SO_Q` or `Spin_Q`, and `S` a finite set of places containing `∞`, with
-`G(ℤ_S)` the `S`-integral points for the `ℤ`-span of the chosen basis of 3E:
+**3H. Imported reduction theory.** AdelicAlgebraicGroups owns the norm-one subgroup,
+discreteness of rational points in full adelic points, finite covolume, and the reduction-theory
+inputs to strong approximation and Tamagawa finiteness. This roadmap checks only the orthogonal
+and Spin hypotheses needed to instantiate those results. In particular it states no second
+generic finite-covolume or density theorem.
 
-1. the **norm-one subgroup** `G(𝔸)¹`, cut out by `|χ(x)|_𝔸 = 1` for every rational character
-   `χ ∈ X(G) ⊗ ℚ`, together with the theorem that `G(𝔸)¹ = G(𝔸)` when `X(G) ⊗ ℚ = 0`, in
-   particular for `G` semisimple, which is every case except `SO_Q` in dimension two;
-2. `G(ℤ_S)` is a **discrete** subgroup of `G_S = ∏_{v ∈ S} G(ℚ_v)`, and `G(ℚ)` is discrete in
-   `G(𝔸)`, which is 3E;
-3. the quotient `G_S / G(ℤ_S)` carries a **finite** invariant measure for a Haar measure on `G_S`,
-   and likewise `G(ℚ) \ G(𝔸)¹` for a Haar measure on `G(𝔸)¹`. ⚠ It is `G(𝔸)¹` and not `G(𝔸)`:
-   in dimension two `SO_Q` is a torus, `G(𝔸)/G(ℚ)` has infinite volume, and the finiteness that
-   does hold is the classical finiteness of the volume of the norm-one idele class group;
-4. the **density theorem**: if `G_S` is noncompact then `G(ℤ_S)` is Zariski dense in `G`, which
-   follows from 3 together with the `ℚ`-almost-simplicity supplied by 3A.
+### Layer 4: the Spin application of strong approximation
 
-This is Borel and Harish-Chandra's reduction theory, in the `S`-arithmetic form of
-Platonov–Rapinchuk Chapter 5. ⚠ It is stated for *some* Haar measure and is therefore independent
-of Layer 5's normalization: Layer 5D's finiteness of the Tamagawa volume is item 3 applied to the
-Tamagawa measure, and Layer 4C consumes items 3 and 4, so the two layers stay independent of each
-other. ⚠ The boundary with the integral lattices roadmap is that nothing here is a statement about
-classes: no finiteness of a class number, no genus, no mass. Those are that roadmap's, and they
-consume this one.
+**Direct prerequisites.** Internal: the transvections and canonical Spin lifts of 2C, the
+orthogonal group schemes and factor data of 3A, the specialized adelic points and rational
+diagonals of 3D--3E, and the adelic spinor norm of 3F. External:
+`AdelicAlgebraicGroups.strongApproximation` and its reduction-theory hypotheses, as exact
+README-level contracts; ReductiveGroups for almost-simple factors; GlobalQuadraticForms only when
+a global quadratic-form comparison is required. Layer 5 is not a prerequisite.
 
-### Layer 4: strong approximation for Spin
+**4A. Orthogonal root subgroups.** For an isotropic vector `u`, the transvections of 2C and their
+canonical Clifford lifts form the expected additive root subgroup. Prove the conjugation and
+generation statements needed to identify the elementary subgroup of `Spin(V)(K)`. This is the
+orthogonal input to strong approximation, not a second proof of the generic theorem.
 
-**Direct prerequisites.** Internal: 2C for the transvections and their Spin lifts, 2D for
-noncompactness, 3A items 5 to 7 for semisimplicity and the factor decomposition, 3D for `𝔸^S`,
-3E for the diagonal maps, 3F for the adelic spinor kernel, 3H for reduction theory, 1F for
-dimension four. External: `denseRange_algebraMap_finiteAdeleRing` of global class field theory
-2A.3, the Kneser–Tits generation input named in 4A, and the two literature inputs named in 4C.
+**4B. Structural verification for `Spin_Q`.** From the specialized group schemes of 3A, verify
+smoothness, connectedness, semisimplicity and simple connectedness, and identify every
+`ℚ`-almost-simple factor. Dimension four keeps its split and nonsplit factor branches; each
+factor must be checked separately.
 
-⚠ This is a **noncompact-place** theorem, not literally an indefinite one: the hypothesis is that
-each `ℚ`-almost-simple factor of `Spin(V)` is noncompact at some place of `S`, which a positive
-definite form can satisfy at a finite place. The indefinite statement is the corollary at
-`S = {∞}`, and that corollary is what Eichler's theorem on lattice classes runs on. Layer 5 does
-not use this layer.
+**4C. The noncompact-place condition.** Prove that the condition required by the imported theorem
+is equivalent to noncompactness of every almost-simple factor at some place in `S`, using the
+local quadratic-form classification and the explicit low-dimensional identifications. This is a
+noncompact-place condition, not a synonym for indefiniteness: a positive-definite rational form
+may satisfy it at a finite place.
 
-**4A. The generation theorem.** The step "generated by transvection subgroups, hence reduce to
-additive approximation" hides the main local input, so it is stated: the subgroup of `Spin(V)(K)`
-generated by the canonical transvection lifts of 2C is the **elementary subgroup** `E(V)(K)`, and
-the target is the equality `E(V)(K) = Spin(V)(K)`, not a finite-index approximation to it, in each
-of the two cases 4B and 4C meet: `K` a local field of characteristic zero with `V ⊗ K` isotropic
-of dimension at least three, and `K = ℚ` with `V` isotropic of dimension at least three. That
-equality is the Kneser–Tits property for the simply connected isotropic group `Spin(V)`, which
-holds because `Spin(V)` is `K`-isotropic of `K`-rank at least one and simply connected; the input
-is Platonov–Rapinchuk §7.2. The `K`-anisotropic case is not claimed: over a local field the
-equality is false there, which is exactly why the places at which `Spin(V)` is compact have to be
-handled separately in 4C. Stating a finite-index variant instead would leave an implementer with
-two targets and no criterion for choosing.
+**4D. General-`S` application.** Instantiate
+`AdelicAlgebraicGroups.strongApproximation` with `Spin_Q`. If `V` is nondegenerate of
+dimension at least three and every almost-simple factor is noncompact at a place of the finite set
+`S`, the diagonal image of `Spin(V)(ℚ)` is dense in `Spin(V)(𝔸^S)`. The generic proof,
+reduction theory, and place-assembly argument belong to AdelicAlgebraicGroups and are not repeated
+here.
 
-**The corollary the general case runs on**: for `K` local of characteristic zero and `V ⊗ K`
-isotropic of dimension at least three, `Spin(V)(K)` has **no proper subgroup of finite index**.
-It needs nothing beyond the equality above and 2C: a subgroup of index `m` contains a normal
-subgroup of index dividing `m!` and therefore contains `g^{m!}` for every `g`, while the additive
-composition law of 2C makes every transvection lift `Ẽ_{u,w}` equal to `(Ẽ_{u,w/m!})^{m!}`. So
-every generator lies in the subgroup, and the subgroup is everything.
+**4E. Finite-adelic corollary.** At `S = {∞}`, an indefinite form of dimension at least three
+satisfies the condition, and
 
-**4B. The case of a `ℚ`-isotropic space.** When `V` is isotropic **over ℚ** the theorem has a short
-proof, and it is a milestone in its own right because everything it runs on is needed anyway. The
-statements, in order:
+    Spin(V)(𝔸_f) = Spin(V)(ℚ) · W
 
-1. **Splitting a hyperbolic plane.** For `V` isotropic over ℚ, `V ≅ H ⊥ V₀` with `H` hyperbolic
-   and `dim V₀ = dim V − 2`, and the transvection subgroups attached to the isotropic vectors of
-   `H` are the ones 4A generates with.
-2. **Density of the adelic transvection subgroups.** The subgroup of `Spin(V)(𝔸^S)` generated by
-   the adelic points of the transvection subgroups of 2C is dense, which reduces approximation to
-   `denseRange_algebraMap_finiteAdeleRing`, additive strong approximation for `𝔸` relative to `ℚ`,
-   consumed by name from global class field theory 2A.3. ⚠ That declaration says `ℚ` is dense in
-   the **finite** adeles. It is not that roadmap's weak approximation, 0.2, whose own note records
-   that strong approximation is a different statement, and it is not the discreteness of `ℚ` in the
-   full adele ring, where no density statement can hold. An earlier revision of the supplier table
-   cited Layer 0 for this, which was the wrong milestone.
-3. **The rank-one base case.** `dim V = 3` with `V` isotropic, where `Spin(V) ≅ SL₂` over ℚ by 1F,
-   and strong approximation for `SL₂` is the classical statement.
-4. **The induction step.** Approximating in `Spin(H ⊥ V₀)` from approximation in the transvection
-   subgroups together with the case of `V₀`, using 4A's generation theorem at each place of `S`.
+for every compact open `W`. This is the theorem
+`strongApproximation_finiteAdelicSpin` pinned in `Suggested.lean` and consumed by
+IntegralLattices. Dimension two is excluded: `Spin(V)` is a one-dimensional torus and the
+statement is false.
 
-⚠ This settles the `ℚ`-isotropic case and nothing else, and 4C does not run through it.
-
-**4C. The general case, by one fixed route.** ⚠ There is no reduction of the general case to 4B.
-Local isotropy at a place of `S` does not split a hyperbolic plane over ℚ, so 4B never applies to a
-`ℚ`-anisotropic space, and the anisotropic case is not a corollary of the isotropic one. Nor is it
-a small residue. `x² + y² − 3z²` is indefinite over ℝ and anisotropic over ℚ, since `x² + y² = 3z²`
-in coprime integers forces `3 ∣ x` and `3 ∣ y`, hence `9 ∣ 3z²` and `3 ∣ z`; and every positive
-definite form is anisotropic over ℚ while being isotropic over every `ℚ_p` once `dim V ≥ 5`. So the
-`ℚ`-anisotropic case carries the theorem in every dimension, and in particular it carries the
-`S = {∞}` indefinite corollary that the integral lattices roadmap consumes.
-
-The route of record is the characteristic-zero proof of Platonov–Rapinchuk Theorem 7.12,
-specialized to `Spin_Q` through 3A. No alternative route is offered, because an implementer must
-not have to choose a proof architecture. The intermediate statements, in the order the proof uses
-them:
-
-1. **Reduction to almost-simple factors.** Strong approximation for `Spin(V)` with respect to `S`
-   holds exactly when it holds for each `ℚ`-almost-simple factor, by 3A item 7; this is where 4D's
-   hypothesis is used factor by factor.
-2. **Reduction to `S`-arithmetic density.** Density of the diagonal image of `Spin(V)(ℚ)` in
-   `Spin(V)(𝔸^S)` is equivalent to density of `Spin(V)(ℤ_{S ∪ S₁})` in `∏_{v ∈ S₁} Spin(V)(ℚ_v)`
-   for every finite set `S₁` of places disjoint from `S`, because a basic open set of `𝔸^S` is an
-   open set at finitely many places times the integral subgroup everywhere else.
-3. **The compact places.** The set `S_c` of finite places at which `Spin(V)(ℚ_p)` is compact,
-   which by 2D is the set of `p` with `V ⊗ ℚ_p` anisotropic. It is finite, and by the local
-   classification it is **empty** once `dim V ≥ 5`, so only dimensions three and four have any.
-4. **No proper subgroup of finite index**, which is 4A's corollary, available at every place
-   outside `S ∪ S_c`.
-5. **One place at a time.** For `v ∉ S ∪ S_c`, `Spin(V)(ℤ_{S ∪ {v}})` is dense in
-   `Spin(V)(ℚ_v)`. This is where reduction theory enters: 3H item 3 makes the closure nondiscrete
-   with a finite-covolume quotient, 3H item 4 makes it Zariski dense, so it is **open**, because
-   the closure of a nondiscrete Zariski-dense subgroup of the `p`-adic point group of an
-   almost-simple group is open; and then 4 turns an open subgroup of finite index into the whole
-   group. The openness step is Cartan's theorem that a closed subgroup of a `p`-adic Lie group is
-   a Lie subgroup, applied to the closure.
-6. **Assembling the places of `S₁`.** The two-factor density criterion, Platonov–Rapinchuk Lemma
-   7.4: a subgroup of `B₁ × B₂` that projects densely to `B₁` and meets each member of a
-   neighbourhood basis of subgroups of `B₁` in something projecting densely to `B₂` is dense.
-   With 5 and 4 this proves 2, and hence 4E, whenever `S ⊇ S_c ∪ {∞}`.
-7. **Weak approximation for `Spin(V)`**, which is what removes `S_c` from `S`: `Spin(V)(ℚ)` is
-   dense in `∏_{v ∈ T} Spin(V)(ℚ_v)` for every finite set `T` of places. `Spin_Q` is unirational
-   over ℚ, so the closure of the rational points is open in the product and the quotient by it is
-   discrete; 3H item 3 makes that quotient of finite measure, hence finite; and 4 kills it, except
-   at a place of `S_c`, where the local group is compact and is the reduced-norm-one group of a
-   central simple algebra over `ℚ_v`, and the input is instead `SK₁ = 1` over a `p`-adic field.
-8. **Removing `S_c`.** `S_c` is finite and `∏_{v ∈ S_c} Spin(V)(ℚ_v)` is compact with a
-   neighbourhood basis of open subgroups of finite index, so 7 and 6 descend the conclusion from
-   `S ∪ S_c` to `S`, using that `Spin(V)(𝔸^{S ∪ S_c})` has no proper closed subgroup of finite
-   index because none of its local factors does, by 4.
-9. **Removing the archimedean place**, for an `S` that does not contain `∞`. The remaining factor
-   is `Spin(V)(ℝ)`, which is connected because `Spin(V)` is simply connected and semisimple. The
-   connected component of the closure of the `S`-integral points there is normalized by the
-   rational points, which are dense by 7, so it is a normal connected subgroup and hence a
-   sub-product of the factors; 3H item 3 together with Cartan's theorem over ℝ forbids it from
-   being a proper one. ⚠ This is the only step that uses connectivity of the real point group, and
-   it is why 4E states general-`S` density against arbitrary nonempty open sets while the
-   `Spin(V)(ℚ) · U` reformulation carries `∞ ∈ S`.
-
-⚠ Items 5, 7 and 9 are the deep ones, and none has an upstream source: 5 and 9 need the Lie theory
-behind Cartan's theorem, over `ℚ_p` and over ℝ, and 7 needs `SK₁ = 1` for a central division
-algebra over a `p`-adic field. All are targets here, cited in the references, and all are what a
-phrase like "reduce to the isotropic case" would have hidden.
-
-**4D. The factor condition.** The hypothesis is stated with `ℚ`-almost-simple **normal** factors,
-supplied by 3A item 7, and the theorem that the decomposition used in the statement is that one.
-For dimension four this is where 1F's split and nonsplit branches do their work: in the split case
-there are two `ℚ`-almost-simple factors and each must be noncompact at a place of `S`; in the
-nonsplit case there is one factor, a restriction of scalars, and the condition is a condition at
-the places of the discriminant field above `S`. Noncompactness of `Spin(V)(ℝ)` alone does not
-imply either.
-
-**4E. The theorem.** Let `V` be a nondegenerate quadratic space over ℚ with `dim V ≥ 3`, and let
-`S` be a finite nonempty set of places of ℚ such that every `ℚ`-almost-simple factor of `Spin(V)`
-is noncompact at some place of `S`. Then the diagonal image of `Spin(V)(ℚ)` is dense in
-`Spin(V)(𝔸^S)`. ⚠ The reformulation `Spin(V)(𝔸^S) = Spin(V)(ℚ) · U` for every compact open `U`
-needs `𝔸^S` totally disconnected, so over ℚ it carries the additional hypothesis `∞ ∈ S`; for
-general `S` density is stated against arbitrary nonempty open sets. The equivalence of the two,
-under `∞ ∈ S`, is proved. The corollary the lattice side uses is stated separately: for
-`S = {∞}` and `V` indefinite, `Spin(V)(𝔸_f) = Spin(V)(ℚ) · U` for every compact open
-`U ≤ Spin(V)(𝔸_f)`.
-
-⚠ **Dimension 2 is excluded**, not deferred: `Spin(V)` is a one-dimensional torus and the theorem
-is false. The binary theory belongs to the integral lattices roadmap, through quadratic orders and
-their class groups.
-
-**4F. What happens in `SO`, exactly.** The continuous image of a dense set is dense in the image,
-not in the ambient group, so the transported statement is about the adelic spinor kernel of 3F and
-not about `SO(V)(𝔸^S)`. The milestone: the closure of the diagonal image of `Spin(V)(ℚ)` inside
-`SO(V)(𝔸^S)`, along either leg of the commuting square of 3E, is the adelic spinor kernel of 3F;
-equivalently the obstruction to strong approximation for
-`SO` is measured by the adelic spinor norm, and it is stated as that cokernel rather than as a
-blanket failure, since in special cases the obstruction vanishes. This is the exact reason spinor
-genera exist.
+**4F. Arithmetic spinor-kernel consequence.** Transport the Spin density statement along the
+componentwise `Spin → SO` map. The closure of the rational Spin image inside adelic `SO` is
+exactly the adelic spinor kernel. It is not the closure of all rational `O`-points: a rational
+reflection of nonsquare spinor norm lies in that larger image and outside the kernel. The precise
+closed-set equality is `closure_rationalSpinImage` in `Suggested.lean`.
 
 ### Layer 5: Tamagawa measures, and the orthogonal volume theorem
 
-**Direct prerequisites.** Mathlib: `haarMeasure`, `haarScalarFactor`, `IsFundamentalDomain`,
-`QuotientMeasureEqMeasurePreimage`, `covolume`. Internal: 3A for the group schemes and their
-invariant differentials, 3D for the full adelic points, 3E for discreteness of the rational
-points in `G(𝔸)`, 3H for finiteness of the covolume, 2F and 3F for the local and adelic spinor
-norms. External: `hilbertProductFormula` and `hasseMinkowski_equivalent` of global class field
-theory 11.4 and 11.8, and the product formula. **Not** Layer 4.
+**Direct prerequisites.** The generic contracts are
+`AdelicAlgebraicGroups.tamagawaMeasure`, finite covolume, the central-isogeny comparison, and the
+strong theorem `τ(G) = 1` for connected simply connected semisimple `G`, all consumed at the
+README-contract level until their scheme carrier lands. Internally this layer uses the specialized
+groups and spinor norms of Layers 1--3. It consumes
+`ClassFieldTheory.hilbertProductFormula` and
+`GlobalQuadraticForms.hasseMinkowski_equivalent`. It does not depend on Layer 4.
 
-⚠ This layer is independent of Layer 4. Strong approximation is a noncompact-place statement about
-`Spin` used for class numbers; the volume theorem has no isotropy hypothesis and is what the mass
-formula of positive definite genera consumes. No proof here uses Layer 4, and the integral lattices
-roadmap consumes the two separately. Nor does any proof here consume the mass formula: the
-implication runs from the volume theorem to the mass formula and not back, and the analytic route
-to the mass formula is outside both roadmaps.
-
-The layer has two halves. 5A to 5E are general Tamagawa theory for connected linear algebraic
-groups, written to be independent of quadratic forms so that they can be lifted into a roadmap of
-their own without rewriting; 5F to 5I are the orthogonal specialization, which is all this roadmap
-is really about.
-
-**5A. Gauge forms and local measures.** Invariant top-degree differential forms on a smooth affine
-algebraic group; the local measure attached to a rational gauge form at each place, through the
-absolute value of the form in local coordinates; and the behaviour under rescaling the form by a
-rational scalar. ⚠ The normalization is **not** pinned by Haar existence and uniqueness together
-with isometry invariance, since every scalar multiple of an invariant measure is again invariant:
-what pins it is the choice of gauge form, and the fact that the *global product* is independent of
-that choice, because rescaling by `c ∈ ℚˣ` changes the local factors by `|c|_v` and the product
-formula `∏_v |c|_v = 1` kills it. That argument, and not an appeal to uniqueness, is what makes
-the Tamagawa measure canonical, and it is stated here in that form.
-
-**5B. Convergence, with the factors named, in both torus cases.** For a **semisimple** group the
-product of local volumes converges with no convergence factors, and that statement is the milestone
-for `Spin_Q` and `SO_Q` in dimension at least three. For a **torus**, which is what dimension two
-produces, it does not converge, and the factors are the local Artin `L`-factors of the character
-module: `λ_v = L_v(1, X(T) ⊗ ℚ)`. The global compensating constant is
-
-    ρ(T) = lim_{s → 1} (s − 1)^{r(T)} · L(s, X(T) ⊗ ℚ),
-
-where `r(T)` is the rank of the Galois invariants of `X(T)`, equivalently the ℚ-rank of the maximal
-ℚ-split subtorus of `T`. The theorem to state is that `∏_v λ_v⁻¹ · vol(T(ℚ_v), U_v)` converges and
-that the resulting measure is independent of the choice of factors up to `ρ(T)`. ⚠ For
-`T = R¹_{E/ℚ}𝔾_m`, the norm-one torus of a quadratic étale algebra `E`, the **two cases of `E` are
-genuinely different and both are stated**:
-
-- `E` a quadratic **field**: `T` is anisotropic, `X(T)` is `ℤ` with the nontrivial Galois action,
-  `L(s, X(T)) = L(s, χ_E)` is the Dirichlet `L`-function of the quadratic character attached to
-  `E`, `r(T) = 0`, and `ρ(T) = L(1, χ_E)`, which is finite and nonzero because `χ_E` is a
-  nontrivial quadratic character.
-- `E ≅ ℚ × ℚ` **split**: `T ≅ 𝔾_m`, `X(T)` is `ℤ` with the *trivial* action, `L(s, X(T)) = ζ(s)`,
-  and `r(T) = 1`. There is no finite value `L(1, χ_E)` to use, because `ζ` has a simple pole at
-  `s = 1`; the normalization goes through `ρ(T) = Res_{s=1} ζ(s)` instead. Writing the split case
-  with a finite `L`-value is the error this subsection exists to prevent.
-
-⚠ The split case also changes what the volume is taken of. `𝔾_m` has a nontrivial group of rational
-characters, so `T(𝔸)/T(ℚ)` has infinite volume and the Tamagawa number is the volume of
-`T(𝔸)¹/T(ℚ)`, where `T(𝔸)¹` is cut out by `|χ(x)|_𝔸 = 1` for every `χ ∈ X(T) ⊗ ℚ`. That
-subgroup is 3H item 1, and it is where the theorem that it is all of `G(𝔸)` for a semisimple `G`
-is stated. Nothing in dimension at least three uses this subsection, since `Spin_Q` and
-`SO_Q` are semisimple there and have no nontrivial rational characters.
-
-**5C. Adelic points, the product measure, and the norm-one subgroup.** Full adelic points of the
-group, consumed from Layer 3D; the product Haar measure; discreteness of the rational points,
-consumed from Layer 3E; the fundamental-domain and quotient-measure API against Mathlib's
-`QuotientMeasureEqMeasurePreimage` and `covolume`; and the norm-one subgroup `G(𝔸)¹` of 3H item 1.
-⚠ It is `G(𝔸)¹`, not `G(𝔸)`, that every volume statement below is taken in; the two coincide in
-dimension at least three, and 5B's split binary case is where they do not. ⚠ Three upstream
-constraints shape this subsection and are
-stated rather than discovered: `covolume` is `ℝ≥0∞`-valued and returns `0` when no fundamental
-domain exists; `haarMeasure_quotient` requires the subgroup countable and the quotient measure
-finite; and Mathlib has no `IsUnimodular` class, so unimodularity is carried as left-invariance
-together with right-invariance and proved for each group used.
-
-**5D. Finiteness, then the number.** Finiteness of the Tamagawa volume of `G(ℚ) \ G(𝔸)¹`, as its
-own milestone preceding any computation of it, which is 3H item 3 applied to the Tamagawa measure
-of 5A once that measure is shown to be a Haar measure; and the definition of the Tamagawa number.
-
-**5E. Central isogenies, and `τ(Spin_Q) = 1` by one named route.** Two things. First, the
-comparison of Tamagawa measures under a central isogeny, in the form Ono's relative theory gives,
-with the local and global contributions of the kernel identified; this is the general statement 5H
-instantiates. Second, `τ(G) = 1` for `G` connected, simply connected and semisimple, which for
-`G = Spin_Q` is the deepest input the roadmap has. The route of record is Weil's, in *Adeles and
-Algebraic Groups*, and its steps are:
-
-1. `τ(SL_n) = 1`, by explicit reduction theory and the Iwasawa decomposition.
-2. `τ(SL₁(A)) = 1` for `A` a central simple algebra, from 1 by Ono's isogeny method, `SL₁(A)` being
-   an inner form of `SL_n`.
-3. `τ(Sp_{2n}) = 1`, by reduction theory for the symplectic group, and `τ(Sp(A, σ)) = 1` for `A`
-   central simple with a symplectic involution, from it by Ono's method. ⚠ This is a separate
-   family and **not** a consequence of 1 and 2: dimension five is type `C₂`, where 1F gives
-   `Spin_Q ≅ Sp(C₀, σ)` for the degree-four even Clifford algebra, which is `Sp₄` only when that
-   algebra splits and is in no case an `SL₁(A)`, a product of two of them, or a restriction of
-   scalars of one.
-4. `τ(SU(A, σ)) = 1` for `A` central simple over a quadratic étale algebra with a unitary
-   involution, needed at dimension six when the discriminant algebra is a field.
-5. `τ(G₁ × G₂) = τ(G₁) · τ(G₂)` and `τ(R_{E/ℚ} G) = τ(G)`, the two compatibilities that assemble
-   the low-dimensional cases.
-6. `τ(Spin_Q) = 1` for `3 ≤ dim V ≤ 6`, from 1F together with 1 to 5: dimension three gives
-   `SL₁` of a quaternion algebra, dimension four a product of two such or a restriction of scalars
-   of one along the discriminant algebra, dimension five the symplectic case of 3, and dimension
-   six either `SL₁` of a degree-four algebra or the unitary case of 4.
-7. `τ(Spin_Q) = 1` in general, by Weil's induction on the dimension of the quadratic space.
-
-⚠ Step 7 is where the analytic input of Weil's argument sits, in the adelic Poisson-summation
-identity of *Adeles and Algebraic Groups*, and it is worth being explicit that this does **not**
-make the roadmap circular with the integral lattices roadmap. That roadmap derives the
-Smith–Minkowski–Siegel mass formula *from* the volume theorem and proves no analytic identity of
-its own; the implication runs one way, and nothing here consumes the mass formula.
+**5A--5E. Imported Tamagawa substrate.** Invariant gauge forms, local Haar normalization, product
+measures, norm-one adelic subgroups, convergence factors for tori, finite covolume, general
+Tamagawa numbers, central-isogeny comparison, and the simply-connected semisimple value all belong
+to AdelicAlgebraicGroups. The split norm-one torus uses the residue normalization at `s = 1`,
+whereas a nonsplit quadratic torus uses the finite value `L(1, χ_E)`; preserving that distinction
+is part of the imported contract. No generic measure or strong-approximation milestone is owned
+here.
 
 **5F. The orthogonal specialization.** The gauge forms on `O_Q`, `SO_Q` and `Spin_Q` from 3A, the
 resulting local and global measures, and their invariance under isometry of quadratic spaces.
@@ -1128,15 +844,13 @@ For `G = SO_Q` with `dim V ≥ 3` the two terms are computed separately, and eac
 - `Ш¹(ℚ, SO_Q) = 1`, of order **1**. ⚠ This is not a formality: it is exactly the Hasse principle
   for quadratic forms, that two forms of the same dimension over ℚ which are isometric over every
   `ℚ_v` are isometric over ℚ, since `H¹(k, SO_Q)` classifies forms of the same dimension and
-  discriminant. It is consumed by name, as `hasseMinkowski_equivalent` of global class field
-  theory 11.8, and not reproved.
+  discriminant. It is consumed by exact name as
+  `GlobalQuadraticForms.hasseMinkowski_equivalent`, and not reproved.
 
-  ⚠ **The supplier is global class field theory, not quadratic form invariants.** An earlier
-  revision cited that roadmap's Layer 6, which is the classification of forms over a
-  nonarchimedean *local* field — local, and a different theorem. The global statement lives with
-  the roadmap whose weak approximation, Hasse norm theorem and Hilbert reciprocity its proof
-  consumes. What is consumed is the `K = ℚ` case of a theorem stated over an arbitrary number
-  field, together with that roadmap's `LocallyEquivalent` predicate; **translating it into the
+  ⚠ **The supplier is GlobalQuadraticForms, not QuadraticFormInvariants or
+  ClassFieldTheory.** An earlier revision cited local classification and then global class field
+  theory; both ownership routes are obsolete. What is consumed is the `K = ℚ` case of the global
+  theorem together with `GlobalQuadraticForms.LocallyEquivalent`; **translating it into the
   pointed-set statement `Ш¹(ℚ, SO_Q) = 1` is this milestone's work**, because the supplier defines
   no `H¹(K, SO(Q))` and no Tate–Shafarevich set.
 
@@ -1147,20 +861,21 @@ rather than described: the exact sequence of pointed sets
 
 together with its local analogue at every place, the compatibility of the two under the
 restriction maps of 2H, and the theorem that the image of `∏_v` on square classes is cut out by
-`hilbertProductFormula`, Hilbert reciprocity `∏_v (a,b)_v = 1`, consumed by name from global class
-field theory 11.4. The
+`ClassFieldTheory.hilbertProductFormula`, the cohomological Hilbert reciprocity relation, consumed
+by exact name. The
 connecting map `θ` in that sequence is the spinor norm of Layer 1D, which is what ties this layer
 to the rest of the roadmap.
 
-**5I. The theorem, by dimension, with every value stated.** From 5E and 5H:
+**5I. The theorem, by dimension, with every value stated.** From the imported general Tamagawa
+theorems and 5H:
 
 - `dim V ≥ 3`: `τ(SO_Q) = 2`.
 - `dim V = 2`: `SO_Q` is the norm-one torus `R¹_{E/ℚ}𝔾_m` of the discriminant quadratic étale
   algebra `E` of 1F, and the value is **2** when `E` is a field and **1** when `E ≅ ℚ × ℚ` is
   split, in which case `SO_Q ≅ 𝔾_m` and the volume is taken in `SO_Q(𝔸)¹`, not `SO_Q(𝔸)`. The
-  computation is Ono's formula again, with the convergence factors of 5B and, in the split case,
-  the residue normalization rather than a finite `L`-value; `Spin_Q` is a torus here too, so 5E
-  does not apply and this case is proved directly.
+  computation is Ono's formula again, with the imported torus convergence factors and, in the
+  split case, the residue normalization rather than a finite `L`-value; `Spin_Q` is a torus here
+  too, so the simply-connected semisimple theorem does not apply and this case is proved directly.
 - `dim V = 1`: `SO_Q` is trivial and `τ(SO_Q) = 1`.
 - `dim V = 0`: `SO_Q` is trivial and `τ(SO_Q) = 1`.
 
@@ -1244,30 +959,20 @@ convention drift.
 
 ## Ordering and parallelism
 
-Layer 0 rests on the two sibling roadmaps that own its objects, and within it 0A to 0D are
-independent while 0E and 0F follow 0D. Layer 1's order is forced: 1B before 1C, and 1C before 1D
-and 1E; 1A is independent of 1B and can be built alongside it; 1F depends on 1C and is otherwise
-independent, so it can be built in parallel with the spinor norm.
+The supplier order is fixed by the portfolio DAG:
 
-Layer 2 needs Layers 0 and 1 and the local classification. Within it, 2A is a self-contained piece
-of topology that depends on nothing else here and is the best independent starting point for a
-contributor who would rather do topology than quadratic forms; 2C depends only on Layer 0 and 1C
-and is needed by 2D, which is why it sits before it.
+    QuadraticFormInvariants, LocalFieldsRamification, ClassFieldTheory,
+    GlobalQuadraticForms, AdelicAlgebraicGroups → OrthogonalSpinGroups.
 
-Layer 3A, the affine group-scheme comparison, is the prerequisite that Layers 4 and 5 both rest
-on, and it can be built as soon as Layer 1 exists. Layer 3B is again independent of everything else
-in this roadmap. Layers 3C to 3G need Layer 2, and 3H needs 3A and 3E.
+Within this roadmap, Layers 0 and 1 establish the algebraic orthogonal/spin API and exact
+spinor-kernel sequence. Layer 2 builds the orthogonal local specialization and transvections.
+Layer 3 instantiates imported adelic carriers and maps and constructs the adelic spinor norm.
+Layer 4 verifies the `Spin_Q` hypotheses of imported strong approximation. Layer 5 independently
+specializes imported Tamagawa machinery and computes `τ(SO_Q)`.
 
-Layers 4 and 5 both consume Layer 3, 3H included, and neither consumes the other, which is the
-second load-bearing distinction made structural. Within Layer 5, the general machinery 5A to 5E
-needs only 3A, 3D and 3H and can proceed in parallel with the whole of Layer 4; 5F to 5H then need
-2F and 3F; and 5E is the long pole. Within Layer 4, 4A and 4B can be built as soon as Layer 2C and
-Layer 3D exist, while 4C is the long pole and is the only place the two literature inputs it names
-are needed.
-
-The shortest route to something the integral lattices roadmap can use is `0 → 1 → 2`, which
-supplies its spinor-norm interface; the shortest route to its adelic interface is
-`0 → 1 → 2 → 3`.
+Layers 4 and 5 are parallel after Layer 3: neither consumes the other. The shortest path for
+IntegralLattices' spinor-norm interface is `0 → 1 → 2`; its adelic interface adds Layer 3; its
+Eichler application uses Layer 4; and its mass formula consumes Layer 5 separately.
 
 ## References
 
