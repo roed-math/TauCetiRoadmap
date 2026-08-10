@@ -258,8 +258,9 @@ the re-check notes are in [`PROVENANCE.md`](PROVENANCE.md).
   computable. Its standing `[Invertible (2 : K)]` is this roadmap's too.
 
   ⚠ That roadmap is **local**: it stops at forms over a nonarchimedean local field. The
-  Hasse–Minkowski principle that Layer 5H needs is global and is not among its milestones; the
-  supplier table records that row as unowned rather than pointing it at Layer 6.
+  Hasse–Minkowski principle that Layer 5H needs is global and is not among its milestones. It is
+  global class field theory's, at 11.8, because its proof consumes that roadmap's weak
+  approximation, Hasse norm theorem and Hilbert reciprocity.
 - **The [local fields roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/2)**, for the local
   structure Layer 2 needs: local compactness of a nonarchimedean local field with `𝒪[K]` compact
   open and `Kˣ` locally compact (its Layer 0), and its `square_eq_range_powMonoidHom` with the
@@ -271,14 +272,17 @@ the re-check notes are in [`PROVENANCE.md`](PROVENANCE.md).
   cites it in that form. Its companion `not_unitFiltration_le_range_powMonoidHom_two` is the
   sharpness, and is what stops the bound being read one step too far.
 - **The [global class field theory
-  roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/6)**, for two declarations. Its 11.4
+  roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/6)**, for three declarations. Its 11.4
   `hilbertProductFormula`, Hilbert reciprocity `∏_v (a,b)_v = 1`: Layer 5's passage from the local
   spinor-norm quotients to the global one is exactly a reciprocity statement, and it is consumed
   from there rather than reproved. This is the same theorem, under the same name, that the integral
   lattices roadmap consumes. And its 2A.3 `denseRange_algebraMap_finiteAdeleRing`, additive strong
   approximation, which Layer 4B reduces adelic approximation to. ⚠ The second is **not** that
   roadmap's Layer 0 weak approximation, which an earlier revision of this document cited; its own
-  note says strong approximation is a different statement.
+  note says strong approximation is a different statement. And its 11.8
+  `hasseMinkowski_equivalent`, the Hasse–Minkowski theorem, which Layer 5H reads at `K = ℚ`; that
+  roadmap states it over an arbitrary number field and defines no `H¹(K, SO(Q))`, so the passage
+  to the pointed-set form `Ш¹(ℚ, SO_Q) = 1` is 5H's own work.
 - **`TauCeti/FieldTheory/SquareClassGroup.lean`** (landed): `TauCeti.SquareClassGroup K`, the
   **additive** avatar `Additive Kˣ ⧸ (Subgroup.square Kˣ).toAddSubgroup` as a `ZMod 2`-vector
   space, with `squareClass` and its characterizations. ⚠ The spinor norm is multiplicative, so its
@@ -333,7 +337,7 @@ one, `hilbertProductFormula` is.
 | the decomposition of a semisimple group into `K`-almost-simple factors | Reductive Groups, Layer 7 | Layers 3A, 4D |
 | finite-dimensionality of `CliffordAlgebra Q`, that is `dim = 2^n` | Spin Representations, Layer 0 | Layer 2A |
 | the multiplicative square-class avatar `Kˣ ⧸ Subgroup.square Kˣ` and its additive comparison | Quadratic Form Invariants, Layer 0 | Layers 1D, 2F, 3F |
-| the Hasse–Minkowski principle over ℚ: locally isometric forms of equal dimension are isometric. ⚠ **No supplier owns this.** The Quadratic Form Invariants roadmap stops at forms over a nonarchimedean local field, and its Layer 6D classification is local; Hasse–Minkowski is global and appears nowhere in it, nor in Global Class Field Theory. Layer 5H needs it, so either that roadmap takes it as a milestone or this one does, and until it is placed the row is an **open prerequisite** and not a contract | *unowned* | Layer 5H (`Ш¹(ℚ, SO_Q) = 1`) |
+| `hasseMinkowski_equivalent`, with the `LocallyEquivalent` predicate of its 11.5: regular quadratic forms over a number field are isometric exactly when they are isometric at every finite completion and every real completion. This roadmap consumes the `K = ℚ` specialization, and derives the pointed-set and `Ш¹` formulation itself; the supplier defines no `H¹(K, SO(Q))` and no Tate–Shafarevich set. ⚠ **Not** Quadratic Form Invariants Layer 6, which an earlier revision of this row cited: that is the classification over a nonarchimedean *local* field, and Hasse–Minkowski is global | Global Class Field Theory, 11.8 | Layer 5H (`Ш¹(ℚ, SO_Q) = 1`) |
 | `denseRange_algebraMap_finiteAdeleRing`, additive strong approximation: `K` is dense in its **finite** adeles. ⚠ Not the weak approximation of that roadmap's 0.2, whose own note says strong approximation is a different statement, and not the discreteness of `K` in the full adele ring, where no density statement can hold | Global Class Field Theory, 2A.3 | Layer 4B |
 
 ## What is missing (build here)
@@ -1001,8 +1005,8 @@ genera exist.
 `QuotientMeasureEqMeasurePreimage`, `covolume`. Internal: 3A for the group schemes and their
 invariant differentials, 3D for the full adelic points, 3E for discreteness of the rational
 points in `G(𝔸)`, 3H for finiteness of the covolume, 2F and 3F for the local and adelic spinor
-norms. External: `hilbertProductFormula` of global class field theory 11.4, and the product
-formula. ⚠ The Hasse principle that 5H's `Ш¹ = 1` **is** has no supplier; see 5H. **Not** Layer 4.
+norms. External: `hilbertProductFormula` and `hasseMinkowski_equivalent` of global class field
+theory 11.4 and 11.8, and the product formula. **Not** Layer 4.
 
 ⚠ This layer is independent of Layer 4. Strong approximation is a noncompact-place statement about
 `Spin` used for class numbers; the volume theorem has no isotropy hypothesis and is what the mass
@@ -1124,15 +1128,17 @@ For `G = SO_Q` with `dim V ≥ 3` the two terms are computed separately, and eac
 - `Ш¹(ℚ, SO_Q) = 1`, of order **1**. ⚠ This is not a formality: it is exactly the Hasse principle
   for quadratic forms, that two forms of the same dimension over ℚ which are isometric over every
   `ℚ_v` are isometric over ℚ, since `H¹(k, SO_Q)` classifies forms of the same dimension and
-  discriminant.
+  discriminant. It is consumed by name, as `hasseMinkowski_equivalent` of global class field
+  theory 11.8, and not reproved.
 
-  ⚠ **It has no supplier.** The quadratic form invariants roadmap stops at forms over a
-  nonarchimedean local field: its Layer 6D classification is local, and Hasse–Minkowski appears
-  nowhere in it, nor in global class field theory. An earlier revision of the supplier table
-  cited "Quadratic Form Invariants, Layer 6" for it, which is the local classification and a
-  different theorem. Until the statement is placed — in that roadmap, which is its natural home,
-  or here — this is an **open prerequisite** of 5H, and the supplier table says so rather than
-  naming an owner that does not own it.
+  ⚠ **The supplier is global class field theory, not quadratic form invariants.** An earlier
+  revision cited that roadmap's Layer 6, which is the classification of forms over a
+  nonarchimedean *local* field — local, and a different theorem. The global statement lives with
+  the roadmap whose weak approximation, Hasse norm theorem and Hilbert reciprocity its proof
+  consumes. What is consumed is the `K = ℚ` case of a theorem stated over an arbitrary number
+  field, together with that roadmap's `LocallyEquivalent` predicate; **translating it into the
+  pointed-set statement `Ш¹(ℚ, SO_Q) = 1` is this milestone's work**, because the supplier defines
+  no `H¹(K, SO(Q))` and no Tate–Shafarevich set.
 
 Beside those, the local and global square-class bookkeeping the comparison runs on, displayed
 rather than described: the exact sequence of pointed sets
