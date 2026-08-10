@@ -92,6 +92,13 @@ def HasDirichletDensity (S : Set (HeightOneSpectrum (𝓞 K))) (δ : ℝ) : Prop
       primeDirichletSum K Set.univ s)
     (𝓝[>] 1) (𝓝 δ)
 
+/-- Layer 7: natural density is normalized by the all-prime counting function. -/
+def HasNaturalDensity (S : Set (HeightOneSpectrum (𝓞 K))) (δ : ℝ) : Prop :=
+  Tendsto
+    (fun x : ℝ ↦ (primeCount K S x : ℝ) /
+      (primeCount K Set.univ x : ℝ))
+    atTop (𝓝 δ)
+
 /-- Layer 7: an epsilon-neighborhood spelling of lower Dirichlet density. -/
 def LowerDirichletDensity (S : Set (HeightOneSpectrum (𝓞 K))) (δ : ℝ) : Prop :=
   ∀ ε : ℝ, 0 < ε → ∃ η : ℝ, 0 < η ∧ ∀ s : ℝ,
