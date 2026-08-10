@@ -1157,7 +1157,7 @@ and does not make CFT depend on quadratic forms. -/
 theorem hilbertSymbol_productFormula [NumberField K] (a b : Kˣ) :
     (∏ v ∈ ClassFieldTheory.finiteHilbertSupport a b,
         hilbertSign (ClassFieldTheory.finiteHilbertInvariantAt v a b)) *
-      ∏ w : InfinitePlace K,
+      ∏ w : NumberField.InfinitePlace K,
         hilbertSign (ClassFieldTheory.infiniteHilbertInvariantAt w a b) = 1 := by
   have hcoh := ClassFieldTheory.hilbertProductFormula a b
   sorry
