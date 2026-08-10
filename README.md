@@ -13,6 +13,7 @@ If you want to write or review a roadmap, start with [CONTRIBUTING.md](CONTRIBUT
 
 ## Roadmaps
 
+- [Adelic algebraic groups, approximation, and Tamagawa measures](TauCetiRoadmap/AdelicAlgebraicGroups/README.md)
 - [Class field theory](TauCetiRoadmap/ClassFieldTheory/README.md)
 - [Combinatorial Heegaard Floer and grid homology](TauCetiRoadmap/CombinatorialHeegaardFloer/README.md)
 - [Conformal mapping and the geometric theory of holomorphic functions](TauCetiRoadmap/ConformalMapping/README.md)
