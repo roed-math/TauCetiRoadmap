@@ -119,6 +119,19 @@ recorded as owed here. What remains outstanding is the merge itself, not the nam
 
 ### From the L-functions roadmap
 
+⚠ **The character type is not the L-functions roadmap's.** Its Layers 5 and 6 were refactored,
+after the group review of the open roadmaps, to consume Global Class Field Theory's carriers
+instead of building their own. `RayClassCharacter` and `Modulus` are therefore that roadmap's
+declarations, in the namespace `TauCetiRoadmap.GlobalClassFieldTheory`, and they reach this
+roadmap through L-functions Layer 5.1. The row below names them at their owner, because a
+contract that named the wrong owner would survive a rename in the wrong document. The analytic
+declarations in every other row remain the L-functions roadmap's.
+
+The same holds one level up: what the L-functions roadmap's Layer 6 builds is a *presentation* of
+a `GlobalClassFieldTheory.HeckeCharacter`, and no milestone here consumes the presentation. Layer
+6.4 of this roadmap uses the finite-order family only, so the rows below are all in the ray-class
+case.
+
 | Consumer layer | Supplier layer | Exact object or theorem | Exact declaration name |
 |---|---|---|---|
 | 0.1–0.5 | LF 0.1 | the data record, and its derived degree, archimedean factor, conjugate dual, and reflection point | `AnalyticLFunctionData`, with `.coeff`, `.conductor`, `.gammaR`, `.gammaC`, `.rootNumber`, `.completed`, `.polarOrder`; `AnalyticLFunctionData.degree`, `.gammaFactor`, `.dualCompleted`, `reflectedPoint` |
@@ -132,7 +145,8 @@ recorded as owed here. What remains outstanding is the merge itself, not the nam
 | 4.7 | LF 1.4–1.5 | the Euler product and the abscissa of absolute convergence, which give the lower bound Jensen's formula needs | `EulerFactorData`, `HasEulerProduct`, `IsOfDegree`, `HasLocalCoefficients`, `abscissaOfAbsConv_idealCoeff` |
 | 3.4, 7.6 | LF 3.6–3.7 | the continued and completed Dedekind zeta function, its exact poles at `0` and `1`, its functional equation, and the residues | `dedekindZetaC`, `dedekindZetaC_eq`, `meromorphic_dedekindZetaC`, `meromorphicOrderAt_dedekindZetaC_one`, `meromorphicOrderAt_dedekindZetaC_nonneg`, `tendsto_sub_one_mul_dedekindZetaC`; `completedDedekindZeta` with `completedDedekindZeta_eq`, `meromorphic_completedDedekindZeta`, `meromorphicOrderAt_completedDedekindZeta_zero`, `..._one`, `..._nonneg`, `tendsto_sub_one_mul_completedDedekindZeta`, `tendsto_mul_completedDedekindZeta_zero`, `completedDedekindZeta_one_sub`; uniqueness by `eq_of_meromorphic_of_eqOn_halfPlane` |
 | 6.2, 7.6 | LF 4.2, 4.4 | the factorizations `ζ_K = ζ · L(χ_d)` and `ζ_{ℚ(ζₙ)} = ∏_χ L(χ*, ·)`, for the **continued** functions and so valid where the zeros are | `dedekindZetaC_quadratic`, `dedekindZetaC_cyclotomic`. The lemma turning an equality of functions into additivity of divisors is this roadmap's 4.2 |
-| 3.4, 6.4 | LF 5.3, 5.7, 5.8 | completed Hecke L-functions of primitive finite-order ray-class characters, entire, with `‖W(χ)‖ = 1`, and their Mellin representation | `RayClassCharacter`, `heckeLFunctionC`, `heckeLFunctionC_eq`, `completedHeckeLFunction`, `differentiable_completedHeckeLFunction`, `heckeRootNumber`, `norm_heckeRootNumber`, `completedHeckeLFunction_one_sub`, `exists_mellin_completedHeckeLFunction` |
+| 3.4, 6.4 | LF 5.3, 5.7, 5.8 | completed Hecke L-functions of primitive finite-order ray-class characters, entire, with `‖W(χ)‖ = 1`, and their Mellin representation | `heckeLFunctionC`, `heckeLFunctionC_eq`, `completedHeckeLFunction`, `differentiable_completedHeckeLFunction`, `heckeRootNumber`, `norm_heckeRootNumber`, `completedHeckeLFunction_one_sub`, `exists_mellin_completedHeckeLFunction` |
+| 3.4, 6.4 | Global CFT 3.1, 3.3, via LF 5.1 | the character those L-functions are indexed by, and the primitivity hypothesis they carry | `GlobalClassFieldTheory.RayClassCharacter`, `RayClassCharacter.IsPrimitive`, `Modulus` |
 | 6.1 | LF 7.3, 7.6 | the `3-4-1` positivity this layer makes quantitative, and the nonnegativity of the ideal von Mangoldt weight that turns it into an inequality between logarithmic derivatives | `three_four_one_nonneg`, `idealVonMangoldt_nonneg` |
 | 6.5 | LF 7.4 | nonvanishing on `Re s = 1`, in meromorphic-order form, for both families | `meromorphicOrderAt_dedekindZetaC_one`, `meromorphicOrderAt_dedekindZetaC_one_add`, `meromorphicOrderAt_dirichletLFunction_one_add` |
 | 8.1–8.6 | LF 7.6 | the ideal von Mangoldt weight, and `−L'/L` as its Dirichlet series | `idealVonMangoldt`, `LSeries_idealVonMangoldt_eq` |
