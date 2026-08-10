@@ -148,3 +148,61 @@ of `README.md` leads, so that a later roadmap can pick a direction without rerea
 - Tate's thesis and the analytic theory.
 - The function-field and geometric theory.
 - Explicit class field theory beyond complex multiplication.
+
+## The Artin-map boundary with Number Field Arithmetic
+
+Settled 2026-08-10. An earlier revision of `Suggested.lean` defined `idealsAway`,
+`UnramifiedAway` and `artinHomAway` locally, at this roadmap's `[IsAbelianGalois K L]`, and proved
+the characteristic, uniqueness and monotonicity statements for that copy — while D.2 already said
+the Number Field Arithmetic roadmap owns the map. The two were the same mathematics under two
+spellings of the abelian hypothesis, and the duplication was recorded as remaining work on
+2026-08-09 by the group review of the open roadmaps.
+
+It is now removed. That roadmap named the five Layer 2.5 properties its consumer cites, in a
+statement-preserving commit at head `339413c`; this roadmap deleted all three definitions and the
+four local property examples, and D.2 became the abelian-hypothesis adapter and nothing else. The
+declaration contract is checked by six closed applications in `Suggested.lean`.
+
+## Hasse–Minkowski: placement and source audit
+
+Placed here on 2026-08-10, by owner decision, after the group review of the open roadmaps found
+that no roadmap owned it. The Orthogonal and Spin Groups roadmap needs it for its Layer 5H, and had
+cited it to Quadratic Form Invariants Layer 6, which is the classification of forms over a
+nonarchimedean local field — local, and a different theorem. The reason it lands here rather than
+there is that its proof consumes weak approximation (0.2), the cyclic Hasse norm theorem (5.5) and
+Hilbert reciprocity (11.4), all constructed here; the *local* theory of quadratic forms stays in
+that roadmap and is consumed.
+
+The implementation home is `TauCeti/NumberTheory/QuadraticForm/HasseMinkowski.lean`, outside the
+class-field-theory tree, so that a later extraction into a global-quadratic-forms development
+changes no declaration name.
+
+**Source audit, 2026-08-10.** O'Meara, *Introduction to Quadratic Forms* (Grundlehren 117), §66,
+**inspected** — the copy in `~/claude/gq2-lean/references/`. The statements are over an arbitrary
+**global** field, which is what the milestones needed; a source proving only the rational case
+would not have grounded them.
+
+- 66:1 — isotropy, local-global. Regularity is hypothesized; the proof splits into `n = 2`,
+  `n = 3`, `n = 4` and `n ≥ 5`, and the archimedean spots are included in "all spots on `F`".
+- 66:3 — representation, local-global, by induction on `dim U` from the scalar case and Witt.
+- 66:4 — the Hasse–Minkowski theorem, isometry, one line from 66:3.
+- 66:5 — the complete invariant list, which is the check on which places 11.5 quantifies over.
+- Supporting: 65:15 (global square theorem), 65:23 (Hasse norm theorem for a quadratic extension,
+  supplied here in cyclic form by 5.5), 58:7 (quaternary descent along `K(√d)`), 63:14 (unit-entry
+  isotropy at a non-dyadic place), 42:11 and 42:12 (representation and subspace isotropy).
+
+Two findings from reading it, both now in the normative text.
+
+1. **The quaternary case is not an instance of the general induction.** That induction needs
+   `T = {v : W_v anisotropic}` finite, which is 63:14 and needs `dim W ≥ 3`. At `dim Q = 4` the
+   complement is binary and `T` is infinite — `⟨1,1⟩` over `ℚ` is anisotropic at every
+   `p ≡ 3 (mod 4)` and at `∞`. O'Meara handles `n = 4` by passing to `K(√(dQ))`, where the
+   discriminant becomes a square, and descending by 58:7.
+2. **The local conventions agree with the Quadratic Form Invariants roadmap.** O'Meara's `S_p V`
+   is that roadmap's `localHasse`, its complete invariant list at a finite place is 6D's
+   `(dim, d, s)`, and the Hilbert-symbol product of 66's supporting material is 11.4's, in this
+   roadmap's arithmetic normalization.
+
+Cassels, *Rational Quadratic Forms*, and Serre, *A Course in Arithmetic*, are companions for the
+`ℚ` worked example W12 and ground nothing over a general number field.
+
