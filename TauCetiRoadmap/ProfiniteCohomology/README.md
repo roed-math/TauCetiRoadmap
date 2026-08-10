@@ -82,10 +82,19 @@ This list is definitive, not a list of things that might come later.
 - Evens norms for coefficients other than `𝔽₂` with trivial action, and the even-degree
   restriction that general coefficients force.
 - Profinite Sylow theory and the resulting equality `cd_p G = cd_p G_p`. That belongs to the
-  the Pro-p Groups roadmap, which owns the existence and conjugacy of pro-`p` Sylow subgroups
+  Profinite Pro-`p` Groups roadmap, which owns the existence and conjugacy of pro-`p` Sylow subgroups
   and supernatural indices.
 - Projective representations, factor sets, and Schur multipliers as representation theory. This
   roadmap supplies `H²` and nothing about its representation-theoretic applications.
+
+### Portfolio export contract
+
+The exact declarations in `Suggested.lean` are the sole continuous-cohomology interface consumed
+by `ProfiniteProPGroups`, `ClassFieldTheory`, `LocalGaloisGroups`, and
+`QuadraticFormInvariants`. Finite-group Tate cohomology in negative degrees and
+`FiniteClassFormation` are owned by `ClassFieldTheory`; this roadmap contains neither. Ordinary
+continuous cohomology in all degrees, `cd_p`, continuous corestriction, Kummer theory, and the
+continuous cup product remain here.
 
 ### The canonical carrier
 
@@ -507,9 +516,9 @@ unbundled classes of §3.
   Layers 2 to 13 needs either. For **finite** `M` and discrete `N`, the internal hom `M →+ N` with
   the conjugation action `(g • φ) m = g • φ (g⁻¹ • m)` is again a discrete `G`-module, and
   evaluation `(M →+ N) →+ M →+ N` is a `G`-equivariant pairing. Layer 8's duality package and
-  the Local Fields roadmap consume that pairing,
+  the Class Field Theory roadmap consume that pairing,
   and only finite products of it. The precise
-  consumer contract is Local Fields' prime-to-residue-characteristic and mixed-characteristic
+  consumer contract is Class Field Theory's prime-to-residue-characteristic and mixed-characteristic
   duality layers; no equal-characteristic residue-primary duality theorem is assumed here.
 - **Continuous sections of profinite quotients.** For a profinite `G` and closed subgroups
   `K ≤ H ≤ G`, the projection `G ⧸ K → G ⧸ H` admits a continuous section, with the normalized
@@ -871,7 +880,7 @@ section, and Layer 2.
   (§1).
 
   The presentation theory of
-  the Pro-p Groups roadmap is built from this
+  the Profinite Pro-`p` Groups roadmap is built from this
   sequence; its `𝔽₂` instance, with `N` a Frattini-type kernel, is the case that roadmap consumes.
 
 **Source** for the exactness of the cochain sequences. NSW (1.3.2) for the long exact sequence.
@@ -1087,7 +1096,7 @@ On the explicit model, relative to an equivariant pairing as fixed in §3. Discr
   Layer 0, with its equivariance `evalPairing_equivariant` and the conjugation action `homAction`,
   composed with the cups gives `Hⁱ(G, M →+ N) × H²⁻ⁱ(G, M) → H²(G, N)` for `i = 0, 1, 2`. These are
   instances of the six-shape API above, and they are what
-  the Local Fields roadmap uses as the underlying
+  the Class Field Theory roadmap uses as the underlying
   pairing of local Tate duality. A consumer building that pairing against the canonical object
   names `evalPairing`, feeds it to `ofDiscreteModulePairing` to get a `TopPairing`, and takes `cup`
   with `cup_add_left` and `cup_add_right` for biadditivity; those are the whole of what it needs
@@ -1101,7 +1110,7 @@ Comparison: with Layer 12's graded cup, under Layer 3. Naturality: the connectin
 stated as typed diagrams with their coefficient sequences as inputs. Edge cases: `(0,0)`, where
 the cup is the pairing itself; a degenerate pairing, where every cup vanishes, which is what the
 `C₂` example rules out. Consumers: Layer 9's mod-2 pairing, Layer 13's identity 1, and the duality
-pairings the Local Fields roadmap consumes.
+pairings the Class Field Theory roadmap consumes.
 
 **Source** for graded commutativity. NSW (1.4.4); Brown, *Cohomology of Groups*, V (3.6). The
 identity `a ⌣_μ b = (-1)^{pq} (b ⌣_{μᵒᵖ} a)` holds **on cohomology classes**. The false neighbor
@@ -1206,7 +1215,7 @@ layer needs Layers 3, 4, 5 and 8, and nothing from Layers 10 to 13.
 
   Both squares include the finiteness and separability hypotheses and the chosen embedding
   explicitly. These are the compatibilities that
-  the Local Fields roadmap and
+  the Class Field Theory roadmap and
   the Quadratic Form Invariants roadmap consume.
 - **The field-extension bridge.** The operations of Layers 1, 10 and 13 are indexed by a
   **subgroup** of the ambient group, and a finite separable `L/K` supplies one only after an
@@ -1243,7 +1252,7 @@ the field, for a finite separable `L/K` with a chosen embedding, one for restric
 the norm. Comparison: with Mathlib's `autEquivRootsOfUnity` at the finite level. Naturality: of the
 connecting map in the short exact sequence. Edge cases: `n = 1`; `μₙ ⊆ K`, where the action is
 trivial and the isomorphism is with `Hom_cont(G_K, μₙ)`; and `K` separably closed, where both sides
-vanish. Consumers: the Local Fields and Quadratic Form Invariants roadmaps.
+vanish. Consumers: the Class Field Theory and Quadratic Form Invariants roadmaps.
 
 **Source** for the Kummer isomorphism. NSW (6.2.1) and the display after it, with (6.2.2) for the
 pairing form. The hypotheses are `[NeZero n]` and `IsUnit (n : K)`. The false neighbor is the
@@ -1304,7 +1313,7 @@ against the canonical object of Layer 1 throughout.
   profinite `G` and `i ≥ 1`: a class of `Hⁱ(G, M)` annihilated by restriction to an open `U` is
   annihilated by `(G : U)`; every element of `Hⁱ(G, M)` is torsion; and `Hⁱ(G, M) = 0` when `M` is a
   `ℚ`-vector space. The `p`-primary refinement for pro-`p` groups belongs to
-  the Pro-p Groups roadmap; state here the general
+  the Profinite Pro-`p` Groups roadmap; state here the general
   torsion statement and the finite-level annihilation the orders of the `G ⧸ U` provide.
 
 **API** for the all-degree package. Constructors: Layer 1's carrier, with the operations of this
@@ -1326,7 +1335,7 @@ construction is that it needs no cochains at all.
 **Source** for the torsion statement. NSW (1.6.1); Brown III (10.1) is the discrete model. The
 hypotheses are `G` profinite and `i ≥ 1`. The false neighbor is the same statement in degree `0`,
 where `H⁰(G, M) = M^G` is not torsion in general, and the `p`-primary refinement for pro-`p`
-groups, which is the Pro-p Groups roadmap's and not this one's.
+groups, which is the Profinite Pro-`p` Groups roadmap's and not this one's.
 
 ### Layer 11: cohomological dimension
 
@@ -1397,7 +1406,7 @@ Layer 10.
 
   For `G` pro-`p` the single module `𝔽_p` suffices (NSW (3.3.2) final clause;
   Koch Def. 5.1 takes that as the definition); that refinement lives in
-  the Pro-p Groups roadmap, built on this layer.
+  the Profinite Pro-`p` Groups roadmap, built on this layer.
 - **Subgroups.** Three theorems:
   1. `cd_p_le_of_isClosed`, that is `cd_p H ≤ cd_p G` for closed `H ≤ G`, by coinduction and
      Shapiro for the cofinal open case and then the limit argument (NSW (3.3.5), Ribes-Zalesskii
@@ -1411,9 +1420,9 @@ Layer 10.
   `p`-primary `M`; `cd_p Ẑ = 1` for every `p` (the worked example in §6); and `H²(Ẑ, M) = 0` for
   finite `M`.
   ⚠ Do not attempt values of `cd_p G_K` for local fields here. That is
-  the Local Fields roadmap's `cd(G_K) = 2`, which
-  rests on this layer plus their duality. The `p`-Sylow equality `cd_p G = cd_p G_p` (NSW (3.3.6))
-  belongs to the Pro-p Groups roadmap together with
+  the Class Field Theory roadmap's `cd(G_K) = 2`, which
+  rests on this layer plus local duality. The `p`-Sylow equality `cd_p G = cd_p G_p` (NSW (3.3.6))
+  belongs to the Profinite Pro-`p` Groups roadmap together with
   the profinite Sylow theory it consumes; this layer supplies the definitions, the monotonicity,
   the prime-to-`p` equality, and Layer 10's all-degree tools that the Sylow argument uses.
 
@@ -1424,7 +1433,8 @@ the inequalities. Functoriality: monotonicity in the closed subgroup, and equali
 subgroup of index prime to `p`. Comparison: the equivalence of `CohomologicalDimensionLE` with the
 `p`-primary-component interface. Naturality: not applicable. Edge cases: `cd_p G = 0`, computed;
 `cd_p G = ⊤`, where `⊤ + 1 = ⊤` and the inequality still has to hold; and `p` not dividing the
-order of any `G ⧸ U`. Consumers: the Pro-p Groups and Local Fields roadmaps.
+order of any `G ⧸ U`. Consumers: the Profinite Pro-`p` Groups, Class Field Theory, and Local
+Galois Groups roadmaps.
 
 **Source** for dévissage. NSW (3.3.2); Koch Def. 5.1 takes the pro-`p` case as the definition. The
 reduction is to **finite** discrete `p`-primary modules and then to the finite simple ones, and
@@ -1687,7 +1697,7 @@ impossible group.
   coefficients, the three evaluation cup pairings
   `Hⁱ(G, Hom(M, μ)) × H²⁻ⁱ(G, M) → H²(G, μ)`, `i = 0, 1, 2`, exist with their biadditivity and
   naturality, as instances of the six-shape API. This is the shape
-  the Local Fields roadmap needs in order to state
+  the Class Field Theory roadmap needs in order to state
   local Tate duality at all; proving perfectness is theirs.
 
 ---
@@ -1776,7 +1786,7 @@ Item numbers are verified against the editions cited.
   Layer 2): Thm. 3.9 (Shapiro), Thm. 3.10 (`cor ∘ res = (G : H)`), Thm. 3.14
   (inflation-restriction-transgression in degree `n`), Thm. 3.16 (inductive limits), §3.9 (cup
   products); Ch. 5 (cd of pro-`p` groups through `Hⁿ(G, 𝔽_p)`, Def. 5.1) and Ch. 6 (generator and
-  relation ranks through `H¹` and `H²`), which is the `../ProPGroups/` interface.
+  relation ranks through `H¹` and `H²`), which is the `../ProfiniteProPGroups/` interface.
 - J. S. Milne, *Arithmetic Duality Theorems*, 2nd ed. (2006), Ch. I §0: the continuous-cochain
   conventions (p. 2), cup-product properties (0.1.1)-(0.1.6), Remark 0.11 (Shapiro for `M_*`),
   Remark 0.10 (`Ext` colimits), Prop. 0.15 (conjugation acts trivially), the reference point for
