@@ -50,10 +50,13 @@ future pin, or on an external repository.
 Global class field theory needs local class field theory, and Tate cohomology in every integer
 degree. Neither is in Mathlib at the pin, and neither is built here. The Local Fields roadmap owns
 local class field theory, and it owns the generic finite-group Tate and class-formation machinery;
-this roadmap consumes both by name, through the contract below. Layer D is the dictionary that
-carries them to a number field: it identifies the completion at a finite place with the objects of
-that roadmap, and it builds the ideal-theoretic Artin map. The archimedean local package is Layer
-2C and is owned here, because the consumed theory is nonarchimedean.
+this roadmap consumes both by name, through the contract below. The ideal-theoretic Artin map is
+not built here either: the Number Field Arithmetic roadmap owns it, and this roadmap consumes it
+by name through the second contract below. Layer D is the dictionary that carries both to a number
+field: it identifies the completion at a finite place with the objects of the Local Fields
+roadmap, and it transports the Artin map into the abelian setting through one hypothesis
+translation. The archimedean local package is Layer 2C and is owned here, because the consumed
+theory is nonarchimedean.
 
 Other roadmaps plan some of the same material. Those relations are alignments and not
 prerequisites. `PROVENANCE.md` records them, and it is not normative.
@@ -64,13 +67,11 @@ list. The L-functions roadmap consumes the modulus, the ray class group, the ray
 and the Hecke character; §What the L-functions roadmap consumes is the list. Both are one-way, and
 no milestone here depends on either consumer.
 
-⚠ Layer D.2 prototypes `idealsAway`, `UnramifiedAway` and `artinHomAway` in `Suggested.lean`, at
-this roadmap's `[IsAbelianGalois K L]` hypothesis. The Number Field Arithmetic roadmap owns those
-three objects, at `[IsGalois K L]` together with an explicit commutativity hypothesis, and it is a
-merge prerequisite here. The two are the same mathematics under different spellings of the abelian
-hypothesis, and D.2 says so; an implementation must use the supplier's declarations and prove the
-hypothesis translation, and must not create a second Artin map. Turning the local prototypes into
-that translation is the remaining work on this boundary.
+The Number Field Arithmetic contract is the second of the two, and D.2 is entirely an adapter:
+that roadmap owns the ideal group, the Artin map, and the map's four characteristic properties,
+and this one owns only the translation between `[IsAbelianGalois K L]` and the `[IsGalois K L]`
+plus explicit commutativity that the supplier takes. There is one ideal-theoretic Artin map in the
+family.
 
 ## What this roadmap consumes from the Local Fields roadmap
 
@@ -158,6 +159,32 @@ through a row.
 | 3.1 | `HeckeCharacter`, `RayClassCharacter`, `HeckeCharacter.ofRayClassCharacter`, `ofRayClassCharacter_apply` | `HeckeCharacter K = ContinuousMonoidHom (IdeleClassGroup K) ℂˣ`; `RayClassCharacter 𝔪 = RayClassGroup 𝔪 →* ℂˣ`; and the pullback of the second into the first along `rayClassQuotient` |
 | 3.3 | `RayClassCharacter.induced`, `RayClassCharacter.IsPrimitive`, `RayClassCharacter.not_isPrimitive_one` | induction as precomposition with `classMap`, primitivity stated **against that map**, and the fact that the trivial character of a nontrivial modulus is imprimitive |
 | 3.5 | `HeckeCharacter.shift`, `HeckeCharacter.unitaryPart`, `norm_unitaryPart`, `shift_eq_zero_iff`, `shift_ofRayClassCharacter` | the unique **real** exponent `σ` with `|χ| = ‖·‖^σ`, its unitary complement, and the compatibility that a finite-order character has `σ = 0` |
+
+## What this roadmap consumes from the Number Field Arithmetic roadmap
+
+The finite ideal-theoretic Artin map is that roadmap's, at its Layer 2.5. This roadmap builds no
+ideal group, no unramifiedness predicate, and no Artin map; D.2 is the abelian-hypothesis adapter
+and nothing else. Backticked names live in the namespace `TauCetiRoadmap.NumberFieldArithmetic`,
+in `TauCetiRoadmap/NumberFieldArithmetic/Suggested.lean`, and every one of them has a **closed**
+application in this roadmap's `Suggested.lean`.
+
+| Consumer here | Supplier layer | Exact declaration | Type or law relied on |
+|---|---|---|---|
+| D.2, and Layers 6 to 8 | 2.5 | `idealsAway` | `J^S`, the fractional ideals with `FractionalIdeal.count` zero at every prime of `S`, as a subgroup of `(FractionalIdeal (𝓞 K)⁰ K)ˣ` |
+| D.2, and the enlargement of `S` to `support 𝔪₀` | 2.5 | `idealsAwayInclusion` | the inclusion `idealsAway S' →* idealsAway S` for `S ⊆ S'` |
+| D.2, and the ideal-side statements of Layers 1, 6 and 7 | 2.5 | `integralIdealsAway`, `integralIdealsAwayHom` | the monoid of nonzero integral ideals no prime of `S` divides, and its map into `J^S` |
+| D.2, and the global map of Layer 6 | 2.5 | `artinHomAway` | the arithmetic-Frobenius-normalized `J^S →* (L ≃ₐ[K] L)`, taking `[IsGalois K L]` with an explicit `hab : ∀ σ τ, Commute σ τ`. ⚠ Its unramified hypothesis is about primes of the **upper** field |
+| 6.1's local compilation, 6.2's reciprocity | 2.5 | `artinHomAway_apply_prime` | the value at a prime outside `S` is the arithmetic Frobenius, at any prime of `𝓞 L` above it |
+| 6.1 item 8, and 7.3's recognition of the global map | 2.5 | `artinHomAway_eq_of_apply_prime` | a multiplicative map with those prime values **is** this map |
+| 6.3 and 7.4, where the excluded set becomes `support 𝔪₀` | 2.5 | `artinHomAway_mono` | `artinHomAway S' hur' = (artinHomAway S hur).comp (idealsAwayInclusion h)`, an equation of homomorphisms. ⚠ The carrier inequality is not a substitute |
+| 6.1 item 8, 6.3's base change, and 7.6's tower | 2.5 | `artinHomAway_restrict`, `isUnramifiedAway_of_intermediateField` | restriction along `AlgEquiv.restrictNormalHom` carries the map of `L/K` to the map of `M/K`, with the unramified hypothesis for `M/K` **derived** from the one for `L/K` |
+| the ideal form of reciprocity in Layers 6 and 7 | 2.5 | `artinHomAwayIntegral`, `artinHomAwayIntegral_apply_prime` | the integral-ideal Artin map and its value at a prime |
+
+⚠ **The hypothesis spellings differ, and translating them is this roadmap's only D.2 content.**
+The supplier takes `[IsGalois K L]` with an explicit commutativity argument; this roadmap carries
+`[IsAbelianGalois K L]`, which supplies both. `algEquiv_commute_of_isAbelianGalois` is the
+translation, and every use of the supplied map goes through it. There is no second Artin map
+under a different typeclass spelling.
 
 ## What the Orthogonal and Spin Groups roadmap consumes from this roadmap
 
@@ -260,7 +287,7 @@ must carry their true hypotheses.
 | nonarchimedean local normalizations | The normalized valuation of a uniformizer is `v(π) = 1`. The residue cardinality is `q_v`. The distinguished generator is the **arithmetic Frobenius** `x ↦ x^{q_v}`. The local Artin map sends a uniformizer to the arithmetic Frobenius: `Art_{K_v}(π) = Frob_v`. These are the Local Fields roadmap's normalizations, consumed by name in the contract above, and Layer D transports them to `v.adicCompletion K` | Layer D; Local Fields Layers 0, 2, 6 and 7 |
 | archimedean local normalizations | These are built in Layer 2C, because the consumed local theory is nonarchimedean. `Art_ℂ : ℂˣ → Gal(ℂ/ℂ)` is trivial. `Art_ℝ : ℝˣ → Gal(ℂ/ℝ)` sends a positive element to `1` and a negative element to complex conjugation, so `ker Art_ℝ = ℝ_{>0} = N_{ℂ/ℝ}(ℂˣ)`. The invariants are `inv_ℂ = 0`, and the nontrivial class at a real place has invariant `1/2`. The Hilbert symbols are `(a,b)_ℂ = 1` always, and `(a,b)_ℝ = −1` exactly when both `a < 0` and `b < 0` | Layer 2C |
 | Artin map, direction and normalization | At finite level, `θ_{L/K} : C_K ⧸ N_{L/K} C_L ≃* Gal(L/K)` for finite abelian `L/K`. It is **defined** as the compilation of local maps, `θ((x_v)_v) = ∏_v Art_{K_v}(x_v)∣_L`. Normalization: let `v` be unramified in `L`, and let `x` be the class of an idele that is a uniformizer at `v` and a unit elsewhere; then `θ(x) = Frob_v`, arithmetic. At profinite level, `Art_K : C_K →* Gal(K^{ab}/K)` is continuous and **surjective**, with kernel the identity component `D_K`. **Common error.** The local map is injective and not surjective; the global map is surjective and not injective. Do not port a local statement without changing it | Layers 6 and 7; Neukirch ANT VI §5 |
-| ideal-theoretic Artin map | Let `L/K` be finite abelian, let `S : Finset (HeightOneSpectrum (𝓞 K))`, and let `hur` say that every prime outside `S` is unramified in `L`. Then `J^S` is the subgroup of `(FractionalIdeal (𝓞 K)⁰ K)ˣ` of fractional ideals with valuation zero at every prime of `S`, and `artinHomAway S hur : J^S →* (L ≃ₐ[K] L)` sends a prime outside `S` to its arithmetic Frobenius. It is milestone D.2, in the name and the signature of the Number Field Arithmetic roadmap. Layers 6 to 8 use the single instance `S = support 𝔪₀`, where `hur` follows from `𝔣(L/K) ∣ 𝔪`, and the carrier is `J^{𝔪₀}` already | Layer D; Layers 6 to 8 |
+| ideal-theoretic Artin map | **Consumed.** `NumberFieldArithmetic.idealsAway S` is the subgroup of `(FractionalIdeal (𝓞 K)⁰ K)ˣ` of fractional ideals with valuation zero at every prime of `S`, and `NumberFieldArithmetic.artinHomAway hab S hur : J^S →* (L ≃ₐ[K] L)` sends a prime outside `S` to its arithmetic Frobenius, for `hur` saying that every prime of the **upper** field above a prime outside `S` is unramified. `abelianArtinHomAway S hur` of D.2 is that map at `[IsAbelianGalois K L]`, reducibly, and is not a second map. Layers 6 to 8 use the single instance `S = support 𝔪₀`, where `hur` follows from `𝔣(L/K) ∣ 𝔪`, and the carrier is `J^{𝔪₀}` already | Layer D; Layers 6 to 8 |
 | Hecke character | A Hecke character is a continuous homomorphism `χ : IdeleClassGroup (𝓞 K) K →* ℂˣ`, that is a `ContinuousMonoidHom`. Three properties are equivalent: `χ` has finite order; `ker χ` is open; `χ` factors through a ray class group `Cl_𝔪 K`. Each equivalence is a named theorem. "Ray class character" names the composite notion and is never an independent definition. Unitary characters and the decomposition `χ = χ_u · ‖·‖^s` are Layer 3. Algebraic characters and infinity types are Layer 10A | Layer 3 |
 | conductor of a character | There are two notions, and neither covers the other. The **finite conductor ideal** of a continuous quasicharacter is assembled from the depths at which its nonarchimedean local components become trivial on principal units. The **ray conductor modulus** is defined for a character that is trivial on the connected component of the archimedean part, in particular for every finite-order character. It is the smallest `𝔪` with `U_𝔪 ⊆ ker χ`, and its infinite part records the real places where the local sign component is nontrivial. **Common error.** A general quasicharacter has no ray conductor, because `‖·‖^s` is trivial on no `U_𝔪`. Over `ℚ`, `DirichletCharacter.conductor` is the finite part, and the parity fixes the infinite part | Layer 3 |
 | conductor of an abelian extension | For finite abelian `L/K`, the conductor `𝔣(L/K)` is the smallest modulus `𝔣` with `U_𝔣 ⊆ Kˣ · N_{L/K}(I_L)`. It has a second description: assemble the consumed local conductor exponents `c(L_w/K_v)` together with the ramified real places. Both descriptions are stated, and their agreement is a theorem | Layer 7 |
@@ -407,13 +434,18 @@ Layer D is the dictionary onto the consumed local theory, and Layers 2B, 2C, 5, 
 it and the contract above. Add each milestone to `Suggested.lean` with `sorry` as soon as its types
 are expressible.
 
-### Layer D: the local dictionary and the ideal-theoretic Artin map
+### Layer D: the local dictionary and the Artin-map adapter
+
+Layer D identifies completions with the local-field API and transports Number Field Arithmetic's
+ideal-theoretic Artin map into the abelian class-field-theory setting. **It builds no second ideal
+group and no second Artin map.**
 
 The Local Fields roadmap states its theory for a nonarchimedean local field `K`, in the
 `ValuativeRel` vocabulary. A number field arrives instead as `K` together with a finite place `v`,
-and its completion `v.adicCompletion K` is a Mathlib object with a `Valued` instance. This layer is
-the dictionary between the two, and it carries the two global constructions that read the consumed
-theory one prime at a time: the ideal-theoretic Artin map, and the local conductor-discriminant sum.
+and its completion `v.adicCompletion K` is a Mathlib object with a `Valued` instance. D.1 is the
+dictionary between the two. D.2 is the Artin-map adapter, and D.4 is the local
+conductor-discriminant sum, which is the other global construction that reads the consumed local
+theory one prime at a time.
 
 **D.1. The completion dictionary at a finite place.** For `v : HeightOneSpectrum (𝓞 K)`, the
 completion `v.adicCompletion K` is a nonarchimedean local field. Its residue cardinality is
@@ -441,42 +473,82 @@ R Local Fields `normalizedValuation`, R Local Fields `Layer 0: the normalized va
 - *Downstream interface:* Layers 2B, 2C, 3, 5, 6, 7, 9 and 11 reach the consumed theory only
   through this milestone.
 
-**D.2. The ideal-theoretic Artin map.** Let `L/K` be finite abelian, let
-`S : Finset (HeightOneSpectrum (𝓞 K))`, and let `hur` say that every prime `Q` of `𝓞 L` above a
-prime outside `S` is unramified. That hypothesis is about primes of the upper field: a condition
-on `v.asIdeal` alone says nothing about `L/K`. Define
-`artinHomAway S hur : J^S →* (L ≃ₐ[K] L)` on the fractional ideals with valuation zero at every
-prime of `S`. Prove:
+**D.2. The Artin-map adapter.** The ideal-theoretic Artin map is Number Field Arithmetic's, by
+the contract in §What this roadmap consumes from the Number Field Arithmetic roadmap. This
+milestone owns one thing, and it is a hypothesis translation.
 
-1. the characteristic property: the value at a prime `𝔭 ∉ S` is the arithmetic Frobenius, in the
-   sense of Mathlib's `IsArithFrobAt` for a prime `Q` of `𝓞 L` above `𝔭`;
-2. uniqueness: a multiplicative map with those values is `artinHomAway`, because the primes
-   outside `S` generate `J^S`;
-3. the restriction formula: for `K ⊆ L ⊆ M` with `M/K` abelian, `artinHomAway` for `M/K`
-   restricted to `L` is `artinHomAway` for `L/K`;
-4. the tower formula for `K ⊆ K' ⊆ L` with `L/K` abelian, relating `artinHomAway` over `K'` to
-   `artinHomAway` over `K` through the ideal norm;
-5. compatibility as `S` grows: for `S ⊆ S'` the carriers are nested and the maps agree.
+**D.2.1. The abelian hypothesis, translated.** `[IsAbelianGalois K L]` is a Galois extension whose
+group is commutative, and it supplies both `[IsGalois K L]` and pairwise commutativity of
+`L ≃ₐ[K] L`; the supplied Artin map takes the second as an explicit argument. Prove
+`algEquiv_commute_of_isAbelianGalois`, which is that argument. It is the only new ingredient of
+this layer, and everything below is a call to the supplier through it.
 
-`S` is a parameter of the construction, and not the ramified set. Layers 6 to 8 use one
-instance, `S = support 𝔪₀`. There `hur` holds because the conductor of `L/K` divides `𝔪`, so
-every prime outside the support of `𝔪₀` is unramified in `L`. The carrier is then `J^{𝔪₀}`, and
-no further restriction is needed. The name, the carrier and the hypothesis are those of the Number
-Field Arithmetic roadmap, so that the two agree by construction and not by a later comparison.
-*Source.* Janusz III §3; Neukirch ANT VI §7.
-*Prerequisites:* M `arithFrobAt`, M `IsArithFrobAt`, M `FractionalIdeal`,
-M `FractionalIdeal.count`, M `Algebra.IsUnramifiedAt`, M `Ideal.LiesOver`.
+**D.2.2. The consumed ideal group and Artin map.** Consume, by name:
+
+```text
+NumberFieldArithmetic.idealsAway
+NumberFieldArithmetic.idealsAwayInclusion
+NumberFieldArithmetic.integralIdealsAway
+NumberFieldArithmetic.integralIdealsAwayHom
+NumberFieldArithmetic.artinHomAway
+NumberFieldArithmetic.artinHomAwayIntegral
+```
+
+`abelianArtinHomAway S hur` is a **reducible abbreviation** of `artinHomAway` at the translated
+hypothesis. It carries no universal property and no construction: every statement of Layers 6 to 8
+about it is a statement about the supplier's map, and `Suggested.lean` proves it reduces to that
+map by `rfl`.
+
+Layers 6 to 8 use one instance, `S = support 𝔪₀`, or any larger finite excluded set. There `hur`
+holds because the conductor of `L/K` divides `𝔪`, so every prime outside the support of `𝔪₀` is
+unramified in `L`, and the carrier is `J^{𝔪₀}` with no further restriction.
+
+⚠ The unramified hypothesis is about primes of the **upper** field. A condition on `v.asIdeal`
+alone says nothing about `L/K`. That is the supplier's spelling, and this roadmap uses it verbatim
+rather than wrapping it in a predicate of its own.
+
+**D.2.3. The compatibilities global reciprocity runs on.** Consume, by name, and re-prove none of
+them:
+
+| Used for | Declaration |
+|---|---|
+| the value at an unramified prime | `artinHomAway_apply_prime` |
+| uniqueness from the prime values, which is how Layer 6 recognizes its own construction as this map | `artinHomAway_eq_of_apply_prime` |
+| enlargement of the excluded set to the support of a modulus | `artinHomAway_mono` |
+| restriction to an abelian subextension, which Layer 6's functoriality and Layer 7's towers run along | `artinHomAway_restrict` |
+| the integral-ideal form the classical statements are in | `artinHomAwayIntegral_apply_prime` |
+
+This roadmap proves global consequences — the kernel, the surjectivity, the factorization through
+ray class groups — and none of these finite-level characteristic properties.
+
+⚠ `artinHomAway_mono` is the statement about the two **maps**. The inequality of carriers,
+`idealsAway S' ≤ idealsAway S`, is not a substitute for it: it says nothing about either map.
+
+⚠ `artinHomAway_restrict` derives the unramified hypothesis for `M/K` from the one for `L/K`,
+through the supplier's `isUnramifiedAway_of_intermediateField`. A version taking two unrelated
+hypotheses states something weaker, namely that two separately-defined maps agree.
+
+`Suggested.lean` carries a **closed** application of each of the five, with no `sorry`, so a change
+to the supplier's carrier or signature breaks this build.
+
+*Source.* Janusz III §3; Neukirch ANT VI §7, for the global use made of the map.
+*Prerequisites:* R Number Field Arithmetic `idealsAway`, R Number Field Arithmetic
+`idealsAwayInclusion`, R Number Field Arithmetic `integralIdealsAway`, R Number Field Arithmetic
+`integralIdealsAwayHom`, R Number Field Arithmetic `artinHomAway`, R Number Field Arithmetic
+`artinHomAway_apply_prime`, R Number Field Arithmetic `artinHomAway_eq_of_apply_prime`,
+R Number Field Arithmetic `artinHomAway_mono`, R Number Field Arithmetic `artinHomAway_restrict`,
+R Number Field Arithmetic `artinHomAwayIntegral`, R Number Field Arithmetic
+`artinHomAwayIntegral_apply_prime`, R Number Field Arithmetic
+`isUnramifiedAway_of_intermediateField`; M `IsAbelianGalois`, M `IsMulCommutative`.
 **Basic API.**
-- *Constructors:* the map from `S` and the unramifiedness hypothesis; the value at a prime.
+- *Constructors:* `algEquiv_commute_of_isAbelianGalois`; `abelianArtinHomAway`, reducibly the
+  supplier's map.
 - *Examples:* `S = ∅`, allowed only for `L/K` unramified everywhere; `S = support 𝔪₀`; `L = K`,
   where the map is trivial; a quadratic extension, where the value is the Legendre symbol.
-- *Morphisms:* `J^S →* Gal(L/K)`.
-- *Functoriality:* items 3, 4 and 5.
-- *Comparison lemmas:* the value on a principal prime; the composite with the map to the ideal
-  class group.
-- *Naturality:* the square that relates `artinHomAway` for `L/K` and for `M/K`.
+- *Comparison lemmas:* the reduction of the adapter to the supplied map, by `rfl`.
 - *Edge cases:* a prime of `S` that is unramified; `S` larger than the ramified set.
-- *Downstream interface:* Layers 6, 7, 8 and 10C use `artinHomAway` and items 1 to 4.
+- *Downstream interface:* Layers 6, 7, 8 and 10C use `abelianArtinHomAway` and the five consumed
+  properties.
 
 **D.3. The cyclotomic orientation at a finite level over `ℚ_p`.** Stage 1 of 6.3 evaluates the
 local factors of `∏_v Art_{ℚ_v}(x)` on `ℚ(ζ_n)`, and needs two clauses, one at each kind of place.
@@ -1772,7 +1844,7 @@ started.
 
 | stage | content | prerequisites |
 |---|---|---|
-| D | the completion dictionary, the ideal-theoretic Artin map, the cyclotomic orientation at a finite place, the local conductor-discriminant | Mathlib, Local Fields |
+| D | the completion dictionary, the Number Field Arithmetic Artin-map adapter, the cyclotomic orientation at a finite place, the local conductor-discriminant | Mathlib, Number Field Arithmetic, Local Fields |
 | 0 | moduli, approximation, congruence subgroups of `Kˣ` | Mathlib |
 | 1 | ray and narrow class groups, moving lemma, exact sequence, finiteness | 0 |
 | 2A | ideles, topology, discreteness, norm-one compactness, `U_𝔪`, `D_K` | Mathlib, 1 |

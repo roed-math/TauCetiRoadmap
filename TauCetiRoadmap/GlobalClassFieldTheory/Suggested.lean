@@ -1,5 +1,6 @@
 import Mathlib
 import TauCetiRoadmap.LocalFields.Suggested
+import TauCetiRoadmap.NumberFieldArithmetic.Suggested
 
 /-!
 # Global class field theory: target signatures
@@ -30,6 +31,13 @@ Local class field theory, and the generic finite-group Tate and class-formation 
 Local Fields roadmap's. This file imports `TauCetiRoadmap.LocalFields.Suggested` and applies those
 declarations by name; it restates none of them, and it carries no compatibility structure standing
 in for them. `README.md` has the exact declaration contract.
+
+The finite ideal-theoretic Artin map is imported from Number Field Arithmetic. This file supplies
+only the abelian-hypothesis adapter — `algEquiv_commute_of_isAbelianGalois`, and the reducible
+`abelianArtinHomAway` built from it — and uses the imported map in global reciprocity. It defines
+no ideal group of its own, no second unramifiedness predicate, and no second Artin map; the
+contract checks below are closed applications of the supplier's declarations, so a change to its
+carrier or signature breaks this build.
 -/
 
 namespace TauCetiRoadmap.GlobalClassFieldTheory
@@ -118,67 +126,111 @@ example (p : ℕ) [Fact p.Prime] [IsNonarchimedeanLocalField ℚ_[p]] (k : ℕ)
       = (Units.map (PadicInt.toZModPow k : ℤ_[p] →+* ZMod (p ^ k)).toMonoidHom u)⁻¹ :=
   sorry
 
-/-- **D.2, the ideals with support away from a finite set of primes.** The carrier of
-`artinHomAway`. It is `J^S` of the conventions table, and `J^{𝔪₀}` of Layer 1 is the case
-`S = support 𝔪₀`. -/
-def idealsAway {K : Type u} [Field K] [NumberField K] (S : Finset (HeightOneSpectrum (𝓞 K))) :
-    Subgroup (FractionalIdeal (𝓞 K)⁰ K)ˣ where
-  carrier := {I | ∀ v ∈ S, FractionalIdeal.count K v (I : FractionalIdeal (𝓞 K)⁰ K) = 0}
-  mul_mem' := by sorry
-  one_mem' := by sorry
-  inv_mem' := by sorry
+/-! ### D.2: the consumed ideal-theoretic Artin map
 
-/-- **D.2, unramifiedness away from `S`.** Every prime of `𝓞 L` above a prime of `𝓞 K` outside
-`S` is unramified. This is the hypothesis of `artinHomAway`, and it is a statement about primes
-of the **upper** field. A condition on `v.asIdeal` alone would say nothing about `L/K`. -/
-def UnramifiedAway (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L]
-    [Algebra K L] (S : Finset (HeightOneSpectrum (𝓞 K))) : Prop :=
-  ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
-    ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q
+The carrier `J^S`, the map, and its four characteristic properties are Number Field Arithmetic's.
+This roadmap builds none of them. What it owns is one adapter: that roadmap states the abelian
+hypothesis as `[IsGalois K L]` together with an explicit `hab : ∀ σ τ, Commute σ τ`, and this one
+carries `[IsAbelianGalois K L]`. Translating between the two is the whole of D.2.
+-/
 
-/-- **D.2, the ideal-theoretic Artin map `artinHomAway`.** The canonical multiplicative map on
-`J^S` whose value at a prime outside `S` is the arithmetic Frobenius. The Frobenius itself is
-Mathlib's `arithFrobAt`, so the content here is well-definedness, multiplicativity, and the
-functoriality that Layers 6 to 8 use.
+/-- **D.2.1, the abelian-hypothesis translation.** The only new ingredient of D.2. `IsAbelianGalois`
+is a Galois extension whose group is commutative, and the supplied Artin map takes that
+commutativity as an explicit argument, so this is the one lemma that lets every use below be a
+call to the supplier. -/
+theorem algEquiv_commute_of_isAbelianGalois {K L : Type*} [Field K] [NumberField K] [Field L]
+    [NumberField L] [Algebra K L] [IsAbelianGalois K L] :
+    ∀ σ τ : L ≃ₐ[K] L, Commute σ τ :=
+  fun σ τ => IsMulCommutative.is_comm.comm σ τ
 
-`S` is a parameter. Layers 6 to 8 use `S = support 𝔪₀`, where the hypothesis holds because the
-conductor of `L/K` divides `𝔪`, and the carrier is then `J^{𝔪₀}` with no further restriction.
-The name, the carrier and the hypothesis are those of the Number Field Arithmetic roadmap. -/
-noncomputable def artinHomAway (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L]
-    [Algebra K L] [IsAbelianGalois K L] (S : Finset (HeightOneSpectrum (𝓞 K)))
-    (_hur : UnramifiedAway K L S) : idealsAway S →* (L ≃ₐ[K] L) :=
-  sorry
+/-- **D.2.2, the Artin map at the abelian hypothesis.** A reducible abbreviation of the supplied
+map, and nothing else: it carries no universal property and no construction of its own. Every
+statement of Layers 6 to 8 about it is a statement about
+`NumberFieldArithmetic.artinHomAway`. -/
+noncomputable abbrev abelianArtinHomAway {K L : Type u} [Field K] [NumberField K] [Field L]
+    [NumberField L] [Algebra K L] [IsAbelianGalois K L]
+    (S : Finset (HeightOneSpectrum (𝓞 K)))
+    (hur : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
+      ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q) :
+    NumberFieldArithmetic.idealsAway (K := K) S →* (L ≃ₐ[K] L) :=
+  NumberFieldArithmetic.artinHomAway (L := L) algEquiv_commute_of_isAbelianGalois S hur
 
-/-- **D.2, the characteristic property.** The value at a prime outside `S` is the arithmetic
-Frobenius, and that property determines the map, because the primes generate `J^S`. -/
-example (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L] [Algebra K L]
-    [IsAbelianGalois K L] (S : Finset (HeightOneSpectrum (𝓞 K))) (hur : UnramifiedAway K L S)
-    (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉ S) (I : idealsAway S)
+section ArtinContract
+
+variable {K L : Type u} [Field K] [NumberField K] [Field L] [NumberField L] [Algebra K L]
+  [IsAbelianGalois K L] (S : Finset (HeightOneSpectrum (𝓞 K)))
+  (hur : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
+    ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q)
+
+/-! #### D.2.3, the contract checks
+
+Closed applications of the supplied declarations, with no `sorry`. Nothing below is a milestone:
+each says that this roadmap reads the supplier's property rather than restating it, and each stops
+elaborating if the supplier's carrier or signature moves. -/
+
+/-- The adapter reduces to the supplied map. -/
+example : abelianArtinHomAway S hur =
+    NumberFieldArithmetic.artinHomAway (L := L) algEquiv_commute_of_isAbelianGalois S hur :=
+  rfl
+
+/-- **The value at a prime**, consumed. -/
+example (I : NumberFieldArithmetic.idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K))
+    (hv : v ∉ S)
     (hI : ((I : (FractionalIdeal (𝓞 K)⁰ K)ˣ) : FractionalIdeal (𝓞 K)⁰ K) =
-      FractionalIdeal.coeIdeal v.asIdeal)
+      (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K))
     (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal] (σ : L ≃ₐ[K] L)
-    (hσ : IsArithFrobAt (𝓞 K) (galRestrict (𝓞 K) K L (𝓞 L) σ) Q) :
-    artinHomAway K L S hur I = σ :=
-  sorry
+    (hσ : IsArithFrobAt (𝓞 K) σ Q) :
+    abelianArtinHomAway S hur I = σ :=
+  NumberFieldArithmetic.artinHomAway_apply_prime algEquiv_commute_of_isAbelianGalois S hur
+    I v hv hI Q σ hσ
 
-/-- **D.2, uniqueness.** A multiplicative map with the Frobenius values is `artinHomAway`. -/
-example (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L] [Algebra K L]
-    [IsAbelianGalois K L] (S : Finset (HeightOneSpectrum (𝓞 K))) (hur : UnramifiedAway K L S)
-    (f g : idealsAway S →* (L ≃ₐ[K] L))
-    (hfg : ∀ (v : HeightOneSpectrum (𝓞 K)), v ∉ S → ∀ I : idealsAway S,
+/-- **Uniqueness from the prime values**, consumed. This is what lets Layer 6 recognize its own
+global construction as the supplied map. -/
+example (φ : NumberFieldArithmetic.idealsAway (K := K) S →* (L ≃ₐ[K] L))
+    (hφ : ∀ (I : NumberFieldArithmetic.idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K)),
+      v ∉ S →
       ((I : (FractionalIdeal (𝓞 K)⁰ K)ˣ) : FractionalIdeal (𝓞 K)⁰ K) =
-        FractionalIdeal.coeIdeal v.asIdeal → f I = g I) :
-    f = g :=
-  sorry
+        (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K) →
+      ∀ (Q : Ideal (𝓞 L)) (_ : Q.IsPrime) (_ : Q.LiesOver v.asIdeal) (σ : L ≃ₐ[K] L),
+        IsArithFrobAt (𝓞 K) σ Q → φ I = σ) :
+    φ = abelianArtinHomAway S hur :=
+  NumberFieldArithmetic.artinHomAway_eq_of_apply_prime algEquiv_commute_of_isAbelianGalois S hur
+    φ hφ
 
-/-- **D.2, compatibility as `S` grows.** For `S ⊆ S'` the carriers are nested and the maps
-agree, so a consumer may enlarge `S` at will. -/
-example (K L : Type u) [Field K] [NumberField K] [Field L] [NumberField L] [Algebra K L]
-    [IsAbelianGalois K L] (S S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S')
-    (hur : UnramifiedAway K L S) (hur' : UnramifiedAway K L S') :
-    ∃ ι : idealsAway S' →* idealsAway S,
-      ∀ I : idealsAway S', artinHomAway K L S hur (ι I) = artinHomAway K L S' hur' I :=
-  sorry
+/-- **Enlargement of the excluded set**, consumed. Layers 6 to 8 take `S = support 𝔪₀`, which is
+generally larger than the ramified set, and this is the equation that licenses the enlargement.
+⚠ The inequality of carriers is not a substitute: it says nothing about the two maps. -/
+example (S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S')
+    (hur' : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S' →
+      ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q) :
+    abelianArtinHomAway S' hur' =
+      (abelianArtinHomAway S hur).comp (NumberFieldArithmetic.idealsAwayInclusion h) :=
+  NumberFieldArithmetic.artinHomAway_mono algEquiv_commute_of_isAbelianGalois S hur S' h hur'
+
+/-- **Restriction to a subextension**, consumed. Layer 6's functoriality and Layer 7's tower
+statements run along this square. ⚠ The unramified hypothesis for `M/K` is *derived* from the one
+for `L/K`, by the supplier's `isUnramifiedAway_of_intermediateField`; a second assumption would
+state something weaker. -/
+example (M : IntermediateField K L) [NumberField M] [Normal K M] [IsGalois K M]
+    (habM : ∀ σ τ : M ≃ₐ[K] M, Commute σ τ) :
+    (AlgEquiv.restrictNormalHom (F := K) M).comp (abelianArtinHomAway S hur) =
+      NumberFieldArithmetic.artinHomAway (L := M) habM S
+        (NumberFieldArithmetic.isUnramifiedAway_of_intermediateField M S hur) :=
+  NumberFieldArithmetic.artinHomAway_restrict algEquiv_commute_of_isAbelianGalois S hur M habM
+
+/-- **The integral-ideal form**, consumed. This is the shape the classical statements of Layers 6
+and 7 are in, and it is the supplier's composite rather than a second construction here. -/
+example (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉ S)
+    (hmem : v.asIdeal ∈ NumberFieldArithmetic.integralIdealsAway (K := K) S)
+    (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal] (σ : L ≃ₐ[K] L)
+    (hσ : IsArithFrobAt (𝓞 K) σ Q) :
+    NumberFieldArithmetic.artinHomAwayIntegral (L := L) algEquiv_commute_of_isAbelianGalois S hur
+        ⟨v.asIdeal, hmem⟩ = σ :=
+  NumberFieldArithmetic.artinHomAwayIntegral_apply_prime algEquiv_commute_of_isAbelianGalois S hur
+    v hv hmem Q σ hσ
+
+end ArtinContract
+
 
 /-! ## Layer 0: moduli, approximation, and multiplicative congruences -/
 
