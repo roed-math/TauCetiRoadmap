@@ -475,7 +475,8 @@ example (hF : IsFunctionField k F) (hex : IsIntegrallyClosedIn k F)
     genus k F = 1 :=
   sorry
 
-/-- **Layers 2/10, the Dedekind instance both this roadmap and PR #68 want**: the
+/-- **Layers 2/10, the Dedekind instance both this roadmap and the landed
+EllipticCurves roadmap require**: the
 affine coordinate ring of an elliptic curve is a Dedekind domain (at the pin it has
 only `IsDomain`). Falls out of Layer 2's general "integral closures of `k[x]` in
 function fields are Dedekind" applied to `y² + a₁xy + a₃y = x³ + …`. -/
