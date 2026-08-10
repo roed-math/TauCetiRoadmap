@@ -58,7 +58,7 @@ does not redefine the carrier under a domain-specific name.
 | ideal weights | The value at `⊥` is `0`. Multiplicativity alone does not imply this: the constant-one function is the rejection test. |
 | norm coefficients | The `n = 0` coefficient is fixed by the ideal-weight convention. Equality of two `LSeries` coefficients is normally stated away from the irrelevant zero slot. |
 | prime carrier | A prime is `IsDedekindDomain.HeightOneSpectrum (𝓞 K)`, not an arbitrary ideal with a later proof that it is nonzero and prime. |
-| density | `HasDirichletDensity S δ` is the limit of `P_S(s) / P_all(s)` as `s → 1⁺`. Normalization by `log (1/(s-1))` is a theorem after the all-prime asymptotic, not the definition. |
+| density | `HasDirichletDensity S δ` is the limit of `P_S(s) / P_all(s)` as `s → 1⁺`; `HasNaturalDensity S δ` is the analogous ratio of prime-counting functions as `x → ∞`. Normalization by `log (1/(s-1))` is a theorem after the all-prime asymptotic, not the definition. |
 | cutoffs | Weighted counts include norm exactly equal to `x`. Natural-number and real cutoffs are connected by named lemmas. |
 | Abel summation | Finite identities use half-open intervals chosen so a boundary term is counted exactly once. |
 | Perron | The finite-height kernel at `x = 1` is `π⁻¹ arctan(T/c)`; `1/2` is only its limit. Arithmetic applications either exclude a norm endpoint or state the half-weight limit. |
@@ -79,7 +79,7 @@ that otherwise survive every coprimality-guarded or off-endpoint theorem.
 | Euler-product package | 3 | `EulerProductData` | canonical local factors, convergence, finite bad set, and product equality |
 | nonzero prime Dirichlet sum | 5 | `primeDirichletSum` | indexed by `HeightOneSpectrum`, with a set or weight parameter |
 | weighted prime counts | 5 | `primeTheta`, `primeCount` | inclusive real cutoff and conversion to natural cutoffs |
-| density predicates | 7 | `HasDirichletDensity`, `LowerDirichletDensity`, `UpperDirichletDensity` | ratio normalization at `𝓝[>] 1` |
+| density predicates | 7 | `HasDirichletDensity`, `HasNaturalDensity`, `LowerDirichletDensity`, `UpperDirichletDensity` | ratio normalization by the corresponding all-prime sum or count |
 | Abel summation | 6 | `abelSummation` | exact finite identity plus an asymptotic corollary |
 | Perron summation | 6 | `perronFormula` | truncated kernel, endpoint value, and an arithmetic summatory form |
 | Landau positivity | 8 | `landau` | singularity at the abscissa for nonnegative coefficients |
