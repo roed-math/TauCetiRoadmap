@@ -19,13 +19,26 @@ namespace TauCetiRoadmap.LFunctions
 
 open Complex Filter NumberField NumberField.InfinitePlace Topology Asymptotics
 open IsDedekindDomain (HeightOneSpectrum)
+open scoped nonZeroDivisors
 
 noncomputable section
 
 universe u v w
 
-namespace ADS := TauCetiRoadmap.ArithmeticDirichletSeries
-namespace GNF := TauCetiRoadmap.GlobalNumberFields
+namespace ADS
+export TauCetiRoadmap.ArithmeticDirichletSeries (IdealWeight normCoeff EulerProductData)
+end ADS
+
+namespace GNF
+export TauCetiRoadmap.GlobalNumberFields
+  (Modulus RayClassGroup RayClassCharacter InfinityType HeckeCharacter finite_rayClassGroup)
+namespace Modulus
+export TauCetiRoadmap.GlobalNumberFields.Modulus (one)
+end Modulus
+namespace RayClassCharacter
+export TauCetiRoadmap.GlobalNumberFields.RayClassCharacter (induced)
+end RayClassCharacter
+end GNF
 
 /-! ## Layer 0: completed L-function data -/
 
@@ -176,6 +189,8 @@ noncomputable def FEPairWithLevel.completed
 
 noncomputable def mixedInner (K : Type u) [Field K] [NumberField K]
     (x y : mixedEmbedding.mixedSpace K) : ℝ :=
+  letI : Fintype {place : InfinitePlace K // place.IsReal} := Fintype.ofFinite _
+  letI : Fintype {place : InfinitePlace K // place.IsComplex} := Fintype.ofFinite _
   ∑ place : {place : InfinitePlace K // place.IsReal}, x.1 place * y.1 place +
     ∑ place : {place : InfinitePlace K // place.IsComplex},
       (x.2 place * starRingEnd ℂ (y.2 place)).re
@@ -214,10 +229,12 @@ theorem partialZeta_eq_lSeries
     partialZeta K 𝔪 c s =
       LSeries (ADS.normCoeff K (rayClassWeight K 𝔪 c)) s := sorry
 
-theorem sum_partialZeta (𝔪 : GNF.Modulus K) {s : ℂ} (hs : 1 < s.re) :
+theorem sum_partialZeta (𝔪 : GNF.Modulus K) [Fintype (GNF.RayClassGroup 𝔪)]
+    {s : ℂ} (hs : 1 < s.re) :
     ∑ c : GNF.RayClassGroup 𝔪, partialZeta K 𝔪 c s = dedekindZeta K s := sorry
 
-noncomputable def dedekindZetaC : ℂ → ℂ := sorry
+noncomputable def dedekindZetaC
+    (K : Type u) [Field K] [NumberField K] : ℂ → ℂ := sorry
 
 theorem dedekindZetaC_eq {s : ℂ} (hs : 1 < s.re) :
     dedekindZetaC K s = dedekindZeta K s := sorry
@@ -230,7 +247,8 @@ theorem analyticAt_dedekindZetaC {s : ℂ} (hs : s ≠ 1) :
 theorem meromorphicOrderAt_dedekindZetaC_one :
     meromorphicOrderAt (dedekindZetaC K) 1 = (-1 : WithTop ℤ) := sorry
 
-noncomputable def completedDedekindZeta : ℂ → ℂ := sorry
+noncomputable def completedDedekindZeta
+    (K : Type u) [Field K] [NumberField K] : ℂ → ℂ := sorry
 
 theorem completedDedekindZeta_eq {s : ℂ} (hs : 1 < s.re) :
     completedDedekindZeta K s =
@@ -245,7 +263,8 @@ theorem analyticAt_completedDedekindZeta {s : ℂ} (h0 : s ≠ 0) (h1 : s ≠ 1)
 theorem completedDedekindZeta_one_sub {s : ℂ} (h0 : s ≠ 0) (h1 : s ≠ 1) :
     completedDedekindZeta K (1 - s) = completedDedekindZeta K s := sorry
 
-noncomputable def dedekindZetaData : AnalyticLFunctionData := sorry
+noncomputable def dedekindZetaData
+    (K : Type u) [Field K] [NumberField K] : AnalyticLFunctionData := sorry
 
 theorem degree_dedekindZetaData :
     (dedekindZetaData K).degree = Module.finrank ℚ K := sorry
@@ -359,15 +378,16 @@ noncomputable def grossenArchimedeanFactor
     (infinityType : GNF.InfinityType K) (shift : ℝ) (x : Kˣ) : ℂ := sorry
 
 /-- Analytic presentation of the imported Hecke-character carrier. -/
-structure Grossencharacter (𝔪 : GNF.Modulus K) where
+structure Grossencharacter
+    (K : Type u) [Field K] [NumberField K] (𝔪 : GNF.Modulus K) where
   toHeckeCharacter : GNF.HeckeCharacter K
   unitaryWeight : ADS.IdealWeight K
   shift : ℝ
   shift_eq : shift = toHeckeCharacter.shift
   finiteCharacter : GNF.RayClassCharacter 𝔪
   infinityType : GNF.InfinityType K
-  compatibility : ∀ x : Kˣ, grossenFullWeight unitaryWeight shift x =
-    grossenArchimedeanFactor infinityType shift x
+  compatibility : ∀ x : Kˣ, grossenFullWeight K unitaryWeight shift x =
+    grossenArchimedeanFactor K infinityType shift x
 
 noncomputable def Grossencharacter.lFunctionC
     {𝔪 : GNF.Modulus K} (χ : Grossencharacter K 𝔪) : ℂ → ℂ := sorry
@@ -392,22 +412,25 @@ noncomputable def Grossencharacter.ofRayClassCharacter
 
 theorem Grossencharacter.completed_recenter
     {𝔪 : GNF.Modulus K} (χ : Grossencharacter K 𝔪) (s : ℂ) :
-    χ.completed s = χ.unitaryCompletion (s - χ.shift) := sorry
+    Grossencharacter.completed K χ s =
+      Grossencharacter.unitaryCompletion K χ (s - (χ.shift : ℂ)) := sorry
 
 theorem Grossencharacter.rootNumber_inv
     {𝔪 : GNF.Modulus K} (χ : Grossencharacter K 𝔪) :
-    χ.inverse.rootNumber = χ.rootNumber⁻¹ := sorry
+    Grossencharacter.rootNumber K (Grossencharacter.inverse K χ) =
+      (Grossencharacter.rootNumber K χ)⁻¹ := sorry
 
 theorem Grossencharacter.completed_one_sub
     {𝔪 : GNF.Modulus K} (χ : Grossencharacter K 𝔪) (s : ℂ) :
-    χ.completed s = χ.rootNumber * χ.inverse.completed (1 - s) := sorry
+    Grossencharacter.completed K χ s = Grossencharacter.rootNumber K χ *
+      Grossencharacter.completed K (Grossencharacter.inverse K χ) (1 - s) := sorry
 
 noncomputable def grossencharacterData
     {𝔪 : GNF.Modulus K} (χ : Grossencharacter K 𝔪) : AnalyticLFunctionData := sorry
 
 theorem grossencharacterData_ofRayClassCharacter
     {𝔪 : GNF.Modulus K} (χ : GNF.RayClassCharacter 𝔪) (hχ : χ.IsPrimitive) :
-    (grossencharacterData K (Grossencharacter.ofRayClassCharacter χ)).EqOffZero
+    (grossencharacterData K (Grossencharacter.ofRayClassCharacter K χ)).EqOffZero
       (heckeData K χ hχ) := sorry
 
 /-- Unconditional odd-parity regression: the real place remains in the conductor and produces
@@ -416,7 +439,7 @@ theorem oddCharacter_mod_four_test :
     (heckeData ℚ oddRayClassCharacterModFour
         oddRayClassCharacterModFour_isPrimitive).gammaR = {1} ∧
       (grossencharacterData ℚ
-        (Grossencharacter.ofRayClassCharacter oddRayClassCharacterModFour)).EqOffZero
+        (Grossencharacter.ofRayClassCharacter ℚ oddRayClassCharacterModFour)).EqOffZero
           (heckeData ℚ oddRayClassCharacterModFour
             oddRayClassCharacterModFour_isPrimitive) := sorry
 
@@ -426,7 +449,7 @@ theorem evenCharacter_mod_five_test :
     (heckeData ℚ evenRayClassCharacterModFive
         evenRayClassCharacterModFive_isPrimitive).gammaR = {0} ∧
       (grossencharacterData ℚ
-        (Grossencharacter.ofRayClassCharacter evenRayClassCharacterModFive)).EqOffZero
+        (Grossencharacter.ofRayClassCharacter ℚ evenRayClassCharacterModFive)).EqOffZero
           (heckeData ℚ evenRayClassCharacterModFive
             evenRayClassCharacterModFive_isPrimitive) := sorry
 
@@ -457,7 +480,7 @@ noncomputable def artinIdealWeight
 
 noncomputable def artinEulerProductData
     (ρ : ArtinRepresentation (K := K) (L := L) V) :
-    ADS.EulerProductData (artinIdealWeight ρ) := sorry
+    ADS.EulerProductData K (artinIdealWeight (K := K) (L := L) ρ) := sorry
 
 noncomputable def artinLFunctionC
     (ρ : ArtinRepresentation (K := K) (L := L) V) : ℂ → ℂ := sorry
@@ -484,13 +507,17 @@ theorem artinLFunction_directSum
     {W : Type w} [NormedAddCommGroup W] [NormedSpace ℂ W] [FiniteDimensional ℂ W]
     (ρ : ArtinRepresentation (K := K) (L := L) V)
     (τ : ArtinRepresentation (K := K) (L := L) W) (s : ℂ) :
-    artinLFunctionC (artinDirectSum ρ τ) s = artinLFunctionC ρ s * artinLFunctionC τ s := sorry
+    artinLFunctionC (K := K) (L := L)
+        (artinDirectSum (K := K) (L := L) ρ τ) s =
+      artinLFunctionC (K := K) (L := L) ρ s *
+        artinLFunctionC (K := K) (L := L) τ s := sorry
 
 noncomputable def trivialArtinRepresentation :
     ArtinRepresentation (K := K) (L := L) ℂ := sorry
 
 theorem artinLFunction_trivial (s : ℂ) :
-    artinLFunctionC (trivialArtinRepresentation K L) s = dedekindZetaC K s := sorry
+    artinLFunctionC (K := K) (L := L)
+        (trivialArtinRepresentation (K := K) (L := L)) s = dedekindZetaC K s := sorry
 
 /-- Concrete analytic factorization data. The terms are completed Hecke cards, with integer
 exponents and identities of both Euler products and completed functions. -/
@@ -503,29 +530,36 @@ structure BrauerHeckeRealization
   term_continuation : ∀ i, (term i).HasMeromorphicContinuation
   term_functionalEquation : ∀ i, (term i).HasFunctionalEquation
   euler_identity : ∀ s : ℂ, 1 < s.re →
-    artinLFunctionC ρ s = ∏ i, (LSeries (term i).coeff s) ^ exponent i
+    artinLFunctionC (K := K) (L := L) ρ s =
+      ∏ i, (LSeries (term i).coeff s) ^ exponent i
   completed_identity : ∀ s : ℂ,
-    completedArtinLFunction ρ s = ∏ i, ((term i).completed s) ^ exponent i
+    completedArtinLFunction (K := K) (L := L) ρ s =
+      ∏ i, ((term i).completed s) ^ exponent i
 
 noncomputable def artinDataFromRealization
     (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (B : BrauerHeckeRealization ρ) : AnalyticLFunctionData := sorry
+    (B : BrauerHeckeRealization (K := K) (L := L) ρ) : AnalyticLFunctionData := sorry
 
 theorem artinData_hasMeromorphicContinuation
     (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (B : BrauerHeckeRealization ρ) : (artinData ρ).HasMeromorphicContinuation := sorry
+    (B : BrauerHeckeRealization (K := K) (L := L) ρ) :
+    (artinData (K := K) (L := L) ρ).HasMeromorphicContinuation := sorry
 
 theorem artinData_hasFunctionalEquation
     (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (B : BrauerHeckeRealization ρ) : (artinData ρ).HasFunctionalEquation := sorry
+    (B : BrauerHeckeRealization (K := K) (L := L) ρ) :
+    (artinData (K := K) (L := L) ρ).HasFunctionalEquation := sorry
 
 theorem artinData_brauer_independent
     (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (B C : BrauerHeckeRealization ρ) :
-    artinDataFromRealization ρ B = artinDataFromRealization ρ C := sorry
+    (B C : BrauerHeckeRealization (K := K) (L := L) ρ) :
+    artinDataFromRealization (K := K) (L := L) ρ B =
+      artinDataFromRealization (K := K) (L := L) ρ C := sorry
 
 theorem artinData_trivial :
-    (artinData (trivialArtinRepresentation K L)).EqOffZero (dedekindZetaData K) := sorry
+    (artinData (K := K) (L := L)
+      (trivialArtinRepresentation (K := K) (L := L))).EqOffZero
+        (dedekindZetaData K) := sorry
 
 end
 
