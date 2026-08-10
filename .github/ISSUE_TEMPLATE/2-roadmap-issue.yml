@@ -15,6 +15,7 @@ body:
       label: Roadmap area
       options:
         - ArithmeticDirichletSeries
+        - Chebotarev
         - CombinatorialHeegaardFloer
         - ConformalMapping
         - ContourIntegration

@@ -19,6 +19,7 @@ import TauCetiRoadmap.UniversalCovers.Suggested
 import TauCetiRoadmap.JacobianChallenge.Suggested
 import TauCetiRoadmap.ReductiveGroups.Suggested
 import TauCetiRoadmap.PDE.Suggested
+import TauCetiRoadmap.Chebotarev.Suggested
 import TauCetiRoadmap.CombinatorialHeegaardFloer.Suggested
 import TauCetiRoadmap.HeegaardFloer.Suggested
 import TauCetiRoadmap.GeometricTopology.Suggested
