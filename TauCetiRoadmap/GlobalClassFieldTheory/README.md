@@ -58,6 +58,20 @@ that roadmap, and it builds the ideal-theoretic Artin map. The archimedean local
 Other roadmaps plan some of the same material. Those relations are alignments and not
 prerequisites. `PROVENANCE.md` records them, and it is not normative.
 
+Two relations run the other way, and they are contracts rather than alignments. The Multiquadratic
+roadmap consumes the narrow class group; §The contract with the Multiquadratic roadmap is the
+list. The L-functions roadmap consumes the modulus, the ray class group, the ray class character
+and the Hecke character; §What the L-functions roadmap consumes is the list. Both are one-way, and
+no milestone here depends on either consumer.
+
+⚠ Layer D.2 prototypes `idealsAway`, `UnramifiedAway` and `artinHomAway` in `Suggested.lean`, at
+this roadmap's `[IsAbelianGalois K L]` hypothesis. The Number Field Arithmetic roadmap owns those
+three objects, at `[IsGalois K L]` together with an explicit commutativity hypothesis, and it is a
+merge prerequisite here. The two are the same mathematics under different spellings of the abelian
+hypothesis, and D.2 says so; an implementation must use the supplier's declarations and prove the
+hypothesis translation, and must not create a second Artin map. Turning the local prototypes into
+that translation is the remaining work on this boundary.
+
 ## What this roadmap consumes from the Local Fields roadmap
 
 Every use this roadmap makes of the Local Fields roadmap is a row below. A row gives the consuming
@@ -120,6 +134,41 @@ Milestone 8.2 proves one comparison theorem against that supplier: `K_gen` is th
 subfield of the Hilbert class field `H` that is abelian over `ℚ`, and the narrow genus field is
 the corresponding subfield of `H⁺`. `Suggested.lean` prototypes the three supplied declarations.
 Use the same names on both sides.
+
+## What the L-functions roadmap consumes from this roadmap
+
+This roadmap is the canonical owner of the modulus, the ray class group, the ray class character,
+and the Hecke character. The L-functions roadmap imports all four rather than constructing its
+own, and owns the analytic theory built on them. The edge is one-way: no milestone here depends
+on anything there, and that roadmap merges after this one.
+
+A subject is not an export. Every row below is an exact declaration in the namespace
+`TauCetiRoadmap.GlobalClassFieldTheory`, in
+`TauCetiRoadmap/GlobalClassFieldTheory/Suggested.lean`, and nothing crosses the boundary except
+through a row.
+
+| Supplying layer | Declaration | What the consumer relies on |
+|---|---|---|
+| 0.1 | `Modulus`, `Modulus.exponent`, the `Dvd` instance, `Modulus.one`, `Modulus.one_dvd` | a nonzero integral ideal together with a `Finset` of **real** places, typed as a subtype and not as infinite places with a side condition; `𝔪 ∣ 𝔫` exponentwise on the finite part and by inclusion on the infinite part |
+| 1.1 | `idealsPrimeTo`, `ray`, `Modulus.IsCoprimeTo` | `J^{𝔪₀}` and `P_𝔪` as subgroups of the fractional-ideal group; and coprimality of an **integral** ideal, which excludes `⊥` |
+| 1.2, 1.3 | `RayClassGroup`, `idealClass`, `idealClass_mul`, `idealClass_eq_one_iff`, `idealClass_surjective` | `Cl_𝔪 K = J^{𝔪₀} ⧸ P_𝔪`; the class of an integral ideal prime to `𝔪₀`, multiplicative on such ideals, trivial exactly on the ray-principal ones, and surjective |
+| 1.4 | `classMap`, `classMap_idealClass`, `classMap_surjective`, `finiteUnitsMap` | the transition `Cl_𝔫 ↠ Cl_𝔪` for `𝔪 ∣ 𝔫`, compatible with `idealClass`; and the residue-unit reduction, which is the **units-pullback** and never a ring composition |
+| 1.6 | `finite_rayClassGroup` | `Cl_𝔪 K` is finite, which is what makes every one of its characters of finite order |
+| 2A.7 | `rayClassQuotient`, `rayClassQuotient_surjective`, `ker_rayClassQuotient` | `C_K ↠ Cl_𝔪 K` with kernel `RaySubgroup 𝔪`, as a map and not as an abstract isomorphism |
+| 3.1 | `HeckeCharacter`, `RayClassCharacter`, `HeckeCharacter.ofRayClassCharacter`, `ofRayClassCharacter_apply` | `HeckeCharacter K = ContinuousMonoidHom (IdeleClassGroup K) ℂˣ`; `RayClassCharacter 𝔪 = RayClassGroup 𝔪 →* ℂˣ`; and the pullback of the second into the first along `rayClassQuotient` |
+| 3.3 | `RayClassCharacter.induced`, `RayClassCharacter.IsPrimitive`, `RayClassCharacter.not_isPrimitive_one` | induction as precomposition with `classMap`, primitivity stated **against that map**, and the fact that the trivial character of a nontrivial modulus is imprimitive |
+| 3.5 | `HeckeCharacter.shift`, `HeckeCharacter.unitaryPart`, `norm_unitaryPart`, `shift_eq_zero_iff`, `shift_ofRayClassCharacter` | the unique **real** exponent `σ` with `|χ| = ‖·‖^σ`, its unitary complement, and the compatibility that a finite-order character has `σ = 0` |
+
+Two boundary statements, because they are what keep the ownership single.
+
+- **There is one Hecke character carrier, and it is `HeckeCharacter`.** A structure that stores an
+  ideal weight, a real shift, a finite character of `(𝓞_K/𝔪₀)ˣ` and archimedean data is a
+  *presentation* of a term of that type, in the sense of Neukirch VII (6.9). The presentation
+  belongs to the roadmap that needs it for gamma factors, Gauss sums and root numbers; the object
+  it presents is this one. This roadmap defines no presentation and no second carrier.
+- **`Modulus.exponent`, not a second exponent.** Layer 3.2's `n_v(χ)` is the Local Fields
+  `characterConductorExp`, already cited in the contract above, and the finite part of a
+  conductor is assembled from it. No consumer defines an exponent of its own.
 
 ## Standing hypotheses
 
@@ -454,8 +503,8 @@ R Local Fields `normResidue`, M `differentIdeal`.
 `Finset` of real places. Provide the exponent-function description, and the lemmas that translate
 between the two descriptions. Provide the divisibility relation in the pinned orientation, `gcd` and
 `lcm` with their exponentwise descriptions, and the support. Provide two named instances: the
-trivial modulus `((1), ∅)`, and the modulus with all real places that Layer 1 uses for the narrow
-class group. Real places are the reason the formalism exists. A design in which `𝔪∞ = ∅` is the easy
+trivial modulus `Modulus.one`, which is `((1), ∅)`, with `Modulus.one_dvd`; and `narrowModulus`,
+the modulus with all real places that Layer 1 uses for the narrow class group. Real places are the reason the formalism exists. A design in which `𝔪∞ = ∅` is the easy
 case produces the wide class group everywhere. Give the two components equal weight in the API, and
 test with `𝔪∞ ≠ ∅` from the first lemma.
 *Prerequisites:* M `Ideal`, M `InfinitePlace.IsReal`, M `UniqueFactorizationMonoid.factorization`,
@@ -536,8 +585,10 @@ of the factorization. Provide the description `I = 𝔞𝔟⁻¹` with `𝔞` an
 `𝔪₀`. Define the ray `P_𝔪`, the principal ideals of elements of `K(𝔪)`.
 *Prerequisites:* L 0.4, M `FractionalIdeal`, M `toPrincipalIdeal`, M `FractionalIdeal.count`.
 
-**1.2. The ray class group.** Define `Cl_𝔪 K := J^{𝔪₀} ⧸ P_𝔪`. Prove `Cl_{((1),∅)} ≃* ClassGroup (𝓞
-K)` as a named isomorphism, through compatibility with `ClassGroup.mk0`.
+**1.2. The ray class group.** Define `RayClassGroup 𝔪 := J^{𝔪₀} ⧸ P_𝔪`. Prove `Cl_{((1),∅)} ≃* ClassGroup (𝓞
+K)` as a named isomorphism, through compatibility with `ClassGroup.mk0`. Name the class of an
+integral ideal prime to `𝔪₀` as `idealClass`, with `idealClass_mul`, `idealClass_eq_one_iff` and
+`idealClass_surjective`: a consumer that indexes an L-series by ideals uses exactly those four.
 *Prerequisites:* L 1.1, M `ClassGroup`, M `ClassGroup.mk0`.
 **Basic API.**
 - *Constructors:* the class of a fractional ideal prime to `𝔪₀`; the class of an integral ideal.
@@ -560,8 +611,12 @@ generality, because both the surjectivity of `Cl_𝔫 ↠ Cl_𝔪` and the ideal
 *Prerequisites:* M `ClassGroup.mk0_surjective`, M `IsDedekindDomain.quotientEquivPiOfProdEq`,
 M `HeightOneSpectrum.valuation_exists_uniformizer`.
 
-**1.4. The transition maps.** For `𝔪 ∣ 𝔫`, construct `Cl_𝔫 ↠ Cl_𝔪`. Prove surjectivity from 1.3.
-Prove that the maps compose in a tower `𝔪 ∣ 𝔫 ∣ 𝔩`.
+**1.4. The transition maps.** For `𝔪 ∣ 𝔫`, construct `classMap : Cl_𝔫 ↠ Cl_𝔪`. Prove surjectivity
+from 1.3, and `classMap_idealClass`. Prove that the maps compose in a tower `𝔪 ∣ 𝔫 ∣ 𝔩`. Name the
+residue-unit reduction along the same divisibility as `finiteUnitsMap`. ⚠ `finiteUnitsMap` is the
+units-pullback `Units.map (Ideal.Quotient.factor _)`, and never a ring composition: `3 mod 6 ↦ 1
+mod 2` is a unit downstairs whose ring-level lift is not a unit upstairs. Both are named because
+induction and primitivity of characters in Layer 3 are stated against them.
 *Prerequisites:* L 1.2, L 1.3.
 
 **1.5. The ray class exact sequence.** Prove the sequence
@@ -575,7 +630,9 @@ reverse.
 *Source.* Janusz IV §1, pp. 139–141; Neukirch ANT VI §1.
 *Prerequisites:* L 0.6, L 1.2, L 1.3, M `NumberField.Units`.
 
-**1.6. Finiteness and the class number formula.** For a number field, `Cl_𝔪 K` is finite of order
+**1.6. Finiteness and the class number formula.** Name finiteness `finite_rayClassGroup`; it is
+what makes every character of `Cl_𝔪 K` of finite order, and a consumer cites it directly. For a
+number field, `Cl_𝔪 K` is finite of order
 `h_K · #(𝓞 K ⧸ 𝔪₀)ˣ · 2^{#𝔪∞} / [𝓞_Kˣ : 𝓞_{K,𝔪}ˣ]`. State the index form and not only finiteness.
 Prove it from 1.5. State it for number fields, or under the explicit finiteness package of the
 standing hypotheses.
@@ -670,7 +727,10 @@ M `InfinitePlace.Completion.ringEquivRealOfIsReal`.
   is no condition.
 - *Downstream interface:* Layers 3, 6 and 7 use `U_𝔪`, `RaySubgroup 𝔪`, openness, and 2A.7.
 
-**2A.7. The ray class dictionary.** Prove `C_K ⧸ RaySubgroup 𝔪 ≃* Cl_𝔪 K`. Use the map `x ↦ ∏_{v ∤
+**2A.7. The ray class dictionary.** Prove `C_K ⧸ RaySubgroup 𝔪 ≃* Cl_𝔪 K`. Give the surjection the
+name `rayClassQuotient`, with `rayClassQuotient_surjective` and `ker_rayClassQuotient`, and not an
+existential: Layers 3, 6 and 7 use the map itself, and so does the pullback
+`HeckeCharacter.ofRayClassCharacter` of 3.1. Use the map `x ↦ ∏_{v ∤
 𝔪₀} v^{ord_v(x_v)}` on ideles, and compute the kernel with 1.3 and 0.6. Prove the special case `𝔪 =
 ((1), ∅)`, which is `C_K ⧸ RaySubgroup ((1),∅) ≃* ClassGroup (𝓞 K)`. Prove that the isomorphisms
 commute with the transition maps of 1.4 as `𝔪` grows.
@@ -790,12 +850,18 @@ places.
 ### Layer 3: Hecke characters and the finite-order dictionary
 
 **3.1. The definition and the finite-order dictionary.** Define `HeckeCharacter K :=
-ContinuousMonoidHom (IdeleClassGroup (𝓞 K) K) ℂˣ`. Prove that the following are equivalent for `χ`:
+ContinuousMonoidHom (IdeleClassGroup K) ℂˣ`. This is the canonical carrier of the subject: a
+roadmap that needs a Grossencharacter consumes this type, and a structure of weights, shifts and
+archimedean data is a *presentation* of a term of it and belongs to the consumer. Prove that the following are equivalent for `χ`:
 `χ` has finite order; `ker χ` is open; `χ` is the pullback of a character of `Cl_𝔪 K` for some `𝔪`.
 Each implication is a named lemma. Deduce the bijection between the finite-order Hecke characters
 with `U_𝔪 ⊆ ker χ` and the characters of the finite group `Cl_𝔪 K`. That composite notion is what
-"ray class character" names. The step from an open kernel to a ray class character is 2A.8. The step
-back uses finiteness of `Cl_𝔪 K`, and the compactness of `C_K/D_K`; it is not formal.
+`RayClassCharacter 𝔪 := Cl_𝔪 K →* ℂˣ` names, and the pullback into `HeckeCharacter K` is
+`HeckeCharacter.ofRayClassCharacter`, with `ofRayClassCharacter_apply` pinning its values along
+`rayClassQuotient` of 2A.7. Prove that the pullback is injective and that its image is the
+characters trivial on `RaySubgroup 𝔪`. The step from an open kernel to a ray class character is
+2A.8. The step back uses finiteness of `Cl_𝔪 K`, and the compactness of `C_K/D_K`; it is not
+formal.
 *Prerequisites:* L 1.6, L 2A.7, L 2A.8, M `ContinuousMonoidHom`.
 **Basic API.**
 - *Constructors:* from a character of `Cl_𝔪 K`; from a Dirichlet character over `ℚ`; the norm
@@ -828,8 +894,13 @@ archimedean part. Every finite-order character has that property. Define the ray
 infinite part is
 the set of real places where the local sign component is nontrivial. Prove that a least element
 exists: show that the set of admissible moduli is closed under `gcd`, with 3.2 at the finite places
-and the sign components at the real places. State primitivity, and induction from a smaller modulus,
-in the shape of `DirichletCharacter.changeLevel`. **Common error.** A general quasicharacter has no
+and the sign components at the real places. State induction from a smaller modulus as `RayClassCharacter.induced`, precomposition with
+`classMap`, in the shape of `DirichletCharacter.changeLevel`, and primitivity as
+`RayClassCharacter.IsPrimitive`, stated **against that map**. ⚠ Primitivity written as "there is
+no function agreeing with `η` away from a divisor" is much weaker, because a bare function need
+not be a character. Prove `not_isPrimitive_one`: the trivial character of a nontrivial modulus is
+induced from the trivial modulus, hence imprimitive. A consumer whose analytic record demands
+primitivity reads that theorem. **Common error.** A general quasicharacter has no
 ray conductor, because `‖·‖^s` is trivial on no `U_𝔪`. Keep 3.2 and 3.3 apart.
 *Prerequisites:* L 3.2, L 2A.6, M `DirichletCharacter.changeLevel`.
 
@@ -846,8 +917,11 @@ because every fractional ideal of `ℤ` has a unique positive generator. State t
 explicitly.
 *Prerequisites:* L 3.1, L 3.3, M `DirichletCharacter`, M `ZMod.χ₄`.
 
-**3.5. Unitary theory.** Prove that `|χ| = ‖·‖^σ` for a unique real `σ`, and that `χ = χ_u · ‖·‖^σ`
-with `χ_u` unitary. Uniqueness holds because `σ` is fixed by `|χ| = ‖·‖^σ` and `‖·‖` surjects onto
+**3.5. Unitary theory.** Prove that `|χ| = ‖·‖^σ` for a unique real `σ`, named
+`HeckeCharacter.shift`, and that `χ = χ_u · ‖·‖^σ` with `χ_u = HeckeCharacter.unitaryPart χ`
+unitary, through `norm_unitaryPart` and `shift_eq_zero_iff`. Prove
+`shift_ofRayClassCharacter`: a finite-order character has shift `0`, so a consumer treats the
+ray-class case as the `σ = 0` case and not as a separate theory. Uniqueness holds because `σ` is fixed by `|χ| = ‖·‖^σ` and `‖·‖` surjects onto
 `ℝ_{>0}`. Normalize the exponent to be real, because a complex exponent is ambiguous exactly up to
 the unitary twists `‖·‖^{it}`.
 *Prerequisites:* L 2A.4, L 3.1.

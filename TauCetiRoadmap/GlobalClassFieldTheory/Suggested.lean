@@ -372,6 +372,84 @@ example (𝔪 : Modulus K) :
         Function.Surjective f :=
   sorry
 
+/-! ### The named ray-class API that the L-functions roadmap consumes
+
+Layers 0 to 3 own the modulus, the ray class group, and the characters of both. The L-functions
+roadmap imports them rather than rebuilding them, so the operations it uses carry Lean names
+here and not only milestone numbers. `README.md`'s contract section with that roadmap is the
+list; every name below appears in a row of it. -/
+
+/-- **0.1, the trivial modulus** `((1), ∅)`, the second of the two named instances 0.1 asks for.
+It divides every modulus, its ray class group is the class group, and it is the conductor of
+every unramified character. -/
+def Modulus.one (K : Type u) [Field K] [NumberField K] : Modulus K where
+  finitePart := ⊤
+  finitePart_ne_bot := top_ne_bot
+  infinitePart := ∅
+
+theorem Modulus.one_dvd (𝔪 : Modulus K) : Modulus.one K ∣ 𝔪 := sorry
+
+/-- **1.1, coprimality of an integral ideal to a modulus.** `idealsPrimeTo` is a subgroup of the
+*fractional* ideal group; this is the predicate on integral ideals that indexes the coefficients
+of an L-series and the fibres of a partial zeta function. ⚠ It excludes `⊥`. A law guarded by
+this predicate says nothing at the zero ideal, so a value there is unconstrained junk. -/
+def Modulus.IsCoprimeTo (𝔪 : Modulus K) (I : Ideal (𝓞 K)) : Prop :=
+  I ≠ ⊥ ∧ ∀ v : HeightOneSpectrum (𝓞 K), v.asIdeal ∣ 𝔪.finitePart → ¬ v.asIdeal ∣ I
+
+/-- **1.2, the ray class of an integral ideal prime to `𝔪₀`**, the constructor of 1.2's basic
+API. The value at an ideal that is not prime to `𝔪₀` is not used, and the three theorems below
+are the whole interface. -/
+noncomputable def idealClass (𝔪 : Modulus K) (I : Ideal (𝓞 K)) : RayClassGroup 𝔪 := sorry
+
+theorem idealClass_mul (𝔪 : Modulus K) {I J : Ideal (𝓞 K)}
+    (hI : 𝔪.IsCoprimeTo I) (hJ : 𝔪.IsCoprimeTo J) :
+    idealClass 𝔪 (I * J) = idealClass 𝔪 I * idealClass 𝔪 J := sorry
+
+/-- **1.2**: the class map kills exactly the ray-principal ideals. This is what "a weight factors
+through the ray class group" means, and it is a theorem about a canonical map rather than a field
+on an arbitrary function. -/
+theorem idealClass_eq_one_iff (𝔪 : Modulus K) {I : Ideal (𝓞 K)} (hI : 𝔪.IsCoprimeTo I) :
+    idealClass 𝔪 I = 1 ↔
+      ∃ α β : 𝓞 K, α ≠ 0 ∧ β ≠ 0 ∧ α - 1 ∈ 𝔪.finitePart ∧ β - 1 ∈ 𝔪.finitePart ∧
+        (∀ w ∈ 𝔪.infinitePart,
+          0 < InfinitePlace.embedding_of_isReal w.2 (algebraMap (𝓞 K) K α)) ∧
+        (∀ w ∈ 𝔪.infinitePart,
+          0 < InfinitePlace.embedding_of_isReal w.2 (algebraMap (𝓞 K) K β)) ∧
+        I * Ideal.span {β} = Ideal.span {α} := sorry
+
+/-- **1.3, the ray class form of the moving lemma.** Every class contains an integral ideal prime
+to `𝔪₀`, so the fibres of `idealClass` partition those ideals. A choice of representatives rests
+on this, and so does every partial-zeta decomposition downstream. -/
+theorem idealClass_surjective (𝔪 : Modulus K) (c : RayClassGroup 𝔪) :
+    ∃ I : Ideal (𝓞 K), 𝔪.IsCoprimeTo I ∧ idealClass 𝔪 I = c := sorry
+
+/-- **1.6, finiteness of the ray class group**, as a named theorem. It is what makes every
+character of `RayClassGroup 𝔪` of finite order, and what makes a sum over classes a finite sum.
+The sharp cardinality formula is the milestone below. -/
+theorem finite_rayClassGroup (𝔪 : Modulus K) : Finite (RayClassGroup 𝔪) := sorry
+
+/-- **1.4, the transition map**, named. In the pinned orientation the larger modulus maps onto
+the smaller. Induction of characters is precomposition with this map, and primitivity is stated
+against it, so it has to be a declaration and not an existential. -/
+noncomputable def classMap {𝔪 𝔫 : Modulus K} (h : 𝔪 ∣ 𝔫) :
+    RayClassGroup 𝔫 →* RayClassGroup 𝔪 := sorry
+
+theorem classMap_idealClass {𝔪 𝔫 : Modulus K} (h : 𝔪 ∣ 𝔫) {I : Ideal (𝓞 K)}
+    (hI : 𝔫.IsCoprimeTo I) : classMap h (idealClass 𝔫 I) = idealClass 𝔪 I := sorry
+
+theorem classMap_surjective {𝔪 𝔫 : Modulus K} (h : 𝔪 ∣ 𝔫) :
+    Function.Surjective (classMap h) := sorry
+
+/-- **0.6 and 1.4, the reduction map on residue units** along a divisibility of moduli. It is
+`Ideal.Quotient.factor` restricted to the unit groups, and it is the map that the finite
+component of an induced character commutes along.
+
+⚠ It is the units-pullback and never a ring composition: `3 mod 6 ↦ 1 mod 2` is a unit of the
+smaller ring whose ring-level lift is not a unit of the larger one. -/
+noncomputable def finiteUnitsMap {𝔪 𝔫 : Modulus K} (h : 𝔪 ∣ 𝔫) :
+    ((𝓞 K) ⧸ 𝔫.finitePart)ˣ →* ((𝓞 K) ⧸ 𝔪.finitePart)ˣ :=
+  Units.map (Ideal.Quotient.factor (Ideal.le_of_dvd h.1)).toMonoidHom
+
 open scoped Classical in
 /-- **1.8, the narrow modulus.** Trivial finite part, and every real place. "Narrow" never means
 that totally positive units exist. A field with no real place has `Cl⁺ = Cl`; that is an
@@ -469,13 +547,23 @@ and the ray class fields all quantify over these subgroups. -/
 noncomputable def RaySubgroup (𝔪 : Modulus K) : Subgroup (IdeleClassGroup K) :=
   (IdeleCongruenceSubgroup 𝔪).map (QuotientGroup.mk' _)
 
-/-- **2A.7, the ray class dictionary.** `U_𝔪` is open, and `C_K ⧸ RaySubgroup 𝔪 ≃* Cl_𝔪 K`. It
-is stated as the surjection together with its kernel, and not as an abstract isomorphism of the
-quotient, because Layers 3, 6 and 7 use the map itself. -/
+/-- **2A.7, the ray class dictionary, as a named map.** `C_K ⧸ RaySubgroup 𝔪 ≃* Cl_𝔪 K`, given
+as the surjection together with its kernel and not as an abstract isomorphism of the quotient,
+because Layers 3, 6 and 7 use the map itself — and so does the L-functions roadmap, which builds
+its finite-order Hecke characters as pullbacks along it. That is why it is a declaration. -/
+noncomputable def rayClassQuotient (𝔪 : Modulus K) :
+    IdeleClassGroup K →* RayClassGroup 𝔪 := sorry
+
+theorem rayClassQuotient_surjective (𝔪 : Modulus K) :
+    Function.Surjective (rayClassQuotient 𝔪) := sorry
+
+theorem ker_rayClassQuotient (𝔪 : Modulus K) :
+    (rayClassQuotient 𝔪).ker = RaySubgroup 𝔪 := sorry
+
+/-- **2A.7, openness of the ray subgroup.** The other half of the dictionary, and the reason a
+character trivial on `U_𝔪` has open kernel. -/
 example (𝔪 : Modulus K) :
-    IsOpen (IdeleCongruenceSubgroup 𝔪 : Set (AdeleRing (𝓞 K) K)ˣ) ∧
-      ∃ f : IdeleClassGroup K →* RayClassGroup 𝔪,
-        Function.Surjective f ∧ f.ker = RaySubgroup 𝔪 :=
+    IsOpen (IdeleCongruenceSubgroup 𝔪 : Set (AdeleRing (𝓞 K) K)ˣ) :=
   sorry
 
 /-- **2A.6, antitonicity, which is the compatibility with the transition maps.** The larger
@@ -530,15 +618,100 @@ example (a b : ℝ) (ha : a ≠ 0) (hb : b ≠ 0) :
 
 /-! ## Layer 3: Hecke characters -/
 
+/-- **3.1, the Hecke character.** A continuous character of the idele class group. This is the
+canonical carrier of the subject, and every roadmap that consumes "a Hecke character" or "a
+Grossencharacter" consumes this type. It is an `abbrev`, so that every `ContinuousMonoidHom`
+lemma applies without glue.
+
+⚠ There is no second carrier. A structure that stores an ideal weight, a shift, a finite
+character and archimedean data is a *presentation* of a term of this type — Neukirch VII (6.9)
+is the dictionary — and belongs to the roadmap that needs the presentation, not here. -/
+abbrev HeckeCharacter (K : Type u) [Field K] [NumberField K] :=
+  ContinuousMonoidHom (IdeleClassGroup K) ℂˣ
+
+/-- **3.1, the ray class character.** The composite notion 3.1 names: a character of the finite
+group `Cl_𝔪 K`. The finite-order Hecke characters with `U_𝔪 ⊆ ker χ` are exactly these, and that
+bijection is the milestone below. -/
+abbrev RayClassCharacter (𝔪 : Modulus K) := RayClassGroup 𝔪 →* ℂˣ
+
 /-- **3.1, the finite-order dictionary.** A continuous character of the idele class group has
 finite order exactly when its kernel is open. With 2A.8 this says that the finite-order Hecke
 characters are the ray class characters, and over `ℚ` the Dirichlet characters.
 
 **Common error.** The backward direction uses compactness of `C_K/D_K`, which is 2A.5. It is not
 formal. -/
-example (χ : ContinuousMonoidHom (IdeleClassGroup K) ℂˣ) :
+example (χ : HeckeCharacter K) :
     (∃ n : ℕ, 0 < n ∧ ∀ y, χ y ^ n = 1) ↔ IsOpen {y | χ y = 1} :=
   sorry
+
+/-- **3.1, a ray class character as a Hecke character.** The constructor named in 3.1's basic
+API, "from a character of `Cl_𝔪 K`". It is the pullback along `rayClassQuotient`, and its
+continuity is the openness of `RaySubgroup 𝔪`. Every finite-order Hecke character is of this
+form, for its ray conductor; that is 3.3. -/
+noncomputable def HeckeCharacter.ofRayClassCharacter {𝔪 : Modulus K} (χ : RayClassCharacter 𝔪) :
+    HeckeCharacter K := sorry
+
+theorem HeckeCharacter.ofRayClassCharacter_apply {𝔪 : Modulus K} (χ : RayClassCharacter 𝔪)
+    (y : IdeleClassGroup K) :
+    HeckeCharacter.ofRayClassCharacter χ y = χ (rayClassQuotient 𝔪 y) := sorry
+
+/-- **3.1, the dictionary as an equivalence.** The finite-order Hecke characters trivial on
+`RaySubgroup 𝔪` are exactly the pullbacks of characters of `Cl_𝔪 K`, and the pullback is
+injective. This is what makes "ray class character" and "finite-order Hecke character of modulus
+`𝔪`" one notion, so that a consumer may state a theorem in either vocabulary. -/
+example (𝔪 : Modulus K) :
+    Function.Injective (HeckeCharacter.ofRayClassCharacter (K := K) (𝔪 := 𝔪)) ∧
+      ∀ χ : HeckeCharacter K, (∀ y ∈ RaySubgroup 𝔪, χ y = 1) →
+        ∃ η : RayClassCharacter 𝔪, HeckeCharacter.ofRayClassCharacter η = χ :=
+  sorry
+
+/-- **3.3, induction of a ray class character** along a divisibility of moduli, in the shape of
+`DirichletCharacter.changeLevel`: precomposition with the transition map. -/
+noncomputable def RayClassCharacter.induced {𝔪 𝔫 : Modulus K} (h : 𝔪 ∣ 𝔫)
+    (η : RayClassCharacter 𝔪) : RayClassCharacter 𝔫 :=
+  η.comp (classMap h)
+
+/-- **3.3, primitivity of a ray class character.** Not induced from any proper divisor of its
+modulus.
+
+⚠ It is stated against `classMap`, and that is load-bearing. "There is no function agreeing with
+`η` away from a divisor" is much weaker, because a bare function is not required to be a
+character. -/
+def RayClassCharacter.IsPrimitive {𝔫 : Modulus K} (η : RayClassCharacter 𝔫) : Prop :=
+  ∀ (𝔪 : Modulus K) (h : 𝔪 ∣ 𝔫), 𝔪 ≠ 𝔫 → ¬ ∃ ψ : RayClassCharacter 𝔪, ψ.induced h = η
+
+/-- **3.3, the trivial character of a nontrivial modulus is imprimitive.** It is induced from the
+trivial modulus. This is stated because a consumer whose analytic data demands primitivity reads
+it: the principal character owns a presented L-series with removed Euler factors, and no
+conductor-bearing record. -/
+theorem RayClassCharacter.not_isPrimitive_one {𝔫 : Modulus K} (h : 𝔫 ≠ Modulus.one K) :
+    ¬ (1 : RayClassCharacter 𝔫).IsPrimitive := sorry
+
+/-- **3.5, the real exponent of a Hecke character.** `|χ| = ‖·‖^σ` for a unique real `σ`, and
+`χ = χ_u · ‖·‖^σ` with `χ_u` unitary. The exponent is normalized to be **real**: with a complex
+exponent the decomposition is ambiguous exactly up to the unitary twists `‖·‖^{it}`, and the
+uniqueness statement is false.
+
+A consumer that builds analytic data from `χ` reads this exponent as the shift of its L-series,
+so it is a declaration. -/
+noncomputable def HeckeCharacter.shift (χ : HeckeCharacter K) : ℝ := sorry
+
+/-- **3.5, the unitary part**, the second factor of the decomposition. -/
+noncomputable def HeckeCharacter.unitaryPart (χ : HeckeCharacter K) : HeckeCharacter K := sorry
+
+theorem HeckeCharacter.norm_unitaryPart (χ : HeckeCharacter K) (y : IdeleClassGroup K) :
+    ‖((χ.unitaryPart y : ℂˣ) : ℂ)‖ = 1 := sorry
+
+/-- **3.5**: the shift vanishes exactly on the unitary characters. This is the form a consumer
+tests, and together with `norm_unitaryPart` it says that the decomposition is a decomposition. -/
+theorem HeckeCharacter.shift_eq_zero_iff (χ : HeckeCharacter K) :
+    χ.shift = 0 ↔ ∀ y : IdeleClassGroup K, ‖((χ y : ℂˣ) : ℂ)‖ = 1 := sorry
+
+/-- **3.5 and 3.1**: a finite-order character has shift `0`. It is the compatibility that lets a
+consumer treat the ray-class case as the `shift = 0` case of the general one, rather than as a
+separate theory. -/
+theorem HeckeCharacter.shift_ofRayClassCharacter {𝔪 : Modulus K} (η : RayClassCharacter 𝔪) :
+    (HeckeCharacter.ofRayClassCharacter η).shift = 0 := sorry
 
 open scoped Classical in
 /-- **3.4, the modulus `(n)·∞` of `ℚ`**, which Layers 3, 4, 7 and 9 evaluate at. -/
