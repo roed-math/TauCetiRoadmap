@@ -95,14 +95,19 @@ layer can use the map without change. Layer 2 proves nothing about its kernel or
 
 **Polynomial Galois groups.** Resolvents, the classification of transitive groups, and the `nTj`
 label semantics belong to that subject. This roadmap proves none of them. Layer 3 proves the
-factorization-type theorem in `Polynomial.Gal` vocabulary, which such a roadmap can use.
+factorization-type theorem in `Polynomial.Gal` vocabulary, and that roadmap consumes it by name:
+Layer 3.10 is `exists_gal_fullCycleType_eq_factorizationType`, and its membership statement,
+recognition corollaries, certificate soundness, and inverse-Galois construction are derived
+there from this declaration. It is the one declaration of this roadmap with a named consumer
+outside it, so its signature is a contract.
 
 **Artin representations.** The general Artin conductor, Artin integrality, and the general
 conductor–discriminant formula belong to that subject. This roadmap forms no general conductor.
 
 What this roadmap supplies to other subjects:
 
-- the polynomial-side Dedekind theorem (Layer 3);
+- the polynomial-side Dedekind theorem `exists_gal_fullCycleType_eq_factorizationType`
+  (Layer 3.10);
 - the `S_n`-embedding of the Galois closure of a number field (Layer 7);
 - the ideal-theoretic Artin map `artinHomAway` (Layer 2);
 - the local-field instance on `v.adicCompletion K`, and the localization of the different
@@ -930,8 +935,16 @@ See §Worked examples.
 
 #### 3.10 The polynomial-side corollary, for arbitrary monic `f`
 
+Suggested name: `TauCeti.NumberField.exists_gal_fullCycleType_eq_factorizationType`, prototyped
+in `Suggested.lean` as `exists_gal_fullCycleType_eq_factorizationType`.
+
 For monic `f : ℤ[X]` and a prime `p ∤ f.discr`, produce `σ : (f.map ℚ).Gal` whose root action has
 full cycle type, with fixed points restored, equal to the factor-degree multiset of `f mod p`.
+
+This is the milestone that the polynomial Galois groups roadmap consumes by name, so it carries a
+Lean name rather than only a milestone number. "Full cycle type" means `Equiv.Perm.cycleType`
+with the fixed points added back as parts equal to `1`; the statement writes that correction out,
+because `cycleType` alone omits them and the factor-degree multiset is a partition of `n`.
 
 A polynomial Galois groups roadmap can use this interface on **reducible** `f`, to derive the
 classical mod-`p` irreducibility criterion. The reduction to the irreducible case is five named

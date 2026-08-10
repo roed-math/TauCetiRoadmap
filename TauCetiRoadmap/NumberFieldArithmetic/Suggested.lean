@@ -23,7 +23,8 @@ stating a milestone:
 
 Every carrier and every cross-subject interface in this file compiles as a named declaration.
 That includes `artinSymbol`, the carrier `idealsAway` with `idealsAwayInclusion`, `artinHomAway`
-with `integralIdealsAway` and `artinHomAwayIntegral`, `relDiscr`, `ramifiedSupport`, the three
+with `integralIdealsAway` and `artinHomAwayIntegral`, `exists_gal_fullCycleType_eq_factorizationType`,
+`relDiscr`, `ramifiedSupport`, the three
 Layer 5 comparison maps, `localRamificationGroup`, and the unit-certificate candidate sets
 `unitCandidates` and `cubicUnitCandidates`. Where a comparison needs an object that a
 neighbouring subject also touches, this roadmap defines the object and owns it;
@@ -495,8 +496,13 @@ afterthought: `p ∤ f.discr` gives separability and pairwise coprime reductions
 `ℤ`-irreducible factors, the root set is their disjoint union, full cycle type and
 factor-degree multisets are both additive along that decomposition, and one Frobenius upstairs
 restricts to a Frobenius on each factor's field. The right side restores fixed points, matching
-the `fullCycleType` such a roadmap uses. -/
-example (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr) :
+the `fullCycleType` such a roadmap uses.
+
+This milestone is consumed **by name**: the polynomial Galois groups roadmap imports it and
+derives its membership statement from it, so the declaration is named here rather than left as
+an anonymous milestone. Changing its signature breaks that consumer's contract check. -/
+theorem exists_gal_fullCycleType_eq_factorizationType
+    (f : ℤ[X]) (hf : f.Monic) (p : ℕ) [Fact p.Prime] (hp : ¬ (p : ℤ) ∣ f.discr) :
     ∃ σ : (f.map (Int.castRingHom ℚ)).Gal,
       (Polynomial.Gal.galActionHom (f.map (Int.castRingHom ℚ)) ℂ σ).cycleType +
           Multiset.replicate
