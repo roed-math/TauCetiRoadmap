@@ -1799,7 +1799,7 @@ example {p : ℕ} [Fact p.Prime] {X : Type u} :
 
 /-- **Layer 4, the maximal pro-`p` quotient of `ℤ̂` is `ℤ_p`.** Step (1)–(2) of the
 identification chain, and the statement the Layer 2 `ℤ̂`-Sylow example rests on. -/
-example (p : ℕ) [Fact p.Prime] :
+theorem maximalProPQuotient_zHat_equiv_padicInt (p : ℕ) [Fact p.Prime] :
     Nonempty (maximalProPQuotient p zHat ≃ₜ* Multiplicative ℤ_[p]) :=
   sorry
 

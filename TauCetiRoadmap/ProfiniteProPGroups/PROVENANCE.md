@@ -100,7 +100,8 @@ The roadmap states each result intrinsically. Source choices such as universe pl
 The exact abstract names are pinned in [`Suggested.lean`](Suggested.lean). Important
 downstream interfaces include:
 
-- `proPKernel`, `maximalProPQuotient`, `IsProP`, `IsProPSylow`;
+- `proPKernel`, `maximalProPQuotient`,
+  `maximalProPQuotient_zHat_equiv_padicInt`, `IsProP`, and `IsProPSylow`;
 - `IsTopologicallyFinitelyGenerated`, `topologicalGeneratorRank`,
   `topologicalGeneratorRankNat`, and `proPFrattini`;
 - `freeProfiniteGroup`, `freeProC`, `freeProP`, `presentedProfiniteGroup`, and
