@@ -28,6 +28,8 @@ import TauCetiRoadmap.ConformalMapping.Suggested
 import TauCetiRoadmap.OrthogonalL2Bases.Suggested
 import TauCetiRoadmap.OptimalTransport.Suggested
 import TauCetiRoadmap.AlgebraicCurves.Suggested
+import TauCetiRoadmap.NumberFieldArithmetic.Suggested
+import TauCetiRoadmap.PolynomialGaloisGroups.Suggested
 import TauCetiRoadmap.ProfiniteProPGroups.Suggested
 import TauCetiRoadmap.ProfiniteCohomology.Suggested
 import TauCetiRoadmap.BelyiMaps.Suggested
