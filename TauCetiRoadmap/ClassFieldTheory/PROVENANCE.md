@@ -94,13 +94,27 @@ implementation.
   Its adelic substrate was ported to Mathlib, while the class-field statements were not. Contact
   the author before adapting code.
 - **kbuzzard/ClassFieldTheory** (Apache-2.0) was checked on 2026-08-07 at
-  `ccc3323c6750`. Its global chapter was blueprint-only; its Lean tree contained finite
-  cohomology and local CFT, not a global implementation. Coordinate before implementing the
-  finite class-formation and local layers.
+  `ccc3323c6750`. Its global chapter was blueprint-only; its Lean tree contained finite Tate
+  cohomology, class-formation and Herbrand infrastructure, a local invariant, valuation-sequence
+  and unramified-cohomology work. Local-unit Herbrand computations, fundamental classes, and the
+  Artin map were still open. Its class-formation interface audit confirms that the distinguished
+  `H²` class at a subgroup has order `Nat.card H`, not the ambient index. Coordinate with that
+  project before adapting any unlanded code or proof structure.
 - **ImperialCollegeLondon/FLT** (Apache-2.0) was checked on 2026-08-07 at
   `d18b563029f3`. It contains sorry-free adelic discreteness and cocompactness and Fujisaki's
   lemma. Those results concern `GlobalNumberFields` carriers consumed here. Coordinate before
   adapting code; independent proofs remain allowed with attribution.
+
+The FLT local-class-field-theory interface on its `erd1/LCFT` line separates
+`SatisfiesLocalExistenceTheorem` from `LocalArtinMapData` and assembles them as
+`SatisfiesLocalClassFieldTheory`, including arithmetic-Frobenius normalization and tower
+compatibility. The old local-fields roadmap's final assembly step translates directly to that
+interface. This observation records compatibility only; no implementation was copied.
+
+The migration also preserves the corrected local proof constraints from PR #2: local class
+formations are constructed before reciprocity; local duality uses Shapiro/coinduction rather
+than a nonexistent filtration by trivial modules; and conductor attainment for complex-valued
+characters uses the no-small-subgroups property of `ℂˣ`.
 
 ## Mathlib work to watch
 
