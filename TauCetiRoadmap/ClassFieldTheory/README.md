@@ -53,12 +53,16 @@ stand-ins.
 | Contract | Exact declarations |
 |---|---|
 | continuous local coefficients | `GalRep`, `H`, `muNRep`, `kummerClass`, `kummerEquiv_mixed` |
+| Kummer transport and local Brauer group | `absoluteGaloisGroupComparison`, `muNRepCoeffDictionary`, `Br`, `invMap`, `brRes`, `brCor` |
 | local invariant and Hilbert pairing | `h2MuEquivZMod_mixed`, `h2FpEquivZMod_of_mu`, `kummerCupPairing`, `localSymbol` |
 | local duality and Euler characteristic | `tateDualityPairing_perfect_mixed`, `finite_H`, `eulerCharacteristic_finrank_fp` |
-| local reciprocity and cyclotomic normalization | `artinMap`, `cyclotomicCharacter_artinMap`, `cyclotomicCharacter_artinMap_padic` |
+| local reciprocity and normalization | `normResidue`, `normResidue_uniformizer`, `artinMap`, `unramifiedCoordinate`, `cyclotomicCharacter_artinMap`, `cyclotomicCharacter_artinMap_padic` |
+| local conductors | `conductorExponent`, `conductorIdeal`, `characterConductorExp` |
 | finite Tate theory | `tateH`, `tateMap`, `ordinaryToTate`, `tateRes`, `tateCor`, `tateInfl`, `tateCup`, `tatePeriodicity`, `herbrandQuotient` |
 | class formations | `FiniteClassFormation`, `tateCupSigma`, `tateNakayama`, `tateNakayama_top` |
+| completion and ideal Artin adapters | `localArtinAt`, `unramifiedCoordinate_localArtinAt`, `abelianArtinHomAway` |
 | global norm and Hilbert reciprocity | `cyclicHasseNorm`, `hilbertProductFormula` |
+| ring class field | `ringClassField`, `gal_ringClassField_equiv_pic` |
 
 `cyclicHasseNorm` and `hilbertProductFormula` are frozen public names. Their statements use the
 global and local carriers above; neither may be replaced with a proposition-valued interface
@@ -124,6 +128,13 @@ The nearby false construction is an arbitrary family of additive maps of the rig
 does not satisfy any of the functoriality, projection, or cup laws and cannot support
 Tate–Nakayama.
 
+The target API names those laws: `tateCup_assoc`, `tateCup_comm`, `tateCup_projection`,
+`tateMap_tateRes`, and the inflation comparison `tateInfl_ordinaryToTate`. It also names the
+ordinary finite-group product `ordinaryCup` and proves both `tateCup_agrees_ordinary` and
+`ordinaryCup_explicitCup11`, the latter against `ProfiniteCohomology.explicitCup11`. The
+top-subgroup and tower transports are `tateHTopEquiv` and `tateHTowerEquiv`; therefore
+`FiniteClassFormation.topClass` is the transported `cls ⊤`, not a freely chosen class.
+
 *Prerequisites:* M finite-group cohomology and homology, M representation categories.
 
 ### Layer 1: Herbrand quotients and finite class formations
@@ -132,6 +143,14 @@ For cyclic `G`, define the Herbrand quotient as `#Ĥ⁰(G,M)/#Ĥ¹(G,M)`, carryi
 hypotheses that make `Nat.card` meaningful. Prove multiplicativity in short exact sequences and
 invariance under an equivariant map with finite kernel and cokernel. Compute the quotients used
 by local and global class field theory, rather than treating them as numerical axioms.
+
+For local units, use a scaled normal-basis element to obtain an open stable lattice that is free
+over the group ring, then pass through the finite quotient into the unit filtration. Do not assume
+`𝒪_L` itself is free over `𝒪_K[G]`; that holds only in the tame case. The finite local
+Galois group is first proved solvable from its ramification filtration, the cyclic `H²` bound is
+then propagated by induction, and only afterward are the invariant, fundamental classes, and
+class formation constructed. Reciprocity, existence, and local duality are forbidden inputs to
+this stage because each is downstream of Tate–Nakayama.
 
 Define `FiniteClassFormation M` with a distinguished class for every subgroup, restriction and
 corestriction on `Ĥ²`, vanishing `H¹`, cyclicity and correct cardinality of `Ĥ²`, compatibility of
@@ -173,6 +192,14 @@ cup followed by the invariant map. Prove bilinearity and the Steinberg relation.
 canonical owner of the cohomological local Hilbert pairing. No quadratic-form or quaternion
 symbol is imported.
 
+The transport is explicit: `absoluteGaloisGroupComparison` relates the algebraic-closure and
+separable-closure Galois groups, while `muNRepCoeffDictionary` is separately proved continuous
+and equivariant. The Brauer carrier is `Br F = H²(G_F,(Fˢ)ˣ)` with invariant `invMap`; `brRes`
+and `brCor` satisfy the degree-multiplying restriction and degree-free corestriction squares.
+Two Kummer classes naturally cup into `mu_n ⊗ mu_n`, not `mu_n`: multiplication of roots of
+unity is not biadditive. A primitive root supplies the additional pairing, and the Steinberg law
+is stated only for that named pairing. At exponent two the identification is canonical.
+
 *Prerequisites:* PC continuous cohomology, Kummer theory, cups and degree transport; LFR local
 field carrier and unit arithmetic.
 
@@ -198,6 +225,25 @@ cardinality Euler characteristic, and the frozen `𝔽_p` finrank formula
 Finally prove the cyclotomic normalization, including both
 `cyclotomicCharacter_artinMap` with the field norm and its `ℚ_p` specialization. These equations
 are consumed by `LocalGaloisGroups` to identify the abstract Demushkin orientation.
+
+The construction order is normative. Norm subgroups first define the normic topology and its
+completion; compatible finite-level reciprocity maps then give the inverse-limit isomorphism and
+the dense, generally non-surjective `artinMap`. Norm limitation precedes the prime-to-residue
+existence theorem; Kummer theory then gives full existence for finite extensions of `ℚ_p`, after
+which injectivity, the ordinary profinite-completion comparison, and conductor theory follow.
+Equal-characteristic `p`-primary existence is not obtained by this route: it requires the excluded
+Artin–Schreier–Witt theory.
+
+Local duality uses the named evaluation pairing and an eight-step Shapiro/coinduction
+dévissage. A general finite `G_K`-module need not admit a filtration by trivial modules: over
+`ℚ_2`, the nontrivial unramified action on `ℤ/3` is the regression example. For an unramified
+module and its dual, the two annihilator orders are separately `#H⁰(K,M)` and `#H⁰(K,M')`;
+they need not agree (the same `ℚ_2`, `ℤ/3` example gives orders `3` and `1`).
+
+The conductor targets are the attained minima `conductorExponent`, `conductorIdeal`, and
+`characterConductorExp`, with minimality and the unramified criterion named. Character-conductor
+attainment uses that `ℂˣ` has no small subgroups; continuity plus a neighbourhood basis alone is
+insufficient, as the identity `Kˣ → Kˣ` is trivial on no unit-filtration subgroup.
 
 *Prerequisites:* L0–L2; LFR valuation, unit filtration, norm group and Frobenius.
 
