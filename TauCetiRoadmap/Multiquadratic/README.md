@@ -130,7 +130,7 @@ expressible in `TauCeti/`, state its milestones in `Suggested.lean` (with `sorry
   has `t = 2` but class number `1`), and the `t − 1` count needs the narrow class group
   and the narrow genus field (unramified at finite places only). Mathlib has neither;
   the narrow class group is defined in
-  [GlobalClassFieldTheory Layer 1](../GlobalClassFieldTheory/README.md), as
+  [ClassFieldTheory Layer 1](../ClassFieldTheory/README.md), as
   `RayClassGroup (narrowModulus K)` with the surjection
   `RayClassGroup (narrowModulus K) →* ClassGroup (𝓞 K)`. That interface milestone freezes
   the `Cl⁺ ↠ Cl` spelling this layer consumes as the prerequisite for the real case, and
@@ -142,7 +142,7 @@ The required deliverables of this roadmap are exactly Layers 0–3. Explicit
 Kronecker–Weber for the abelian-over-`ℚ` case (every multiquadratic field embeds in a
 cyclotomic field, via Gauss sums), the full Hilbert class field beyond the genus-field
 quotient cut out by `Cl/Cl²`, and ring class fields are not milestones here. They belong
-to GlobalClassFieldTheory and possible later roadmaps; this section records interfaces and
+to ClassFieldTheory and possible later roadmaps; this section records interfaces and
 motivation only and makes no completion claim.
 
 ## Worked examples (acceptance criteria, keeping the definitions honest)
