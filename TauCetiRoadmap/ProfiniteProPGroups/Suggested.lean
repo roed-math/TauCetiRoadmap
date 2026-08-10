@@ -4,7 +4,7 @@ import TauCetiRoadmap.ProfiniteCohomology.Suggested
 set_option autoImplicit false
 
 /-!
-# Pro-p and Demushkin groups: target signatures
+# Profinite and pro-`p` groups: target signatures
 
 **This file is not the roadmap and is not exhaustive.** The definitive document is
 `README.md`. The statements here suggest Lean forms for particular milestones, so that
@@ -19,24 +19,24 @@ products by the Profinite Cohomology roadmap; this file imports those declaratio
 namespace `TauCetiRoadmap.ProfiniteCohomology` and states the pro-`p` theory against them. The
 coefficient object of the pro-`p` theory is `trivialFp`, the trivial `𝔽_p`-representation, with
 `cohomFp` for its cohomology and `fpPairing` for the multiplication pairing that gives the cup
-square. The Demushkin predicate, the rank and `q` invariants, the prescription property that
-pins the canonical character, and the arithmetic inputs of Layer 11 are all stated against
-those objects.
+square. The Demushkin predicate, the rank and `q` invariants, and the prescription property that
+pins a canonical character are all stated against those objects. Arithmetic identification with
+local absolute Galois groups is owned by `LocalGaloisGroups`.
 
 Everything else is here too: the profinite foundations, the supernatural
 order and index, Sylow theory, the pro-`p`, Frattini and generation layers, the free pro-`C`
 class formalism, free pro-`p` groups with their universal property, the finite-quotient
 determinacy theorem, the lower `p`-series with its graded pieces, the completed group algebra
 and Labute's relation module, the closed-subgroup theory of `ℤ₂ˣ`, and the presentation-level
-worked examples, including the group `D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩` of the dyadic acceptance
-instance with its marked generators and its standard orientation.
+worked examples, including the abstract group `D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y)⟩` with its marked
+generators and standard orientation.
 
 The `def`s in the Prototypes section pin suggested *forms* for the objects the examples
 mention (each is also a design decision recorded in `README.md`); they are prototypes, not
 proved-out API.
 -/
 
-namespace TauCetiRoadmap.ProPGroups
+namespace TauCetiRoadmap.ProfiniteProPGroups
 
 open CategoryTheory
 
@@ -60,8 +60,8 @@ def IsProP (G : Type u) [Group G] [TopologicalSpace G] : Prop :=
   ∀ U : OpenNormalSubgroup G, IsPGroup p (G ⧸ U.toSubgroup)
 
 /-- **Topological finite generation**: some finite subset generates a dense subgroup. This is
-the predicate the local-fields roadmap's finite-generation theorem (its `B1` layer) produces
-and the reconstruction theorem (Layer 8) consumes; keep this exact shape. -/
+the predicate used by the reconstruction theorem (Layer 8) and exported to downstream
+consumers; keep this exact shape. -/
 def IsTopologicallyFinitelyGenerated (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] : Prop :=
   ∃ s : Finset G, (Subgroup.closure (s : Set G)).topologicalClosure = ⊤
@@ -109,13 +109,6 @@ instance proPKernel_normal (G : Type u) [Group G] [TopologicalSpace G] :
 abbrev maximalProPQuotient (G : Type u) [Group G] [TopologicalSpace G] : Type u :=
   G ⧸ proPKernel p G
 
-/-- **`G_K(p)`**, the Galois group of the maximal `p`-extension of `K`, as the maximal
-pro-`p` quotient of the absolute Galois group. This is the carrier the shared layer-DAG table
-fixes for Layer 11: the LocalFields roadmap's Layer 9 cites this name rather than re-forming
-the quotient, so that the two roadmaps' rank statements are about one object. -/
-abbrev absoluteGaloisGroupProP (K : Type u) [Field K] : Type u :=
-  maximalProPQuotient p (Field.absoluteGaloisGroup K)
-
 /-- **`p`-Sylow subgroup of a profinite group**: a closed pro-`p` subgroup whose image in
 every continuous finite quotient has index prime to `p` (equivalently: whose supernatural
 index is prime to `p`, Layer 1). -/
@@ -158,7 +151,7 @@ instance proPFrattini_normal (G : Type u) [Group G] [TopologicalSpace G] :
 `Subgroup.is_normal_topologicalClosure`, which is deliberately not an instance there. We make
 it a **scoped** instance rather than a global one: it fires on every `topologicalClosure`
 goal, and a global instance would compete with more specific ones in downstream files. Anyone
-who wants the convenience writes `open scoped TauCetiRoadmap.ProPGroups`. -/
+who wants the convenience writes `open scoped TauCetiRoadmap.ProfiniteProPGroups`. -/
 scoped instance normal_topologicalClosure {G : Type u} [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] (N : Subgroup G) [N.Normal] : N.topologicalClosure.Normal :=
   Subgroup.is_normal_topologicalClosure N
@@ -259,11 +252,9 @@ noncomputable def freeProP.of {X : Type u} (x : X) : freeProP p X :=
   QuotientGroup.mk (freeProfiniteGroup.of x)
 
 /-- The profinite group **presented** by generators `X` and relators `rels`: the free
-profinite group modulo the *closed* normal closure of the relators. This is the object the
-LocalFields roadmap's Layer 4 states the Iwasawa presentation
-`G_K^t = ⟨σ, τ ∣ στσ⁻¹τ^(−q)⟩` against, and it is a row of the shared layer-DAG table; ⚠ it
-is not `presentedProP` below, whose pro-`p` quotient forgets the prime-to-`p` tame inertia
-that presentation is about. -/
+profinite group modulo the *closed* normal closure of the relators. This is the abstract
+presentation object; it is distinct from `presentedProP` below, which first restricts to the
+pro-`p` category. -/
 noncomputable abbrev presentedProfiniteGroup (X : Type u)
     (rels : Set (freeProfiniteGroup X)) : Type u :=
   freeProfiniteGroup X ⧸ (Subgroup.normalClosure rels).topologicalClosure
@@ -281,9 +272,8 @@ noncomputable def d0Relator : freeProP 2 (Fin 3) :=
   freeProP.of 2 0 ^ 2 * freeProP.of 2 1 ^ 4 *
     ((freeProP.of 2 1)⁻¹ * (freeProP.of 2 2)⁻¹ * freeProP.of 2 1 * freeProP.of 2 2)
 
-/-- **`D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y) = 1⟩`**, the rank-3, `q = 2` dyadic Demushkin group, the
-Layer 11 acceptance instance (`G_{ℚ₂}(2) ≅ D₀`), defined intrinsically as a presented
-pro-`2` group. -/
+/-- **`D₀ = ⟨A, S, Y ∣ A²S⁴(S,Y) = 1⟩`**, the standard rank-3, `q = 2` Demushkin group,
+defined intrinsically as a presented pro-`2` group. -/
 noncomputable abbrev demushkinD0 : Type := presentedProP 2 (Fin 3) {d0Relator}
 
 /-- The **topological abelianization** `G^{ab} = G ⧸ closure [G,G]`, the profinite
@@ -375,8 +365,8 @@ noncomputable abbrev cohomFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace 
 
 /-- **The multiplication pairing on `𝔽_p`**, as a `TopPairing` of the trivial representation
 with itself. This is the coefficient input of the imported cup product: `cup (fpPairing p G) 1 1`
-is the cup square `H¹(G, 𝔽_p) × H¹(G, 𝔽_p) → H²(G, 𝔽_p)` that the Demushkin predicate and the
-Layer 11 duality input are stated against, and there is no second cup product in this roadmap.
+is the cup square `H¹(G, 𝔽_p) × H¹(G, 𝔽_p) → H²(G, 𝔽_p)` that the Demushkin predicate is
+stated against, and there is no second cup product in this roadmap.
 The pairing is the multiplication of `ZMod p`, which is `ZMod p`-bilinear, continuous because the
 coefficients are discrete, and equivariant because the action is trivial. -/
 noncomputable def fpPairing (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
@@ -405,8 +395,8 @@ noncomputable abbrev cupFp (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
 /-- **Layer 5, graded commutativity of the cup square**, the specialization of the imported
 `cup_gradedComm` to `fpPairing`, whose opposite pairing is itself because multiplication in
 `ZMod p` is commutative. With it, right nondegeneracy of a cup pairing follows from left
-nondegeneracy, so the second nondegeneracy field of `IsDemushkin` and of `LocalFieldInputs`
-becomes a theorem and is dropped. -/
+nondegeneracy, so the second nondegeneracy clause of `IsDemushkin` becomes a theorem and is
+dropped. -/
 theorem cupFp_gradedComm (p : ℕ) (G : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] (a b : cohomFp p G 1) : cupFp p G a b = - cupFp p G b a :=
   sorry
@@ -556,8 +546,7 @@ theorem demushkinCharacter_hasPrescriptionProperty {p G} [Fact p.Prime] [Group G
   (existsUnique_hasPrescriptionProperty hG).exists.choose_spec.2
 
 /-- **Layer 7, the canonical character is the only one.** This is the uniqueness half of
-Labute Thm 4, in the form Layer 11 applies to identify the orientation of `G_K(p)` with the
-descended cyclotomic character. -/
+Labute Thm 4 and the abstract normalization exported to downstream applications. -/
 theorem demushkinCharacter_unique {p G} [Fact p.Prime] [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
     (hG : IsDemushkin p G) (χ : G →* ℤ_[p]ˣ) (hcont : Continuous χ)
@@ -583,313 +572,6 @@ theorem demushkinCharacter_range_congr {p G H} [Fact p.Prime] [Group G] [Topolog
   sorry
 
 end Demushkin
-
-/-! ## Layer 11: the arithmetic inputs, as a local interface
-
-The five inputs of Layer 11 are theorems about `G_K` that the Local Fields roadmap proves.
-They are bundled here as one structure over an abstract profinite group `Γ`, which stands
-for `G_K`, so that every theorem of Layer 11 is a statement of this roadmap with the inputs
-as a hypothesis. Nothing waits for another roadmap: the Local Fields roadmap supplies an
-instance of this structure, and the shared table names the object behind each field. -/
-
-/-- **The arithmetic inputs of Layer 11.** `N` is the degree `[K : ℚ_p]`, and `hasMu` says
-that `μ_p ⊆ K`. The fields are the parts of inputs 1 to 6 that Layer 11 uses. Finiteness is
-a separate field from each dimension count, because `Module.finrank` is `0` for an
-infinite-dimensional space as well, and the free case needs actual vanishing. -/
-structure LocalFieldInputs (p : ℕ) [Fact p.Prime] (Γ : Type u) [Group Γ] [TopologicalSpace Γ]
-    [IsTopologicalGroup Γ] [CompactSpace Γ] [TotallyDisconnectedSpace Γ] (N : ℕ)
-    (hasMu : Prop) where
-  /-- Input 1: `H⁰(G_K, 𝔽_p)` is finite-dimensional. -/
-  h0_finite : Module.Finite (ZMod p) (cohomFp p Γ 0)
-  /-- Input 1: `H¹(G_K, 𝔽_p)` is finite-dimensional. -/
-  h1_finite : Module.Finite (ZMod p) (cohomFp p Γ 1)
-  /-- Input 1: `H²(G_K, 𝔽_p)` is finite-dimensional. -/
-  h2_finite : Module.Finite (ZMod p) (cohomFp p Γ 2)
-  /-- Input 1: `dim H⁰(G_K, 𝔽_p) = 1`. -/
-  h0_rank : Module.finrank (ZMod p) (cohomFp p Γ 0) = 1
-  /-- Input 1: `dim H²(G_K, 𝔽_p) = 1` when `μ_p ⊆ K`. -/
-  h2_rank_of_mu : hasMu → Module.finrank (ZMod p) (cohomFp p Γ 2) = 1
-  /-- Input 1: `H²(G_K, 𝔽_p)` **vanishes** when `μ_p ⊄ K`. This is the statement the free
-  case uses; a `finrank = 0` field would not give it. -/
-  h2_eq_zero_of_not_mu : ¬ hasMu → Subsingleton (cohomFp p Γ 2)
-  /-- Input 1: the Euler-characteristic count `dim H¹ = 1 + dim H² + N`. -/
-  h1_rank : Module.finrank (ZMod p) (cohomFp p Γ 1)
-    = 1 + Module.finrank (ZMod p) (cohomFp p Γ 2) + N
-  /-- Input 3: the cup pairing on `H¹(G_K, 𝔽_p)` is nondegenerate on the left when
-  `μ_p ⊆ K`. This is local Tate duality at `n = p`, transported along inputs 2 and 4. -/
-  cup_nondegenerate_left : hasMu →
-    ∀ a : cohomFp p Γ 1, a ≠ 0 → ∃ b : cohomFp p Γ 1, cupFp p Γ a b ≠ 0
-  /-- Input 3: and on the right. This field is dropped once the graded commutativity of
-  Layer 5 is available, because it then follows from the left-hand statement. -/
-  cup_nondegenerate_right : hasMu →
-    ∀ b : cohomFp p Γ 1, b ≠ 0 → ∃ a : cohomFp p Γ 1, cupFp p Γ a b ≠ 0
-  /-- Input 5: the cyclotomic character. -/
-  cyclotomic : Γ →* ℤ_[p]ˣ
-  /-- Input 5: it is continuous. -/
-  cyclotomic_continuous : Continuous cyclotomic
-  /-- Input 5: its image is pro-`p` when `μ_p ⊆ K`. This is what makes the character factor
-  through `G_K(p)`: the pro-`p` kernel then lies in its kernel. Nothing else in this list
-  forces that factorization. -/
-  cyclotomic_proP_image : hasMu → IsProP p cyclotomic.range
-  /-- Input 5: the image, as a closed subgroup of `ℤ_pˣ`. Layer 9 selects a normal form from
-  it, so it is data and not an existence statement. -/
-  cyclotomicRange : Subgroup ℤ_[p]ˣ
-  /-- Input 5: it really is the image. -/
-  cyclotomicRange_eq : cyclotomicRange = cyclotomic.range
-  /-- Input 4: the finite quotients of the cyclotomic module satisfy the prescription
-  property of Layer 7, which is what the Kummer compatibility square gives. -/
-  cyclotomic_prescription : hasMu → HasPrescriptionProperty cyclotomic
-  /-- Input 6: the largest `p`-power `q` with `μ_q ⊆ K`, as data. -/
-  qInvariant : ℕ
-  /-- Input 6: `q` is the order of the torsion of the abelianization of `G_K(p)`, which is
-  what makes it the `q` of the Demushkin classification. -/
-  qInvariant_eq :
-    qInvariant = Nat.card {x : topAbelianization (maximalProPQuotient p Γ) // IsOfFinOrder x}
-
-section LocalFields
-
-variable {p : ℕ} [Fact p.Prime] {Γ : Type u} [Group Γ] [TopologicalSpace Γ]
-  [IsTopologicalGroup Γ] [CompactSpace Γ] [TotallyDisconnectedSpace Γ] {N : ℕ} {hasMu : Prop}
-
--- `G_K(p)` is a quotient of a profinite group by a closed normal subgroup, so it is
--- profinite. That instance is the Layer 0 milestone `TotallyDisconnectedSpace (G ⧸ N)`
--- together with closedness of `proPKernel` (Layer 3); it is an argument here, because this
--- file states milestones and does not prove them.
-variable [TotallyDisconnectedSpace (maximalProPQuotient p Γ)]
-
-/-- `μ_p ⊆ F`. This is the predicate the Local Fields roadmap states, written here with the
-same definition, so that the constructor below takes the same hypothesis and a contributor
-can replace one by the other without a translation. -/
-def HasMuP (p : ℕ) (F : Type u) [Field F] : Prop := ∃ ζ : F, IsPrimitiveRoot ζ p
-
-/-- **Layer 11, `G_K(p)` is topologically finitely generated**, for an abstract `Γ` carrying
-the inputs. From the `H¹` count and the degree-one inflation isomorphism, and not from finite
-generation of `G_K`, which this roadmap never assumes. -/
-theorem isTopologicallyFinitelyGenerated_maximalProPQuotient
-    (_inp : LocalFieldInputs p Γ N hasMu) :
-    IsTopologicallyFinitelyGenerated (maximalProPQuotient p Γ) :=
-  sorry
-
-/-- **Layer 11, the free case (Shafarevich)**, for an abstract `Γ`. If `μ_p ⊄ K` then `G_K(p)`
-is free pro-`p` of rank `N + 1`. -/
-theorem maximalProPQuotient_equiv_free_of_not_mu (_inp : LocalFieldInputs p Γ N hasMu)
-    (_h : ¬ hasMu) :
-    Nonempty (maximalProPQuotient p Γ ≃ₜ* freeProP p (Fin (N + 1))) :=
-  sorry
-
-/-- **Layer 11, the Demushkin case: the construction**, for an abstract `Γ`. If `μ_p ⊆ K` then
-`G_K(p)` is Demushkin. This is the theorem of the layer; the rank, `q`, the orientation and the
-presentation are its consequences. -/
-theorem isDemushkin_maximalProPQuotient_of_mu (_inp : LocalFieldInputs p Γ N hasMu)
-    (_h : hasMu) : IsDemushkin p (maximalProPQuotient p Γ) :=
-  sorry
-
-/-- **Layer 11, the rank in the Demushkin case**, for an abstract `Γ`. `n(G_K(p)) = N + 2`. -/
-theorem demushkinRank_maximalProPQuotient (_inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu)
-    (hD : IsDemushkin p (maximalProPQuotient p Γ)) : demushkinRank hD = N + 2 :=
-  sorry
-
-/-- **Layer 11, the `q`-invariant**, for an abstract `Γ`. `q(G_K(p))` is the input
-`qInvariant`, that is the largest `p`-power `q` with `μ_q ⊆ K`. -/
-theorem demushkinQ_maximalProPQuotient (inp : LocalFieldInputs p Γ N hasMu) (_h : hasMu)
-    (hD : IsDemushkin p (maximalProPQuotient p Γ)) : demushkinQ hD = inp.qInvariant :=
-  sorry
-
-/-- **Layer 11, the orientation is cyclotomic**, for an abstract `Γ`. The cyclotomic character
-is trivial on the kernel of `G_K ↠ G_K(p)`, so it descends, and the descent has the
-prescription property. With `demushkinCharacter_unique`, the descent is the canonical character
-of `G_K(p)`. -/
-theorem cyclotomicOrientation_maximalProPQuotient (inp : LocalFieldInputs p Γ N hasMu)
-    (_h : hasMu) (hD : IsDemushkin p (maximalProPQuotient p Γ)) :
-    (demushkinCharacter hD).comp (QuotientGroup.mk' (proPKernel p Γ)) = inp.cyclotomic :=
-  sorry
-
-end LocalFields
-
-/-! ### Layer 11: the public arithmetic theorems
-
-The statements above are about an abstract `Γ` carrying the inputs. These are the theorems the
-Local Fields roadmap and the interface table cite: their arguments are the field `K` itself, and
-their proofs invoke `localFieldInputs p K`. -/
-
-section PublicLocalFields
-
--- Mathlib supplies `Group`, `TopologicalSpace` and `IsTopologicalGroup` on
--- `Field.absoluteGaloisGroup K`, so those are not binders here: repeating them would shadow
--- Mathlib's instances and make `absoluteGaloisGroupProP p K` a different type from the one the
--- abbreviation names. Compactness and total disconnectedness are the Layer 0 milestones of this
--- roadmap, so they are instance arguments until Layer 0 supplies them by instance search.
-variable (p : ℕ) [Fact p.Prime] (K : Type u) [Field K] [Algebra ℚ_[p] K] [Module.Finite ℚ_[p] K]
-  [CompactSpace (Field.absoluteGaloisGroup K)]
-  [TotallyDisconnectedSpace (Field.absoluteGaloisGroup K)]
-
-/-- **Layer 11, the canonical instance.** The interface is not lawless: this milestone builds
-the term for a finite extension of `ℚ_p`, from the Local Fields theorems, so that the
-statements below are about `G_K(p)` and not about an abstract structure. It is a named
-declaration, and not an existence statement, because the interface table promises the name.
-Every field is proved from a named theorem of that roadmap, transported through the imported
-comparison isomorphisms. Compactness and total disconnectedness of `Field.absoluteGaloisGroup K`
-are Layer 0 milestones of this roadmap; they are instance arguments here, and the declaration
-loses them once Layer 0 supplies them by instance search. -/
-noncomputable def localFieldInputs :
-    LocalFieldInputs p (Field.absoluteGaloisGroup K) (Module.finrank ℚ_[p] K) (HasMuP p K) := by
-  sorry
-
--- `G_K(p)` is a quotient of a profinite group by a closed normal subgroup, so it is profinite.
--- That instance is the Layer 0 milestone `TotallyDisconnectedSpace (G ⧸ N)` together with
--- closedness of `proPKernel` (Layer 3); it is an argument here, because this file states
--- milestones and does not prove them.
-variable [hTD : TotallyDisconnectedSpace (absoluteGaloisGroupProP p K)]
-
-include hTD
-
-/-- **Layer 11, `G_K(p)` is topologically finitely generated.** The interface table names this
-theorem, and the Local Fields roadmap's Layer 9 rank statement consumes it. -/
-theorem isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP :
-    IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p K) :=
-  isTopologicallyFinitelyGenerated_maximalProPQuotient (localFieldInputs p K)
-
-/-- **Layer 11, the rank of `G_K(p)` in the Demushkin case**, `d(G_K(p)) = [K : ℚ_p] + 2`. -/
-theorem topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu (hmu : HasMuP p K) :
-    topologicalGeneratorRankNat (absoluteGaloisGroupProP p K)
-        (isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP p K)
-      = Module.finrank ℚ_[p] K + 2 :=
-  sorry
-
-/-- **Layer 11, the rank of `G_K(p)` in the free case**, `d(G_K(p)) = [K : ℚ_p] + 1`. -/
-theorem topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu (hmu : ¬ HasMuP p K) :
-    topologicalGeneratorRankNat (absoluteGaloisGroupProP p K)
-        (isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP p K)
-      = Module.finrank ℚ_[p] K + 1 :=
-  sorry
-
-/-- **Layer 11, the free case (Shafarevich), publicly.** If `μ_p ⊄ K` then `G_K(p)` is free
-pro-`p` of rank `[K : ℚ_p] + 1`. -/
-theorem absoluteGaloisGroupProP_iso_freeProP_of_not_hasMuP (hmu : ¬ HasMuP p K) :
-    Nonempty (absoluteGaloisGroupProP p K ≃ₜ* freeProP p (Fin (Module.finrank ℚ_[p] K + 1))) :=
-  maximalProPQuotient_equiv_free_of_not_mu (localFieldInputs p K) hmu
-
-/-- **Layer 11, the Demushkin case, publicly.** If `μ_p ⊆ K` then `G_K(p)` is Demushkin. -/
-theorem isDemushkin_absoluteGaloisGroupProP_of_hasMuP (hmu : HasMuP p K) :
-    IsDemushkin p (absoluteGaloisGroupProP p K) :=
-  isDemushkin_maximalProPQuotient_of_mu (localFieldInputs p K) hmu
-
-/-- **Layer 11, the `q`-invariant of `G_K(p)`, publicly.** It is the largest `p`-power `q`
-with `μ_q ⊆ K`, which is the `qInvariant` field of the canonical instance. -/
-theorem demushkinQ_absoluteGaloisGroupProP (hmu : HasMuP p K) :
-    demushkinQ (isDemushkin_absoluteGaloisGroupProP_of_hasMuP p K hmu)
-      = (localFieldInputs p K).qInvariant :=
-  demushkinQ_maximalProPQuotient (localFieldInputs p K) hmu
-    (isDemushkin_absoluteGaloisGroupProP_of_hasMuP p K hmu)
-
-/-- **The descended cyclotomic character of `G_K(p)`.** The cyclotomic character of `G_K` is
-trivial on the kernel of `G_K ↠ G_K(p)`, because its image is pro-`p`, so it descends. This is
-the descent, as data; the two theorems below pin it and identify it with the orientation. -/
-noncomputable def cyclotomicOrientation : absoluteGaloisGroupProP p K →* ℤ_[p]ˣ :=
-  sorry
-
-/-- **Layer 11, the descent equation.** Stated pointwise, on the quotient map of `proPKernel`,
-because that is the form the uniqueness argument for the orientation uses. -/
-theorem cyclotomicOrientation_mk (g : Field.absoluteGaloisGroup K) :
-    cyclotomicOrientation p K (QuotientGroup.mk g) = (localFieldInputs p K).cyclotomic g :=
-  sorry
-
-/-- **Layer 11, the descent is continuous.** -/
-theorem cyclotomicOrientation_continuous : Continuous (cyclotomicOrientation p K) :=
-  sorry
-
-/-- **Layer 11, the orientation of `G_K(p)` is cyclotomic, publicly.** The canonical character
-of the Demushkin group `G_K(p)` is the descent of the cyclotomic character of `G_K`. -/
-theorem demushkinCharacter_absoluteGaloisGroupProP (hmu : HasMuP p K) :
-    demushkinCharacter (isDemushkin_absoluteGaloisGroupProP_of_hasMuP p K hmu)
-      = cyclotomicOrientation p K :=
-  sorry
-
-end PublicLocalFields
-
-/-! ### Layer 11: the bundling structures the Local Fields roadmap states its rank theorem
-against
-
-`ProPOps` and `ProPRankInputs` are stated in the Local Fields roadmap, which quantifies its
-Layer 9 rank theorem over them. They are repeated here verbatim, and the two canonical terms
-below are what make that theorem unconditional: the Local Fields roadmap instantiates it at
-`proPOps` and `proPRankInputs`. -/
-
-section Bundles
-
-/-- The pro-`p` and profinite group theory that Layers 4 and 9 use. Every field is a statement
-about profinite groups, free of Galois vocabulary. -/
-structure ProPOps (p : ℕ) : Prop where
-  /-- Every profinite group has a pro-`p` Sylow subgroup. -/
-  exists_isProPSylow : ∀ (G : Type u) [Group G] [TopologicalSpace G] [CompactSpace G]
-    [TotallyDisconnectedSpace G], ∃ P : Subgroup G, IsProPSylow p P
-  /-- Every closed pro-`p` subgroup lies in a pro-`p` Sylow subgroup. -/
-  exists_le_isProPSylow : ∀ (G : Type u) [Group G] [TopologicalSpace G] [CompactSpace G]
-    [TotallyDisconnectedSpace G] (Q : Subgroup G), IsProP p Q → IsClosed (Q : Set G) →
-      ∃ P : Subgroup G, IsProPSylow p P ∧ Q ≤ P
-  /-- A normal pro-`p` Sylow subgroup is the only one. Layer 4 uses this for wild inertia. -/
-  sylow_eq_of_normal : ∀ (G : Type u) [Group G] [TopologicalSpace G] (P Q : Subgroup G),
-    IsProPSylow p P → IsProPSylow p Q → P.Normal → P = Q
-  /-- The image under a continuous surjection is a pro-`p` Sylow subgroup. -/
-  sylow_map_of_surjective : ∀ (G H : Type u) [Group G] [TopologicalSpace G] [Group H]
-    [TopologicalSpace H] (f : G →* H), Continuous f → Function.Surjective f →
-      ∀ P : Subgroup G, IsProPSylow p P → IsProPSylow p (P.map f)
-  /-- The universal property of the free profinite group, with uniqueness. -/
-  freeProfiniteGroupLift : ∀ (X : Type u) (G : ProfiniteGrp.{u}) (f : X → G),
-    ∃! φ : freeProfiniteGroup X ⟶ G, ∀ x : X, φ (freeProfiniteGroup.of x) = f x
-  /-- The rank does not increase under a continuous surjection. Layer 9 uses it for
-  `d(G_K) ≥ d(G_K(p))`. -/
-  rank_le_of_surjective : ∀ (G H : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
-    [Group H] [TopologicalSpace H] [IsTopologicalGroup H] (f : G →* H), Continuous f →
-      Function.Surjective f → topologicalGeneratorRank H ≤ topologicalGeneratorRank G
-  /-- The Schreier bound `d(U) ≤ 1 + [G : U](d(G) − 1)` for an open subgroup. Layer 9 uses it
-  for the lower bound in the case `μ_p ⊄ K`. -/
-  rank_le_of_isOpen : ∀ (G : Type u) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
-    (U : Subgroup G), IsOpen (U : Set G) → ∀ (hG : IsTopologicallyFinitelyGenerated G)
-      (hU : IsTopologicallyFinitelyGenerated U),
-      topologicalGeneratorRankNat U hU ≤ 1 + U.index * (topologicalGeneratorRankNat G hG - 1)
-  /-- The Burnside criterion: a subset of a pro-`p` group generates topologically if and only if
-  its image topologically generates the Frattini quotient `G ⧸ Φ(G)`. ⚠ The closure on the
-  right is not decoration: without it the statement is false for `∏_ℕ C_p`, where the Frattini
-  subgroup is trivial and a countable dense subset generates topologically but not abstractly.
-  Layer 9 uses this field for the tame frame. -/
-  topologicallyGenerates_iff_frattiniQuotient : ∀ (G : Type u) [Group G] [TopologicalSpace G]
-    [IsTopologicalGroup G] [CompactSpace G], IsProP p G → ∀ s : Set G,
-      (Subgroup.closure s).topologicalClosure = ⊤ ↔
-        (Subgroup.closure ((QuotientGroup.mk' (proPFrattini p G)) '' s)).topologicalClosure = ⊤
-
-/-- The rank of the maximal pro-`p` quotient of an absolute Galois group, in the two cases that
-Layer 9 uses. ⚠ Every field is about `G_F(p)`, and none is about `G_F`. -/
-structure ProPRankInputs (p : ℕ) [Fact p.Prime] : Prop where
-  /-- `G_F(p)` is topologically finitely generated. -/
-  finiteGen : ∀ (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F],
-    IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p F)
-  /-- Demushkin: `d(G_F(p)) = [F : ℚ_p] + 2` when `μ_p ⊆ F`. -/
-  rank_of_mu : ∀ (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F],
-    HasMuP p F → ∀ h : IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p F),
-      topologicalGeneratorRankNat (absoluteGaloisGroupProP p F) h = Module.finrank ℚ_[p] F + 2
-  /-- Shafarevich: `d(G_F(p)) = [F : ℚ_p] + 1` when `μ_p ⊄ F`, where `G_F(p)` is free pro-`p`. -/
-  rank_of_not_mu : ∀ (F : Type u) [Field F] [Algebra ℚ_[p] F] [Module.Finite ℚ_[p] F],
-    ¬ HasMuP p F → ∀ h : IsTopologicallyFinitelyGenerated (absoluteGaloisGroupProP p F),
-      topologicalGeneratorRankNat (absoluteGaloisGroupProP p F) h = Module.finrank ℚ_[p] F + 1
-
-/-- **The canonical pro-`p` package**: the term of `ProPOps` assembled from the named
-supplier theorems (`exists_isProPSylow`, `IsProP.exists_le_isProPSylow`,
-`IsProPSylow.eq_of_normal`, `IsProPSylow.map_of_surjective`, `freeProfiniteGroup.lift`,
-`topologicalGeneratorRank_le_of_surjective`, `topologicalGeneratorRankNat_le_of_isOpen`,
-`topologicallyGenerates_iff_frattiniQuotient`). The interface table names this term, so it
-is a stable declaration and not an anonymous example. -/
-theorem proPOps (p : ℕ) : ProPOps.{u} p := sorry
-
-/-- **The canonical rank package**: the term of `ProPRankInputs` assembled from the named
-Layer 11 theorems (`isTopologicallyFinitelyGenerated_absoluteGaloisGroupProP`,
-`topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_mu`,
-`topologicalGeneratorRankNat_absoluteGaloisGroupProP_of_not_mu`). The interface table names
-this term, so it is a stable declaration and not an anonymous example. -/
-theorem proPRankInputs (p : ℕ) [Fact p.Prime] : ProPRankInputs.{u} p := sorry
-
-end Bundles
-
 
 /-! ## Layer 8: the graded pieces of the lower `p`-series
 
@@ -1720,7 +1402,7 @@ theorem isDemushkin_marked_of_q_ne_two (hG : IsDemushkin p G) (hq : demushkinQ h
 
 /-- **Layer 9, the marked classification at `q = 2` with `n` odd.** Here `p = 2`, the relator is
 `x₁²x₂^{2^f}(x₂,x₃)⋯`, and the character values are `χ(x₁) = -1`, `χ(x₃)(1 - 2^f) = 1`, and `1`
-elsewhere. The `ℚ₂` acceptance instance is the case `n = 3`, `f = 2`. -/
+elsewhere. The standard abstract group `D₀` is the case `n = 3`, `f = 2`. -/
 theorem isDemushkin_marked_of_q_two_odd (hp : p = 2) (hG : IsDemushkin p G)
     (hq : demushkinQ hG = 2) (hodd : Odd (demushkinRank hG)) (f : ℕ) (hf : 2 ≤ f)
     [TotallyDisconnectedSpace (presentedProP p (Fin (demushkinRank hG))
@@ -1850,8 +1532,7 @@ theorem IsProP.exists_le_isProPSylow (p : ℕ) [Fact p.Prime] (G : Type u) [Grou
     ∃ P : Subgroup G, IsProPSylow p P ∧ Q ≤ P :=
   sorry
 
-/-- **Layer 2, a normal `p`-Sylow subgroup is the only one.** The Local Fields roadmap uses
-this for wild inertia. -/
+/-- **Layer 2, a normal `p`-Sylow subgroup is the only one.** -/
 theorem IsProPSylow.eq_of_normal (p : ℕ) [Fact p.Prime] (G : Type u) [Group G]
     [TopologicalSpace G] [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G]
     (P Q : Subgroup G) (hP : IsProPSylow p P) (hQ : IsProPSylow p Q) (hn : P.Normal) :
@@ -1873,13 +1554,6 @@ example {p : ℕ} [Fact p.Prime] {G : Type u} [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G] {P Q : Subgroup G}
     (hP : IsProPSylow p P) (hQ : IsProPSylow p Q) :
     ∃ g : G, Q = P.map (MulAut.conj g).toMonoidHom :=
-  sorry
-
-/-- **Layer 2, Galois instance.** The Galois group of any Galois extension, in its Krull
-topology, has a `p`-Sylow subgroup (the group-theoretic half of "maximal prime-to-`p`
-subextensions exist"; the fixed-field dictionary belongs to the Galois-correspondence API). -/
-example (p : ℕ) [Fact p.Prime] {k K : Type u} [Field k] [Field K] [Algebra k K]
-    [IsGalois k K] : ∃ P : Subgroup (K ≃ₐ[k] K), IsProPSylow p P :=
   sorry
 
 /-- **Layer 2, the `p`-Sylow subgroup of `ℤ̂`.** Every `p`-Sylow subgroup of the profinite
@@ -1968,7 +1642,7 @@ example {p : ℕ} [Fact p.Prime] {G : Type u} [Group G] [TopologicalSpace G]
 /-- **Layer 3, the topological finite generation criterion.** A pro-`p` group is
 topologically finitely generated iff its Frattini quotient is finite (`index ≠ 0` is
 Mathlib's idiom for finiteness of the quotient), the Burnside basis theorem's counting
-half, and the criterion the local-fields roadmap applies to `G_K`. -/
+half. -/
 example {p : ℕ} [Fact p.Prime] {G : Type u} [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] [CompactSpace G] [TotallyDisconnectedSpace G] (hG : IsProP p G) :
     IsTopologicallyFinitelyGenerated G ↔ (proPFrattini p G).index ≠ 0 :=
@@ -1998,9 +1672,7 @@ theorem topologicallyGenerates_iff_frattiniQuotient (p : ℕ) [Fact p.Prime] (G 
         = ⊤ :=
   sorry
 
-/-- **Layer 3, the rank does not increase under a continuous surjection.** The interface table
-names this theorem, and the Local Fields roadmap's Layer 9 uses it for
-`d(G_K) ≥ d(G_K(p))`. -/
+/-- **Layer 3, the rank does not increase under a continuous surjection.** -/
 theorem topologicalGeneratorRank_le_of_surjective (G H : Type u) [Group G] [TopologicalSpace G]
     [IsTopologicalGroup G] [Group H] [TopologicalSpace H] [IsTopologicalGroup H] (f : G →* H)
     (hf : Continuous f) (hsurj : Function.Surjective f) :
@@ -2089,9 +1761,8 @@ example {p : ℕ} [Fact p.Prime] {X : Type u} :
   sorry
 
 /-- **Layer 4, universal property of the free profinite group.** A map `X → G` into a
-profinite group extends uniquely to a morphism of profinite groups out of `freeProfiniteGroup X`.
-The interface table names this theorem, and the Local Fields roadmap states the Iwasawa
-presentation of the tame quotient against it. -/
+profinite group extends uniquely to a morphism of profinite groups out of
+`freeProfiniteGroup X`. -/
 theorem freeProfiniteGroup.lift (X : Type u) (G : ProfiniteGrp.{u}) (f : X → G) :
     ∃! φ : freeProfiniteGroup X ⟶ G, ∀ x : X, φ (freeProfiniteGroup.of x) = f x :=
   sorry
@@ -2191,7 +1862,7 @@ example : ∃ f : demushkinD0 →* Multiplicative (ZMod 2),
   sorry
 
 /-- **Layer 5, non-vacuity of the presentation machinery.** `D₀` is nontrivial, a corollary
-of the surjection above. A collapse here would make the dyadic acceptance instance vacuous. -/
+of the surjection above. -/
 example : Nontrivial demushkinD0 :=
   sorry
 
@@ -2203,8 +1874,8 @@ example : IsProP 2 demushkinD0 ∧ IsTopologicallyFinitelyGenerated demushkinD0 
 /-! ### The marked standard presentation `D₀`
 
 `D₀` is a *presented* group, so its three generators are named terms and its orientation is a
-named character with named values. That is what makes the Layer 11 acceptance instance a
-normalized statement rather than an unmarked isomorphism. -/
+named character with named values. These are the abstract marked data exported to downstream
+consumers. -/
 
 /-- The marked generator `A` of `D₀`, the image of the first free pro-`2` generator. -/
 noncomputable def d0A : demushkinD0 := QuotientGroup.mk (freeProP.of 2 0)
@@ -2507,38 +2178,4 @@ example {G H : Type u} [Group G] [TopologicalSpace G] [IsTopologicalGroup G] [Co
     Nonempty (G ≃ₜ* H) :=
   sorry
 
-/-! ## Layer 11: the marked acceptance instance for `ℚ₂`
-
-The acceptance instance is the marked statement, and the unmarked isomorphism `G_{ℚ₂}(2) ≅ D₀`
-is its corollary. -/
-
-section MarkedRatPadic
-
-variable [CompactSpace (Field.absoluteGaloisGroup ℚ_[2])]
-  [TotallyDisconnectedSpace (Field.absoluteGaloisGroup ℚ_[2])]
-  [TotallyDisconnectedSpace (absoluteGaloisGroupProP 2 ℚ_[2])]
-
-/-- **Layer 11, the marked acceptance instance `G_{ℚ₂}(2) ≃ D₀`.** There is a continuous
-isomorphism onto the standard presented group `D₀ = ⟨A, S, Y ∣ A²S⁴(S, Y)⟩` under which the
-descended cyclotomic character of `G_{ℚ₂}(2)` becomes the standard orientation, whose image is
-all of `ℤ₂ˣ` and whose values on `(A, S, Y)` are `(-1, 1, (-3)⁻¹)`. Those values are the Layer 9
-table at `q = 2`, `n = 3` odd, `f = 2`, since `(1 - 2²)⁻¹ = (-3)⁻¹`.
-
-This is the statement of this roadmap: with it, a consumer identifying `G_{ℚ₂}(2)` with `D₀`
-needs no further automorphism or basis-normalization theorem. -/
-theorem absoluteGaloisGroupProP_two_ratPadic_marked :
-    ∃ e : absoluteGaloisGroupProP 2 ℚ_[2] ≃ₜ* demushkinD0,
-      MonoidHom.comp standardD0Orientation e.toMulEquiv.toMonoidHom
-          = cyclotomicOrientation 2 ℚ_[2] ∧
-        Function.Surjective (cyclotomicOrientation 2 ℚ_[2]) :=
-  sorry
-
-/-- **Layer 11, the unmarked acceptance instance**, as a corollary of the marked one. -/
-theorem absoluteGaloisGroupProP_two_ratPadic :
-    Nonempty (absoluteGaloisGroupProP 2 ℚ_[2] ≃ₜ* demushkinD0) := by
-  obtain ⟨e, -⟩ := absoluteGaloisGroupProP_two_ratPadic_marked
-  exact ⟨e⟩
-
-end MarkedRatPadic
-
-end TauCetiRoadmap.ProPGroups
+end TauCetiRoadmap.ProfiniteProPGroups
