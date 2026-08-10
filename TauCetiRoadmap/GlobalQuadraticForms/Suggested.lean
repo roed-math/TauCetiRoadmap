@@ -33,7 +33,7 @@ Statements use `sorry`, which is allowed in this human-owned roadmap library. Th
 
 namespace TauCetiRoadmap.GlobalQuadraticForms
 
-open NumberField QuadraticMap
+open IsDedekindDomain NumberField QuadraticMap
 open scoped TensorProduct
 
 universe u v
@@ -152,6 +152,7 @@ structure GlobalFormInvariants where
 /-- **3.2, the finite product relation.** The existential support makes the definition
 proof-independent. Enlarging `S` by places with sign `1` leaves the displayed product unchanged. -/
 def GlobalFormInvariants.HasseProductCompatible (I : GlobalFormInvariants K) : Prop :=
+  letI : Fintype {w : InfinitePlace K // w.IsReal} := Fintype.ofFinite _
   ∃ S : Finset (HeightOneSpectrum (𝓞 K)),
     (∀ v, v ∉ S → I.finiteHasse v = 1) ∧
       (∏ v ∈ S, I.finiteHasse v) *
