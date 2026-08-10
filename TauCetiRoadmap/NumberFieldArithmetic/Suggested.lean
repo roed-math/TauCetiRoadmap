@@ -182,11 +182,12 @@ one along exactly this square, so the declaration is a contract and not an inter
 something weaker, namely that two separately-defined symbols agree, rather than that one symbol
 restricts to the other. -/
 theorem artinSymbol_map_restrictNormalHom {L : Type*} [Field L] [NumberField L] [Algebra K L]
-    [IsGalois K L] (M : IntermediateField K L) [NumberField M] [IsGalois K M]
+    [IsGalois K L] (M : Type*) [Field M] [NumberField M] [Algebra K M] [Algebra M L]
+    [IsScalarTower K M L] [IsGalois K M]
     (𝔭 : Ideal (𝓞 K)) [𝔭.IsMaximal]
     (hur : ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver 𝔭], Algebra.IsUnramifiedAt (𝓞 K) Q)
     (hurM : ∀ (Q : Ideal (𝓞 M)) [Q.IsPrime] [Q.LiesOver 𝔭], Algebra.IsUnramifiedAt (𝓞 K) Q) :
-    ConjClasses.map (AlgEquiv.restrictNormalHom (F := K) M) (artinSymbol 𝔭 hur) =
+    ConjClasses.map (AlgEquiv.restrictNormalHom (F := K) (K₁ := L) M) (artinSymbol 𝔭 hur) =
       artinSymbol 𝔭 hurM :=
   sorry
 
@@ -203,12 +204,14 @@ The class-level statement is a corollary of this one and never a replacement for
 inertia, so no equality of automorphisms is available; the ramified statement would have to live
 in the quotient by inertia, or be a statement about a coset. -/
 theorem exists_isArithFrobAt_pow_inertiaDeg {L : Type*} [Field L] [NumberField L] [Algebra K L]
-    [IsGalois K L] (M : IntermediateField K L) [NumberField M]
-    {𝔭 : Ideal (𝓞 K)} [𝔭.IsMaximal] {Q : Ideal (𝓞 L)} [Q.IsPrime] [Q.LiesOver 𝔭]
-    [Algebra.IsUnramifiedAt (𝓞 K) Q] {σ : L ≃ₐ[K] L} (hσ : IsArithFrobAt (𝓞 K) σ Q) :
-    ∃ τ : L ≃ₐ[M] L,
-      τ.restrictScalars K = σ ^ Ideal.inertiaDeg 𝔭 (Q.under (𝓞 M)) ∧
-        IsArithFrobAt (𝓞 M) τ Q :=
+    [IsGalois K L] (M : Type*) [Field M] [NumberField M] [Algebra K M] [Algebra M L]
+    [IsScalarTower K M L] [IsGalois M L]
+    (Q : Ideal (𝓞 L)) (𝔓 : Ideal (𝓞 M)) (𝔭 : Ideal (𝓞 K))
+    (hQM : Q.under (𝓞 M) = 𝔓) (hQK : Q.under (𝓞 K) = 𝔭)
+    (hur : ∀ (Q' : Ideal (𝓞 L)) [Q'.IsPrime] [Q'.LiesOver 𝔭], Algebra.IsUnramifiedAt (𝓞 K) Q')
+    (σ : L ≃ₐ[K] L) (hσ : IsArithFrobAt (𝓞 K) σ Q) :
+    ∃ τ : L ≃ₐ[M] L, IsArithFrobAt (𝓞 M) τ Q ∧
+      AlgEquiv.restrictScalars K τ = σ ^ Ideal.inertiaDeg 𝔭 𝔓 :=
   sorry
 
 /-- **Layer 2.5, the carrier `J^S`.** The fractional ideals with valuation zero at every prime
