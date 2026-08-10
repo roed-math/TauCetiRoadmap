@@ -14,16 +14,17 @@ body:
     attributes:
       label: Roadmap area
       options:
+        - ArithmeticDirichletSeries
         - CombinatorialHeegaardFloer
         - ConformalMapping
         - ContourIntegration
         - Exchangeability
         - GeometricTopology
-        - GlobalClassFieldTheory
+        - GlobalNumberFields
         - HeegaardFloer
         - IntegralLattices
         - JacobianChallenge
-        - LocalFields
+        - LFunctions
         - ModularForms
         - Multiquadratic
         - NumberFieldArithmetic

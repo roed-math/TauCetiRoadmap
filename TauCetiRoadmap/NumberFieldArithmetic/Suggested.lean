@@ -22,8 +22,12 @@ stating a milestone:
   elaborate.
 
 Every carrier and every cross-subject interface in this file compiles as a named declaration.
-That includes `artinSymbol`, the carrier `idealsAway` with `idealsAwayInclusion`, `artinHomAway`
-with `integralIdealsAway` and `artinHomAwayIntegral`, `exists_gal_fullCycleType_eq_factorizationType`,
+That includes `artinSymbol` with `artinSymbol_map_restrictNormalHom` and
+`exists_isArithFrobAt_pow_inertiaDeg`, the carrier `idealsAway` with `idealsAwayInclusion`,
+`artinHomAway` with its four properties `artinHomAway_apply_prime`,
+`artinHomAway_eq_of_apply_prime`, `artinHomAway_mono` and `artinHomAway_restrict`,
+`integralIdealsAway` with `integralIdealsAwayHom`, `artinHomAwayIntegral` with
+`artinHomAwayIntegral_apply_prime`, `exists_gal_fullCycleType_eq_factorizationType`,
 `relDiscr`, `ramifiedSupport`, the three
 Layer 5 comparison maps, `localRamificationGroup`, and the unit-certificate candidate sets
 `unitCandidates` and `cubicUnitCandidates`. Where a comparison needs an object that a
@@ -170,6 +174,48 @@ example {M : Type*} [Field M] [NumberField M] [IsGalois ℚ M] (K : Intermediate
     IsArithFrobAt ℤ (σ.restrictNormal K) (Q.under (𝓞 K)) :=
   sorry
 
+/-- **Layer 2.4, functoriality of the Artin symbol along restriction**, at the level of the
+conjugacy class. This is the class-level half that 2.3 defers to 2.4, and it is consumed by
+name: the L-functions roadmap's Chebotarev argument reduces a general extension to a cyclotomic
+one along exactly this square, so the declaration is a contract and not an internal step.
+
+⚠ The unramified hypothesis for `M/K` is *derived* from the one for `L/K`, through
+`isUnramifiedAway_of_intermediateField` below. Taking an unrelated second hypothesis would state
+something weaker, namely that two separately-defined symbols agree, rather than that one symbol
+restricts to the other. -/
+theorem artinSymbol_map_restrictNormalHom {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    [IsGalois K L] (M : Type*) [Field M] [NumberField M] [Algebra K M] [Algebra M L]
+    [IsScalarTower K M L] [IsGalois K M]
+    (𝔭 : Ideal (𝓞 K)) [𝔭.IsMaximal]
+    (hur : ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver 𝔭], Algebra.IsUnramifiedAt (𝓞 K) Q)
+    (hurM : ∀ (Q : Ideal (𝓞 M)) [Q.IsPrime] [Q.LiesOver 𝔭], Algebra.IsUnramifiedAt (𝓞 K) Q) :
+    ConjClasses.map (AlgEquiv.restrictNormalHom (F := K) (K₁ := L) M) (artinSymbol 𝔭 hur) =
+      artinSymbol 𝔭 hurM :=
+  sorry
+
+/-- **Layer 2.4, the tower formula**, `Frob_{L/M}(Q) = Frob_{L/K}(Q)^{f(Q ∩ M / 𝔭)}` for
+`K ⊆ M ⊆ L`. It is stated **relative to one prime `Q` of `L`**, and that is the whole content of
+the statement.
+
+⚠ A version taking an arbitrary representative of `artinSymbol 𝔭 hur` and a fixed prime of `M`
+is false when `M/K` is not normal: a conjugate representative need not stabilize `Q`, so its
+`f`-th power need not fix `M` pointwise and is then the restriction of nothing in `Gal(L/M)`.
+The class-level statement is a corollary of this one and never a replacement for it.
+
+⚠ `𝔭` must be unramified. At a ramified prime a Frobenius lift is determined only modulo
+inertia, so no equality of automorphisms is available; the ramified statement would have to live
+in the quotient by inertia, or be a statement about a coset. -/
+theorem exists_isArithFrobAt_pow_inertiaDeg {L : Type*} [Field L] [NumberField L] [Algebra K L]
+    [IsGalois K L] (M : Type*) [Field M] [NumberField M] [Algebra K M] [Algebra M L]
+    [IsScalarTower K M L] [IsGalois M L]
+    (Q : Ideal (𝓞 L)) (𝔓 : Ideal (𝓞 M)) (𝔭 : Ideal (𝓞 K))
+    (hQM : Q.under (𝓞 M) = 𝔓) (hQK : Q.under (𝓞 K) = 𝔭)
+    (hur : ∀ (Q' : Ideal (𝓞 L)) [Q'.IsPrime] [Q'.LiesOver 𝔭], Algebra.IsUnramifiedAt (𝓞 K) Q')
+    (σ : L ≃ₐ[K] L) (hσ : IsArithFrobAt (𝓞 K) σ Q) :
+    ∃ τ : L ≃ₐ[M] L, IsArithFrobAt (𝓞 M) τ Q ∧
+      AlgEquiv.restrictScalars K τ = σ ^ Ideal.inertiaDeg 𝔭 𝔓 :=
+  sorry
+
 /-- **Layer 2.5, the carrier `J^S`.** The fractional ideals with valuation zero at every prime
 of `S`, inside `(FractionalIdeal (𝓞 K)⁰ K)ˣ`. That is the carrier a reciprocity layer uses for
 `J^{𝔪₀}`, which is why it is this type and not a new one. -/
@@ -249,8 +295,11 @@ variable {L : Type*} [Field L] [NumberField L] [Algebra K L] [IsGalois K L]
   (hur : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S →
     ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q)
 
-/-- **Layer 2.5, the value at a prime.** -/
-example (I : idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉ S)
+/-- **Layer 2.5, the value at a prime.** Consumed by name: the global class field theory roadmap
+imports this map rather than building a second one, and recognizes its own construction through
+this equation and the uniqueness below. -/
+theorem artinHomAway_apply_prime (I : idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K))
+    (hv : v ∉ S)
     (hI : ((I : (FractionalIdeal (𝓞 K)⁰ K)ˣ) : FractionalIdeal (𝓞 K)⁰ K) =
       (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K))
     (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal] (σ : L ≃ₐ[K] L)
@@ -260,7 +309,7 @@ example (I : idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉
 
 /-- **Layer 2.5, the values on primes determine the map.** With the generation statement above,
 this is what lets a reciprocity layer recognize its own construction as this one. -/
-example (φ : idealsAway (K := K) S →* (L ≃ₐ[K] L))
+theorem artinHomAway_eq_of_apply_prime (φ : idealsAway (K := K) S →* (L ≃ₐ[K] L))
     (hφ : ∀ (I : idealsAway (K := K) S) (v : HeightOneSpectrum (𝓞 K)), v ∉ S →
       ((I : (FractionalIdeal (𝓞 K)⁰ K)ˣ) : FractionalIdeal (𝓞 K)⁰ K) =
         (v.asIdeal : FractionalIdeal (𝓞 K)⁰ K) →
@@ -273,7 +322,7 @@ example (φ : idealsAway (K := K) S →* (L ≃ₐ[K] L))
 smaller carrier, as homomorphisms on `idealsAway S'`. This is the statement that a reciprocity
 layer needs when it enlarges the excluded set to the support of a modulus, and an inequality of
 carriers is not a substitute for it. -/
-example (S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S')
+theorem artinHomAway_mono (S' : Finset (HeightOneSpectrum (𝓞 K))) (h : S ⊆ S')
     (hur' : ∀ v : HeightOneSpectrum (𝓞 K), v ∉ S' →
       ∀ (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal], Algebra.IsUnramifiedAt (𝓞 K) Q) :
     artinHomAway (L := L) hab S' hur' =
@@ -286,8 +335,8 @@ map of `L/K` to the Artin map of `M/K` on the same carrier. ⚠ There is one exc
 unramified hypothesis: the right-hand side takes the *derived*
 `isUnramifiedAway_of_intermediateField M S hur`, not a second assumption. Its proof also needs
 Layer 2.4, which is what relates a Frobenius of `L/K` to a Frobenius of `M/K`. -/
-example (M : IntermediateField K L) [NumberField M] [Normal K M] [IsGalois K M]
-    (habM : ∀ σ τ : M ≃ₐ[K] M, Commute σ τ) :
+theorem artinHomAway_restrict (M : IntermediateField K L) [NumberField M] [Normal K M]
+    [IsGalois K M] (habM : ∀ σ τ : M ≃ₐ[K] M, Commute σ τ) :
     (AlgEquiv.restrictNormalHom (F := K) M).comp (artinHomAway (L := L) hab S hur) =
       artinHomAway (L := M) habM S (isUnramifiedAway_of_intermediateField M S hur) :=
   sorry
@@ -301,7 +350,7 @@ noncomputable def artinHomAwayIntegral :
 
 /-- **Layer 2.5, the value of the integral Artin homomorphism at a prime.** With the generation
 statement above, this determines it. -/
-example (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉ S)
+theorem artinHomAwayIntegral_apply_prime (v : HeightOneSpectrum (𝓞 K)) (hv : v ∉ S)
     (hmem : v.asIdeal ∈ integralIdealsAway (K := K) S)
     (Q : Ideal (𝓞 L)) [Q.IsPrime] [Q.LiesOver v.asIdeal] (σ : L ≃ₐ[K] L)
     (hσ : IsArithFrobAt (𝓞 K) σ Q) :
@@ -621,7 +670,8 @@ nothing to be about, and `Nonempty (… ≃ …)` does not even do that. -/
 local compactness, which is one of its corollaries. ⚠ Stated once
 `ValuativeRel (v.adicCompletion K)` is available through the `Valued`-compatibility layer;
 the `Valued → ValuativeRel` migration must be a refactor of this instance, not a re-proof. -/
-example (v : HeightOneSpectrum (𝓞 K)) [ValuativeRel (v.adicCompletion K)] :
+theorem isNonarchimedeanLocalField_adicCompletion
+    (v : HeightOneSpectrum (𝓞 K)) [ValuativeRel (v.adicCompletion K)] :
     IsNonarchimedeanLocalField (v.adicCompletion K) :=
   sorry
 
