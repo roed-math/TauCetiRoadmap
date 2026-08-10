@@ -50,9 +50,9 @@ Every milestone below lists its direct prerequisites. Each prerequisite has one 
 - **T**, an existing Tau Ceti declaration in a merged roadmap. The roadmap and the layer are named.
 - **R**, an exact declaration or milestone of a roadmap that is earlier in the merge order. The
   entry names the roadmap and then the declaration or the milestone, so it reads "R Local Fields
-  `tateH`". A subject is never a prerequisite: "the cup product" is not one, `tateCup` is. Two
-  roadmaps supply this one, Local Fields and Quadratic Form Invariants, and every row is in the two
-  contract sections below.
+  `tateH`". A subject is never a prerequisite: "the cup product" is not one, `tateCup` is. Three
+  roadmaps supply this one — Local Fields, Number Field Arithmetic and Quadratic Form Invariants —
+  and every row is in the three contract sections below.
 - **L**, an earlier milestone of this roadmap. The milestone number is given.
 
 No other class is allowed. No milestone here depends on a branch, on an open pull request, on a
@@ -117,17 +117,27 @@ are imported and applied.
 | 5.2, where the Herbrand quotient is read; 5.4 step 2, the Sylow reduction | 6 | `tatePeriodicity`, `eq_zero_of_tateRes_sylow_eq_zero` | `Ĥ^r ≅ Ĥ^{r+2}` for cyclic `G`, which is what makes the Herbrand quotient well defined; and a `p`-primary class killed by restriction to a Sylow `p`-subgroup is zero |
 | 5.5, the knot group | 6 | `tateHNegEquivGroupHomology`, `tateHNegThreeEquivSchurMultiplier` | `Ĥ^{−n−1}(G, M) ≅ H_n(G, M)` for `n ≥ 1`, and the case `Ĥ^{−3}(G, ℤ) ≅ H₂(G, ℤ)`, the Schur multiplier, that Tate's description of the knot group is stated in |
 
-## The quadratic Hilbert symbol, from the Quadratic Form Invariants roadmap
+## What this roadmap consumes from the Quadratic Form Invariants roadmap
 
-Milestone 11.4 multiplies local symbols over every place of `K`. The nonarchimedean factors belong
-to the Quadratic Form Invariants roadmap, which defines the symbol over an arbitrary nonarchimedean
-local field by the norm equation and proves bimultiplicativity and nondegeneracy there. The
-archimedean factors are 2C.8 and are owned here. This roadmap defines no second symbol, and it
-states no `n`-th symbol with roots-of-unity hypotheses.
+Two milestones read that roadmap. 11.4 multiplies local Hilbert symbols over every place of `K`,
+and 11.5 to 11.8 build the **global** Hasse–Minkowski theorem on its **local** theory of quadratic
+forms. The nonarchimedean symbol is defined there, over an arbitrary nonarchimedean local field,
+by the norm equation, with bimultiplicativity and nondegeneracy; the archimedean factors are 2C.8
+and are owned here. This roadmap defines no second symbol, no second local classification, and no
+`n`-th symbol with roots-of-unity hypotheses.
+
+⚠ The direction of the boundary is the point. That roadmap stops at a nonarchimedean local field;
+this one owns the passage from every completion to `K`, because that passage consumes weak
+approximation, the Hasse norm theorem and Hilbert reciprocity, all built here.
 
 | Global CFT consumer | Quadratic Form Invariants supplier | Declaration | Type/normalization |
 |---|---|---|---|
 | 11.4 at the finite places, and W10 at `v = 2` | 6C | `hilbertSymbol` | `(·,·)_F : Fˣ × Fˣ → {±1}` over a nonarchimedean local field, `1` exactly when the norm equation `a x² + b y² = 1` is solvable in `F`, bimultiplicative and nondegenerate |
+| 11.6, the finiteness of the exceptional set `T` | 6C | `hilbertSymbol_unramified`, `localHasse`, `hasseInvariant_eq_localHasse` | the symbol of two units at odd residue characteristic is `1`, so a unit-entry form there has trivial Hasse invariant |
+| 11.6, cases 1 and 4; 11.5's comparison lemmas | 6D | `6D: the classification` with its isotropy list, and the plain discriminant of Layer 3 | two regular forms over a nonarchimedean local field are isometric exactly when `(dim, d, s)` agree, with isotropy decided rank by rank — which is what makes a unit-entry form of rank at least `3` isotropic at a good place |
+| 11.6, case 3; 11.7's scalar case | 0 | `0: the representation criterion` | for regular `Q` and `a : Kˣ`, `a` is represented by `Q` exactly when `Q ⊥ ⟨−a⟩` is isotropic. This is O'Meara 42:11, and it is what both 42:12 and the reduction of 11.7 to 11.6 run through |
+| 11.6, case 3; 11.7's induction; 11.8's last step | 1 | `1: hyperbolic planes`, `1: Witt cancellation`, `1: Witt's extension theorem` | a regular binary form of discriminant `−1` is a hyperbolic plane; and cancellation, which is what turns a representation between regular forms of equal dimension into an isometry |
+| 11.6, the openness of `(K_vˣ)²` at a dyadic place | 6A | `6A: the local-field substrate`, which consumes `unitFiltration_le_range_powMonoidHom_two` at the threshold `2e + 1` | the local square theorem in the sharp form. ⚠ Read through that roadmap's 6A rather than reaching past it to Local Fields; and ⚠ the supplied declaration carries `[Algebra ℚ₂ K]`, so the odd-residue case `U(K_v, 1) ⊆ (K_vˣ)²` is Hensel and **not** an instance of it |
 
 ## The contract with the Multiquadratic roadmap
 
@@ -1895,12 +1905,12 @@ The route is **four cases**, and the case division is part of the milestone.
    - **continuity of `Q_v` on `U_v`**, which is a polynomial map of the coordinates after base
      change. Internal to this milestone;
    - **openness of `(K_vˣ)²`**. Internal to this milestone, and it has two cases. At odd residue
-     characteristic `U(K_v, 1) ⊆ (K_vˣ)²` by Hensel; at a dyadic place it is the consumed
-     `unitFiltration_le_range_powMonoidHom_two`, at the threshold `2e + 1` of
-     `absoluteRamificationIndex`. In both, openness follows because the unit filtration is a
-     neighbourhood basis of `1`. At a real place the square subgroup is `ℝ_{>0}`. ⚠ The consumed
-     Local Fields declaration carries the hypothesis `[Algebra ℚ₂ K]`, so the odd-residue case is
-     **not** an instance of it and is proved separately;
+     characteristic `U(K_v, 1) ⊆ (K_vˣ)²` by Hensel; at a dyadic place it is the local square
+     theorem at the threshold `2e + 1`, read through Quadratic Form Invariants 6A rather than
+     past it. In both, openness follows because the unit filtration is a neighbourhood basis of
+     `1`. At a real place the square subgroup is `ℝ_{>0}`. ⚠ The supplied dyadic declaration
+     carries the hypothesis `[Algebra ℚ₂ K]`, so the odd-residue case is **not** an instance of
+     it and is proved separately;
    - **stability of represented values under squares**, `Q(c x) = c² Q(x)`, which is what turns
      `β/β_v ∈ (K_vˣ)²` into a representation of `−β` by `W_v`.
 
@@ -1924,9 +1934,8 @@ nothing to approximate at.
 Invariants `hilbertSymbol`, R Quadratic Form Invariants `hilbertSymbol_unramified`,
 R Quadratic Form Invariants `localHasse`, R Quadratic Form Invariants `6D: the classification`
 with its isotropy list, R Quadratic Form Invariants `0: the representation criterion`,
-R Quadratic Form Invariants `1: hyperbolic planes`, R Local Fields
-`unitFiltration_le_range_powMonoidHom_two`, R Local Fields `absoluteRamificationIndex`;
-M `QuadraticForm`, M `Hensel's lemma`.
+R Quadratic Form Invariants `1: hyperbolic planes`, R Quadratic Form Invariants
+`6A: the local-field substrate`; M `QuadraticForm`, M `Hensel's lemma`.
 
 Three ingredients of the route are internal to this milestone, and are listed rather than left
 implicit: O'Meara 42:12 for the quaternary subcase, continuity of a base-changed form on the
