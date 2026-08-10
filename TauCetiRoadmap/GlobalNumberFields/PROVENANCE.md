@@ -33,6 +33,12 @@ The Number Field Arithmetic contracts were checked against local branch revision
 prime-to ideal group to that branch's `idealsAway` carrier instead of retaining the source
 roadmap's duplicate `idealsPrimeTo` definition.
 
+The extraction preserves the reviewed exact API names whose carriers remain owned here:
+`primeToSubgroup`, `unitsCongruenceSubgroup`, `idealClass_eq_one_iff`, `finiteUnitsMap`, and
+`ratModulus`. The first is a subgroup of `Kˣ`, distinct from the supplier-owned prime-to *ideal*
+group; the second records the global-unit obstruction in the ray-class exact sequence. Their
+earlier omission from `Suggested.lean` was compression loss, not an ownership change.
+
 ## Corrections made during extraction
 
 The extraction changes several source-level choices.

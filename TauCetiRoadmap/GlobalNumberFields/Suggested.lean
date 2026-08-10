@@ -83,6 +83,20 @@ def congruenceSubgroup (𝔪 : Modulus K) : Subgroup Kˣ where
   one_mem' := by sorry
   inv_mem' := by sorry
 
+/-- Elements of `Kˣ` that are units at every finite place dividing the modulus. This is the
+domain of reduction to residue units; it is not merely a predicate hidden inside that map. -/
+def primeToSubgroup (m : Modulus K) : Subgroup Kˣ where
+  carrier := {x | ∀ v : HeightOneSpectrum (𝓞 K), v.asIdeal ∣ m.finitePart →
+    v.valuation K (x : K) = 1}
+  mul_mem' := by sorry
+  one_mem' := by sorry
+  inv_mem' := by sorry
+
+/-- Units of the ring of integers congruent to one modulo the finite and real parts of the
+modulus. Its index is the unit correction in the ray-class number formula. -/
+def unitsCongruenceSubgroup (m : Modulus K) : Subgroup (𝓞 K)ˣ :=
+  (congruenceSubgroup m).comap (Units.map (algebraMap (𝓞 K) K).toMonoidHom)
+
 /-- **Single ownership of the prime-to ideal group.** -/
 noncomputable abbrev idealsPrimeTo (𝔪 : Modulus K) :=
   TauCetiRoadmap.NumberFieldArithmetic.idealsAway (K := K) 𝔪.support
@@ -119,6 +133,26 @@ theorem classMap_idealClass {𝔪 𝔫 : Modulus K} (h : 𝔪 ∣ 𝔫) {I : Ide
 
 theorem classMap_surjective {𝔪 𝔫 : Modulus K} (h : 𝔪 ∣ 𝔫) :
     Function.Surjective (classMap h) := sorry
+
+/-- The canonical ideal-class map kills exactly the ray-principal ideals. Keeping the
+triviality criterion named prevents consumers from replacing factorization through the ray
+class group by an unstructured hypothesis on an ideal weight. -/
+theorem idealClass_eq_one_iff (m : Modulus K) {I : Ideal (𝓞 K)}
+    (hI : m.IsCoprimeTo I) :
+    idealClass m I = 1 ↔
+      ∃ a b : 𝓞 K, a ≠ 0 ∧ b ≠ 0 ∧ a - 1 ∈ m.finitePart ∧ b - 1 ∈ m.finitePart ∧
+        (∀ w ∈ m.infinitePart,
+          0 < InfinitePlace.embedding_of_isReal w.2 (algebraMap (𝓞 K) K a)) ∧
+        (∀ w ∈ m.infinitePart,
+          0 < InfinitePlace.embedding_of_isReal w.2 (algebraMap (𝓞 K) K b)) ∧
+        I * Ideal.span {b} = Ideal.span {a} := sorry
+
+/-- Reduction on residue-field units along divisibility of moduli. The direction is from the
+larger modulus to the smaller one, matching `classMap`; this is a units pullback and not a
+ring-level inverse. -/
+noncomputable def finiteUnitsMap {m n : Modulus K} (h : m ∣ n) :
+    ((𝓞 K) ⧸ n.finitePart)ˣ →* ((𝓞 K) ⧸ m.finitePart)ˣ :=
+  Units.map (Ideal.Quotient.factor (Ideal.le_of_dvd h.1)).toMonoidHom
 
 /-! ## Layer 3: ray-class counting -/
 
@@ -240,6 +274,16 @@ theorem HeckeCharacter.shift_ofRayClassCharacter {𝔪 : Modulus K} (η : RayCla
     (HeckeCharacter.ofRayClassCharacter η).shift = 0 := sorry
 
 /-! ## Layer 10: infinity types -/
+
+open scoped Classical in
+/-- The modulus `(n)·∞` over `ℚ`, used by the ray-class/Dirichlet-character and
+cyclotomic carrier comparisons. Including the real place is essential: omitting it quotients
+the finite residue-unit group by the sign of `-1`. -/
+noncomputable def ratModulus (n : ℕ)
+    (h : (Ideal.span {(n : 𝓞 ℚ)} : Ideal (𝓞 ℚ)) ≠ ⊥) : Modulus ℚ where
+  finitePart := Ideal.span {(n : 𝓞 ℚ)}
+  finitePart_ne_bot := h
+  infinitePart := Finset.univ
 
 /-- The integer exponents of an algebraic infinity type, indexed by embeddings into `ℂ`. -/
 structure InfinityType (K : Type u) [Field K] [NumberField K] where
