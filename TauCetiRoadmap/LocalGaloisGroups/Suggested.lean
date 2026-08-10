@@ -24,7 +24,8 @@ namespace TauCetiRoadmap.LocalGaloisGroups
 
 universe u
 
-open scoped Classical
+open ValuativeRel
+open scoped Classical TauCetiRoadmap.ProfiniteProPGroups
 
 /-! ## Layer 0: arithmetic carriers -/
 
