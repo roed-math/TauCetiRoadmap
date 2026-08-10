@@ -13,6 +13,7 @@ If you want to write or review a roadmap, start with [CONTRIBUTING.md](CONTRIBUT
 
 ## Roadmaps
 
+- [Arithmetic Dirichlet series and Tauberian methods](TauCetiRoadmap/ArithmeticDirichletSeries/README.md)
 - [Chebotarev density theorem](TauCetiRoadmap/Chebotarev/README.md)
 - [Combinatorial Heegaard Floer and grid homology](TauCetiRoadmap/CombinatorialHeegaardFloer/README.md)
 - [Conformal mapping and the geometric theory of holomorphic functions](TauCetiRoadmap/ConformalMapping/README.md)
