@@ -252,22 +252,33 @@ the re-check notes are in [`PROVENANCE.md`](PROVENANCE.md).
   square-class calculus and orthogonal bases; its Layer 1 hyperbolic planes, Witt decomposition,
   Witt cancellation, **Witt's extension theorem**, **reflections** with the formula pinned above,
   and **Cartan–Dieudonné**, that every isometry of a regular `n`-dimensional space is a product of
-  at most `n` reflections; its Layer 3 `discr` and `signedDiscr`; its Layer 6 Hilbert symbol and
-  the classification of forms over a finite extension of `ℚ_p` by `(dim, d, s)`, which is what
-  makes the local spinor-norm images of Layer 2 computable. Its standing `[Invertible (2 : K)]`
-  is this roadmap's too.
+  at most `n` reflections; its Layer 3 `discr` and `signedDiscr`; its 6C `hilbertSymbol`,
+  `localHasse` and `hasseInvariant_eq_localHasse`, and its 6D classification of forms over a finite
+  extension of `ℚ_p` by `(dim, d, s)`, which is what makes the local spinor-norm images of Layer 2
+  computable. Its standing `[Invertible (2 : K)]` is this roadmap's too.
+
+  ⚠ That roadmap is **local**: it stops at forms over a nonarchimedean local field. The
+  Hasse–Minkowski principle that Layer 5H needs is global and is not among its milestones; the
+  supplier table records that row as unowned rather than pointing it at Layer 6.
 - **The [local fields roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/2)**, for the local
   structure Layer 2 needs: local compactness of a nonarchimedean local field with `𝒪[K]` compact
-  open and `Kˣ` locally compact (its Layer 0), and the power-class cardinality formula of its
-  Layer 1, whose `n = 2` case gives finiteness of `Kˣ/(Kˣ)²`. That roadmap does not state
-  openness of `(Kˣ)²` on its own, and openness is what makes the square-class group discrete and
-  hence the spinor norm continuous; its Layer 1 instance `U(K, 2e+1) ⊆ (Kˣ)²` supplies it, since
-  the unit filtration is open, and Layer 2 below cites it in that form.
+  open and `Kˣ` locally compact (its Layer 0), and its `square_eq_range_powMonoidHom` with the
+  square-class counts `card_squareClasses_of_isUnit` and `card_squareClasses_dyadic`, which give
+  finiteness of `Kˣ/(Kˣ)²`. That roadmap does not state openness of `(Kˣ)²` on its own, and
+  openness is what makes the square-class group discrete and hence the spinor norm continuous;
+  `unitFiltration_le_range_powMonoidHom_two`, which is `U(K, 2e+1) ⊆ (Kˣ)²` at the `e` of
+  `absoluteRamificationIndex`, supplies it since the unit filtration is open, and Layer 2 below
+  cites it in that form. Its companion `not_unitFiltration_le_range_powMonoidHom_two` is the
+  sharpness, and is what stops the bound being read one step too far.
 - **The [global class field theory
-  roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/6)**, for one theorem: its Layer 11
-  Hilbert reciprocity `∏_v (a,b)_v = 1`. Layer 5's passage from the local spinor-norm quotients to
-  the global one is exactly a reciprocity statement, and it is consumed from there rather than
-  reproved. This is the same theorem the integral lattices roadmap consumes.
+  roadmap](https://github.com/roed-math/TauCetiRoadmap/pull/6)**, for two declarations. Its 11.4
+  `hilbertProductFormula`, Hilbert reciprocity `∏_v (a,b)_v = 1`: Layer 5's passage from the local
+  spinor-norm quotients to the global one is exactly a reciprocity statement, and it is consumed
+  from there rather than reproved. This is the same theorem, under the same name, that the integral
+  lattices roadmap consumes. And its 2A.3 `denseRange_algebraMap_finiteAdeleRing`, additive strong
+  approximation, which Layer 4B reduces adelic approximation to. ⚠ The second is **not** that
+  roadmap's Layer 0 weak approximation, which an earlier revision of this document cited; its own
+  note says strong approximation is a different statement.
 - **`TauCeti/FieldTheory/SquareClassGroup.lean`** (landed): `TauCeti.SquareClassGroup K`, the
   **additive** avatar `Additive Kˣ ⧸ (Subgroup.square Kˣ).toAddSubgroup` as a `ZMod 2`-vector
   space, with `squareClass` and its characterizations. ⚠ The spinor norm is multiplicative, so its
@@ -296,6 +307,12 @@ the re-check notes are in [`PROVENANCE.md`](PROVENANCE.md).
 
 Each row is a theorem or interface consumed by name, not a whole roadmap.
 
+Where the supplier has fixed a Lean name at its current head, the **Consumed** column gives that
+name and the row is an exact contract. Where the supplier has fixed a milestone but no name, the
+row gives the milestone in the supplier's own citation form, and any provisional name both
+roadmaps use is marked with an asterisk. A subject is never a row: "Hilbert reciprocity" is not
+one, `hilbertProductFormula` is.
+
 | Consumed | From | Used by |
 | --- | --- | --- |
 | `orthogonalGroup Q`, `specialOrthogonalGroup Q`, the matrix comparison | Spin Representations, Layer 2 | Layers 0 to 5 |
@@ -306,17 +323,18 @@ Each row is a theorem or interface consumed by name, not a whole roadmap.
 | Cartan–Dieudonné | Quadratic Form Invariants, Layer 1 | Layer 1 (well-definedness of `θ`) |
 | Witt cancellation and Witt's extension theorem | Quadratic Form Invariants, Layer 1 | Layers 0, 2 |
 | orthogonal bases over a field with `2` invertible | Quadratic Form Invariants, Layer 0 | Layers 0, 1 |
-| the square-class group and its calculus | Quadratic Form Invariants, Layer 0 | Layers 1, 2, 5 |
-| the classification over `ℚ_p` by `(dim, d, s)`, with the Hilbert symbol | Quadratic Form Invariants, Layers 3, 6 | Layer 2 |
-| local compactness, `𝒪[K]` compact open, `U(K, 2e+1) ⊆ (Kˣ)²` | Local Fields, Layers 0, 1 | Layers 2, 3 |
-| Hilbert reciprocity `∏_v (a,b)_v = 1` over ℚ | Global Class Field Theory, Layer 11 | Layer 5H |
+| the landed `TauCeti.SquareClassGroup` with `TauCeti.squareClass_eq_zero_iff`, and the multiplicative avatar `Kˣ ⧸ Subgroup.square Kˣ` with its `ZMod 2`-module dictionary, pushforward and finiteness transfer, from the milestone `0: square-class interop`; and the Kummer comparison `kummerSquareClassEquiv` with `kummerSquareClassEquiv_kummerClass`. ⚠ `SquareClassGroup` is landed Tau Ceti code, not a target of that roadmap; what it supplies is the interop | Quadratic Form Invariants, Layer 0 | Layers 1, 2, 5 |
+| the Hilbert symbol `hilbertSymbol`, with `hilbertSymbol_comm`, `hilbertSymbol_mul`, `hilbertSymbol_unramified` and `exists_hilbertSymbol_eq_neg_one`; the local Hasse invariant `localHasse` with `hasseInvariant_eq_localHasse`; the plain discriminant of Layer 3; and, as a milestone, `6D: the classification` — two regular forms over a nonarchimedean local field are isometric exactly when `(dim, d, s)` agree | Quadratic Form Invariants, Layers 3, 6C, 6D | Layer 2 |
+| `normalizedValuation` with `normalizedValuation_surjective` and `normalizedValuation_eq_one_iff`; `unitFiltration` with `unitFiltration_antitone` and `iInf_unitFiltration`; the square subgroup `square_eq_range_powMonoidHom` with the square-class counts `card_squareClasses_of_isUnit` and `card_squareClasses_dyadic`; and the deep-squares pair `unitFiltration_le_range_powMonoidHom_two` and `not_unitFiltration_le_range_powMonoidHom_two`, which is `U(K,2e+1) ⊆ (Kˣ)²` **with its sharpness**; plus `absoluteRamificationIndex` for the `e` in that bound. ⚠ The bound is indexed by the prime, because "the absolute ramification index" is not a number attached to `K` alone | Local Fields, Layers 0, 1 | Layers 2, 3 |
+| local compactness of `K` and compact-openness of `𝒪[K]`, as `Layer 0: the valuation ring and its topology` | Local Fields, Layer 0 | Layers 2, 3 |
+| `hilbertProductFormula`\*, Hilbert reciprocity `∏_v (a,b)_v = 1` over ℚ, with the finite symbols from the consumed `hilbertSymbol` and the real one from that roadmap's 2C.8 | Global Class Field Theory, 11.4 | Layer 5H |
 | the functor of points of an affine group scheme, and morphisms of such | Reductive Groups, Layer 0 | Layer 3A |
 | smoothness, connectedness, semisimplicity, simple connectedness, central isogenies | Reductive Groups, Layers 3, 6 | Layer 3A |
 | the decomposition of a semisimple group into `K`-almost-simple factors | Reductive Groups, Layer 7 | Layers 3A, 4D |
 | finite-dimensionality of `CliffordAlgebra Q`, that is `dim = 2^n` | Spin Representations, Layer 0 | Layer 2A |
 | the multiplicative square-class avatar `Kˣ ⧸ Subgroup.square Kˣ` and its additive comparison | Quadratic Form Invariants, Layer 0 | Layers 1D, 2F, 3F |
-| the Hasse principle over ℚ: locally isometric forms of equal dimension are isometric | Quadratic Form Invariants, Layer 6 | Layer 5H (`Ш¹(ℚ, SO_Q) = 1`) |
-| strong approximation for the additive group `𝔸` relative to ℚ | Global Class Field Theory, Layer 0 | Layer 4B |
+| the Hasse–Minkowski principle over ℚ: locally isometric forms of equal dimension are isometric. ⚠ **No supplier owns this.** The Quadratic Form Invariants roadmap stops at forms over a nonarchimedean local field, and its Layer 6D classification is local; Hasse–Minkowski is global and appears nowhere in it, nor in Global Class Field Theory. Layer 5H needs it, so either that roadmap takes it as a milestone or this one does, and until it is placed the row is an **open prerequisite** and not a contract | *unowned* | Layer 5H (`Ш¹(ℚ, SO_Q) = 1`) |
+| `denseRange_algebraMap_finiteAdeleRing`, additive strong approximation: `K` is dense in its **finite** adeles. ⚠ Not the weak approximation of that roadmap's 0.2, whose own note says strong approximation is a different statement, and not the discreteness of `K` in the full adele ring, where no density statement can hold | Global Class Field Theory, 2A.3 | Layer 4B |
 
 ## What is missing (build here)
 
@@ -546,9 +564,13 @@ two:
 
 **Direct prerequisites.** Mathlib: `Padic` with its `ProperSpace` instance, the matrix and
 endomorphism topology instances, `Module.End`. Spin Representations Layer 0:
-finite-dimensionality of `CliffordAlgebra Q`. Quadratic Form Invariants Layers 3 and 6: the
-classification over `ℚ_p` by `(dim, d, s)`. Local Fields Layer 0: local compactness and `𝒪[K]`
-compact open; Layer 1: `U(K, 2e+1) ⊆ (Kˣ)²`. Internal: 0B, 0C, 0D, 1A, 1C, 1D, 1E.
+finite-dimensionality of `CliffordAlgebra Q`. Quadratic Form Invariants Layer 3, the plain
+discriminant, and Layers 6C and 6D: `hilbertSymbol`, `localHasse`, `hasseInvariant_eq_localHasse`,
+and the classification over `ℚ_p` by `(dim, d, s)`. Local Fields Layer 0: local compactness and `𝒪[K]`
+compact open; Layer 1: `square_eq_range_powMonoidHom`, `card_squareClasses_of_isUnit`,
+`card_squareClasses_dyadic`, and the deep-squares pair `unitFiltration_le_range_powMonoidHom_two`
+with `not_unitFiltration_le_range_powMonoidHom_two`, which is `U(K, 2e+1) ⊆ (Kˣ)²` together with
+its sharpness, at the `e` of `absoluteRamificationIndex`. Internal: 0B, 0C, 0D, 1A, 1C, 1D, 1E.
 
 `K` is `ℝ` or `ℚ_p` throughout, and each statement is proved uniformly in the local field where
 the proof is uniform, so that a later development over a general local field can reuse it.
@@ -830,8 +852,8 @@ consume this one.
 **Direct prerequisites.** Internal: 2C for the transvections and their Spin lifts, 2D for
 noncompactness, 3A items 5 to 7 for semisimplicity and the factor decomposition, 3D for `𝔸^S`,
 3E for the diagonal maps, 3F for the adelic spinor kernel, 3H for reduction theory, 1F for
-dimension four. External: strong approximation for the additive group `𝔸` relative to ℚ, the
-Kneser–Tits generation input named in 4A, and the two literature inputs named in 4C.
+dimension four. External: `denseRange_algebraMap_finiteAdeleRing` of global class field theory
+2A.3, the Kneser–Tits generation input named in 4A, and the two literature inputs named in 4C.
 
 ⚠ This is a **noncompact-place** theorem, not literally an indefinite one: the hypothesis is that
 each `ℚ`-almost-simple factor of `Spin(V)` is noncompact at some place of `S`, which a positive
@@ -868,8 +890,12 @@ statements, in order:
    `H` are the ones 4A generates with.
 2. **Density of the adelic transvection subgroups.** The subgroup of `Spin(V)(𝔸^S)` generated by
    the adelic points of the transvection subgroups of 2C is dense, which reduces approximation to
-   strong approximation for the additive group `𝔸` relative to ℚ, consumed by name from the global
-   class field theory roadmap rather than gestured at.
+   `denseRange_algebraMap_finiteAdeleRing`, additive strong approximation for `𝔸` relative to `ℚ`,
+   consumed by name from global class field theory 2A.3. ⚠ That declaration says `ℚ` is dense in
+   the **finite** adeles. It is not that roadmap's weak approximation, 0.2, whose own note records
+   that strong approximation is a different statement, and it is not the discreteness of `ℚ` in the
+   full adele ring, where no density statement can hold. An earlier revision of the supplier table
+   cited Layer 0 for this, which was the wrong milestone.
 3. **The rank-one base case.** `dim V = 3` with `V` isotropic, where `Spin(V) ≅ SL₂` over ℚ by 1F,
    and strong approximation for `SL₂` is the classical statement.
 4. **The induction step.** Approximating in `Spin(H ⊥ V₀)` from approximation in the transvection
@@ -975,8 +1001,8 @@ genera exist.
 `QuotientMeasureEqMeasurePreimage`, `covolume`. Internal: 3A for the group schemes and their
 invariant differentials, 3D for the full adelic points, 3E for discreteness of the rational
 points in `G(𝔸)`, 3H for finiteness of the covolume, 2F and 3F for the local and adelic spinor
-norms. External: Hilbert reciprocity from Global Class Field Theory Layer 11, and the product
-formula. **Not** Layer 4.
+norms. External: `hilbertProductFormula` of global class field theory 11.4, and the product
+formula. ⚠ The Hasse principle that 5H's `Ш¹ = 1` **is** has no supplier; see 5H. **Not** Layer 4.
 
 ⚠ This layer is independent of Layer 4. Strong approximation is a noncompact-place statement about
 `Spin` used for class numbers; the volume theorem has no isotropy hypothesis and is what the mass
@@ -1098,7 +1124,15 @@ For `G = SO_Q` with `dim V ≥ 3` the two terms are computed separately, and eac
 - `Ш¹(ℚ, SO_Q) = 1`, of order **1**. ⚠ This is not a formality: it is exactly the Hasse principle
   for quadratic forms, that two forms of the same dimension over ℚ which are isometric over every
   `ℚ_v` are isometric over ℚ, since `H¹(k, SO_Q)` classifies forms of the same dimension and
-  discriminant. It is consumed from the quadratic form invariants roadmap and not reproved.
+  discriminant.
+
+  ⚠ **It has no supplier.** The quadratic form invariants roadmap stops at forms over a
+  nonarchimedean local field: its Layer 6D classification is local, and Hasse–Minkowski appears
+  nowhere in it, nor in global class field theory. An earlier revision of the supplier table
+  cited "Quadratic Form Invariants, Layer 6" for it, which is the local classification and a
+  different theorem. Until the statement is placed — in that roadmap, which is its natural home,
+  or here — this is an **open prerequisite** of 5H, and the supplier table says so rather than
+  naming an owner that does not own it.
 
 Beside those, the local and global square-class bookkeeping the comparison runs on, displayed
 rather than described: the exact sequence of pointed sets
@@ -1107,7 +1141,8 @@ rather than described: the exact sequence of pointed sets
 
 together with its local analogue at every place, the compatibility of the two under the
 restriction maps of 2H, and the theorem that the image of `∏_v` on square classes is cut out by
-Hilbert reciprocity `∏_v (a,b)_v = 1`, consumed from the global class field theory roadmap. The
+`hilbertProductFormula`, Hilbert reciprocity `∏_v (a,b)_v = 1`, consumed by name from global class
+field theory 11.4. The
 connecting map `θ` in that sequence is the spinor norm of Layer 1D, which is what ties this layer
 to the rest of the roadmap.
 
