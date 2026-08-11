@@ -85,10 +85,12 @@ portfolio interfaces consumed after the PR restructuring.
   classification criteria. Open as of today: the correspondence is not yet onto
   (`subgroupQuotientProj` not known to be a covering map), and `Deck ≅ N(H)/H` is
   unproved. Layer 6.3 here cites the milestone, and Layer 6.2's associated cover
-  `(Ũ × S)/π₁` supplies the constructive direction independently — it needs only the
-  universal cover and free proper discontinuity, both of which that roadmap has, and takes
-  the covering property from Mathlib's `IsQuotientCoveringMap`. So nothing here waits on
-  those two gaps.
+  `(Ũ × S)/π₁` supplies the constructive direction independently. It consumes the universal
+  cover and free proper discontinuity, but Mathlib's `IsQuotientCoveringMap` proves only that
+  `Ũ × S → (Ũ × S)/π₁` is a covering. The required projection `(Ũ × S)/π₁ → X` is a
+  different map; Layer 6.2 must establish its covering property by an equivariant sheet
+  computation. Thus this roadmap does not wait on the two UniversalCovers gaps, but it does
+  retain that additional proof obligation of its own.
 - **ConformalMapping** (merged): `TauCeti.exists_localDegree` and the branch-root API are
   delivered. Its L0–L3 are declared temporary shims to be deleted when mathlib4#33505
   lands; Layer 8.2's consumption of L0 inherits that refactor obligation, which is a
