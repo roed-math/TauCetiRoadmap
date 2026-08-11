@@ -3,6 +3,7 @@
 Supporting material for [`README.md`](README.md), which is the specification. Nothing here is
 a completion criterion. This file records where the roadmap came from, which sibling interfaces
 it consumes, and which source checks changed the mathematical statement.
+This file is explicitly non-normative: no roadmap milestone or dependency depends on it.
 
 The roadmap was mechanically renamed from `LFunctionZeros` to `ZerosOfLFunctions` and then
 refactored from source commit `21e58a4bcba71584e143aa37f8abdb4ac46a4262` on
