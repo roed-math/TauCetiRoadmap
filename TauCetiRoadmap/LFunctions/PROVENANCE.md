@@ -3,6 +3,7 @@
 This file supports [`README.md`](README.md), which is the normative roadmap. Everything here is
 dated context: source revisions, nearby formalizations, licensing, and corrections learned while
 the roadmap was developed.
+This file is explicitly non-normative: no roadmap milestone or dependency depends on it.
 
 ## Source revision and retained history
 
