@@ -19,8 +19,10 @@ universe u
 
 variable (K : Type u) [Field K] [NumberField K]
 
-/-- Layer 0: a multiplicative arithmetic function on ideals. The zero-ideal law is data, not a
-consequence of multiplicativity. -/
+/-- Layer 0: a completely multiplicative degree-one character-like function on ideals. The
+zero-ideal law is data, not a consequence of multiplicativity. This is not a carrier for an
+arbitrary Euler product: higher-dimensional Artin coefficients require independent prime-power
+local data. -/
 structure IdealWeight where
   toFun : Ideal (𝓞 K) → ℂ
   bad : Set (HeightOneSpectrum (𝓞 K))
