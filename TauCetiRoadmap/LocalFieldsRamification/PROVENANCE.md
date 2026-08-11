@@ -2,6 +2,7 @@
 
 This dated file records the sources and portfolio migration behind the normative roadmap in
 [`README.md`](README.md). It is not itself a prerequisite list.
+It is explicitly non-normative: no roadmap milestone or dependency depends on it.
 
 ## Portfolio source and extraction boundary
 
