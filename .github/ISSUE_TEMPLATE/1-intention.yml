@@ -18,19 +18,31 @@ body:
       label: Roadmap area
       description: Which roadmap does this intention sit in?
       options:
+        - AdelicAlgebraicGroups
+        - ArithmeticDirichletSeries
+        - ClassFieldTheory
         - CombinatorialHeegaardFloer
         - ConformalMapping
         - ContourIntegration
         - Exchangeability
         - GeometricTopology
+        - GlobalNumberFields
+        - GlobalQuadraticForms
         - HeegaardFloer
+        - IntegralLattices
         - JacobianChallenge
+        - LFunctions
+        - LocalFieldsRamification
         - ModularForms
         - Multiquadratic
+        - NumberFieldArithmetic
         - OneParameterSemigroups
         - OptimalTransport
         - OrthogonalL2Bases
+        - OrthogonalSpinGroups
         - PDE
+        - ProfiniteCohomology
+        - QuadraticFormInvariants
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers

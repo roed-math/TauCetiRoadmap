@@ -14,6 +14,7 @@ import TauCetiRoadmap.RepresentationTheory.CompactGroups.Suggested
 import TauCetiRoadmap.RepresentationTheory.LieGroups.Suggested
 import TauCetiRoadmap.RepresentationTheory.SpinRepresentations.Suggested
 import TauCetiRoadmap.RepresentationTheory.QuiverRepresentations.Suggested
+import TauCetiRoadmap.GlobalQuadraticForms.Suggested
 import TauCetiRoadmap.Multiquadratic.Suggested
 import TauCetiRoadmap.UniversalCovers.Suggested
 import TauCetiRoadmap.JacobianChallenge.Suggested
@@ -22,8 +23,19 @@ import TauCetiRoadmap.PDE.Suggested
 import TauCetiRoadmap.CombinatorialHeegaardFloer.Suggested
 import TauCetiRoadmap.HeegaardFloer.Suggested
 import TauCetiRoadmap.GeometricTopology.Suggested
+import TauCetiRoadmap.GlobalNumberFields.Suggested
 import TauCetiRoadmap.Exchangeability.Suggested
 import TauCetiRoadmap.ContourIntegration.Suggested
 import TauCetiRoadmap.ConformalMapping.Suggested
 import TauCetiRoadmap.OrthogonalL2Bases.Suggested
+import TauCetiRoadmap.OrthogonalSpinGroups.Suggested
 import TauCetiRoadmap.OptimalTransport.Suggested
+import TauCetiRoadmap.AdelicAlgebraicGroups.Suggested
+import TauCetiRoadmap.ProfiniteCohomology.Suggested
+import TauCetiRoadmap.ArithmeticDirichletSeries.Suggested
+import TauCetiRoadmap.ClassFieldTheory.Suggested
+import TauCetiRoadmap.IntegralLattices.Suggested
+import TauCetiRoadmap.LFunctions.Suggested
+import TauCetiRoadmap.LocalFieldsRamification.Suggested
+import TauCetiRoadmap.NumberFieldArithmetic.Suggested
+import TauCetiRoadmap.QuadraticFormInvariants.Suggested
