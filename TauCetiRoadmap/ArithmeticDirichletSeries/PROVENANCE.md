@@ -21,6 +21,9 @@ file records only the rows that land in this roadmap.
 
 - `IdealWeight.eq_zero_bot` is mandatory. The constant-one function is the counterexample to the
   weaker carrier.
+- `IdealWeight.map_mul` makes this a completely multiplicative degree-one carrier. It cannot carry
+  a general Artin Euler product: for the two-dimensional trivial representation `(1-T)⁻²` has
+  coefficients `a(𝔭)=2` and `a(𝔭²)=3`, not `a(𝔭)²=4`.
 - The public prime type is `HeightOneSpectrum (𝓞 K)`, so primality and nonzeroness are carried by
   the type.
 - Dirichlet density is the ratio to the all-prime prime sum. Equivalence with logarithmic
