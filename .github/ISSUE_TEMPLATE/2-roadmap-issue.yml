@@ -14,6 +14,8 @@ body:
     attributes:
       label: Roadmap area
       options:
+        - AlgebraicCurves
+        - BelyiMaps
         - CombinatorialHeegaardFloer
         - ConformalMapping
         - ContourIntegration
@@ -23,10 +25,14 @@ body:
         - JacobianChallenge
         - ModularForms
         - Multiquadratic
+        - NumberFieldArithmetic
         - OneParameterSemigroups
         - OptimalTransport
         - OrthogonalL2Bases
         - PDE
+        - PolynomialGaloisGroups
+        - ProfiniteCohomology
+        - ProfiniteProPGroups
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers

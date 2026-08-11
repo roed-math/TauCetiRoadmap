@@ -18,6 +18,8 @@ body:
       label: Roadmap area
       description: Which roadmap does this intention sit in?
       options:
+        - AlgebraicCurves
+        - BelyiMaps
         - CombinatorialHeegaardFloer
         - ConformalMapping
         - ContourIntegration
@@ -27,10 +29,14 @@ body:
         - JacobianChallenge
         - ModularForms
         - Multiquadratic
+        - NumberFieldArithmetic
         - OneParameterSemigroups
         - OptimalTransport
         - OrthogonalL2Bases
         - PDE
+        - PolynomialGaloisGroups
+        - ProfiniteCohomology
+        - ProfiniteProPGroups
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers
