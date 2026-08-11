@@ -3,6 +3,7 @@
 **This file is non-normative and dated.** The specification is [`README.md`](README.md). This file
 records the migration sources, revisions, licensing questions, and ownership decisions so that
 reviewed corrections are not lost during extraction.
+No roadmap milestone or dependency depends on this file.
 
 Audit date: 2026-08-10.
 
