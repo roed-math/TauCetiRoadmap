@@ -23,7 +23,7 @@ open scoped nonZeroDivisors
 
 noncomputable section
 
-universe u v w
+universe u
 
 namespace ADS
 export TauCetiRoadmap.ArithmeticDirichletSeries
@@ -536,109 +536,6 @@ theorem dedekindZeta_logDeriv_eq {s : ℂ} (hs : 1 < s.re) :
       ADS.idealVonMangoldt K (TauCetiRoadmap.ArithmeticDirichletSeries.IdealWeight.one K) I /
         (Ideal.absNorm I : ℂ) ^ s) =
       -deriv (dedekindZeta K) s / dedekindZeta K s := sorry
-
-/-! ## Layer 8: Artin L-functions and formalism -/
-
-variable {L : Type v} [Field L] [NumberField L] [Algebra K L]
-  [FiniteDimensional K L] [IsGalois K L]
-
-abbrev ArtinRepresentation
-    (V : Type w) [AddCommGroup V] [Module ℂ V] :=
-  Representation ℂ (L ≃ₐ[K] L) V
-
-variable {V : Type w} [NormedAddCommGroup V] [NormedSpace ℂ V] [FiniteDimensional ℂ V]
-
-/-- The local polynomial on inertia invariants. Its construction may choose a prime and a lift;
-the theorem below makes the result independent of both choices. -/
-noncomputable def artinLocalPolynomial
-    (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (𝔭 : HeightOneSpectrum (𝓞 K)) : Polynomial ℂ := sorry
-
-noncomputable def artinIdealWeight
-    (ρ : ArtinRepresentation (K := K) (L := L) V) : ADS.IdealWeight K := sorry
-
-noncomputable def artinEulerProductData
-    (ρ : ArtinRepresentation (K := K) (L := L) V) :
-    ADS.EulerProductData K (artinIdealWeight (K := K) (L := L) ρ) := sorry
-
-noncomputable def artinLFunctionC
-    (ρ : ArtinRepresentation (K := K) (L := L) V) : ℂ → ℂ := sorry
-
-noncomputable def artinConductor
-    (ρ : ArtinRepresentation (K := K) (L := L) V) : ℕ+ := sorry
-
-noncomputable def artinRootNumber
-    (ρ : ArtinRepresentation (K := K) (L := L) V) : ℂ := sorry
-
-noncomputable def completedArtinLFunction
-    (ρ : ArtinRepresentation (K := K) (L := L) V) : ℂ → ℂ := sorry
-
-noncomputable def artinData
-    (ρ : ArtinRepresentation (K := K) (L := L) V) : AnalyticLFunctionData := sorry
-
-noncomputable def artinDirectSum
-    {W : Type w} [NormedAddCommGroup W] [NormedSpace ℂ W] [FiniteDimensional ℂ W]
-    (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (τ : ArtinRepresentation (K := K) (L := L) W) :
-    ArtinRepresentation (K := K) (L := L) (V × W) := sorry
-
-theorem artinLFunction_directSum
-    {W : Type w} [NormedAddCommGroup W] [NormedSpace ℂ W] [FiniteDimensional ℂ W]
-    (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (τ : ArtinRepresentation (K := K) (L := L) W) (s : ℂ) :
-    artinLFunctionC (K := K) (L := L)
-        (artinDirectSum (K := K) (L := L) ρ τ) s =
-      artinLFunctionC (K := K) (L := L) ρ s *
-        artinLFunctionC (K := K) (L := L) τ s := sorry
-
-noncomputable def trivialArtinRepresentation :
-    ArtinRepresentation (K := K) (L := L) ℂ := sorry
-
-theorem artinLFunction_trivial (s : ℂ) :
-    artinLFunctionC (K := K) (L := L)
-        (trivialArtinRepresentation (K := K) (L := L)) s = dedekindZetaC K s := sorry
-
-/-- Concrete analytic factorization data. The terms are completed Hecke cards, with integer
-exponents and identities of both Euler products and completed functions. -/
-structure BrauerHeckeRealization
-    (ρ : ArtinRepresentation (K := K) (L := L) V) where
-  count : ℕ
-  term : Fin count → AnalyticLFunctionData
-  exponent : Fin count → ℤ
-  term_dirichlet : ∀ i, (term i).HasDirichletAgreement
-  term_continuation : ∀ i, (term i).HasMeromorphicContinuation
-  term_functionalEquation : ∀ i, (term i).HasFunctionalEquation
-  euler_identity : ∀ s : ℂ, 1 < s.re →
-    artinLFunctionC (K := K) (L := L) ρ s =
-      ∏ i, (LSeries (term i).coeff s) ^ exponent i
-  completed_identity : ∀ s : ℂ,
-    completedArtinLFunction (K := K) (L := L) ρ s =
-      ∏ i, ((term i).completed s) ^ exponent i
-
-noncomputable def artinDataFromRealization
-    (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (B : BrauerHeckeRealization (K := K) (L := L) ρ) : AnalyticLFunctionData := sorry
-
-theorem artinData_hasMeromorphicContinuation
-    (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (B : BrauerHeckeRealization (K := K) (L := L) ρ) :
-    (artinData (K := K) (L := L) ρ).HasMeromorphicContinuation := sorry
-
-theorem artinData_hasFunctionalEquation
-    (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (B : BrauerHeckeRealization (K := K) (L := L) ρ) :
-    (artinData (K := K) (L := L) ρ).HasFunctionalEquation := sorry
-
-theorem artinData_brauer_independent
-    (ρ : ArtinRepresentation (K := K) (L := L) V)
-    (B C : BrauerHeckeRealization (K := K) (L := L) ρ) :
-    artinDataFromRealization (K := K) (L := L) ρ B =
-      artinDataFromRealization (K := K) (L := L) ρ C := sorry
-
-theorem artinData_trivial :
-    (artinData (K := K) (L := L)
-      (trivialArtinRepresentation (K := K) (L := L))).EqOffZero
-        (dedekindZetaData K) := sorry
 
 end
 

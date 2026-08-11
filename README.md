@@ -26,7 +26,7 @@ If you want to write or review a roadmap, start with [CONTRIBUTING.md](CONTRIBUT
 - [Global quadratic forms over number fields](TauCetiRoadmap/GlobalQuadraticForms/README.md)
 - [Heegaard Floer homology, analytically](TauCetiRoadmap/HeegaardFloer/README.md)
 - [Integral quadratic forms and lattices](TauCetiRoadmap/IntegralLattices/README.md)
-- [L-functions: completions, functional equations, and Artin formalism](TauCetiRoadmap/LFunctions/README.md)
+- [L-functions: completions and functional equations](TauCetiRoadmap/LFunctions/README.md)
 - [Local fields and ramification](TauCetiRoadmap/LocalFieldsRamification/README.md)
 - [Modular forms — Hecke theory, newforms, and L-functions](TauCetiRoadmap/ModularForms/README.md)
 - [Multiquadratic fields and genus theory](TauCetiRoadmap/Multiquadratic/README.md)

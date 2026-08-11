@@ -1,10 +1,9 @@
-# Roadmap: L-functions — completions, functional equations, and Artin formalism
+# Roadmap: L-functions — completions and functional equations
 
 This roadmap develops the analytic theory of the principal L-functions attached to number
 fields. It starts with a normalization-conscious record for completed L-functions, proves the
 Poisson and theta identities used in Hecke's method, constructs the continued Dedekind zeta and
-Hecke L-functions, and packages conductors, root numbers, Grossencharacters, Artin L-functions,
-and Artin formalism.
+Hecke L-functions, and packages conductors, root numbers, and Grossencharacters.
 
 Two neighbouring roadmaps deliberately own the reusable substrate. Arithmetic Dirichlet Series
 owns ideal weights, norm regrouping, Euler products, density, summation, and Tauberian methods.
@@ -13,7 +12,7 @@ carrier. This roadmap consumes those declarations and owns the analytic presenta
 completions, and functional equations attached to them.
 
 Suggested home: `TauCeti/NumberTheory/LFunctions/`, divided into `Data/`, `Theta/`,
-`DedekindZeta/`, `Dirichlet/`, `Hecke/`, `Grossencharacter/`, and `Artin/`.
+`DedekindZeta/`, `Dirichlet/`, `Hecke/`, and `Grossencharacter/`.
 [`Suggested.lean`](Suggested.lean) pins the most important declaration shapes; it is not an
 exhaustive checklist. [`PROVENANCE.md`](PROVENANCE.md) is dated and non-normative.
 
@@ -25,13 +24,10 @@ exhaustive checklist. [`PROVENANCE.md`](PROVENANCE.md) is dated and non-normativ
 - conductor, gamma-shift, degree, root-number, polar-divisor, and normalization conventions;
 - Poisson summation and Gaussian theta transformations needed by Hecke's method;
 - partial zeta functions and the continuation, residue, and functional equation of Dedekind zeta;
-- special values and exact quadratic, cyclotomic, and Artin factorizations;
+- special values and exact quadratic and cyclotomic factorizations;
 - Dirichlet L-function cards extending Mathlib's continued functions;
 - finite-order ray-class Hecke L-functions and general Grossencharacter L-functions;
 - primitive conductors, Gauss sums, root numbers, continuations, and functional equations;
-- Artin local polynomials, Artin L-functions, induction and exact-sequence formalism;
-- meromorphic continuation and functional equations for Artin data equipped with a Brauer--Hecke
-  realization;
 - character-specific nonvanishing on `Re s = 1`, as an intrinsic theorem about the named
   continued L-function.
 
@@ -48,7 +44,7 @@ landau
 abelSummation
 ```
 
-This roadmap specializes these declarations to zeta, Hecke, and Artin coefficients. It does not
+This roadmap specializes these declarations to zeta and Hecke coefficients. It does not
 define another ideal weight, another norm-regrouped series, or another generic Euler product.
 
 From `GlobalNumberFields`:
@@ -67,10 +63,7 @@ InfinityType
 ```
 
 The character carrier is therefore available without importing Class Field Theory. Reciprocity
-and class fields are not used merely to restate a Hecke character. When an Artin representation is
-compared with Hecke characters, the comparison is explicit realization data; a theorem asserting
-that every abelian Galois character has such data is a reciprocity theorem and is not silently
-assumed here.
+and class fields are not used merely to restate a Hecke character.
 
 ### Not owned here
 
@@ -84,9 +77,9 @@ assumed here.
 - zero distributions, zero-free regions, zero counting, the explicit formula, and effective
   estimates (`ZerosOfLFunctions`);
 - local epsilon factors and the adelic proof of the functional equation (Tate's thesis);
-- Artin reciprocity, class fields, or the existence of Hecke realizations for all abelian Galois
-  characters (`ClassFieldTheory`);
-- Artin holomorphy for arbitrary nontrivial irreducible representations.
+- Artin representations, their local reciprocal polynomials and conductors, Artin L-functions,
+  Brauer induction, or Artin formalism (a future `ArtinRepresentations` roadmap);
+- Artin reciprocity and class fields (`ClassFieldTheory`).
 
 The absence of zero-distribution targets is intentional. A theorem that one named character
 L-function is nonzero on `Re s = 1` belongs here because it is part of that function's basic
@@ -99,7 +92,7 @@ belong downstream.
 
 | Declaration | Use here |
 | --- | --- |
-| `ArithmeticDirichletSeries.IdealWeight` | coefficient systems of ray-class, Grossencharacter, and Artin presentations |
+| `ArithmeticDirichletSeries.IdealWeight` | coefficient systems of ray-class and Grossencharacter presentations |
 | `ArithmeticDirichletSeries.normCoeff` | conversion of an ideal-indexed L-function into Mathlib's `LSeries` coefficients |
 | `ArithmeticDirichletSeries.regroupByNorm` | equality between the ideal sum and the norm-indexed series |
 | `ArithmeticDirichletSeries.EulerProductData` | local Euler factors and the global Euler-product theorem |
@@ -143,9 +136,6 @@ heckeLFunctionC
 completedHeckeLFunction
 heckeData
 grossencharacterData
-artinLFunctionC
-completedArtinLFunction
-artinData
 ```
 
 For every continued function, regularity away from its named polar divisor is exported as
@@ -156,8 +146,7 @@ depends only on a punctured germ and does not constrain the total representative
 
 The number-field context is `[Field K] [NumberField K]`. Finite-order Hecke theory is over a
 modulus `𝔪 : GlobalNumberFields.Modulus K`; the general carrier is
-`GlobalNumberFields.HeckeCharacter K`. Artin theory is for a finite Galois extension `L/K` and a
-finite-dimensional complex representation of `L ≃ₐ[K] L`.
+`GlobalNumberFields.HeckeCharacter K`.
 
 | Subject | Convention |
 | --- | --- |
@@ -170,8 +159,6 @@ finite-dimensional complex representation of `L ≃ₐ[K] L`.
 | imprimitive series | retain the presented L-series and a finite Euler-factor correction to the canonical primitive series; do not manufacture a second completed card. |
 | Hecke shift | the shift is real, and the full completion is defined by recentering the unitary completion at `s-shift`. |
 | root-number duality | `W(χ⁻¹) = W(χ)⁻¹`; for a unitary character this is also `conj W(χ)`. |
-| Artin local factor | the determinant acts on inertia invariants. A chosen Frobenius lift may appear in the construction, but the resulting polynomial is choice-independent and no Frobenius carrier is exported. |
-| Artin holomorphy | meromorphic continuation is proved from Brauer--Hecke data; holomorphy beyond the one-dimensional and monomial cases is not asserted. |
 
 ## The build, in layers
 
@@ -372,59 +359,16 @@ finite character family and detects an infinity-type interface that merely typec
 This layer proves no zero-free region, no zero counting, and no explicit formula. Those are
 downstream uses of the named nonvanishing theorem and completed cards.
 
-### Layer 8: Artin L-functions and Artin formalism
-
-Let `ρ` be a finite-dimensional complex representation of `Gal(L/K)`. Define the local Artin
-polynomial at a finite prime as the characteristic polynomial of arithmetic Frobenius on inertia
-invariants. Prove independence from the prime above the base prime and from the Frobenius lift.
-Package these local polynomials with `ArithmeticDirichletSeries.EulerProductData`; do not export a
-Frobenius element or conjugacy class.
-
-Define `artinLFunctionC ρ` first on its convergence half-plane. Construct the archimedean gamma
-factors, Artin conductor, contragredient, completed function, and root number. Prove the formalism:
-
-- direct sums give products;
-- short exact sequences give products;
-- induction from a subgroup/fixed field leaves the L-function unchanged;
-- restriction and inflation have their standard local-factor compatibilities;
-- the trivial and permutation representations give Dedekind zeta functions;
-- one-dimensional representations agree with their supplied finite-order Hecke realizations;
-- conductors and root numbers obey the corresponding direct-sum and induction laws;
-- the dual representation gives the dual analytic card.
-
-A `BrauerHeckeRealization` is concrete data: a finite list of fixed fields and finite-order Hecke
-characters, integer exponents, and equality of every local factor. From it, prove meromorphic
-continuation, the functional equation, and independence of the chosen Brauer decomposition. The
-realization is not a `Prop` placeholder and not an assumption hidden in the definition of
-`artinLFunctionC`. Class Field Theory may later supply realizations through reciprocity without
-changing any analytic carrier here.
-
-Do not claim Artin holomorphy in general. Prove holomorphy for one-dimensional and monomial cases
-where the Hecke realization gives it, and record the pole bound furnished by the Brauer quotient in
-the general case.
-
-Mandatory tests:
-
-- the trivial representation gives `dedekindZetaData`;
-- a permutation representation induced from the trivial representation gives the Dedekind zeta
-  function of the fixed field;
-- a direct sum gives the product with additive degree and Artin conductor exponent;
-- one-dimensional characters separate only the abelianization; no orthogonality formula sums only
-  over linear characters of a nonabelian group;
-- the `S₃` standard representation is obtained from the permutation representation minus the
-  trivial summand, without asserting a one-dimensional character decomposition.
-
-### Layer 9: interoperability and examples
+### Layer 8: interoperability and examples
 
 Supply named comparison cards for Riemann zeta, Dedekind zeta, primitive Dirichlet characters,
-primitive ray-class characters, unitary Grossencharacters, and Artin representations. Prove all
+primitive ray-class characters, and unitary Grossencharacters. Prove all
 comparisons with `EqOffZero`, so conductors, gamma factors, root numbers, completions, polar
 divisors, and positive-index coefficients are checked together.
 
-Add examples over `ℚ`, `ℚ(i)`, a real quadratic field, and an `S₃` extension. Each example must
-exercise a convention that is invisible in the easiest case: an odd real gamma factor, a complex
-place multiplicity, a nontrivial dual, an imprimitive Euler factor, or a genuinely nonabelian
-Artin representation.
+Add examples over `ℚ`, `ℚ(i)`, and a real quadratic field. Each example must exercise a convention
+that is invisible in the easiest case: an odd real gamma factor, a complex-place multiplicity, a
+nontrivial dual, or an imprimitive Euler factor.
 
 Retain two number-field zeta specializations of the shared arithmetic-series infrastructure:
 
@@ -440,8 +384,7 @@ Retain two number-field zeta specializations of the shared arithmetic-series inf
 Layer 0 can proceed with the completed-function record while Layer 1 develops Poisson summation.
 Layer 2 consumes Global Number Fields and the shared arithmetic-series substrate. Layers 3 and 4
 then settle the zeta and Dirichlet instances. Layers 5 and 6 build the Hecke instances; Layer 7
-uses their continuation. The algebraic local-factor portion of Layer 8 can proceed after the shared
-Euler-product API, while its continuation and comparison cards follow Layers 3--6.
+uses their continuation, and Layer 8 records exact interoperability cards and examples.
 
 The roadmap-level dependency graph is exactly
 
@@ -451,16 +394,11 @@ ArithmeticDirichletSeries ─┐
 GlobalNumberFields ────────┘
 ```
 
-Chebotarev also consumes the two suppliers but is not a dependency of L-functions. Class Field
-Theory may provide additional Artin--Hecke realizations downstream; the L-functions carrier and
-formalism do not import it.
+Chebotarev also consumes the two suppliers but is not a dependency of L-functions.
 
 ## References
 
 - E. Hecke, *Lectures on the Theory of Algebraic Numbers*.
 - J. Neukirch, *Algebraic Number Theory*, Chapters VI and VII.
-- J. Neukirch, *Algebraic Number Theory*, Chapter VII, §§10--12 (Artin L-functions).
-- J.-P. Serre, *Linear Representations of Finite Groups*, Chapters 7 and 10.
-- J.-P. Serre, *Local Fields*, Chapter VI (Artin conductors).
 - H. Iwaniec and E. Kowalski, *Analytic Number Theory*, Chapters 3 and 5.
 - D. Loeffler and M. Stoll, *Formalizing zeta and L-functions in Lean*.

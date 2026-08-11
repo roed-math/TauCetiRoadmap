@@ -49,13 +49,17 @@ objects directly and does not wrap a competing series type or prime predicate ar
 The boundary is theorem-level. A downstream roadmap may specialize a declaration below, but it
 does not redefine the carrier under a domain-specific name.
 
+`IdealWeight` is a completely multiplicative degree-one character-like carrier. It is not the
+coefficient carrier of an arbitrary Euler product. In particular, higher-dimensional Artin
+coefficients require separate prime-power local data and do not define an `IdealWeight`.
+
 ---
 
 ## Pinned conventions
 
 | Subject | Convention |
 |---|---|
-| ideal weights | The value at `⊥` is `0`. Multiplicativity alone does not imply this: the constant-one function is the rejection test. |
+| ideal weights | The carrier is completely multiplicative and degree-one. Its value at `⊥` is `0`; multiplicativity alone does not imply this, as the constant-one rejection test shows. It is not a carrier for arbitrary local reciprocal polynomials. |
 | norm coefficients | The `n = 0` coefficient is fixed by the ideal-weight convention. Equality of two `LSeries` coefficients is normally stated away from the irrelevant zero slot. |
 | prime carrier | A prime is `IsDedekindDomain.HeightOneSpectrum (𝓞 K)`, not an arbitrary ideal with a later proof that it is nonzero and prime. |
 | density | `HasDirichletDensity S δ` is the limit of `P_S(s) / P_all(s)` as `s → 1⁺`; `HasNaturalDensity S δ` is the analogous ratio of prime-counting functions as `x → ∞`. Normalization by `log (1/(s-1))` is a theorem after the all-prime asymptotic, not the definition. |
@@ -99,7 +103,8 @@ these declarations rather than prose such as “the density lemmas” or “a Ta
 **0.1 The carrier.** Define `IdealWeight K` as a complex-valued multiplicative function on
 integral ideals, with a finite set of bad height-one primes, unit norm away from that set, value
 zero on it, and value zero at `⊥`. Supply coercions, extensionality, `map_one`, and simplification
-lemmas for good and bad primes.
+lemmas for good and bad primes. State explicitly that this completely multiplicative degree-one
+carrier excludes coefficient systems whose prime powers are independent local-polynomial data.
 
 **0.2 Constructors and operations.** Build the trivial weight, conjugation, pointwise product,
 restriction away from a finite prime set, and finite-order weights. Keep pointwise multiplication
