@@ -1,6 +1,7 @@
 # Provenance: adelic algebraic groups
 
 **Non-normative, audited 2026-08-10.** The specification is [`README.md`](README.md).
+No roadmap milestone or dependency depends on this file.
 
 ## Extraction
 
