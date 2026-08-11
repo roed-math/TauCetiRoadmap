@@ -4,6 +4,7 @@ This file is not normative. `README.md` is the definitive roadmap; this file rec
 evidence, audit results, and decisions, so that reviewers can check the roadmap's claims
 without redoing the searches, and so that stale facts can be re-verified against their
 dates.
+No roadmap milestone or dependency depends on this file.
 
 ## Portfolio restructuring record
 
