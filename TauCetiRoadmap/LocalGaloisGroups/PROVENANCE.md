@@ -3,6 +3,7 @@
 **This file is not normative.** [`README.md`](README.md) is the specification. This record
 documents the source extraction, declaration arbitration, and implementation material that may
 inform the work. No source-file layout is a roadmap requirement.
+No roadmap milestone or dependency depends on this file.
 
 ## Portfolio extraction record
 
