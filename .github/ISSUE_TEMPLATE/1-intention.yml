@@ -18,22 +18,29 @@ body:
       label: Roadmap area
       description: Which roadmap does this intention sit in?
       options:
+        - ArithmeticDirichletSeries
+        - Chebotarev
         - CombinatorialHeegaardFloer
         - ConformalMapping
         - ContourIntegration
         - Exchangeability
         - GeometricTopology
+        - GlobalNumberFields
         - HeegaardFloer
         - JacobianChallenge
+        - LFunctions
         - ModularForms
         - Multiquadratic
+        - NumberFieldArithmetic
         - OneParameterSemigroups
         - OptimalTransport
         - OrthogonalL2Bases
         - PDE
+        - ProfiniteCohomology
         - ReductiveGroups
         - RepresentationTheory
         - UniversalCovers
+        - ZerosOfLFunctions
     validations:
       required: true
   - type: textarea
