@@ -21,7 +21,10 @@ The refactoring changed ownership, not the mathematical source:
   von Mangoldt coefficients, and qualitative Chebotarev counting were extracted to `Chebotarev`;
 - moduli, ray classes, ray-class characters, and the Hecke-character carrier are now consumed from
   `GlobalNumberFields`;
-- zero-distribution promises were removed in favour of exact exports to `ZerosOfLFunctions`.
+- zero-distribution promises were removed in favour of exact exports to `ZerosOfLFunctions`;
+- Artin representations, local reciprocal polynomials, conductors, Brauer induction, and Artin
+  L-functions were moved to the future `ArtinRepresentations` roadmap after the coefficient
+  carrier audit described below.
 
 No code from those extracted sections is an independent prerequisite of this roadmap. Their new
 owners provide named contracts.
@@ -34,8 +37,8 @@ Audit date: **2026-08-07**. The project pinned Mathlib at
 At that pin Mathlib contained the `LSeries` and abstract functional-equation libraries, completed
 Riemann zeta, Hurwitz zeta, continued Dirichlet-character L-functions, gamma factors, Euler-product
 infrastructure, and Roblot's real one-sided Dedekind-zeta residue theorem. It did not contain a
-general completed-L-function record, continuation or a functional equation for Dedekind zeta,
-analytic Hecke or Grossencharacter L-functions, or analytic Artin L-functions.
+general completed-L-function record, continuation or a functional equation for Dedekind zeta, or
+analytic Hecke or Grossencharacter L-functions.
 
 Relevant post-pin work at the audit date included:
 
@@ -91,14 +94,21 @@ split.
 - A vertical norm twist carries the two conductor constants forced by the completion and has poles
   at `iu` and `1+iu`.
 
-### Artin formalism
+### Artin boundary correction
 
-- One-dimensional characters separate only the abelianization. A sum over linear characters is
-  not a character-orthogonality formula for a nonabelian Galois group.
-- Artin local factors act on inertia invariants and are independent of the chosen Frobenius lift;
-  the roadmap exports the polynomial, not a second Frobenius carrier.
-- Brauer induction gives meromorphic continuation after comparison with Hecke L-functions; it does
-  not prove the Artin holomorphy conjecture.
+The source roadmap tried to send an arbitrary finite-dimensional Artin representation to
+`ArithmeticDirichletSeries.IdealWeight`. That carrier is completely multiplicative. General Artin
+coefficients are only multiplicative on coprime ideals, and their prime-power coefficients come
+from reciprocal local polynomials. For the two-dimensional trivial representation the local
+factor `(1-T)⁻²` gives coefficients `a(𝔭)=2` and `a(𝔭²)=3`, whereas complete multiplicativity
+would force `a(𝔭²)=4`.
+
+The general Artin layer was therefore removed rather than weakening the degree-one character
+carrier. Its reviewed local-factor, conductor, formalism, Brauer-induction, continuation, and
+regression-test plans remain accounted for at source commit
+`a070739ff7c026723e1ef67477fe206dfdf28455` in the internal portfolio migration records. A future
+`ArtinRepresentations` roadmap must introduce coprime-multiplicative coefficients with independent
+prime-power local data and may consume this roadmap's completed-function record.
 
 Corrections specific to Frobenius fibre coefficients, tagged Chebotarev fibres, and density
 normalization are recorded by the Chebotarev roadmap, their present owner.
@@ -114,10 +124,6 @@ PrimeNumberTheoremAnd (Alex Kontorovich and collaborators) contains a sorry-free
 Wiener--Ikehara theorem. That theorem is now cited by Arithmetic Dirichlet Series, not by this
 roadmap. The external Chebotarev developments `CBirkbeck/AINTLIB` and
 `CBirkbeck/chebotarev-density` are cited by the Chebotarev roadmap.
-
-The Artin layer is a roadmap target rather than a port of an identified Lean development. Its
-mathematical references are Neukirch, Serre's *Linear Representations of Finite Groups*, and
-Serre's *Local Fields*. Any later code reuse requires a separate source and licence entry here.
 
 ## Licence and contact ledger
 
@@ -145,9 +151,6 @@ Dirichlet/Completed
 Hecke/FiniteOrder
 Hecke/Grossencharacter
 Hecke/Nonvanishing
-Artin/LocalFactor
-Artin/Formalism
-Artin/Brauer
 ```
 
 The map is organizational only. The mathematical milestones and ownership boundaries in the
