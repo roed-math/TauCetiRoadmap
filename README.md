@@ -23,7 +23,7 @@ If you want to write or review a roadmap, start with [CONTRIBUTING.md](CONTRIBUT
 - [Geometric topology and the Kirby-list problems](TauCetiRoadmap/GeometricTopology/README.md)
 - [Global number fields, ray classes, adeles, and Hecke characters](TauCetiRoadmap/GlobalNumberFields/README.md)
 - [Heegaard Floer homology, analytically](TauCetiRoadmap/HeegaardFloer/README.md)
-- [L-functions: completions, functional equations, and Artin formalism](TauCetiRoadmap/LFunctions/README.md)
+- [L-functions: completions and functional equations](TauCetiRoadmap/LFunctions/README.md)
 - [Modular forms — Hecke theory, newforms, and L-functions](TauCetiRoadmap/ModularForms/README.md)
 - [Multiquadratic fields and genus theory](TauCetiRoadmap/Multiquadratic/README.md)
 - [Number fields: ramification, Frobenius, and the LMFDB invariants](TauCetiRoadmap/NumberFieldArithmetic/README.md)

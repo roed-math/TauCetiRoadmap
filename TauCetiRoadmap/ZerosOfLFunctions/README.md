@@ -141,7 +141,10 @@ separately.
 | 6.2, 7.6 | LF 4 | continued quadratic and cyclotomic factorizations | `dedekindZetaC_quadratic`, `dedekindZetaC_cyclotomic_four` |
 | 3.4, 6.4, 8.6 | LF 5 | primitive finite-order Hecke L-functions, completions, cards, and root numbers | `heckeLFunctionC`, `completedHeckeLFunction`, `heckeRootNumber`, `heckeData`, `norm_heckeRootNumber`, `completedHeckeLFunction_one_sub` |
 | 6.5 | LF 7 | intrinsic boundary nonvanishing | `heckeLFunction_ne_zero_of_one_le_re` |
-| 4--8 | LF 8 | Artin instances whose analytic cards carry the required continuation | `artinLFunctionC`, `completedArtinLFunction`, `artinData` |
+
+The zero-distribution theory is polymorphic in `LFunctions.AnalyticLFunctionData`. A future
+`ArtinRepresentations` roadmap may supply an Artin card satisfying these generic predicates, but
+this roadmap currently owns no Artin instance and assumes no Artin-specific coefficient carrier.
 
 ### From the Arithmetic Dirichlet Series roadmap
 

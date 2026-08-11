@@ -15,7 +15,7 @@ underlying Mathlib audit was made on **2026-08-07** against project pin
 This roadmap has four direct roadmap dependencies.
 
 - [`LFunctions`](../LFunctions/README.md) owns analytic L-function cards, their duals,
-  completed Dedekind/Hecke/Artin functions, Euler-product-side nonvanishing, and normalization
+  completed Dedekind and Hecke functions, Euler-product-side nonvanishing, and normalization
   transport. This roadmap owns the growth, finite-order, factorization, zero-counting,
   zero-free-region, explicit-formula, and certification consequences of those cards.
 - [`ArithmeticDirichletSeries`](../ArithmeticDirichletSeries/README.md) owns ideal weights,
@@ -33,6 +33,11 @@ This roadmap has four direct roadmap dependencies.
 There is deliberately no direct dependency on `ClassFieldTheory` or
 `GlobalNumberFields`: any algebraic or character-theoretic input reaches this roadmap through
 the L-functions or Chebotarev interfaces above.
+
+General Artin representations and Artin L-functions were moved out of the current L-functions
+roadmap after its coefficient carrier proved too restrictive. The generic zero-analysis
+declarations remain applicable to a future Artin card once its owning roadmap supplies the
+ordinary `AnalyticLFunctionData` predicates.
 
 ## Extraction ledger
 
