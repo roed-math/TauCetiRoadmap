@@ -3,6 +3,7 @@
 This file is non-normative. `README.md` is the definitive roadmap. This file records the source
 revision, review decisions, supplier contracts, and ownership migration so that the corrected
 mathematics is not lost when generic adelic material moves out.
+No roadmap milestone or dependency depends on this file.
 
 ## Source revision
 
