@@ -1,0 +1,766 @@
+[
+ {
+  "name": "RiemannianGeometry/CurvatureAndSubmanifolds",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "A",
+  "scope": "This roadmap develops the algebra of the curvature tensor and the geometry of Riemannian submanifolds, on Tau Ceti's Levi-Civita connection and curvature tensors, which it consumes and never redefines. It covers the Weyl–Schouten decomposition (with Λ⁺ ⊕ Λ⁻ in dimension four), Einstein metrics, conformal and warped-product formulas, the constant-curvature models, and the Christoffel presentation onto which chart-based work ports. For submanifolds it builds the second fundamental form, mean curvature, normal connection and the Gauss, Codazzi and Ricci equations, through Gauss–Bonnet for surfaces. Jacobi fields are ComparisonGeometry's, minimal submanifolds MinimalSubmanifolds', principal connections ConnectionsAndCharacteristicClasses', indefinite metrics LorentzianGeometry's.",
+  "prerequisites": [
+   "Tau Ceti curvature code (GeometricTopology L7)",
+   "HopfRinow (#723)",
+   "DifferentialGeometry L0–L5, L12",
+   "RepresentationTheory/LieGroups"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#62",
+    "Annals#68"
+   ],
+   "OpenAI": [
+    "OAI#260",
+    "OAI#334",
+    "OAI#348"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/EinsteinFour (W± in coordinates)",
+   "the ≥6 OAI chart-level curvature definitions, via the coordinate bridge"
+  ],
+  "replaces": [
+   "RiemannianGeometry (OAI geometry share, local half)",
+   "RiemannianGeometry (probability share cross-need)"
+  ]
+ },
+ {
+  "name": "RiemannianGeometry/ComparisonGeometry",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "A",
+  "scope": "This roadmap develops Jacobi fields and second variation and derives the comparison theorems and their global consequences for complete manifolds with curvature bounds. It consumes HopfRinow's geodesics, exponential map and first variation and OptimalTransport Layer 7's injectivity radius and cut-locus measure theory, and supplies the conjugate-point theory those rest on. It covers Rauch, Hessian, Laplacian and volume comparison, Toponogov, Bonnet–Myers, Cartan–Hadamard, Synge, Preissmann, the splitting theorem and Milnor's growth bound. Gromov–Hausdorff convergence is MetricGeometry's, Ricci limits RicciCurvatureAndLimitSpaces', Morse theory of energy VariationalTheoryOfGeodesics'.",
+  "prerequisites": [
+   "HopfRinow",
+   "Tau Ceti curvature code",
+   "OptimalTransport L7, L8",
+   "UniversalCovers",
+   "PDE (strong maximum principle)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#62"
+   ],
+   "OpenAI": [
+    "OAI#335",
+    "OAI#337",
+    "OAI#338",
+    "OAI#344",
+    "OAI#358",
+    "OAI#360",
+    "OAI#361"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/ConjugatePoints, NegativeCurvature",
+   "explorer draft RiemannianGeometry RG.0–RG.4 (Jacobi/index/Riccati; two source slips recorded)"
+  ],
+  "replaces": [
+   "ComparisonGeometry (Annals P10, smooth part)",
+   "RiemannianGeometry (OAI, Jacobi/comparison half)",
+   "GlobalRiemannianGeometry (OAI, comparison/splitting/growth part)"
+  ]
+ },
+ {
+  "name": "RiemannianGeometry/SymmetricSpaces",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 180,
+  "wave": "B",
+  "scope": "This roadmap develops the Riemannian geometry of homogeneous and symmetric spaces: reductive homogeneous spaces, Cartan's characterization of locally symmetric spaces, symmetric pairs and R(X,Y)Z = −[[X,Y],Z], duality, rank and maximal flats, the de Rham decomposition, and the rank-one spaces with their pinching. It consumes RepresentationTheory/LieGroups (Cartan, Iwasawa, KAK), holonomy from ConnectionsAndCharacteristicClasses and Cartan–Hadamard from ComparisonGeometry. Lattices and Γ\\G/K are the algebra campaign's LatticesInSemisimpleGroups and ℍⁿ/Γ the topology campaign's HyperbolicManifolds; both consume this roadmap.",
+  "prerequisites": [
+   "RepresentationTheory/LieGroups",
+   "ConnectionsAndCharacteristicClasses",
+   "RiemannianGeometry/ComparisonGeometry"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#77"
+   ],
+   "OpenAI": [
+    "OAI#062",
+    "OAI#339",
+    "OAI#344"
+   ]
+  },
+  "porting": [
+   "none in OAI; coordinate with Birkbeck ArithmeticLocallySymmetricSpaces ALS.0, FuchsianOrbifolds, KleinianGroups (#432)"
+  ],
+  "replaces": [
+   "GlobalRiemannianGeometry (OAI, symmetric-space part)",
+   "LatticesInSemisimpleGroups (Annals P14, Riemannian G/K)"
+  ]
+ },
+ {
+  "name": "RiemannianGeometry/VariationalTheoryOfGeodesics",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "M",
+  "est_prs": 110,
+  "wave": "B",
+  "scope": "This roadmap studies geodesics as critical points of energy on path and loop spaces. It builds Milnor's broken-geodesic approximation, proves the Morse index theorem, and derives the topology of path spaces and the existence of closed geodesics. It treats manifolds all of whose geodesics are closed, Blaschke manifolds with the Berger–Kazdan inequality, and the geodesic flow with its Liouville measure. Conjugate points are ComparisonGeometry's and Morse homology HeegaardFloer Lane M's; Hilbert-manifold loop spaces are not used.",
+  "prerequisites": [
+   "RiemannianGeometry/ComparisonGeometry",
+   "AlgebraicTopology",
+   "HamiltonianSystems (#480)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#344",
+    "OAI#345"
+   ]
+  },
+  "porting": [
+   "explorer draft RiemannianGeometry RG.5",
+   "Tau Ceti Geometry/Manifold/Morse"
+  ],
+  "replaces": [
+   "GlobalRiemannianGeometry (OAI, geodesic Morse theory, Berger–Kazdan)"
+  ]
+ },
+ {
+  "name": "RiemannianGeometry/RicciCurvatureAndLimitSpaces",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "C",
+  "scope": "This roadmap develops manifolds with Ricci curvature bounded below and their Gromov–Hausdorff limits: the Abresch–Gromoll estimate, segment and Poincaré inequalities, Cheeger–Colding almost splitting and 'volume cone implies metric cone', volume convergence, tangent cones (also at infinity) and their cone structure when noncollapsed, and the singular strata with dim S^k ≤ k. It consumes MetricGeometry, ComparisonGeometry, SpectralGeometry and OptimalTransport Layer 14, to which it supplies 'Ricci limits are RCD'. Rectifiability and the codimension-two and -four theorems are stated.",
+  "prerequisites": [
+   "RiemannianGeometry/ComparisonGeometry",
+   "MetricGeometry",
+   "GlobalAnalysisOnManifolds/SpectralGeometry",
+   "OptimalTransport L14"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#75"
+   ],
+   "OpenAI": [
+    "OAI#357",
+    "OAI#361"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/RCD (2,889 files)",
+   "OAI Analysis/RCDHeat",
+   "OAI Geometry/HarmonicGrowth"
+  ],
+  "replaces": [
+   "RicciLimitSpaces (OAI)",
+   "ComparisonGeometry (Annals P10, limits and strata)"
+  ]
+ },
+ {
+  "name": "RiemannianGeometry/IsometricEmbeddings",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "M",
+  "est_prs": 110,
+  "wave": "B",
+  "scope": "This roadmap covers isometric immersions and embeddings into Euclidean space and the h-principle behind them: Nash–Kuiper by convex integration, Nash's C^∞ theorem in Günther's form, Janet–Cartan, and the rigidity side (Darboux equation, Hilbert's theorem, Liebmann). It consumes CurvatureAndSubmanifolds and Euclidean PDE, and ports the local h-principle for open ample relations from the sphere-eversion project. Convex integration for fluids is the analysis campaign's ConvexIntegration.",
+  "prerequisites": [
+   "RiemannianGeometry/CurvatureAndSubmanifolds",
+   "PDE",
+   "sphere-eversion (port)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#333",
+    "OAI#334"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/SurfaceImmersion (2,050 files), IsometricImmersion (447)",
+   "sphere-eversion local h-principle (coordinate first)"
+  ],
+  "replaces": [
+   "IsometricEmbeddings (OAI)"
+  ]
+ },
+ {
+  "name": "GlobalAnalysisOnManifolds/EllipticOperators",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 280,
+  "wave": "A",
+  "scope": "This roadmap develops linear elliptic theory for differential operators between vector bundles over compact manifolds with and without boundary: Sobolev and Hölder spaces of sections, symbols and adjoints, Gårding's inequality, interior and boundary regularity, the Fredholm property and spectral theory of self-adjoint elliptic operators, with the Hodge theorem, the Bochner technique, the Dirichlet and Neumann problems and the Dirichlet-to-Neumann map as applications. It starts where DifferentialGeometry Layer 12 stops and works in charts on the PDE roadmap's Euclidean estimates. It is the single owner of elliptic theory on manifolds, consumed by the analysis campaign's boundary problems and the algebraic-geometry campaign's Hodge theory. Pseudodifferential calculus, index theorems and heat asymptotics are not here.",
+  "prerequisites": [
+   "DifferentialGeometry L0–L8, L12",
+   "PDE (Lanes A, D, E)",
+   "Tau Ceti Sobolev, Fredholm and compact self-adjoint spectral code"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#86"
+   ],
+   "OpenAI": [
+    "OAI#341",
+    "OAI#342",
+    "OAI#348",
+    "OAI#365"
+   ]
+  },
+  "porting": [
+   "abenenson/rellich-kondrachov (Rellich on closed manifolds; OAI dependency)",
+   "OAI Geometry/Riemannian/HarmonicCore (52)",
+   "OAI Geometry/TamingCompatibility (582)"
+  ],
+  "replaces": [
+   "EllipticOperatorsOnManifolds (OAI geometry share; Annals P32)",
+   "EllipticTheoryOnManifolds (OAI analysis share)",
+   "Hodge-theorem layer of KahlerManifoldsAndHodgeTheory (AG share)"
+  ]
+ },
+ {
+  "name": "GlobalAnalysisOnManifolds/SpectralGeometry",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "B",
+  "scope": "This roadmap studies Laplace eigenvalues and eigenfunctions and harmonic functions on complete manifolds: Dirichlet and Neumann spectra, min–max and explicit spectra, Weyl's law, heat-kernel asymptotics and spectral invariants, isospectrality, curvature and isoperimetric eigenvalue bounds, nodal sets, and gradient estimates and Liouville theorems under Ric ≥ 0. It consumes EllipticOperators, ComparisonGeometry and the analysis campaign's symmetrization. Automorphic spectral theory is the number-theory campaign's, Schrödinger operators FAMP's, graph spectra COMB's.",
+  "prerequisites": [
+   "GlobalAnalysisOnManifolds/EllipticOperators",
+   "RiemannianGeometry/ComparisonGeometry",
+   "GeometricMeasureTheory (ANA)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#86"
+   ],
+   "OpenAI": [
+    "OAI#336",
+    "OAI#348",
+    "OAI#350",
+    "OAI#361"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/NodalSets (1,068 files), SmoothYau (436), HarmonicGrowth",
+   "OAI Analysis/NodalLength"
+  ],
+  "replaces": [
+   "SpectralGeometry (Annals P33; OAI geometry share)"
+  ]
+ },
+ {
+  "name": "GlobalAnalysisOnManifolds/DiracOperatorsAndIndexTheory",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "B",
+  "scope": "This roadmap builds Clifford modules, spin structures and Dirac operators and proves the Atiyah–Singer index theorem for Dirac operators by the heat-kernel method: Lichnerowicz and Weitzenböck formulas, McKean–Singer, Getzler rescaling, the local index theorem, and the corollaries Chern–Gauss–Bonnet, the signature theorem, the Â obstruction to positive scalar curvature and Hitchin–Thorpe. It consumes OrthogonalSpinGroups, ConnectionsAndCharacteristicClasses and EllipticOperators. K-theoretic and families index theorems are stated; holomorphic Riemann–Roch is the algebraic-geometry campaign's consumer.",
+  "prerequisites": [
+   "GlobalAnalysisOnManifolds/EllipticOperators",
+   "ConnectionsAndCharacteristicClasses",
+   "OrthogonalSpinGroups"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#335",
+    "OAI#336"
+   ]
+  },
+  "porting": [
+   "none in OAI (Berline–Getzler–Vergne; Lawson–Michelsohn)"
+  ],
+  "replaces": [
+   "index-theory basics (BOUNDARIES)",
+   "GlobalRiemannianGeometry (OAI, Chern–Gauss–Bonnet/Hitchin–Thorpe)"
+  ]
+ },
+ {
+  "name": "GlobalAnalysisOnManifolds/MinimalSubmanifolds",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "B",
+  "scope": "This roadmap develops minimal submanifolds and the regularity of stationary and minimizing varifolds and currents: variations, stability and index, Simons' identity, monotonicity, calibrations, minimal surfaces in ℝ³ and spheres, the Plateau problem; then Allard regularity, De Giorgi ε-regularity for minimizing and almost-minimizing boundaries (hence isoperimetric and CMC regularity), dimension reduction, the Simons cone and Bernstein's theorem. It consumes the objects and compactness theorems of the analysis campaign's GeometricMeasureTheory and CurvatureAndSubmanifolds. Min–max, Schoen–Yau descent and μ-bubbles have their smooth core proved and regularity-heavy endpoints stated.",
+  "prerequisites": [
+   "RiemannianGeometry/CurvatureAndSubmanifolds",
+   "GlobalAnalysisOnManifolds/EllipticOperators",
+   "GeometricMeasureTheory (ANA)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#68"
+   ],
+   "OpenAI": [
+    "OAI#335",
+    "OAI#336",
+    "OAI#346",
+    "OAI#349",
+    "OAI#375"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/StableBernstein, Varifold, HypersurfaceGerms",
+   "OAI Geometry/Perimeter, CubicTorus (regularity half)"
+  ],
+  "replaces": [
+   "MinimalSubmanifolds (Annals P19; OAI)",
+   "regularity part of GeometricMeasureTheory (analysis share; Annals P22)"
+  ]
+ },
+ {
+  "name": "GlobalAnalysisOnManifolds/GeometricFlows",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "C",
+  "scope": "This roadmap develops Ricci flow, mean curvature flow, the Kähler–Ricci and Calabi flows and the harmonic map heat flow: their shared parabolic theory on closed manifolds (short-time existence, DeTurck's trick, scalar and tensor maximum principles), curvature evolution, and the monotonicity formulas that control singularities, with the classical convergence theorems as milestones. It consumes EllipticOperators, MinimalSubmanifolds, KahlerGeometry and the analysis campaign's parabolic PDE. Singularity theory beyond the classical results is stated.",
+  "prerequisites": [
+   "GlobalAnalysisOnManifolds/EllipticOperators",
+   "GlobalAnalysisOnManifolds/MinimalSubmanifolds",
+   "KahlerGeometry",
+   "PDE (Lane F)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#81"
+   ],
+   "OpenAI": [
+    "OAI#338",
+    "OAI#341",
+    "OAI#351",
+    "OAI#352",
+    "OAI#355"
+   ]
+  },
+  "porting": [
+   "none in OAI (Chow–Knopf, Topping, Mantegazza)"
+  ],
+  "replaces": [
+   "GeometricFlows (Annals P29; OAI)"
+  ]
+ },
+ {
+  "name": "GlobalAnalysisOnManifolds/GaugeTheory",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "C",
+  "scope": "This roadmap develops the analysis of gauge-theoretic equations over compact manifolds: Yang–Mills, anti-self-dual connections, Uhlenbeck gauge fixing and compactness, instanton moduli spaces, Seiberg–Witten, and Hermitian–Yang–Mills on Kähler manifolds. Its milestones are Donaldson's diagonalization theorem, Witten's vanishing under positive scalar curvature and Donaldson–Uhlenbeck–Yau. It consumes ConnectionsAndCharacteristicClasses, EllipticOperators, DiracOperatorsAndIndexTheory and the algebraic-geometry campaign's stable bundles. Floer homologies and Donaldson invariants are stated.",
+  "prerequisites": [
+   "ConnectionsAndCharacteristicClasses",
+   "GlobalAnalysisOnManifolds/DiracOperatorsAndIndexTheory"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#306"
+   ]
+  },
+  "porting": [
+   "none (Donaldson–Kronheimer; Morgan)"
+  ],
+  "replaces": [
+   "GaugeTheory (OAI)"
+  ]
+ },
+ {
+  "name": "SymplecticAndContactGeometry/SymplecticManifolds",
+  "campaign": "GEO",
+  "topic": "math.SG",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "B",
+  "scope": "This roadmap develops symplectic manifolds between the local normal forms and Floer theory: cotangent bundles, Lagrangian and coisotropic submanifolds and Weinstein's neighbourhood theorems, Liouville volume, Symp and Ham with flux, Hamiltonian Lie group actions and reduction, convexity and the Delzant classification, blow-up and cuts, toric domains, and Liouville–Arnold. It consumes HeegaardFloer Lane F2.1 (Darboux, Moser), HamiltonianSystems (#480) and RepresentationTheory/LieGroups. Pseudoholomorphic curves and what needs them are later sub-roadmaps; KAM and twist maps are the dynamics campaign's.",
+  "prerequisites": [
+   "HeegaardFloer F2.1",
+   "HamiltonianSystems (#480)",
+   "RepresentationTheory/LieGroups",
+   "DifferentialGeometry"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#69"
+   ],
+   "OpenAI": [
+    "OAI#343",
+    "OAI#347"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/Symplectic, BallPacking (207)",
+   "explorer draft SymplecticContactGeometry SC.3–SC.7"
+  ],
+  "replaces": [
+   "SymplecticTopology (OAI, neighbourhood/toric/cut part)",
+   "SymplecticRigidity (Annals P20, Symp/Ham part)"
+  ]
+ },
+ {
+  "name": "SymplecticAndContactGeometry/ContactGeometry",
+  "campaign": "GEO",
+  "topic": "math.SG",
+  "size": "L",
+  "est_prs": 180,
+  "wave": "A",
+  "scope": "This roadmap develops contact geometry in all odd dimensions with the three-dimensional theory of Legendrian knots and tightness: contact forms, Reeb flows, contact Hamiltonians, the Darboux and Gray theorems, Legendrian neighbourhoods, symplectization, fronts with Thurston–Bennequin and rotation numbers, overtwisted discs, Lutz–Martinet existence, and symplectic fillings. It consumes DifferentialGeometry and shares Liouville domains with DGFloer (#655) Layer 6. Contact homology is not here; Eliashberg's classification, Giroux's correspondence and the Weinstein conjecture are stated.",
+  "prerequisites": [
+   "DifferentialGeometry",
+   "GeometricTopology (surgery)",
+   "Liouville domains: DGFloer (#655) L6 if merged first, else defined here and aliased there"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#80"
+   ],
+   "OpenAI": []
+  },
+  "porting": [
+   "explorer draft SymplecticContactGeometry SC.0–SC.2",
+   "Tau Ceti standard contact distribution"
+  ],
+  "replaces": [
+   "ContactGeometry (Annals P28)"
+  ]
+ },
+ {
+  "name": "SymplecticAndContactGeometry/PseudoholomorphicCurves",
+  "campaign": "GEO",
+  "topic": "math.SG",
+  "size": "L",
+  "est_prs": 280,
+  "wave": "B",
+  "scope": "This roadmap extends HeegaardFloer Lanes F0–F2 (genus zero, fixed domains, Lagrangian boundary) to closed pseudoholomorphic curves in closed symplectic manifolds, following McDuff–Salamon: simple curves, the index n(2−2g) + 2c₁(A), generic transversality, pseudocycles, Gromov compactness to genus-zero stable maps, semipositive genus-zero Gromov–Witten invariants and quantum cohomology, and nonsqueezing. It consumes HeegaardFloer's Fredholm and Cauchy–Riemann package, SymplecticManifolds, and StableReduction's dual graphs. Virtual classes are out of scope; algebraic Gromov–Witten theory is the algebraic-geometry campaign's.",
+  "prerequisites": [
+   "HeegaardFloer F0–F2",
+   "SymplecticAndContactGeometry/SymplecticManifolds",
+   "StableReduction"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#83"
+   ],
+   "OpenAI": [
+    "OAI#087",
+    "OAI#343"
+   ]
+  },
+  "porting": [
+   "Tau Ceti Geometry/Symplectic/JHolomorphic",
+   "McDuff–Salamon"
+  ],
+  "replaces": [
+   "PseudoholomorphicCurveModuli (Annals P17)"
+  ]
+ },
+ {
+  "name": "SymplecticAndContactGeometry/FloerTheoryAndSymplecticRigidity",
+  "campaign": "GEO",
+  "topic": "math.SG",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "B",
+  "scope": "This roadmap develops symplectic rigidity: capacities and embedding obstructions, Hofer geometry, monotone Hamiltonian Floer homology with the PSS isomorphism, spectral invariants and norm, the Arnold conjecture in its cup-length form, and exact Lagrangians in cotangent bundles through generating functions. It consumes DGFloer (#655) Layers 6–7 (aspherical Floer complex, action filtration, Hofer–Zehnder capacity), HeegaardFloer Lane F3 and PseudoholomorphicCurves. Fukaya categories and ECH are stated where needed, not built.",
+  "prerequisites": [
+   "DGFloer (#655)",
+   "HamiltonianSystems (#480)",
+   "HeegaardFloer F3",
+   "SymplecticAndContactGeometry/PseudoholomorphicCurves"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#69",
+    "Annals#73"
+   ],
+   "OpenAI": [
+    "OAI#087",
+    "OAI#340",
+    "OAI#343",
+    "OAI#347"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/BallPacking, PolarProducts, Arnold, NearbyLagrangian (93)"
+  ],
+  "replaces": [
+   "SymplecticRigidity (Annals P20)",
+   "SymplecticTopology (OAI, capacities/packings/Lagrangians)"
+  ]
+ },
+ {
+  "name": "ConnectionsAndCharacteristicClasses",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "A",
+  "scope": "This roadmap develops principal bundles with Lie structure group, connections, curvature, holonomy and Chern–Weil theory: associated and frame bundles, reductions of structure group, connection forms and the structure equation, induced covariant derivatives matched with Tau Ceti's, gauge transformations, holonomy and Ambrose–Singer, flat connections, Chern, Pontryagin and Euler forms, Chern–Simons forms, and Riemannian holonomy (de Rham decomposition, Berger's list). It consumes DifferentialGeometry and RepresentationTheory/LieGroups. Gauge-theoretic analysis is GaugeTheory's; the Chern connection of a Hermitian holomorphic bundle belongs to the algebraic-geometry campaign's Kähler roadmap, which consumes this one.",
+  "prerequisites": [
+   "DifferentialGeometry L0–L6",
+   "RepresentationTheory/LieGroups",
+   "UniversalCovers"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#79"
+   ],
+   "OpenAI": [
+    "OAI#062",
+    "OAI#306",
+    "OAI#341",
+    "OAI#348"
+   ]
+  },
+  "porting": [
+   "DifferentialGeometry PR #334 §10 design",
+   "Tau Ceti CovariantDerivative code",
+   "Tu; Kobayashi–Nomizu"
+  ],
+  "replaces": [
+   "ConnectionsAndCharacteristicClasses (Annals P27)",
+   "GlobalRiemannianGeometry (OAI, Chern–Weil part)"
+  ]
+ },
+ {
+  "name": "LorentzianGeometry",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "B",
+  "scope": "This roadmap develops semi-Riemannian geometry with emphasis on Lorentzian causal structure: the Levi-Civita connection and curvature of nondegenerate metrics, time orientations, the causal ladder through global hyperbolicity, Cauchy surfaces and Geroch splitting, maximal causal geodesics, the Raychaudhuri equation, and the Hawking and Penrose singularity theorems. It covers the standard spacetimes, initial data sets with the constraint equations and energy conditions, ADM energy–momentum and trapped surfaces. Einstein evolution is the analysis campaign's EinsteinEvolutionEquations; the positive mass theorem, Penrose inequality and maximal development are stated.",
+  "prerequisites": [
+   "DifferentialGeometry",
+   "HopfRinow (template)",
+   "RiemannianGeometry/CurvatureAndSubmanifolds"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#87"
+   ],
+   "OpenAI": [
+    "OAI#260",
+    "OAI#264"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/Relativity (336 files)",
+   "O'Neill; Hawking–Ellis"
+  ],
+  "replaces": [
+   "LorentzianGeometry (Annals P34)",
+   "MathematicalRelativity (probability/physics share)"
+  ]
+ },
+ {
+  "name": "KahlerGeometry",
+  "campaign": "GEO",
+  "topic": "math.DG",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "C",
+  "scope": "This roadmap studies Kähler metrics as Riemannian objects: holomorphic sectional and bisectional curvature, Kähler–Einstein, cscK and extremal metrics with the Futaki invariant and Matsushima's obstruction, symmetry reductions (Calabi ansatz, toric metrics, Kähler cuts), hyperkähler metrics, and Yau's solution of the Calabi conjecture with the Aubin–Yau theorem. It consumes Kähler manifolds, the Chern connection, the Ricci form and the ∂∂̄-lemma from the algebraic-geometry campaign's KahlerManifoldsAndHodgeTheory, with EllipticOperators and ConnectionsAndCharacteristicClasses. Pluripotential theory and weak solutions are the analysis campaign's PositiveCurrentsAndMongeAmpere; K-stability and Chen–Donaldson–Sun are the algebraic-geometry campaign's.",
+  "prerequisites": [
+   "KahlerManifoldsAndHodgeTheory (AG proposal)",
+   "GlobalAnalysisOnManifolds/EllipticOperators",
+   "ConnectionsAndCharacteristicClasses",
+   "ComplexManifolds (#279)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#64",
+    "Annals#76",
+    "Annals#91"
+   ],
+   "OpenAI": [
+    "OAI#041",
+    "OAI#062",
+    "OAI#338",
+    "OAI#341",
+    "OAI#343",
+    "OAI#347",
+    "OAI#352",
+    "OAI#359"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/PrescribedRicci (161; Chern–Lu, Calabi C³)",
+   "OAI Geometry/Kahler (119), KahlerSplitting (46)"
+  ],
+  "replaces": [
+   "KahlerGeometry (Annals P12 metric part; OAI)",
+   "CalabiYauAndComplexMongeAmpere (Annals P13)",
+   "Calabi–Yau part of PositiveCurrentsAndMongeAmpere (AG share)"
+  ]
+ },
+ {
+  "name": "MetricGeometry",
+  "campaign": "GEO",
+  "topic": "math.MG",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "A",
+  "scope": "This roadmap develops the geometry of metric spaces through lengths, curvature comparison and convergence: length and geodesic spaces, metric Hopf–Rinow, model spaces, comparison triangles and Alexandrov angles, pointed and measured Gromov–Hausdorff convergence with Gromov's precompactness, ultralimits and asymptotic cones, metric cones, and Alexandrov spaces of curvature bounded below through Toponogov globalization and Burago–Gromov–Perelman. It consumes Mathlib's Gromov–Hausdorff space and extends OptimalTransport Layer 8's CBB(κ) predicate. CAT(κ) spaces are the algebra campaign's NonpositiveCurvature, which consumes the comparison layer here; RCD spaces stay with OptimalTransport Layer 14.",
+  "prerequisites": [
+   "Mathlib GromovHausdorff",
+   "Tau Ceti length-space code",
+   "OptimalTransport L8",
+   "HopfRinow (normal coordinates)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#75"
+   ],
+   "OpenAI": [
+    "OAI#211",
+    "OAI#337",
+    "OAI#356",
+    "OAI#357"
+   ]
+  },
+  "porting": [
+   "OAI Geometry/RCD (pointed rescalings), CAT0Fillings",
+   "Burago–Burago–Ivanov"
+  ],
+  "replaces": [
+   "AlexandrovAndCATSpaces (OAI, CBB/comparison part)",
+   "ComparisonGeometry (Annals P10, GH part)"
+  ]
+ },
+ {
+  "name": "MetricEmbeddings",
+  "campaign": "GEO",
+  "topic": "math.MG",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "A",
+  "scope": "This roadmap studies bi-Lipschitz, coarse and quasisymmetric embeddings of metric spaces: distortion, Lipschitz extension, Fréchet, Bourgain and Johnson–Lindenstrauss, L₁ as the cut cone and negative type, Poincaré inequalities as obstructions (Enflo, expanders, Brinkman–Charikar), doubling spaces and Assouad, coarse embeddings, and quasisymmetric maps with conformal dimension and combinatorial modulus. It consumes Mathlib's L^p spaces and GraphConnectivityAndFlows (#444). LP/SDP relaxations and rounding are the logic-and-computation campaign's, Banach-space invariants (type, cotype, Ribe, Markov type) FAMP's; both consume this roadmap.",
+  "prerequisites": [
+   "Mathlib L^p, SimpleGraph",
+   "GraphConnectivityAndFlows (#444) and PlanarTopology (#271), for the flow–cut and planar layers only"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#089",
+    "OAI#094",
+    "OAI#098",
+    "OAI#099",
+    "OAI#110",
+    "OAI#117",
+    "OAI#246",
+    "OAI#307"
+   ]
+  },
+  "porting": [
+   "OAI Combinatorics/PlanarL1, TreewidthL1, EditDistance",
+   "OAI Analysis/LpDimension",
+   "OAI Geometry/DoublingHilbert, Cannon (299)"
+  ],
+  "replaces": [
+   "MetricEmbeddings (OAI geometry share)",
+   "ConvexRelaxationsAndMetricEmbeddings (OAI combinatorics share, embedding part)"
+  ]
+ },
+ {
+  "name": "ConvexBodies",
+  "campaign": "GEO",
+  "topic": "math.MG",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "A",
+  "scope": "This roadmap builds the Brunn–Minkowski theory of convex bodies in Euclidean space: support functions, mixed volumes and the Steiner formula, the Brunn–Minkowski, Minkowski and Aleksandrov–Fenchel inequalities with equality cases, the Minkowski problem, polarity and Blaschke–Santaló, projection and centroid bodies with the cosine transform, symmetrization, the affine invariants (John ellipsoid, isotropic position, affine surface area) and the L_p theory. It consumes Mathlib's ConvexBody and shares Brunn–Minkowski and Prékopa–Leindler with ArithmeticHeights (#287) C.3. Log-concave measures are the probability campaign's, packings PackingCoveringAndEnergy's, Monge–Ampère regularity OptimalTransport Layer 6's.",
+  "prerequisites": [
+   "Mathlib Analysis/Convex/Body",
+   "ArithmeticHeights (#287) C.3 if merged first, else proved here and aliased there",
+   "OptimalTransport L6"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#087",
+    "OAI#088",
+    "OAI#091",
+    "OAI#101",
+    "OAI#353"
+   ]
+  },
+  "porting": [
+   "OAI Analysis/Mahler (243)",
+   "OAI Geometry/Convex/GeneralMahler, ProjectionBodies, LogVolume, Zonotope"
+  ],
+  "replaces": [
+   "ConvexBodies (OAI geometry share)"
+  ]
+ },
+ {
+  "name": "PackingCoveringAndEnergy",
+  "campaign": "GEO",
+  "topic": "math.MG",
+  "size": "L",
+  "est_prs": 180,
+  "wave": "B",
+  "scope": "This roadmap studies packings, coverings and point energies: packing and covering densities of convex bodies, the geometric invariants of positive-definite lattices (covering radius, Voronoi cells, Hermite constant, kissing configurations, well-roundedness), Voronoi's perfect and eutactic forms, spherical codes and designs with Delsarte's bounds and Venkov's theorem, Minkowski–Hlawka, Rogers' bound, the Cohn–Elkies bound and energies for completely monotone, Coulomb and Riesz potentials. It consumes IntegralLattices, ThetaSeries (#286), Mathlib Fourier analysis and ConvexBodies. Arithmetic of quadratic forms stays with IntegralLattices; Viazovska's theorems are stated.",
+  "prerequisites": [
+   "IntegralLattices",
+   "ThetaSeries (#286)",
+   "ConvexBodies"
+  ],
+  "goals": {
+   "LMFDB": [
+    "lattice"
+   ],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#090",
+    "OAI#092"
+   ]
+  },
+  "porting": [
+   "OAI Analysis/Triangular, PlanarPacking (certificates)",
+   "OAI Geometry/LatticeCovering, TranslativeCovering",
+   "sphere-packing project (coordinate first)"
+  ],
+  "replaces": [
+   "PackingCoveringEnergy (OAI geometry share)",
+   "LatticePackingsAndPerfectForms (LMFDB P21, geometric part)"
+  ]
+ }
+]

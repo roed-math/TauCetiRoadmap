@@ -1,0 +1,812 @@
+[
+ {
+  "name": "LMFDBLabelsAndCompleteness",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "A",
+  "lane": "LMFDB",
+  "sub_roadmaps": [],
+  "scope": "An LMFDB label names an isomorphism class of an arithmetic object by a tuple of isomorphism invariants followed by an index into a finite list sorted by a fixed rule. The object roadmaps state the invariant half as predicates (the number-field prefix d.r.D, nTj for n ≤ 5, Belyi passports, the newform prefix N.k.a) and stop at the index; this roadmap owns the index. It builds a generic carrier for labelled finite enumeration (a complete computable invariant with a total order, the induced bijection with an initial segment of N, base-26 class codes), the normal forms that pick representatives (polredabs, Hermite-normal-form ideal and prime labels, the trace-vector order of newform orbits, the a_p order of isogeny classes, RSZB subgroup labels, p-adic field and family labels, L-function, Artin, Sato-Tate, lattice and Galois-representation labels), and the completeness theorems that make an enumeration exhaustive (Hunter-Pohst; Krasner with Serre's mass formula; dimension formula plus Sturm bound; Cremona-style completeness by conductor with modularity as a named hypothesis). It fixes once the conventions that change meaning between systems (permutation composition, Weierstrass coefficient order, L-polynomial versus characteristic polynomial, arithmetic versus analytic normalization, Conrey versus Mathlib characters, embedding order) and states conditional data (class groups under GRH via Bach's bound, analytic ranks as proved upper bounds, analytic Ш as the rounding of the BSD quotient) as implications from named hypotheses. A predicate invariant under isomorphism belongs to the object roadmap; anything that depends on an ordering, a normal form, a stored list or a convention belongs here. Searching for objects and storing tables are outside it.",
+  "prerequisites": [
+   "NumberFieldArithmetic",
+   "PolynomialGaloisGroups",
+   "ModularForms",
+   "EllipticCurves",
+   "BelyiMaps",
+   "IntegralLattices",
+   "LocalFieldsRamification",
+   "MassFormula (#226)",
+   "CertifiedPermutationComputation (#717)",
+   "every LMFDB-lane object roadmap below (per-section label layers)",
+   "CertifiedArithmeticComputation (campaign unit U5, certificate schema)"
+  ],
+  "goals": {
+   "LMFDB": [
+    "artin",
+    "av.fq",
+    "belyi",
+    "bmf",
+    "cmf",
+    "ec",
+    "ecnf",
+    "g2c",
+    "gg",
+    "group.abstract",
+    "hgcwa",
+    "hgm",
+    "hmf",
+    "hmsurface",
+    "lattice",
+    "lf",
+    "lfunction",
+    "maass",
+    "modcurve",
+    "modlgal",
+    "nf",
+    "shimcurve",
+    "smf",
+    "st_group"
+   ],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [
+   "Tau Ceti IntrinsicLabel.lean, TransitiveGroupLabel/, Passport/Label.lean",
+   "LMFDB source (label and ordering code) as the specification"
+  ],
+  "replaces": [
+   "LMFDBLabelsAndCompleteness (lmfdb P1)",
+   "ComputationalNumberTheory CN.5 (LMFDB instance)"
+  ]
+ },
+ {
+  "name": "ArithmeticOfFiniteFields",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "XL family (3 subs)",
+  "est_prs": 650,
+  "wave": "A (subs 1-2), B (sub 3)",
+  "lane": "LMFDB",
+  "sub_roadmaps": [
+   {
+    "name": "CharacterSumsOverFiniteFields",
+    "size": "M",
+    "est_prs": 120
+   },
+   {
+    "name": "CurvesOverFiniteFields",
+    "size": "L",
+    "est_prs": 230
+   },
+   {
+    "name": "AbelianVarietiesOverFiniteFields",
+    "size": "L",
+    "est_prs": 300
+   }
+  ],
+  "scope": "This family develops arithmetic over a finite field 𝔽_q around point counts and the Weil bounds. CharacterSumsOverFiniteFields covers multiplicative and additive characters of 𝔽_q and of finite rings, Gauss and Jacobi sums of every order with their absolute values, the Hasse-Davenport lifting and product relations, Kloosterman and Salié sums, and the Weil bounds for character sums of polynomials and for Kloosterman sums, deduced from the Riemann hypothesis for Kummer and Artin-Schreier curves. CurvesOverFiniteFields defines the zeta function of a function field in one variable over 𝔽_q, proves rationality and the functional equation from AlgebraicCurves' Riemann-Roch, identifies L_F(1) with the class number, proves the Riemann hypothesis by Stepanov-Bombieri, derives the Hasse-Weil, Serre and Ihara bounds, and develops Weil polynomials as a combinatorial theory (q-Weil numbers, finiteness, Newton polygons and p-rank, angle rank, Galois groups). AbelianVarietiesOverFiniteFields attaches the q-Frobenius and its characteristic polynomial on Tate modules, proves Tate's isogeny theorem and the description of End^0 with Tate's local invariants, proves Honda-Tate (Honda's existence via CM lifting cited from ComplexMultiplicationAndExplicitReciprocity), and builds the invariants of isomorphism classes inside an isogeny class (Deligne modules, Centeleghe-Stix, the orders Z[pi, q/pi], Bass and Gorenstein orders, weak equivalence classes, principal polarizability, Jacobians in dimension 2). The cohomological Weil conjectures in higher dimension and ℓ-adic sheaves are AG's (WeilConjectures, PR #196), which consume the curve case from here; codes are AlgebraicCodingTheory's; finite hypergeometric sums are HypergeometricMotives'.",
+  "prerequisites": [
+   "AlgebraicCurves",
+   "JacobianChallenge",
+   "ClassFieldTheory",
+   "NumberFieldArithmetic",
+   "AG abelian-variety supplier (AbelianSchemesAndArithmeticModuli promoted, plus Poincare reducibility/Rosati/Albert)",
+   "ComplexMultiplicationAndExplicitReciprocity (U16)",
+   "Mathlib GaussSum, JacobiSum, MulChar"
+  ],
+  "goals": {
+   "LMFDB": [
+    "av.fq",
+    "character.dirichlet",
+    "g2c",
+    "modcurve",
+    "shimcurve"
+   ],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#013"
+   ]
+  },
+  "porting": [
+   "none known in Lean beyond Mathlib Gauss/Jacobi sums and Tau Ceti EllipticCurves Layer 3 (Hasse bound)"
+  ],
+  "replaces": [
+   "CurvesOverFiniteFields (lmfdb P2)",
+   "AbelianVarietiesOverFiniteFields (lmfdb P3)",
+   "FiniteFieldsAndCharacterSums (campaign FF.0-FF.3, FF.5)",
+   "FunctionFieldArithmetic FA.5 (campaign)"
+  ]
+ },
+ {
+  "name": "HyperellipticCurves",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "A",
+  "lane": "LMFDB",
+  "sub_roadmaps": [],
+  "scope": "A hyperelliptic curve over a field k is a smooth projective curve with a degree-2 map to ℙ¹, with a model y^2 + h(x)y = f(x) in every characteristic. This roadmap builds the models and their symmetries (weighted projective model, the action of GL_2(k) x k^x, hyperelliptic involution, Weierstrass points, twists, the characteristic-free discriminant), the genus-2 invariants (Igusa-Clebsch, Igusa's J_2..J_10, G2 invariants, the theorem that they characterize k̄-isomorphism, Mestre's obstruction, the classification of automorphism groups), minimal models over discrete valuation rings and over Z (Liu), the cluster pictures of Dokchitser-Dokchitser-Maistret-Morgan for p odd with the semistability criterion and the dictionary to special fibre, Tamagawa numbers, root numbers and conductor exponents, and the arithmetic of the Jacobian: 2-descent through k[x]/(f), the 2-Selmer group, local solvability and the explicit Euler factors at good primes. Curves, Riemann-Roch and the Jacobian are imported from AlgebraicCurves (Layer 10) and JacobianChallenge (AG); Néron models and component groups from AG's NéronModelsAndSemistableAbelianVarieties as an interface; endomorphism types are SatoTateGroups'.",
+  "prerequisites": [
+   "AlgebraicCurves",
+   "JacobianChallenge",
+   "EllipticCurves (minimal-model style)",
+   "LocalFieldsRamification",
+   "CurvesOverFiniteFields (ArithmeticOfFiniteFields)",
+   "AG NeronModelsAndSemistableAbelianVarieties (interface)"
+  ],
+  "goals": {
+   "LMFDB": [
+    "g2c"
+   ],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [
+   "none known"
+  ],
+  "replaces": [
+   "HyperellipticCurves (lmfdb P5; AlgebraicCurves names it)"
+  ]
+ },
+ {
+  "name": "QuaternionArithmetic",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "A",
+  "lane": "LMFDB",
+  "sub_roadmaps": [],
+  "scope": "Quaternion algebras over a number field F are classified by their ramification sets, finite sets of noncomplex places of even cardinality. On the model of Voight's book this roadmap builds local algebras and Hilbert-symbol invariants, the classification (Hilbert reciprocity and Hasse-Minkowski consumed), reduced norm and trace forms, orders with their discriminants and levels (maximal, Eichler, Gorenstein, Bass), ideals, class sets and type numbers, the Eichler mass formula and Eichler's class-number theorem for indefinite algebras, optimal embeddings of quadratic orders and embedding numbers, and Brandt matrices. Over Q, for indefinite B of discriminant D, the norm-one units of an Eichler order of level N form an arithmetic Fuchsian group; the roadmap proves cocompactness for D > 1, Shimizu's covolume formula, the genus and elliptic points of X(D;N) from embedding numbers, the Atkin-Lehner group and X*(D;N), and the theory of polarized orders and enhanced groups by which the LMFDB indexes Shimura curves. The moduli interpretation by QM abelian surfaces is ShimuraVarieties' (campaign HilbertModularVarietiesAndShimuraCurves); models and gonality are AG's CanonicalModelsAndGonality.",
+  "prerequisites": [
+   "QuadraticFormInvariants",
+   "GlobalQuadraticForms",
+   "ClassFieldTheory",
+   "NumberFieldArithmetic",
+   "GlobalNumberFields",
+   "FuchsianOrbifolds",
+   "OrthogonalSpinGroups",
+   "Mathlib QuaternionAlgebra"
+  ],
+  "goals": {
+   "LMFDB": [
+    "hmf",
+    "shimcurve"
+   ],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [
+   "Voight (book) as source; no Lean"
+  ],
+  "replaces": [
+   "QuaternionArithmetic (lmfdb P6; July-plan W2)"
+  ]
+ },
+ {
+  "name": "ArtinRepresentations",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 240,
+  "wave": "B (#248)",
+  "lane": "LMFDB",
+  "sub_roadmaps": [],
+  "scope": "An Artin representation is a continuous representation of a Galois group of a local or global field on a finite-dimensional complex vector space; its image is finite. Locally, the roadmap owns the Artin and Swan conductors of representations of local Galois groups (defined from LocalFieldsRamification's filtration; integrality by Hasse-Arf), the Langlands-Deligne local constants of Weil-Deligne representations characterized by inductivity in degree zero and the abelian case (existence cited), and local root numbers, including Rohrlich's formulas for elliptic curves and the root number of a p-adic field. Globally it defines Artin L-functions with Euler factors on inertia invariants, proves invariance under induction and inflation, derives meromorphic continuation and the functional equation from Brauer induction and LFunctions' Hecke L-functions, proves the conductor-discriminant formula, and states the Artin conjecture (solvable cases cited), the weight-one dictionary and Stark's conjecture at s = 0. It builds the invariants the LMFDB records (determinant, parity, Frobenius-Schur indicator, projective image and type, Artin and projective fields), and a final layer on finite-image representations into GL_n(𝔽̄_ℓ): image, conductor prime to l, Frobenius characteristic polynomials and Chebotarev recognition. ℓ-adic representations, Weil-Deligne monodromy and Tate modules stay with the campaign's ArithmeticGaloisRepresentations, which consumes the conductors from here.",
+  "prerequisites": [
+   "LFunctions (#248)",
+   "RepresentationTheory/CharacterTheory and InductionRestriction",
+   "LocalFieldsRamification",
+   "LocalGaloisGroups",
+   "ClassFieldTheory",
+   "Chebotarev",
+   "AdelicFourierAnalysis (Tate local constants for GL_1)"
+  ],
+  "goals": {
+   "LMFDB": [
+    "artin",
+    "cmf",
+    "ec",
+    "lf",
+    "modlgal"
+   ],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [
+   "none known"
+  ],
+  "replaces": [
+   "ArtinRepresentations (lmfdb P7; named by #248)",
+   "ArithmeticGaloisRepresentations R01.3 and the finite-image part of R01.4-R01.5 (campaign)"
+  ]
+ },
+ {
+  "name": "SatoTateGroups",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "A (group side), B (arithmetic)",
+  "lane": "LMFDB",
+  "sub_roadmaps": [],
+  "scope": "A Sato-Tate group of weight w and degree d is a compact subgroup of USp(d) or O(d) satisfying the Fité-Kedlaya-Rotger-Sutherland axioms. The roadmap defines the axioms, identity component and component group, and the pushforward of Haar measure to characteristic polynomials; computes moment sequences, a_1 and a_2 moments, moment matrices and trace-zero densities by the Weyl integration formula; proves the classifications in degree 2 (SU(2), U(1), N(U(1))) and the 52 groups of degree 4 with their subgroup lattice, and records degree 6 as checked data. Its arithmetic half develops the endomorphism invariants the databases display (End over k and over k̄, the endomorphism field, the real endomorphism algebra End^0 tensor R, Galois endomorphism types in dimension 2, GL_2-type abelian varieties and Q-curves), the Sato-Tate group of an abelian variety and of a newform (Zariski closure of the ℓ-adic image; algebraic Sato-Tate conjecture stated), and equidistribution as a statement, proved for CM elliptic curves from Hecke L-functions. Poincaré reducibility, Rosati positivity and Albert's classification are imported from AG's abelian-variety roadmap; compact Lie groups from RepresentationTheory.",
+  "prerequisites": [
+   "RepresentationTheory/CompactGroups, LieGroups, ClassicalGroups",
+   "LFunctions (#248)",
+   "ArithmeticGaloisRepresentations (campaign U25)",
+   "AG abelian varieties (Poincare, Rosati, Albert)",
+   "JacobianChallenge"
+  ],
+  "goals": {
+   "LMFDB": [
+    "ec",
+    "ecnf",
+    "g2c",
+    "st_group"
+   ],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [
+   "none known"
+  ],
+  "replaces": [
+   "SatoTateGroups (lmfdb P8)",
+   "EndomorphismAlgebrasOfAbelianVarieties (lmfdb P4), arithmetic half"
+  ]
+ },
+ {
+  "name": "AdelicImagesAndModularCurves",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 300,
+  "wave": "A (group side), B (moduli side)",
+  "lane": "LMFDB",
+  "sub_roadmaps": [],
+  "scope": "For an elliptic curve E over a number field K the torsion representation is ρ_E: G_K -> GL_2(Ẑ). This roadmap builds the group theory, arithmetic and moduli that the LMFDB uses to describe its image. Group side: open subgroups H of GL_2(Ẑ) with level and index, Γ_H = H cap SL_2(Z) with genus, cusps, widths and elliptic points, Dickson's classification of subgroups of GL_2(𝔽_ℓ), Serre's lifting lemma, entanglement and the index-2 commutator obstruction, and the analogous theory for GSp_4(Ẑ). Arithmetic side: mod-N, ℓ-adic and adelic images, adelic index, Serre's open image theorem for non-CM curves, the CM counterpart from class field theory, and Mazur's torsion and isogeny theorems and Kenku's bound as cited statements with their consequences for isogeny classes and isogeny graphs. Moduli side: the curve X_H over K for open H with det(H) containing the cyclotomic image, its points as curves with image in H (with the -I and j = 0, 1728 caveats), the j-map, cusps and their fields of definition, CM and isolated points, fiber products, Gassmann-equivalent subgroups, minimal twists, local obstructions, and J_H up to isogeny as a product of newform quotients A_f. Katz-Mazur moduli and integral models are ModularCurves' and its campaign continuation; models and gonality are AG's CanonicalModelsAndGonality.",
+  "prerequisites": [
+   "ProfiniteProPGroups",
+   "ModularForms (Layer 10)",
+   "FuchsianOrbifolds",
+   "EllipticCurves",
+   "ModularCurves",
+   "ClassFieldTheory",
+   "ModularCurvesPartII R13.4a, R14.5 (campaign U11)"
+  ],
+  "goals": {
+   "LMFDB": [
+    "ec",
+    "ecnf",
+    "g2c",
+    "modcurve"
+   ],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [
+   "RSZB/RZB modular-curve data as test data; no Lean"
+  ],
+  "replaces": [
+   "AdelicImagesAndModularCurves (lmfdb P9)"
+  ]
+ },
+ {
+  "name": "EllipticCurvePeriodsAndModularParametrizations",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "M",
+  "est_prs": 110,
+  "wave": "B",
+  "lane": "LMFDB",
+  "sub_roadmaps": [],
+  "scope": "This roadmap owns the invariants of an elliptic curve built from its periods or from X_0(N). It defines the period lattice of E over a number field K at each real and complex place, the global period Ω_{E/K} and the BSD quotient over K (EllipticCurves stops at the real period over Q), and analytic Ш over Q and over K as a real number defined by the BSD quotient, with L*(E,1) supplied by RankZeroOneBSD over Q and by a pinned continuation hypothesis over K. For the modular parametrization phi: X_0(N) -> E it develops X_0(N)- and Γ₁(N)-optimal curves, the modular degree and its relation to <f,f> and to the congruence modulus, the Manin constant with phi*omega = c 2 pi i f(tau) dtau (integrality results cited, Manin's conjecture c = 1 stated), Stevens' conjecture stated, and Cremona's convention placing the optimal curve first as an interface to LMFDBLabelsAndCompleteness. Modularity itself, A_f and Hecke correspondences are the campaign's (EllipticCurveModularity, ModularCurvesPartII R14).",
+  "prerequisites": [
+   "EllipticCurves",
+   "ModularForms",
+   "AdelicImagesAndModularCurves",
+   "ModularCurvesPartII R12.1, R14.5 (campaign U11)",
+   "EllipticCurveModularity and RankZeroOneBSD BSD.0 (campaign, interfaces)"
+  ],
+  "goals": {
+   "LMFDB": [
+    "ec",
+    "ecnf"
+   ],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [
+   "none known"
+  ],
+  "replaces": [
+   "EllipticCurvePeriodsAndModularParametrizations (lmfdb P11)",
+   "EichlerShimuraModularAV (July plan W3), invariant layer"
+  ]
+ },
+ {
+  "name": "HypergeometricMotives",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "B",
+  "lane": "LMFDB",
+  "sub_roadmaps": [],
+  "scope": "Hypergeometric data are disjoint Galois-stable multisets alpha, beta in Q/Z, equivalently cyclotomic parameter vectors. The roadmap develops the monodromy (hypergeometric groups generated by companion matrices, Levelt's rigidity theorem, the Beukers-Heckman finite-monodromy criterion by interlacing, the invariant Hermitian form and its signature, Bézout matrices, imprimitivity), the Hodge vector by the zigzag procedure and the weight, the finite hypergeometric sums of Katz, Greene and Beukers-Cohen-Mellit through Gauss sums with their rationality for data defined over Q, and the L-function: Euler factors at good primes from those sums, tame and wild primes, the tame conductor formulas of Roberts-Rodriguez-Villegas stated, and the identification with point counts of Katz's motive cited. Gauss sums come from ArithmeticOfFiniteFields; ℓ-adic sheaves and Katz's geometric construction are AG's; the L-function lives in LFunctions' data model.",
+  "prerequisites": [
+   "ArithmeticOfFiniteFields (Gauss sums)",
+   "LFunctions (#248)",
+   "Mathlib cyclotomic fields"
+  ],
+  "goals": {
+   "LMFDB": [
+    "hgm"
+   ],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [
+   "none known"
+  ],
+  "replaces": [
+   "HypergeometricMotives (lmfdb P18)",
+   "FiniteHypergeometricSums (July plan W3)"
+  ]
+ },
+ {
+  "name": "PadicExtensionFamilies",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "A",
+  "lane": "LMFDB",
+  "sub_roadmaps": [],
+  "scope": "A totally ramified extension of a p-adic field is generated by a root of an Eisenstein polynomial, and much of its ramification is visible on that polynomial. The roadmap builds the Newton polygon over a valued field with its slope factorization, ramification polygons and residual polynomials (Greve-Pauli) with the theorem relating their slopes to lower ramification breaks and through it to Artin and Swan slopes and the Herbrand function, indices of inseparability (Fried, Heiermann) and jump sets, the unramified-tame-wild tower with visible and hidden slopes, slope content and Galois mean slope, Krasner bounds and finiteness of extensions of given degree, families of Eisenstein polynomials with fixed ramification polygon (Pauli-Sinclair, Monge) with their packets and masses compared with MassFormula, and the Galois root discriminant as a product of local mean-slope factors. Ramification groups are LocalFieldsRamification's; the absolute Galois group is LocalGaloisGroups'; counting by mass is MassFormula's (#226).",
+  "prerequisites": [
+   "LocalFieldsRamification",
+   "LocalGaloisGroups",
+   "MassFormula (#226)",
+   "Mathlib IsEisensteinAt, Krasner"
+  ],
+  "goals": {
+   "LMFDB": [
+    "lf",
+    "nf"
+   ],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [
+   "Pauli-Sinclair algorithms (Magma/Sage) as specification"
+  ],
+  "replaces": [
+   "PadicExtensionFamilies (lmfdb P22)"
+  ]
+ },
+ {
+  "name": "ClassicalAutomorphicForms",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "XL family (5 subs)",
+  "est_prs": 1210,
+  "wave": "A (Maass, noncongruence), B (Hilbert, Bianchi, Siegel)",
+  "lane": "automorphic (LMFDB-facing)",
+  "sub_roadmaps": [
+   {
+    "name": "MaassFormsAndSpectralTheory",
+    "size": "L",
+    "est_prs": 250
+   },
+   {
+    "name": "HilbertModularForms",
+    "size": "L",
+    "est_prs": 250
+   },
+   {
+    "name": "BianchiModularForms",
+    "size": "L",
+    "est_prs": 220
+   },
+   {
+    "name": "SiegelModularForms",
+    "size": "L+ (two layers of degree-2 theory)",
+    "est_prs": 400
+   },
+   {
+    "name": "NoncongruenceModularForms",
+    "size": "M",
+    "est_prs": 90
+   }
+  ],
+  "scope": "This family treats automorphic forms on arithmetic groups acting on classical symmetric domains in the classical style: slash operators, Fourier expansions, Hecke operators on expansions or on cohomology, newforms, and L-functions in LFunctions' data model. ModularForms (integral weight on congruence subgroups of SL_2(Z)) is the model and stays separate. MaassFormsAndSpectralTheory: the hyperbolic Laplacian on Γ\\ℍ for Fuchsian groups of the first kind, real-analytic Eisenstein series with continuation and functional equation, K-Bessel functions, Fourier-Whittaker expansions, Hecke-Maass newforms with character, Selberg's spectral decomposition of L^2(Γ\\ℍ), λ₁ ≥ 3/16 for congruence groups via the Weil bound for Kloosterman sums, Weyl's law stated, L-functions, and Maass forms for PSL_2(Z[i]) on ℍ³. HilbertModularForms: forms of parallel and nonparallel weight on ℍⁿ for totally real F, Koecher's principle, expansions over the totally positive inverse different, Hecke operators at primes, newforms, base change and CM forms, Jacquet-Langlands to definite quaternion algebras stated. BianchiModularForms: weight-2 forms for Γ₀(n) over imaginary quadratic K as classes in H^1_cusp and as harmonic forms on ℍ³ with Fourier-Bessel expansions, Hecke theory with nonprincipal primes, signs and analytic rank, base change and CM forms. SiegelModularForms: degree 2 in full and general degree where free (Koecher, Phi-operator, Siegel and Klingen Eisenstein series, Igusa's structure theorem, paramodular groups and newforms, spinor and standard L-functions, the Saito-Kurokawa lift, Siegel theta series, the paramodular conjecture stated). NoncongruenceModularForms: subgroups of PSL_2(Z) as permutation pairs, Wohlfahrt level and congruence tests, forms via Mathlib's ModularForm, unbounded denominators and ASD congruences stated. Half-integral weight and Jacobi forms are MetaplecticFormsAndTheta's; adelic representations and Arthur's trace formula are the campaign's automorphic units; Hilbert modular varieties as moduli are ShimuraVarieties'; Hilbert modular surfaces are AG's.",
+  "prerequisites": [
+   "ModularForms",
+   "FuchsianOrbifolds",
+   "KleinianGroups (#432)",
+   "GlobalNumberFields",
+   "LFunctions (#248)",
+   "ThetaSeries (#286)",
+   "QuaternionArithmetic",
+   "ArithmeticOfFiniteFields (Kloosterman bound)",
+   "MetaplecticFormsAndTheta (Jacobi forms)",
+   "ArithmeticLocallySymmetricSpaces (campaign U22)",
+   "BelyiMaps",
+   "FAMP spectral theory of unbounded self-adjoint operators",
+   "Mathlib symplecticGroup"
+  ],
+  "goals": {
+   "LMFDB": [
+    "bmf",
+    "ecnf",
+    "g2c",
+    "hmf",
+    "maass",
+    "noncong",
+    "smf"
+   ],
+   "Annals": [
+    "Annals#13"
+   ],
+   "OpenAI": []
+  },
+  "porting": [
+   "Booker-Stromberg-Then rigorous Maass data and LMFDB smf/hmf/bmf tables as test data; no Lean"
+  ],
+  "replaces": [
+   "MaassForms (lmfdb P16)",
+   "MaassFormsAndSpectralTheory (Annals #13)",
+   "HilbertModularForms (P12)",
+   "BianchiModularForms (P14)",
+   "SiegelModularForms (P15)",
+   "NoncongruenceSubgroups (P23)"
+  ]
+ },
+ {
+  "name": "MetaplecticFormsAndTheta",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "XL family (4 subs)",
+  "est_prs": 880,
+  "wave": "A (subs 1-2), B (subs 3-4)",
+  "lane": "automorphic (LMFDB-facing)",
+  "sub_roadmaps": [
+   {
+    "name": "FiniteQuadraticModulesAndWeilRepresentation",
+    "size": "M",
+    "est_prs": 100
+   },
+   {
+    "name": "HalfIntegralWeightModularForms",
+    "size": "L",
+    "est_prs": 180
+   },
+   {
+    "name": "WeilRepresentationAndThetaCorrespondence",
+    "size": "L",
+    "est_prs": 300
+   },
+   {
+    "name": "HigherMetaplecticCoversAndGaussSums",
+    "size": "L",
+    "est_prs": 300
+   }
+  ],
+  "scope": "This family develops theta functions and the metaplectic covers on which they are automorphic. FiniteQuadraticModulesAndWeilRepresentation: finite quadratic modules, their Witt group and Gauss-sign invariant, Milgram's formula, the Weil representation of SL_2(Z) and Mp_2(Z) on C[A] and vector-valued modular forms for it (IntegralLattices names this successor and lists the Weil representation as unowned). HalfIntegralWeightModularForms: theta and eta multipliers, M_{k+1/2}(4N, chi) and T_{p^2}, the Kohnen plus space, Shimura and Shintani lifts, Serre-Stark, Waldspurger and Kohnen-Zagier stated, theta series of odd-rank lattices, Eichler-Zagier Jacobi forms and J_{k,1} = M^+_{k-1/2}(4). WeilRepresentationAndThetaCorrespondence: Heisenberg and metaplectic groups over local fields, Stone-von Neumann, Weil indices, dual pairs, the global Weil representation, theta kernels and lifts, the Siegel-Weil formula, and the Siegel-Narain theta of indefinite lattices. HigherMetaplecticCoversAndGaussSums: Kubota's n-fold cover of SL_2 over a number field containing μ_n, metaplectic Eisenstein series and the theta function as residue, Patterson's theorem that cubic theta coefficients are cubic Gauss sums, the Kubota-Patterson Dirichlet series, Heath-Brown-Patterson equidistribution, Heath-Brown's cubic large sieve, and Kazhdan-Patterson theta representations of covers of GL_r. Integral-weight theta series of positive definite lattices are ThetaSeries' (#286); power residue symbols are PowerReciprocityLaws'; the quadratic large sieve is the sieve unit's.",
+  "prerequisites": [
+   "ThetaSeries (#286)",
+   "IntegralLattices",
+   "ModularForms",
+   "PowerReciprocityLaws",
+   "KleinianGroups (#432)",
+   "LFunctions (#248)",
+   "AdelicFourierAnalysis (AdelicAlgebraicGroups)",
+   "ALG SmoothRepresentationsOfLocalGroups",
+   "ContourIntegration"
+  ],
+  "goals": {
+   "LMFDB": [
+    "cmf",
+    "mf.half_integral",
+    "smf"
+   ],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#003",
+    "OAI#023",
+    "OAI#029",
+    "OAI#032"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/NumberTheory/CubicMoment, CubicGauss, CubicGram, DirichletL (Apache-2.0; port with re-basing on Tau Ceti carriers)"
+  ],
+  "replaces": [
+   "HalfIntegralWeightModularForms (lmfdb P17)",
+   "GaussSumsAndMetaplecticTheta (OAI)",
+   "MetaplecticAutomorphicForms (campaign)",
+   "FiniteQuadraticModuleWittTheory and IndefiniteThetaAndSiegelWeil (named by IntegralLattices)"
+  ]
+ },
+ {
+  "name": "AdelicAlgebraicGroups",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "XL family (5 subs)",
+  "est_prs": 950,
+  "wave": "A (subs 1–3), B (subs 4–5: S5)",
+  "lane": "automorphic",
+  "sub_roadmaps": [
+   {
+    "name": "AlgebraicGroupStrongApproximation",
+    "size": "L",
+    "est_prs": 200
+   },
+   {
+    "name": "ArithmeticReductionTheory",
+    "size": "L",
+    "est_prs": 200
+   },
+   {
+    "name": "AdelicFourierAnalysis",
+    "size": "M",
+    "est_prs": 110
+   },
+   {
+    "name": "TamagawaMeasures",
+    "size": "L",
+    "est_prs": 220
+   },
+   {
+    "name": "OrthogonalTamagawaAndLatticeMass",
+    "size": "L",
+    "est_prs": 220
+   }
+  ],
+  "scope": "This family develops linear algebraic groups over number fields and their adelic points as far as Tamagawa numbers and the mass formula, under the five sub-roadmap names that RestrictedProducts, IntegralLattices and OrthogonalSpinGroups already reserve. AlgebraicGroupStrongApproximation: adelic points of an affine group over a number field as a restricted product, functoriality, weak approximation, strong approximation for simply connected groups (Kneser, Platonov) and class numbers of open compact subgroups. ArithmeticReductionTheory: Iwasawa decompositions, Siegel sets, Borel-Harish-Chandra finiteness and finite covolume, Godement's compactness criterion. AdelicFourierAnalysis: Schwartz-Bruhat spaces, the adelic Fourier transform and Poisson summation, and Tate's local and global zeta integrals for GL_1 with local epsilon factors, compared with LFunctions' completed L-functions. TamagawaMeasures: gauge forms, convergence factors from Artin L-functions of character lattices, Tamagawa measures and numbers, Ono's formula for tori, the central-isogeny comparison, and τ(SL_n) = 1 via Siegel's mean value theorem. OrthogonalTamagawaAndLatticeMass: strong approximation for Spin, τ(SO_Q) = 2, Eichler's cls+ = spn+ in indefinite rank ≥ 3, Cho's dyadic group scheme and local density, the Smith-Minkowski-Siegel mass formula and the rank-16 classification. Structure theory over fields is ReductiveGroups'; group schemes over Z are ChevalleyGroups' (#447); automorphic forms on G(F)\\G(A) are the campaign's AutomorphicFormsOnReductiveGroups; real Lie-group lattices beyond the arithmetic case are ALG's LatticesInSemisimpleGroups, which consumes the reduction theory.",
+  "prerequisites": [
+   "RestrictedProducts",
+   "GlobalNumberFields",
+   "ReductiveGroups",
+   "OrthogonalSpinGroups",
+   "IntegralLattices",
+   "ChevalleyGroups (#447)",
+   "LFunctions (#248)",
+   "ArtinRepresentations (character-lattice factors)",
+   "Mathlib Haar measure"
+  ],
+  "goals": {
+   "LMFDB": [
+    "lattice"
+   ],
+   "Annals": [
+    "Annals#4",
+    "Annals#65"
+   ],
+   "OpenAI": [
+    "OAI#018",
+    "OAI#092"
+   ]
+  },
+  "porting": [
+   "none known; Platonov-Rapinchuk and Weil \"Adeles and algebraic groups\" as sources"
+  ],
+  "replaces": [
+   "AdelicAlgebraicGroups (campaign AA.1-AA.5; AA.0 duplicates RestrictedProducts)",
+   "AutomorphicLFunctionsAndLocalFactors AL.0-AL.1 (campaign)",
+   "OrthogonalTamagawaAndLatticeMass (lmfdb; named by IntegralLattices, OrthogonalSpinGroups)",
+   "AlgebraicGroupStrongApproximation, ArithmeticReductionTheory, TamagawaMeasures, AdelicFourierAnalysis (named by RestrictedProducts)"
+  ]
+ },
+ {
+  "name": "FormalGroupsAndLubinTateTheory",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "A",
+  "lane": "algebraic",
+  "sub_roadmaps": [],
+  "scope": "This roadmap develops one-dimensional commutative formal group laws over a commutative ring, extending Mathlib's FormalGroup: homomorphisms and endomorphism rings, the invariant differential and logarithm over Q-algebras, [p]-series and height over 𝔽_p-algebras, the classification of one-dimensional laws over separably closed fields by height, and formal O-modules over the integers O of a local field. For a local field K with uniformizer pi it builds Lubin-Tate series and the formal O-module 𝔽_pi, uniqueness up to isomorphism, torsion points and the Lubin-Tate extensions K_{pi,n}, Gal(K_pi/K) = O^x, the explicit local Artin map on K_pi K^ur with its comparison to ClassFieldTheory's reciprocity map, and the local Kronecker-Weber theorem. It ends with Lubin-Tate deformation theory of a formal O-module of finite height over the residue field (the universal deformation ring) and with Coleman's norm operator and power-series isomorphism for Lubin-Tate groups. The elliptic formal group is EllipticCurves' (an instance of this API); p-divisible groups and Dieudonné theory are AG's; Morava E-theory is TOP's ChromaticHomotopyTheory, which consumes the deformation layer; cyclotomic units and the Coleman map in Iwasawa theory stay with the Iwasawa unit, which consumes the norm operator.",
+  "prerequisites": [
+   "Mathlib FormalGroup",
+   "LocalFieldsRamification",
+   "ClassFieldTheory",
+   "LocalGaloisGroups",
+   "ProfiniteArithmetic"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#309",
+    "OAI#311",
+    "OAI#313",
+    "OAI#318"
+   ]
+  },
+  "porting": [
+   "none known"
+  ],
+  "replaces": [
+   "unowned prerequisite (ClassFieldTheory excludes Lubin-Tate; coordination 3.2)"
+  ]
+ },
+ {
+  "name": "PowerReciprocityLaws",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "A",
+  "lane": "algebraic",
+  "sub_roadmaps": [],
+  "scope": "This roadmap builds the n-th power residue symbol of a number field containing the n-th roots of unity and proves the reciprocity laws it satisfies. The symbol (a/p)_n is defined from the residue field, extended multiplicatively to ideals prime to n a, and identified with the degree-n Hilbert symbol that ClassFieldTheory builds from Kummer classes; the product formula then gives the general power reciprocity law, and the explicit laws are proved as instances: the Jacobi and Kronecker symbols with quadratic reciprocity in Kronecker form, cubic and biquadratic reciprocity with supplementary laws for primary elements, Eisenstein reciprocity, and sextic reciprocity over Q(ζ₃). It proves Stickelberger's factorization of the Gauss-sum ideal and Weil's theorem that Jacobi sums define Hecke characters. Gauss and Jacobi sums over finite fields are ArithmeticOfFiniteFields'; Hecke characters are GlobalNumberFields'; explicit Hilbert-symbol formulas of Artin-Hasse type are FormalGroupsAndLubinTateTheory's.",
+  "prerequisites": [
+   "ClassFieldTheory",
+   "NumberFieldArithmetic",
+   "GlobalNumberFields",
+   "ArithmeticOfFiniteFields (CharacterSums)",
+   "Mathlib cyclotomic fields"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#003",
+    "OAI#023",
+    "OAI#029"
+   ]
+  },
+  "porting": [
+   "OAI CubicGauss, CubicGram (ad hoc cubic symbol over Z[omega]; cross-check)"
+  ],
+  "replaces": [
+   "PowerReciprocityLaws (OAI)",
+   "ClassicalArithmeticCompletion CA.1 (campaign, reciprocity clause)",
+   "Kronecker symbol extension of Multiquadratic (lmfdb; Multiquadratic is archived)"
+  ]
+ },
+ {
+  "name": "BirationalAnabelianGeometry",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "A (local theory), B (Uchida: #451)",
+  "lane": "algebraic",
+  "sub_roadmaps": [],
+  "scope": "This roadmap reconstructs fields from their Galois groups. Its local theory reads valuations off group theory: decomposition and inertia groups of Krull valuations, the detection of valuations from commuting-liftable pairs in the maximal pro-ℓ abelian-by-central quotient (Bogomolov-Tschinkel, Engler-Koenigsmann, Topaz), Neukirch's characterization of decomposition groups in G_K for a number field K, and the valuative form of Koenigsmann's birational p-adic section conjecture (Pop-Stix). Its global theory proves the Neukirch-Uchida theorem for absolute and solvably closed Galois groups of number fields, Uchida's theorem on open homomorphisms with Hoshi's cyclotomic criterion, and the Bogomolov-Pop reconstruction of function fields of transcendence degree ≥ 2 over algebraically closed fields via Kummer duality, curve subfields and the fundamental theorem of projective geometry. Etale fundamental groups of curves, Galois sections of curves and Mochizuki's theorem stay with the campaign's AnabelianGeometryAndNonabelianChabauty; the boundary is fields versus schemes.",
+  "prerequisites": [
+   "ClassFieldTheory",
+   "LocalGaloisGroups",
+   "ProfiniteProPGroups",
+   "Chebotarev",
+   "AlgebraicCurves",
+   "LinearFormsInLogarithms (#451)",
+   "TOP K2SymbolsBrauer (Milnor K variant)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#009",
+    "OAI#019",
+    "OAI#031"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Algebra/BogomolovPop (injectivity)"
+  ],
+  "replaces": [
+   "BirationalAnabelianGeometry (OAI)"
+  ]
+ },
+ {
+  "name": "MultiplicativeNumberTheory",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "XL family (3 subs)",
+  "est_prs": 700,
+  "wave": "A (subs 2-3), B (sub 1: #253)",
+  "lane": "classical-analytic",
+  "sub_roadmaps": [
+   {
+    "name": "PrimesInArithmeticProgressions",
+    "size": "L",
+    "est_prs": 250
+   },
+   {
+    "name": "MultiplicativeFunctionsInShortIntervals",
+    "size": "L",
+    "est_prs": 250
+   },
+   {
+    "name": "AnatomyOfIntegers",
+    "size": "L",
+    "est_prs": 200
+   }
+  ],
+  "scope": "This family develops the distribution of primes uniformly in the modulus and the mean values and anatomy of multiplicative functions, starting where ArithmeticDirichletSeries and ZerosOfLFunctions stop. PrimesInArithmeticProgressions owns the exceptional zero and every prime estimate uniform in the modulus: Landau-Page, Siegel's ineffective bound, Deuring-Heilbronn repulsion, Siegel-Walfisz with its quantifiers, log-free zero density and Linnik's theorem, Brun-Titchmarsh in Montgomery-Vaughan form, and Stark's effective Brauer-Siegel bound; it exports conductor-uniform prime counts for Dirichlet and ray-class characters. MultiplicativeFunctionsInShortIntervals proves Halász's theorem (Montgomery-Tenenbaum form), the pretentious distance and its triangle inequality, Shiu's bound, mean values of Dirichlet polynomials, the Matomäki-Radziwiłł theorem, the Matomäki-Radziwiłł-Tao exponential-sum bound, and Tao's logarithmically averaged binary Elliott theorem (two-point logarithmic Chowla). AnatomyOfIntegers proves Mertens' theorems, Hardy-Ramanujan, Turán-Kubilius, Erdős-Kac and Sathe-Selberg, smooth numbers through the Dickman function (Hildebrand's range, short intervals, shifted primes), the Poisson-Dirichlet law for prime factors, Erdős-Wintner, Pomerance's totient fibers and Ford's structure theorem for V(x). Zeros and explicit formulas are ZerosOfLFunctions' (#253); sieves, the large sieve and Bombieri-Vinogradov are the campaign's SieveMethodsAndPrimePatterns; the law PD(theta) itself is PRDS's StandardDistributions.",
+  "prerequisites": [
+   "ArithmeticDirichletSeries",
+   "ZerosOfLFunctions (#253)",
+   "LFunctions (#248)",
+   "Chebotarev",
+   "SieveMethodsAndPrimePatterns SV.1-SV.3 (campaign U1)",
+   "Tau Ceti InformationTheory",
+   "PRDS StandardDistributions (PD extension)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#003",
+    "OAI#007",
+    "OAI#011",
+    "OAI#012",
+    "OAI#013",
+    "OAI#015",
+    "OAI#021",
+    "OAI#024",
+    "OAI#025"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/NumberTheory/SiegelZeros, Ostmann, Jacobsthal, DukePrimeDegree (Stark), TwoPoint, OrdinaryCorrelations, JointDickman, TotientAsymptotic (Apache-2.0)",
+   "PrimeNumberTheoremAnd (Mertens, Selberg sieve) - coordinate first"
+  ],
+  "replaces": [
+   "SiegelZerosAndPrimesInProgressions (OAI)",
+   "MultiplicativeFunctionsInShortIntervals (OAI)",
+   "AnatomyOfIntegers (OAI)",
+   "AnalyticNumberTheory AN.2, AN.5 (campaign)",
+   "ProbabilisticAndMetricNumberTheory PM.0-PM.1 (campaign)"
+  ]
+ },
+ {
+  "name": "ArakelovGeometry",
+  "campaign": "NT",
+  "topic": "math.NT",
+  "size": "L",
+  "est_prs": 300,
+  "wave": "B (#287, AG IntersectionTheory)",
+  "lane": "arithmetic geometry",
+  "sub_roadmaps": [],
+  "scope": "This roadmap develops heights through hermitian and adelic metrics on arithmetic varieties over number fields. It builds hermitian vector bundles on Spec O_K with arithmetic degree and slopes, adelically metrized line bundles (model, semipositive and integrable metrics, after Zhang), local and global heights of points and subvarieties, the Weil height machine on projective varieties extending ArithmeticHeights' heights on projective space, canonical heights for polarized dynamical systems and Néron-Tate heights on abelian varieties, arithmetic intersection theory on regular arithmetic surfaces (Green's functions, admissible metrics, Faltings' arithmetic Riemann-Roch stated) and Deligne pairings in general, arithmetic ampleness, nefness and bigness with Northcott for arithmetically ample bundles, and on abelian schemes the Hodge bundle with Faltings' metric, the stable Faltings height, its variation under isogeny, and the comparison with theta heights. Placement follows rule 4 of coordination 4.4: arithmetic intersection theory consumes AG's IntersectionTheory and PositivityOfLineBundles. Heights on projective space and Siegel's lemma are ArithmeticHeights' (#287); Néron-Tate on elliptic curves is EllipticCurves'; regular arithmetic surfaces are StableReduction's; Faltings' finiteness theorems are the campaign unit FaltingsFinitenessAndRationalPoints'.",
+  "prerequisites": [
+   "ArithmeticHeights (#287)",
+   "EllipticCurves (Layer 6)",
+   "StableReduction (Layer 4)",
+   "AG IntersectionTheory and PositivityOfLineBundles",
+   "AG AbelianSchemesAndArithmeticModuli",
+   "GlobalNumberFields"
+  ],
+  "goals": {
+   "LMFDB": [
+    "ec",
+    "g2c"
+   ],
+   "Annals": [
+    "Annals#24"
+   ],
+   "OpenAI": [
+    "OAI#004",
+    "OAI#016"
+   ]
+  },
+  "porting": [
+   "none known"
+  ],
+  "replaces": [
+   "ArakelovIntersectionTheory (Annals #24)",
+   "ArakelovGeometryAndAbelianHeights (campaign R35.1-R35.5)",
+   "HeightsRationalPointsAndObstructions RP.0 (campaign)"
+  ]
+ }
+]

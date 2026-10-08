@@ -1,0 +1,989 @@
+[
+ {
+  "name": "MarkovChainsAndMixing",
+  "campaign": "PRDS",
+  "family": "StochasticProcesses",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "A",
+  "scope": "This roadmap develops Markov chains on countable state spaces, in discrete and continuous time, from Tau Ceti's `markovChainLaw` and Mathlib's kernel invariance, reversibility and irreducibility. It fixes the library's one total-variation distance and one mixing-time API. It covers recurrence, renewal theory, Q-matrices and Dirichlet forms, and mixing by coupling, stopping times, spectral gap, conductance and comparison, with Glauber dynamics and walks on finite groups as model families. Functional inequalities come from ConcentrationAndFunctionalInequalities; approximate counting is LTCS's; walks on infinite graphs are RandomWalksOnGraphsAndNetworks'.",
+  "milestones": "tvDist and maximal coupling; convergence theorem; renewal theorem; t_mix vs t_rel; path coupling; Jerrum–Sinclair; comparison; Diaconis–Shahshahani cutoff; Propp–Wilson.",
+  "prerequisites": [
+   "Tau Ceti Probability/Process/MarkovChain",
+   "OptimalTransport",
+   "RepresentationTheory/SchurWeyl",
+   "ConcentrationAndFunctionalInequalities"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#103",
+    "OAI#113",
+    "OAI#114",
+    "OAI#115",
+    "OAI#131",
+    "OAI#220",
+    "OAI#227",
+    "OAI#238"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/{SwitchChain, ThorpShuffle, CubeShuffle, Renewal}",
+   "replaces ~30 OAI totalVariation and ~15 mixingTime definitions"
+  ],
+  "replaces": [
+   "MarkovChainsAndMixing",
+   "MarkovChainMixing"
+  ]
+ },
+ {
+  "name": "BrownianMotion",
+  "campaign": "PRDS",
+  "family": "StochasticProcesses",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "A",
+  "scope": "This roadmap develops Brownian motion as a random continuous path, from Mathlib's `IsBrownianReal` and Kolmogorov condition, following Mörters–Peres. It constructs d-dimensional Brownian motion with continuous paths and proves the strong Markov property, the classical path theorems, the invariance principle and Skorokhod embedding. It builds Brownian potential theory, through Feynman–Kac and planar conformal invariance, and the dimension of the range and zero set, with dimension of measures from ANA's FractalGeometry. Stochastic integration is StochasticCalculus'; excursion codings of trees are RandomTreesAndMaps'.",
+  "milestones": "continuous paths; strong Markov; reflection; LIL; Lévy modulus; Donsker; Skorokhod embedding; Kakutani; recurrence iff d ≤ 2; conformal invariance; dim B[0,1] = 2.",
+  "prerequisites": [
+   "Mathlib BrownianMotion, Process/Kolmogorov",
+   "ConformalMapping",
+   "PDE",
+   "ANA FractalGeometry"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#220",
+    "OAI#230",
+    "OAI#267"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/SLE/BrownianStrongMarkov",
+   "OAI lean/OAI/Probability/StrongRayleigh/{PreBrownianExistence, BrownianKolmogorov}",
+   "Degenne et al. brownian-motion project (coordinate first)"
+  ],
+  "replaces": [
+   "BrownianMotion"
+  ]
+ },
+ {
+  "name": "StochasticCalculus",
+  "campaign": "PRDS",
+  "family": "StochasticProcesses",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 300,
+  "wave": "A",
+  "scope": "This roadmap develops stochastic calculus for continuous semimartingales and SDEs, following Le Gall and Revuz–Yor. It extends Mathlib's filtrations, predictability and martingales to continuous time and builds the Itô integral and its calculus. Its SDE layers prove existence, uniqueness and the Markov and Feller properties of solutions, with generators, Kolmogorov equations, one-dimensional diffusions and Bessel processes, and its top layers are the Föllmer drift, nonlinear filtering and stochastic localization. It owns the general Itô calculus of RandomMatrices (#397) Milestone 10 and generalizes those declarations in place; point-process intensities stay in PointProcesses (#417).",
+  "milestones": "Doob in continuous time; Itô formula; Lévy; Dubins–Schwarz; BDG; Tanaka; Girsanov; Lipschitz SDEs; Yamada–Watanabe; martingale problem; Feynman–Kac; Boué–Dupuis; Fujisaki–Kallianpur–Kunita.",
+  "prerequisites": [
+   "BrownianMotion",
+   "OneParameterSemigroups",
+   "PDE",
+   "OptimalTransport",
+   "RandomMatrices #397"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#139",
+    "OAI#211",
+    "OAI#219",
+    "OAI#222",
+    "OAI#223",
+    "OAI#227",
+    "OAI#230",
+    "OAI#231"
+   ]
+  },
+  "porting": [
+   "Degenne et al. brownian-motion project (stochastic integral, Itô formula, Doob–Meyer; coordinate first, #417 already defers to it)",
+   "OAI lean/OAI/Probability/SLE/{ItoIsometry, StochasticIntegrals, StochasticFubini}",
+   "OAI lean/OAI/Probability/SKGap/Localization"
+  ],
+  "replaces": [
+   "StochasticCalculus"
+  ]
+ },
+ {
+  "name": "ConcentrationAndFunctionalInequalities",
+  "campaign": "PRDS",
+  "family": "StochasticProcesses",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 240,
+  "wave": "A",
+  "scope": "This roadmap develops concentration of measure on product spaces and the functional inequalities of Markov semigroups. It covers the variance and entropy methods, bounded differences (from Tau Ceti's McDiarmid), Talagrand's convex distance and transportation-cost inequalities. For symmetric Markov semigroups it develops Poincaré and (modified) log-Sobolev inequalities, hypercontractivity and the Bakry–Émery calculus, with the Ornstein–Uhlenbeck semigroup and the discrete cube as model cases. Gaussian comparison and log-concave measures are GaussianAnalysisAndLogConcaveMeasures', matrix concentration stays in RandomMatrices (#397) M2, and the generic items of M2 are generalized here by alias.",
+  "milestones": "Efron–Stein; Herbst; Talagrand convex distance; Marton/T2; Gross LSI ⇔ hypercontractivity; Bonami–Beckner; Bakry–Émery; Holley–Stroock; Brascamp–Lieb variance; Caffarelli.",
+  "prerequisites": [
+   "Tau Ceti McDiarmid",
+   "OneParameterSemigroups",
+   "OptimalTransport",
+   "LTCS ShannonInformationTheory",
+   "RandomMatrices #397"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#091",
+    "OAI#093",
+    "OAI#101",
+    "OAI#113",
+    "OAI#157",
+    "OAI#161",
+    "OAI#219",
+    "OAI#221",
+    "OAI#227",
+    "OAI#235",
+    "OAI#238",
+    "OAI#239",
+    "OAI#261",
+    "OAI#283"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/SKGap/Gaussian",
+   "OAI VertexCover/Information/Tensorization"
+  ],
+  "replaces": [
+   "ConcentrationAndFunctionalInequalities"
+  ]
+ },
+ {
+  "name": "GaussianAnalysisAndLogConcaveMeasures",
+  "campaign": "PRDS",
+  "family": "StochasticProcesses",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "A",
+  "scope": "This roadmap develops Gaussian analysis and the measure-theoretic side of convexity. Its Gaussian layers cover integration by parts, comparison, suprema of processes, isoperimetry and correlation inequalities, and characterizations of the Gaussian law. Its log-concave layers cover Prékopa–Leindler (from #287), Borell's s-concave measures, isotropic position and log-concave densities, stating the KLS, thin-shell and (B) conjectures. Semigroup proofs come from ConcentrationAndFunctionalInequalities; convex bodies as geometric objects are GEO's ConvexBodies.",
+  "milestones": "Gaussian IBP; Slepian; Sudakov–Fernique; Gordon; Dudley; majorizing measures; Borell–TIS; Gaussian isoperimetry; Ehrhard; Royen; Banaszczyk; Cramér decomposition; Prékopa–Leindler; Borell.",
+  "prerequisites": [
+   "StandardDistributions",
+   "ConcentrationAndFunctionalInequalities",
+   "ArithmeticHeights #287",
+   "GEO ConvexBodies",
+   "Hadamard factorization (ANA or #253)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#087",
+    "OAI#091",
+    "OAI#093",
+    "OAI#096",
+    "OAI#097",
+    "OAI#101",
+    "OAI#217",
+    "OAI#220",
+    "OAI#227",
+    "OAI#234"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/{GaussianPropeller, GaussianReplacement, LogConcave/Analysis, SKGap/Gaussian}"
+  ],
+  "replaces": [
+   "LogConcaveMeasures",
+   "the Gaussian-analysis cluster of ConcentrationAndFunctionalInequalities"
+  ]
+ },
+ {
+  "name": "LargeDeviations",
+  "campaign": "PRDS",
+  "family": "StochasticProcesses",
+  "topic": "math.PR",
+  "size": "M",
+  "est_prs": 120,
+  "wave": "A",
+  "scope": "This roadmap develops large deviations following Dembo–Zeitouni. It defines large-deviation principles with good rate functions on topological spaces, exponential tightness and exponential equivalence, and proves the transfer theorems and the classical principles for sums, empirical measures, paths and projective limits. It owns the LDP framework that RandomMatrices (#397) Milestone 9 introduces and generalizes those declarations in place; the log-gas and largest-eigenvalue principles stay in #397. Boué–Dupuis is StochasticCalculus', and the Gibbs roadmaps consume Sanov and Varadhan for their variational principles.",
+  "milestones": "contraction principle; Varadhan and Bryc; Cramér in ℝ^d; Sanov; Gärtner–Ellis; Mogulskii; Schilder; Dawson–Gärtner.",
+  "prerequisites": [
+   "LTCS ShannonInformationTheory",
+   "BrownianMotion",
+   "RandomMatrices #397"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#222"
+   ]
+  },
+  "porting": [
+   "#397 M9 by alias"
+  ],
+  "replaces": [
+   "LargeDeviations"
+  ]
+ },
+ {
+  "name": "BernoulliPercolation",
+  "campaign": "PRDS",
+  "family": "StatisticalMechanics",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "A",
+  "scope": "This roadmap develops Bernoulli bond and site percolation on locally finite graphs with one graph encoding. Its first layer is the correlation theory of product measures, built on Mathlib's Harris–Kleitman and four-functions theorems and exported to COMB. It develops the phase transition and its sharpness, uniqueness on transitive graphs, and the planar theory, stating Kesten's scaling relations and Smirnov's theorem. Mass transport comes from RandomWalksOnGraphsAndNetworks and amenability from ALG; dependent percolation is RandomClusterAndRandomCurrents', first passage RandomMedia's.",
+  "milestones": "Harris–FKG; BK; Russo–Margulis; OSSS; Duminil-Copin–Tassion sharpness; Burton–Keane; Newman–Schulman; Häggström–Peres; RSW; Harris–Kesten p_c = 1/2; quasi-multiplicativity of arm events.",
+  "prerequisites": [
+   "Mathlib FourFunctions, HarrisKleitman",
+   "RandomWalksOnGraphsAndNetworks",
+   "ALG AmenableGroupsAndGrowth"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#212",
+    "OAI#213",
+    "OAI#214",
+    "OAI#224",
+    "OAI#236",
+    "OAI#267"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/{UnimodularPercolation, CriticalZ3, BenjaminiSchramm/GhostFanBK}",
+   "the percolation developments cited by #213 (unchecked)"
+  ],
+  "replaces": [
+   "BernoulliPercolation"
+  ]
+ },
+ {
+  "name": "LatticeGibbsMeasures",
+  "campaign": "PRDS",
+  "family": "StatisticalMechanics",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "A",
+  "scope": "This roadmap develops classical lattice spin systems, following Georgii and Friedli–Velenik. It builds specifications and the DLR equations, the Gibbs simplex, translation-invariant states, pressure and the variational principle, and uniqueness criteria. It defines the Ising, Potts, O(n), XY/Villain and gradient models and proves the correlation inequalities and the classical transition and no-transition theorems. Graphical representations are RandomClusterAndRandomCurrents', solvable models IntegrableLatticeModels', continuum systems ContinuumGibbsSystems', quantum spin systems FAMP's.",
+  "milestones": "DLR existence and extremal decomposition; variational principle; Dobrushin; GKS; FKG; Lee–Yang; Peierls; Fröhlich–Simon–Spencer; Mermin–Wagner; Griffiths–Pearce.",
+  "prerequisites": [
+   "LargeDeviations",
+   "ErgodicTheory"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#97"
+   ],
+   "OpenAI": [
+    "OAI#215",
+    "OAI#216",
+    "OAI#218",
+    "OAI#225",
+    "OAI#232",
+    "OAI#236",
+    "OAI#237"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/{Ising, ClassicalON, InvariantIsing/Pressure, FKPressure}",
+   "replaces dozens of OAI gibbs/partitionFunction definitions"
+  ],
+  "replaces": [
+   "LatticeGibbsMeasures",
+   "GibbsMeasuresAndSpinSystems (Annals P44)",
+   "FAMP-tagged lattice-model needs"
+  ]
+ },
+ {
+  "name": "RandomClusterAndRandomCurrents",
+  "campaign": "PRDS",
+  "family": "StatisticalMechanics",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "B",
+  "scope": "This roadmap develops the graphical representations of lattice spin models. It constructs the random-cluster model with its coupling to Potts, comparison inequalities, infinite-volume measures, planar duality and the self-dual point. It develops random currents and the switching lemma, the loop O(n) representation, and spin/height duality for XY and Villain models. Its top layer is the planar FK theory for 1 ≤ q ≤ 4 (box crossings and continuity), with discontinuity for q > 4 stated. Spin-system foundations are LatticeGibbsMeasures', Bernoulli percolation BernoulliPercolation's, scaling limits SchrammLoewnerEvolution's.",
+  "milestones": "Edwards–Sokal; FK comparison; self-dual p_c on ℤ²; Duminil-Copin–Raoufi–Tassion sharpness; switching lemma; continuity of Ising in d ≥ 3; McBryan–Spencer; Duminil-Copin–Sidoravicius–Tassion for q ≤ 4.",
+  "prerequisites": [
+   "LatticeGibbsMeasures",
+   "BernoulliPercolation"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#97"
+   ],
+   "OpenAI": [
+    "OAI#211",
+    "OAI#215",
+    "OAI#216",
+    "OAI#218",
+    "OAI#223",
+    "OAI#233"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/{FKPressure, ClassicalON, FKMaps}"
+  ],
+  "replaces": [
+   "the FK/current split of LatticeGibbsMeasures"
+  ]
+ },
+ {
+  "name": "MeanFieldSpinGlasses",
+  "campaign": "PRDS",
+  "family": "StatisticalMechanics",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "B",
+  "scope": "This roadmap develops mean-field spin glasses following Talagrand and Panchenko. It defines the SK, mixed p-spin, spherical, perceptron and diluted models. It proves the interpolation bounds, the cavity scheme, Ruelle cascades, Ghirlanda–Guerra, ultrametricity and the Parisi formula, taking Dovbysh–Sudakov from Tau Ceti's Aldous–Hoover theory, and treats the Parisi functional, TAP and AMP. Gaussian tools come from GaussianAnalysisAndLogConcaveMeasures; random CSP thresholds are RandomGraphsAndConstraintSatisfaction's.",
+  "milestones": "Guerra; Aizenman–Sims–Starr; Ruelle cascades; Ghirlanda–Guerra; ultrametricity; Parisi formula; Auffinger–Chen; Crisanti–Sommers; Franz–Leone; Bolthausen AMP.",
+  "prerequisites": [
+   "GaussianAnalysisAndLogConcaveMeasures",
+   "ConcentrationAndFunctionalInequalities",
+   "StochasticCalculus",
+   "Exchangeability",
+   "RandomMatrices #397"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#217",
+    "OAI#221",
+    "OAI#222",
+    "OAI#227",
+    "OAI#234",
+    "OAI#235",
+    "OAI#281"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/{SKGap, SKValue, ParisiFinite, DilutedSpin, Perceptron/{Cascade, Control}}"
+  ],
+  "replaces": [
+   "MeanFieldSpinGlasses"
+  ]
+ },
+ {
+  "name": "LatticeRandomWalks",
+  "campaign": "PRDS",
+  "family": "StatisticalMechanics",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "A",
+  "scope": "This roadmap develops simple random walk on ℤ^d and planar lattices as potential theory, following Lawler–Limic. It builds discrete complex analysis on square and isoradial lattices, the Chelkak–Smirnov toolbox and s-holomorphicity, as the source of the observables used in scaling-limit proofs. It constructs loop-erased walk and the random-walk loop soup, and develops self-avoiding walk through the connective constant and the parafermionic observable. Walks on general graphs and Wilson's algorithm are RandomWalksOnGraphsAndNetworks'; scaling limits to SLE are SchrammLoewnerEvolution's.",
+  "milestones": "LCLT; Green-function asymptotics; Beurling; LERW; discrete Cauchy formula; convergence of discrete harmonic measure; Hammersley–Welsh; Duminil-Copin–Smirnov.",
+  "prerequisites": [
+   "MarkovChainsAndMixing",
+   "ConformalMapping"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#211",
+    "OAI#218",
+    "OAI#223",
+    "OAI#224",
+    "OAI#237"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/Honeycomb (minor)"
+  ],
+  "replaces": [
+   "LatticeRandomWalks"
+  ]
+ },
+ {
+  "name": "SchrammLoewnerEvolution",
+  "campaign": "PRDS",
+  "family": "StatisticalMechanics",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "C",
+  "scope": "This roadmap develops Loewner evolution and SLE following Lawler and Kemppainen. It builds chordal and radial Loewner chains driven by continuous functions and defines SLE_κ and SLE(κ, ρ) with their phases, trace, locality, restriction and Green function. It develops the space of curves with the tightness criteria that carry discrete interfaces to SLE. Conformal loop ensembles and imaginary geometry enter as definitions with their main theorems stated. Univalent-function theory (Koebe, distortion, radial chains of class S) is ANA's UnivalentFunctionsAndQuasiconformalMaps, and Bessel processes come from StochasticCalculus.",
+  "milestones": "Loewner transform; phases; Rohde–Schramm; locality and restriction; Green function and dim ≤ 1 + κ/8; Cardy for SLE_6; Kemppainen–Smirnov.",
+  "prerequisites": [
+   "StochasticCalculus",
+   "BrownianMotion",
+   "LatticeRandomWalks",
+   "ConformalMapping",
+   "ANA UnivalentFunctionsAndQuasiconformalMaps, FractalGeometry"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#211",
+    "OAI#218",
+    "OAI#223",
+    "OAI#226",
+    "OAI#230",
+    "OAI#232"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/SLE/Loewner/*, OAI lean/OAI/Probability/SLE/LoewnerCharts, OAI lean/OAI/Probability/SLEGauge"
+  ],
+  "replaces": [
+   "SchrammLoewnerEvolution"
+  ]
+ },
+ {
+  "name": "GaussianFreeField",
+  "campaign": "PRDS",
+  "family": "StatisticalMechanics",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "B",
+  "scope": "This roadmap develops the Gaussian free field. It builds the discrete field on graphs with its Markov property and random-walk representation, and the continuum Dirichlet and whole-plane fields as random distributions with domain Markov decomposition, circle averages, thick points, conformal invariance and lattice-to-continuum convergence. It constructs Gaussian multiplicative chaos and the Liouville measure and defines quantum spheres and disks. Local sets, level lines, two-valued sets and the SLE_4 coupling are stated, and the LQG metric and mating of trees are frontier. Negative-order Sobolev spaces come from ANA's RealHarmonicAnalysis.",
+  "milestones": "discrete Markov property; continuum GFF and Cameron–Martin space; domain Markov; thick points; lattice convergence; GMC (Kahane, Berestycki); Liouville measure.",
+  "prerequisites": [
+   "GaussianAnalysisAndLogConcaveMeasures",
+   "LatticeRandomWalks",
+   "BrownianMotion",
+   "PDE",
+   "ANA RealHarmonicAnalysis",
+   "SchrammLoewnerEvolution (SLE_4 layer)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#211",
+    "OAI#216",
+    "OAI#223",
+    "OAI#225",
+    "OAI#226",
+    "OAI#232",
+    "OAI#233"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/SLE/GreenCovariance",
+   "OAI lean/OAI/Probability/LatticeSurface"
+  ],
+  "replaces": [
+   "GaussianFreeField"
+  ]
+ },
+ {
+  "name": "IntegrableLatticeModels",
+  "campaign": "PRDS",
+  "family": "StatisticalMechanics",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "B",
+  "scope": "This roadmap develops exactly solvable planar lattice models. For dimers it builds Pfaffian methods, Temperley's bijection, local statistics and double dimers, stating Kenyon's fluctuation and lozenge-universality theorems. It solves the planar Ising model by Kac–Ward and Pfaffian formulas. For the six-vertex model it develops transfer matrices, Yang–Baxter and the algebraic Bethe ansatz, and the correspondences with random-cluster and Ashkin–Teller models. Gibbs theory is LatticeGibbsMeasures', spanning trees RandomWalksOnGraphsAndNetworks'; quantum integrable systems and quantum groups are FAMP's and ALG's.",
+  "milestones": "Kasteleyn; Temperley; Kenyon local statistics; Kac–Ward; Onsager; Yang magnetization; Yang–Baxter; Bethe ansatz; Lieb square ice; Baxter–Kelland–Wu.",
+  "prerequisites": [
+   "LatticeGibbsMeasures",
+   "RandomWalksOnGraphsAndNetworks",
+   "RandomClusterAndRandomCurrents"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#97"
+   ],
+   "OpenAI": [
+    "OAI#218",
+    "OAI#223",
+    "OAI#225",
+    "OAI#226",
+    "OAI#233"
+   ]
+  },
+  "porting": [],
+  "replaces": [
+   "IntegrableLatticeModels (FAMP- and COMB-tagged needs)"
+  ]
+ },
+ {
+  "name": "RandomMedia",
+  "campaign": "PRDS",
+  "family": "StatisticalMechanics",
+  "topic": "math.PR",
+  "size": "M",
+  "est_prs": 130,
+  "wave": "B",
+  "scope": "This roadmap develops random walks and growth in random media. For first-passage percolation on ℤ^d it proves the time constant, the shape theorem and concentration, and develops Busemann functions and geodesics. For random walk in random environment it covers the one-dimensional theory, the 0-1 laws, regeneration, ballisticity and the environment seen from the particle. Random Schrödinger operators are FAMP's; percolation clusters are BernoulliPercolation's.",
+  "milestones": "time constant; Cox–Durrett; Kesten concentration; Solomon; Kalikow and Zerner–Merkl 0-1 laws; Sznitman–Zerner LLN.",
+  "prerequisites": [
+   "ErgodicTheory",
+   "BernoulliPercolation",
+   "MarkovChainsAndMixing",
+   "ConcentrationAndFunctionalInequalities"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#212",
+    "OAI#220"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/{FirstPassage, LatticePassage, Ballisticity, DirectionalWalk}"
+  ],
+  "replaces": [
+   "RandomMedia"
+  ]
+ },
+ {
+  "name": "ContinuumGibbsSystems",
+  "campaign": "PRDS",
+  "family": "StatisticalMechanics",
+  "topic": "math.PR",
+  "size": "M",
+  "est_prs": 120,
+  "wave": "B",
+  "scope": "This roadmap develops classical continuum particle systems following Ruelle. It treats stable and superstable pair potentials, canonical and grand-canonical ensembles, their thermodynamic limits and the equivalence of ensembles. It proves convergence of the Mayer expansion, the Kac/Lebowitz–Penrose limit, and existence of infinite-volume Gibbs point processes by DLR and Georgii–Nguyen–Zessin. It extends PointProcesses (#417), whose boundary excludes infinite-volume Gibbs processes; quantum particle systems are FAMP's.",
+  "milestones": "superstability; thermodynamic limits; equivalence of ensembles; Mayer expansion; Lebowitz–Penrose; DLR existence.",
+  "prerequisites": [
+   "PointProcesses #417",
+   "LatticeGibbsMeasures",
+   "LargeDeviations"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#228",
+    "OAI#267"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/{ContinuumTransition, RadialTransition}"
+  ],
+  "replaces": [
+   "ContinuumGibbsSystems (FAMP-tagged)"
+  ]
+ },
+ {
+  "name": "RandomWalksOnGraphsAndNetworks",
+  "campaign": "PRDS",
+  "family": "RandomDiscreteStructures",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "A",
+  "scope": "This roadmap develops random walks on infinite graphs and groups following Lyons–Peres. It treats electrical networks, uniform spanning trees and forests, and determinantal and strongly Rayleigh measures on countable sets. It develops transitive graphs with unimodularity and mass transport, unimodular random graphs, heat-kernel bounds, and entropy and the Liouville property of walks on groups. Amenability and Kesten's criterion come from ALG; branching is RandomTreesAndMaps', local weak limits RandomGraphsAndConstraintSatisfaction's.",
+  "milestones": "Rayleigh; Nash-Williams; Wilson; transfer-current; WUSF = FUSF on amenable graphs; Lyons DPP; Borcea–Brändén–Liggett; mass transport; Varopoulos–Carne; Kaimanovich–Vershik.",
+  "prerequisites": [
+   "MarkovChainsAndMixing",
+   "ALG AmenableGroupsAndGrowth",
+   "LTCS ShannonInformationTheory"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#96"
+   ],
+   "OpenAI": [
+    "OAI#213",
+    "OAI#214",
+    "OAI#231",
+    "OAI#271"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/{StrongRayleigh, SpanningForest, UnimodularPercolation/Transport}"
+  ],
+  "replaces": [
+   "ProbabilityOnTreesAndNetworks (graph part)"
+  ]
+ },
+ {
+  "name": "RandomTreesAndMaps",
+  "campaign": "PRDS",
+  "family": "RandomDiscreteStructures",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 230,
+  "wave": "B",
+  "scope": "This roadmap develops branching processes, random trees and random planar maps. It treats Galton–Watson processes, branching on trees and broadcasting and reconstruction on trees. It codes conditioned Galton–Watson and simply generated trees by paths and proves Aldous's continuum-random-tree theorem in the Gromov–Hausdorff–Prokhorov topology, which it builds on compact metric measure spaces. For planar maps it proves the enumeration and the classical bijections and states the Brownian-map theorem. Combinatorial maps as rotation systems come from COMB's StructuralGraphTheory; Liouville quantum gravity is GaussianFreeField's.",
+  "milestones": "Kesten–Stigum (growth and reconstruction); branching number; Vervaat; Aldous CRT; GHP; Tutte; Cori–Vauquelin–Schaeffer; Sheffield bijection.",
+  "prerequisites": [
+   "BrownianMotion",
+   "RandomWalksOnGraphsAndNetworks",
+   "LatticeGibbsMeasures",
+   "COMB StructuralGraphTheory"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#211",
+    "OAI#229",
+    "OAI#236"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/FKMaps (plane trees, Vervaat, excursion law, GHP bounds)",
+   "OAI lean/OAI/Probability/ThreeState"
+  ],
+  "replaces": [
+   "RandomTreesAndMaps",
+   "ProbabilityOnTreesAndNetworks (trees)",
+   "COMB-tagged planar maps",
+   "GEO-tagged GHP"
+  ]
+ },
+ {
+  "name": "RandomGraphsAndConstraintSatisfaction",
+  "campaign": "PRDS",
+  "family": "RandomDiscreteStructures",
+  "topic": "math.PR",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "B",
+  "scope": "This roadmap develops sparse random graphs and random constraint satisfaction. It proves the Erdős–Rényi transition and builds the configuration model, random regular graphs, Benjamini–Schramm limits and the Kesten–McKay law. For random k-SAT, XORSAT and colorings it develops moment methods, sharp thresholds and interpolation, stating the large-k k-SAT threshold, and it treats the stochastic block model up to the Kesten–Stigum threshold. Fixed-subgraph thresholds, Janson, the local lemma and the nibble are COMB's ProbabilisticMethod; dense limits are DenseGraphLimits'; spectral expansion is COMB's ExpanderGraphs.",
+  "milestones": "giant component; configuration model; Kesten–McKay; Benjamini–Schramm limits; sharp k-SAT thresholds; Franz–Leone; Bayati–Gamarnik–Tetali; XORSAT; SBM below Kesten–Stigum.",
+  "prerequisites": [
+   "RandomTreesAndMaps",
+   "RandomWalksOnGraphsAndNetworks",
+   "MeanFieldSpinGlasses",
+   "ConcentrationAndFunctionalInequalities",
+   "COMB BooleanFunctionAnalysis, ProbabilisticMethod"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#219",
+    "OAI#229",
+    "OAI#231",
+    "OAI#235"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Probability/{RandomSAT, SATVariance, SATComputability, BenjaminiSchramm}"
+  ],
+  "replaces": [
+   "RandomGraphsAndConstraintSatisfaction"
+  ]
+ },
+ {
+  "name": "StrongConvergenceOfRandomMatrices",
+  "campaign": "PRDS",
+  "family": null,
+  "topic": "math.PR",
+  "size": "M",
+  "est_prs": 130,
+  "wave": "C",
+  "scope": "This roadmap develops strong asymptotic freeness: convergence of operator norms of noncommutative polynomials in random matrices to those of the limiting free operators. It treats Gaussian, Haar-unitary and random-permutation models, with Friedman's theorem as the graph-theoretic consequence. Moment convergence and C*-level freeness are imported from RandomMatrices (#397) Milestone 6; C*_r(F_d), Haagerup's inequality and free group factors are FAMP's; Ramanujan graphs are COMB's ExpanderGraphs. Operator-algebra applications (Hayes's route to Peterson–Thom) are stated.",
+  "milestones": "linearization; Haagerup–Thorbjørnsen; Collins–Male; polynomial method; Bordenave–Collins; Friedman 2√(d−1) + o(1).",
+  "prerequisites": [
+   "RandomMatrices #397",
+   "FAMP FreeProbabilityAndFreeGroupFactors, VonNeumannAlgebras",
+   "COMB ExpanderGraphs",
+   "RandomGraphsAndConstraintSatisfaction"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#99"
+   ],
+   "OpenAI": []
+  },
+  "porting": [],
+  "replaces": [
+   "StrongConvergenceOfRandomMatrices (Annals P46)"
+  ]
+ },
+ {
+  "name": "ErgodicTheory",
+  "campaign": "PRDS",
+  "family": "DynamicalSystems",
+  "topic": "math.DS",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "A",
+  "scope": "This roadmap develops measure-preserving dynamics beyond Mathlib's ergodicity, mean ergodic theorem and Krylov–Bogolyubov and Tau Ceti's Koopman results. It proves the pointwise and subadditive ergodic theorems for ℤ-, ℝ- and amenable-group actions and builds Lebesgue spaces, conditional measures and ergodic decomposition. It develops mixing, Koopman spectral theory, factors, joinings and extensions, and supplies the group-action ergodic theorems to which PointProcesses (#417) defers. Entropy is EntropyAndThermodynamicFormalism's, recurrence ErgodicRamseyTheory's, orbit equivalence MeasuredGroupTheory's.",
+  "milestones": "maximal ergodic lemma; Birkhoff; Kingman; Lindenstrauss; ergodic decomposition; Rokhlin; Kac; weak mixing; Halmos–von Neumann; Furstenberg disjointness.",
+  "prerequisites": [
+   "Tau Ceti Probability/Ergodic",
+   "ALG AmenableGroupsAndGrowth",
+   "OneParameterSemigroups",
+   "OperatorTheory #126"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#144",
+    "OAI#145",
+    "OAI#150",
+    "OAI#152",
+    "OAI#154",
+    "OAI#212",
+    "OAI#220",
+    "OAI#228"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Dynamics/{MultipleMixing, ThreeTorus}",
+   "Tau Ceti Probability/Ergodic (built for Exchangeability)"
+  ],
+  "replaces": [
+   "ErgodicTheory",
+   "PM.2/PM.4 ergodic theory"
+  ]
+ },
+ {
+  "name": "EntropyAndThermodynamicFormalism",
+  "campaign": "PRDS",
+  "family": "DynamicalSystems",
+  "topic": "math.DS",
+  "size": "L",
+  "est_prs": 280,
+  "wave": "B",
+  "scope": "This roadmap develops entropy theory and thermodynamic formalism. It builds measure-theoretic entropy on LTCS's Shannon entropy and the topological theory on Mathlib's topological entropy, including mean dimension. It develops subshifts of finite type, pressure, equilibrium states, transfer operators, Gibbs measures (identified with LatticeGibbsMeasures' DLR measures on ℤ) and the dimension theory of dynamically defined measures. Dimension of sets and measures is ANA's FractalGeometry; smooth entropy formulas are SmoothErgodicTheory's.",
+  "milestones": "Kolmogorov–Sinai; Shannon–McMillan–Breiman; Abramov; Pinsker; variational principle; mean dimension; RPF; Bowen Gibbs measures; Bowen's equation; Feng–Hu; Erdős Pisot; Garsia.",
+  "prerequisites": [
+   "ErgodicTheory",
+   "LTCS ShannonInformationTheory",
+   "LatticeGibbsMeasures",
+   "ANA FractalGeometry"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#96"
+   ],
+   "OpenAI": [
+    "OAI#015",
+    "OAI#145",
+    "OAI#146",
+    "OAI#148",
+    "OAI#151",
+    "OAI#152",
+    "OAI#153",
+    "OAI#302",
+    "OAI#339"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Dynamics/{StandardMap, EntropyCounterexample}",
+   "OAI MeasureTheory/SelfSimilar, NumberTheory/DukePrimeDegree/Entropy"
+  ],
+  "replaces": [
+   "EntropyAndThermodynamicFormalism",
+   "dynamical part of FractalGeometry"
+  ]
+ },
+ {
+  "name": "SmoothErgodicTheory",
+  "campaign": "PRDS",
+  "family": "DynamicalSystems",
+  "topic": "math.DS",
+  "size": "L",
+  "est_prs": 280,
+  "wave": "C",
+  "scope": "This roadmap develops hyperbolic smooth dynamics and its ergodic theory, following Katok–Hasselblatt and Barreira–Pesin. It treats linear cocycles and random matrix products, Lyapunov exponents, and uniformly hyperbolic sets and Anosov systems with their symbolic codings, absolute continuity and the Hopf argument. Its nonuniform layers develop hyperbolic measures and the link between exponents and entropy; Ledrappier–Young and Katok's entropy-rigidity conjecture are stated. Local theory at fixed points is QualitativeODEAndBifurcations' and Tau Ceti code, and the Riemannian geometry of geodesic flows is GEO's.",
+  "milestones": "Oseledets; Furstenberg positivity; hyperbolic stable manifolds; shadowing; Markov partitions; Hopf–Anosov ergodicity; Ruelle inequality; Pesin formula; Katok horseshoes.",
+  "prerequisites": [
+   "ErgodicTheory",
+   "EntropyAndThermodynamicFormalism",
+   "QualitativeODEAndBifurcations",
+   "DifferentialGeometry",
+   "GEO GlobalRiemannianGeometry"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#93"
+   ],
+   "OpenAI": [
+    "OAI#144",
+    "OAI#146",
+    "OAI#152",
+    "OAI#339"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Dynamics/{StandardMap (Lyapunov predicates), SmoothObstruction}"
+  ],
+  "replaces": [
+   "SmoothErgodicTheory",
+   "NonuniformHyperbolicity (Annals P40)"
+  ]
+ },
+ {
+  "name": "HomogeneousDynamics",
+  "campaign": "PRDS",
+  "family": "DynamicalSystems",
+  "topic": "math.DS",
+  "size": "L",
+  "est_prs": 300,
+  "wave": "C",
+  "scope": "This roadmap develops dynamics on homogeneous spaces G/Γ, with SL₂(ℝ)/SL₂(ℤ) and SL_n(ℤ)\\SL_n(ℝ) as running examples. It proves mixing and Howe–Moore, the theory of horocycle and geodesic flows, nondivergence, Ratner theory for SL₂(ℝ) with the general statements, and Oppenheim. Its rigidity layers develop the entropy and leafwise-measure theory behind the measure classification of diagonal actions and the equidistribution of periodic torus packets. Lattices and arithmetic groups come from ALG and Siegel's mean-value theorem from the Birkbeck GeometryOfNumbers roadmap; arithmetic applications stay with NT consumers.",
+  "milestones": "Mahler; Howe–Moore; Furstenberg unique ergodicity; Dani; Dani–Margulis; Ratner for SL₂(ℝ); Oppenheim; Einsiedler–Katok–Lindenstrauss; ELMV torus packets.",
+  "prerequisites": [
+   "ErgodicTheory",
+   "EntropyAndThermodynamicFormalism",
+   "ALG LatticesInSemisimpleGroups, AmenabilityAndPropertyT",
+   "RepresentationTheory/LieGroups",
+   "NumberFieldArithmetic",
+   "Birkbeck GN.4"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#95"
+   ],
+   "OpenAI": [
+    "OAI#015"
+   ]
+  },
+  "porting": [
+   "OAI NumberTheory/DukePrimeDegree (~600 files, a complete EKL-type argument)"
+  ],
+  "replaces": [
+   "HomogeneousDynamics",
+   "GN.4 and PM.4 dynamics"
+  ]
+ },
+ {
+  "name": "MeasuredGroupTheory",
+  "campaign": "PRDS",
+  "family": "DynamicalSystems",
+  "topic": "math.DS",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "B",
+  "scope": "This roadmap develops p.m.p. actions of countable groups through their orbit equivalence relations, following Kechris–Miller and Gaboriau. It treats Bernoulli shifts and factors of IID on groups and transitive graphs. It develops full groups, graphings and treeings, hyperfiniteness and cost. Borel equivalence relations without measure are LTCS's InvariantDescriptiveSetTheory; amenability is ALG's; group von Neumann algebras and W*-rigidity are FAMP's.",
+  "milestones": "factors of IID; Dye; Ornstein–Weiss and Connes–Feldman–Weiss; Levitt; Gaboriau fixed price for F_n; amalgam formula.",
+  "prerequisites": [
+   "ErgodicTheory",
+   "ALG AmenableGroupsAndGrowth",
+   "LTCS InvariantDescriptiveSetTheory",
+   "RandomWalksOnGraphsAndNetworks"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#212",
+    "OAI#231",
+    "OAI#236",
+    "OAI#259"
+   ]
+  },
+  "porting": [],
+  "replaces": [
+   "MeasuredGroupTheory",
+   "factors-of-IID cluster (probability share)"
+  ]
+ },
+ {
+  "name": "ErgodicRamseyTheory",
+  "campaign": "PRDS",
+  "family": "DynamicalSystems",
+  "topic": "math.DS",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "B",
+  "scope": "This roadmap develops ergodic Ramsey theory. It proves the correspondence principle and multiple recurrence through the Furstenberg–Zimmer structure theory, with topological, polynomial and IP recurrence. It develops nilsystems and the Host–Kra theory of multiple ergodic averages. Gowers norms, inverse theorems and quantitative nilsequences belong to the Birkbeck AdditiveCombinatorics roadmap (math.CO), which consumes this one; joinings and extensions are ErgodicTheory's.",
+  "milestones": "correspondence principle; Furstenberg–Zimmer; Szemerédi; Furstenberg–Katznelson; Bergelson–Leibman; Leibman; Host–Kra; IP recurrence.",
+  "prerequisites": [
+   "ErgodicTheory",
+   "RepresentationTheory/LieGroups"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#145",
+    "OAI#154",
+    "OAI#164"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Dynamics/MultipleMixing"
+  ],
+  "replaces": [
+   "ErgodicRamseyTheory"
+  ]
+ },
+ {
+  "name": "TwistMapsBilliardsAndKAM",
+  "campaign": "PRDS",
+  "family": "DynamicalSystems",
+  "topic": "math.DS",
+  "size": "L",
+  "est_prs": 200,
+  "wave": "B",
+  "scope": "This roadmap develops low-dimensional conservative dynamics. It extends Mathlib's rotation number of circle maps and treats area-preserving twist maps, their periodic orbits, invariant circles and Aubry–Mather sets. It proves the Liouville–Arnold theorem and the KAM theorems, and develops convex and polygonal billiards. The Hamiltonian formalism comes from HamiltonianSystems (#480), which leaves Liouville–Arnold and KAM unowned; Teichmüller dynamics of translation surfaces is TOP's.",
+  "milestones": "Denjoy; Poincaré–Birkhoff; Birkhoff graph theorem; Aubry–Mather; Liouville–Arnold; KAM; Moser twist; Lazutkin; Zemlyakov–Katok.",
+  "prerequisites": [
+   "ErgodicTheory",
+   "HamiltonianSystems #480",
+   "QualitativeODEAndBifurcations",
+   "TOP TeichmullerTheory"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#93"
+   ],
+   "OpenAI": [
+    "OAI#146",
+    "OAI#147",
+    "OAI#150"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Dynamics/{StandardMap, TriangleBilliards}"
+  ],
+  "replaces": [
+   "AreaPreservingMapsAndBilliards",
+   "Liouville–Arnold and KAM left unowned by #480"
+  ]
+ },
+ {
+  "name": "QualitativeODEAndBifurcations",
+  "campaign": "PRDS",
+  "family": "DynamicalSystems",
+  "topic": "math.DS",
+  "size": "L",
+  "est_prs": 180,
+  "wave": "A",
+  "scope": "This roadmap develops the qualitative theory of autonomous ODE beyond Mathlib's flow API and Tau Ceti's flows, ω-limit sets and local stable manifolds. It covers stability, local linearization and invariant manifolds, periodic orbits and return maps, planar theory and limit cycles, local bifurcations, and mass-action reaction networks. Dulac's finiteness theorem, Peixoto's theorem and Hilbert's sixteenth problem are stated. Hyperbolic sets are SmoothErgodicTheory's; PDE are ANA's.",
+  "milestones": "LaSalle; Hartman–Grobman; center manifold; Floquet; Poincaré–Bendixson; Dulac; Liénard; Hopf bifurcation; Bautin; deficiency zero.",
+  "prerequisites": [
+   "Tau Ceti Analysis/ODE, Dynamics/Flow",
+   "DifferentialGeometry"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#143",
+    "OAI#149",
+    "OAI#352"
+   ]
+  },
+  "porting": [
+   "OAI Analysis/{LienardCycles, MassAction}"
+  ],
+  "replaces": [
+   "QualitativeODE"
+  ]
+ }
+]

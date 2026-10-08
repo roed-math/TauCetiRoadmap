@@ -1,0 +1,846 @@
+{
+ "version": 2,
+ "purpose": "Subject fields and their areas. The map's labels sit at one level of abstraction: zoomed out it names fields (algebraic number theory, algebraic geometry, analysis, ...), and zooming into a field reveals its areas. Each area (a galaxy on the map) belongs to one field and takes its colour; the only area of a field with roadmaps is named after the field. Each classification cluster is its own area; an area with primaryMsc takes only the roadmaps of its cluster whose primary subject class starts with one of those prefixes, and the area without primaryMsc takes the rest of that cluster. Where an area lies on the map is measured, not set here: its distance from Mathlib and its direction come from scripts/measure_distances.py (data/roadmap-distances.json and data/galaxy-layout.json), which keeps a field's areas side by side. msc lists the subject-class prefixes whose secondary classes tag a roadmap with this area; the longest matching prefix wins.",
+ "fields": [
+  {
+   "id": "algebraic-number-theory",
+   "label": "Algebraic number theory",
+   "short": "Algebraic NT",
+   "caption": [
+    "Algebraic",
+    "number theory"
+   ],
+   "color": "#cfe3fb"
+  },
+  {
+   "id": "analytic-number-theory",
+   "label": "Analytic number theory",
+   "short": "Analytic NT",
+   "caption": [
+    "Analytic",
+    "number theory"
+   ],
+   "color": "#dbeafe"
+  },
+  {
+   "id": "elementary-number-theory",
+   "label": "Elementary and computational number theory",
+   "short": "Elementary NT",
+   "caption": [
+    "Elementary & computational",
+    "number theory"
+   ],
+   "color": "#dbeafe"
+  },
+  {
+   "id": "algebraic-geometry",
+   "label": "Algebraic geometry",
+   "short": "Alg. geometry",
+   "caption": [
+    "Algebraic",
+    "geometry"
+   ],
+   "color": "#e0f2e9"
+  },
+  {
+   "id": "k-theory",
+   "label": "Algebraic K-theory and motives",
+   "short": "K-theory & motives",
+   "caption": [
+    "Algebraic K-theory",
+    "& motives"
+   ],
+   "color": "#fce7f3"
+  },
+  {
+   "id": "representation-theory",
+   "label": "Representation theory",
+   "short": "Representations",
+   "caption": [
+    "Representation",
+    "theory"
+   ],
+   "color": "#e7dcfa"
+  },
+  {
+   "id": "group-theory",
+   "label": "Group theory",
+   "short": "Group theory",
+   "caption": [
+    "Group theory"
+   ],
+   "color": "#dcd4f5"
+  },
+  {
+   "id": "commutative-algebra",
+   "label": "Commutative algebra",
+   "short": "Comm. algebra",
+   "caption": [
+    "Commutative",
+    "algebra"
+   ],
+   "color": "#dcd4f5"
+  },
+  {
+   "id": "homological-algebra",
+   "label": "Homological algebra and category theory",
+   "short": "Homological algebra",
+   "caption": [
+    "Homological algebra",
+    "& category theory"
+   ],
+   "color": "#e2e8f0"
+  },
+  {
+   "id": "logic",
+   "label": "Logic and model theory",
+   "short": "Logic",
+   "caption": [
+    "Logic &",
+    "model theory"
+   ],
+   "color": "#e2e8f0"
+  },
+  {
+   "id": "foundations",
+   "label": "Library foundations",
+   "short": "Foundations",
+   "caption": [
+    "Library",
+    "foundations"
+   ],
+   "color": "#e2e8f0"
+  },
+  {
+   "id": "analysis",
+   "label": "Analysis",
+   "short": "Analysis",
+   "caption": [
+    "Analysis"
+   ],
+   "color": "#d8eafe"
+  },
+  {
+   "id": "probability",
+   "label": "Probability",
+   "short": "Probability",
+   "caption": [
+    "Probability"
+   ],
+   "color": "#e6f0ff"
+  },
+  {
+   "id": "combinatorics",
+   "label": "Combinatorics",
+   "short": "Combinatorics",
+   "caption": [
+    "Combinatorics"
+   ],
+   "color": "#e6f0ff"
+  },
+  {
+   "id": "topology",
+   "label": "Topology",
+   "short": "Topology",
+   "caption": [
+    "Topology"
+   ],
+   "color": "#d2f1e7"
+  },
+  {
+   "id": "differential-geometry",
+   "label": "Differential geometry",
+   "short": "Diff. geometry",
+   "caption": [
+    "Differential",
+    "geometry"
+   ],
+   "color": "#d2f1e7"
+  }
+ ],
+ "galaxies": [
+  {
+   "id": "elementary",
+   "label": "Elementary number theory",
+   "short": "Elementary NT",
+   "caption": [
+    "Elementary",
+    "number theory"
+   ],
+   "clusters": [
+    "elementary-and-computational-number-theory"
+   ],
+   "msc": [
+    "11A",
+    "11B"
+   ],
+   "description": "Divisibility, congruences and reciprocity, arithmetic functions, integer sequences and polynomials: the classical arithmetic the rest of number theory assumes.",
+   "topics": [
+    "Congruences and reciprocity",
+    "Arithmetic functions",
+    "Integer sequences",
+    "Integer polynomials"
+   ],
+   "field": "elementary-number-theory"
+  },
+  {
+   "id": "computational",
+   "label": "Computational number theory",
+   "short": "Computational NT",
+   "caption": [
+    "Computational",
+    "number theory"
+   ],
+   "clusters": [
+    "elementary-and-computational-number-theory"
+   ],
+   "primaryMsc": [
+    "11Y"
+   ],
+   "msc": [
+    "11Y",
+    "68W"
+   ],
+   "description": "Certified algorithms for arithmetic invariants, and the checks that connect formal statements with arithmetic databases such as the LMFDB.",
+   "topics": [
+    "Certified algorithms",
+    "Arithmetic databases",
+    "Verified computation"
+   ],
+   "field": "elementary-number-theory"
+  },
+  {
+   "id": "finitefields",
+   "label": "Finite fields",
+   "short": "Finite fields",
+   "caption": [
+    "Finite fields"
+   ],
+   "clusters": [
+    "elementary-and-computational-number-theory"
+   ],
+   "primaryMsc": [
+    "11T"
+   ],
+   "msc": [
+    "11T"
+   ],
+   "description": "Finite fields and finite rings, character sums and their bounds, and their interfaces with coding theory.",
+   "topics": [
+    "Finite fields and finite rings",
+    "Character sums",
+    "Coding interfaces"
+   ],
+   "field": "elementary-number-theory"
+  },
+  {
+   "id": "analytic",
+   "label": "Analytic number theory",
+   "short": "Analytic NT",
+   "caption": [
+    "Analytic",
+    "number theory"
+   ],
+   "clusters": [
+    "analytic-number-theory"
+   ],
+   "msc": [
+    "11J",
+    "11K",
+    "11L",
+    "11M",
+    "11N",
+    "11P",
+    "11Z"
+   ],
+   "description": "Zeta and L-functions and the distribution of primes, sieves, exponential sums and the circle method, Diophantine approximation and transcendence, and probabilistic and statistical number theory.",
+   "topics": [
+    "Zeta and L-functions",
+    "Primes and sieves",
+    "Circle method",
+    "Diophantine approximation",
+    "Arithmetic statistics"
+   ],
+   "field": "analytic-number-theory"
+  },
+  {
+   "id": "algebraicnt",
+   "label": "Number fields and class field theory",
+   "short": "Number fields",
+   "caption": [
+    "Number fields &",
+    "class field theory"
+   ],
+   "clusters": [
+    "algebraic-number-theory"
+   ],
+   "msc": [
+    "11C",
+    "11E",
+    "11H",
+    "11R",
+    "11S",
+    "12"
+   ],
+   "description": "Number fields and local fields, ramification, class field theory, Galois cohomology and duality, and quadratic forms and lattices over global and local fields.",
+   "topics": [
+    "Number fields and ideals",
+    "Local fields and ramification",
+    "Class field theory",
+    "Galois cohomology and duality",
+    "Quadratic forms and lattices"
+   ],
+   "field": "algebraic-number-theory"
+  },
+  {
+   "id": "arithmeticgeometry",
+   "label": "Curves, abelian varieties and Shimura varieties",
+   "short": "Curves & abelian var.",
+   "caption": [
+    "Curves, abelian &",
+    "Shimura varieties"
+   ],
+   "clusters": [
+    "arithmetic-geometry"
+   ],
+   "msc": [
+    "11D",
+    "11G",
+    "14G",
+    "14K",
+    "37P"
+   ],
+   "description": "Elliptic curves and abelian varieties, heights and rational points, Néron models, modular curves and Shimura varieties as moduli spaces, and the finiteness theorems of Diophantine geometry.",
+   "topics": [
+    "Elliptic curves and abelian varieties",
+    "Heights and rational points",
+    "Modular curves and Shimura varieties",
+    "Faltings and anabelian methods"
+   ],
+   "field": "algebraic-number-theory"
+  },
+  {
+   "id": "functionfields",
+   "label": "Function fields",
+   "short": "Function fields",
+   "caption": [
+    "Function fields"
+   ],
+   "clusters": [
+    "function-fields"
+   ],
+   "msc": [],
+   "description": "Arithmetic of global function fields: Drinfeld modules and t-motives, special values in characteristic p, and shtukas and the Langlands correspondence over function fields.",
+   "topics": [
+    "Global function fields",
+    "Drinfeld modules and t-motives",
+    "Shtukas and function-field Langlands"
+   ],
+   "field": "algebraic-number-theory"
+  },
+  {
+   "id": "automorphic",
+   "label": "Modular and automorphic forms",
+   "short": "Automorphic forms",
+   "caption": [
+    "Modular &",
+    "automorphic forms"
+   ],
+   "clusters": [
+    "modular-and-automorphic-forms"
+   ],
+   "msc": [
+    "11F"
+   ],
+   "description": "Modular forms and their Hecke theory, automorphic forms and representations on reductive groups, locally symmetric spaces, trace formulas, p-adic families, and q-series and mock modular forms.",
+   "topics": [
+    "Modular forms and Hecke operators",
+    "Automorphic representations",
+    "Locally symmetric spaces",
+    "p-adic families",
+    "q-series and mock modular forms"
+   ],
+   "field": "algebraic-number-theory"
+  },
+  {
+   "id": "iwasawa",
+   "label": "Iwasawa theory and special values",
+   "short": "Iwasawa theory",
+   "caption": [
+    "Iwasawa theory &",
+    "special values"
+   ],
+   "clusters": [
+    "iwasawa-theory-and-special-values"
+   ],
+   "msc": [],
+   "description": "p-adic L-functions and measures, Euler systems and main conjectures, Heegner points and Gross–Zagier formulas, and the Birch–Swinnerton-Dyer and Bloch–Kato statements about special values.",
+   "topics": [
+    "p-adic L-functions",
+    "Euler systems",
+    "Main conjectures",
+    "Heegner points and Gross–Zagier",
+    "BSD and special values"
+   ],
+   "field": "algebraic-number-theory"
+  },
+  {
+   "id": "langlands",
+   "label": "Galois representations and modularity",
+   "short": "Galois reps",
+   "caption": [
+    "Galois representations",
+    "& modularity"
+   ],
+   "clusters": [
+    "galois-representations-and-langlands"
+   ],
+   "msc": [],
+   "description": "Galois representations attached to automorphic forms, Galois deformation rings, modularity lifting and potential automorphy, p-adic local Langlands, and endoscopic transfer.",
+   "topics": [
+    "Galois representations",
+    "Deformation rings",
+    "Modularity lifting",
+    "Potential automorphy",
+    "p-adic local Langlands"
+   ],
+   "field": "algebraic-number-theory"
+  },
+  {
+   "id": "modeltheory",
+   "label": "Model theory",
+   "short": "Model theory",
+   "caption": [
+    "Model theory"
+   ],
+   "clusters": [
+    "logic-and-model-theory"
+   ],
+   "msc": [
+    "03",
+    "11U"
+   ],
+   "description": "Logic in number theory: definability, the model theory of valued fields, and motivic integration.",
+   "topics": [
+    "Definability",
+    "Valued fields",
+    "Motivic integration"
+   ],
+   "field": "logic"
+  },
+  {
+   "id": "algebraicgeometry",
+   "label": "Schemes, curves and moduli",
+   "short": "Schemes & curves",
+   "caption": [
+    "Schemes, curves",
+    "& moduli"
+   ],
+   "clusters": [
+    "algebraic-geometry"
+   ],
+   "msc": [
+    "14"
+   ],
+   "description": "Schemes and stacks, curves and their Jacobians, moduli and representability, toric varieties, Hodge structures and stable reduction.",
+   "topics": [
+    "Schemes and stacks",
+    "Curves and Jacobians",
+    "Moduli",
+    "Hodge structures"
+   ],
+   "field": "algebraic-geometry"
+  },
+  {
+   "id": "padic",
+   "label": "p-adic Hodge theory and p-adic geometry",
+   "short": "p-adic geometry",
+   "caption": [
+    "p-adic Hodge theory",
+    "& p-adic geometry"
+   ],
+   "clusters": [
+    "p-adic-geometry"
+   ],
+   "msc": [
+    "14T"
+   ],
+   "description": "Adic and perfectoid spaces, diamonds and v-stacks, crystalline, prismatic and A_inf cohomology, p-adic Hodge theory, and the Fargues–Fontaine curve.",
+   "topics": [
+    "Adic and perfectoid spaces",
+    "Diamonds",
+    "Prismatic cohomology",
+    "p-adic Hodge theory",
+    "Fargues–Fontaine curve"
+   ],
+   "field": "algebraic-number-theory"
+  },
+  {
+   "id": "etale",
+   "label": "Étale cohomology",
+   "short": "Étale cohomology",
+   "caption": [
+    "Étale",
+    "cohomology"
+   ],
+   "clusters": [
+    "etale-and-motivic-cohomology"
+   ],
+   "msc": [
+    "14F"
+   ],
+   "description": "Étale and ℓ-adic cohomology with its duality and operations, weights and the Weil conjectures, vanishing cycles and perverse sheaves, and newer cohomology theories such as Habiro cohomology.",
+   "topics": [
+    "ℓ-adic coefficients",
+    "Weights and the Weil conjectures",
+    "Vanishing cycles",
+    "Perverse sheaves"
+   ],
+   "field": "algebraic-geometry"
+  },
+  {
+   "id": "motives",
+   "label": "Motives and algebraic cycles",
+   "short": "Motives",
+   "caption": [
+    "Motives &",
+    "algebraic cycles"
+   ],
+   "clusters": [
+    "k-theory-and-motives"
+   ],
+   "primaryMsc": [
+    "14C"
+   ],
+   "msc": [
+    "14C"
+   ],
+   "description": "Algebraic cycles and their equivalence relations, and pure and mixed motives.",
+   "topics": [
+    "Algebraic cycles",
+    "Pure motives",
+    "Mixed motives"
+   ],
+   "field": "k-theory"
+  },
+  {
+   "id": "ktheory",
+   "label": "Algebraic K-theory",
+   "short": "K-theory",
+   "caption": [
+    "Algebraic",
+    "K-theory"
+   ],
+   "clusters": [
+    "k-theory-and-motives"
+   ],
+   "msc": [
+    "19"
+   ],
+   "description": "K-groups of rings, schemes and number fields, symbols and Bloch groups, regulators and polylogarithms, trace methods, and the Habiro-ring constructions around finite regulators.",
+   "topics": [
+    "K-groups of rings and schemes",
+    "Symbols and Bloch groups",
+    "Regulators and polylogarithms",
+    "Trace methods"
+   ],
+   "field": "k-theory"
+  },
+  {
+   "id": "geomlanglands",
+   "label": "Geometrisation of local Langlands",
+   "short": "Local Langlands",
+   "caption": [
+    "Geometrisation of",
+    "local Langlands"
+   ],
+   "clusters": [
+    "geometric-langlands"
+   ],
+   "msc": [],
+   "description": "The geometrisation of the local Langlands correspondence: bundles on the Fargues–Fontaine curve, Hecke stacks and local shtukas, geometric Satake, and the spectral action.",
+   "topics": [
+    "Bundles on the Fargues–Fontaine curve",
+    "Hecke stacks and local shtukas",
+    "Geometric Satake",
+    "Spectral action"
+   ],
+   "field": "algebraic-number-theory"
+  },
+  {
+   "id": "commutative",
+   "label": "Commutative algebra",
+   "short": "Comm. algebra",
+   "caption": [
+    "Commutative",
+    "algebra"
+   ],
+   "clusters": [
+    "commutative-algebra"
+   ],
+   "msc": [
+    "13"
+   ],
+   "description": "Commutative rings and their completions for deformation theory and patching, and cyclotomic completions and Habiro rings.",
+   "topics": [
+    "Completions",
+    "Deformation and patching algebra",
+    "Habiro rings"
+   ],
+   "field": "commutative-algebra"
+  },
+  {
+   "id": "grouptheory",
+   "label": "Group theory",
+   "short": "Group theory",
+   "caption": [
+    "Group theory"
+   ],
+   "clusters": [
+    "group-theory"
+   ],
+   "msc": [
+    "20"
+   ],
+   "description": "The classification of finite simple groups, and profinite and pro-p groups.",
+   "topics": [
+    "Finite simple groups",
+    "Profinite and pro-p groups"
+   ],
+   "field": "group-theory"
+  },
+  {
+   "id": "representations",
+   "label": "Representation theory",
+   "short": "Representations",
+   "caption": [
+    "Representation",
+    "theory"
+   ],
+   "clusters": [
+    "lie-theory-and-representations"
+   ],
+   "msc": [
+    "14L",
+    "15",
+    "16",
+    "16G",
+    "17",
+    "20C",
+    "20G",
+    "22"
+   ],
+   "description": "Representations of finite, compact and Lie groups, Lie algebras and root systems, reductive groups, smooth representations of p-adic groups, and representations of quivers and algebras.",
+   "topics": [
+    "Finite and compact groups",
+    "Lie algebras and root systems",
+    "Reductive groups",
+    "Smooth representations",
+    "Quivers and algebras"
+   ],
+   "field": "representation-theory"
+  },
+  {
+   "id": "homological",
+   "label": "Homological algebra",
+   "short": "Homological algebra",
+   "caption": [
+    "Homological",
+    "algebra"
+   ],
+   "clusters": [
+    "homological-algebra-and-categories"
+   ],
+   "msc": [
+    "16E",
+    "18",
+    "20J"
+   ],
+   "description": "Derived and enhanced categories, DG and A∞ structures, stable and curved homological algebra, Grothendieck groups, and the cohomology of profinite groups.",
+   "topics": [
+    "Derived and enhanced categories",
+    "DG and A∞ structures",
+    "Stable and curved complexes",
+    "Grothendieck groups"
+   ],
+   "field": "homological-algebra"
+  },
+  {
+   "id": "foundations",
+   "label": "Library foundations",
+   "short": "Foundations",
+   "caption": [
+    "Library",
+    "foundations"
+   ],
+   "clusters": [
+    "foundations"
+   ],
+   "msc": [
+    "00",
+    "68V"
+   ],
+   "description": "Shared definitions, existing libraries and proof-integrity checks that the roadmaps build on.",
+   "topics": [
+    "Shared definitions",
+    "Library integration",
+    "Proof integrity"
+   ],
+   "field": "foundations"
+  },
+  {
+   "id": "analysis",
+   "label": "Complex and functional analysis",
+   "short": "Complex & functional",
+   "caption": [
+    "Complex &",
+    "functional analysis"
+   ],
+   "clusters": [
+    "analysis"
+   ],
+   "msc": [
+    "26",
+    "28",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "37",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "49",
+    "65"
+   ],
+   "description": "Complex analysis and conformal mapping, Fuchsian groups, orthogonal bases, operator semigroups, and optimal transport.",
+   "topics": [
+    "Complex analysis",
+    "Fuchsian groups",
+    "Operator semigroups",
+    "Optimal transport"
+   ],
+   "field": "analysis"
+  },
+  {
+   "id": "pde",
+   "label": "Partial differential equations",
+   "short": "PDE",
+   "caption": [
+    "Partial differential",
+    "equations"
+   ],
+   "clusters": [
+    "pde"
+   ],
+   "msc": [
+    "35"
+   ],
+   "description": "Sobolev spaces, and elliptic and evolution equations.",
+   "topics": [
+    "Sobolev spaces",
+    "Elliptic equations",
+    "Evolution equations"
+   ],
+   "field": "analysis"
+  },
+  {
+   "id": "probability",
+   "label": "Probability",
+   "short": "Probability",
+   "caption": [
+    "Probability"
+   ],
+   "clusters": [
+    "probability"
+   ],
+   "msc": [
+    "60",
+    "62"
+   ],
+   "description": "Standard probability distributions, and exchangeability and de Finetti's theorem.",
+   "topics": [
+    "Distributions",
+    "Exchangeability"
+   ],
+   "field": "probability"
+  },
+  {
+   "id": "combinatorics",
+   "label": "Combinatorics",
+   "short": "Combinatorics",
+   "caption": [
+    "Combinatorics"
+   ],
+   "clusters": [
+    "combinatorics"
+   ],
+   "msc": [
+    "05",
+    "52",
+    "94"
+   ],
+   "description": "Dense graph limits, additive combinatorics and higher Fourier analysis, and algebraic coding theory.",
+   "topics": [
+    "Graph limits",
+    "Additive combinatorics",
+    "Coding theory"
+   ],
+   "field": "combinatorics"
+  },
+  {
+   "id": "topology",
+   "label": "Topology",
+   "short": "Topology",
+   "caption": [
+    "Topology"
+   ],
+   "clusters": [
+    "topology"
+   ],
+   "msc": [
+    "54",
+    "55",
+    "57"
+   ],
+   "description": "Algebraic topology, low-dimensional and geometric topology, Heegaard Floer homology, covering spaces, and quantum invariants of knots and three-manifolds.",
+   "topics": [
+    "Algebraic topology",
+    "Low-dimensional topology",
+    "Heegaard Floer homology",
+    "Quantum invariants"
+   ],
+   "field": "topology"
+  },
+  {
+   "id": "diffgeom",
+   "label": "Differential geometry",
+   "short": "Diff. geometry",
+   "caption": [
+    "Differential",
+    "geometry"
+   ],
+   "clusters": [
+    "differential-geometry"
+   ],
+   "msc": [
+    "51",
+    "53",
+    "58"
+   ],
+   "description": "Riemannian manifolds, geodesics and the exponential map.",
+   "topics": [
+    "Riemannian manifolds",
+    "Geodesics"
+   ],
+   "field": "differential-geometry"
+  }
+ ]
+}

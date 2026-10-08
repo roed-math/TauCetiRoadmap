@@ -1,0 +1,1223 @@
+[
+ {
+  "name": "GraphTheory",
+  "campaign": "COMB",
+  "topic": "math.CO",
+  "size": "XL family",
+  "est_prs": 950,
+  "wave": "A (sub-roadmaps A/B)",
+  "scope": "A family of roadmaps for the structure of finite graphs on Mathlib's `SimpleGraph` and `Graph`: matchings and factors, colouring, minors with tree decompositions, Hamiltonicity and drawings, spectra, and expansion. Connectivity, Menger and flows are GraphConnectivityAndFlows (#444); planarity, Euler's formula, Kuratowski–Wagner, plane duality and the five-colour theorem are SurfaceTopology layer 10 (#271); regularity is Regularity (#66); graph limits are DenseGraphLimits; extremal and Ramsey problems are the ExtremalAndProbabilisticCombinatorics family; random graphs are PRDS's. The umbrella pins shared conventions: `SimpleGraph V` with `[Fintype V]` as the primary carrier, Mathlib's `Graph α β` for multigraph statements, matrices as adapters, and the American spelling of Mathlib (`Coloring`).",
+  "prerequisites": [
+   "GraphConnectivityAndFlows (#444)",
+   "SurfaceTopology/PlanarTopology (#271)",
+   "Regularity (#66)",
+   "DenseGraphLimits"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#94"
+   ],
+   "OpenAI": [
+    "OAI#089",
+    "OAI#106",
+    "OAI#113",
+    "OAI#120",
+    "OAI#126",
+    "OAI#133",
+    "OAI#136",
+    "OAI#157",
+    "OAI#158",
+    "OAI#165",
+    "OAI#174",
+    "OAI#177",
+    "OAI#178",
+    "OAI#180",
+    "OAI#183",
+    "OAI#184",
+    "OAI#214",
+    "OAI#218",
+    "OAI#226",
+    "OAI#231",
+    "OAI#271"
+   ]
+  },
+  "porting": [],
+  "replaces": [
+   "StructuralGraphTheory (openai_combinatorics_tcs)",
+   "ExpanderGraphs (openai_combinatorics_tcs; annals_52_100 P41)",
+   "explorer opportunity 'Graph theory'"
+  ],
+  "subroadmaps": [
+   {
+    "name": "GraphTheory/MatchingsAndFactors",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "M",
+    "est_prs": 130,
+    "wave": "A (Kasteleyn layer B: SurfaceTopology #271)",
+    "scope": "This roadmap develops matching theory in general graphs from Mathlib's perfect matchings and Tutte's theorem: the Tutte–Berge formula and the Gallai–Edmonds structure theorem, factor-critical graphs, f-factors and b-matchings, and stable matchings. It treats the matching polynomial (Godsil's path tree, Heilmann–Lieb), Pfaffian orientations with Kasteleyn's theorem for planar graphs and the Temperley bijection, and upper and lower bounds for permanents. Bipartite matching, Kőnig and Hall come from Mathlib and GraphConnectivityAndFlows; matching polytopes are PolyhedralCombinatorics'; the van der Waerden bound is LogConcavityAndStablePolynomials'; algorithms with running times are LTCS's CombinatorialAlgorithms.",
+    "prerequisites": [
+     "Mathlib SimpleGraph.Tutte, Hall",
+     "GraphConnectivityAndFlows (#444)",
+     "SurfaceTopology (#271) layers 5 and 10 for plane maps"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#113",
+      "OAI#120",
+      "OAI#218",
+      "OAI#226"
+     ]
+    },
+    "porting": [
+     "OAI lean/OAI/Combinatorics/{PerfectMatching,MatchingCount,Permanent,PortMatching}"
+    ],
+    "replaces": [
+     "matching part of StructuralGraphTheory (openai_combinatorics_tcs)",
+     "Kasteleyn/Temperley part of IntegrableLatticeModels (openai_probability_physics)"
+    ],
+    "key_objects": [
+     "deficiency",
+     "Gallai–Edmonds decomposition",
+     "factor-critical graph",
+     "f-factor",
+     "stable matching",
+     "matching polynomial",
+     "Pfaffian orientation",
+     "permanent"
+    ],
+    "headline_theorems": [
+     "Tutte–Berge",
+     "Gallai–Edmonds",
+     "Petersen",
+     "Lovász ear decomposition of factor-critical graphs",
+     "Tutte f-factor and b-matchings",
+     "Gale–Shapley and the stable-matching lattice",
+     "Godsil path tree, real roots and Heilmann–Lieb",
+     "Kasteleyn for planar graphs",
+     "Temperley bijection",
+     "Brégman–Minc and Schrijver's lower bound"
+    ],
+    "formalizability": "High; Kasteleyn needs faces of plane maps from #271."
+   },
+   {
+    "name": "GraphTheory/GraphColoring",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "L",
+    "est_prs": 200,
+    "wave": "A (Thomassen and Grötzsch layers B: #271)",
+    "scope": "This roadmap develops vertex, edge, list, correspondence and fractional colouring beyond Mathlib's `SimpleGraph.Coloring`: the classical bounds (Brooks, Gallai–Roy, Hajnal–Szemerédi), the Mycielski and Hajós constructions, the chromatic polynomial, perfect graphs, Grötzsch's theorem, edge colouring of simple graphs and multigraphs, list colouring by the Combinatorial Nullstellensatz and by kernels, planar choosability, DP-colouring, and the fractional chromatic number with its LP dual. Kőnig's bipartite edge-colouring theorem is GraphConnectivityAndFlows'; the five-colour theorem is SurfaceTopology's; probabilistic colouring bounds are ProbabilisticMethod's; Lovász's Kneser theorem is DiscreteGeometryAndIncidences'.",
+    "prerequisites": [
+     "Mathlib SimpleGraph.Coloring, Combinatorics/Nullstellensatz",
+     "GraphConnectivityAndFlows (#444)",
+     "SurfaceTopology (#271) layer 10",
+     "PolyhedralCombinatorics (LP duality layer)"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#106",
+      "OAI#157",
+      "OAI#158",
+      "OAI#184"
+     ]
+    },
+    "porting": [
+     "OAI lean/OAI/Combinatorics/ListHadwiger/{Basic,ColorBins}"
+    ],
+    "replaces": [
+     "colouring part of StructuralGraphTheory (openai_combinatorics_tcs)"
+    ],
+    "key_objects": [
+     "degeneracy",
+     "chromatic polynomial",
+     "perfect graph",
+     "kernel",
+     "list assignment and choosability",
+     "DP-cover",
+     "fractional colouring"
+    ],
+    "headline_theorems": [
+     "degeneracy bounds and Brooks",
+     "Gallai–Roy",
+     "Mycielski and Hajós",
+     "Hajnal–Szemerédi",
+     "chromatic polynomial and Whitney's broken circuits",
+     "Lovász's perfect graph theorem",
+     "Grötzsch",
+     "Vizing and Shannon",
+     "Alon–Tarsi",
+     "kernels and Galvin",
+     "Thomassen 5-choosability and Erdős–Rubin–Taylor",
+     "DP-colouring basics",
+     "fractional chromatic number and LP duality, Kneser graphs"
+    ],
+    "formalizability": "High; Grötzsch (Thomassen's proof) is the long layer."
+   },
+   {
+    "name": "GraphTheory/StructuralGraphTheory",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "L",
+    "est_prs": 250,
+    "wave": "B (SurfaceTopology #271, GraphConnectivityAndFlows #444)",
+    "scope": "This roadmap develops graph structure under minors and decompositions, Hamiltonicity, and drawings with crossings. It takes minors, Kuratowski and Wagner from SurfaceTopology and connectivity and Menger from GraphConnectivityAndFlows, and builds the extremal theory of complete minors, tree decompositions, treewidth and brambles, the excluded grid theorem, linkage, the Colin de Verdière invariant, sufficient conditions for Hamiltonicity including Tutte's theorem on 4-connected planar graphs, crossing numbers with good-drawing normalization, and tournaments. Tree packing is MatroidsAndSubmodularity's and the crossing lemma DiscreteGeometryAndIncidences'; the Robertson–Seymour structure and well-quasi-ordering theorems are not part of this roadmap.",
+    "prerequisites": [
+     "SurfaceTopology and PlanarTopology (#271)",
+     "GraphConnectivityAndFlows (#444)",
+     "MatroidsAndSubmodularity (tree packing)"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#089",
+      "OAI#133",
+      "OAI#157",
+      "OAI#165",
+      "OAI#174",
+      "OAI#180",
+      "OAI#183"
+     ]
+    },
+    "porting": [
+     "OAI lean/OAI/Combinatorics/{Crossing (339 files),CompleteCrossing,ListHadwiger/MinorModels,HadwigerMatching,TreewidthL1,PlanarL1,Hamiltonian}"
+    ],
+    "replaces": [
+     "minors/treewidth/Hamiltonicity/drawings part of StructuralGraphTheory (openai_combinatorics_tcs)"
+    ],
+    "key_objects": [
+     "minor model and Hadwiger number",
+     "tree decomposition, treewidth, bramble",
+     "linkage",
+     "Colin de Verdière invariant",
+     "Hamiltonian closure",
+     "crossing number, good drawing",
+     "tournament"
+    ],
+    "headline_theorems": [
+     "Mader and Kostochka–Thomason",
+     "Hadwiger for t ≤ 4",
+     "Seymour–Thomas treewidth–bramble duality",
+     "treewidth of grids and the excluded grid theorem",
+     "Thomas–Wollan linkage",
+     "Colin de Verdière μ ≤ 1, 2, 3 characterizations and minor monotonicity",
+     "Dirac, Ore, Bondy–Chvátal closure, Chvátal–Erdős, Pósa rotation",
+     "Tutte's 4-connected planar theorem and Grinberg",
+     "crossing and rectilinear crossing numbers, good-drawing normalization",
+     "Zarankiewicz and Harary–Hill upper bounds, Kleitman parity",
+     "Rédei and Camion"
+    ],
+    "formalizability": "Medium; drawings and the excluded grid theorem are the expensive layers."
+   },
+   {
+    "name": "GraphTheory/SpectralGraphTheory",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "M",
+    "est_prs": 140,
+    "wave": "A",
+    "scope": "This roadmap develops the spectral theory of finite graphs on Mathlib's `adjMatrix` and `lapMatrix`: adjacency and Laplacian spectra, interlacing, Perron–Frobenius, eigenvalue bounds on independence and chromatic numbers, the Lovász theta function, strongly regular graphs, the matrix-tree theorem, effective resistance on finite networks, and the nonbacktracking operator with the Ihara–Bass formula. Expansion is ExpanderGraphs'; random walks on infinite networks and uniform spanning trees are PRDS's ProbabilityOnTreesAndNetworks; quantum-walk dynamics are #258/#259; the semidefinite formulation of ϑ is LTCS's ConvexRelaxationsAndMetricEmbeddings.",
+    "prerequisites": [
+     "Mathlib AdjMatrix, LapMatrix, Matrix.IsHermitian spectral theorem"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [
+      "Annals#94"
+     ],
+     "OpenAI": [
+      "OAI#174",
+      "OAI#178",
+      "OAI#214",
+      "OAI#231",
+      "OAI#271"
+     ]
+    },
+    "porting": [
+     "OAI lean/OAI/Combinatorics/GraphSpectrum",
+     "OAI lean/OAI/Probability/SpanningForest (matrix-tree parts)",
+     "Graphplay (cited by #258)"
+    ],
+    "replaces": [
+     "spectral layer of ExpanderGraphs (openai_combinatorics_tcs)",
+     "matrix-tree and effective-resistance part of ProbabilityOnTreesAndNetworks (openai_probability_physics)"
+    ],
+    "key_objects": [
+     "normalized Laplacian",
+     "interlacing",
+     "Perron vector",
+     "Lovász ϑ",
+     "strongly regular graph",
+     "effective resistance",
+     "nonbacktracking matrix, Ihara zeta"
+    ],
+    "headline_theorems": [
+     "Perron–Frobenius for connected graphs and bipartite symmetry",
+     "Courant–Fischer, Cauchy and Haemers interlacing",
+     "spectra of standard families and products",
+     "Hoffman ratio and Delsarte–Hoffman bounds",
+     "ϑ via orthonormal representations, ϑ(C₅)=√5, Shannon-capacity bound",
+     "strongly regular feasibility and Hoffman–Singleton",
+     "matrix-tree (all minors)",
+     "Foster, Thomson and Dirichlet principles, Rayleigh monotonicity",
+     "Ihara–Bass"
+    ],
+    "formalizability": "High."
+   },
+   {
+    "name": "GraphTheory/ExpanderGraphs",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "L",
+    "est_prs": 230,
+    "wave": "A (MSS layer B: LogConcavityAndStablePolynomials; property-(T) family B: ALG AmenabilityAndPropertyT)",
+    "scope": "This roadmap develops expansion of finite graphs and its high-dimensional analogue: edge, vertex and spectral expansion, the Cheeger inequalities, the expander mixing lemma, Alon–Boppana, random walks on expanders, Ramanujan graphs, explicit families (algebraic, from property (T), zig-zag, 2-lifts, interlacing families), and simplicial high-dimensional expanders with local-to-global theorems and coboundary expansion. It consumes SpectralGraphTheory for spectra and LogConcavityAndStablePolynomials for interlacing families. The Ramanujan property of the Lubotzky–Phillips–Sarnak and Margulis graphs is NT's (it rests on the Ramanujan–Petersson bound); Friedman's second-eigenvalue theorem is not part of this roadmap; metric-embedding consequences are GEO's MetricEmbeddings.",
+    "prerequisites": [
+     "GraphTheory/SpectralGraphTheory",
+     "LogConcavityAndStablePolynomials (interlacing families)",
+     "ALG AmenabilityAndPropertyT (Margulis construction)"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [
+      "Annals#94",
+      "Annals#86 (feeds)",
+      "Annals#99 (feeds)"
+     ],
+     "OpenAI": [
+      "OAI#120",
+      "OAI#126",
+      "OAI#136",
+      "OAI#174",
+      "OAI#177",
+      "OAI#178"
+     ],
+     "OpenAI_via_consumers": [
+      "OAI#094",
+      "OAI#102",
+      "OAI#103",
+      "OAI#105",
+      "OAI#106",
+      "OAI#285",
+      "OAI#307",
+      "OAI#330"
+     ]
+    },
+    "porting": [
+     "OAI lean/OAI/Computability/BinPacking/Expanders (ZigzagSpectral)",
+     "OAI lean/OAI/Computability/UniqueGames/Machines/MachineExpanderFamily*",
+     "OAI lean/OAI/Combinatorics/Coboundary",
+     "OAI lean/OAI/Geometry/Coboundary",
+     "OAI lean/OAI/Combinatorics/ThinTrees"
+    ],
+    "replaces": [
+     "ExpanderGraphs (openai_combinatorics_tcs)",
+     "P41 ExpanderGraphs (annals_52_100)"
+    ],
+    "key_objects": [
+     "Cheeger constant",
+     "(n,d,λ)-graph",
+     "Ramanujan graph",
+     "zig-zag product",
+     "2-lift",
+     "simplicial link",
+     "local spectral expander",
+     "coboundary expansion"
+    ],
+    "headline_theorems": [
+     "Cheeger inequalities (both directions)",
+     "expander mixing lemma and Bilu–Linial converse",
+     "Alon–Boppana",
+     "expander hitting and Chernoff bounds",
+     "Ramanujan property via the Ihara zeta function",
+     "Margulis–Gabber–Galil",
+     "property-(T) Cayley expanders",
+     "zig-zag and replacement products",
+     "2-lifts and MSS bipartite Ramanujan graphs of every degree",
+     "Garland and Oppenheim trickle-down",
+     "local-to-global theorem for up–down walks",
+     "coboundary and cosystolic expansion basics"
+    ],
+    "formalizability": "High; cosystolic expansion is medium."
+   }
+  ]
+ },
+ {
+  "name": "ExtremalAndProbabilisticCombinatorics",
+  "campaign": "COMB",
+  "topic": "math.CO",
+  "size": "XL family",
+  "est_prs": 830,
+  "wave": "A",
+  "scope": "A family for extremal problems on graphs, hypergraphs and set systems and for the probabilistic method that drives them. Mathlib supplies Turán, Erdős–Stone, Zarankiewicz, Szemerédi regularity, triangle removal, Hales–Jewett, Hindman, LYM, Kruskal–Katona, Erdős–Ko–Rado, Sauer–Shelah, Hoeffding, Azuma and the `binomialRandom` measure; Regularity (#66) supplies weak, strong and arity-3 hypergraph regularity; DenseGraphLimits supplies homomorphism densities. General concentration inequalities and the structure of random graphs are PRDS's; Fourier-analytic threshold theorems are BooleanFunctionAnalysis'; additive problems are AdditiveCombinatorics'.",
+  "prerequisites": [
+   "Regularity (#66)",
+   "DenseGraphLimits",
+   "RandomMatrices (#397)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#106",
+    "OAI#112",
+    "OAI#134",
+    "OAI#156",
+    "OAI#157",
+    "OAI#160",
+    "OAI#161",
+    "OAI#162",
+    "OAI#164",
+    "OAI#170",
+    "OAI#171",
+    "OAI#172",
+    "OAI#175",
+    "OAI#176",
+    "OAI#178",
+    "OAI#181",
+    "OAI#184",
+    "OAI#188",
+    "OAI#189",
+    "OAI#190",
+    "OAI#191"
+   ]
+  },
+  "porting": [],
+  "replaces": [
+   "ProbabilisticMethod, RamseyTheory, ExtremalGraphTheory (openai_combinatorics_tcs)",
+   "explorer opportunity 'Extremal and probabilistic combinatorics'"
+  ],
+  "subroadmaps": [
+   {
+    "name": "ProbabilisticMethod",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "L",
+    "est_prs": 270,
+    "wave": "A (nibble/Kim–Vu layer uses RandomMatrices #397 for Talagrand)",
+    "scope": "This roadmap develops the probabilistic method as finite tools on Mathlib's probability spaces and `binomialRandom`: moments and alterations, Janson's inequalities, the local lemma with Moser–Tardos and entropy compression, dependent random choice, correlation inequalities, polynomial concentration, discrepancy, thresholds of monotone properties of product measures (through Park–Pham), hypergraph containers, the nibble and the differential-equations method. Sharp-threshold theorems are BooleanFunctionAnalysis'; the structure of random graphs (phase transition, configuration model, random regular graphs) is PRDS's RandomGraphsAndConstraintSatisfaction; concentration inequalities beyond Mathlib's Hoeffding and Azuma are PRDS's.",
+    "prerequisites": [
+     "Mathlib Hoeffding, Azuma, binomialRandom, four-functions theorem",
+     "ExtremalSetTheory (spread families)",
+     "RandomMatrices (#397) for Talagrand"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#112",
+      "OAI#134",
+      "OAI#157",
+      "OAI#160",
+      "OAI#170",
+      "OAI#171",
+      "OAI#175",
+      "OAI#176",
+      "OAI#178",
+      "OAI#181",
+      "OAI#184",
+      "OAI#188",
+      "OAI#191"
+     ],
+     "OpenAI_via_consumers": [
+      "OAI#219",
+      "OAI#235",
+      "OAI#285"
+     ]
+    },
+    "porting": [
+     "OAI lean/OAI/Combinatorics/{ProgressionColoring/FiniteLocalLemma*,BalancedRyser/Local,ExpectationThreshold,GraphThreshold,DiscreteConvexity}",
+     "LeanCamCombi (Cambridge combinatorics courses; coordinate)"
+    ],
+    "replaces": [
+     "ProbabilisticMethod (openai_combinatorics_tcs)",
+     "explorer opportunity 'Extremal and probabilistic combinatorics' (probabilistic half)"
+    ],
+    "key_objects": [
+     "local-lemma dependency graph",
+     "spread family",
+     "expectation threshold",
+     "container family",
+     "nibble"
+    ],
+    "headline_theorems": [
+     "Erdős lower bound and alterations",
+     "Janson inequalities (both tails, Suen)",
+     "LLL (symmetric, asymmetric, lopsided) and Moser–Tardos",
+     "entropy compression",
+     "dependent random choice",
+     "Harris–FKG and Kleitman",
+     "Kim–Vu",
+     "Beck–Fiala and Spencer six deviations",
+     "Bollobás–Thomason",
+     "subgraph appearance thresholds in G(n,p)",
+     "Park–Pham and fractional Kahn–Kalai",
+     "hypergraph containers",
+     "Pippenger–Spencer",
+     "Wormald DE theorem with the triangle-free and triangle-removal processes",
+     "Johansson–Molloy"
+    ],
+    "formalizability": "Medium–high; the differential-equations method is the long layer."
+   },
+   {
+    "name": "ExtremalGraphTheory",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "L",
+    "est_prs": 220,
+    "wave": "A (removal layers B: Regularity #66)",
+    "scope": "This roadmap develops extremal problems for graphs and hypergraphs on Mathlib's Turán, Erdős–Stone–Simonovits and Zarankiewicz API: supersaturation, bipartite Turán numbers with their algebraic constructions, cycles and paths, independence-number bounds in sparse graphs, Sidorenko's conjecture in its known cases, graph decompositions, hypergraph Turán densities, matchings and covers, ordered graphs and 0–1 matrices, the blow-up lemma and induced removal. Ramsey problems are RamseyTheory's; set systems are ExtremalSetTheory's; regularity itself is Regularity (#66).",
+    "prerequisites": [
+     "Mathlib Turán, Erdős–Stone, Zarankiewicz, regularity",
+     "DenseGraphLimits",
+     "Regularity (#66)",
+     "CombinatorialDesignsAndFiniteGeometry (constructions)",
+     "ProbabilisticMethod",
+     "DiscreteGeometryAndIncidences (Sperner/KKM)"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#157",
+      "OAI#161",
+      "OAI#162",
+      "OAI#171",
+      "OAI#181",
+      "OAI#184",
+      "OAI#190"
+     ]
+    },
+    "porting": [
+     "OAI lean/OAI/Combinatorics/{Sidorenko,CliqueFree,CycleDecomposition,MatrixRemoval,Ryser,BalancedRyser,TriangleRemoval}",
+     "LeanCamCombi"
+    ],
+    "replaces": [
+     "ExtremalGraphTheory (openai_combinatorics_tcs)"
+    ],
+    "key_objects": [
+     "extremal number",
+     "supersaturation",
+     "norm graph",
+     "Turán density",
+     "hypergraph cover number τ",
+     "ordered pattern",
+     "blow-up"
+    ],
+    "headline_theorems": [
+     "supersaturation",
+     "Kővári–Sós–Turán with projective-plane and norm-graph sharpness",
+     "Bondy–Simonovits",
+     "Erdős–Gallai",
+     "dependent-random-choice bound for one-side-bounded bipartite graphs",
+     "Caro–Wei, Shearer and AKS independence bounds",
+     "Sidorenko known cases",
+     "Lovász path–cycle decomposition and sublinear expanders",
+     "de Caen and tetrahedron constructions",
+     "Ryser r = 3 and Aharoni–Haxell",
+     "Füredi τ ≤ (r−1)ν",
+     "Füredi–Hajnal and Marcus–Tardos",
+     "blow-up lemma",
+     "induced removal (Alon–Fischer–Krivelevich–Szegedy)"
+    ],
+    "formalizability": "High."
+   },
+   {
+    "name": "RamseyTheory",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "L",
+    "est_prs": 220,
+    "wave": "A (bounded-degree layer B: Regularity #66)",
+    "scope": "This roadmap develops Ramsey theory for graphs, hypergraphs, arithmetic and Euclidean configurations; Mathlib has Hales–Jewett and Hindman but no finite graph Ramsey theorem. It covers Ramsey numbers and their classical bounds, stepping-up, canonical Ramsey, the off-diagonal numbers r(3,t) and r(4,t), the exponential improvement for diagonal numbers, bounded-degree graphs and Ramsey goodness, van der Waerden and Rado-type partition regularity, and Euclidean Ramsey theory. Density theorems (Szemerédi, density Hales–Jewett) are AdditiveCombinatorics' and PRDS's ErgodicRamseyTheory.",
+    "prerequisites": [
+     "Mathlib HalesJewett, Hindman",
+     "ProbabilisticMethod",
+     "ExtremalGraphTheory (independence bounds)",
+     "Regularity (#66)",
+     "CombinatorialDesignsAndFiniteGeometry (Mattheus–Verstraëte construction)"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#106",
+      "OAI#160",
+      "OAI#164",
+      "OAI#170",
+      "OAI#171",
+      "OAI#172",
+      "OAI#189"
+     ]
+    },
+    "porting": [
+     "OAI lean/OAI/Combinatorics/{Ramsey,RamseyFive,SharpRamsey,EuclideanRamsey,SphericalRamsey}",
+     "Mehta's Lean 3 formalization of the exponential diagonal Ramsey bound (coordinate)",
+     "LeanCamCombi"
+    ],
+    "replaces": [
+     "RamseyTheory (openai_combinatorics_tcs)"
+    ],
+    "key_objects": [
+     "Ramsey number r(H₁,…,H_k)",
+     "hypergraph Ramsey number",
+     "van der Waerden number",
+     "partition-regular system",
+     "Ramsey configuration in ℝⁿ"
+    ],
+    "headline_theorems": [
+     "Ramsey (finite and infinite) and Erdős–Szekeres",
+     "Erdős–Hajnal stepping-up",
+     "Erdős–Rado canonical Ramsey",
+     "AKS/Shearer and Kim bounds for r(3,t)",
+     "Mattheus–Verstraëte r(4,t)",
+     "Campos–Griffiths–Morris–Sahasrabudhe",
+     "Chvátal–Rödl–Szemerédi–Trotter",
+     "Burr–Erdős goodness and Chvátal's tree–clique theorem",
+     "induced and Folkman-type existence",
+     "van der Waerden with Shelah's bound and Berlekamp",
+     "Schur and Rado",
+     "Folkman–Rado–Sanders and Deuber",
+     "Frankl–Rödl and Kříž"
+    ],
+    "formalizability": "High; Kim and CGMS are long but have literature-level detail and, for CGMS, a Lean 3 precedent."
+   },
+   {
+    "name": "ExtremalSetTheory",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "M",
+    "est_prs": 120,
+    "wave": "A",
+    "scope": "This roadmap develops extremal set theory beyond Mathlib's Sperner, LYM, Kruskal–Katona, Erdős–Ko–Rado, Harris–Kleitman and Sauer–Shelah material: intersection theorems through Ahlswede–Khachatrian, the linear-algebra method, sunflowers and spread families, VC-dimension beyond Sauer–Shelah, Kleitman's diameter theorem and union-closed families. It exports the Frankl–Wilson theorems that DiscreteGeometryAndIncidences uses for the chromatic number of ℝⁿ and the Kahn–Kalai counterexamples. Slice rank and cap sets are AdditiveCombinatorics'; designs are CombinatorialDesignsAndFiniteGeometry's.",
+    "prerequisites": [
+     "Mathlib Combinatorics/SetFamily",
+     "Mathlib binEntropy (Gilmer)"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#156",
+      "OAI#175",
+      "OAI#176"
+     ]
+    },
+    "porting": [
+     "LeanCamCombi (source of Mathlib's Kruskal–Katona and Ahlswede–Zhang)"
+    ],
+    "replaces": [
+     "explorer opportunity 'Extremal and probabilistic combinatorics' (set-system half)"
+    ],
+    "key_objects": [
+     "t-intersecting family",
+     "sunflower",
+     "spread family",
+     "VC-dimension",
+     "union-closed family"
+    ],
+    "headline_theorems": [
+     "Hilton–Milner",
+     "Katona t-intersection and Ahlswede–Khachatrian",
+     "Frankl–Wilson and Ray-Chaudhuri–Wilson",
+     "Oddtown and Bollobás set pairs (exterior algebra)",
+     "Erdős–Rado and ALWZ/Rao sunflower bounds, spread families",
+     "Haussler packing and dual VC-dimension",
+     "Kleitman diameter",
+     "Gilmer union-closed"
+    ],
+    "formalizability": "High."
+   }
+  ]
+ },
+ {
+  "name": "EnumerativeAndAlgebraicCombinatorics",
+  "campaign": "COMB",
+  "topic": "math.CO",
+  "size": "XL family",
+  "est_prs": 790,
+  "wave": "A",
+  "scope": "A family for exact counting and for algebraic structures in combinatorics: enumeration and posets, symmetric functions, log-concavity and stable polynomials, matroids, and designs and finite geometries. It extends Mathlib's `Combinatorics/Enumerative`, `Matroid`, `Configuration` and `HadamardMatrix` material and consumes RepresentationTheory/SchurWeyl (tableaux, RSK, Schur polynomials in finitely many variables) and AlgebraicCodingTheory (codes and weight enumerators). Coxeter combinatorics and Kazhdan–Lusztig theory are ALG's; q-series with modular content stay with NT.",
+  "prerequisites": [
+   "RepresentationTheory/SchurWeyl",
+   "AlgebraicCodingTheory",
+   "SurfaceTopology (#271)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [
+    "Annals#94"
+   ],
+   "OpenAI": [
+    "OAI#111",
+    "OAI#114",
+    "OAI#161",
+    "OAI#162",
+    "OAI#169",
+    "OAI#170",
+    "OAI#174",
+    "OAI#178",
+    "OAI#179",
+    "OAI#185",
+    "OAI#210",
+    "OAI#211",
+    "OAI#231",
+    "OAI#266",
+    "OAI#271",
+    "OAI#300",
+    "OAI#310"
+   ]
+  },
+  "porting": [],
+  "replaces": [
+   "SymmetricFunctions, MatroidsAndSubmodularity, CombinatorialDesignsAndFiniteGeometry (openai_combinatorics_tcs)",
+   "explorer opportunity 'Enumerative combinatorics and matroids'"
+  ],
+  "subroadmaps": [
+   {
+    "name": "EnumerativeCombinatorics",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "L",
+    "est_prs": 200,
+    "wave": "A (Quillen fiber lemma layer uses AlgebraicTopology; maps layer uses #271)",
+    "scope": "This roadmap develops enumerative combinatorics in the scope of Stanley's EC1 and EC2 chapters 5–6, on Mathlib's `PowerSeries` and `Combinatorics/Enumerative`: generating functions and the exponential formula, Lagrange inversion, rational, algebraic and D-finite series, the transfer-matrix method, lattice paths, Pólya–Redfield counting, permutation statistics, q-analogues, tree and planar-map enumeration with the classical map bijections, and posets (Möbius inversion, distributive lattices, chain and antichain theorems, order complexes). Symmetric functions are SymmetricFunctions'; random maps and scaling limits are PRDS's RandomTreesAndMaps; q-series with modular content are NT's.",
+    "prerequisites": [
+     "Mathlib PowerSeries, Combinatorics/Enumerative",
+     "SurfaceTopology (#271) rotation systems",
+     "AlgebraicTopology (main) simplicial homology"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#211",
+      "OAI#310"
+     ]
+    },
+    "porting": [
+     "Mathlib Combinatorics/Enumerative",
+     "Tau Ceti TauCeti/Combinatorics/Enumerative"
+    ],
+    "replaces": [
+     "explorer opportunity 'Enumerative combinatorics and matroids' (enumerative half)",
+     "planar-map enumeration part of RandomTreesAndMaps (openai_probability_physics)",
+     "05A part of QSeriesPartitionsAndMockModularForms (coordination §3.3)"
+    ],
+    "key_objects": [
+     "exponential formula",
+     "D-finite series",
+     "transfer matrix",
+     "Möbius function",
+     "order complex",
+     "rooted planar map"
+    ],
+    "headline_theorems": [
+     "exponential formula",
+     "Lagrange inversion (one and several variables)",
+     "closure of rational, algebraic, D-finite series",
+     "transfer-matrix method",
+     "Lindström–Gessel–Viennot",
+     "Pólya–Redfield",
+     "Eulerian/Mahonian statistics, MacMahon, Foata",
+     "q-binomial theorem and bijective Rogers–Ramanujan",
+     "Cayley and Prüfer",
+     "Tutte's rooted planar maps, Mullin, Cori–Vauquelin–Schaeffer and Bernardi bijections",
+     "Rota crossbar/closure, Birkhoff representation",
+     "Dilworth, Mirsky, Greene–Kleitman",
+     "P. Hall μ = χ̃ and Quillen fiber lemma (homology)"
+    ],
+    "formalizability": "High."
+   },
+   {
+    "name": "SymmetricFunctions",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "M",
+    "est_prs": 130,
+    "wave": "A",
+    "scope": "This roadmap develops the ring Λ of symmetric functions in infinitely many variables, the graded inverse limit of Mathlib's symmetric `MvPolynomial`s: the classical bases, the Hall inner product and ω, the Cauchy identities, the Littlewood–Richardson rule, plethysm, Hall–Littlewood and Macdonald polynomials, quasisymmetric and noncommutative symmetric functions, P-partitions, and chromatic symmetric and quasisymmetric functions. It extends RepresentationTheory/SchurWeyl's finite-variable Schur polynomials and Frobenius characteristic. Specht modules, Schur functors and Kronecker coefficients are RepresentationTheory's; positivity theorems resting on geometry (Haiman's n! theorem) are not part of this roadmap.",
+    "prerequisites": [
+     "RepresentationTheory/SchurWeyl (main)",
+     "Tau Ceti TauCeti/Combinatorics/Young",
+     "EnumerativeCombinatorics"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#169",
+      "OAI#210"
+     ]
+    },
+    "porting": [
+     "OAI lean/OAI/Combinatorics/Chromatic (549 files)",
+     "Tau Ceti Young tableaux and RSK code"
+    ],
+    "replaces": [
+     "SymmetricFunctions (openai_combinatorics_tcs)"
+    ],
+    "key_objects": [
+     "Λ and its bases",
+     "Hall inner product",
+     "Littlewood–Richardson coefficient",
+     "plethysm",
+     "Macdonald polynomial",
+     "QSym",
+     "P-partition",
+     "chromatic quasisymmetric function"
+    ],
+    "headline_theorems": [
+     "bases m, e, h, p, s and ω",
+     "Hall inner product and Cauchy identities",
+     "Littlewood–Richardson rule (jeu de taquin)",
+     "Pieri and Jacobi–Trudi in Λ",
+     "Frobenius characteristic agreeing with SchurWeyl",
+     "plethysm identities",
+     "Hall–Littlewood and Macdonald existence and specializations",
+     "QSym–NSym duality, Gessel fundamental basis",
+     "Stanley P-partitions",
+     "chromatic symmetric/quasisymmetric functions and Gasharov"
+    ],
+    "formalizability": "High."
+   },
+   {
+    "name": "LogConcavityAndStablePolynomials",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "M",
+    "est_prs": 130,
+    "wave": "A (Mason layer uses MatroidsAndSubmodularity)",
+    "scope": "This roadmap develops real-rootedness, log-concavity and stability of polynomials as tools for combinatorics: interlacing and interlacing families, real stable polynomials and the barrier method with the Marcus–Spielman–Srivastava theorem on Weaver's KS₂, real-rooted independence and matching polynomials, strongly Rayleigh measures, Gurvits' capacity, and Lorentzian polynomials with the log-concavity theorems for matroids. Hyperbolic polynomials in Gårding's generality, hyperbolicity cones and spectrahedra are ANA's ConvexAlgebraicGeometry; the operator-algebra form of Kadison–Singer is FAMP's; determinantal point processes are PRDS's.",
+    "prerequisites": [
+     "Mathlib Polynomial, Matrix.PosSemidef",
+     "MatroidsAndSubmodularity",
+     "GraphTheory/MatchingsAndFactors (Heilmann–Lieb)"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [
+      "Annals#94"
+     ],
+     "OpenAI": [
+      "OAI#114",
+      "OAI#174",
+      "OAI#178",
+      "OAI#231",
+      "OAI#271",
+      "OAI#300"
+     ]
+    },
+    "porting": [
+     "OAI lean/OAI/Probability/StrongRayleigh (133 files)",
+     "OAI lean/OAI/Combinatorics/{ThinTrees,MatroidCounting}"
+    ],
+    "replaces": [
+     "Lorentzian milestone of MatroidsAndSubmodularity and MSS layer of ExpanderGraphs (openai_combinatorics_tcs)",
+     "MSS paving need OAI#300 (openai_analysis)",
+     "strongly Rayleigh part of ProbabilityOnTreesAndNetworks (openai_probability_physics)"
+    ],
+    "key_objects": [
+     "interlacing family",
+     "real stable polynomial",
+     "barrier function",
+     "strongly Rayleigh measure",
+     "capacity",
+     "Lorentzian polynomial"
+    ],
+    "headline_theorems": [
+     "Newton inequalities and log-concavity closure",
+     "common interlacers and interlacing families",
+     "real stable polynomials, closure, determinantal pencils",
+     "barrier method and MSS KS₂",
+     "Chudnovsky–Seymour",
+     "Borcea–Brändén–Liggett negative association",
+     "Gurvits capacity and van der Waerden",
+     "Brändén–Huh Lorentzian polynomials",
+     "Mason ultra-log-concavity and basis-generating log-concavity"
+    ],
+    "formalizability": "High."
+   },
+   {
+    "name": "MatroidsAndSubmodularity",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "L",
+    "est_prs": 200,
+    "wave": "A",
+    "scope": "This roadmap develops matroid theory on Mathlib's `Matroid` (arbitrary ground sets, duality, minors): exchange and greedy characterizations, geometric lattices, connectivity, binary and representable matroids, graphic matroids, Edmonds' intersection and Nash-Williams' union theorems with their packing, covering, tree-packing and arborescence corollaries, submodular functions and polymatroids, the Tutte and characteristic polynomials, and infinite matroids. Matroid polytopes are PolyhedralCombinatorics'; Lorentzian log-concavity is LogConcavityAndStablePolynomials'; algorithms are LTCS's.",
+    "prerequisites": [
+     "Mathlib Combinatorics/Matroid",
+     "EnumerativeCombinatorics (Möbius functions)",
+     "SurfaceTopology (#271) 2-isomorphism theorem"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#111",
+      "OAI#114",
+      "OAI#174",
+      "OAI#185"
+     ]
+    },
+    "porting": [
+     "apnelson1/Matroid (origin of Mathlib's Matroid and Graph; coordinate)",
+     "OAI lean/OAI/Combinatorics/{InfiniteMatroid,MatroidCounting}"
+    ],
+    "replaces": [
+     "MatroidsAndSubmodularity (openai_combinatorics_tcs)",
+     "explorer opportunity 'Enumerative combinatorics and matroids' (matroid half)",
+     "Nash-Williams–Tutte and Edmonds arborescences excluded by GraphConnectivityAndFlows (#444)"
+    ],
+    "key_objects": [
+     "geometric lattice",
+     "binary/regular matroid",
+     "matroid union",
+     "polymatroid",
+     "Lovász extension",
+     "Tutte polynomial",
+     "finitary matroid"
+    ],
+    "headline_theorems": [
+     "Rado–Edmonds greedy, strong and multiple exchange",
+     "flats and geometric lattices",
+     "connectivity and 2-sums",
+     "Tutte's binary excluded minor, Fano/non-Fano",
+     "Whitney's graphic-matroid theorem",
+     "Edmonds intersection",
+     "Nash-Williams union and partition, Rado",
+     "Edmonds packing/covering, Nash-Williams–Tutte, arboricity, Edmonds arborescences",
+     "Lovász extension convexity, polymatroid intersection",
+     "Tutte polynomial universality and specializations",
+     "characteristic polynomial via lattice of flats",
+     "finitary/cofinitary classes and Bowler–Carmesin intersection and packing/covering"
+    ],
+    "formalizability": "High."
+   },
+   {
+    "name": "CombinatorialDesignsAndFiniteGeometry",
+    "campaign": "COMB",
+    "topic": "math.CO",
+    "size": "M",
+    "est_prs": 130,
+    "wave": "A",
+    "scope": "This roadmap develops designs and finite geometries: projective and affine spaces over 𝔽_q on Mathlib's `Projectivization` and `Configuration`, projective planes and their classical substructures, block and t-designs, Latin squares, difference sets, Hadamard matrices (real, circulant, complex), mutually unbiased bases, association schemes with Delsarte's bound, and counts of forms over 𝔽_q by rank and type. It consumes AlgebraicCodingTheory for the Golay codes, QuadraticFormInvariants for Bruck–Ryser–Chowla and NumberFieldArithmetic for cyclotomic descent. Coding theory is AlgebraicCodingTheory's; existence of designs by absorption (Keevash) is not part of this roadmap.",
+    "prerequisites": [
+     "Mathlib Configuration, Projectivization, Matrix.IsHadamard, QuadraticForm",
+     "AlgebraicCodingTheory (main)",
+     "QuadraticFormInvariants (main)",
+     "NumberFieldArithmetic (main) cyclotomic integers",
+     "EnumerativeCombinatorics (q-analogues)"
+    ],
+    "goals": {
+     "LMFDB": [],
+     "Annals": [],
+     "OpenAI": [
+      "OAI#161",
+      "OAI#162",
+      "OAI#170",
+      "OAI#179",
+      "OAI#266"
+     ]
+    },
+    "porting": [
+     "Mathlib HadamardMatrix",
+     "Tau Ceti TauCeti/InformationTheory/Coding"
+    ],
+    "replaces": [
+     "CombinatorialDesignsAndFiniteGeometry (openai_combinatorics_tcs)"
+    ],
+    "key_objects": [
+     "t-design",
+     "symmetric design",
+     "MOLS",
+     "difference set",
+     "Hadamard matrix",
+     "association scheme",
+     "generalized quadrangle"
+    ],
+    "headline_theorems": [
+     "subspace counts via Gaussian binomials",
+     "Bruck–Ryser, ovals and Segre",
+     "Hermitian unital and classical generalized quadrangles",
+     "Fisher and Bruck–Ryser–Chowla",
+     "Kirkman",
+     "Assmus–Mattson and the Witt designs",
+     "MOLS, MacNeish, plane equivalence",
+     "Singer, Paley, Hall multiplier theorem",
+     "Paley and Williamson Hadamard",
+     "Turyn bound and Schmidt descent, Barker sequences",
+     "Butson Hadamard and MUBs in prime-power dimension",
+     "Bose–Mesner algebra and Delsarte LP bound",
+     "form counts over 𝔽_q and Lagrangian counts"
+    ],
+    "formalizability": "High."
+   }
+  ]
+ },
+ {
+  "name": "BooleanFunctionAnalysis",
+  "campaign": "COMB",
+  "topic": "math.CO",
+  "size": "L",
+  "est_prs": 240,
+  "wave": "A",
+  "scope": "This roadmap develops the analysis of Boolean functions in the scope of O'Donnell's book, on Mathlib's finite abelian Fourier transform and Gaussian measures: Walsh and p-biased Fourier analysis, influences, noise stability, hypercontractivity on the cube and on finite product spaces, junta and sharp-threshold theorems, linearity testing, query-complexity measures, polynomial threshold functions, and Gaussian analysis through the invariance principle and Majority is Stablest. The Gaussian isoperimetric inequality in measure form and general log-Sobolev theory are PRDS's; PCP and hardness reductions are LTCS's HardnessOfApproximation; Austin's continuous junta theorem is not part of this roadmap.",
+  "prerequisites": [
+   "Mathlib finite abelian Fourier, Gaussian measures, CLT",
+   "StandardDistributions (main)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#099",
+    "OAI#102",
+    "OAI#105",
+    "OAI#106",
+    "OAI#119",
+    "OAI#126",
+    "OAI#127",
+    "OAI#132",
+    "OAI#175",
+    "OAI#186",
+    "OAI#192",
+    "OAI#274",
+    "OAI#284"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Combinatorics/{SharpThreshold (78 files),GotsmanLinial,BooleanFunctions,Sensitivity}",
+   "OAI lean/OAI/Computability/VertexCover/Fourier",
+   "OAI Walsh copies under Computability/UniqueGames"
+  ],
+  "replaces": [
+   "BooleanFunctionAnalysis (openai_combinatorics_tcs; openai_probability_physics cross-share)",
+   "Fourier-on-the-hypercube need of MetricEmbeddings (openai_geometry_topology_dynamics)"
+  ],
+  "key_objects": [
+   "Walsh character",
+   "influence",
+   "noise operator T_ρ",
+   "p-biased basis",
+   "sensitivity/block sensitivity",
+   "PTF",
+   "Hermite polynomial",
+   "noise stability"
+  ],
+  "headline_theorems": [
+   "Walsh, p-biased and Efron–Stein expansions",
+   "influences and noise stability",
+   "Bonami lemma and Bonami–Beckner on cube and product spaces",
+   "cube log-Sobolev",
+   "KKL",
+   "Friedgut junta and FKN",
+   "Margulis–Russo, Friedgut–Kalai, Bourgain",
+   "BLR",
+   "Nisan–Szegedy and Huang sensitivity",
+   "Gotsman–Linial for PTFs",
+   "Hermite analysis and Ornstein–Uhlenbeck",
+   "Mossel–O'Donnell–Oleszkiewicz invariance",
+   "Borell noise stability and Majority is Stablest"
+  ],
+  "formalizability": "High; five private OAI Walsh libraries show the core is routine."
+ },
+ {
+  "name": "DiscreteGeometryAndIncidences",
+  "campaign": "COMB",
+  "topic": "math.CO",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "A (crossing lemma B: #271; polynomial partitioning and Guth–Katz C: AG inputs)",
+  "scope": "This roadmap develops discrete and combinatorial geometry: convexity theorems of Helly–Radon–Tverberg type, topological methods (Sperner, Tucker, Borsuk–Ulam, ham sandwich, Kneser), ε-nets and cuttings, incidence bounds, k-sets, the polynomial method and polynomial partitioning through the Guth–Katz distinct-distance theorem, distance and colouring problems in ℝᵈ, and translational tilings of ℤᵈ. Euclidean Kakeya and restriction are ANA's; convex bodies are GEO's; Brouwer's fixed-point theorem is DifferentialGeometry's; Milnor–Thom bounds and ruled-surface theory are AG's.",
+  "prerequisites": [
+   "Mathlib Radon/Helly/Carathéodory, UnitDistance, Tiling, simplicial complexes",
+   "SurfaceTopology (#271) noncrossing drawings",
+   "RealAlgebraicGeometry plus the AG targets of §4",
+   "ExtremalSetTheory",
+   "RamseyTheory",
+   "ProbabilisticMethod"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#073",
+    "OAI#074",
+    "OAI#077",
+    "OAI#155",
+    "OAI#156",
+    "OAI#158",
+    "OAI#166",
+    "OAI#167",
+    "OAI#170",
+    "OAI#183",
+    "OAI#191"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Combinatorics/{HalvingLines,Distances,Crossing}",
+   "OAI lean/OAI/Geometry/{PinnedDistances,UnitDistances,PlaneColoring,PeriodicTiling,Borsuk,HeilbronnTriangle}"
+  ],
+  "replaces": [
+   "DiscreteGeometryAndIncidences (openai_combinatorics_tcs)",
+   "Borsuk–Ulam and polynomial-partitioning inputs of KakeyaAndProjections (openai_analysis)"
+  ],
+  "key_objects": [
+   "Tverberg partition",
+   "ε-net",
+   "cutting",
+   "halving line",
+   "partitioning polynomial",
+   "unit-distance graph",
+   "translational tiling"
+  ],
+  "headline_theorems": [
+   "Tverberg, colorful Carathéodory and Helly, fractional Helly, centerpoints",
+   "Erdős–Szekeres happy ending",
+   "Sperner, KKM, Tucker",
+   "Borsuk–Ulam and Lyusternik–Shnirelman",
+   "ham sandwich and Stone–Tukey polynomial ham sandwich",
+   "necklace splitting",
+   "Lovász–Kneser (Greene)",
+   "Haussler–Welzl ε-nets, Clarkson–Shor, cuttings",
+   "crossing lemma, Szemerédi–Trotter, Pach–Sharir, unit distances",
+   "Lovász lemma and Dey's halving-line bound",
+   "Dvir Kakeya, joints, Ellenberg–Hablicsek",
+   "polynomial partitioning and Guth–Katz",
+   "Hadwiger–Nelson 4 ≤ χ(ℝ²) ≤ 7",
+   "Kahn–Kalai",
+   "Komlós–Pintz–Szemerédi Heilbronn",
+   "Newman and Bhattacharya tilings"
+  ],
+  "formalizability": "Medium; Guth–Katz is the hardest layer and needs AG inputs."
+ },
+ {
+  "name": "PolyhedralCombinatorics",
+  "campaign": "COMB",
+  "topic": "math.CO",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "A",
+  "scope": "This roadmap develops polyhedra and polyhedral combinatorics on Mathlib's `PointedCone` (`FG`, `DualFG`, faces) and Tau Ceti's `IsConvexPolyhedron`: Minkowski–Weyl, face lattices and f-vectors of polytopes, linear-programming duality, total unimodularity and total dual integrality (with min-cost and submodular flows), polyhedral descriptions of matchings, T-joins, flows, matroids and stable sets, extended formulations through Rothvoss's theorem, and Ehrhart theory. The ellipsoid method and the Grötschel–Lovász–Schrijver theorem are LTCS's CombinatorialAlgorithms; SDP and sum-of-squares are LTCS's ConvexRelaxationsAndMetricEmbeddings; convex bodies are GEO's.",
+  "prerequisites": [
+   "Mathlib PointedCone (DualFG, faces), Birkhoff, IsTotallyUnimodular",
+   "Tau Ceti IsConvexPolyhedron, Stiemke",
+   "GraphConnectivityAndFlows (#444)",
+   "MatroidsAndSubmodularity",
+   "GraphTheory/GraphColoring (perfect graphs)",
+   "SurfaceTopology (#271) for Steinitz"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#089",
+    "OAI#113",
+    "OAI#114",
+    "OAI#118",
+    "OAI#125",
+    "OAI#126"
+   ]
+  },
+  "porting": [
+   "OAI lean/OAI/Combinatorics/{MatchingPSD,PerfectMatching}",
+   "Mathlib polyhedral-cone work by M. Winter (defer to its shape)"
+  ],
+  "replaces": [
+   "PolyhedralCombinatorics (openai_combinatorics_tcs)",
+   "min-cost flows, Nash-Williams orientation excluded by GraphConnectivityAndFlows (#444)"
+  ],
+  "key_objects": [
+   "polyhedron/polytope",
+   "face lattice",
+   "f-vector",
+   "TU matrix",
+   "TDI system",
+   "submodular flow",
+   "slack matrix",
+   "extension complexity",
+   "Ehrhart polynomial"
+  ],
+  "headline_theorems": [
+   "Minkowski–Weyl",
+   "face lattice, Bruggesser–Mani, Euler–Poincaré, Dehn–Sommerville",
+   "cyclic polytopes and McMullen's upper bound theorem",
+   "Balinski and Steinitz",
+   "LP strong duality and complementary slackness",
+   "Hoffman–Kruskal, Ghouila-Houri, network matrices, min-cost flow optimality",
+   "Edmonds–Giles TDI, Lucchesi–Younger, Nash-Williams weak orientation",
+   "Chvátal–Gomory closure",
+   "Edmonds matching and perfect-matching polytopes, T-joins",
+   "matroid and polymatroid polyhedra, perfect-graph stable-set polytope",
+   "Yannakakis, nonnegative and PSD rank",
+   "Rothvoss",
+   "Ehrhart, Ehrhart–Macdonald reciprocity, Pick"
+  ],
+  "formalizability": "High; Rothvoss is the long final layer."
+ },
+ {
+  "name": "AdditiveCombinatorics",
+  "campaign": "COMB",
+  "topic": "math.CO",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "A (Szemerédi layer B: Regularity extension; Green–Tao–Ziegler C)",
+  "scope": "This roadmap develops additive combinatorics in abelian groups on Mathlib's sumset, Plünnecke–Ruzsa, Freiman-homomorphism, energy, Cauchy–Davenport, Behrend and corners material: Balog–Szemerédi–Gowers, Freiman-type inverse theorems including polynomial Freiman–Ruzsa in bounded torsion, Bohr sets, sum–product estimates, Roth's theorem with the Kelley–Meka bound, cap sets, Szemerédi's theorem, and higher-order Fourier analysis through the Green–Tao–Ziegler inverse theorem. Transference to the primes and linear equations in primes are NT's; ergodic proofs and IP recurrence are PRDS's ErgodicRamseyTheory; continuous Gowers norms are ANA's.",
+  "prerequisites": [
+   "Mathlib Combinatorics/Additive",
+   "Regularity (#66) extended to arbitrary arity",
+   "DiscreteGeometryAndIncidences (Szemerédi–Trotter for Elekes)",
+   "BooleanFunctionAnalysis (Fourier on 𝔽₂ⁿ)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": [
+    "OAI#013",
+    "OAI#086",
+    "OAI#159",
+    "OAI#164"
+   ]
+  },
+  "porting": [
+   "LeanAPAP (Kelley–Meka; coordinate)",
+   "PFR project (Apache-2.0; coordinate)",
+   "Lean 3 cap-set formalization (Dahmen–Hölzl–Lewis)",
+   "OAI lean/OAI/Combinatorics/{Progressions/Nilpotent (139 files),SumProduct}"
+  ],
+  "replaces": [
+   "AdditiveCombinatorics AC.0–AC.3 (Birkbeck campaign; split by stage per coordination §3.3)"
+  ],
+  "key_objects": [
+   "sumset and doubling constant",
+   "Freiman homomorphism",
+   "Bohr set",
+   "Gowers U^k norm",
+   "nilsequence",
+   "slice rank"
+  ],
+  "headline_theorems": [
+   "Balog–Szemerédi–Gowers",
+   "Green–Ruzsa Freiman",
+   "PFR in bounded torsion (GGMT)",
+   "Bogolyubov–Ruzsa and Chang",
+   "Elekes, Solymosi, Bourgain–Katz–Tao",
+   "Roth by density increment and Kelley–Meka",
+   "Ellenberg–Gijswijt",
+   "Szemerédi via hypergraph removal",
+   "Gowers norms and generalized von Neumann",
+   "U² and U³ inverse theorems over 𝔽_pⁿ and ℤ/N",
+   "nilmanifolds, Mal'cev bases, polynomial nilsequences",
+   "Green–Tao–Ziegler"
+  ],
+  "formalizability": "High through U³; Green–Tao–Ziegler is very long."
+ }
+]

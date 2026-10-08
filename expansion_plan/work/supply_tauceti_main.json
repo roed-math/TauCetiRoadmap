@@ -1,0 +1,401 @@
+[
+ {
+  "name": "AdicSpaces",
+  "source": "TauCeti main (active)",
+  "topic": "math.AG",
+  "title": "Roadmap: foundations of adic spaces",
+  "summary": "This roadmap develops Huber's theory of adic spaces from the underlying topological algebra to Tate acyclicity and the gluing of adic spaces. The final application is the construction of the adic Fargues–Fontaine curve"
+ },
+ {
+  "name": "AlgebraicCodingTheory",
+  "source": "TauCeti main (active)",
+  "topic": "math.IT",
+  "title": "Roadmap: algebraic codes and code-lattice constructions",
+  "summary": "Algebraic codes are the finite algebra which turns coordinate data into lattice overlattices. This roadmap develops finite linear and additive codes far enough to support that use: matrix presentations, Hamming data, duality, the MacWilliams identity, the small exceptional codes, and Construction A. Its final layer identifies code coordinates with the discriminant modules from the [integral-lattices roadmap](../../Completed/IntegralLattices/README.md), so the lattice attached to an isotropic code is literally the preimage construction from that roadmap and has discriminant module `C^⊥/C`."
+ },
+ {
+  "name": "AlgebraicCurves",
+  "source": "TauCeti main (active)",
+  "topic": "math.AG",
+  "title": "Roadmap: algebraic curves — function fields, divisors, and Riemann–Roch",
+  "summary": "Mathlib has a rich valuation-theoretic and Dedekind-domain substrate — `IsDedekindDomain.HeightOneSpectrum` with `ℤᵐ⁰`-valued adic valuations, the factorization calculus `FractionalIdeal.count` (an unlabelled isomorphism `(FractionalIdeal R⁰ K)ˣ ≅ (HeightOneSpectrum R →₀ ℤ)`), `ClassGroup`, the different ideal with its conductor formula, `Ideal.sum_ramification_inertia`, Kähler differentials with the full smooth/étale/separability dictionary, and even an Ostrowski theorem classifying the places of `RatFunc K` over an arbitrary field `K` — and **no theory of algebraic curves at all**: no genus, no Riemann–Roch theorem, no divisor type of any kind, no degree of a closed point, no `L(D)`, no ca"
+ },
+ {
+  "name": "AlgebraicTopology",
+  "source": "TauCeti main (active)",
+  "topic": "math.AT",
+  "title": "Roadmap: algebraic topology of spaces and manifolds",
+  "summary": "This roadmap develops the map-level algebraic topology needed to calculate spaces from open covers, CW structures, fibrations, and manifold decompositions. It starts at Mathlib's singular chains, fundamental groupoid, topological pairs, cubical homotopy groups, and classical CW complexes. It ends with reusable van Kampen, relative homology, excision, cellular comparison, duality, Euler-characteristic, Hurewicz, and Whitehead theorems."
+ },
+ {
+  "name": "AlgebraicVectorBundles",
+  "source": "TauCeti main (active)",
+  "topic": "math.AG",
+  "title": "Roadmap: algebraic vector bundles",
+  "summary": "This roadmap develops algebraic vector bundles over schemes and reaches the equivalence between their sheaf-theoretic and geometric presentations. The geometric categories carry linear structure, including on morphisms. The main equivalences are"
+ },
+ {
+  "name": "AnalyticToricGeometry",
+  "source": "TauCeti main (active)",
+  "topic": "math.AG",
+  "title": "Roadmap: analytic toric geometry",
+  "summary": "This roadmap constructs algebraic and complex-analytic toric varieties from finite regular rational fans. Tau Ceti implements the algebraic cone-to-fan layer and the affine analytic charts. This roadmap completes that layer and builds on it the glued complex manifold, torus actions, orbit strata, normal-crossings boundary components, toric maps, properness, and the algebraic--analytic comparison."
+ },
+ {
+  "name": "ArithmeticDirichletSeries",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: arithmetic Dirichlet series and Tauberian methods",
+  "summary": "This roadmap develops the analytic infrastructure shared by zeta functions, Hecke L-functions, Chebotarev density, and explicit prime-counting arguments. It starts from arithmetic functions on the nonzero ideals of a number field, regroups them by norm into Mathlib's `ArithmeticFunction` and `LSeries` APIs, builds local Euler factors and Euler products, and ends with Landau-type positivity, Perron summation, Dirichlet-density calculus, Wiener–Ikehara, and generic prime-number-theorem transfer."
+ },
+ {
+  "name": "BelyiMaps",
+  "source": "TauCeti main (active)",
+  "topic": "math.AG",
+  "title": "Roadmap: Belyi maps, dessins d'enfants, and three-point covers",
+  "summary": "A Belyi map is a finite cover of the projective line branched over at most `{0, 1, ∞}`. The subject sits at a crossroads: the covers are classified by finite combinatorial data (permutation triples, equivalently dessins d'enfants), they are analytic objects (compact Riemann surfaces with a holomorphic map to the sphere), they are algebraic curves over number fields (Belyi's theorem), and the absolute Galois group of `ℚ` acts on them faithfully. The [LMFDB's Belyi section](https://www.lmfdb.org/Belyi/) displays all four faces of each object."
+ },
+ {
+  "name": "CFSGStatement",
+  "source": "TauCeti main (active)",
+  "topic": "math.GR",
+  "title": "Roadmap: stating the classification of finite simple groups",
+  "summary": "The goal of **CFSGStatement** is deliberately narrower than a formalization of the classification of finite simple groups. We want every group on the classification list to be an honest Lean type with a `Group` instance, so that the classification becomes a named proposition:"
+ },
+ {
+  "name": "Chebotarev",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: the Chebotarev density theorem",
+  "summary": "Let `L/K` be a finite Galois extension of number fields, with Galois group `G`, and let `C` be a conjugacy class in `G`. The Chebotarev density theorem says that the unramified primes of `K` whose arithmetic Frobenius class is `C` have both Dirichlet density and natural density"
+ },
+ {
+  "name": "ClassFieldTheory",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: class field theory",
+  "summary": "The central object of this roadmap is an **abstract class formation** in the sense of Artin–Tate. The build is organised around the implication"
+ },
+ {
+  "name": "CombinatorialHeegaardFloer",
+  "source": "TauCeti main (active)",
+  "topic": "math.GT",
+  "title": "Roadmap: Combinatorial Heegaard Floer and grid homology",
+  "summary": "Heegaard Floer homology (Ozsváth–Szabó) and its knot-theoretic sibling knot Floer homology are among the most consequential inventions of twenty-first-century low-dimensional topology: they categorify the Alexander polynomial, detect Seifert genus and fiberedness, bound the slice genus and unknotting number (reproving the Milnor conjecture), and power most modern progress on surgery, concordance, and contact geometry. Nothing remotely near them exists in any proof assistant; Mathlib has no knots, no 3-manifolds, and no symplectic geometry. This roadmap is the **combinatorial half**: the bodies of theory that are formalizable now, with real topological payoffs of their own — grid homology, la"
+ },
+ {
+  "name": "ConformalMapping",
+  "source": "TauCeti main (active)",
+  "topic": "math.CV",
+  "title": "Conformal mapping and the geometric theory of holomorphic functions",
+  "summary": "The narrative roadmap for the conformal-mapping / geometric-function-theory area of complex analysis, with the **Riemann mapping theorem** as its summit; `Suggested.lean` states the milestones as `sorry`-goals. Among its applications: the modular-`λ` uniformization `ℍ/Γ(2) ≅ ℂ∖{0,1}` (hence Picard's little theorem and the elliptic/modular uniformization) and the boundary regularity of conformal maps — but the area is foundational complex analysis in its own right."
+ },
+ {
+  "name": "DGAInfinity",
+  "source": "TauCeti main (active)",
+  "topic": "math.CT",
+  "title": "Roadmap: DG and A-infinity algebras, categories, and modules",
+  "summary": "Differential graded objects make homological algebra compositional: morphisms themselves form complexes, composition obeys the Leibniz rule, and derived categories retain a chain-level model. `A∞` objects retain the same information while allowing associativity, functoriality, and module actions to hold through coherent higher operations. This is especially useful after passing to cohomology: homological transfer places a minimal `A∞` structure directly on cohomology, where the higher products record information which an ordinary cohomology algebra forgets."
+ },
+ {
+  "name": "DenseGraphLimits",
+  "source": "TauCeti main (active)",
+  "topic": "math.CO",
+  "title": "Roadmap: dense graph limits and graphons",
+  "summary": "This roadmap consumes Mathlib's substantial **finite-graph** ecosystem — `SimpleGraph`, `Sym2`, the graph-homomorphism API (`SimpleGraph.Hom`) and copy-counting, Szemerédi regularity, triangle counting/removal, Turán density, measurable simple graphs, and the binomial random graph `G(V, p)` — together with the measure-theoretic stack (probability measures, `AEEqFun`, product/pi measures, conditional expectation, weak convergence, `StandardBorelSpace`). It develops the **dense graph limit** theory tying them together: graphons, homomorphism densities `t(F, W)`, cut norm and cut distance, weak regularity, graphon space, and counting/inverse-counting lemmas. Following Part 3 of Lovász, *Large N"
+ },
+ {
+  "name": "DifferentialGeometry",
+  "source": "TauCeti main (active)",
+  "topic": "math.DG",
+  "title": "Roadmap: differential geometry — forms, de Rham cohomology, flows, and degree",
+  "summary": "Mathlib has the smooth-manifold core (`IsManifold` over any `ModelWithCorners`, tangent and general `ContMDiffVectorBundle`s, `mfderiv`/`mvfderiv`, Lie brackets, integral curves, partitions of unity, the interior/boundary calculus) and a complete *flat* exterior calculus (`extDeriv`, d² = 0, naturality under pullback), but none of the geometry built on them: no forms on manifolds (no wedge product even on normed spaces), no manifold `d`, no orientations, no integration or Stokes' theorem, no de Rham or singular cohomology, no flows beyond the local integral-curve theory, no Frobenius theorem, no Riemannian Laplacian, no mapping degree."
+ },
+ {
+  "name": "EllipticCurves",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: elliptic curves",
+  "summary": "Mathlib knows what an elliptic curve *is*. It has the Weierstrass model (`WeierstrassCurve R`, its `a`-invariants, `b`/`c₄`/`c₆`/`Δ`/`j`, and the elliptic-curve condition `WeierstrassCurve.IsElliptic`, i.e. `IsUnit Δ`), the group law on the points (`WeierstrassCurve.Affine.Point` with its `AddCommGroup`, plus the projective and Jacobian models), variable changes and normal forms, the division polynomials and elliptic divisibility sequences, and reduction over a discrete valuation ring. What it does **not** have is much of the further theory that every graduate student in the area learns: the **isogenies** and the **Weil pairing**, the number of points over a finite field and the **Hasse boun"
+ },
+ {
+  "name": "Exchangeability",
+  "source": "TauCeti main (active)",
+  "topic": "math.PR",
+  "title": "Roadmap: exchangeability and de Finetti",
+  "summary": "Exchangeability is the first large probability-symmetry theory missing from Mathlib: finite-dimensional laws invariant under permutations, spreadability/contractability, tail σ-algebras for processes, random directing measures, and the conditional-product representation of invariant laws. Mathlib supplies the ambient stack this rests on: finite and product measures, kernels, `Measure.bind`, conditional expectation, filtrations and martingales, `Lp` spaces, Hilbert-space projections, measure-preserving maps, and the mean ergodic theorem. It does not, however, carry the exchangeability theory on top."
+ },
+ {
+  "name": "FuchsianOrbifolds",
+  "source": "TauCeti main (active)",
+  "topic": "math.CV",
+  "title": "Roadmap: Fuchsian groups and orbifold Riemann surfaces",
+  "summary": "This roadmap develops discrete subgroups of `PSL(2,R)`, their action on the upper half-plane, the quotient Riemann surfaces and orbifold points produced by elliptic stabilizers, and the compactification produced by adjoining cusp orbits. It exposes the actual group action, stabilizers, quotient maps, local coordinates, and compact Riemann surface. Orbifold signatures and presentations are theorems derived from those objects, not substitutes for constructing them."
+ },
+ {
+  "name": "GeometricTopology",
+  "source": "TauCeti main (active)",
+  "topic": "math.GT",
+  "title": "Roadmap: geometric topology and the solved Kirby-list problems",
+  "summary": "Rob Kirby's problem list (`[Kir97]`, *Problems in Low-Dimensional Topology*) and its successors hold many problems since **solved** (sometimes by proving the negation of Kirby's question). Walking that list while building the [`leanprover/lean-eval`](https://github.com/leanprover/lean-eval) topology problems raises a narrower question than \"can we prove this\": can we even *state* the resolved theorem in Lean today? For a good fraction the answer is no, not because the proof is hard but because the *statement* needs primitives Mathlib lacks: Dehn surgery, knot concordance, hyperbolic volume, Heegaard genus, foliation Euler classes, locally flat embeddings, diffeomorphism-group topologies. Thi"
+ },
+ {
+  "name": "GlobalNumberFields",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: global number fields, ray classes, adeles, and Hecke characters",
+  "summary": "This roadmap builds the reusable global arithmetic carried by a number field before reciprocity or L-function analysis begins. Its central objects are the places and completions of a number field, weak approximation, moduli and ray class groups, additive and multiplicative adeles, the idele class group, ray class and Hecke characters, infinity types, and orders with their Picard groups. Geometry of numbers supplies the uniform ideal-counting statements that analytic consumers need."
+ },
+ {
+  "name": "GlobalQuadraticForms",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: global quadratic forms over number fields",
+  "summary": "This roadmap builds the local-to-global theory of regular quadratic forms over an arbitrary number field. It starts from the canonical finite and archimedean completions, the local classification and invariant theory supplied by the Quadratic Form Invariants roadmap, weak approximation and the idele carrier supplied by Global Number Fields, and the Hasse norm theorem, the idele-class norm index and Hilbert reciprocity supplied by Class Field Theory. It ends with both halves of the global theory:"
+ },
+ {
+  "name": "GrothendieckEulerForms",
+  "source": "TauCeti main (active)",
+  "topic": "math.RT",
+  "title": "Roadmap: Grothendieck groups, Cartan maps, and Euler forms",
+  "summary": "Grothendieck groups turn direct-sum, exact-sequence, or triangle decompositions into additive relations. Euler pairings then turn homological information into integral forms, but only when the homological groups are finite-dimensional and vanish outside a finite range. This roadmap builds the categorical infrastructure needed to make both constructions reusable and precise: Quillen exact structures, split/exact/abelian/triangulated Grothendieck groups and their universal properties, the Cartan map from projectives to modules, finite-resolution comparison, ordinary and graded Ext-Euler pairings, and the two numerical quotients of a nonsymmetric form."
+ },
+ {
+  "name": "HeegaardFloer",
+  "source": "TauCeti main (active)",
+  "topic": "math.SG",
+  "title": "Roadmap: Heegaard Floer homology, analytically",
+  "summary": "Heegaard Floer homology (Ozsváth–Szabó) and its knot-theoretic sibling knot Floer homology are among the most consequential inventions of twenty-first-century low-dimensional topology: they categorify the Alexander polynomial, detect Seifert genus and fiberedness, bound the slice genus and unknotting number, and power most modern progress on surgery, concordance, and contact geometry. Nothing remotely near them exists in any proof assistant; Mathlib has no knots, no 3-manifolds, and no symplectic geometry. This roadmap is the **analytic half**: the full holomorphic tower — Morse homology, Fredholm theory, transversality and Sard–Smale, the Cauchy–Riemann elliptic package, Gromov compactness,"
+ },
+ {
+  "name": "HopfRinow",
+  "source": "TauCeti main (active)",
+  "topic": "math.DG",
+  "title": "Roadmap: geodesics, the exponential map, and the Hopf–Rinow theorem",
+  "summary": "Mathlib's Riemannian library has the metric-and-distance layer: `RiemannianBundle`, `IsRiemannianManifold`, and `EMetricSpace.ofRiemannianMetric` live in `Mathlib/Geometry/Manifold/Riemannian/Basic.lean`, while `Manifold.pathELength` and `Manifold.riemannianEDist` live in `Mathlib/Geometry/Manifold/Riemannian/PathELength.lean`. Mathlib also has general covariant derivatives and their torsion. The pinned revision predates Mathlib's `CovariantDerivative.IsMetricCompatible`; whenever the working Mathlib revision contains it, consume that predicate rather than maintaining a local duplicate. The owned Riemannian connection-and-geodesic work is existence and uniqueness and `C^∞` regularity of the "
+ },
+ {
+  "name": "IntegralLattices",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: integral quadratic forms and lattices",
+  "summary": "Mathlib has the material a lattice is made of. It does not have the arithmetic of lattices. This roadmap builds that arithmetic over `ℤ` and `ℤ_p`."
+ },
+ {
+  "name": "JacobianChallenge",
+  "source": "TauCeti main (active)",
+  "topic": "math.AG",
+  "title": "Roadmap: the Jacobian challenge (Christian Merten's AG version)",
+  "summary": "Background: Kevin Buzzard's \"Jacobian challenge\" (Zulip [#Autoformalization > Jacobian challenge](https://leanprover.zulipchat.com/#narrow/channel/583336-Autoformalization/topic/Jacobian.20challenge)), in the **algebraic-geometry formulation due to Christian Merten**. The challenge is designed with **checks along the way**, so a construction that satisfies them all has to have the definitions right; the point is autoformalizing *definitions*, not just discharging `sorry`s."
+ },
+ {
+  "name": "LocalFieldsRamification",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: local fields and ramification",
+  "summary": "This roadmap owns the local-field substrate: normalized valuations, unit filtrations, unramified extensions, lower and upper ramification groups, Herbrand functions, wild inertia, and tame quotients. It stops before local reciprocity and before the arithmetic structure of the maximal pro-`p` quotient of the absolute Galois group."
+ },
+ {
+  "name": "LocalGaloisGroups",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: local Galois groups of p-adic fields",
+  "summary": "This roadmap determines the absolute Galois group and the maximal pro-`p` Galois group of a finite extension `K/ℚ_p` at the level visible to generators, cohomology, roots of unity, cyclotomic orientation, and marked presentations. Its central dichotomy is Shafarevich–Demushkin:"
+ },
+ {
+  "name": "ModularCurves",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: modular curves, following Katz–Mazur",
+  "summary": "This roadmap formalises the moduli of elliptic curves with level structure, following N. Katz and B. Mazur, *Arithmetic Moduli of Elliptic Curves* (Annals of Mathematics Studies 108, 1985). The book is abbreviated **KM**, and its result numbering is used throughout. D. Loeffler's *Modular Curves* lecture notes are cited alongside KM for some of the classical constructions over `ℤ[1/N]`."
+ },
+ {
+  "name": "ModularForms",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: modular forms — Hecke theory, newforms, and L-functions",
+  "summary": "Mathlib has the *foundations* of modular forms — `SlashInvariantForm`, `ModularForm`, `CuspForm` and their classes ([`ModularFormClass`](https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/ModularForms/Basic.html#ModularFormClass), `CuspFormClass`, in `Mathlib/NumberTheory/ModularForms/Basic.lean`), the slash action (`SlashActions.lean`), the congruence subgroups `Γ(N)`, `Γ₀(N)`, `Γ₁(N)` (`CongruenceSubgroups.lean`), Eisenstein series and `E₄, E₆` (`EisensteinSeries/*`), the `q`-expansion and [`cuspFunction`](https://leanprover-community.github.io/mathlib4_docs/Mathlib/NumberTheory/ModularForms/QExpansion.html) (`QExpansion.lean`), the Petersson integrand (`Petersson.le"
+ },
+ {
+  "name": "Multiquadratic",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: multiquadratic fields and genus theory",
+  "summary": "Mathlib has quadratic fields, Kummer theory, quadratic reciprocity, and the class group, but **nothing on multiquadratic extensions** `ℚ(√d₁, …, √dₙ)`: their degree, their elementary-abelian Galois group, or the genus theory of quadratic fields that they encode. Genus theory is the first, explicit, computable slice of class field theory, and it is entirely absent upstream. We build the multiquadratic theory here, and use it to reach the genus-field description of the 2-part of the class group."
+ },
+ {
+  "name": "NumberFieldArithmetic",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: number fields, ramification, Frobenius, and the LMFDB invariants",
+  "summary": "- rings of integers over a Dedekind base; - the signed discriminant, with Brill's sign theorem and Hermite's finiteness theorem; - finiteness of the class group; - Dirichlet's unit theorem, and a regulator defined as a lattice covolume; - the class number formula, at the residue of the Dedekind zeta function; - the fundamental identity `Σ eᵢ·fᵢ = n`; - Hilbert's ramification theory, through `D/I ≅ Gal(residue extension)`; - the Kummer–Dedekind factorization theorem over `ℤ`, with matching `e` and `f`; - the different ideal, with transitivity in towers; - an arithmetic-Frobenius API; - complete ramification theory of infinite places; - cyclotomic fields, through their splitting law; - adeles,"
+ },
+ {
+  "name": "OneParameterSemigroups",
+  "source": "TauCeti main (active)",
+  "topic": "math.FA",
+  "title": "Roadmap: one-parameter semigroups, completely monotone and positive-definite functions, and Bochner-type representations",
+  "summary": "Operator semigroups are the analytic backbone of evolution equations (heat, Fokker–Planck; the conservative Schrödinger case is a unitary *group*, a stretch goal below) and of Markov-process theory. Mathlib has the *static* functional-analysis stack — Banach/Hilbert spaces, bounded operators, `spectrum` and `resolvent`, the holomorphic functional calculus, the Bochner integral, Fourier theory, unbounded operators via `LinearPMap` — but **not the dynamical layer**: strongly continuous (C₀) semigroups, their generators and resolvents, the **Hille–Yosida** generation theorem, the theory of **completely monotone** functions and **Bernstein's** representation theorem, **continuous positive-defini"
+ },
+ {
+  "name": "OptimalTransport",
+  "source": "TauCeti main (active)",
+  "topic": "math.OC",
+  "title": "Roadmap: optimal transport and Wasserstein geometry",
+  "summary": "Optimal transport is not one theorem. Its reusable core is a chain of structures: couplings and pushforwards, lower-semicontinuous minimization, Kantorovich duality, Wasserstein geometry, transport maps, convex and Monge--Ampère theory, dynamic plans and continuity equations, and metric gradient flows. Entropic transport, barycenters, and Gromov--Wasserstein then reuse that chain rather than living as isolated algorithms."
+ },
+ {
+  "name": "OrthogonalSpinGroups",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: orthogonal and spin groups",
+  "summary": "Mathlib has the Clifford algebra and nothing for it to act on. It has `CliffordAlgebra` over a commutative ring with the embedding `ι`, the grade involution `involute`, the anti-automorphism `reverse`, the `ZMod 2` grading and the even subalgebra; it has `lipschitzGroup` — defined as the subgroup *closure* of the invertible vectors, which its own docstring records as agreeing with the usual \"twisted conjugation preserves `V`\" Clifford group in one direction only — and `pinGroup` and `spinGroup`, cut out of that closure by the `star`-unitary condition, with their group structures and the theorems that twisted conjugation preserves the embedded copy of the underlying module; it has `Module.ref"
+ },
+ {
+  "name": "PDE",
+  "source": "TauCeti main (active)",
+  "topic": "math.AP",
+  "title": "Roadmap: partial differential equations",
+  "summary": "Mathlib master already carries a deep analysis stack: distributions, the Schwartz space, the full Fourier transform with inversion and Plancherel, convolution and mollifiers, the Gagliardo–Nirenberg–Sobolev inequality, **Bessel-potential Sobolev spaces**, the Laplacian on inner-product spaces, harmonic-function theory, **Lax–Milgram**, the **Fredholm alternative for compact operators**, and Picard–Lindelöf for ODEs. What is still missing is the **PDE theory built on top**: weak-derivative Sobolev spaces on a domain with their embedding/trace/compactness package, maximum principles, the harmonic-analysis estimates (maximal function, Calderón–Zygmund, interpolation), and the existence-and-regu"
+ },
+ {
+  "name": "PeripheralActions",
+  "source": "TauCeti main (active)",
+  "topic": "math.GR",
+  "title": "Roadmap: peripheral actions on free pro-`p` groups",
+  "summary": "A free pro-`p` group `F` of finite rank `r` with a basis `x_1, …, x_r` carries one more distinguished element, the *cusp* `z := (x_1 ⋯ x_r)⁻¹`, and the `r + 1` conjugacy classes of `x_1, …, x_r, z` are its *peripheral classes*. For `r = 2` this is the pro-`p` fundamental group of the thrice-punctured line, with the three classes of loops around `0`, `1` and `∞`. The roadmap builds the theory of the automorphisms of `F` that preserve this structure up to a common exponent: a continuous automorphism `φ` is *peripheral of exponent* `u ∈ ℤ_pˣ` when it carries each of `x_1, …, x_r, z` to a conjugate of its `u`-th power. The headline theorem is that such an automorphism exists for **every** unit `"
+ },
+ {
+  "name": "PolynomialGaloisGroups",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: Galois groups of polynomials",
+  "summary": "Mathlib has the Galois group of a polynomial. `Polynomial.Gal p` is the automorphism group of the splitting field of `p`. It acts faithfully on the roots, and the action is transitive when `p` is irreducible. Mathlib also has one direction of Abel-Ruffini. It has a large permutation action library from A. Chambert-Loir, which covers:"
+ },
+ {
+  "name": "ProfiniteArithmetic",
+  "source": "TauCeti main (active)",
+  "topic": "math.GR",
+  "title": "Roadmap: profinite integers, profinite powers, and continuous automorphisms",
+  "summary": "This roadmap builds the generic profinite calculus that several arithmetic roadmaps consume and none of them owns. **ProfiniteProPGroups** names it, in its opening section, as the exact owner of three constructions: the profinite integers `ẑ` as a topological commutative **ring**, the profinite power `x ^ᶻ a` of an element of a profinite group by an exponent `a ∈ ẑ` together with its comparison against the `ℤ_ℓ`-power on a pro-`ℓ` group, and the continuous automorphism and outer-automorphism groups of a profinite group with their topology. **BelyiMaps** consumes the same three constructions for its arithmetic layers, under the same name. A fourth belongs with them for the same reason, that i"
+ },
+ {
+  "name": "ProfiniteCohomology",
+  "source": "TauCeti main (active)",
+  "topic": "math.GR",
+  "title": "Roadmap: continuous cohomology of profinite groups",
+  "summary": "Continuous cochain cohomology of a profinite group acting on discrete modules is the language of Galois cohomology. Local and global class field theory, the duality theorems, Demushkin groups, and the cohomological invariants of quadratic forms are all written in it. Mathlib supplies a deep theory of discrete group cohomology and a continuous cohomology functor; §4 records that inventory. This roadmap builds what one computes with: explicit inhomogeneous `H⁰, H¹, H²` with their cocycle identities, the comparison isomorphisms between models, the description as a colimit over finite quotients, long exact sequences, corestriction, Shapiro's lemma for closed subgroups, cup products with their co"
+ },
+ {
+  "name": "ProfiniteProPGroups",
+  "source": "TauCeti main (active)",
+  "topic": "math.GR",
+  "title": "Roadmap: profinite and pro-`p` groups",
+  "summary": "This roadmap develops the abstract group theory used throughout the arithmetic portfolio: profinite foundations, supernatural order and Sylow theory, Frattini quotients and generator rank, free pro-`p` groups, cohomological dimension, lower `p`-series, completed group algebras, one-relator theory, and the classification of finite-rank Demushkin groups."
+ },
+ {
+  "name": "QuadraticFormInvariants",
+  "source": "TauCeti main (active)",
+  "topic": "math.NT",
+  "title": "Roadmap: quadratic forms and cohomological invariants",
+  "summary": "Mathlib has the linear algebra of quadratic forms in depth. It has `QuadraticMap` and `QuadraticForm`, polar forms, orthogonal bases, diagonalization (`QuadraticForm.equivalent_weightedSumSquares`), `Anisotropic`, the radical, the EKM-style `QuadraticMap.Nondegenerate`, isometries, `Equivalent`, tensor products, the classifications over `ℝ`, over `ℂ`, and over an algebraically closed field, and a full Clifford-algebra directory. It also has the quaternion algebras `ℍ[R,c₁,c₂,c₃]` with conjugation and the `QuaternionAlgebra.Basis` universal property, and the rank-2 `QuadraticAlgebra R a b` with its norm."
+ },
+ {
+  "name": "RealAlgebraicGeometry",
+  "source": "TauCeti main (active)",
+  "topic": "math.AG",
+  "title": "Real algebraic geometry: sign determination and cylindrical decomposition",
+  "summary": "This roadmap develops the real algebra of polynomial signs and the geometry of polynomial roots in families, culminating in a sign-invariant cylindrical algebraic decomposition (CAD) and quantifier elimination. It also develops the order-invariant projection theorem of McCallum and valuation-invariant lifting for Lazard's projection. These are successive milestones of one library."
+ },
+ {
+  "name": "ReductiveGroups",
+  "source": "TauCeti main (active)",
+  "topic": "math.AG",
+  "title": "Roadmap: reductive algebraic groups",
+  "summary": "The theory of reductive algebraic groups is the long game: it underpins the Langlands programme, automorphic forms, and much of FLT, and it is almost entirely absent from Mathlib. Suggested home: `TauCeti/Algebra/AlgebraicGroup/` (foundations) and `TauCeti/AlgebraicGeometry/` (the scheme-side dictionary)."
+ },
+ {
+  "name": "RepresentationTheory",
+  "source": "TauCeti main (active)",
+  "topic": "math.RT",
+  "title": "Representation theory",
+  "summary": "A connected family of roadmaps for the representation theory of groups, algebras, and Lie algebras, downstream of Mathlib. Each subdirectory is a self-contained roadmap (a definitive `README.md` plus a `Suggested.lean` of target signatures); this page is the index and the map of how they fit together."
+ },
+ {
+  "name": "RestrictedProducts",
+  "source": "TauCeti main (active)",
+  "topic": "math.GR",
+  "title": "Roadmap: restricted products of topological groups and rational diagonals",
+  "summary": "This roadmap builds the generic infrastructure for restricted products of topological groups: families of compact open subgroups used as reference data, componentwise maps, change of reference family at finitely many indices, reindexing along an equivalence, the away-`S` decomposition, and diagonal homomorphisms whose coordinates are eventually integral. Its inputs are a family of topological groups, subgroups of them, and coordinate homomorphisms. It uses no arithmetic and no algebraic geometry, and its representative `Suggested.lean` imports only Mathlib."
+ },
+ {
+  "name": "StablePeriodicCurved",
+  "source": "TauCeti main (active)",
+  "topic": "math.RT",
+  "title": "Roadmap: stable, periodic, and curved homological algebra",
+  "summary": "Stable categories turn exact algebra into triangulated algebra by killing the projective-injective objects. Periodic complexes repeat a finite amount of differential data. Curved complexes replace `d² = 0` by a controlled equation `d² = w`. These constructions meet at Frobenius algebras, hypersurface singularities, and matrix factorizations, but they are not the same quotient and they do not have the same weak equivalences."
+ },
+ {
+  "name": "StableReduction",
+  "source": "TauCeti main (active)",
+  "topic": "math.AG",
+  "title": "Roadmap: stable reduction of curves and stable maps",
+  "summary": "The eventual application is the **properness of the moduli space of stable maps**. This roadmap builds two prerequisites: the stable-reduction theory of curves over a discrete valuation ring and the scheme-level theory of stable maps. Its summit includes existence and uniqueness of a stable curve model after finite base extension, first for smooth curves of genus at least two and then for stable pointed curves in the full stable range. It also defines families of stable maps to a target scheme and develops their basic geometric API, using projective polarized targets for degree, positivity, openness, and stabilization. It does **not** construct a moduli functor, stack, or coarse moduli space"
+ },
+ {
+  "name": "StandardDistributions",
+  "source": "TauCeti main (active)",
+  "topic": "math.PR",
+  "title": "Roadmap: standard probability distributions and their elementary theory",
+  "summary": "Mathlib supplies the starting definitions for the real and multivariate Gaussian, Gamma, Beta, exponential, Cauchy, Pareto, Poisson, geometric, binomial, and Bernoulli laws. This roadmap completes their elementary distributional APIs and connects the continuous scalar families to `MeasureTheory.HasPDF` and Radon–Nikodym derivatives."
+ },
+ {
+  "name": "ZigzagPreprojective",
+  "source": "TauCeti main (active)",
+  "topic": "math.RT",
+  "title": "Roadmap: Zigzag, preprojective, and Ginzburg algebras",
+  "summary": "Zigzag algebras are finite-dimensional symmetric quotients of doubled-graph path algebras. Their quadratic duals lead to preprojective algebras, while their derived Koszul duals lead to 2-dimensional Ginzburg DG algebras and Calabi--Yau completions. This roadmap builds that chain without identifying objects which agree only after a duality, a completion, or transfer of an `A∞` structure. It covers arbitrary finite simple graphs at the strict-algebra level, finite trees for the sharp intrinsic-formality theorem, and finite and affine ADE graphs as named examples."
+ },
+ {
+  "name": "ContourIntegration",
+  "source": "TauCeti main (completed)",
+  "topic": "math.CV",
+  "title": "Roadmap: contour integration and the Hungerbühler–Wasem generalized residue theorem",
+  "summary": "**Status: declared complete by the maintainers (2026-08-29).** The library this roadmap asked for has been built, sorry-free, in [TauCeti](https://github.com/TauCetiProject/TauCeti) under `TauCeti/Analysis/Contour/`. All four layers are there: the generalized winding number and its model-sector geometry (L0–L1), residues with the argument principle and the classical residue theorem (L2), the homology Cauchy theorem by Dixon's argument (L3), and the summit — the Hungerbühler–Wasem generalized residue theorem for singularities lying *on* the cycle, with non-integer winding-number weights (L4)."
+ },
+ {
+  "name": "EffectiveBounds",
+  "source": "TauCeti main (completed)",
+  "topic": "math.NT",
+  "title": "Roadmap: effective arithmetic bounds and geometry of numbers",
+  "summary": "**Status: declared complete by the maintainers (2026-07-02).** The library this roadmap asked for has been built: the whole spine below has landed, sorry-free, in [TauCeti](https://github.com/TauCetiProject/TauCeti): the Layer-1 bounds (`abs_discr_le_of_basis_isIntegral`, `classNumber_le_bound`, `units_sq_index_le`), the explicit ideal count (`card_ideal_absNorm_le`), and the Layer-2 summit, the effective Hermite–Minkowski count (`ncard_setOf_finiteDimensional_abs_discr_le_le`), all under `TauCeti/NumberTheory/EffectiveBounds/`, with the geometry-of-numbers engine under `TauCeti/NumberTheory/GeometryOfNumbers/`. This roadmap is archived and no longer offered to contributors."
+ },
+ {
+  "name": "HodgeStructures",
+  "source": "TauCeti main (completed)",
+  "topic": "math.AG",
+  "title": "Roadmap: Hodge structures (pure, mixed, and polarized)",
+  "summary": "The narrative roadmap for **Hodge theory's linear-algebraic core** — pure, mixed, and polarized Hodge structures and their period-domain points — at general weight, as a reusable library; `Suggested.lean` states the milestones, each now discharged by the Tau Ceti declaration that realizes it. Its summit in the pure theory is the **semisimplicity of polarizable Hodge structures** (Hodge–Riemann), and in the mixed theory Deligne's **strictness**. Written to the roadmap conventions: build the library not one theorem, ground in Mathlib's vocabulary, pin conventions up front, and — because this is a subject Mathlib has *nothing* on — get the **definitions** right (the `JacobianChallenge` philosop"
+ },
+ {
+  "name": "IntegralLattices",
+  "source": "TauCeti main (completed)",
+  "topic": "math.NT",
+  "title": "Roadmap: integral lattices, discriminant forms, and overlattices",
+  "summary": "An integral lattice is most useful as more than a Gram matrix. It has a rational ambient space, a dual lattice in that space, a finite discriminant group with a pairing, and intermediate lattices controlled by subgroups of that discriminant group. This roadmap builds that reusable algebraic package and proves the discriminant-form gluing theorem. It ends with checked ADE discriminant forms and the basic glue calculation which enlarges `D₈` to `E₈`."
+ },
+ {
+  "name": "OrthogonalL2Bases",
+  "source": "TauCeti main (completed)",
+  "topic": "math.CA",
+  "title": "Roadmap: weighted orthogonal L² bases — completeness, Hilbert-basis structure, and product bases of orthogonal systems",
+  "summary": "**Status: declared complete by the maintainers (2026-08-16).** The library this roadmap asked for has been built, sorry-free, in [TauCeti](https://github.com/TauCetiProject/TauCeti). The family-agnostic spine is there: the weight-to-measure isometry (`weightL2Isometry`) with its `HilbertBasis` transport (`HilbertBasis.mapₗᵢ`); the completeness toolkit grounded in moment determinacy (`ae_eq_zero_of_forall_moment_eq_zero`, and its measure-level form); the orthogonality-relation bridge (`hilbertBasisOfWeightedMeasure`, `hilbertBasisOfOrthogonalSystem`, `orthogonal_span_range_bareNormalizedLp_eq_bot`); and the product and `pi` bases (`prodHilbertBasis`, `piHilbertBasis`). Both instances the road"
+ },
+ {
+  "name": "UniversalCovers",
+  "source": "TauCeti main (completed)",
+  "topic": "math.AT",
+  "title": "Roadmap: universal covers",
+  "summary": "Mathlib already has a substantial covering-space toolkit; what it lacks is the **universal cover construction itself** and the **deck transformation group**, which sit in PRs that stalled or died upstream. **Port the missing construction into `TauCeti/`, sorry-free and attributed, consume the rest from Mathlib, and build the theory of covers on top.**"
+ }
+]

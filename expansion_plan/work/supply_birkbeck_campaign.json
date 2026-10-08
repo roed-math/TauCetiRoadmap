@@ -1,0 +1,1964 @@
+[
+ {
+  "name": "AInfCohomology",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "11G",
+   "13A"
+  ],
+  "distance": 9,
+  "title": "Integral A_inf cohomology and Breuil–Kisin–Fargues structures",
+  "summary": "Develop integral p-adic cohomology that retains torsion information lost after inverting p. The central construction is the AΩ complex over Fontaine’s A_inf period ring, together with its crystalline and étale specializations and Breuil–Kisin–Fargues modules. The main proper comparison starts with smooth proper formal schemes over the integers of a complete algebraically closed p-adic field; a logarithmic branch treats semistable geometry."
+ },
+ {
+  "name": "AbelianSchemesAndArithmeticModuli",
+  "source": "Birkbeck campaign",
+  "msc": "14K",
+  "msc2": [
+   "14L",
+   "14D",
+   "11G"
+  ],
+  "distance": 6,
+  "title": "Roadmap: Abelian Schemes And Arithmetic Moduli",
+  "summary": "Develop abelian varieties in families: proper smooth group schemes with geometrically connected fibres. The planned theory includes rigidity, dual abelian schemes, polarizations, finite flat quotients, torsion pairings and deformation theory, followed by complex uniformization with level structure. These constructions provide the geometric objects needed to describe and compare Siegel, Hilbert and other arithmetic moduli spaces."
+ },
+ {
+  "name": "AdditiveCombinatorics",
+  "source": "Birkbeck campaign",
+  "msc": "11B",
+  "msc2": [
+   "11N",
+   "11P",
+   "37A"
+  ],
+  "distance": 7,
+  "title": "Additive combinatorics, higher Fourier analysis and primes",
+  "summary": "Study additive patterns in sets of integers and finite groups through sumsets, additive energy and Fourier analysis. The planned development moves from structure-versus-randomness decompositions and progression theorems to Gowers norms, nilsequences and transference arguments. Its arithmetic applications concern specified linear patterns in primes and orthogonality to multiplicative functions, with the necessary inverse theorems and uniformity hypotheses made explicit."
+ },
+ {
+  "name": "AdelicAlgebraicGroups",
+  "source": "Birkbeck campaign",
+  "msc": "20G",
+  "msc2": [
+   "22E",
+   "11F",
+   "11R"
+  ],
+  "distance": 5,
+  "title": "Adelic algebraic groups and arithmetic quotients",
+  "summary": "Develop reductive groups over the adeles of a number field, combining their real, complex and nonarchimedean points into a single locally compact group. Targets include Haar and quotient measures, reduction theory, approximation theorems and arithmetic quotient geometry. This supplies the spaces and integration conventions on which automorphic forms, spectral decompositions and arithmetic cohomology are built."
+ },
+ {
+  "name": "AdicCoefficientsAndComparisons",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "14E",
+   "18F"
+  ],
+  "distance": 9,
+  "title": "Roadmap: adic coefficients and comparison with schemes",
+  "summary": "Develop étale cohomology with complete adic coefficients, such as compatible systems modulo powers of a prime ℓ different from the residue characteristic p. The planned comparison connects schemes to their associated v-sheaves and relates pullback, direct image and compactly supported cohomology. It includes the compactification, approximation and alteration arguments needed for characteristic-p and mixed-characteristic comparison, with separate constructibility and coefficient hypotheses."
+ },
+ {
+  "name": "AdicEtaleGeometry",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14F",
+   "13J",
+   "32P"
+  ],
+  "distance": 8,
+  "title": "Roadmap: analytic adic geometry required for diamonds",
+  "summary": "Develop the geometric operations needed to work with analytic adic spaces and pass from them to diamonds. The planned results construct the relevant completed tensor products and fibre products, finite étale and étale maps, smooth charts and approximation by better-behaved affinoid spaces. These results make local analytic geometry and descent available beyond the initial definition of an adic space."
+ },
+ {
+  "name": "AdicSpacesPartII",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "13J",
+   "14F",
+   "11F"
+  ],
+  "distance": 7,
+  "title": "Roadmap: Adic Spaces PartII",
+  "summary": "Extend nonarchimedean analytic geometry from basic adic spaces to algebraic and formal constructions. The planned theory includes analytification of finite-type schemes, formal generic fibres, finite and proper maps, coherent sheaves, étale sites and overconvergent de Rham complexes. Families and suitable nonnoetherian spaces are included where needed for p-adic modular geometry and period maps."
+ },
+ {
+  "name": "AlgebraicModularFormsAndSerreWeights",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "14G",
+   "11R",
+   "14L"
+  ],
+  "distance": 6,
+  "title": "Roadmap: Algebraic modular forms, reduction and Serre weights",
+  "summary": "Develop modular forms as sections of algebraic line bundles, allowing coefficients in rings and in characteristic p. Targets include comparison with analytic forms, q-expansion principles, integral Hecke operators, characteristic-p operations and lifting eigenforms to characteristic zero. The classical Serre weight is defined from local Galois data, providing the precise weight appearing in residual modularity statements."
+ },
+ {
+  "name": "AlgebraicModuliForArithmeticGeometry",
+  "source": "Birkbeck campaign",
+  "msc": "14D",
+  "msc2": [
+   "14A",
+   "14C",
+   "14E"
+  ],
+  "distance": 6,
+  "title": "Roadmap: Algebraic moduli and representability for arithmetic geometry",
+  "summary": "Construct parameter spaces for the geometric objects used in arithmetic: projective bundles, Hilbert and Quot schemes, algebraic spaces and suitable algebraic stacks. The planned development proves representability, descent, coarse-space and deformation comparisons, together with characteristic-zero resolution and normal-crossings compactification. These results turn families of curves, sheaves and abelian varieties into rigorously defined arithmetic moduli problems."
+ },
+ {
+  "name": "AnabelianGeometryAndNonabelianChabauty",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "11G",
+   "14H",
+   "14F"
+  ],
+  "distance": 9,
+  "title": "Anabelian geometry and nonabelian Chabauty",
+  "summary": "Study how arithmetic fundamental groups encode varieties and how their unipotent quotients constrain rational points. The planned constructions include path torsors, nonabelian Galois cohomology, Selmer varieties and Chabauty–Kim loci, with quadratic Chabauty and height equations as concrete applications. Reconstruction theorems retain their stated hypotheses; the section conjecture and eventual completeness of the general Chabauty–Kim method remain conjectural."
+ },
+ {
+  "name": "AnalyticNumberTheory",
+  "source": "Birkbeck campaign",
+  "msc": "11M",
+  "msc2": [
+   "11N",
+   "11R",
+   "46L"
+  ],
+  "distance": 4,
+  "title": "Analytic number theory, zeta functions and prime distribution",
+  "summary": "Develop analytic tools for studying primes and multiplicative arithmetic through Dirichlet series and L-functions. Targets include summation formulas, analytic continuation in specified families, prime number theorems, explicit formulas and zero-density estimates, followed by value distribution and more general zeta constructions. Unconditional results remain distinct from arguments requiring the Riemann hypothesis, its generalizations or additional holomorphy assumptions."
+ },
+ {
+  "name": "ArakelovGeometryAndAbelianHeights",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14K",
+   "11G",
+   "14C"
+  ],
+  "distance": 8,
+  "title": "Roadmap: Arakelov geometry and heights of abelian varieties",
+  "summary": "Develop heights of abelian varieties using arithmetic intersection theory and metrics at the archimedean places. The central object is the stable Faltings height, constructed from the metrized Hodge bundle and semistable reduction. Planned results compare this height under isogenies and with moduli or theta heights, supplying the quantitative geometry behind arithmetic finiteness theorems."
+ },
+ {
+  "name": "ArithmeticDynamics",
+  "source": "Birkbeck campaign",
+  "msc": "37P",
+  "msc2": [
+   "11G",
+   "14G",
+   "37F"
+  ],
+  "distance": 6,
+  "title": "Arithmetic dynamics",
+  "summary": "Study the arithmetic of iterating algebraic maps: periodic points, orbit growth and the fields generated by repeated preimages. The planned development begins with polarized morphisms of projective varieties, constructs canonical heights and local reduction theory, and proceeds to equidistribution, arboreal Galois representations and families. Rational maps with indeterminacy and broader dynamical conjectures receive separate hypotheses and scope."
+ },
+ {
+  "name": "ArithmeticGaloisDuality",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "11S",
+   "11F",
+   "20J"
+  ],
+  "distance": 5,
+  "title": "Roadmap: Global Galois duality and compact coefficients",
+  "summary": "Develop the duality and cohomology of Galois representations over number fields, including compact p-adic coefficients. Targets include inverse-limit comparisons, the Hochschild–Serre spectral sequence, restricted-ramification finiteness and Poitou–Tate duality. Selmer groups and deformation conditions are then related through their local constraints, providing the global dimension calculations and auxiliary-prime arguments used in arithmetic patching."
+ },
+ {
+  "name": "ArithmeticGaloisRepresentations",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11R",
+   "11S",
+   "14G"
+  ],
+  "distance": 5,
+  "title": "Roadmap: Arithmetic Galois representations and conductors",
+  "summary": "Develop continuous representations of absolute Galois groups over number fields and local fields, together with their integral and residual forms. The planned theory includes inertia, Weil–Deligne representations, Artin and Swan conductors, oddness and recognition from Frobenius polynomials. Tate modules of elliptic curves and abelian varieties connect these abstract representations to geometric arithmetic and modularity."
+ },
+ {
+  "name": "ArithmeticKTheory",
+  "source": "Birkbeck campaign",
+  "msc": "19F",
+  "msc2": [
+   "11R",
+   "19D",
+   "14F"
+  ],
+  "distance": 9,
+  "title": "K-theory of number fields and S-integers",
+  "summary": "Develop algebraic K-groups of number fields and rings of S-integers, including low-degree descriptions, localization, finite generation, ranks and torsion. Planned calculations relate these groups to roots of unity with twists, arithmetic cohomology, regular primes and Bernoulli numbers. Explicit examples include certificates, while extension data and integral structures are retained instead of recording group orders alone."
+ },
+ {
+  "name": "ArithmeticLocallySymmetricSpaces",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "22E",
+   "20J",
+   "57T"
+  ],
+  "distance": 7,
+  "title": "Arithmetic locally symmetric spaces and their cohomology",
+  "summary": "Develop locally symmetric spaces attached to reductive groups over number fields, together with arithmetic quotients and coefficient systems. The planned theory constructs chain complexes, Hecke correspondences, Borel–Serre compactifications and boundary cohomology, preserving duality and comparison maps. This provides a topological realization of automorphic information and the finite-level geometry underlying completed cohomology."
+ },
+ {
+  "name": "ArithmeticQuantumTopology",
+  "source": "Birkbeck campaign",
+  "msc": "57K",
+  "msc2": [
+   "17B",
+   "81T",
+   "19E"
+  ],
+  "distance": 9,
+  "title": "Arithmetic quantum topology, Habiro invariants and regulators",
+  "summary": "Develop the arithmetic structures appearing in quantum invariants of knots and three-manifolds. The planned route passes from framed links, surgery and ribbon-category invariants to colored Jones polynomials and unified Habiro invariants, then connects hyperbolic geometry, Bloch groups, regulators and Nahm series. Proven integrality and comparison results are separated from conjectures about volume, quantum modularity and asymptotic expansions."
+ },
+ {
+  "name": "ArithmeticStatistics",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "11R",
+   "11E",
+   "11P"
+  ],
+  "distance": 6,
+  "title": "Arithmetic statistics, counting fields and Selmer distributions",
+  "summary": "Study how number fields, class groups, Selmer groups and ranks vary across arithmetic families. The planned methods combine parametrization by group orbits, geometry of numbers, sieve estimates and uniform counting, always using a specified height or discriminant ordering. Targets distinguish established distribution results and rank bounds from broader Cohen–Lenstra, Malle and rank-distribution conjectures."
+ },
+ {
+  "name": "AutomorphicBundles",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "11G",
+   "11F",
+   "32N"
+  ],
+  "distance": 8,
+  "title": "Roadmap: automorphic bundles and classical automorphic forms",
+  "summary": "Construct vector bundles on Shimura varieties from algebraic representations and describe automorphic forms as their sections. The planned theory includes canonical principal bundles, coefficient descent, canonical and subcanonical extensions over compactifications, Hecke actions and Fourier expansions. Explicit modular and Hilbert weight conventions connect the general construction to classical forms and later p-adic period comparisons."
+ },
+ {
+  "name": "AutomorphicCongruences",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "11F",
+   "11G",
+   "11S"
+  ],
+  "distance": 10,
+  "title": "automorphic congruences and reverse main-conjecture divisibilities",
+  "summary": "Use congruences between automorphic forms to construct Galois extensions and constrain Selmer groups. The planned development supplies the divisibility in Iwasawa main conjectures complementary to Euler-system bounds, through ordinary modular, cohomological-family and selected unitary-group arguments. Congruence modules, deformation theory and integral specialization are developed with the precise residual, local and ordinarity hypotheses of each theorem."
+ },
+ {
+  "name": "AutomorphicFormsOnReductiveGroups",
+  "source": "Birkbeck campaign",
+  "msc": "22E",
+  "msc2": [
+   "11F",
+   "20G",
+   "17B"
+  ],
+  "distance": 7,
+  "title": "Automorphic forms on reductive groups",
+  "summary": "Develop automorphic forms for connected reductive groups over number fields, including nonsplit groups and inner forms. The planned theory covers growth conditions, real-group representations, constant terms, cusp forms, algebraic weights and rational structures. It supplies a common language for local-to-global representation theory without imposing properties, such as multiplicity one or Whittaker models, that require additional hypotheses."
+ },
+ {
+  "name": "AutomorphicGaloisRepresentations",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11G",
+   "14G",
+   "11R"
+  ],
+  "distance": 9,
+  "title": "Roadmap: Galois representations attached to modular and Hilbert modular forms",
+  "summary": "Construct the two-dimensional Galois representations attached to classical and Hilbert modular eigenforms, using modular and quaternionic geometry. Planned results include purity, compatible systems, representations over localized Hecke algebras and local–global compatibility both away from and at the coefficient prime. These comparisons explain how Hecke eigenvalues encode arithmetic and supply representations for modularity-lifting arguments."
+ },
+ {
+  "name": "AutomorphicGaloisRepresentationsPartII",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11G",
+   "14G",
+   "11R"
+  ],
+  "distance": 10,
+  "title": "Roadmap: Automorphic Galois Representations PartII",
+  "summary": "Extend the passage from automorphic forms to Galois representations from rank two to general dimension. The planned targets attach characteristic-zero Galois representations to regular algebraic automorphic representations of GL_n over CM or totally real fields, with polarized and nonselfdual cases distinguished. Geometric realization, compatible systems and ramified local comparison are developed under the hypotheses of the applicable construction."
+ },
+ {
+  "name": "AutomorphicLFunctionsAndLocalFactors",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "22E",
+   "11R",
+   "11S"
+  ],
+  "distance": 6,
+  "title": "Automorphic L-functions and local factors",
+  "summary": "Develop the local factors and integral formulas that define complex automorphic L-functions. The planned theory includes Tate’s character integrals, standard GL_n factors, Rankin–Selberg convolutions and general unramified factors from the dual group. Analytic continuation and functional equations are proved for the specified families, with normalization and period comparisons suitable for later p-adic interpolation."
+ },
+ {
+  "name": "AutomorphicPadicLFunctions",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11S",
+   "11R",
+   "11G"
+  ],
+  "distance": 9,
+  "title": "ray-class distributions and general automorphic constructions",
+  "summary": "Construct p-adic distributions whose values interpolate complex automorphic L-values. The planned cases include GL₂ over number fields, abelian characters over totally real fields, ordinary CM characters and selected ordinary unitary groups. Ray-class character spaces, overconvergent cohomology, differential operators and doubling integrals provide the constructions, with explicit interpolation factors, period choices and ordinarity or slope conditions."
+ },
+ {
+  "name": "AutomorphicSpectralTheory",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "22E",
+   "20G",
+   "43A"
+  ],
+  "distance": 8,
+  "title": "Automorphic spectral theory and trace distributions",
+  "summary": "Develop the decomposition of square-integrable automorphic functions into discrete and continuous spectra. The planned theory constructs Eisenstein series and intertwining operators, proves meromorphic continuation and Maass–Selberg relations, and uses truncation to obtain trace distributions and the invariant trace formula. These analytic results connect representations, orbital integrals and cohomology on arithmetic quotients of reductive groups."
+ },
+ {
+  "name": "BorelRegulators",
+  "source": "Birkbeck campaign",
+  "msc": "19F",
+  "msc2": [
+   "57T",
+   "14G",
+   "11R"
+  ],
+  "distance": 8,
+  "title": "Stable arithmetic cohomology and Borel regulators",
+  "summary": "Develop Borel’s relationship between higher K-theory of number fields, stable arithmetic-group cohomology and special values of Dedekind zeta functions. The planned construction builds regulator classes using real Lie-group cohomology, proves rank and lattice statements, and derives the specified zeta leading-term proportionalities. Comparisons with Beilinson regulators and Tamagawa formulations make the arithmetic meaning of these real-valued invariants explicit."
+ },
+ {
+  "name": "BunGAndNewtonStrata",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "11S",
+   "14F",
+   "20G"
+  ],
+  "distance": 10,
+  "title": "Roadmap: reductive bundles, B(G) and Newton strata",
+  "summary": "Construct the moduli stack of principal G-bundles on the Fargues–Fontaine curve for a connected reductive group over a nonarchimedean local field. The planned theory classifies isocrystal data through Kottwitz and Newton invariants and studies basic and nonbasic strata, uniformization and specialization. Ramified and nonsplit groups are included, providing the geometric setting for local Langlands constructions."
+ },
+ {
+  "name": "ClassicalAdicEtaleCohomology",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "32P"
+  ],
+  "distance": 8,
+  "title": "Roadmap: the classical analytic cohomology inputs to diamonds",
+  "summary": "Develop étale cohomology for analytic adic spaces, including sheaves, direct images, compact supports and duality for curves. The planned proofs compare analytic spaces with formal models and nearby cycles, establish invariance under suitable valued-field extensions, and treat constructibility and annulus computations. These classical results supply the analytic comparison theorems needed before passing to diamond cohomology."
+ },
+ {
+  "name": "ClassicalArithmeticCompletion",
+  "source": "Birkbeck campaign",
+  "msc": "11A",
+  "msc2": [
+   "11R",
+   "11Y",
+   "11B"
+  ],
+  "distance": 3,
+  "title": "Classical arithmetic, sequences, polynomials and reciprocity",
+  "summary": "Develop the elementary and algebraic arithmetic connecting divisibility, reciprocity, recurrences and polynomial calculations to number-field theory. Planned topics include multiplicative functions, generating series, classical Diophantine equations, special algebraic numbers and Mahler measure. Integral orders and Galois modules extend the scope beyond individual examples, while shared constructions connect these explicit calculations to more advanced arithmetic."
+ },
+ {
+  "name": "ClassicalSerreModularity",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11R",
+   "14L",
+   "11G"
+  ],
+  "distance": 10,
+  "title": "Roadmap: Classical Serre Modularity",
+  "summary": "Develop the classical Serre modularity theorem: continuous odd irreducible two-dimensional residual Galois representations of the rationals arise from modular forms with the prescribed weight and conductor. The planned proof includes the level-one starting case, auxiliary ramification, weight reduction and characteristic-two branches. A second qualitative proof route is developed separately and then combined with the precise classical weight-and-level refinement."
+ },
+ {
+  "name": "CohomologyComparisons",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "11S",
+   "11G"
+  ],
+  "distance": 10,
+  "title": "Cohomology comparisons: integral diagrams and rational period realizations",
+  "summary": "Relate étale, crystalline, de Rham, prismatic and integral p-adic cohomology on the same geometric objects. The planned comparisons preserve products, filtrations, Frobenius, Galois action and, in semistable situations, monodromy. Integral torsion bounds and lattice recovery accompany rational period isomorphisms, with properness, smoothness and completion hypotheses retained so derived comparison is not confused with degreewise freeness."
+ },
+ {
+  "name": "ColemanIntegration",
+  "source": "Birkbeck campaign",
+  "msc": "11S",
+  "msc2": [
+   "14G",
+   "11R",
+   "33B"
+  ],
+  "distance": 6,
+  "title": "Coleman integration and noncritical Dirichlet L-values",
+  "summary": "Develop p-adic integration on curves with good reduction by continuing local primitives through Frobenius. The planned theory begins with differential equations on residue discs, constructs Coleman integrals and p-adic polylogarithms, and applies them to Dirichlet L-values at positive integers. The punctured projective line supplies explicit examples linking analytic continuation, logarithms and arithmetic special values."
+ },
+ {
+  "name": "ColemanPowerSeries",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "11S",
+   "14L"
+  ],
+  "distance": 4,
+  "title": "Coleman power series, local units, and cyclotomic-unit quotients",
+  "summary": "Study norm-compatible local units in cyclotomic p-adic towers through Coleman power series. The planned construction establishes the norm operator, the Coleman map and its exact kernel and cokernel, then identifies the contribution of cyclotomic units. This translates multiplicative arithmetic in an infinite field tower into power-series algebra and the local modules used in Iwasawa theory."
+ },
+ {
+  "name": "CompletedCohomologyAndLocalGlobalCompatibility",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "22E",
+   "11S",
+   "11R"
+  ],
+  "distance": 10,
+  "title": "Roadmap: Completed cohomology and p-adic local–global compatibility over Q",
+  "summary": "Develop completed cohomology for towers of modular and Shimura curves and relate its group action to p-adic Galois representations. The planned results recover classical forms through locally algebraic vectors, establish the relevant p-adic local–global compatibility over the rationals, and study patched completed modules. This strengthens finite-level cohomology in the setting needed for modern GL₂ modularity lifting."
+ },
+ {
+  "name": "CompletedCohomologyPartII",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "22E",
+   "14G",
+   "11S"
+  ],
+  "distance": 8,
+  "title": "Roadmap: Completed cohomology, homology and arithmetic towers — Part II",
+  "summary": "Construct completed cohomology and homology for towers of arithmetic locally symmetric spaces and Shimura varieties in general reductive-group dimension. The planned development handles torsion colimits, derived inverse limits, continuous duals and completed chain complexes, then proves finiteness, admissibility and classical comparison. Compact supports and boundary triangles retain the geometry of noncompact arithmetic spaces throughout the passage to infinite level."
+ },
+ {
+  "name": "ComplexComparisonPartII",
+  "source": "Birkbeck campaign",
+  "msc": "32C",
+  "msc2": [
+   "14F",
+   "32J",
+   "32E"
+  ],
+  "distance": 6,
+  "title": "Roadmap: Complex Comparison PartII",
+  "summary": "Compare algebraic varieties over the complex numbers with their analytic spaces through coherent sheaves and cohomology. The planned theory proves projective and proper GAGA, algebraization of suitable analytic objects, and compatibility of morphisms, followed by algebraic de Rham–Betti comparison. These results explain when algebraic, holomorphic and topological descriptions carry the same geometric and cohomological information."
+ },
+ {
+  "name": "ComplexMultiplicationAndExplicitReciprocity",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "11R",
+   "14K",
+   "14H"
+  ],
+  "distance": 7,
+  "title": "Complex multiplication and explicit reciprocity",
+  "summary": "Develop explicit class-field constructions from elliptic curves and abelian varieties with complex multiplication. The planned theory treats CM types, orders, ideal actions, class polynomials, ring class fields and CM Hecke characters, with reduction and isogeny computations. Reciprocity connects these geometric operations to Galois action; the scope does not extend to explicit class-field generation for every number field."
+ },
+ {
+  "name": "ComputationalNumberTheory",
+  "source": "Birkbeck campaign",
+  "msc": "11Y",
+  "msc2": [
+   "11T",
+   "11C",
+   "11A"
+  ],
+  "distance": 4,
+  "title": "Certified computational number theory and arithmetic data",
+  "summary": "Develop arithmetic algorithms whose outputs come with mathematical correctness and termination proofs. Planned topics include primality, factorization, number and local fields, curves, modular forms and validated real or p-adic approximation. Exact representations and independently checkable certificates connect computation to theorems, while experimental data, numerical guesses and conditional complexity estimates retain their separate meanings."
+ },
+ {
+  "name": "CrystallineCohomology",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "13F",
+   "14A"
+  ],
+  "distance": 8,
+  "title": "Crystalline cohomology, de Rham–Witt and logarithmic foundations",
+  "summary": "Construct crystalline cohomology from divided-power thickenings, crystals and derived global sections. The planned theory proves de Rham calculations, descent, finiteness, base change and Frobenius comparisons, then develops de Rham–Witt complexes and logarithmic extensions. Smooth proper varieties in characteristic p and semistable mixed-characteristic models provide central applications, including duality and the Hyodo–Kato structures used in p-adic comparison."
+ },
+ {
+  "name": "DeformationAndDerivedPatchingAlgebra",
+  "source": "Birkbeck campaign",
+  "msc": "13D",
+  "msc2": [
+   "13H",
+   "11F",
+   "14D"
+  ],
+  "distance": 5,
+  "title": "Roadmap: Commutative algebra for deformation theory and patching",
+  "summary": "Develop the local commutative algebra behind deformation theory and arithmetic patching. The planned results concern complete local rings, representable deformation functors, obstruction spaces, dimension, depth and complete intersections, together with patching of modules and perfect complexes. Support and component theorems make it possible to pass from local algebraic conditions to the ring comparisons required in modularity proofs."
+ },
+ {
+  "name": "DeligneWeightsAndPurity",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "11G",
+   "14D"
+  ],
+  "distance": 9,
+  "title": "Deligne weights, purity and the Weil bounds",
+  "summary": "Develop Deligne’s bounds on Frobenius eigenvalues in the cohomology of varieties over finite fields. The planned route proves the Riemann hypothesis for smooth projective varieties, then builds the theory of weights for sheaves and direct images. Mixed complexes, geometric semisimplicity and hard Lefschetz express how these arithmetic bounds govern both point counts and the structure of geometric cohomology."
+ },
+ {
+  "name": "DerivedDeRhamCohomology",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "13D",
+   "18G",
+   "14G"
+  ],
+  "distance": 8,
+  "title": "Derived de Rham cohomology and its algebraic foundations",
+  "summary": "Develop de Rham cohomology for singular and derived algebraic objects using cotangent complexes and polynomial resolutions. The planned theory constructs derived exterior powers, completion, Hodge and conjugate filtrations, Cartier comparisons and quasisyntomic descent, with logarithmic extensions where specified. This provides a shared algebraic framework for deformation theory and crystalline, prismatic and q-deformed cohomology."
+ },
+ {
+  "name": "DiamondEtaleCohomology",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "18F",
+   "18G"
+  ],
+  "distance": 9,
+  "title": "Roadmap: étale cohomology of diamonds and its four operations",
+  "summary": "Develop étale sheaves and derived cohomology on diamonds, allowing the geometry of perfectoid spaces to support arithmetic coefficient systems. The planned results construct pullback, direct image, tensor products and internal Hom, and prove descent, proper base change, constructibility and cohomological bounds. Compactification and finiteness results prepare the later extension to the full six-operation formalism."
+ },
+ {
+  "name": "DiamondSixOperations",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "18N",
+   "18G"
+  ],
+  "distance": 9,
+  "title": "Roadmap: six operations, cohomological smoothness and biduality",
+  "summary": "Extend diamond cohomology to the six operations, especially pushforward with proper support and exceptional inverse image. The planned theory proves their adjunctions, base-change identities and biduality, then develops cohomological smoothness and examples involving balls, quotients and smooth analytic maps. Coefficients are prime to the residue characteristic, and extensions to small v-stacks retain the required compactifiability and dimension conditions."
+ },
+ {
+  "name": "DiamondsAndVStacks",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14A",
+   "18F",
+   "14F"
+  ],
+  "distance": 8,
+  "title": "Roadmap: pro-étale descent, diamonds and small v-stacks",
+  "summary": "Construct diamonds as sheaf-theoretic quotients of perfectoid spaces and develop the broader setting of small v-stacks. The planned theory builds the pro-étale and v-topologies, proves effective descent, and studies spatial geometry, representability and analytic adic spaces viewed as diamonds. This language makes infinite-level p-adic spaces and their moduli accessible to geometric and cohomological methods."
+ },
+ {
+  "name": "DiophantineApproximationAndTranscendence",
+  "source": "Birkbeck campaign",
+  "msc": "11J",
+  "msc2": [
+   "11D",
+   "11H",
+   "11G"
+  ],
+  "distance": 5,
+  "title": "Diophantine approximation and transcendence",
+  "summary": "Study how closely algebraic numbers can be approximated and when arithmetic expressions must be transcendental. The planned development includes Liouville and Roth theorems, the Subspace Theorem, S-unit equations and bounds for linear forms in logarithms. Heights connect these results to effective Diophantine applications, with ineffective finiteness, effective estimates and broader transcendence conjectures explicitly distinguished."
+ },
+ {
+  "name": "DirichletPadicLFunctions",
+  "source": "Birkbeck campaign",
+  "msc": "11S",
+  "msc2": [
+   "11R",
+   "11F",
+   "11M"
+  ],
+  "distance": 3,
+  "title": "Dirichlet p-adic L-functions, special values, and Eisenstein measures",
+  "summary": "Construct Dirichlet p-adic L-functions by measures that interpolate algebraic special values of complex L-functions. The planned theory includes arbitrary tame conductor, character branches, logarithmic values, poles and residues, together with p-adic Eisenstein families. A separate construction at p = 2 uses the appropriate subgroup and integral normalization, rather than assuming the odd-prime argument applies unchanged."
+ },
+ {
+  "name": "DrinfeldModulesAndTModules",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "11R",
+   "11F",
+   "11M"
+  ],
+  "distance": 7,
+  "title": "Drinfeld modules, t-motives and characteristic-p special values",
+  "summary": "Develop Drinfeld modules and t-modules as characteristic-p analogues of familiar arithmetic structures on elliptic and abelian varieties. The planned theory includes additive-polynomial actions, torsion and Tate modules, analytic uniformization, moduli, isogenies and t-motives. Special values, regulators, class modules and periods connect this geometry to function-field arithmetic, with generic and special characteristic treated separately."
+ },
+ {
+  "name": "EffectiveDiophantineMethods",
+  "source": "Birkbeck campaign",
+  "msc": "11Y",
+  "msc2": [
+   "11G",
+   "14G",
+   "11D"
+  ],
+  "distance": 7,
+  "title": "Effective Diophantine methods and certified rational points",
+  "summary": "Develop methods that certify all solutions for specified classes of Diophantine equations. The planned tools combine lattice reduction, logarithmic-form bounds, S-unit equations, descent, rank calculations and Chabauty–Coleman integration with the Mordell–Weil sieve. Every finite search is paired with a theorem proving exhaustiveness; general effective Mordell and unrestricted rational-point decidability are not assumed."
+ },
+ {
+  "name": "EllipticCurveModularity",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "11F",
+   "14G",
+   "14H"
+  ],
+  "distance": 9,
+  "title": "Roadmap: Modularity and modular parametrisations of elliptic curves over Q",
+  "summary": "Develop the modularity theorem for every elliptic curve over the rationals, including curves with complex multiplication and bad reduction. The planned argument identifies a newform of the exact conductor, compares its Galois representation with the curve’s Tate module, and constructs a nonconstant modular parametrization. Equality of L-series then supplies analytic continuation and the corresponding functional equation."
+ },
+ {
+  "name": "EllipticKTheory",
+  "source": "Birkbeck campaign",
+  "msc": "19E",
+  "msc2": [
+   "19F",
+   "19D",
+   "14H"
+  ],
+  "distance": 8,
+  "title": "K-theory of curves and elliptic curves",
+  "summary": "Develop algebraic K-theory of curves and elliptic curves, connecting explicit symbols with geometric localization sequences. The planned theory describes K₀ through K₃, handles K₁ and its reduced part, and studies functoriality and coniveau constructions. Regular arithmetic models determine integral classes, providing the concrete K-theoretic objects on which elliptic regulator and special-value formulas operate."
+ },
+ {
+  "name": "EllipticRegulators",
+  "source": "Birkbeck campaign",
+  "msc": "19F",
+  "msc2": [
+   "11G",
+   "14G",
+   "11F"
+  ],
+  "distance": 9,
+  "title": "Elliptic regulators, explicit K₂ classes and L-values",
+  "summary": "Relate explicit K₂ classes on elliptic curves to complex and p-adic periods and L-values. The planned construction develops Deligne cohomology, elliptic dilogarithms and divisor formulas, with a complete complex-multiplication example and constructed classes for modular elliptic curves. Integral models and p-adic comparison control which classes enter the stated regulator identities and which broader special-value statements remain conjectural."
+ },
+ {
+  "name": "EndoscopicTransferAndUnitaryTraceComparison",
+  "source": "Birkbeck campaign",
+  "msc": "22E",
+  "msc2": [
+   "11F",
+   "11G",
+   "14G"
+  ],
+  "distance": 10,
+  "title": "Endoscopic transfer and unitary trace comparison",
+  "summary": "Develop endoscopic comparison of representations through stable conjugacy, orbital integrals and transfer factors. The planned theory includes the geometric machinery behind the fundamental lemma and the simple stable and twisted trace formulas needed for selected unitary groups. Applications compare automorphic and Igusa-variety cohomology, with local transfer and global stabilization proved in the specific ranges used by those calculations."
+ },
+ {
+  "name": "EnhancedDerivedSheaves",
+  "source": "Birkbeck campaign",
+  "msc": "18N",
+  "msc2": [
+   "18G",
+   "18F",
+   "14F"
+  ],
+  "distance": 8,
+  "title": "Roadmap: enhanced derived categories of sheaves",
+  "summary": "Develop derived categories of sheaves with the higher coherence needed to compose geometric operations reliably. The planned theory uses stable higher categories to construct presentable sheaf categories, descent, completion, monoidal structures and adjoints, together with coherent diagrams and Kan extensions. These foundations allow compactly supported pushforward and comparison maps to be constructed beyond what an ordinary triangulated category alone records."
+ },
+ {
+  "name": "EtaleDualityAndPerverseSheaves",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14C",
+   "18F",
+   "14G"
+  ],
+  "distance": 9,
+  "title": "Étale duality, cycle classes and perverse sheaves",
+  "summary": "Develop duality and geometric structure in étale cohomology of schemes. The planned theory constructs exceptional inverse image, Verdier duality, smooth traces, purity, Gysin maps and cycle classes, then builds perverse sheaves and intermediate extension. Lefschetz results, intersection complexes and decomposition theorems connect singular geometry to cohomology, with coefficient and purity assumptions preserved in each comparison."
+ },
+ {
+  "name": "EulerSystemsAndKolyvaginSystems",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "11G",
+   "11F",
+   "13E"
+  ],
+  "distance": 7,
+  "title": "Euler systems, Kolyvagin systems and higher-rank descent",
+  "summary": "Develop the general mechanism that turns norm-compatible Galois cohomology classes into bounds on Selmer groups. Planned results construct Euler and Kolyvagin systems, derivative operators, auxiliary-prime comparisons and descent, including primitivity and higher-rank refinements. The coefficient theory covers specified discrete valuation and Gorenstein settings; arithmetic examples must separately establish their norm relations, reciprocity laws and nonvanishing."
+ },
+ {
+  "name": "EulerSystemsCyclotomicMainConjecture",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "11S",
+   "11F"
+  ],
+  "distance": 8,
+  "title": "Euler systems and the unconditional cyclotomic main conjecture",
+  "summary": "Prove the cyclotomic Iwasawa main conjecture through the Euler system of cyclotomic units. The planned argument builds derivative classes, obtains characteristic-ideal divisibility from descent and global duality, and proves equality using index and class-number formulas. It removes the need for Vandiver’s conjecture; the extension to abelian fields and p = 2 has its own integral argument."
+ },
+ {
+  "name": "ExcursionOperatorsAndSpectralAction",
+  "source": "Birkbeck campaign",
+  "msc": "11S",
+  "msc2": [
+   "22E",
+   "14D",
+   "14G"
+  ],
+  "distance": 10,
+  "title": "Roadmap: excursion operators and the spectral action",
+  "summary": "Construct excursion operators from coherent families of Hecke correspondences and use them to organize local Langlands parameters. The planned theory develops spectral centers, ramification bounds and categorical actions, followed by semisimple parameter assignments and specified comparisons with classical GL_n theory. Integral coefficients require additional hypotheses; the full conjectural categorical local Langlands equivalence is outside these claimed endpoints."
+ },
+ {
+  "name": "ExponentialSumsAndCircleMethod",
+  "source": "Birkbeck campaign",
+  "msc": "11P",
+  "msc2": [
+   "11L",
+   "11D",
+   "42B"
+  ],
+  "distance": 6,
+  "title": "Exponential sums, decoupling and the circle method",
+  "summary": "Develop oscillatory estimates and the circle method for counting integer solutions to polynomial equations. The planned tools include exponential sums, Fourier counting, mean-value and decoupling arguments, and the separation of major and minor arcs. Singular series and local factors lead to asymptotic formulas in stated variable ranges, with nonsingularity and local-solubility conditions retained in every arithmetic application."
+ },
+ {
+  "name": "FaltingsFinitenessAndIsogenyTheorems",
+  "source": "Birkbeck campaign",
+  "msc": "14K",
+  "msc2": [
+   "11G",
+   "14G",
+   "14L"
+  ],
+  "distance": 9,
+  "title": "Roadmap: Faltings finiteness, semisimplicity and isogeny theorems",
+  "summary": "Develop Faltings’ finiteness and isogeny theorems for abelian varieties over number fields. The planned proof uses arithmetic heights, moduli and isogeny estimates to establish boundedness and Shafarevich finiteness, then proves semisimplicity and the Tate-module description of homomorphisms. These results turn equality of Galois representations into geometric isogenies and support finiteness arguments for arithmetic families."
+ },
+ {
+  "name": "FarguesFontaineDiamonds",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14F",
+   "11S",
+   "13F"
+  ],
+  "distance": 9,
+  "title": "Roadmap: the existing Fargues–Fontaine curve as a diamond",
+  "summary": "Compare the adic Fargues–Fontaine curve with its description as a diamond, initially over Q_p and a perfectoid field base. The planned construction identifies the untilt product, respects Frobenius and passes to the quotient, then compares finite étale covers and étale cohomology. Marked untilts are interpreted as Cartier divisors, linking concrete period geometry to the moduli language of diamonds."
+ },
+ {
+  "name": "FiniteFieldsAndCharacterSums",
+  "source": "Birkbeck campaign",
+  "msc": "11T",
+  "msc2": [
+   "11L",
+   "14G",
+   "11Y"
+  ],
+  "distance": 6,
+  "title": "Finite fields, character sums, finite rings and coding interfaces",
+  "summary": "Develop finite-field arithmetic and the character sums used in point counting and analytic number theory. Planned topics include field constructions, additive and multiplicative characters, elementary sums, Weil–Deligne estimates and certified factorization or point-counting procedures. Finite rings, recurrence sequences and coding interfaces extend the applications, while geometric bounds retain the nondegeneracy conditions required by their proofs."
+ },
+ {
+  "name": "FiniteFlatGroupsAndIntegralPadicHodgeTheory",
+  "source": "Birkbeck campaign",
+  "msc": "14L",
+  "msc2": [
+   "11F",
+   "14F",
+   "14G"
+  ],
+  "distance": 7,
+  "title": "Roadmap: Finite flat group schemes and integral p-adic Hodge theory",
+  "summary": "Develop finite flat group schemes and p-divisible groups over local bases, together with their linear-algebraic descriptions. Planned results include Dieudonné, Fontaine–Laffaille and Breuil–Kisin theories, connecting integral Galois representations to Frobenius modules. Ramification and weight restrictions are retained, giving precise local residual types and deformation conditions for Serre weights and modularity-lifting applications."
+ },
+ {
+  "name": "FoundationsAndLibraryIntegration",
+  "source": "Birkbeck campaign",
+  "msc": null,
+  "msc2": null,
+  "distance": null,
+  "title": "Foundations, existing libraries, and proof integrity",
+  "summary": "Bring together the general algebra, analysis, topology, category theory and sheaf constructions needed across the arithmetic developments. The planned work connects existing definitions and theorems through explicit comparison maps, fills identified foundational gaps and checks the assumptions used in proofs. Its purpose is a coherent shared mathematical library in which later results refer to the same objects and conventions."
+ },
+ {
+  "name": "FunctionFieldArithmetic",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "11S",
+   "11F",
+   "14H"
+  ],
+  "distance": 6,
+  "title": "Global function fields, reciprocity and automorphic foundations",
+  "summary": "Develop arithmetic over the function field of a smooth projective curve over a finite field. The planned theory includes divisors, Riemann–Roch, adeles, ramification, reciprocity, zeta functions and Chebotarev, followed by reductive-group automorphic forms. Exact constant fields, separable extensions and purely inseparable extensions remain distinct, providing the characteristic-p foundation for Drinfeld modules and global shtukas."
+ },
+ {
+  "name": "GL2AutomorphicRepresentationsAndTransfer",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "22E",
+   "11R",
+   "11S"
+  ],
+  "distance": 9,
+  "title": "Roadmap: GL₂ Automorphic Representations And Transfer",
+  "summary": "Develop local and global automorphic representation theory for GL₂ over number fields. Planned targets include local Langlands, cuspidal decomposition, multiplicity results, quaternionic Jacquet–Langlands transfer, solvable base change and automorphic induction. Classical modular forms appear as a concrete specialization, while trace formulas and integral representations provide the comparisons used in modularity and potential-modularity arguments."
+ },
+ {
+  "name": "GL2ModularityLifting",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11R",
+   "14G",
+   "22E"
+  ],
+  "distance": 10,
+  "title": "Roadmap: GL₂ Modularity Lifting",
+  "summary": "Develop theorems lifting modularity from a residual two-dimensional Galois representation to a p-adic one. The planned proofs compare universal deformation rings with Hecke algebras through auxiliary levels, arithmetic patching and control of local components. Separate odd-prime, dyadic and residually reducible arguments retain their local Hodge, image and ramification hypotheses, providing precise tools for global modularity proofs."
+ },
+ {
+  "name": "GeneralAlgebraicKTheory",
+  "source": "Birkbeck campaign",
+  "msc": "19D",
+  "msc2": [
+   "18F",
+   "55P",
+   "19E"
+  ],
+  "distance": 7,
+  "title": "General algebraic K-theory",
+  "summary": "Construct higher algebraic K-theory from exact categories, rings and their homotopy-theoretic models. The planned development compares the Q-, plus- and S-constructions, proves additivity, resolution, dévissage and localization, and extends to relative and nonconnective theories. Products, Morita invariance and low-degree comparisons connect these general constructions to explicit arithmetic K-groups and geometric applications."
+ },
+ {
+  "name": "GeneralizedHeegnerCycles",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "11F",
+   "11R",
+   "11S"
+  ],
+  "distance": 10,
+  "title": "Generalized Heegner cycles and their Iwasawa variation",
+  "summary": "Construct higher-dimensional analogues of Heegner points on varieties built from families of elliptic curves. The planned theory forms algebraic cycles and their étale or p-adic Abel–Jacobi classes, proves norm relations and explicit reciprocity, and derives specified Selmer consequences. Ordinary stabilization and variation in Hida families connect higher-weight cycles to Iwasawa theory, with an explicit comparison back to weight two."
+ },
+ {
+  "name": "GeometricSatakeAndFusion",
+  "source": "Birkbeck campaign",
+  "msc": "14D",
+  "msc2": [
+   "14M",
+   "22E",
+   "14G"
+  ],
+  "distance": 10,
+  "title": "Roadmap: geometric Satake over the Fargues–Fontaine curve",
+  "summary": "Develop the geometric Satake correspondence through sheaves on affine Grassmannians associated with the Fargues–Fontaine setting. The planned construction uses convolution and fusion to recover the representation category of the dual reductive group, including Weil action and normalized functoriality. Mixed and equal characteristic, ramified groups and integral coefficients are treated with their respective hypotheses and Tate-twist conventions."
+ },
+ {
+  "name": "GeometryOfNumbersAndQuadraticArithmetic",
+  "source": "Birkbeck campaign",
+  "msc": "11H",
+  "msc2": [
+   "11E",
+   "37A",
+   "19G"
+  ],
+  "distance": 5,
+  "title": "Geometry of numbers, quadratic forms and homogeneous arithmetic",
+  "summary": "Study arithmetic through lattices, convex bodies and quadratic or hermitian forms. The planned theory develops covolumes, successive minima, local–global classification, reduction, mass formulas and theta series, with certified reduction algorithms and lattice-point applications. Homogeneous dynamics and hermitian K-theory form further branches, connecting explicit inequalities to arithmetic groups and the structure of bilinear forms."
+ },
+ {
+  "name": "GlobalGaloisDeformations",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11R",
+   "14D",
+   "11G"
+  ],
+  "distance": 7,
+  "title": "Roadmap: Global Galois deformation rings",
+  "summary": "Construct deformation spaces for residual Galois representations over number fields, including prescribed local behavior and determinant conditions. Planned results prove representability, build universal representations and give global presentations through cohomology and duality. Restriction, twisting and Taylor–Wiles auxiliary primes connect these global rings to local deformation geometry and to the patching methods used in modularity lifting."
+ },
+ {
+  "name": "GlobalShtukasAndFunctionFieldLanglands",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "14G",
+   "11F",
+   "22E"
+  ],
+  "distance": 9,
+  "title": "Global shtukas and Langlands over function fields",
+  "summary": "Develop global shtukas, which combine bundles on a curve over a finite field with Frobenius modifications. The planned theory constructs their moduli and cohomology, partial Frobenius actions and excursion operators. Targets include the automorphic-to-Galois parameter construction for general reductive groups and a separate full GL_n correspondence, with local–global comparison and coefficients away from the field characteristic."
+ },
+ {
+  "name": "GrossZagierAndArithmeticHeights",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "14G",
+   "11F",
+   "14C"
+  ],
+  "distance": 9,
+  "title": "Gross–Zagier formulas and arithmetic heights",
+  "summary": "Develop formulas relating heights of special points on curves and abelian varieties to derivatives of automorphic L-functions. The planned construction combines Poincaré pairings, arithmetic intersections, toric periods and theta kernels, culminating in the quaternionic Shimura-curve Gross–Zagier formula over totally real fields. Explicit specializations and an ordinary p-adic logarithmic formula connect these identities to arithmetic descent."
+ },
+ {
+  "name": "HabiroCohomologyFoundations",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "13F",
+   "19D",
+   "14G"
+  ],
+  "distance": 10,
+  "title": "q-Hodge filtrations and Habiro cohomology",
+  "summary": "Develop q-deformed de Rham cohomology with arithmetic gluing across cyclotomic completions. The planned theory constructs q-Hodge filtrations, q-de Rham–Witt objects and Habiro-valued cohomology, relating them to ordinary, crystalline and prismatic theories. Existence and multiplicative structures carry specific smoothness, dimension and prime-inversion conditions; a canonical q-Hodge filtration for every ring is not asserted."
+ },
+ {
+  "name": "HabiroCyclotomicCompletions",
+  "source": "Birkbeck campaign",
+  "msc": "13J",
+  "msc2": [
+   "13B",
+   "11R",
+   "57K"
+  ],
+  "distance": 2,
+  "title": "Cyclotomic completions and classical Habiro rings",
+  "summary": "Construct Habiro-style completions of polynomial rings and modules along cyclotomic factors. The planned theory studies their topology and universal properties, evaluates elements at roots of unity and forms Taylor expansions around those roots. Connectedness and rigidity results explain how local expansions determine global elements, while coefficient algorithms, prime inversion and component decompositions make the arithmetic concrete."
+ },
+ {
+  "name": "HabiroNahmSeries",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11R",
+   "33D",
+   "57K"
+  ],
+  "distance": 7,
+  "title": "Nahm series, asymptotics and Habiro integrality",
+  "summary": "Study arithmetic q-series arising from Nahm equations, including their asymptotic expansions near roots of unity and their relation to Bloch groups. The planned results establish specified integrality and Frobenius congruences, identify membership in Habiro modules and compare modular behavior at cusps. The proved implication from modularity to Bloch torsion is distinguished from the full range of Nahm-type conjectures."
+ },
+ {
+  "name": "HabiroNumberFields",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "19D",
+   "19F",
+   "13J"
+  ],
+  "distance": 9,
+  "title": "Number-field Habiro rings, finite regulators and K₃-graded modules",
+  "summary": "Construct number-field versions of Habiro rings by gluing Taylor expansions through arithmetic Frobenius relations. The planned theory then uses finite Chern classes, cyclic quantum dilogarithms and regulators to build modules indexed by K₃ classes. This connects cyclotomic analytic expansions with algebraic K-theory while keeping the ring construction separate from the additional regulator and graded-module structures."
+ },
+ {
+  "name": "HabiroRings",
+  "source": "Birkbeck campaign",
+  "msc": "13F",
+  "msc2": [
+   "13J",
+   "14F",
+   "11R"
+  ],
+  "distance": 9,
+  "title": "Habiro rings: relative arithmetic constructions and cohomological coefficients",
+  "summary": "Develop relative Habiro rings for étale algebras over suitable rings equipped with compatible Frobenius lifts. The planned construction combines cyclotomic descent, q-Witt rings and derived-complete modules, then proves Taylor presentations and comparison with explicit number-field rings. These coefficient structures support q-deformed cohomology; the required covering, étaleness and completeness conditions remain part of the mathematical statements."
+ },
+ {
+  "name": "HeckeStacksAndLocalShtukas",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "11S",
+   "22E",
+   "14F"
+  ],
+  "distance": 10,
+  "title": "Roadmap: Hecke correspondences and local shtuka cohomology",
+  "summary": "Construct moduli spaces of modifications of bundles and the local shtukas they define over nonarchimedean fields. The planned theory builds Hecke correspondences, coefficient kernels and coherent actions, then realizes bounded local shtuka cohomology as a representation-valued functor. Commuting group actions and functorial comparisons connect this geometry to local Langlands, with coefficients prime to the residue characteristic."
+ },
+ {
+  "name": "HeegnerPointEulerSystems",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "11R",
+   "14G",
+   "14H"
+  ],
+  "distance": 9,
+  "title": "Heegner-point Euler systems and arithmetic descent",
+  "summary": "Construct compatible families of Heegner points using complex multiplication, ring class fields and modular parametrizations. The planned proof establishes norm and reduction relations, forms Kummer and derivative classes, and verifies the local conditions needed for Kolyvagin descent. Targets include precise rank-one bounds and Tate–Shafarevich finiteness statements, followed by anticyclotomic variation with explicit nonvanishing and exceptional-prime hypotheses."
+ },
+ {
+  "name": "HeightsRationalPointsAndObstructions",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "11G",
+   "14K",
+   "14F"
+  ],
+  "distance": 8,
+  "title": "Heights, rational points and obstructions",
+  "summary": "Develop methods for understanding rational points through heights, descent and local–global obstructions. The planned theory constructs canonical heights, studies Mordell–Weil descent and compares adelic Brauer evaluations with torsor obstructions, then treats finiteness on curves and subvarieties of abelian varieties. Existence, finiteness, effective enumeration and completeness of an obstruction are kept as distinct mathematical questions."
+ },
+ {
+  "name": "HigherLocalFieldsAndHigherClassFieldTheory",
+  "source": "Birkbeck campaign",
+  "msc": "11S",
+  "msc2": [
+   "19F",
+   "19D",
+   "14C"
+  ],
+  "distance": 7,
+  "title": "Higher local fields and higher class field theory",
+  "summary": "Extend local and global reciprocity to fields with several successive valuation levels and to higher-dimensional arithmetic schemes. The planned theory develops higher topologies, Milnor K-groups, residues, norms, duality and ramification, followed by Parshin chains and higher adeles. The residue tower and characteristic profile remain explicit, since familiar locally compact field arguments need not apply."
+ },
+ {
+  "name": "HilbertModularVarietiesAndShimuraCurves",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "14G",
+   "14K",
+   "11F"
+  ],
+  "distance": 8,
+  "title": "Roadmap: Hilbert Modular Varieties And Shimura Curves",
+  "summary": "Construct Hilbert modular varieties and quaternionic Shimura curves over totally real fields through moduli of abelian varieties with extra structure. The planned theory handles polarizations, level structures, compactifications, integral models and bad-prime uniformization, including ramified rational primes. Hecke correspondences and cohomology connect these spaces to modular forms, Galois representations and arithmetic modularity arguments."
+ },
+ {
+  "name": "HodgeTateAndCanonicalSubgroups",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14F",
+   "11F",
+   "14L"
+  ],
+  "distance": 9,
+  "title": "Roadmap: Hodge–Tate theory, canonical subgroups, and automorphic period maps",
+  "summary": "Develop Hodge–Tate period maps and canonical subgroups for p-divisible groups and arithmetic families of abelian varieties. The planned theory builds relative period comparisons, integral differentials, torsors and quantitative subgroup bounds, then studies canonical and anticanonical regions. Logarithmic comparison extends the picture toward compactified Shimura towers, retaining the precise prime and valuation bounds needed for automorphic applications."
+ },
+ {
+  "name": "IgusaVarietiesAndTorsionConcentration",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "14G",
+   "11F",
+   "14F"
+  ],
+  "distance": 10,
+  "title": "Igusa varieties, compactified period fibers and torsion concentration",
+  "summary": "Develop Igusa varieties over Newton strata and relate them to fibres of compactified Hodge–Tate period maps. The planned construction includes central leaves, towers, compactifications, nearby cycles and trace comparisons, leading to cohomological concentration under specified genericity hypotheses. These geometric results explain how particular Hecke eigensystems constrain the degrees in which torsion cohomology of unitary Shimura varieties can occur."
+ },
+ {
+  "name": "IntegralHeckeAndGaloisDeterminants",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "13A",
+   "11R",
+   "22E"
+  ],
+  "distance": 5,
+  "title": "Integral Hecke actions, determinants and interpolation",
+  "summary": "Develop algebraic methods for extracting Galois information from Hecke actions with integral, torsion or nonreduced coefficients. The planned theory constructs polynomial-law determinants and Cayley–Hamilton algebras, proves reconstruction under appropriate hypotheses, and handles interpolation, nilpotent descent and specialization. This extends arithmetic comparison beyond characteristic-zero eigenforms while preserving the distinction between a determinant and a genuine representation."
+ },
+ {
+  "name": "IntegralIwasawaTheory",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "11S",
+   "11F",
+   "19F"
+  ],
+  "distance": 9,
+  "title": "Arithmetic Iwasawa theory and the main conjecture",
+  "summary": "Develop class groups, units and cohomological complexes in p-adic towers of number fields. Planned results include class-number growth in general Z_p-extensions, cyclotomic control, p-adic zeta interpolation and precise main-conjecture comparisons. Classical odd-prime arguments and all-prime integral determinant formulations receive separate constructions, including Brumer–Stark inputs; special cases involving Vandiver’s condition do not become general vanishing claims."
+ },
+ {
+  "name": "InverseGaloisAndArithmeticFundamentalGroups",
+  "source": "Birkbeck campaign",
+  "msc": "12F",
+  "msc2": [
+   "11R",
+   "14H",
+   "14F"
+  ],
+  "distance": 7,
+  "title": "Inverse Galois theory and arithmetic fundamental groups",
+  "summary": "Finite covers connect the topology of algebraic varieties with the Galois groups of fields. This development follows that connection through Galois categories, arithmetic fundamental groups, Hilbert irreducibility, branch cycles and Hurwitz spaces. Its arithmetic targets include regular realizations, specialization to number fields and solvable embedding problems, while the inverse Galois problem over the rationals for an arbitrary finite group remains an open endpoint."
+ },
+ {
+  "name": "K2SymbolsBrauer",
+  "source": "Birkbeck campaign",
+  "msc": "19C",
+  "msc2": [
+   "19F",
+   "11R",
+   "19D"
+  ],
+  "distance": 5,
+  "title": "Explicit K₂: symbols, residues and reciprocity",
+  "summary": "Symbols give concrete representatives for elements of the second algebraic K-group. Starting from Steinberg groups and Matsumoto's presentation, this development studies tame symbols, valuation residues, reciprocity in rational function fields and arithmetic tame kernels. Comparisons with Hilbert symbols and relative K-groups connect explicit calculations to class field theory, regulators and the arithmetic of fields and rings."
+ },
+ {
+  "name": "K3BlochGroups",
+  "source": "Birkbeck campaign",
+  "msc": "19D",
+  "msc2": [
+   "11R",
+   "19F",
+   "20J"
+  ],
+  "distance": 7,
+  "title": "Explicit K₃ and Bloch groups",
+  "summary": "The third algebraic K-group contains arithmetic information that can be expressed through the Bloch group and its functional relations. This development separates decomposable and indecomposable classes, constructs the relevant homological models and establishes Suslin's exact sequence with its torsion terms retained. Explicit elements and calculations provide a route from abstract K-theory to the regulators and special values studied elsewhere in the atlas."
+ },
+ {
+  "name": "KTheoryFiniteLocalFields",
+  "source": "Birkbeck campaign",
+  "msc": "19D",
+  "msc2": [
+   "11S",
+   "55Q",
+   "14F"
+  ],
+  "distance": 9,
+  "title": "K-theory of finite and local fields",
+  "summary": "Finite fields and nonarchimedean local fields provide fundamental examples in algebraic K-theory. This development starts with Quillen's finite-field calculation and studies rigidity for henselian rings, local K₂, Witt vectors and higher K-groups. Trace methods connect these groups to more computable invariants. Integral groups and their completions are kept distinct, allowing local calculations to feed accurately into global arithmetic comparisons."
+ },
+ {
+  "name": "KTheoryLowDegrees",
+  "source": "Birkbeck campaign",
+  "msc": "19A",
+  "msc2": [
+   "19B",
+   "13D",
+   "11R"
+  ],
+  "distance": 4,
+  "title": "Explicit K₀: projectives, rank and determinant",
+  "summary": "Low-degree K-theory turns projective modules and invertible matrices into arithmetic invariants. The development builds K₀ from finitely generated projectives, with rank, tensor operations and determinant, then constructs K₁ through stabilization and elementary matrices. Dedekind domains, rings of S-integers, vector bundles and curves supply concrete examples. Comparisons with homotopical K-theory make these explicit constructions compatible with the higher theory."
+ },
+ {
+  "name": "KatoEulerSystems",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11G",
+   "11R",
+   "14G"
+  ],
+  "distance": 9,
+  "title": "Kato classes and explicit reciprocity for modular forms",
+  "summary": "Kato's Euler system links modular forms to Galois cohomology through classes built from the geometry of modular curves. The construction proceeds from Siegel units and K-theoretic symbols to global zeta classes and their regulators. Its central arithmetic result is the explicit reciprocity law relating those regulators to modular L-values, followed by the nonvanishing and divisibility statements used in Iwasawa theory."
+ },
+ {
+  "name": "LanglandsParameterStacks",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "20G",
+   "22E",
+   "14D"
+  ],
+  "distance": 9,
+  "title": "Roadmap: parameter stacks, invariant theory and spectral coefficients",
+  "summary": "Langlands parameters can be organized into moduli spaces that remember both their deformations and their symmetries. This development constructs stacks of continuous parameters for connected reductive groups, their quotient geometry and the invariant functions described by excursion operators. Integral invariant theory and perfect complexes then provide the geometric coefficients for spectral actions, without assuming a representation-theoretic correspondence in advance."
+ },
+ {
+  "name": "LefschetzPencilsAndVanishingCycles",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14D",
+   "14G",
+   "14C"
+  ],
+  "distance": 8,
+  "title": "Lefschetz pencils, nearby cycles and vanishing cycles",
+  "summary": "When a family of varieties develops singular fibres, nearby and vanishing cycles record how its cohomology changes. This development constructs those functors and their monodromy actions, analyzes ordinary quadratic singularities through the Picard–Lefschetz formula, and builds Lefschetz pencils. Global vanishing cycles, open monodromy and invariant-cycle results supply the geometric tools needed for purity, degeneration arguments and the Weil conjectures."
+ },
+ {
+  "name": "LocalGaloisDeformationRings",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "14L",
+   "11S",
+   "11R"
+  ],
+  "distance": 8,
+  "title": "Roadmap: Local Galois deformation rings and their components",
+  "summary": "Local deformation rings describe how a Galois representation varies while specified arithmetic properties are preserved. The development constructs unrestricted, finite-flat, potentially semistable and ordinary deformation conditions, together with their integral rings and geometric components. It includes local models and delicate small-prime cases. These objects determine which local representations can appear in global patching and modularity-lifting arguments."
+ },
+ {
+  "name": "LocallyAnalyticDistributions",
+  "source": "Birkbeck campaign",
+  "msc": "11S",
+  "msc2": [
+   "46S",
+   "11F",
+   "14G"
+  ],
+  "distance": 5,
+  "title": "locally analytic distributions, growth, and character spaces",
+  "summary": "Locally analytic distributions extend p-adic measures so that they can capture growth and nonordinary phenomena. This development builds spaces of locally analytic functions and their duals, the Amice transform, growth conditions and uniqueness results. Mellin transforms connect distributions to analytic character spaces, while families and operator theory make the construction useful for p-adic modular forms, L-functions and regulators."
+ },
+ {
+  "name": "LogicAndDefinabilityInNumberTheory",
+  "source": "Birkbeck campaign",
+  "msc": "11U",
+  "msc2": [
+   "03C",
+   "11S",
+   "14E"
+  ],
+  "distance": 6,
+  "title": "Logic, definability, valued fields and motivic integration",
+  "summary": "Logical descriptions of arithmetic sets can yield uniform theorems across many fields. This development studies languages and interpretations, valued-field logic, p-adic definable integration and motivic transfer. It also covers Diophantine definability and undecidability, alongside o-minimal counting and applications to unlikely intersections. The emphasis is on the precise structures and hypotheses that allow geometric or arithmetic behavior to be controlled uniformly."
+ },
+ {
+  "name": "MetaplecticAutomorphicForms",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "22E",
+   "20G",
+   "11E"
+  ],
+  "distance": 7,
+  "title": "Metaplectic groups, Weil representations and automorphic theta kernels",
+  "summary": "Theta functions arise from the Weil representation of a metaplectic cover of a symplectic group. This development constructs the Heisenberg and metaplectic groups, the Stone–von Neumann theorem, explicit Weil operators and local theta representations. It then passes to adelic theta kernels and automorphic forms, including half-integral weights, Jacobi forms and similitudes. These constructions connect harmonic analysis, quadratic forms and automorphic representation theory."
+ },
+ {
+  "name": "ModularCurvesPartII",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "14H",
+   "14D",
+   "11F"
+  ],
+  "distance": 8,
+  "title": "Roadmap: Modular Curves PartII",
+  "summary": "Modular curves admit analytic descriptions as quotients of the upper half-plane and algebraic descriptions as moduli spaces of elliptic curves. This development proves their comparison, including level structures, cusps, compactification and descent. Generalized elliptic curves and Tate curves describe integral boundary geometry. Hecke correspondences, Jacobians and modular quotients then connect the geometry to modular forms, Galois representations and level-changing arguments."
+ },
+ {
+  "name": "ModularIwasawaMainConjectures",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "11F",
+   "11G",
+   "11S"
+  ],
+  "distance": 10,
+  "title": "main conjectures for modular forms and their families",
+  "summary": "Iwasawa main conjectures relate p-adic L-functions to the size of Selmer groups in infinite extensions. This development formulates ordinary, cohomological and signed versions for modular forms and compares their characteristic ideals and determinant descriptions. It develops the established theorem families with their arithmetic hypotheses, including ordinary elliptic curves and variation in families, and draws the corresponding consequences for Selmer groups and special values."
+ },
+ {
+  "name": "ModularSymbolsPadicLFunctions",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11S",
+   "11R",
+   "11G"
+  ],
+  "distance": 7,
+  "title": "modular symbols and analytic p-adic L-functions of modular forms",
+  "summary": "Modular symbols translate modular forms into cohomological objects whose integrals recover special L-values. This development constructs their Hecke actions, periods and p-adic distributions for cuspidal eigenforms with a chosen refinement at p. Ordinary, noncritical finite-slope and established critical-slope constructions are treated separately. The resulting p-adic L-functions retain the coefficient, level and normalization data needed for arithmetic applications."
+ },
+ {
+  "name": "ModularityAndLanglandsExtensions",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "22E",
+   "11R"
+  ],
+  "distance": 10,
+  "title": "Modularity, automorphy and Langlands endpoint extensions",
+  "summary": "Modularity and automorphy connect Galois representations to modular or automorphic forms. This development assembles broader endpoints, including weight-one results, potential automorphy, symmetric powers, Sato–Tate and established functorial transfers. It also brings classical-group classification into the picture. Proven theorem families retain their hypotheses, while unrestricted functoriality and broader Langlands correspondences are presented as conjectural directions rather than assumed conclusions."
+ },
+ {
+  "name": "MotivesAndAlgebraicCycles",
+  "source": "Birkbeck campaign",
+  "msc": "14C",
+  "msc2": [
+   "14F",
+   "18M",
+   "18G"
+  ],
+  "distance": 8,
+  "title": "Algebraic cycles, pure and mixed motives",
+  "summary": "Motives organize the cohomological information carried by algebraic varieties into a common mathematical language. This development begins with algebraic cycles and correspondences, then constructs pure and mixed motives, Tate objects and realization functors. Numerical equivalence, semisimplicity, Nori's construction and motivic Galois groups connect the categorical theory to periods. Cycle conjectures and their proven cases describe the remaining arithmetic questions."
+ },
+ {
+  "name": "MotivicEtaleKTheory",
+  "source": "Birkbeck campaign",
+  "msc": "19E",
+  "msc2": [
+   "14F",
+   "19F",
+   "14C"
+  ],
+  "distance": 9,
+  "title": "Motivic and étale methods for arithmetic K-theory",
+  "summary": "Motivic and étale cohomology connect algebraic cycles, Galois cohomology and higher K-groups. This development builds higher Chow groups and motivic complexes, then develops the norm-residue theorem through its geometric and cohomological ingredients. Motivic filtrations, coniveau methods and spectral sequences lead to arithmetic K-theory comparisons. Duality, regulators and integral coefficient structures make these comparisons usable in local and global arithmetic."
+ },
+ {
+  "name": "NeronModelsAndSemistableAbelianVarieties",
+  "source": "Birkbeck campaign",
+  "msc": "14K",
+  "msc2": [
+   "14L",
+   "14D",
+   "14G"
+  ],
+  "distance": 8,
+  "title": "Roadmap: Néron models and semistable abelian varieties",
+  "summary": "A Néron model extends an abelian variety over a local field to a smooth group scheme over its valuation ring. This development studies the mapping property, special fibres, component groups and semistable uniformization. Picard schemes of degenerating curves connect the construction to Jacobians. Tate modules, conductors and local factors then translate reduction geometry into the arithmetic information needed for modularity and finiteness theorems."
+ },
+ {
+  "name": "NoncommutativeAndEquivariantIwasawa",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "19B",
+   "11S",
+   "11G"
+  ],
+  "distance": 10,
+  "title": "Noncommutative and equivariant Iwasawa theory",
+  "summary": "Noncommutative Iwasawa theory studies arithmetic over extensions with p-adic Lie groups as Galois groups. Completed group rings, Ore localizations and relative K-groups replace the characteristic ideals available in the commutative setting. This development builds characteristic elements, Artin evaluations and equivariant arithmetic complexes, then formulates interpolation and main-theorem statements with their hypotheses. Descent and leading terms connect the theory to finite-level arithmetic."
+ },
+ {
+  "name": "OrdinaryAutomorphicFormsAndModularityLifting",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11R",
+   "14F"
+  ],
+  "distance": 9,
+  "title": "Roadmap: Ordinary automorphic forms and ordinary modularity lifting",
+  "summary": "Ordinary modular forms vary in p-adic families controlled by Hecke algebras. This development constructs ordinary projectors, Hida control theorems and the associated Galois and deformation families. Ordinary comparisons between deformation rings and Hecke algebras lead to modularity-lifting results, including residually reducible and small-prime branches. These results supply arithmetic cases that require their own ordinary methods within broader modularity arguments."
+ },
+ {
+  "name": "OverconvergentAutomorphicForms",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11G",
+   "14G"
+  ],
+  "distance": 10,
+  "title": "Roadmap: overconvergent Hilbert modular forms and p-adic automorphic coefficients",
+  "summary": "Overconvergent automorphic forms allow p-adic weights to vary analytically beyond classical algebraic weights. This development constructs their coefficient sheaves from characters, representations and Hodge–Tate torsors, with Hilbert modular forms as a detailed application. Integral structures, descent, cusps and Hecke operators are included. Comparison with other geometric constructions and with ordinary Hida theory places these forms within a common p-adic framework."
+ },
+ {
+  "name": "PELModuli",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "11G",
+   "14K"
+  ],
+  "distance": 9,
+  "title": "Roadmap: Siegel and PEL moduli problems",
+  "summary": "Moduli spaces of polarized abelian varieties with endomorphisms and level structure provide concrete arithmetic models of Shimura varieties. This development formulates those moduli problems, proves representability and studies smooth integral geometry at suitable primes. It includes reflex fields, complex uniformization and canonical models. Siegel, modular and Hilbert examples show how the general construction produces the families used in automorphic and p-adic geometry."
+ },
+ {
+  "name": "PadicDifferentialEquationsAndRigidCohomology",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "12H",
+   "14G",
+   "11G"
+  ],
+  "distance": 9,
+  "title": "p-adic differential equations, rigid cohomology and p-adic weights",
+  "summary": "P-adic differential equations offer a cohomological approach to varieties in positive characteristic. This development builds dagger algebras, Robba rings, differential modules and Frobenius slopes, then develops local monodromy and overconvergent isocrystals. Rigid cohomology, compact supports, duality and trace formulas connect the analytic theory to point counting. Comparisons with crystalline cohomology and weight results supply arithmetic applications with their precise coefficient hypotheses."
+ },
+ {
+  "name": "PadicFamilies",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11G",
+   "46S",
+   "14G"
+  ],
+  "distance": 9,
+  "title": "Hida and Coleman families, period modules, and family L-functions",
+  "summary": "P-adic families organize modular eigenforms as their weights and eigenvalues vary. This development constructs integral ordinary Hecke algebras and Hida families, then builds finite-slope eigenvarieties and their coherent period and modular-symbol spaces. Family L-functions connect geometric variation to special values, including critical specializations. The ordinary theory over totally real fields extends the same ideas to Hilbert modular forms."
+ },
+ {
+  "name": "PadicHodgeRegulators",
+  "source": "Birkbeck campaign",
+  "msc": "11S",
+  "msc2": [
+   "11R",
+   "19F",
+   "14F"
+  ],
+  "distance": 10,
+  "title": "p-adic regulators and the local K₃ calculation",
+  "summary": "P-adic regulators carry algebraic K-theory and motivic classes into local Galois cohomology and period spaces. This development connects étale and syntomic regulators with Bloch–Kato exponentials, Iwasawa cohomology and Perrin–Riou's big logarithm. Explicit local K₃ calculations and interpolation formulas link the constructions to p-adic L-values. Signed and noncrystalline extensions broaden the arithmetic settings in which these comparisons can be used."
+ },
+ {
+  "name": "PadicHodgeTheory",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "11S",
+   "14G",
+   "11F"
+  ],
+  "distance": 9,
+  "title": "Roadmap: p-adic Hodge theory and geometric comparison",
+  "summary": "P-adic Hodge theory relates Galois representations to linear algebra equipped with filtrations, Frobenius and monodromy. This development constructs period rings and functors, admissibility conditions and geometric comparison theorems. Integral and small-weight theories address finer arithmetic structure, while relative period sheaves and analytic coefficient rings support families. The resulting comparisons identify the local properties of representations arising from varieties and automorphic forms."
+ },
+ {
+  "name": "PadicLocalLanglandsForGL2Qp",
+  "source": "Birkbeck campaign",
+  "msc": "11S",
+  "msc2": [
+   "22E",
+   "11F"
+  ],
+  "distance": 10,
+  "title": "Roadmap: p-adic local Langlands for GL₂(Q_p)",
+  "summary": "The p-adic local Langlands correspondence connects two-dimensional Galois representations with p-adic representations of GL₂ over the p-adic rationals. This development builds the relevant analytic categories and Colmez's construction using Robba rings and semilinear modules. Locally algebraic vectors recover classical compatibility, while blocks, projective envelopes and deformation rings connect the local correspondence to modern modularity-lifting arguments."
+ },
+ {
+  "name": "PadicMeasuresIwasawaAlgebras",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "11S",
+   "46S",
+   "13F"
+  ],
+  "distance": 4,
+  "title": "p-adic measures, completed group algebras, and characteristic ideals",
+  "summary": "P-adic measures and completed group rings provide the common language for interpolation and Iwasawa modules. This development constructs continuous duals, convolution and Mahler–Amice transforms, then studies characters, weight spaces and pseudomeasures. Weierstrass theory and module structure lead to characteristic ideals and specialization formulas. Determinants and duality extend these tools to coefficient rings needed for arithmetic families."
+ },
+ {
+  "name": "PerfectoidQuotients",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14F",
+   "13D",
+   "13J"
+  ],
+  "distance": 9,
+  "title": "Roadmap: perfectoid quotients and their prismatic prerequisites",
+  "summary": "Quotients of perfectoid rings involve subtle interactions between integral algebra and derived p-adic geometry. This development connects perfectoid rings to delta-rings, perfect prisms and prismatic cohomology, including Hodge–Tate comparison and descent. Quasisyntomic covers and André's flatness lemma provide the ingredients for perfectoidization and its surjectivity results. The endpoint describes closed perfectoid quotients with the algebraic hypotheses made explicit."
+ },
+ {
+  "name": "PerfectoidShimuraVarieties",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "11G",
+   "11S",
+   "11F"
+  ],
+  "distance": 10,
+  "title": "Roadmap: Shimura towers and perfectoid representability",
+  "summary": "Passing to infinite p-power level reveals perfectoid geometry in towers of Shimura varieties. This development starts with the Siegel case, proceeds through Hodge type to pre-abelian type, and includes minimal compactifications within the established scope. Hodge–Tate period maps and coefficient comparisons connect the infinite tower to finite-level arithmetic. Modular and Hilbert towers provide explicit examples of the construction."
+ },
+ {
+  "name": "PerfectoidSpaces",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14F",
+   "11S",
+   "13B"
+  ],
+  "distance": 8,
+  "title": "Roadmap: perfectoid rings and spaces",
+  "summary": "Perfectoid spaces let mixed-characteristic geometry be studied through a corresponding characteristic-p space. This development constructs perfectoid rings, tilting and untilting, rational localizations and the sheaf theory of their adic spaces. Almost purity connects finite étale covers across tilting. Limits, approximation, quotients and pro-étale presentations then provide the geometric tools needed for Shimura towers, diamonds and p-adic comparison theorems."
+ },
+ {
+  "name": "PeriodsAndSpecialValues",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "11M",
+   "19A",
+   "14F"
+  ],
+  "distance": 10,
+  "title": "Periods, motivic L-values and special-value conjectures",
+  "summary": "Periods compare different cohomological realizations of a motive and help describe the arithmetic of its L-function. This development studies period lines, critical values, regulator determinants and leading terms, including integral and equivariant refinements. It connects established special-value results with the Birch–Swinnerton-Dyer and Bloch–Kato conjectures. Multiple zeta values and period differential equations provide further concrete settings for these comparisons."
+ },
+ {
+  "name": "PhiGammaModulesAndIwasawaCohomology",
+  "source": "Birkbeck campaign",
+  "msc": "11S",
+  "msc2": [
+   "14F",
+   "11R",
+   "11F"
+  ],
+  "distance": 8,
+  "title": "(φ,Γ)-modules, Herr complexes and local Iwasawa cohomology",
+  "summary": "Semilinear modules with Frobenius and cyclotomic group actions turn local Galois representations into analytic algebra. This development constructs their étale equivalence, overconvergent and Robba realizations, and Herr complexes computing Galois cohomology. The psi operator supplies a comparison with local Iwasawa cohomology. Wach modules, crystalline lattices and relative families prepare the tools used in p-adic regulators and signed local conditions."
+ },
+ {
+  "name": "Polylogarithms",
+  "source": "Birkbeck campaign",
+  "msc": "19F",
+  "msc2": [
+   "11R",
+   "19E",
+   "14G"
+  ],
+  "distance": 9,
+  "title": "Polylogarithms, explicit regulators and Zagier statements",
+  "summary": "Polylogarithms encode functional equations and arithmetic information that can be organized into regulator complexes. This development starts with classical and single-valued functions, then constructs explicit weight-two and weight-three regulators and compares them with algebraic K-theory. Curves provide further geometric examples. Established low-weight special-value results are developed alongside precise formulations of the broader Zagier and elliptic Beilinson conjectures."
+ },
+ {
+  "name": "PotentialAutomorphyInfrastructure",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "14G",
+   "11G",
+   "11R"
+  ],
+  "distance": 10,
+  "title": "Reusable infrastructure for potential automorphy over CM fields",
+  "summary": "Potential automorphy seeks automorphic realizations of Galois representations after extending the base field. This development builds the cohomological and patching tools needed over complex multiplication fields in general dimension. Integral cohomology, Fontaine–Laffaille weights, ordinary induction and derived support control changes of local conditions. Auxiliary primes and compatible systems then connect these constructions to the arithmetic arguments proving potential automorphy."
+ },
+ {
+  "name": "PotentialModularityAndCompatibleSystems",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11R",
+   "14G",
+   "11G"
+  ],
+  "distance": 9,
+  "title": "Roadmap: Potential Modularity And Compatible Systems",
+  "summary": "Potential modularity makes a Galois representation modular after a carefully chosen extension of number fields. This development uses Moret–Bailly's theorem and auxiliary moduli spaces to construct that extension, then combines residual modularity with lifting theorems. Global deformation-ring finiteness and prescribed local lifts support the construction of compatible systems. Changing the residual characteristic links these systems to broader modularity arguments."
+ },
+ {
+  "name": "PrismaticCohomology",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "19D",
+   "14A"
+  ],
+  "distance": 10,
+  "title": "Prismatic cohomology: relative, absolute, Nygaard and log variants",
+  "summary": "Prismatic cohomology unifies several p-adic cohomology theories through rings equipped with Frobenius lifts and distinguished ideals. This development constructs prisms, their sites and relative cohomology, followed by derived and absolute extensions. Hodge–Tate, crystalline and étale comparisons explain the resulting realizations. Nygaard filtrations, divided Frobenius, coefficients and logarithmic variants extend the theory to integral structures and degenerating geometry."
+ },
+ {
+  "name": "ProbabilisticAndMetricNumberTheory",
+  "source": "Birkbeck campaign",
+  "msc": "11K",
+  "msc2": [
+   "11N",
+   "11J",
+   "37A"
+  ],
+  "distance": 5,
+  "title": "Probabilistic, metric and ergodic number theory",
+  "summary": "Probability and dynamics reveal regular behavior in arithmetic sequences and Diophantine approximation. This development studies normal orders, limit laws, uniform distribution and discrepancy, then turns to metric approximation and continued fractions through ergodic methods. Arithmetic correlations and probabilistic models connect these themes. Each result specifies its averaging or measure-theoretic setting, distinguishing almost-everywhere behavior from statements about individual numbers."
+ },
+ {
+  "name": "QSeriesPartitionsAndMockModularForms",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11P",
+   "17B",
+   "05A"
+  ],
+  "distance": 7,
+  "title": "q-series, partitions, Jacobi and mock modular forms",
+  "summary": "Partition generating functions lead from formal q-series to theta functions, Jacobi forms and modular phenomena. This development studies identities, convergence, partition asymptotics and exact formulas, then introduces harmonic Maass forms and the completions of mock modular forms. Arithmetic and quantum connections, including moonshine, show how these analytic structures interact with combinatorics, special values and representation theory."
+ },
+ {
+  "name": "RankZeroOneBSD",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "11R",
+   "11F",
+   "14G"
+  ],
+  "distance": 10,
+  "title": "Rank-zero and rank-one Birch–Swinnerton-Dyer theory",
+  "summary": "The Birch–Swinnerton-Dyer conjecture predicts that the behavior of an elliptic curve's L-function reflects its rational points and arithmetic invariants. This development targets the rank equality and finiteness of the Tate–Shafarevich group for curves over the rationals of analytic rank zero or one. Quadratic twists, Heegner points and local comparisons then lead to specified prime-part leading-term formulas, with their hypotheses retained."
+ },
+ {
+  "name": "ReductiveGroupsPartII",
+  "source": "Birkbeck campaign",
+  "msc": "20G",
+  "msc2": [
+   "14L",
+   "22E",
+   "20E"
+  ],
+  "distance": 7,
+  "title": "Reductive groups, Part II: local structure and arithmetic models",
+  "summary": "Reductive groups over nonarchimedean local fields carry geometric and topological structure beyond their algebraic root data. This development constructs relative roots, valued root data and buildings, then studies parahoric group schemes, congruence subgroups and integral models. Decompositions and double-coset calculations connect the geometry to harmonic analysis. The resulting local structure supports smooth representations, Hecke algebras and arithmetic applications."
+ },
+ {
+  "name": "RefinedTraceMethods",
+  "source": "Birkbeck campaign",
+  "msc": "19D",
+  "msc2": [
+   "55P",
+   "14F",
+   "16E"
+  ],
+  "distance": 10,
+  "title": "Hochschild, cyclotomic and refined trace methods",
+  "summary": "Trace maps turn algebraic K-theory into invariants built from Hochschild and cyclic homology. This development constructs topological Hochschild homology, circle actions and cyclotomic structure, together with relative comparison theorems. Refined localizing invariants and prismatic comparisons connect these constructions to arithmetic geometry. Applications include local-field K-theory, topological K-theory and the cohomological structures appearing in Habiro-type theories."
+ },
+ {
+  "name": "RelativeFarguesFontaine",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14F",
+   "11S",
+   "13J"
+  ],
+  "distance": 10,
+  "title": "Roadmap: relative Fargues–Fontaine curves and period geometry",
+  "summary": "The relative Fargues–Fontaine curve organizes p-adic period geometry over a varying perfectoid base. This development constructs its ramified Witt coefficients, period annuli and quotient spaces in both equal and mixed characteristic. Untilts give divisors and local de Rham rings; line bundles and graded algebras describe further geometry. Patching and modifications then connect the curve to vector bundles and reductive-group structures."
+ },
+ {
+  "name": "SchemeAndStackFoundations",
+  "source": "Birkbeck campaign",
+  "msc": "14A",
+  "msc2": [
+   "14F",
+   "14C",
+   "14D"
+  ],
+  "distance": 6,
+  "title": "Scheme, stack, cohomology and intersection foundations",
+  "summary": "Schemes and stacks provide the geometric language for arithmetic moduli problems. This development covers morphisms, descent, algebraic spaces, sites and cohomology, then studies curves, divisors, Picard objects and deformation theory. Intersection theory and Riemann–Roch connect geometry to numerical invariants. These foundations support the later constructions of modular and Shimura varieties, arithmetic models, motives and cohomological comparison theorems."
+ },
+ {
+  "name": "SchemeKTheoryOperations",
+  "source": "Birkbeck campaign",
+  "msc": "19E",
+  "msc2": [
+   "14C",
+   "14F",
+   "18F"
+  ],
+  "distance": 8,
+  "title": "K-theory of schemes, localisation and operations",
+  "summary": "Algebraic K-theory of schemes records vector bundles and perfect complexes in a form compatible with geometric operations. This development constructs K-theory and G-theory, localization with supports, descent and coniveau methods. Homotopy invariance, products, exterior-power operations and Adams operations give the theory its calculational structure. Cycle classes and Riemann–Roch then connect K-theory with intersection theory and cohomology."
+ },
+ {
+  "name": "SelmerIwasawaCohomology",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "11S",
+   "11G",
+   "18G"
+  ],
+  "distance": 7,
+  "title": "Selmer groups, continuous integral cohomology, and Iwasawa cohomology",
+  "summary": "Selmer groups impose arithmetic local conditions on global Galois cohomology. This development builds continuous cohomology with integral and rational p-adic coefficients, local and global duality, and the associated Selmer structures. Passing through towers of fields produces Iwasawa cohomology and control theorems. These constructions provide the common framework for Euler systems, characteristic ideals and comparisons with p-adic L-functions."
+ },
+ {
+  "name": "SerreWeightAndLevelOptimisation",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "11G",
+   "14G",
+   "11R"
+  ],
+  "distance": 9,
+  "title": "Roadmap: Weight and level optimisation of residual modular representations",
+  "summary": "A residual Galois representation can arise from modular forms of several weights and levels. This development identifies the minimal arithmetic data predicted by Serre's recipe through level lowering, weight optimization and character control. Integral Hecke cohomology and local representation theory support the argument. The combined results, including explicitly treated exceptional cases, feed into proofs of Serre modularity and applications to elliptic curves."
+ },
+ {
+  "name": "ShimuraCompactifications",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14K",
+   "14M",
+   "14D"
+  ],
+  "distance": 9,
+  "title": "Roadmap: toroidal compactifications and boundary geometry",
+  "summary": "Compactifying a Shimura variety reveals the geometry of its degenerations and its automorphic forms at the boundary. This development builds toroidal compactifications from fans, torus embeddings and rational boundary data, and compares them with minimal compactifications. Degenerating polarized abelian schemes supply integral boundary charts. Modular, Hilbert and related moduli examples support the study of cusps, Hecke maps and overconvergent forms."
+ },
+ {
+  "name": "ShimuraData",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "11G",
+   "32M",
+   "20G"
+  ],
+  "distance": 5,
+  "title": "Roadmap: Shimura data, Hermitian domains, and adelic level structures",
+  "summary": "A Shimura datum specifies the reductive group and Hodge-theoretic structure from which a Shimura variety is built. This development constructs the Deligne torus, Hermitian symmetric domains, homogeneous variations and compact duals, then studies morphisms and adelic level structures. Distinguished families and explicit examples explain the relationship between the general definition and moduli interpretations involving elliptic or higher-dimensional abelian varieties."
+ },
+ {
+  "name": "ShimuraVarieties",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "11G",
+   "11F",
+   "32M"
+  ],
+  "distance": 9,
+  "title": "Roadmap: complex Shimura varieties and canonical models",
+  "summary": "Shimura varieties connect Hermitian symmetric domains with algebraic varieties defined over number fields. This development constructs their analytic quotients and Hecke towers, proves algebraicity and minimal compactification, and develops canonical models over reflex fields. Torus and Siegel examples lead through Hodge and abelian type to general data. Comparison with modular curves makes the construction concrete in its simplest arithmetic case."
+ },
+ {
+  "name": "SieveMethodsAndPrimePatterns",
+  "source": "Birkbeck campaign",
+  "msc": "11N",
+  "msc2": [
+   "11P",
+   "11B"
+  ],
+  "distance": 6,
+  "title": "Sieve methods, prime gaps and prime patterns",
+  "summary": "Sieve methods estimate how often integers avoid prescribed divisibility conditions. This development begins with local densities and the Brun and Selberg sieves, then adds the large sieve, bilinear sums and average distribution results for primes. These tools lead to almost-prime results and established bounded-gap and prime-cluster theorems, illustrating both the power and the arithmetic limitations of sieving."
+ },
+ {
+  "name": "SmallRamificationAndAbelianVarietyBaseCases",
+  "source": "Birkbeck campaign",
+  "msc": "11G",
+  "msc2": [
+   "11F",
+   "14K",
+   "11R"
+  ],
+  "distance": 8,
+  "title": "Roadmap: Small ramification and the base cases for Serre modularity",
+  "summary": "Strong restrictions on ramification can force Galois representations or abelian varieties not to exist. This development combines explicit discriminant bounds with small-characteristic representation theory, Fontaine's good-reduction theorem and Schoof's semistable results. Ordinary and two-dimensional arithmetic cases supply further endpoints. The resulting bounds and nonexistence theorems provide the initial and terminal cases needed in inductive proofs of modularity."
+ },
+ {
+  "name": "SmoothRepresentationsOfLocalGroups",
+  "source": "Birkbeck campaign",
+  "msc": "22E",
+  "msc2": [
+   "11F",
+   "20C"
+  ],
+  "distance": 8,
+  "title": "Smooth representations of local groups",
+  "summary": "Smooth representations are the natural representations of locally profinite groups in which vectors have open stabilizers. This development constructs their categories, Hecke algebras, induction, Jacquet functors and adjunctions, then studies admissibility and spherical representations through Satake theory. Integral coefficient families and finiteness results extend the framework beyond complex representations, supporting local Langlands theory and its arithmetic applications."
+ },
+ {
+  "name": "SpecialValuesBirchTate",
+  "source": "Birkbeck campaign",
+  "msc": "11R",
+  "msc2": [
+   "19F",
+   "11S",
+   "19D"
+  ],
+  "distance": 10,
+  "title": "Birch–Tate and arithmetic special-value formulas",
+  "summary": "The Birch–Tate formula relates a special value of a totally real number field's zeta function to the size of its second algebraic K-group. This development follows the odd-primary and two-primary arguments, including abelian-field cases, and accounts for the Euler factors introduced by S-integers. Independent calculations over the rationals provide examples, while higher special-value statements connect the theorem to broader arithmetic conjectures."
+ },
+ {
+  "name": "StableHomotopyKTheory",
+  "source": "Birkbeck campaign",
+  "msc": "19D",
+  "msc2": [
+   "55P",
+   "18F",
+   "18G"
+  ],
+  "distance": 5,
+  "title": "Homotopy foundations for algebraic K-theory",
+  "summary": "Higher algebraic K-theory relies on homotopy constructions that turn categories and groups into spaces and spectra. This development builds nerves, classifying spaces, homotopy fibres, Quillen's theorems and the plus construction. Group completion and spectrum foundations connect these models to stable invariants. Coefficients, completion and spectral sequences then provide the tools for comparing K-theoretic constructions and calculating their arithmetic consequences."
+ },
+ {
+  "name": "TorsionCohomologyInfrastructure",
+  "source": "Birkbeck campaign",
+  "msc": "11F",
+  "msc2": [
+   "14G",
+   "22E",
+   "11G"
+  ],
+  "distance": 10,
+  "title": "Reusable infrastructure for torsion in arithmetic cohomology",
+  "summary": "Torsion classes in the cohomology of arithmetic spaces carry information invisible to characteristic-zero cohomology. This development connects integral sheaves and formal models with perfectoid period maps, automorphic bundles and approximating sections. It compares coherent, completed and torsion cohomology while tracking Hecke actions. Boundary induction and determinant factorizations provide the structures needed to transport this information into arithmetic representation theory."
+ },
+ {
+  "name": "TropicalAndBerkovichArithmetic",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14T",
+   "14H",
+   "05C"
+  ],
+  "distance": 7,
+  "title": "Berkovich spaces, tropical curves and nonarchimedean arithmetic",
+  "summary": "Berkovich and tropical geometry turn parts of nonarchimedean geometry into spaces with visible metric and combinatorial structure. This development constructs analytic spectra, discs, annuli and the skeletons of semistable curves. Divisors, slope formulas and tropical multiplicities connect those models to algebraic geometry. Faithful tropicalization, model metrics and measures then support local heights, uniformization and integration in arithmetic geometry."
+ },
+ {
+  "name": "VStackSheavesAndLisseCategories",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "22E",
+   "18F"
+  ],
+  "distance": 10,
+  "title": "Roadmap: Artin v-stacks, solid and lisse coefficient categories",
+  "summary": "Sheaves on Artin v-stacks provide a setting for the geometric form of the local Langlands program. This development builds the relevant operations, local acyclicity and smoothness criteria, then introduces condensed, solid and lisse coefficient categories. Sheaves on strata of the moduli stack of bundles connect the geometry to smooth representations. Compact generation, duality and admissibility organize the resulting categories."
+ },
+ {
+  "name": "VectorBundlesAndIsocrystals",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14F",
+   "11S",
+   "14H"
+  ],
+  "distance": 9,
+  "title": "Roadmap: isocrystals, vector bundles and Banach–Colmez spaces",
+  "summary": "Vector bundles on the Fargues–Fontaine curve translate p-adic linear algebra into geometry. This development relates isocrystals and slopes to bundles, cohomology, ampleness and geometric classification, while retaining the additional structure needed for varying bases. Banach–Colmez spaces describe the associated linear geometry. Relative Harder–Narasimhan strata then organize how bundles and their slope decompositions vary in families."
+ },
+ {
+  "name": "WeightsInEtaleCohomology",
+  "source": "Birkbeck campaign",
+  "msc": "14F",
+  "msc2": [
+   "14G",
+   "11G",
+   "11F"
+  ],
+  "distance": 9,
+  "title": "Roadmap: Weights and purity in étale cohomology",
+  "summary": "Weights measure the sizes of Frobenius eigenvalues in the étale cohomology of varieties over finite fields. This development brings together the weight and purity results needed for arithmetic applications, beginning with curves and abelian varieties. Nearby cycles, Lefschetz pencils and monodromy supply the geometric reductions. The resulting comparisons support automorphic Galois representations, compatible systems and cohomological interpretations of zeta functions."
+ },
+ {
+  "name": "WeilConjectures",
+  "source": "Birkbeck campaign",
+  "msc": "14G",
+  "msc2": [
+   "14F",
+   "11G",
+   "14H"
+  ],
+  "distance": 9,
+  "title": "Weil conjectures and cohomological zeta functions",
+  "summary": "The zeta function of a variety over a finite field records its points over every finite extension. This development connects that generating function to Frobenius acting on cohomology and assembles rationality, the functional equation and the Riemann-hypothesis bounds in their appropriate geometric settings. Duality, weights and comparison theorems also yield point-counting estimates, with curves supplying concrete geometric examples."
+ }
+]

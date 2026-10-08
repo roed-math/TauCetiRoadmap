@@ -1,0 +1,1149 @@
+[
+ {
+  "name": "GeometricGroupTheory",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "XL family",
+  "est_prs": 0,
+  "wave": "A",
+  "scope": "An umbrella for infinite discrete groups studied through presentations, actions and geometry. Its members share one vocabulary, pinned in the index: Mathlib's word metric and Cayley graphs, one quasi-isometry structure, one hyperbolicity predicate, one CAT(0) predicate, one amenability predicate and the finiteness types F_n/FP_n. Lattices in Lie groups are the sibling LatticesInSemisimpleGroups; finite groups are StructureOfFiniteGroups. Outside the family: computability (LTCS), measured group theory and orbit equivalence (PRDS), mapping class groups, bounded cohomology and transformation groups (TOP), group operator algebras and L2-invariants (FAMP), curvature bounded below (GEO).",
+  "prerequisites": [
+   "Mathlib Geometry/Group (WordMetric, Growth)",
+   "TOP ClassifyingSpaces #437"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [],
+  "replaces": [
+   "GeometricGroupTheory (Annals P30, as family name)"
+  ],
+  "parent": null,
+  "milestones": "Index README: member list, dependency map, pinned shared definitions and their owners.",
+  "formalizability": "Umbrella only; each member carries its own README and Suggested.lean.",
+  "family_est_prs": 2000
+ },
+ {
+  "name": "RepresentationsOfReductiveGroups",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "XL family",
+  "est_prs": 0,
+  "wave": "A",
+  "scope": "An umbrella for representations of G(F) when G is reductive and F is a finite or non-archimedean local field, for rational representations of reductive groups in positive characteristic, and for the Coxeter, Hecke and geometric machinery these share. It starts where RepresentationTheory (finite and compact groups, characteristic-zero Lie theory) and ReductiveGroups (the groups themselves) stop. Its p-adic foundation is the Birkbeck campaign's SmoothRepresentationsOfLocalGroups, promoted as a member; buildings of p-adic groups and Moy-Prasad filtrations come from AG's BruhatTitsTheory; automorphic representations, trace formulas and Langlands correspondences stay with NT as consumers.",
+  "prerequisites": [
+   "ReductiveGroups",
+   "RepresentationTheory",
+   "ChevalleyGroups #447/#697",
+   "campaign SmoothRepresentationsOfLocalGroups",
+   "AG BruhatTitsTheory"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [],
+  "replaces": [
+   "RepresentationsOfReductiveGroups (brief: suggested family)"
+  ],
+  "parent": null,
+  "milestones": "Index README with the boundary against RepresentationTheory and ReductiveGroups.",
+  "formalizability": "Umbrella only.",
+  "family_est_prs": 1580
+ },
+ {
+  "name": "CommutativeAlgebra",
+  "campaign": "ALG",
+  "topic": "math.AC",
+  "size": "XL family",
+  "est_prs": 0,
+  "wave": "A",
+  "scope": "An umbrella for Noetherian commutative algebra beyond Mathlib's Krull dimension, regular sequences, regular local rings and Rees' Ext-depth theorem: homological local algebra, multiplicities, graded resolutions and affine algebra. Its members are CohenMacaulayRings, MultiplicitiesAndIntersections, GradedFreeResolutions and LocallyNilpotentDerivations, plus the generic stages of the Birkbeck campaign's DeformationAndDerivedPatchingAlgebra (R03.1-R03.4, R03.6, P7, P9) promoted as a member, whose depth material yields to CohenMacaulayRings. Perfectoid and big Cohen-Macaulay algebras are AG; Habiro rings go with AG's HabiroCohomology; Gorenstein homological algebra over noncommutative rings is #323.",
+  "prerequisites": [
+   "Mathlib RingTheory (Regular, Depth/Rees, KrullDimension, HilbertPoly)"
+  ],
+  "goals": {
+   "LMFDB": [],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [],
+  "replaces": [
+   "CommutativeAlgebra (brief: suggested family)"
+  ],
+  "parent": null,
+  "milestones": "Index README; pinned `depth`, `IsCohenMacaulay`, Koszul complex and Hilbert-Samuel API owners.",
+  "formalizability": "Umbrella only.",
+  "family_est_prs": 810
+ },
+ {
+  "name": "CombinatorialGroupTheory",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "L",
+  "est_prs": 250,
+  "wave": "A",
+  "scope": "This roadmap develops groups given by generators and relations and the diagrammatic and algorithmic methods for studying them. It starts from Mathlib's `PresentedGroup`, `IsFinitelyPresented`, `CoprodI`, `PushoutI`, `HNNExtension` and Nielsen-Schreier and from Tau Ceti's presentation files, and it ends at Higman's embedding theorem and the finitely presented simple Thompson groups. Diagrams and pictures use one combinatorial planar-map model. Graphs of groups are GroupsActingOnTrees; quasi-isometry invariance of Dehn functions is CoarseGeometryAndHyperbolicGroups; Turing machines and undecidability are imported from LTCS's ComputabilityTheory; linear groups and Mal'cev's residual finiteness are NilpotentSolvableAndLinearGroups.",
+  "prerequisites": [
+   "Mathlib GroupTheory presentations",
+   "AlgebraicTopology (presentation complex)",
+   "TOP ClassifyingSpaces #437 (asphericity)",
+   "LTCS ComputabilityTheory"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#196",
+    "OAI#197",
+    "OAI#247",
+    "OAI#248",
+    "OAI#250",
+    "OAI#252",
+    "OAI#253",
+    "OAI#256",
+    "OAI#257",
+    "OAI#258",
+    "OAI#285"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI Geometry/HyperbolicGroups (422 files, 57k lines: finite complexes, disk diagrams, pictures)",
+   "OAI GroupTheory/Kervaire (11k: relative pictures)",
+   "OAI GroupTheory/Thompson (9k)",
+   "OAI GroupTheory/BooneHigman (19k)",
+   "Tau Ceti GroupTheory/Presentation"
+  ],
+  "replaces": [
+   "CombinatorialGroupTheory (OAI algebra/groups)"
+  ],
+  "parent": "GeometricGroupTheory",
+  "milestones": "Tietze moves; Britton's lemma and normal forms (consume Mathlib); van Kampen's lemma, area, Dehn function; pictures and relative pictures over free products; C'(1/6) and C(4)-T(4) small cancellation: Greendlinger, Dehn's algorithm, asphericity, graphical C'(1/6); one-relator groups: Freiheitssatz, solvable word problem, Lyndon asphericity, torsion theorem; Baumslag-Solitar groups (BS(2,3) non-Hopfian); residual finiteness and Hopficity; Gerstenhaber-Rothaus (stated input) and Klyachko's theorem; word, conjugacy, isomorphism problems; Novikov-Boone; Higman embedding; Boone-Higman (classical); Thompson F, T, V and Brin-Thompson nV: presentations, normal forms, simplicity of [F,F], T, V.",
+  "formalizability": "Textbook (Lyndon-Schupp, Bogopolski, Cannon-Floyd-Parry); the diagram model is the one design risk."
+ },
+ {
+  "name": "GroupsActingOnTrees",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "M",
+  "est_prs": 120,
+  "wave": "A",
+  "scope": "Bass-Serre theory: groups acting without inversion on simplicial trees, graphs of groups and their fundamental groups, and the structure theorems they give. It consumes CombinatorialGroupTheory's amalgams and HNN normal forms and Mathlib's trees, and it ends at Stallings' ends theorem, whose corollary cd 1 implies free is proved in FinitenessPropertiesOfGroups. R-trees and hyperbolicity are CoarseGeometryAndHyperbolicGroups; the tree of SL2 over a local field is the worked example, and buildings in general are NonpositiveCurvature.",
+  "prerequisites": [
+   "CombinatorialGroupTheory",
+   "Mathlib SimpleGraph trees"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#196",
+    "OAI#256",
+    "OAI#258"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [],
+  "replaces": [
+   "Bass-Serre layer of CombinatorialGroupTheory (OAI, \"can be its own roadmap\")"
+  ],
+  "parent": "GeometricGroupTheory",
+  "milestones": "G-trees and fundamental domains; graphs of groups, pi_1 and the Bass-Serre tree; the structure theorem; free actions and Nielsen-Schreier compared with Mathlib's; Kurosh subgroup theorem; subgroups of amalgams and HNN extensions; property FA (finite groups, SL_n(Z) for n >= 3); SL2(Z) = Z/4 *_{Z/2} Z/6; Ihara's theorem for SL2(Q_p); ends (Freudenthal-Hopf), Stallings' ends theorem; Dunwoody accessibility stated.",
+  "formalizability": "Textbook (Serre, Trees; Dicks-Dunwoody)."
+ },
+ {
+  "name": "CoarseGeometryAndHyperbolicGroups",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "L",
+  "est_prs": 280,
+  "wave": "A",
+  "scope": "Coarse geometry of metric spaces and finitely generated groups, and Gromov hyperbolicity. It fixes one definition of each notion the OpenAI formalizations define ad hoc (quasi-isometry; hyperbolic space by the four-point Gromov-product condition; hyperbolic group via any finite generating set; Gromov boundary by sequences converging at infinity) and proves them equivalent to thin triangles, linear isoperimetry and the Cayley-walk and geodesic-ray formulations of the OAI comparators. It starts from Mathlib's word metric, Cayley graphs and growth files. Polynomial growth is NilpotentSolvableAndLinearGroups; CAT(0) geometry is NonpositiveCurvature; quasisymmetric uniformization (Bonk-Kleiner, Cannon's conjecture) is GEO frontier.",
+  "prerequisites": [
+   "Mathlib Geometry/Group (WordMetric, Growth)",
+   "Tau Ceti length spaces",
+   "CombinatorialGroupTheory",
+   "TOP ClassifyingSpaces #437 (K(G,1) corollary)"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#82"
+   ],
+   "OpenAI": [
+    "OAI#246",
+    "OAI#252",
+    "OAI#254",
+    "OAI#255",
+    "OAI#257",
+    "OAI#258",
+    "OAI#315",
+    "OAI#320"
+   ],
+   "LMFDB": []
+  },
+  "porting": [
+   "OAI GroupTheory/Hyperbolic (11k)",
+   "OAI Geometry/HyperbolicGroups/Basic (WordHyperbolic, IsGromovSequence)",
+   "OAI GroupTheory/PolycyclicRecognition/Analysis (coarse equivalences, SelfQuasiIsometry)",
+   "OAI Topology/ArtinGroups/ParabolicIntersections/DynamicsDefinitions (AcylindricallyHyperbolic)"
+  ],
+  "replaces": [
+   "HyperbolicGroups (OAI algebra/groups; OAI geometry/topology)",
+   "GeometricGroupTheory (Annals P30)"
+  ],
+  "parent": "GeometricGroupTheory",
+  "milestones": "QI, coarse equivalence, quasi-geodesics; Svarc-Milnor; QI invariance of finite presentability, ends, growth type and Dehn function; Grigorchuk's group has intermediate growth; equivalent definitions of delta-hyperbolicity; Morse lemma; QI invariance of hyperbolicity; hyperbolic iff Dehn presentation iff linear isoperimetric; word and conjugacy problems; Rips complex contractible (finite K(G,1) when torsion-free, finitely many conjugacy classes of finite subgroups); virtually cyclic centralizers, no Z^2; classification of isometries, ping-pong, Tits alternative; quasiconvex subgroups; boundary compact metrizable with visual metrics, QI gives boundary homeomorphism; convergence action; relatively and acylindrically hyperbolic groups (definitions, equivalences, examples); Bowditch's characterization and local connectivity of boundaries stated.",
+  "formalizability": "Textbook (Bridson-Haefliger III.H, Ghys-de la Harpe, Druțu-Kapovich)."
+ },
+ {
+  "name": "NonpositiveCurvature",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "L",
+  "est_prs": 300,
+  "wave": "A",
+  "scope": "CAT(kappa) metric spaces, the polyhedral complexes that carry them, and groups acting geometrically on them: cube complexes, Coxeter-Davis complexes and buildings. It starts from Tau Ceti's length spaces and ends at Haglund-Wise specialness and the flat torus theorem. Alexandrov spaces of curvature bounded below, Toponogov and the theorem that Riemannian manifolds with sec <= kappa are locally CAT(kappa) are GEO's. Abstract buildings, including BN-pair buildings and Euclidean buildings as CAT(0) spaces, are here; the Bruhat-Tits building of a p-adic reductive group is AG's BruhatTitsTheory, which consumes them. Artin groups beyond the right-angled case are ArtinGroupsAndGarside.",
+  "prerequisites": [
+   "Tau Ceti Topology/MetricSpace/Length",
+   "Tau Ceti GroupTheory/Coxeter, TitsSystem",
+   "RepresentationTheory/RootSystems",
+   "CoarseGeometryAndHyperbolicGroups",
+   "TOP ClassifyingSpaces #437"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#177",
+    "OAI#249",
+    "OAI#252",
+    "OAI#254",
+    "OAI#257",
+    "OAI#258",
+    "OAI#305",
+    "OAI#320",
+    "OAI#337",
+    "OAI#358"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI GroupTheory/ArtinCAT0 (9k: CAT0 predicate)",
+   "OAI GroupTheory/RightAngledArtin (2k)",
+   "OAI Geometry/CAT0Fillings/Model (IsCAT0)"
+  ],
+  "replaces": [
+   "NonpositiveCurvature (OAI)",
+   "CAT(kappa), cube- and Davis-complex half of AlexandrovAndCATSpaces (GEO)",
+   "abstract-building half of BuildingsAndCosetComplexes (COMB)"
+  ],
+  "parent": "GeometricGroupTheory",
+  "milestones": "Model spaces and comparison triangles; equivalent CAT(kappa) conditions, Alexandrov angles; convexity, projections to convex sets; Cartan-Hadamard (Alexander-Bishop); Bruhat-Tits fixed point theorem; M_kappa-polyhedral complexes with finitely many shapes (Bridson), Gromov's link condition; cube complexes: flag criterion, hyperplanes, Sageev's construction; RAAGs, Salvetti complexes, RACGs, Davis complex, Moussong (right-angled proof, general statement), Davis reflection trick; special cube complexes (Haglund-Wise), virtually special implies linear; CAT(0) groups: finite presentation, quadratic Dehn function, semisimple isometries, flat torus and solvable subgroup theorems; chamber complexes, apartments, BN-pair buildings, Solomon-Tits, Euclidean buildings are CAT(0); Wise's hierarchy and Agol's theorem stated.",
+  "formalizability": "Textbook (Bridson-Haefliger I-II, Abramenko-Brown, Davis, Sageev's PCMI notes)."
+ },
+ {
+  "name": "ArtinGroupsAndGarside",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "M",
+  "est_prs": 150,
+  "wave": "B",
+  "scope": "Artin-Tits groups of arbitrary Coxeter matrices: positive monoids, Garside theory in spherical type, parabolic subgroups, and the Salvetti and Deligne complexes that carry the K(pi,1) problem. It extends Tau Ceti's `GroupTheory/Coxeter/Artin` and parabolic API and ends at Deligne's theorem in spherical type and Charney-Davis for FC type. Right-angled Artin groups and their cube complexes are NonpositiveCurvature; braid groups as mapping class groups are TOP.",
+  "prerequisites": [
+   "Tau Ceti GroupTheory/Coxeter",
+   "RepresentationTheory/RootSystems",
+   "NonpositiveCurvature",
+   "TOP ClassifyingSpaces #437"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#249",
+    "OAI#254"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI Topology/ArtinGroups (881 files, 82k: SalvettiCover in TopCat, Coxeter parabolic and reduced-word API)"
+  ],
+  "replaces": [
+   "ArtinGroupsAndGarside (OAI)"
+  ],
+  "parent": "GeometricGroupTheory",
+  "milestones": "Positive monoid embeds (Paris); Garside monoids and normal form; word and conjugacy problems in spherical type; Brieskorn-Saito center; pure Artin groups; standard parabolics are Artin groups and their intersections (van der Lek); Salvetti complex and cover, K(pi,1) conjecture stated; Deligne's theorem; CAT(0) Deligne complex for FC and two-dimensional type (Charney-Davis); type A matches Tau Ceti's braid groups.",
+  "formalizability": "Textbook (Dehornoy et al., Foundations of Garside Theory; Paris's survey)."
+ },
+ {
+  "name": "FinitenessPropertiesOfGroups",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "L",
+  "est_prs": 220,
+  "wave": "B",
+  "scope": "Cohomological and geometric dimension and the homological and homotopical finiteness properties of discrete groups. It starts from Mathlib's `groupCohomology`, Tau Ceti's asphericity recognition and ClassifyingSpaces (#437), whose K(G,1) and identification of singular homology with group homology it consumes, and it ends at Bestvina-Brady Morse theory, Brown-Geoghegan and Poincare duality groups. Profinite cohomological dimension stays in ProfiniteProPGroups; L2-Betti numbers are FAMP's L2Invariants; aspherical manifolds and surgery are TOP.",
+  "prerequisites": [
+   "TOP ClassifyingSpaces #437",
+   "AlgebraicTopology",
+   "GroupsActingOnTrees",
+   "NonpositiveCurvature (cube complexes)",
+   "CombinatorialGroupTheory"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#196",
+    "OAI#249",
+    "OAI#250",
+    "OAI#305",
+    "OAI#315"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI GroupTheory/FiniteType (136 files, 45k: CW extension, cellular homology, HasTypeFInfty)",
+   "OAI GroupTheory/PolycyclicRecognition/Finiteness (TypeFP n, Poincare duality)"
+  ],
+  "replaces": [
+   "GroupCohomologyFiniteness (OAI; GEO/TOP report)"
+  ],
+  "parent": "GeometricGroupTheory",
+  "milestones": "cd_R, gd; finite cd implies torsion-free; Serre's finite-index theorem; cd 1 iff free (Stallings-Swan, via GroupsActingOnTrees); Eilenberg-Ganea; types FP_n, FP_infty, FL, F_n, F_infty; F_n iff FP_n and finitely presented; Euler characteristics and multiplicativity; duality and Poincare duality groups (Bieri-Eckmann), PD2 groups are surface groups stated; Brown's criterion; Bestvina-Brady Morse theory and groups; Brown-Geoghegan (F is F_infty); finiteness of Brin-Thompson nV stated.",
+  "formalizability": "Textbook (Brown, Cohomology of Groups VIII; Geoghegan, Topological Methods)."
+ },
+ {
+  "name": "NilpotentSolvableAndLinearGroups",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "A",
+  "scope": "Structure of nilpotent, polycyclic and finitely generated linear groups, and the theory of growth they culminate in. It starts from Mathlib's nilpotent and solvable groups and Tau Ceti's Fitting and Frattini files and ends at Gromov's polynomial growth theorem by Kleiner's route. Mal'cev's embedding of torsion-free nilpotent groups as lattices uses RepresentationTheory/LieGroups for the exponential map; lattices in semisimple groups are LatticesInSemisimpleGroups; growth functions and their QI invariance are CoarseGeometryAndHyperbolicGroups.",
+  "prerequisites": [
+   "Mathlib nilpotent/solvable groups",
+   "RepresentationTheory/LieGroups L0-L4",
+   "CoarseGeometryAndHyperbolicGroups (growth)",
+   "ReductiveGroups (Zariski closure)"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#213",
+    "OAI#252",
+    "OAI#255"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "Aaron1011/gromov (an OAI lake dependency: Gromov polynomial growth; coordinate first)",
+   "OAI Probability/CriticalPercolation/{Harmonic,GraphTopology,Classification}",
+   "OAI GroupTheory/PolycyclicRecognition/Lattices (Mal'cev realization)"
+  ],
+  "replaces": [
+   "NilpotentAndPolycyclicGroups (OAI)",
+   "Gromov-growth part of AmenableGroupsAndGrowth (OAI, PRDS)",
+   "growth summit of GeometricGroupTheory (Annals P30)"
+  ],
+  "parent": "GeometricGroupTheory",
+  "milestones": "Polycyclic iff solvable with max; Hirsch length; Mal'cev completions and bases, torsion-free nilpotent groups as lattices (rational structure constants); Auslander-Swan; Burnside-Schur, Jordan, Mal'cev (finitely generated linear implies residually finite), Selberg's lemma, Tits alternative; Milnor-Wolf; Bass-Guivarc'h; Lipschitz harmonic functions and Kleiner's finite-dimensionality theorem; Gromov's theorem; Trofimov's theorem stated.",
+  "formalizability": "Textbook (Segal, Polycyclic Groups; Druțu-Kapovich; Kleiner/Shalom-Tao); an external Lean proof exists."
+ },
+ {
+  "name": "AmenabilityAndPropertyT",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "L",
+  "est_prs": 300,
+  "wave": "A",
+  "scope": "Amenability and Kazhdan's property (T) for discrete and locally compact groups, following Bekka-de la Harpe-Valette and Ceccherini-Silberstein-Coornaert. It fixes one definition of amenability (an invariant mean) with equivalences to Mathlib's `FoelnerFilter`, the Finset Folner condition of the OAI comparators, Reiter, Kesten and Tarski. It develops unitary representations of locally compact groups as far as (T) needs: weak containment, the Fell topology, Howe-Moore and Mautner. FAMP's operator-algebra roadmaps, COMB's expander layer and PRDS import it; cost and orbit equivalence are PRDS; bounded cohomology is TOP.",
+  "prerequisites": [
+   "Mathlib Haar measure, Hilbert spaces, FoelnerFilter",
+   "OperatorTheory #126 (spectral calculus)",
+   "CoarseGeometryAndHyperbolicGroups",
+   "KT campaign K2SymbolsBrauer T.1 (Steinberg groups)"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#70"
+   ],
+   "OpenAI": [
+    "OAI#103",
+    "OAI#136",
+    "OAI#197",
+    "OAI#213",
+    "OAI#214",
+    "OAI#247",
+    "OAI#248",
+    "OAI#251",
+    "OAI#253",
+    "OAI#286",
+    "OAI#292",
+    "OAI#307"
+   ],
+   "LMFDB": []
+  },
+  "porting": [
+   "OAI Analysis/Unitarizability (4k)",
+   "OAI GroupTheory/SimpleAmenable (85k: topological full groups)",
+   "OAI Probability/BenjaminiSchramm/Cayley"
+  ],
+  "replaces": [
+   "AmenabilityAndPropertyT (Annals P21)",
+   "AmenableGroupsAndGrowth (OAI, PRDS; amenability part)",
+   "KazhdanPropertyT (COMB)",
+   "property-(T) layer of NuclearCStarAlgebras (FAMP)"
+  ],
+  "parent": "GeometricGroupTheory",
+  "milestones": "Invariant means; Folner, Reiter, Tarski; closure properties; elementary amenable groups; Grigorchuk's group amenable and not elementary amenable; free groups nonamenable; Kesten's criterion; Garden of Eden (Moore-Myhill) and Gottschalk surjunctivity; sofic groups and Elek-Szabo stable finiteness; Dixmier unitarizability; extensive amenability and Juschenko-Monod; Kazhdan pairs and constants; (T) implies compactly generated with compact abelianization; Delorme-Guichardet; Howe-Moore, Mautner; relative (T) for SL2(R) x R^2, (T) for SL_n(R), SL_n(Z), n >= 3; (T) passes to lattices; amenable and (T) implies compact; Ershov-Jaikin-Zapirain for EL_n(R); Kazhdan constants (Kassabov, Shalom) stated; Margulis expanders.",
+  "formalizability": "Textbook (BdlHV, Juschenko, Ceccherini-Silberstein-Coornaert); FAMP already cites it by this name."
+ },
+ {
+  "name": "GroupRings",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "M",
+  "est_prs": 120,
+  "wave": "A",
+  "scope": "Group algebras K[G] of infinite groups and Kaplansky's problems about them. It starts from Mathlib's `MonoidAlgebra` and Tau Ceti's augmentation and projective-trace files. It imports the canonical trace and Kaplansky's stable finiteness of C[G] from FAMP's L2Invariants, soficity and Elek-Szabo from AmenabilityAndPropertyT, and K_0 from the KT campaign's KTheoryLowDegrees, building a minimal K_0 layer only if that has not landed. It ends at the Bass trace conjecture and its known cases, Zalesskii's theorem, and Gardam's counterexample to the unit conjecture as a checked computation. The topic is math.GR, following arXiv practice for these problems.",
+  "prerequisites": [
+   "Mathlib MonoidAlgebra",
+   "FAMP OperatorAlgebras/L2Invariants",
+   "AmenabilityAndPropertyT",
+   "KT campaign KTheoryLowDegrees"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#196",
+    "OAI#197",
+    "OAI#207"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI RingTheory/BassTrace (24k: ModuleK0, Hattori-Stallings)",
+   "OAI RingTheory/DirectFiniteness (13k)",
+   "OAI Algebra/OddKaplansky (13k)",
+   "OAI Algebra/GroupRing (45k)"
+  ],
+  "replaces": [
+   "GroupRings (OAI)"
+  ],
+  "parent": "GeometricGroupTheory",
+  "milestones": "Supports; unique-product and orderable groups (ordered implies UP, Promislow group not UP); zero-divisor and unit conjectures for UP groups; Gardam's counterexample over F_2; idempotents and the trace; Zalesskii's rationality of tau(e); Connell's primeness and Passman's semiprimeness criteria; Hattori-Stallings rank on K_0(K[G]); Bass trace conjecture and Linnell's restriction stated; Dykema-Juschenko matrix-to-scalar transfer.",
+  "formalizability": "Textbook plus papers (Passman, The Algebraic Structure of Group Rings; Gardam 2021)."
+ },
+ {
+  "name": "LatticesInSemisimpleGroups",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "B",
+  "scope": "Lattices in locally compact groups, with semisimple Lie groups and their arithmetic subgroups as the main case, following Raghunathan and Witte Morris. Its one `IsLattice` predicate specializes FuchsianOrbifolds' `IsCofinite` and the covolume predicates of KleinianGroups (#432). It builds Mahler's criterion and Siegel sets for SL_n(Z) directly and imports finite covolume of general arithmetic groups from the NT campaign's AdelicAlgebraicGroups AA.3. The Riemannian geometry of G/K is GEO's and its CAT(0) structure is NonpositiveCurvature; (T) and Howe-Moore come from AmenabilityAndPropertyT; homogeneous dynamics is PRDS, which consumes this roadmap.",
+  "prerequisites": [
+   "RepresentationTheory/LieGroups L9",
+   "ReductiveGroups",
+   "FuchsianOrbifolds",
+   "KleinianGroups #432",
+   "campaign AdelicAlgebraicGroups AA.3",
+   "AmenabilityAndPropertyT",
+   "NonpositiveCurvature",
+   "NilpotentSolvableAndLinearGroups (Selberg)",
+   "GEO RiemannianGeometry"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#65",
+    "Annals#77"
+   ],
+   "OpenAI": [
+    "OAI#018",
+    "OAI#286"
+   ],
+   "LMFDB": []
+  },
+  "porting": [],
+  "replaces": [
+   "LatticesInSemisimpleGroups (Annals P14)"
+  ],
+  "parent": null,
+  "milestones": "Lattices, unimodularity, covolume, uniform vs nonuniform; Mahler's criterion; SL_n(Z) via Siegel sets; arithmetic subgroups and commensurability; Borel-Harish-Chandra and Godement's criterion (imported/stated); Borel density (Furstenberg); Zassenhaus neighborhoods, Kazhdan-Margulis, Margulis lemma, thick-thin stated; Moore ergodicity; higher-rank lattices have (T); rank-one list; Mostow rigidity, Margulis superrigidity, arithmeticity, normal subgroup theorem and congruence subgroup property stated; examples: H^n lattices, Bianchi groups, quaternion-algebra lattices.",
+  "formalizability": "Textbook (Witte Morris, Raghunathan); the deep rigidity theorems are statements."
+ },
+ {
+  "name": "StructureOfFiniteGroups",
+  "campaign": "ALG",
+  "topic": "math.GR",
+  "size": "L",
+  "est_prs": 230,
+  "wave": "A",
+  "scope": "The structure theory of finite groups beyond Mathlib's Sylow, nilpotent and solvable groups: characteristic subgroups and series, classes of groups, local analysis, primitive permutation groups, and the invariants that group databases display. CFSG enters only through CFSGStatement's named proposition, so results that need it carry it as a hypothesis. Character-theoretic invariants (rational tables, Schur indices, faithful degrees) are RationalAndIntegralRepresentations; LMFDB labels and SmallGroup identifiers are NT's LMFDBLabelsAndCompleteness; certified permutation-group algorithms are #717.",
+  "prerequisites": [
+   "Mathlib GroupTheory",
+   "Tau Ceti GroupTheory (Fitting, Frattini, Transfer, FrobeniusKernel)",
+   "CFSGStatement",
+   "CFSGBasicProperties #446/#698",
+   "Mathlib simplicial complexes"
+  ],
+  "goals": {
+   "LMFDB": [
+    "group.abstract",
+    "gg",
+    "nf"
+   ],
+   "OpenAI": [
+    "OAI#018",
+    "OAI#203",
+    "OAI#206",
+    "OAI#310"
+   ],
+   "Annals": []
+  },
+  "porting": [
+   "OAI GroupTheory/FiniteLattice (2.6k)"
+  ],
+  "replaces": [
+   "FiniteGroupInvariants (LMFDB P20, group-theoretic part)",
+   "maximal-subgroup and Quillen-poset needs (OAI#206, #310)"
+  ],
+  "parent": null,
+  "milestones": "Fitting and generalized Fitting subgroups, components, Bender's theorem; socle; chief series with multiplicities; Hall's theorem; Burnside and Frobenius p-nilpotence; supersolvable, metabelian, metacyclic, monomial, A- and Z-groups (Holder-Burnside-Zassenhaus), quasisimple, almost simple, perfect groups; Out(G), isoclinism and stem groups; commutator length; Mobius function of the subgroup lattice; Gassmann triples and arithmetic equivalence (Perlis); Malle's a(G), b(G); O'Nan-Scott theorem, Aschbacher's classes stated; Quillen's poset A_p(G) and S_p(G): Brown-Quillen homotopy equivalence, contractibility when O_p(G) != 1, Quillen's conjecture stated; Schreier conjecture, two-generation and Ore under CFSG.",
+  "formalizability": "Textbook (Isaacs, Kurzweil-Stellmacher, Aschbacher, Dixon-Mortimer)."
+ },
+ {
+  "name": "ModularRepresentationTheory",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "L",
+  "est_prs": 270,
+  "wave": "A",
+  "scope": "Representations of finite groups over fields of characteristic p dividing |G| and over complete discrete valuation rings: Brauer characters, blocks and defect groups, and the local-global correspondences of Brauer and Green. It starts from SemisimpleAlgebras, CharacterTheory, InductionRestriction and ModularInduction (G_0(k[G]), reduction modulo l) and ends at Brauer's main theorems, Green correspondence and the statements of the block conjectures. Rational representations of algebraic groups in characteristic p are RationalRepresentationsOfReductiveGroups; the modular theory of symmetric groups is outside.",
+  "prerequisites": [
+   "RepresentationTheory/{SemisimpleAlgebras, CharacterTheory, InductionRestriction, ModularInduction}",
+   "Tau Ceti RingTheory/CentralIdempotent, Morita"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#57"
+   ],
+   "OpenAI": [
+    "OAI#202",
+    "OAI#203"
+   ],
+   "LMFDB": []
+  },
+  "porting": [
+   "OAI RepresentationTheory/AlperinWeights, Block (statement level)"
+  ],
+  "replaces": [
+   "ModularRepresentationTheory (OAI; Annals P6)"
+  ],
+  "parent": "RepresentationTheory (existing; exclusions amended)",
+  "milestones": "Splitting p-modular systems, lifting idempotents, PIMs; Brauer characters; number of simple kG-modules equals number of p-regular classes; decomposition and Cartan matrices, C = D^T D, cde triangle; blocks, central characters, defect groups, defect zero, heights; Higman's criterion, vertices and sources, Green correspondence; Brauer homomorphism and pairs, Brauer's three main theorems; Brauer-Feit; Morita equivalence of blocks; weights and Knorr-Robinson; Alperin weight, Alperin-McKay, height zero and Donovan conjectures stated (Kessar's reduction); all blocks of S3, S4, A5.",
+  "formalizability": "Textbook (Navarro, Linckelmann I, Webb)."
+ },
+ {
+  "name": "KacMoodyAlgebras",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "A",
+  "scope": "Kac-Moody algebras of symmetrizable generalized Cartan matrices, their integrable highest-weight modules, and affine algebras as central extensions of loop algebras, following Kac. It extends RootSystems and LieHighestWeight beyond finite type and Tau Ceti's affine Dynkin types, and it ends at the Weyl-Kac character formula, the Macdonald identities, the Sugawara construction and the center at the critical level. Vertex algebras are VertexAlgebras; quantum groups are outside; affine Grassmannians are AG's.",
+  "prerequisites": [
+   "RepresentationTheory/{RootSystems, LieHighestWeight}",
+   "Tau Ceti AffineDynkinType"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#56",
+    "Annals#61"
+   ],
+   "LMFDB": [],
+   "OpenAI": []
+  },
+  "porting": [],
+  "replaces": [
+   "AffineLieAlgebras (Annals P5)"
+  ],
+  "parent": "RepresentationTheory (existing; exclusions amended)",
+  "milestones": "GCMs and the finite/affine/indefinite trichotomy; realizations; g(A) and Gabber-Kac; Weyl group as a Coxeter group; real and imaginary roots; invariant form; Verma and integrable modules; Weyl-Kac character and denominator formulas; loop realization with cocycle Res(f dg); classification of affine types; Macdonald identities; levels and vacuum modules; Segal-Sugawara and Virasoro; critical-level center dichotomy; Feigin-Frenkel stated; Frenkel-Kac construction at level one.",
+  "formalizability": "Textbook (Kac, Infinite-Dimensional Lie Algebras; Frenkel-Ben-Zvi for the critical level)."
+ },
+ {
+  "name": "CrystalBases",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "M",
+  "est_prs": 120,
+  "wave": "A",
+  "scope": "Combinatorial crystals for a root datum of finite type and the Littelmann path model, as a theory independent of quantum groups. It consumes RootSystems, LieHighestWeight's characters and SchurWeyl's tableaux and RSK, and it ends at Littelmann's generalized Littlewood-Richardson rule and the identification of type-A tableau crystals with B(lambda). Kashiwara's crystal bases of quantized enveloping algebras are outside; symmetric functions in infinitely many variables are COMB's.",
+  "prerequisites": [
+   "RepresentationTheory/{RootSystems, LieHighestWeight, SchurWeyl}"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#204"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [],
+  "replaces": [
+   "CrystalBases (OAI)"
+  ],
+  "parent": "RepresentationTheory (existing; exclusions amended)",
+  "milestones": "Abstract and seminormal crystals, morphisms, the tensor product rule (convention pinned), Stembridge axioms; B(lambda); Littelmann paths and root operators, LS paths; path-crystal character equals the Weyl character; independence of the initial path; generalized LR rule; uniqueness of normal crystals with given character; tableau crystals and RSK as a crystal isomorphism.",
+  "formalizability": "Textbook (Bump-Schilling, Crystal Bases)."
+ },
+ {
+  "name": "TiltingAndHomologicalDimensions",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "L",
+  "est_prs": 230,
+  "wave": "A",
+  "scope": "Homological dimensions of finite-dimensional algebras and the tilting theory relating them, up to the precise statements and known implications of the homological conjectures. It continues QuiverRepresentations (path algebras, Auslander-Reiten theory) and uses StablePeriodicCurved (self-injective algebras), GorensteinHomologicalAlgebra (#323) and GrothendieckEulerForms. Derived categories of coherent sheaves are AG and DG enhancements are DGAInfinity.",
+  "prerequisites": [
+   "RepresentationTheory/QuiverRepresentations (L6)",
+   "StablePeriodicCurved",
+   "GorensteinHomologicalAlgebra #323",
+   "GrothendieckEulerForms",
+   "Mathlib projective dimension, Ext"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#198",
+    "OAI#199"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI Algebra/Finitistic, AuslanderReiten, FinitisticAsymmetry; RingTheory/Tachikawa (1351 files, 135k)"
+  ],
+  "replaces": [
+   "TiltingAndHomologicalDimensions (OAI)"
+  ],
+  "parent": "RepresentationTheory (existing; exclusions amended)",
+  "milestones": "Global, finitistic (little and big), dominant and injective dimensions; finitistic dimension of monomial and radical-cube-zero algebras, Igusa-Todorov functions; tilting and cotilting modules, Brenner-Butler, Happel's derived equivalence, Rickard stated; trivial extensions are symmetric; Auslander algebras and correspondence; Morita-Tachikawa; Muller's theorem; Auslander-Gorenstein and gendo-symmetric algebras; the finitistic, Nakayama, generalized Nakayama, Auslander-Reiten, Tachikawa and Wakamatsu conjectures and the implications among them.",
+  "formalizability": "Textbook (Auslander-Reiten-Smalo, Assem-Simson-Skowronski, Yamagata)."
+ },
+ {
+  "name": "RationalAndIntegralRepresentations",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "M",
+  "est_prs": 140,
+  "wave": "A",
+  "scope": "Representations of finite groups over non-closed fields and over Z: rational character tables, Schur indices, minimal faithful degrees, ZG-lattices, and finite subgroups of GL_n over Z, Q and C, as group databases display them. It extends CharacterTheory (indicators, Galois action on characters), SemisimpleAlgebras (central simple algebras, Brauer group) and InductionRestriction. Galois modules of number-field units are NT consumers.",
+  "prerequisites": [
+   "RepresentationTheory/{CharacterTheory, SemisimpleAlgebras, InductionRestriction}",
+   "NumberFieldArithmetic (class numbers)",
+   "McKaySkewGroup #223 (finite subgroups of SU(2))"
+  ],
+  "goals": {
+   "LMFDB": [
+    "group.abstract",
+    "gg",
+    "nf"
+   ],
+   "Annals": [],
+   "OpenAI": []
+  },
+  "porting": [],
+  "replaces": [
+   "FiniteGroupInvariants (LMFDB P20, representation part)"
+  ],
+  "parent": "RepresentationTheory (existing; exclusions amended)",
+  "milestones": "Galois conjugacy, rational classes and the rational character table; Schur index via simple components of QG, Brauer-Speiser, Benard-Schacher, local indices, Brauer-Witt stated; Roquette for p-groups; minimal faithful degrees; ZG-lattices, Jordan-Zassenhaus, genus and failure of Krull-Schmidt; Diederichsen-Reiner for Z C_p; Minkowski's bound and finite subgroups of GL_2(Z), GL_3(Z); finite subgroups of SL_2(C) and GL_n(Q) for small n.",
+  "formalizability": "Textbook (Curtis-Reiner I, Isaacs ch. 10, Serre Linear Representations part III)."
+ },
+ {
+  "name": "HeckeAlgebrasAndKazhdanLusztigTheory",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "A",
+  "scope": "Iwahori-Hecke algebras of Coxeter systems with unequal parameters, the Kazhdan-Lusztig basis and polynomials, cells, and affine Hecke algebras of extended affine Weyl groups. It builds on RootSystems and Tau Ceti's Coxeter code (strong exchange, Matsumoto, Bruhat order, parabolics). It identifies the generic algebra with End_G(Ind_B^G 1) for a finite BN-pair (Tau Ceti's Tits systems) and with H(G, I) for an Iwahori subgroup of a split p-adic group, through SmoothRepresentationsOfLocalGroups SR.1 and AG's BruhatTitsTheory. Positivity of KL polynomials is SoergelBimodules; the KL conjecture is SpringerTheoryAndLocalization.",
+  "prerequisites": [
+   "RepresentationTheory/RootSystems",
+   "Tau Ceti GroupTheory/Coxeter, TitsSystem",
+   "campaign SmoothRepresentationsOfLocalGroups SR.1",
+   "AG BruhatTitsTheory (Iwahori subgroups)"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#52"
+   ],
+   "OpenAI": [
+    "OAI#168"
+   ],
+   "LMFDB": []
+  },
+  "porting": [
+   "OAI RepresentationTheory/KazhdanLusztig (34 files, 43k: Hecke, CanonicalKL, Bruhat, DyerPaths, dihedral intervals)"
+  ],
+  "replaces": [
+   "HeckeAlgebrasOfCoxeterGroups (Annals P1)",
+   "HeckeAlgebrasAndKazhdanLusztigTheory (COMB)"
+  ],
+  "parent": "RepresentationsOfReductiveGroups",
+  "milestones": "Bruhat order: subword property, intervals, Bruhat graph, Dyer's reflection subgroups; generic Hecke algebra and bar involution; KL basis; R- and KL polynomials, degree bounds, inversion, mu-function, W-graphs; parabolic KL polynomials; combinatorial invariance for lower and dihedral intervals; cells and Lusztig's a-function (P1-P15 stated); affine and extended affine Weyl groups; Iwahori-Matsumoto and Bernstein presentations, center Z[X]^W; H(G, I) is noncommutative; Iwahori's theorem for finite BN-pairs; Tits deformation.",
+  "formalizability": "Textbook (Humphreys, Bjorner-Brenti, Lusztig's Hecke Algebras with Unequal Parameters)."
+ },
+ {
+  "name": "SoergelBimodules",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "L",
+  "est_prs": 240,
+  "wave": "C",
+  "scope": "Soergel bimodules of a realization of a Coxeter system, their categorification of the Hecke algebra, and the Elias-Williamson Hodge theory that proves positivity of Kazhdan-Lusztig polynomials for every Coxeter system, following Elias-Makisumi-Thiel-Williamson. It consumes HeckeAlgebrasAndKazhdanLusztigTheory and Mathlib's graded modules. The perverse-sheaf proof for Weyl groups is a statement in SpringerTheoryAndLocalization; general combinatorial invariance is frontier.",
+  "prerequisites": [
+   "HeckeAlgebrasAndKazhdanLusztigTheory",
+   "Mathlib graded modules"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#168"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI RepresentationTheory/KazhdanLusztig (BottSamelson, GradedModules, GradedSheaves, EdgeLocalization)"
+  ],
+  "replaces": [
+   "SoergelBimodules (COMB)"
+  ],
+  "parent": "RepresentationsOfReductiveGroups",
+  "milestones": "Realizations and Demazure operators; Bott-Samelson and Soergel bimodules; Soergel's hom formula and categorification theorem; diagrammatic Hecke category (Elias-Khovanov-Williamson) and light leaves; hard Lefschetz and Hodge-Riemann for Soergel bimodules; positivity of KL polynomials; moment graphs and Fiebig sheaves stated; p-canonical basis and Williamson's counterexamples stated.",
+  "formalizability": "Recent textbook (EMTW 2020); long but self-contained."
+ },
+ {
+  "name": "RepresentationsOfFiniteGroupsOfLieType",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "L",
+  "est_prs": 300,
+  "wave": "B",
+  "scope": "Complex representations of finite reductive groups G^F by Harish-Chandra theory and Deligne-Lusztig theory, following Digne-Michel and Carter. The groups and Steinberg endomorphisms come from ChevalleyGroups (#447) and ReductiveGroups; compactly supported l-adic cohomology and the Lefschetz trace formula come from AG's #196 CohomologicalPointCounting. It recovers CharacterTheory's GL2(F_q) table. Lusztig's classification and the l-modular theory are statements.",
+  "prerequisites": [
+   "ChevalleyGroups #447/#697",
+   "ReductiveGroups L7",
+   "RepresentationTheory/{CharacterTheory, InductionRestriction}",
+   "HeckeAlgebrasAndKazhdanLusztigTheory",
+   "AG CohomologicalPointCounting #196",
+   "NonpositiveCurvature (buildings)"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#54"
+   ],
+   "OpenAI": [
+    "OAI#203"
+   ],
+   "LMFDB": []
+  },
+  "porting": [],
+  "replaces": [
+   "RepresentationsOfFiniteGroupsOfLieType (Annals P2)"
+  ],
+  "parent": "RepresentationsOfReductiveGroups",
+  "milestones": "Lang-Steinberg; F-stable tori and F-conjugacy in W; Harish-Chandra induction and restriction, Mackey formula, cuspidality, Harish-Chandra series, Howlett-Lehrer algebras; Steinberg character via Solomon-Tits; Deligne-Lusztig varieties, R_T^theta, character formula, orthogonality, Green functions and the degree formula; every irreducible is a constituent of some R_T^theta; Gelfand-Graev characters, Alvis-Curtis duality; GL2, SL2, GL3 worked; unipotent characters of GL_n, Jordan decomposition and Broue's conjecture stated.",
+  "formalizability": "Textbook (Digne-Michel 2nd ed., Carter); the Deligne-Lusztig half waits on #196 (wave C within the roadmap)."
+ },
+ {
+  "name": "RationalRepresentationsOfReductiveGroups",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "L",
+  "est_prs": 240,
+  "wave": "B",
+  "scope": "Rational representations of split reductive groups over fields of characteristic p, following Jantzen part II: induced and Weyl modules, simple modules, Frobenius kernels and tilting modules. It consumes ReductiveGroups (comodules, Borel subgroups, root data) and AG's FlagVarieties (line bundles on G/B, for Kempf vanishing); characteristic-zero highest-weight theory is LieHighestWeight. Its SL2 layer is complete and supplies TensorCategories' construction of Ver_p.",
+  "prerequisites": [
+   "ReductiveGroups L1-L7",
+   "AG FlagVarieties",
+   "RepresentationTheory/LieHighestWeight",
+   "TemperleyLieb #58 (comparison)"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#59"
+   ],
+   "OpenAI": [
+    "OAI#208"
+   ],
+   "LMFDB": []
+  },
+  "porting": [
+   "OAI RepresentationTheory/RestrictedTilting (116 files, 16k: SL2 tilting in characteristic p)"
+  ],
+  "replaces": [
+   "SL2-tilting need of FiniteTensorCategories (OAI#208)",
+   "'Jantzen II has no owner' (OAI report)"
+  ],
+  "parent": "RepresentationsOfReductiveGroups",
+  "milestones": "H^0(lambda), nonvanishing exactly for dominant lambda, Kempf vanishing; Weyl modules, classification of simple modules; Weyl's character formula for H^0; Frobenius kernels, restricted modules, Steinberg's tensor product theorem, the Steinberg module; linkage and translation functors; good filtrations (Donkin-Mathieu stated); tilting modules (Ringel-Donkin) and their classification; SL2 complete; Lusztig's character formula and Williamson's torsion stated.",
+  "formalizability": "Textbook (Jantzen, Representations of Algebraic Groups II)."
+ },
+ {
+  "name": "SpringerTheoryAndLocalization",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "L",
+  "est_prs": 280,
+  "wave": "B",
+  "scope": "Nilpotent orbits of reductive Lie algebras, the Springer resolution and correspondence, and Beilinson-Bernstein localization: the geometric representation theory of a semisimple Lie algebra in characteristic zero on the flag variety and its cotangent bundle. Orbit classification is algebraic and starts from ReductiveGroups and LieHighestWeight's sl2 theory; flag varieties come from AG's FlagVarieties, twisted differential operators from AG's AlgebraicDModules, and perverse sheaves and the decomposition theorem from AG's PerverseSheavesOnComplexVarieties. Affine Springer fibres and geometric Satake are AG's AffineGrassmannians.",
+  "prerequisites": [
+   "ReductiveGroups",
+   "RepresentationTheory/LieHighestWeight",
+   "AG FlagVarieties",
+   "AG AlgebraicDModules",
+   "AG PerverseSheavesOnComplexVarieties",
+   "HeckeAlgebrasAndKazhdanLusztigTheory"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#15",
+    "Annals#53"
+   ],
+   "OpenAI": [
+    "OAI#014",
+    "OAI#062",
+    "OAI#069"
+   ],
+   "LMFDB": []
+  },
+  "porting": [],
+  "replaces": [
+   "NilpotentOrbitsAndSpringerTheory (Annals P3)",
+   "BeilinsonBernsteinLocalization (Annals #1-51 report)"
+  ],
+  "parent": "RepresentationsOfReductiveGroups",
+  "milestones": "Nilpotent cone; Jacobson-Morozov, Kostant; weighted Dynkin diagrams, finiteness of orbits; partitions for gl_n and the classical types with closure order and dimensions; minimal and regular orbits, Kostant section; Springer resolution (semismall), Springer fibres, W-action on their cohomology, Springer correspondence (gl_n combinatorially; general via the decomposition theorem); Steinberg variety; D_lambda on G/B, Gamma(G/B, D_lambda) = U(g)/ker chi_lambda, Beilinson-Bernstein equivalence, SL2 on P^1; Kazhdan-Lusztig conjecture with its proof chain stated.",
+  "formalizability": "Textbook (Collingwood-McGovern, Chriss-Ginzburg, Hotta-Takeuchi-Tanisaki); orbit layers wave B, geometric layers wave C."
+ },
+ {
+  "name": "TypesAndSupercuspidalRepresentations",
+  "campaign": "ALG",
+  "topic": "math.RT",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "C",
+  "scope": "Construction and exhaustion of supercuspidal representations of p-adic reductive groups through types. It consumes SmoothRepresentationsOfLocalGroups SR.0-SR.3 (smooth category, Hecke algebras, Jacquet functors, Bernstein decomposition), AG's BruhatTitsTheory (buildings, parahorics, Moy-Prasad filtrations), RepresentationsOfFiniteGroupsOfLieType (cuspidal representations of reductive quotients) and HeckeAlgebrasAndKazhdanLusztigTheory (affine Hecke algebras). Local Langlands correspondences stay with NT.",
+  "prerequisites": [
+   "campaign SmoothRepresentationsOfLocalGroups",
+   "AG BruhatTitsTheory",
+   "RepresentationsOfFiniteGroupsOfLieType",
+   "HeckeAlgebrasAndKazhdanLusztigTheory"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#60"
+   ],
+   "LMFDB": [],
+   "OpenAI": []
+  },
+  "porting": [],
+  "replaces": [
+   "TypesAndSupercuspidalRepresentations (Annals P8)"
+  ],
+  "parent": "RepresentationsOfReductiveGroups",
+  "milestones": "Depth and unrefined minimal K-types (Moy-Prasad); depth-zero supercuspidals by compact induction from parahorics; Bushnell-Kutzko types, H(G, rho) and the equivalence with a Bernstein block; G-covers; the Iwahori block (Borel-Casselman); simple strata and types for GL_n with exhaustion; Yu's construction with the Fintzen-Kaletha-Spice correction; Kim and Fintzen exhaustion stated with hypotheses; GL2 and SL2 explicit.",
+  "formalizability": "Research monographs and papers (Bushnell-Kutzko, Yu, Fintzen); feasible once suppliers land."
+ },
+ {
+  "name": "CohenMacaulayRings",
+  "campaign": "ALG",
+  "topic": "math.AC",
+  "size": "L",
+  "est_prs": 260,
+  "wave": "A",
+  "scope": "The homological theory of Noetherian local rings beyond regularity: depth, Cohen-Macaulay and Gorenstein rings and modules, and the local cohomology that measures them. It starts from Mathlib's regular sequences, `Ext`, Krull dimension, regular local rings, local cohomology and Rees' theorem, and ends at canonical modules and local duality. The Birkbeck stage R03.3 and NT's orders (CM type, Gorenstein and Bass orders) consume it rather than build their own.",
+  "prerequisites": [
+   "Mathlib RingTheory/Regular, Depth/Rees, KrullDimension, Algebra/Homology/LocalCohomology"
+  ],
+  "goals": {
+   "LMFDB": [
+    "av.fq"
+   ],
+   "OpenAI": [
+    "OAI#193",
+    "OAI#194",
+    "OAI#195",
+    "OAI#200"
+   ],
+   "Annals": []
+  },
+  "porting": [
+   "OAI RingTheory/Multiplicity (Cech complexes, coefficient fields)"
+  ],
+  "replaces": [
+   "CohenMacaulayRings (OAI)",
+   "depth and CM part of DeformationAndDerivedPatchingAlgebra R03.3 (campaign)"
+  ],
+  "parent": "CommutativeAlgebra",
+  "milestones": "Koszul complex and depth sensitivity; Auslander-Buchsbaum formula; Auslander-Buchsbaum-Serre; regular local rings are UFDs; CM rings and modules, unmixedness, behavior under localization, completion, polynomial and flat local extensions; MCM modules; Cohen structure theorem; injective hulls and Matlis duality; Bass numbers, Gorenstein rings (Bass), complete intersection => Gorenstein => CM; Grothendieck vanishing and nonvanishing; local duality; canonical modules and CM type; Serre's (R_k), (S_k) and normality criterion; MCM modules over complete domains of dimension <= 2.",
+  "formalizability": "Textbook (Bruns-Herzog 1-3, Matsumura 6-8); aligned with active Mathlib depth work."
+ },
+ {
+  "name": "MultiplicitiesAndIntersections",
+  "campaign": "ALG",
+  "topic": "math.AC",
+  "size": "L",
+  "est_prs": 230,
+  "wave": "B",
+  "scope": "Hilbert-Samuel theory of Noetherian local rings and modules, multiplicities of ideals, and Serre's homological intersection multiplicity up to the cases Serre settled. It consumes CohenMacaulayRings and Mathlib's Hilbert polynomials and generalizes Tau Ceti's regular-surface intersection lengths. Statements needing K-theory with supports or alterations (Roberts, Gillet-Soule, Gabber) and perfectoid methods are outside.",
+  "prerequisites": [
+   "CohenMacaulayRings",
+   "Mathlib HilbertPoly",
+   "Tau Ceti RingTheory/Intersection, RegularLocalRing/Intersection"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#193",
+    "OAI#194"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI RingTheory/Multiplicity (278 files, 54k: associated-graded reduction, additive lengths, Dutta multiplicity)"
+  ],
+  "replaces": [
+   "MultiplicitiesAndIntersections (OAI)"
+  ],
+  "parent": "CommutativeAlgebra",
+  "milestones": "Hilbert-Samuel function and polynomial; dimension theorem (degree = Krull dimension = least s.o.p. length); e(q, M), associativity formula; associated graded ring and Rees algebra; reductions and integral closure of ideals, Rees' theorem; Serre's e(x; M) = chi(Koszul); Nagata's e(R) = 1 criterion; Lech's inequality and e(R) <= e(S) for flat maps with dim R <= 2; chi(M, N), dimension inequality, vanishing and positivity in the equicharacteristic and unramified cases; Dutta multiplicity; Monsky's Hilbert-Kunz multiplicity.",
+  "formalizability": "Textbook (Serre, Local Algebra II and V; Huneke-Swanson 11)."
+ },
+ {
+  "name": "GradedFreeResolutions",
+  "campaign": "ALG",
+  "topic": "math.AC",
+  "size": "L",
+  "est_prs": 210,
+  "wave": "A",
+  "scope": "Finite graded modules over a polynomial ring, their Hilbert functions and minimal free resolutions, and the extremal theory of Hilbert functions and Betti numbers. It starts from Mathlib's `MvPolynomial`, `MonomialOrder`, `HilbertPoly`, `Tor` and Kruskal-Katona, with regular sequences from CohenMacaulayRings. Symmetric-function combinatorics is COMB; intersection theory on schemes is AG.",
+  "prerequisites": [
+   "Mathlib MvPolynomial, MonomialOrder, HilbertPoly, Tor",
+   "CohenMacaulayRings"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#200"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [],
+  "replaces": [
+   "GradedFreeResolutions (OAI)"
+  ],
+  "parent": "CommutativeAlgebra",
+  "milestones": "Hilbert functions and series, Hilbert-Serre rationality; Hilbert syzygy theorem; minimal graded resolutions, graded Betti numbers, Castelnuovo-Mumford regularity; Groebner bases, Buchberger, initial ideals; monomial, lex-segment, strongly stable and Borel-fixed ideals; Macaulay's theorem; Gotzmann persistence; Green's hyperplane restriction; Eliahou-Kervaire resolution; Bigatti-Hulett-Pardue; Galligo/Bayer-Stillman generic initial ideals; Clements-Lindstrom.",
+  "formalizability": "Combinatorial and finite (Herzog-Hibi, Eisenbud 15, Peeva)."
+ },
+ {
+  "name": "LocallyNilpotentDerivations",
+  "campaign": "ALG",
+  "topic": "math.AC",
+  "size": "M",
+  "est_prs": 110,
+  "wave": "A",
+  "scope": "Locally nilpotent derivations and G_a-actions on affine varieties in characteristic zero, the Makar-Limanov invariant, and the classical cancellation and coordinate theorems for affine spaces of dimension at most three. It starts from Mathlib's derivations, `MvPolynomial` and Kahler differentials and uses GroupsActingOnTrees for Jung-van der Kulk. Logarithmic Kodaira dimension and the geometric proofs of cancellation in dimension two are AG and appear here as statements.",
+  "prerequisites": [
+   "Mathlib Derivation, MvPolynomial, KaehlerDifferential",
+   "GroupsActingOnTrees"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#047",
+    "OAI#049"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI Algebra/AffineCancellation (5.6k)",
+   "OAI AlgebraicGeometry/CommutingDerivations, AbhyankarSathaye"
+  ],
+  "replaces": [
+   "LocallyNilpotentDerivations (OAI algebraic geometry)"
+  ],
+  "parent": "CommutativeAlgebra",
+  "milestones": "LNDs, exponential automorphisms, kernels, slices and the slice theorem; degree functions; Makar-Limanov invariant; Rentschler's theorem; Jung-van der Kulk amalgam; Abhyankar-Eakin-Heinzer cancellation in dimension one; Danielewski surfaces; the Russell cubic is not A^3; Nagata automorphism and Shestakov-Umirbaev, Abhyankar-Moh-Suzuki, Fujita/Miyanishi-Sugie cancellation and Gupta's counterexample stated.",
+  "formalizability": "Textbook (Freudenburg, Algebraic Theory of Locally Nilpotent Derivations)."
+ },
+ {
+  "name": "NoncommutativeRingTheory",
+  "campaign": "ALG",
+  "topic": "math.RA",
+  "size": "L",
+  "est_prs": 230,
+  "wave": "A",
+  "scope": "The structure theory of noncommutative rings beyond semisimplicity: radicals, primitive and prime rings, Noetherian rings and Goldie's theorem, polynomial identities, and algebraic and nil algebras, including the Golod-Shafarevich counterexamples to the Kurosh and Burnside problems. It starts from Mathlib's `Ring.jacobson` and `OreLocalization`, Tau Ceti's Golod-Shafarevich inequality and SemisimpleAlgebras. Central simple and division algebras over fields are SemisimpleAlgebras and NT; group rings are GroupRings; finite-dimensional algebras are TiltingAndHomologicalDimensions.",
+  "prerequisites": [
+   "Mathlib Ring.jacobson, OreLocalization",
+   "Tau Ceti RingTheory/Ideal/GolodShafarevich",
+   "RepresentationTheory/SemisimpleAlgebras"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#201",
+    "OAI#247"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI RingTheory/Kurosh (1.7k)",
+   "OAI GroupTheory/PeriodicGroups (38k: Golod-Shafarevich graded algebras)"
+  ],
+  "replaces": [
+   "NoncommutativeRingTheory (OAI)"
+  ],
+  "parent": null,
+  "milestones": "Jacobson, Levitzki and Kothe radicals; primitive, prime and semiprime rings; Jacobson density; Levitzki's theorem; Goldie's theorem; Weyl algebras and skew polynomial rings; Gelfand-Kirillov dimension, Bergman's gap theorem; Amitsur-Levitzki; Kaplansky's PI theorem, Posner; Kaplansky-Jacobson local finiteness of algebraic PI algebras; Amitsur's algebraicity over uncountable fields; Cartan-Brauer-Hua; Golod's finitely generated infinite-dimensional nil algebra and infinite finitely generated p-groups.",
+  "formalizability": "Textbook (Lam, A First Course; McConnell-Robson; Rowen)."
+ },
+ {
+  "name": "UniversalAlgebra",
+  "campaign": "ALG",
+  "topic": "math.RA",
+  "size": "M",
+  "est_prs": 110,
+  "wave": "A",
+  "scope": "Algebras of an arbitrary signature, their congruence lattices and varieties. It defers to Mathlib's functional `FirstOrder.Language` structures and lattice theory, and it ends at Gratzer-Schmidt and the Palfy-Pudlak reduction of finite lattice representation to subgroup intervals. Model theory is LTCS's ClassicalModelTheory; finite semigroups and automata are LTCS's AutomataAndFiniteSemigroups.",
+  "prerequisites": [
+   "Mathlib ModelTheory (functional languages)",
+   "Mathlib Order (CompleteLattice, compactly generated)"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#206"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI Algebra/Universal (0.7k)",
+   "OAI GroupTheory/FiniteLattice (2.6k)"
+  ],
+  "replaces": [
+   "UniversalAlgebra (OAI)"
+  ],
+  "parent": null,
+  "milestones": "Congruences, Con(A) an algebraic lattice; subdirect products and Birkhoff's subdirect representation; free algebras, varieties and Birkhoff's HSP theorem; clones; Mal'cev terms and congruence permutability; Jonsson's lemma; Gratzer-Schmidt; Palfy-Pudlak.",
+  "formalizability": "Textbook (Burris-Sankappanavar, Bergman)."
+ },
+ {
+  "name": "TensorCategories",
+  "campaign": "ALG",
+  "topic": "math.QA",
+  "size": "L",
+  "est_prs": 300,
+  "wave": "B",
+  "scope": "Finite tensor categories and symmetric tensor categories in every characteristic, following Etingof-Gelaki-Nikshych-Ostrik. It starts from Mathlib's monoidal, rigid and braided categories, #57 PivotalSpherical (pivotal and spherical structures, fusion categories, semisimple FP dimension) and the Tannakian reconstruction of ReductiveGroups L1. It ends at Deligne's theorem in characteristic zero, Ostrik's theorem in characteristic p and the Etingof-Ostrik Frobenius functor. Temperley-Lieb categories are #58, Hopf-algebra stable categories are #222, and modular tensor categories of vertex algebras are statements in VertexAlgebras.",
+  "prerequisites": [
+   "PivotalSpherical #57",
+   "Mathlib monoidal categories",
+   "ReductiveGroups L1",
+   "RationalRepresentationsOfReductiveGroups (SL2 tilting)",
+   "RepresentationTheory/SchurWeyl"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#59"
+   ],
+   "OpenAI": [
+    "OAI#208",
+    "OAI#280"
+   ],
+   "LMFDB": []
+  },
+  "porting": [
+   "OAI Algebra/FiniteTensor (52 files, 16k)",
+   "OAI RepresentationTheory/RestrictedTilting"
+  ],
+  "replaces": [
+   "FiniteTensorCategories (OAI)",
+   "SymmetricTensorCategories (Annals P7)"
+  ],
+  "parent": null,
+  "milestones": "Multitensor and finite tensor categories; exactness of tensor product from rigidity; projective covers; FP dimension of objects, of categories and of the projective generator; exact module categories; Hopf algebras and fiber functors, Radford's S^4; symmetric tensor categories, sVec, supergroups and super-Tannakian reconstruction; moderate growth; Deligne's Rep(S_t), Rep(GL_t), Rep(O_t); semisimplification; Ver_p from SL2 tilting modules; no fiber functor Ver_p -> sVec for p >= 5; Deligne's theorem; Ostrik's theorem; Frobenius functor and its exactness criterion; Ver_{p^n} stated.",
+  "formalizability": "Textbook (EGNO); Ostrik and Coulembier-Etingof-Ostrik are recent but short."
+ },
+ {
+  "name": "VertexAlgebras",
+  "campaign": "ALG",
+  "topic": "math.QA",
+  "size": "L",
+  "est_prs": 300,
+  "wave": "B",
+  "scope": "Vertex algebras and vertex operator algebras: axioms, modules, the standard constructions and the representation-theoretic finiteness conditions. It starts from Mathlib's `Algebra/Vertex` vertex operators and Hahn series, takes affine algebras from KacMoodyAlgebras and lattices from IntegralLattices and #219, and ends at the holomorphic Leech lattice VOA and the statements of Zhu's modularity and Huang's modular tensor category theorems. The moonshine module is consumed by the NT campaign's QSeriesPartitionsAndMockModularForms QM.6; conformal nets are FAMP's.",
+  "prerequisites": [
+   "Mathlib Algebra/Vertex, HahnSeries",
+   "KacMoodyAlgebras",
+   "Completed/IntegralLattices",
+   "Rank24LatticeConstructions #219",
+   "ModularForms",
+   "TensorCategories"
+  ],
+  "goals": {
+   "Annals": [
+    "Annals#61"
+   ],
+   "OpenAI": [
+    "OAI#280"
+   ],
+   "LMFDB": []
+  },
+  "porting": [
+   "OAI RepresentationTheory/VertexAlgebra (143 files, 36k; low reuse: own VertexAlgebra class)"
+  ],
+  "replaces": [
+   "VertexAlgebras (Annals P9)",
+   "VertexOperatorAlgebras (PRDS/physics report)"
+  ],
+  "parent": null,
+  "milestones": "Locality, Borcherds identity, Goddard uniqueness and reconstruction; conformal vectors and Virasoro relations; modules and intertwining operators; the Lie algebra V_1; Heisenberg, Virasoro, affine and lattice VOAs with their central charges; holomorphic VOAs, V_Leech holomorphic with V_1 = 0; cyclic orbifolds; Zhu's algebra, C2-cofiniteness, rationality; unitary VOAs; Zhu's modularity, Huang's theorem and the FLM moonshine module stated.",
+  "formalizability": "Textbook (Kac, Vertex Algebras for Beginners; Frenkel-Ben-Zvi; Lepowsky-Li)."
+ },
+ {
+  "name": "GrothendieckTeichmuller",
+  "campaign": "ALG",
+  "topic": "math.QA",
+  "size": "L",
+  "est_prs": 230,
+  "wave": "A",
+  "scope": "The Grothendieck-Teichmuller Lie algebra and the Drinfeld associators it acts on. It builds graded free Lie algebras with Hall and Lyndon bases on Mathlib's `FreeLieAlgebra`, the Drinfeld-Kohno Lie algebras t_n, grt_1 with the Ihara bracket, associators and the KZ associator by regularized holonomy, and ends at the Deligne-Drinfeld theorem and the profinite group GT-hat receiving G_Q. Arithmetic of multiple zeta values is the NT campaign's PeriodsAndSpecialValues PS.9; BelyiMaps and PeripheralActions supply the profinite side they explicitly leave to this roadmap.",
+  "prerequisites": [
+   "Mathlib FreeLieAlgebra, FreeAlgebra, UniversalEnvelopingAlgebra",
+   "campaign PeriodsAndSpecialValues PS.9",
+   "PeripheralActions",
+   "ProfiniteProPGroups",
+   "BelyiMaps"
+  ],
+  "goals": {
+   "OpenAI": [
+    "OAI#008"
+   ],
+   "LMFDB": [],
+   "Annals": []
+  },
+  "porting": [
+   "OAI Algebra/Drinfeld (21 files, 30k: complete proof of the endpoint, regularized-ODE associator)"
+  ],
+  "replaces": [
+   "GrothendieckTeichmuller (OAI number theory)"
+  ],
+  "parent": null,
+  "milestones": "Hall and Lyndon bases, weight grading, Witt's formula; t_n and their relations; grt_1 by antisymmetry, three-term and pentagon relations, Ihara bracket, GRT_1; associators, KZ associator, coefficients as iterated integrals; existence of rational associators; GRT_1 acts simply transitively; sigma_{2k+1} with nonzero depth-one coefficient; Deligne-Drinfeld (grt_1 free on them); GT-hat and G_Q -> GT-hat (Belyi, Drinfeld, Ihara).",
+  "formalizability": "High for the algebra, medium for the associator analysis; a complete Lean proof exists."
+ }
+]

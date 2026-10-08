@@ -1,0 +1,1145 @@
+[
+ {
+  "pr": 726,
+  "author": "roed-math",
+  "kind": "archive",
+  "title": "chore(NumberFieldArithmetic): discharge the targets in place and archive the roadmap",
+  "dirs": [
+   "Chebotarev",
+   "ClassFieldTheory",
+   "GlobalNumberFields",
+   "GlobalQuadraticForms",
+   "LocalFieldsRamification",
+   "NumberFieldArithmetic",
+   "PolynomialGaloisGroups"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-07",
+  "updated": "2026-10-07",
+  "body": "This PR states every milestone of the Number Field Arithmetic roadmap in `Suggested.lean`, closes each with the Tau Ceti (or Mathlib) declaration that realizes it, and moves the roadmap to `Completed/`. The remaining `sorry` count is zero. The earlier file proposed its own carriers and imported the Local Fields and Ramification prototypes; the statements are now about Tau Ceti's objects, including its local `ramificationIndex`, `inertiaDegree`, `differentExponent` and `lowerRamificationGroup`. Covered: - L1: the three splitting conditions, unramified sets as explicit quantification, the decomp"
+ },
+ {
+  "pr": 725,
+  "author": "roed-math",
+  "kind": "archive",
+  "title": "chore(ArithmeticDirichletSeries): discharge the targets in place and archive the roadmap",
+  "dirs": [
+   "ArithmeticDirichletSeries",
+   "Chebotarev"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-07",
+  "updated": "2026-10-07",
+  "body": "This PR states every milestone of the Arithmetic Dirichlet series roadmap in `Suggested.lean`, closes each with the Tau Ceti declaration that realizes it, and moves the roadmap to `Completed/`. The remaining `sorry` count is zero. The earlier file proposed local stand-ins for the carriers, counting functions and transfer theorems; the statements are now about the Tau Ceti objects, with predicates and packages certified by their contents (`HasCancellation`, `IsMultiplicative`, `IdealCountingLinearBounds`, `PrimeBoundaryRemainder`, `HasAnalyticExtensionAt`, the density bounds). Covered: - L0–L1:"
+ },
+ {
+  "pr": 724,
+  "author": "roed-math",
+  "kind": "archive",
+  "title": "chore(AlgebraicCodingTheory): discharge the targets in place and archive the roadmap",
+  "dirs": [
+   "AlgebraicCodingTheory"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-07",
+  "updated": "2026-10-07",
+  "body": "This PR states every milestone of the algebraic coding theory roadmap in `Suggested.lean`, closes each with the Tau Ceti (or Mathlib) declaration that realizes it, and moves the roadmap to `Completed/`. The remaining `sorry` count is zero. The previous file stated its milestones about local stand-ins (`minimumDistance` via `Set.infsep`, `zmodDual`, `constructionABase`, structure-literal discriminant alphabets, Golay codes on `Fin 12 ⊕ Fin 12`). The statements are now about the Tau Ceti objects. Predicates are certified by their contents, as `iff` statements, and the named codes by `rfl` agains"
+ },
+ {
+  "pr": 723,
+  "author": "roed-math",
+  "kind": "archive",
+  "title": "chore(HopfRinow): discharge the targets in place and archive the roadmap",
+  "dirs": [
+   "GeometricTopology",
+   "HopfRinow",
+   "OptimalTransport"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-07",
+  "updated": "2026-10-07",
+  "body": "This PR states every milestone of the Hopf–Rinow roadmap in `Suggested.lean`, closes each with the Tau Ceti (or Mathlib) declaration that realizes it, and moves the roadmap to `Completed/`. The remaining `sorry` count is zero. The old file stated only the Layer 0 comparison, over partitions indexed by `ℕ`. That statement keeps its name and is now proved through Tau Ceti's `IsPiecewiseContMDiffOn`. Predicates are certified by their contents, as `iff` statements. Covered: - L0: subdivision via `pathELength_add`, piecewise-`C¹` paths and refinement independence, corner smoothing, the piecewise-`C"
+ },
+ {
+  "pr": 722,
+  "author": "roed-math",
+  "kind": "archive",
+  "title": "chore(Chebotarev): discharge the targets in place and archive the roadmap",
+  "dirs": [
+   "Chebotarev"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-07",
+  "updated": "2026-10-07",
+  "body": "This PR states every milestone of the Chebotarev roadmap in `Suggested.lean`, closes each with the Tau Ceti (or Mathlib) declaration that realizes it, and moves the roadmap to `Completed/`. The remaining `sorry` count is zero. The previous file imported the `Suggested.lean` files of Arithmetic Dirichlet Series, Global Number Fields and Number Field Arithmetic and proposed its own carriers; the new file imports Tau Ceti and Mathlib only, so it does not depend on those roadmaps' own archiving PRs, and its statements are about the Tau Ceti objects. Covered: - L1–L3: `ConjClasses.pow` and its API,"
+ },
+ {
+  "pr": 721,
+  "author": "roed-math",
+  "kind": "archive",
+  "title": "chore(DenseGraphLimits): discharge the targets in place and archive the roadmap",
+  "dirs": [
+   "DenseGraphLimits"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-10-07",
+  "updated": "2026-10-07",
+  "body": "This PR states every milestone of the dense graph limits roadmap in `Suggested.lean`, closes each with the Tau Ceti declaration that realizes it, and moves the roadmap to `Completed/`. The remaining `sorry` count is zero (the old file had 122). The old file defined its own kernels, graphons, cut metric, graphon space, sampling and graph laws, and gluing algebra. All of them now live in Tau Ceti under `TauCeti.DenseGraphLimits`, so the statements are about the Tau Ceti objects. Definitions are certified by their contents (`iff`s, `_def`/`_apply` laws, `example`s for definitional facts). Covered"
+ },
+ {
+  "pr": 720,
+  "author": "roed-math",
+  "kind": "archive",
+  "title": "chore(RestrictedProducts): discharge the targets in place and archive the roadmap",
+  "dirs": [
+   "IntegralLattices",
+   "OrthogonalSpinGroups",
+   "RestrictedProducts"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-07",
+  "updated": "2026-10-07",
+  "body": "This PR states every milestone of the restricted-products roadmap in `Suggested.lean`, closes each with the Tau Ceti declaration that realizes it (all in `TauCeti/Topology/Algebra/RestrictedProduct/`, at the current pin), and moves the roadmap to `Completed/`. The remaining `sorry` count is zero. The previous file proposed its own definitions and left 30 `sorry`s. Those definitions now live in Tau Ceti under the same names, so the statements are about the Tau Ceti objects, and the contract's definitions are re-exported (`export TauCeti (...)`) into `TauCetiRoadmap.RestrictedProducts`. Covered:"
+ },
+ {
+  "pr": 719,
+  "author": "roed-math",
+  "kind": "archive",
+  "title": "chore(Multiquadratic): discharge the targets in place and archive the roadmap",
+  "dirs": [
+   "Multiquadratic",
+   "QuadraticFormInvariants"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-07",
+  "updated": "2026-10-07",
+  "body": "This PR states every milestone of the multiquadratic fields and genus theory roadmap in `Suggested.lean`, closes each with the Tau Ceti declaration that realizes it, and moves the roadmap to `Completed/`. The remaining `sorry` count is zero. The previous file covered Layers 0 and 1 only; the new one covers Layers 0–3 and the worked examples. Predicates (`IsGenusField`, `IsNarrowGenusField`, the narrow class group) are certified by their contents as `iff` statements, and the genus-field isomorphisms by their compatibility with the Artin map. Covered: - L0: the erdos-unit-distance migrations (`s"
+ },
+ {
+  "pr": 717,
+  "author": "vincentqb",
+  "kind": "roadmap",
+  "title": "Add a roadmap for certified permutation-group computation",
+  "dirs": [
+   "CertifiedPermutationComputation"
+  ],
+  "labels": [],
+  "created": "2026-10-07",
+  "updated": "2026-10-07",
+  "body": "This adds `CertifiedPermutationComputation` (`math.GR`), a roadmap for classical Jordan–Wielandt criteria in finite permutation groups and their verified computational interfaces. Its five layers specify: 1. Computable sequences, polynomial output-size/composition bounds, and uniform bounded loops with size invariants. 2. Permutation encodings, words, orbit/primitivity checking, cycles, and parity. 3. Strong Jordan criteria, normal-closure certificate soundness, a polynomial-time verifier, and explicit successful families. 4. Bernoulli indicators, conditional moments, trial failure bounds, and"
+ },
+ {
+  "pr": 716,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: IntegralLattices report for 2026-10-06",
+  "dirs": [],
+  "labels": [],
+  "created": "2026-10-07",
+  "updated": "2026-10-07",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"06fa4daa78e94b5a6f0eaae58742a89e37958e12\",\"prs\":[9887,10429,10444,10568,10594,10857,10977,11013,11086,11428,11463,11581,11622,11639,11745,11808,11871,12068,12196],\"roadmap\":\"IntegralLattices\",\"to_sha\":\"df51a897f47dacef2dc5f45a9f0ac5b1d40fd313\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the IntegralLattices roadmap for the window `06fa4da..df51a89` of TauCeti `main`, covering 19 merged pull requests. `STATUS.md` is rewritten as a snapshot at `df51a89`; `PROGRESS.md` gains one appended section for the window. Both "
+ },
+ {
+  "pr": 698,
+  "author": "Robertboy18",
+  "kind": "roadmap",
+  "title": "docs: specify CFSG recognition dependencies for #446",
+  "dirs": [
+   "CFSGBasicProperties"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-05",
+  "updated": "2026-10-05",
+  "body": "Expands the recognition milestones requested in the review of #446 and adds `topic = \"math.GR\"`. This PR targets `roadmap/cfsg-basic-properties` so the changes can be incorporated into that proposal. - Specifies the Golay/Mathieu/Leech/Conway action bridges, the actual Monster axis stabilizers, the no-perfect-double-cover prerequisite, and the exact Monster and Baby Monster quotient relators. - Gives a presentation, finite model, subgroup/index target, and simplicity-certificate requirements for each of the other nine sporadic groups. The Fi24′ route reuses its existing Schreier equivalence an"
+ },
+ {
+  "pr": 697,
+  "author": "Robertboy18",
+  "kind": "roadmap",
+  "title": "docs: add the ChevalleyGroups topic for #447",
+  "dirs": [
+   "ChevalleyGroups"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-05",
+  "updated": "2026-10-05",
+  "body": "Adds `topic = \"math.GR\"` for the ChevalleyGroups roadmap, as requested on #447. This PR targets its proposal branch so the metadata can be incorporated into #447. Validation: the current `check_roadmap_topics.py` accepts the new file; `git diff --check` passes. This changes one metadata file. AI assistance: prepared with OpenAI GPT-6 (Codex)."
+ },
+ {
+  "pr": 655,
+  "author": "t4v1",
+  "kind": "roadmap",
+  "title": "feat: add a roadmap for Morse and Floer homology with DG coefficients (DGFloer)",
+  "dirs": [
+   "DGFloer"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-05",
+  "updated": "2026-10-05",
+  "body": "This adds a roadmap, `DGFloer`, for Morse and Floer homology with differential graded local coefficients, following - J.-F. Barraud, M. Damian, V. Humilière, A. Oancea, *Floer homology with DG coefficients. Applications to cotangent bundles*, [arXiv:2404.07953](https://arxiv.org/abs/2404.07953); - the same authors' book *Morse homology with differential graded coefficients*, Progress in Mathematics 360, Birkhäuser, 2025; - Barraud–Cornea, *Lagrangian intersections and the Serre spectral sequence*, Ann. of Math. 166 (2007). ## What it builds Twelve layers: - **Layers 0–4, reusable outside sympl"
+ },
+ {
+  "pr": 641,
+  "author": "cameronfreer",
+  "kind": "roadmap",
+  "title": "docs(Exchangeability): reconcile milestone references with the implemented API",
+  "dirs": [
+   "Exchangeability"
+  ],
+  "labels": [],
+  "created": "2026-10-03",
+  "updated": "2026-10-03",
+  "body": "Adds a 24-row roadmap-to-implementation reference table and the implemented Lévy-downward worked-example pointer. The mappings reflect the removal of two roadmap-only aliases in https://github.com/TauCetiProject/TauCeti/pull/11229 and retain the relevant hypothesis and public/private distinctions. Documentation only: mathematical requirements, milestone lists, Suggested.lean and generated STATUS.md are unchanged. Separate from #234; the generated status refresh is separate work. 🤖 AI-assisted by Opus 5.5 and Astra 6; directed and submitted by Cameron Freer."
+ },
+ {
+  "pr": 618,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "fix(ProfiniteProPGroups): specify the dyadic basis corrections and the 2-adic normal-form words",
+  "dirs": [
+   "ProfiniteProPGroups"
+  ],
+  "labels": [],
+  "created": "2026-10-02",
+  "updated": "2026-10-06",
+  "body": "This PR specifies the change of generators that Labute's §4 arguments consume, separately for the branches `Im χ = U^[f]` and `Im χ = {±1} × U^(f)`. Each branch theorem returns a new basis, the orientation values on it, the relator read in it up to an error in `(X, X) ∩ F₃`, and the relator class with its coefficients pinned to the corrected generators. The existing branch statements only give scalar membership, and dividing out a common factor does not in general give a basis vector. It adds what these rest on: the generation and Frattini-congruence criteria for a basis, the constant-term com"
+ },
+ {
+  "pr": 617,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "fix(LocalFieldsRamification): pin the uniformizer normalizations of the wild characters and the break norm",
+  "dirs": [
+   "LocalFieldsRamification"
+  ],
+  "labels": [],
+  "created": "2026-10-02",
+  "updated": "2026-10-06",
+  "body": "This PR corrects the uniformizer normalizations in the Layer 3 contracts of the local fields roadmap, and supersedes https://github.com/TauCetiProject/TauCetiRoadmap/pull/352. The quotient embeddings θ_i are independent of the uniformizer in their unit-quotient form, but at level i ≥ 1 the residue form depends on π_L: replacing π_L by uπ_L multiplies it by residue(u)^{-i}. The README now says so, with an 𝔽₄ example in which a rescaled character satisfies injectivity and the action formula but gives the wrong norm polynomial. `wildRamificationCharacter` takes the uniformizer as an argument and "
+ },
+ {
+  "pr": 616,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "fix(ProfiniteCohomology): state the carrier and coefficient contracts against the pin",
+  "dirs": [
+   "ProfiniteCohomology"
+  ],
+  "labels": [],
+  "created": "2026-10-02",
+  "updated": "2026-10-06",
+  "body": "This PR corrects the ProfiniteCohomology carrier and coefficient contracts that current main still states wrongly, and supersedes https://github.com/TauCetiProject/TauCetiRoadmap/pull/354. It describes Mathlib's `TopRep` as a structure related to `Action (TopModuleCat R) G` by the explicit equivalence `TopRep.TopRepEquivActionTop`, not an abbreviation, and `continuousCohomology` as object-valued, using the pin's actual modules and names (`TopRep.homogeneousCochains`, `ContinuousCohomology.zeroIso`). It moves the coefficient functors `continuousCohomologyFunctor` and `continuousCochainsFunctor`"
+ },
+ {
+  "pr": 599,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "SporadicOrders: orders of the sporadic groups from permutation representations",
+  "dirs": [
+   "SporadicOrders"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-01",
+  "updated": "2026-10-02",
+  "body": "This PR adds the **SporadicOrders** roadmap. For ten sporadic groups with a faithful permutation representation of degree at most 276 (`M11 M12 M22 M23 M24 J1 J2 HS McL Co3`) it asks for a subgroup of `Equiv.Perm (Fin n)` generated by the ATLAS standard generators, a theorem giving its order, and a surjection onto it from the `PresentedGroup` that CFSGStatement pins for that name. The surjection makes the existing CFSGStatement cross-check against permutation models a theorem, and in particular proves each of those presented groups nontrivial. The orders are to be proved with the `perm_group` "
+ },
+ {
+  "pr": 596,
+  "author": "mrdouglasny",
+  "kind": "roadmap",
+  "title": "doc: link to Completed/README.md instead of a stale copy in the root README",
+  "dirs": [],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-10-01",
+  "updated": "2026-10-01",
+  "body": "The root README duplicated the list in Completed/README.md and had fallen behind it: it named two of the five archived roadmaps. Every archive PR already updates Completed/README.md, so this links to that list instead of keeping a second copy. AI assistance: drafted with Claude Fable 5.1; I have read and checked it."
+ },
+ {
+  "pr": 545,
+  "author": "RoktimMascharak",
+  "kind": "roadmap",
+  "title": "Add roadmap for stating abundance for projective klt varieties",
+  "dirs": [
+   "AbundanceStatement"
+  ],
+  "labels": [],
+  "created": "2026-09-30",
+  "updated": "2026-10-04",
+  "body": "This adds `TauCetiRoadmap/AbundanceStatement/README.md`, specifying the foundations needed for a concrete Lean statement of abundance for normal integral projective klt varieties over algebraically closed fields of characteristic zero. The endpoint is a proposition asserting that a nef canonical divisor has a globally generated positive Cartier multiple. It includes no proof of abundance and no assumption of Q-factoriality. The roadmap builds on the shared divisor, line-bundle, vector-bundle, and curve-degree APIs, with explicit targets for unique Weil-divisor extension across complements of c"
+ },
+ {
+  "pr": 532,
+  "author": "roed-math",
+  "kind": "progress",
+  "title": "progress-merge: gate fork reports when CI completes, and skip the first pass while build runs",
+  "dirs": [],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-30",
+  "updated": "2026-10-04",
+  "body": "Progress reports opened from a fork never land by themselves. Each one is gated once, when it opens, and never again. ## What happens now `progress-merge` gates a report twice: 1. On `pull_request_target`, when the report opens. Its `build` is still running, so the gate refuses with \"build is 'in_progress' … not completed\" and comments that the pull request \"is left for a human to review\". 2. On `workflow_run`, when CI completes. The resolver finds the pull request with `repos/$REPO/commits/$HEAD_SHA/pulls`, and the gate lands it. For a fork, step 2 finds nothing: `commits/<sha>/pulls` asked o"
+ },
+ {
+  "pr": 524,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: HeegaardFloer report for 2026-09-29",
+  "dirs": [
+   "HeegaardFloer"
+  ],
+  "labels": [],
+  "created": "2026-09-30",
+  "updated": "2026-09-30",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"6704398b2cce336011717b9d7c800ea9729d50c3\",\"prs\":[5861,6028,6114,6137,6139,6196,6526,6554,6905,6990,7103,7174,7348,7491,7496,7655,7675,7716,7908,8003,8050,8078,8129,8222,8320,8410,8435,8460,8478,8483,8526,8634,8725,8862,8864,8871,8885,8958,9025,9032,9058,9069,9120,9326,9344,9396,9405,9504,9558,9565,9566,9663,9689,9821],\"roadmap\":\"HeegaardFloer\",\"to_sha\":\"163ce800f7f3b5089428c699474f28f877d6759b\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the HeegaardFloer roadmap for the window `6704398..163ce80` of TauCeti `main`"
+ },
+ {
+  "pr": 523,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: ZigzagPreprojective report for 2026-09-29",
+  "dirs": [
+   "ZigzagPreprojective"
+  ],
+  "labels": [],
+  "created": "2026-09-30",
+  "updated": "2026-09-30",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"8745177e39945cdda39b4203688f5f6bb380a0b9\",\"prs\":[5140,5561,5672,5891,5981,6122,6124,6345,6371,6586,6641,6657,6686,6804,6837,7075,7077,7106,7178,7276,7296,7308,7351,7390,7394,7422,7444,7486,7601,7674,7691,7824,7933,7957,7965,7967,8063,8230,8329,8441,8519,8772,8872,8873,8907,8970,9020,9062,9096,9193,9386,9575,9605,9633,9721],\"roadmap\":\"ZigzagPreprojective\",\"to_sha\":\"163ce800f7f3b5089428c699474f28f877d6759b\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the ZigzagPreprojective roadmap for the window `8745177..163ce80` "
+ },
+ {
+  "pr": 522,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: ArithmeticDirichletSeries report for 2026-09-29",
+  "dirs": [
+   "ArithmeticDirichletSeries"
+  ],
+  "labels": [],
+  "created": "2026-09-30",
+  "updated": "2026-09-30",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"6bc3780dce4545c3a58085efada58f9f0043c7b1\",\"prs\":[6698,6715,6965,7020,7046,7048,7102,7119,7146,7156,7241,7305,7334,7345,7410,7485,7505,7529,7599,7612,7624,7748,7764,7811,7833,7854,7885,7946,7947,7948,7950,7956,7958,7960,7964,7975,7977,7984,7985,7989,8041,8138,8201,8241,8673,8688,8709,8713,8816,8850,8890,8964,9158,9379,9399],\"roadmap\":\"ArithmeticDirichletSeries\",\"to_sha\":\"163ce800f7f3b5089428c699474f28f877d6759b\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the ArithmeticDirichletSeries roadmap for the window `6bc378"
+ },
+ {
+  "pr": 521,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: PolynomialGaloisGroups report for 2026-09-29",
+  "dirs": [
+   "PolynomialGaloisGroups"
+  ],
+  "labels": [],
+  "created": "2026-09-30",
+  "updated": "2026-09-30",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"8745177e39945cdda39b4203688f5f6bb380a0b9\",\"prs\":[5434,5656,5706,5711,5965,5999,6177,6223,6379,6441,6470,6494,6588,6645,6647,6689,6704,6722,6752,6776,7068,7076,7145,7151,7294,7317,7324,7406,7458,7510,7557,7584,7638,7718,7735,7776,7978,7990,8032,8055,8190,8214,8247,8393,8514,8826,8888,8945,9165,9200,9271,9303,9325,9547,9570,9610,9611,9638,9809],\"roadmap\":\"PolynomialGaloisGroups\",\"to_sha\":\"163ce800f7f3b5089428c699474f28f877d6759b\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the PolynomialGaloisGroups roadmap for the "
+ },
+ {
+  "pr": 520,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: DGAInfinity report for 2026-09-29",
+  "dirs": [
+   "DGAInfinity"
+  ],
+  "labels": [],
+  "created": "2026-09-30",
+  "updated": "2026-09-30",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"8745177e39945cdda39b4203688f5f6bb380a0b9\",\"prs\":[4654,4941,5110,5613,5662,5799,6083,6189,6373,6410,6523,6621,6634,6640,6673,6770,6929,7120,7352,7365,7397,7403,7452,7461,7509,7520,7551,7610,7768,7777,7819,7842,7864,7912,7921,7944,8087,8172,8191,8261,8335,8433,8520,8665,8704,8822,9013,9033,9036,9177,9275,9280,9330,9372,9450,9492,9622,9659,9691,9767],\"roadmap\":\"DGAInfinity\",\"to_sha\":\"163ce800f7f3b5089428c699474f28f877d6759b\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the DGAInfinity roadmap for the window `8745177.."
+ },
+ {
+  "pr": 519,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: ConformalMapping report for 2026-09-29",
+  "dirs": [
+   "ConformalMapping"
+  ],
+  "labels": [],
+  "created": "2026-09-30",
+  "updated": "2026-09-30",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"ae69ef93ae1b853b89b7e0966d5895c901e370f2\",\"prs\":[6217,6300,6368,6403,6551,6595,6610,6614,6617,6747,6890,6902,6904,6913,6923,7069,7092,7147,7201,7290,7302,7322,7370,7462,7523,7805,7859,7866,7898,7900,7901,7906,8009,8068,8127,8286,8436,8487,8512,8534,8622,8718,8928,9048,9107,9115,9170,9181,9198,9202,9348,9367,9377,9406,9409,9420,9563,9687,9738,9753,9872],\"roadmap\":\"ConformalMapping\",\"to_sha\":\"163ce800f7f3b5089428c699474f28f877d6759b\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the ConformalMapping roadmap for the wi"
+ },
+ {
+  "pr": 503,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: Chebotarev report for 2026-09-28",
+  "dirs": [
+   "Chebotarev"
+  ],
+  "labels": [],
+  "created": "2026-09-29",
+  "updated": "2026-09-29",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"94050b6aee7bc349e209c85bf5e2cec3c49420a8\",\"prs\":[5594,6241,6250,6269,6277,6335,6611,6616,6744,6748,6822,6850,6877,6884,6885,6909,6934,6959,7013,7089,7127,7256,7323,7469,7543,7828,7835,7888,7909,7949,7952,7976,7979,8079,8276,8319,8380,8396,8397,8398,8399,8615,8624,8645,8655,8680,8841,8844,9039,9071,9074,9160,9164,9244,9295,9355,9415,9433,9593],\"roadmap\":\"Chebotarev\",\"to_sha\":\"8339b5a9999c7fe7c83ad0ac2b89c5a2754fd8c8\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the Chebotarev roadmap for the window `94050b6..8339b5a"
+ },
+ {
+  "pr": 500,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: HopfRinow report for 2026-09-27",
+  "dirs": [
+   "HopfRinow"
+  ],
+  "labels": [],
+  "created": "2026-09-28",
+  "updated": "2026-09-28",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"8745177e39945cdda39b4203688f5f6bb380a0b9\",\"prs\":[4099,5437,5556,5630,5683,6149,6483,6672,6693,6702,6782,6851,6886,6948,7059,7159,7181,7223,7355,7625,7646,7701,7971,8001,8018,8084,8120,8124,8128,8135,8341,8412,8620,8677,8726,8740,8870,8911,8983,9008,9010,9018,9064,9089,9090,9123,9148,9226,9340,9352,9356,9401],\"roadmap\":\"HopfRinow\",\"to_sha\":\"b1ab119fa96ae6d2d8f43e2aa8159a148ba67f57\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the HopfRinow roadmap for the window `8745177..b1ab119` of TauCeti `main`, covering 52 merg"
+ },
+ {
+  "pr": 493,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: ArithmeticDirichletSeries report for 2026-09-27",
+  "dirs": [
+   "ArithmeticDirichletSeries"
+  ],
+  "labels": [],
+  "created": "2026-09-28",
+  "updated": "2026-09-28",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"6bc3780dce4545c3a58085efada58f9f0043c7b1\",\"prs\":[6698,6715,6965,7020,7046,7048,7102,7119,7146,7156,7241,7305,7334,7345,7410,7485,7505,7529,7599,7612,7624,7748,7764,7811,7833,7854,7885,7946,7947,7948,7950,7956,7958,7960,7964,7975,7977,7984,7985,7989,8041,8138,8201,8241,8673,8688,8709,8713,8816,8850,8890,8964,9158,9379,9399],\"roadmap\":\"ArithmeticDirichletSeries\",\"to_sha\":\"b1ab119fa96ae6d2d8f43e2aa8159a148ba67f57\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the ArithmeticDirichletSeries roadmap for the window `6bc378"
+ },
+ {
+  "pr": 491,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: PDE report for 2026-09-27",
+  "dirs": [
+   "PDE"
+  ],
+  "labels": [],
+  "created": "2026-09-28",
+  "updated": "2026-09-28",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"bc61e7b32c7365b0385fec726d9d4bc2ec787dea\",\"prs\":[6013,6127,6131,6143,6155,6255,6260,6326,6505,6557,6571,6710,6717,6737,6788,6810,7044,7158,7270,7331,7354,7493,7528,7605,7651,7653,7677,7687,7834,7838,7843,7876,7925,8183,8417,8492,8499,8508,8510,8530,8531,8563,8629,8714,8757,8846,8924,8927,8962,8987,8989,8991,8994,9065,9095,9221,9283,9287,9300,9337,9345,9465],\"roadmap\":\"PDE\",\"to_sha\":\"b1ab119fa96ae6d2d8f43e2aa8159a148ba67f57\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the PDE roadmap for the window `bc61e7b..b1ab11"
+ },
+ {
+  "pr": 480,
+  "author": "KevorkianPhilippe",
+  "kind": "roadmap",
+  "title": "Add roadmap: Hamiltonian systems and moment maps",
+  "dirs": [
+   "HamiltonianSystems"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-27",
+  "updated": "2026-10-05",
+  "body": "This adds a roadmap, `TauCetiRoadmap/HamiltonianSystems/`, for the Hamiltonian layer on top of Tau Ceti's symplectic manifolds (`SmoothTwoForm`, `SmoothTwoForm.IsSymplectic`, the cotangent models, and the maximal flows): - **Layer 1.** Hamiltonian vector fields and the Poisson bracket on weakly symplectic Banach manifolds, with the weak nondegeneracy of `SmoothTwoForm.IsNondegenerate`. It also contains the invariant formula for a closed two-form, and the Lie algebra of Hamiltonian functions. - **Layer 2.** Conservation laws, symplectic maps and symplectomorphisms, the canonical model in coordi"
+ },
+ {
+  "pr": 464,
+  "author": "ldct",
+  "kind": "progress",
+  "title": "progress: AlgebraicCodingTheory report for 2026-09-26",
+  "dirs": [
+   "AlgebraicCodingTheory"
+  ],
+  "labels": [],
+  "created": "2026-09-27",
+  "updated": "2026-09-27",
+  "body": "<!--tauceti-progress-pr:v1 {\"from_sha\":\"66cca668f423bd68ddf6d9802418ca061cdc358b\",\"prs\":[6778,6779,6784,6787,6819,6869,6873,6891,6922,7040,7142,7160,7195,7203,7337,7464,7465,7472,7476,7477,7482,7484,7497,7507,7517,7532,7548,7556,7562,7570,7602,7639,7643,7740,7760,7790,7882,7942,8103,8121,8359,8385,8391,8404,8450,8545,8652,8731,8959,8978,8986,8995,9079],\"roadmap\":\"AlgebraicCodingTheory\",\"to_sha\":\"759eb3ef9658ad1d756b2d42bc5882bb394586c2\",\"version\":\"edd3e9dae0f91b0b7a5778d632f7ec017d818a55\"}--> This PR records progress on the AlgebraicCodingTheory roadmap for the window `66cca66..759eb3e` of Tau"
+ },
+ {
+  "pr": 453,
+  "author": "JakobScholbach",
+  "kind": "roadmap",
+  "title": "feat: add the CommRingFactorizationSystems roadmap",
+  "dirs": [
+   "CommRingFactorizationSystems"
+  ],
+  "labels": [],
+  "created": "2026-09-26",
+  "updated": "2026-10-04",
+  "body": "A new roadmap: **generated factorization systems on commutative rings.** Several classical closure operations on a commutative ring are reflections onto the local objects of an orthogonal factorization system whose left class is generated by a handful of explicit maps between finitely presented rings: localization at the inverted elements, integral closure, the largest absolutely flat quotient (Olivier), and the seminormalization and absolute weak normalization of Stacks 0EUR. This roadmap builds those systems on `CommRingCat`, identifies both classes of each by intrinsic ring theory, identifi"
+ },
+ {
+  "pr": 451,
+  "author": "mkaratarakis",
+  "kind": "roadmap",
+  "title": "Add roadmap: linear forms in logarithms, Baker's theorem over ℂ and ℂ_p",
+  "dirs": [
+   "LinearFormsInLogarithms"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-09-26",
+  "updated": "2026-10-04",
+  "body": "This adds a roadmap for the transcendence of values of the exponential function, in TauCetiRoadmap/LinearFormsInLogarithms/ (README.md and Suggested.lean). Complex part (Waldschmidt, Diophantine Approximation on Linear Algebraic Groups, Ch. 4): the Schneider–Lang criterion for ℂ^{d₀} × (ℂˣ)^{d₁} (his Corollary 4.2); from it, Hermite–Lindemann, Gelfond–Schneider, and Baker's theorem with its corollaries; most of the work is the analysis underneath, which Mathlib lacks: multi-index Taylor coefficients (Layer 0) and Cauchy and Schwarz estimates on polydiscs (Layer 1). p-adic part (Layer 8): Baker"
+ },
+ {
+  "pr": 449,
+  "author": "fzaiser",
+  "kind": "roadmap",
+  "title": "Expand the standard distributions roadmap: new families, quantiles, and transformations",
+  "dirs": [
+   "StandardDistributions"
+  ],
+  "labels": [],
+  "created": "2026-09-26",
+  "updated": "2026-09-26",
+  "body": "## Summary Extends the **StandardDistributions roadmap from Layers 0–6 to Layers 0–15**, retaining existing targets and strengthening several statements. [**(README.md with rendered equations)**](https://github.com/fzaiser/TauCetiRoadmap/blob/standard-distributions-expansion/TauCetiRoadmap/StandardDistributions/README.md) The goal is a broader, connected library of probability distributions: not just definitions and density formulas, but also moments, cumulative distribution functions, quantiles, and results about transforming and combining random variables. Each entry specifies which results "
+ },
+ {
+  "pr": 447,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "feat: add the ChevalleyGroups roadmap and rebase the CFSG statement on it",
+  "dirs": [
+   "CFSGStatement",
+   "ChevalleyGroups",
+   "ReductiveGroups"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-25",
+  "updated": "2026-10-06",
+  "body": "This PR adds the ChevalleyGroups roadmap, which constructs the simply connected Chevalley–Demazure group scheme of every valid Dynkin type from one uniform recipe, and rebases the Lie-type half of the CFSG statement on it. The recipe is Kostant's `ℤ`-form acting on the direct sum of the fundamental modules. The roadmap covers the root subgroups for every root, the Bruhat decomposition, Steinberg's presentation, flatness and the big cell, the Frobenius, graph and exceptional endomorphisms with their action on characters, and Chevalley's comparison theorem. CFSGStatement now takes every Lie-type"
+ },
+ {
+  "pr": 446,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "Roadmap: finiteness and simplicity of every CFSG-listed group",
+  "dirs": [
+   "CFSGBasicProperties"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-25",
+  "updated": "2026-10-06",
+  "body": "CFSGStatement names every cyclic, alternating, Lie-type, and sporadic group on the classification list, but stops before proving that its concrete carriers are finite and simple. This roadmap makes those two properties the endpoint for `CFSGIndex.Group` itself. The Lie-type lane proves finite-coordinate descent for Steinberg fixed points, complete ambient root generation and fixed-point Bruhat descent, then checks all seventeen constructors. The Tits group has a separate finite-action recognition path because the full Ree group's BN-pair does not identify its derived subgroup. The sporadic lan"
+ },
+ {
+  "pr": 444,
+  "author": "fzaiser",
+  "kind": "roadmap",
+  "title": "Add roadmap: Finite graph connectivity and network flows",
+  "dirs": [
+   "GraphConnectivityAndFlows"
+  ],
+  "labels": [],
+  "created": "2026-09-24",
+  "updated": "2026-10-05",
+  "body": "Adds a roadmap for finite graph connectivity and network flows, building on Mathlib's `Graph`, `SimpleGraph`, and `Quiver` APIs. The **main targets** are: - **Graph structure:** bridges, cut vertices, blocks and the block–cut forest, ear decompositions, and Robbins' strong orientation theorem. - **Paths and connectivity:** Menger's theorem in local, vertex-capacitated, adjacent-terminal, and set-to-set forms, Whitney's inequalities, fans, cycles through prescribed vertices, and directed connectivity invariants. - **Flows and circulations:** flow decomposition, max-flow/min-cut, mixed vertex an"
+ },
+ {
+  "pr": 438,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "roadmap(BelyiMaps): point van Kampen and semilocal connectivity at their real owners",
+  "dirs": [
+   "BelyiMaps"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-22",
+  "updated": "2026-10-03",
+  "body": "This PR repoints two supplier contracts that name the wrong roadmap. The two-open Seifert-van Kampen theorem is attributed here to `UniversalCovers`, in the excluded material table and in the prerequisites of Layers 5.5 and 5.6. That roadmap never contained van Kampen at any point in its life; the `AlgebraicTopology` roadmap owns it, in Stage 1, where it is built through the fundamental groupoid with the group-presentation corollaries this roadmap wants and a wedge-of-circles check that recovers a free presentation. Semilocal simple connectivity is recorded as an unresolved supplier contract, "
+ },
+ {
+  "pr": 437,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "roadmap: add classifying spaces of discrete groups",
+  "dirs": [
+   "ClassifyingSpaces"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-22",
+  "updated": "2026-10-06",
+  "body": "This PR adds a roadmap that constructs a `K(G, 1)` for an arbitrary discrete group, in two models, proves they agree, and identifies the singular homology of the result with Mathlib's group homology. The universal-covers roadmap ends with recognition -- a space whose universal cover is weakly contractible is a `K(G, 1)`, with circles and tori as examples -- and says construction is out of its scope. Nothing else claims it, and nothing claims the topological side of discrete group cohomology either: the profinite-cohomology roadmap is explicitly about continuous cohomology of profinite groups. "
+ },
+ {
+  "pr": 436,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "roadmap(AlgebraicTopology): own the comparison of Mathlib's two CW structures",
+  "dirs": [
+   "AlgebraicTopology"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-22",
+  "updated": "2026-10-02",
+  "body": "This PR adds the comparison of Mathlib's two CW structures to Stage 4, and to the completion criterion. Mathlib has both: `Topology/CWComplex/Abstract/Basic.lean` builds a complex as the colimit of an expanding sequence of skeleta, each obtained from the last by attaching disks, and `Topology/CWComplex/Classical/Basic.lean` recognizes a CW structure on a subspace through explicit cells and characteristic maps. The two are equivalent, Mathlib says so in a comment, and Mathlib records proving it as a `TODO`. `RelativeCWComplex` currently appears in exactly one file. Stage 4 states cellular chain"
+ },
+ {
+  "pr": 435,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "roadmap(GeometricTopology): name the realization API layer 11 owes its consumers",
+  "dirs": [
+   "GeometricTopology"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-22",
+  "updated": "2026-09-26",
+  "body": "This PR names four parts of the abstract-simplicial-complex realization API that layer 11 already owns in substance but never listed: the continuous map induced by a simplicial map, restriction of a complex to a subset of its vertices, the factorization of a map out of a compact space through a finite vertex restriction, and the contraction of a realized cone onto its apex. Tau Ceti has the polyhedron with its weak topology, the combinatorial join and cone, subdivision and collapse, but of these four it has only the map induced by an inclusion `K ≤ L`. The compactness statement is the one that"
+ },
+ {
+  "pr": 432,
+  "author": "t4v1",
+  "kind": "roadmap",
+  "title": "Add roadmap: Kleinian groups, hyperbolic 3-manifolds, and arithmetic volume",
+  "dirs": [
+   "KleinianGroups"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-21",
+  "updated": "2026-09-30",
+  "body": "Adds a roadmap for discrete subgroups of `PSL(2, C)` acting on hyperbolic 3-space: the upper half-space model with its measure and distance, the quaternionic Moebius action, Kleinian groups, fundamental polyhedra and covolume, and the Bianchi groups of the two smallest discriminants. The endpoint is the covolumes of `PSL(2, Z[i])` and `PSL(2, Z[omega])`, `catalanConstant / 3` and `sqrt 3 * L(2, chi_-3) / 8`, computed from explicit fundamental polyhedra of the torsion-free congruence subgroups `Gamma(2 + i)` and `Gamma(3 + omega)` and the index law, together with a faithful statement of Thursto"
+ },
+ {
+  "pr": 419,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "feat(roadmap): Montgomery arithmetic and ECM correctness",
+  "dirs": [
+   "ECM"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-20",
+  "updated": "2026-10-06",
+  "body": "## Summary Develop the algebraic correctness theory of Lenstra's elliptic-curve factorization method. The 12 milestones cover Montgomery models, the Kummer line, differential arithmetic, the ladder, Suyama parameterization, reduction modulo a prime divisor, gcd extraction, conditional stage-1 and stage-2 detection, batched recovery, and finite ECM algorithms with worked examples. The roadmap fixes the scaled `(A+2)/4` convention, distinguishes prime-power order divisibility from smoothness, and explicitly handles invalid projective pairs and whole-modulus gcds. Its final milestone assembles th"
+ },
+ {
+  "pr": 417,
+  "author": "mccorvie",
+  "kind": "roadmap",
+  "title": "feat: roadmap for point processes and random measures",
+  "dirs": [
+   "PointProcesses"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-20",
+  "updated": "2026-10-07",
+  "body": "A roadmap for random measures, point processes, Palm theory, and stochastic intensities: locally finite configurations with the vague topology, laws and Laplace functionals on arbitrary measurable spaces, Campbell and Palm kernels, factorial and Janossy measures, Poisson processes and Mecke calculus, Poisson densities and the Papangelou intensity, operations and Grigelionis convergence, stationarity and second-order structure, stationary Palm theory with renewal processes, Cox processes, compensators and stochastic intensities for internal histories, Watanabe, random time change, and Poisson e"
+ },
+ {
+  "pr": 397,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "Random matrix theory: reusable foundations, spectral laws, and applications",
+  "dirs": [
+   "RandomMatrices"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-15",
+  "updated": "2026-10-07",
+  "body": "Add a random-matrix-theory roadmap selecting reusable material from Anderson–Guionnet–Zeitouni, Tao, and Potters–Bouchaud. Twelve milestones start with sample-space extensions, spectral measures, concentration and global laws, then cover free probability, covariance applications and spikes, Gaussian local statistics, large deviations, Dyson Brownian motion, and the circular law. The specification fixes normalization, transform signs, moment assumptions and convergence modes, and identifies dependencies on the existing distribution, transport, representation-theory and orthogonal-basis roadmaps"
+ },
+ {
+  "pr": 387,
+  "author": "cameronfreer",
+  "kind": "roadmap",
+  "title": "Explain roadmap writing and review with human direction and AI assistance",
+  "dirs": [],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-13",
+  "updated": "2026-09-27",
+  "body": "This PR explains the phases of writing a roadmap and the complementary questions involved in reviewing one: mathematical scope, architecture and Lean interfaces, Tau Ceti conventions, and detailed consistency checks. The README links to the guidance in `CONTRIBUTING.md`, which also gives examples of describing authorship and review coverage. Approval and AI-attribution rules are unchanged. The structure and much of the wording are adapted from [Cameron Freer's Zulip explanation of roadmap writing and review](https://leanprover.zulipchat.com/#narrow/channel/610393-Tau-Ceti/topic/Getting.20start"
+ },
+ {
+  "pr": 341,
+  "author": "JakobScholbach",
+  "kind": "roadmap",
+  "title": "feat: add the OrthogonalFactorization roadmap",
+  "dirs": [
+   "OrthogonalFactorization"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-09-07",
+  "updated": "2026-10-04",
+  "body": "A new roadmap: **unique lifting, orthogonal factorization systems, and their cellular presentations.** Mathlib has the weak half of lifting theory in full — `HasLiftingProperty`, `llp`/`rlp`, `IsWeakFactorizationSystem`, the small object argument and the presentability API that feeds it — and nothing for the unique half. There is no predicate for a square having exactly one filler, no orthogonal complement of a morphism property, and no orthogonal factorization system. `ObjectProperty.Orthogonal` is a different notion and does not meet this area. This roadmap builds the unique half, for an arb"
+ },
+ {
+  "pr": 334,
+  "author": "idontgetoutmuch",
+  "kind": "roadmap",
+  "title": " Differential Forms & Smooth Flows",
+  "dirs": [
+   "DifferentialGeometry"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-09-06",
+  "updated": "2026-10-04",
+  "body": "# Proposed sub-PR: Differential Forms & Smooth Flows ## Summary **@deicyde, would you be happy to split the broader differential-geometry roadmap into a small, focused sub-PR covering differential forms and smooth flows?** The aim is to establish the common substrate needed by later work on Lie-algebra-valued forms, connections, curvature and the Bianchi identity, while also closing the smooth-flow gap in the existing Tau Ceti development. This document is the **PR pitch**. The detailed mathematical and prior-art roadmap is in `README.md`; `Suggested.lean` is the compiled interface sketch. ## "
+ },
+ {
+  "pr": 323,
+  "author": "abderrahim-lectures",
+  "kind": "roadmap",
+  "title": "roadmap: Gorenstein homological algebra",
+  "dirs": [
+   "GorensteinHomologicalAlgebra"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-09-03",
+  "updated": "2026-10-04",
+  "body": "Proposes a roadmap for Gorenstein homological algebra: Gorenstein projective, injective, and flat modules over an associative ring, the complete resolutions that define them, the dimension theory they support, and the strongly Gorenstein classes that generate the general ones under direct summands. The area is currently unbuilt in Tau Ceti. The other occurrences of the name in both repositories are Daniel Gorenstein in classification bibliographies, and `GlobalNumberFields` owns Gorenstein *orders*, which is a different subject. ## The layers 0. Totally acyclic complexes and the homotopy crite"
+ },
+ {
+  "pr": 287,
+  "author": "rwst",
+  "kind": "roadmap",
+  "title": "feat: roadmap for arithmetic heights and Siegel's lemma",
+  "dirs": [
+   "ArithmeticHeights"
+  ],
+  "labels": [],
+  "created": "2026-08-26",
+  "updated": "2026-10-04",
+  "body": "Adds `TauCetiRoadmap/ArithmeticHeights/` — a seven-layer roadmap for heights of algebraic numbers, polynomials, matrices and **linear subspaces**, with **Siegel's lemma** and its invariant refinement **Bombieri–Vaaler** as the summit. The ultimate motivation is to have everything for a formalization of the subspace theorems (a different roadmap). The short version of the scope: Mathlib's `Mathlib/NumberTheory/Height/` (M. Stoll) already has the foundation, so this roadmap does not rebuild it. What is missing everywhere in Lean is the theory that stands on it — the Arakelov normalization, the a"
+ },
+ {
+  "pr": 286,
+  "author": "seewoo5",
+  "kind": "roadmap",
+  "title": "feat: roadmap for theta series of lattice",
+  "dirs": [
+   "ThetaSeries"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-08-26",
+  "updated": "2026-10-05",
+  "body": "The main goal of this formalization is to define theta series of lattices and prove Hecke-Schoeneberg, i.e. theta series of (even-dimensional) even lattice is a modular form of suitable weight (=dim/2) and level. When the lattice is unimodular, the level becomes 1. Using this, one can prove formulas for the number of lattices points with given length for small dimensions (notably 2, 8, 24). Note that this may overlap with integral lattice project and modular form project. At least, this project will use some part of these projects' formalizations. Also, the project idea arose from sphere packi"
+ },
+ {
+  "pr": 284,
+  "author": "Paul-Lez",
+  "kind": "roadmap",
+  "title": "feat: roadmap for high-dimensional differential topology and homotopy spheres",
+  "dirs": [
+   "AlgebraicTopology",
+   "HomotopySpheres"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-08-25",
+  "updated": "2026-10-04",
+  "body": "- Develop James/EHP, Bott periodicity, bundle classifiers, and Pontryagin–Thom. - Build h-cobordism and surgery theory through the classification of homotopy spheres and θ₆. Sources: Bott, Kervaire–Milnor, Browder, and Wall. Motivating consumer: [Levent PDF](https://alpo.ge/s6.pdf) AI assistance: Codex (GPT-5) and Codex 5.6 Sol."
+ },
+ {
+  "pr": 280,
+  "author": "Paul-Lez",
+  "kind": "roadmap",
+  "title": "feat: roadmap for complex tori and logarithmic transforms",
+  "dirs": [
+   "ComplexTori"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-08-25",
+  "updated": "2026-10-04",
+  "body": "- Construct complex-torus families from fixed and varying full lattices. - Develop torus-level cyclic affine quotients and logarithmic transforms. Sources: Birkenhake–Lange, Brown, and Barth–Hulek–Peters–Van de Ven. Motivating consumer: [Levent PDF](https://alpo.ge/s6.pdf) AI assistance: Codex (GPT-5) and Codex 5.6 Sol."
+ },
+ {
+  "pr": 279,
+  "author": "Paul-Lez",
+  "kind": "roadmap",
+  "title": "feat: roadmap for complex manifolds, quotients, bundles, and gluing",
+  "dirs": [
+   "ComplexManifolds"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-08-25",
+  "updated": "2026-10-04",
+  "body": "- Add restriction of scalars, atlas transport, and the standard Riemann-sphere atlas. - Develop holomorphic quotients, compatible open gluing, and holomorphic vector bundles. AI assistance: Codex (GPT-5) and Codex 5.6 Sol (xhigh review)."
+ },
+ {
+  "pr": 271,
+  "author": "mccorvie",
+  "kind": "roadmap",
+  "title": "Add roadmap: planar and surface topology",
+  "dirs": [
+   "BelyiMaps",
+   "ConformalMapping",
+   "GeometricTopology",
+   "PlanarTopology",
+   "SurfaceTopology"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-08-20",
+  "updated": "2026-10-07",
+  "body": "## Summary - Add a planar topology roadmap covering Jordan separation, surface triangulation, the two-dimensional Hauptvermutung, Schoenflies, and PL/smooth structure uniqueness. - Add a surface topology roadmap covering generalized maps, finite presentations, surface classification, mapping class groups, and planarity. - Connect the new roadmaps to the existing conformal mapping and geometric topology roadmaps. ## Validation - lake build - git diff --check ## AI assistance OpenAI Codex (GPT-5) was used for repository setup, build diagnosis, mechanical formatting, and pull-request preparation."
+ },
+ {
+  "pr": 260,
+  "author": "emberian",
+  "kind": "roadmap",
+  "title": "Add roadmap: structured block operators and certified fast application",
+  "dirs": [
+   "StructuredBlockOperators"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-08-17",
+  "updated": "2026-10-04",
+  "body": "## Summary Adds a roadmap for structured finite block operators and certified fast application. The roadmap starts from rectangular block-constant matrices, proves the exact fiber-sum application algorithm, and gives operation counts a concrete program can certify. It then separates quotient-plus-residual approximation, low-rank correction, normalized-kernel consumers, banded/circulant mechanisms, and executable certificates into explicit layers. ## Scope and coordination This PR owns reusable structured-operator mathematics and verified finite algorithms, not an ML framework. It consumes equi"
+ },
+ {
+  "pr": 259,
+  "author": "emberian",
+  "kind": "roadmap",
+  "title": "Add roadmap: finite discrete-time quantum walks",
+  "dirs": [
+   "DiscreteQuantumWalks"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-08-17",
+  "updated": "2026-10-04",
+  "body": "## Summary Adds a roadmap for finite discrete-time quantum walks on Mathlib matrices and stochastic matrices. The roadmap separates the common finite unitary-step API from coined walks and Szegedy walks, then identifies spectral mapping, transfer and mixing, exact lumping, search/hitting notions, and standard finite examples as distinct implementation layers. ## Scope and coordination This PR owns discrete-time unitary dynamics. It consumes the equitable-reduction layer proposed in #257. Continuous-time spectral dynamics are intentionally split into sibling PR #258 because the state spaces, sp"
+ },
+ {
+  "pr": 258,
+  "author": "emberian",
+  "kind": "roadmap",
+  "title": "Add roadmap: finite spectral graph theory and continuous-time quantum walks",
+  "dirs": [
+   "SpectralQuantumWalks"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-08-17",
+  "updated": "2026-10-04",
+  "body": "## Summary Adds a roadmap for Mathlib-native finite spectral graph theory and continuous-time quantum walks. The roadmap fixes the column-state and sign conventions for `U_A(t) = exp(-itA)`, then decomposes the subject into finite Hermitian evolution, local spectral projectors, transfer and periodicity, arithmetic criteria, mixing, products, standard graph families, and finite spatial search. ## Scope and coordination This PR owns continuous-time unitary dynamics. It consumes the equitable-reduction layer proposed in #257 and the general operator-theory work in #126. Discrete-time coined/Szege"
+ },
+ {
+  "pr": 257,
+  "author": "emberian",
+  "kind": "roadmap",
+  "title": "Add roadmap: equitable partitions and finite operator reduction",
+  "dirs": [
+   "EquitableOperatorReduction"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-08-17",
+  "updated": "2026-10-04",
+  "body": "## Summary Adds a roadmap for equitable partitions as finite operator reductions, centered on Mathlib-native finite types, matrices, and linear maps. The roadmap separates four notions that are easy to conflate: - exact algebraic equitability; - normalized Hermitian compression and intertwining; - approximate reduction measured by the residual `A E - E Q`; - stronger block-constant structure. It then identifies graph, stochastic, and symmetry-orbit adapters as consumers of the common operator API. ## Scope and coordination This PR owns the reusable finite reduction layer. The continuous- and d"
+ },
+ {
+  "pr": 253,
+  "author": "roed-math",
+  "kind": "roadmap",
+  "title": "Add roadmap: Zeros of L-functions",
+  "dirs": [
+   "ZerosOfLFunctions"
+  ],
+  "labels": [
+   "awaiting-review",
+   "awaiting-dependencies"
+  ],
+  "created": "2026-08-17",
+  "updated": "2026-10-07",
+  "body": "> **Dependencies:** This roadmap depends on [Arithmetic Dirichlet Series #192](https://github.com/TauCetiProject/TauCetiRoadmap/pull/192), [L-functions #248](https://github.com/TauCetiProject/TauCetiRoadmap/pull/248), and [Chebotarev #249](https://github.com/TauCetiProject/TauCetiRoadmap/pull/249). It should be reviewed and merged after those supplier PRs. The inherited supplier order includes **[#192](https://github.com/TauCetiProject/TauCetiRoadmap/pull/192); [#188](https://github.com/TauCetiProject/TauCetiRoadmap/pull/188) → [#244](https://github.com/TauCetiProject/TauCetiRoadmap/pull/244) "
+ },
+ {
+  "pr": 248,
+  "author": "roed-math",
+  "kind": "roadmap",
+  "title": "Add roadmap: L-functions: completions and functional equations",
+  "dirs": [
+   "LFunctions"
+  ],
+  "labels": [
+   "awaiting-review",
+   "awaiting-dependencies"
+  ],
+  "created": "2026-08-17",
+  "updated": "2026-10-07",
+  "body": "> **Dependencies:** This roadmap depends on Arithmetic Dirichlet Series (#192) and Global Number Fields (#245), both merged, and on [Theta Series #286](https://github.com/TauCetiProject/TauCetiRoadmap/pull/286), which it imports (`import TauCetiRoadmap.ThetaSeries.Suggested`) and whose nine consumed declarations it applies by name. It should be merged after #286. Theta Series imports no roadmap (its lattices are the Tau Ceti library's), so the edge is a leaf and there is no cycle. The `build` check on this PR is red until #286 merges; that is the portfolio's merge-order model. ## Summary This "
+ },
+ {
+  "pr": 237,
+  "author": "emberian",
+  "kind": "roadmap",
+  "title": "Add incompressible flows and Navier–Stokes roadmap",
+  "dirs": [
+   "IncompressibleFlows"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-08-17",
+  "updated": "2026-10-04",
+  "body": "hey all, i got roped into this by Sol, who told me this is probably worth my attention. ok ok ok fine. i'm still settling in to really review this plan, but thought i'd share it early rather than late. i have a background in formal verification (long before AI) but am not an expert in incompressible flow theory yet. anyway, here's codex about the work: --- Codex here. This draft proposes a dependency-ordered roadmap for building reusable formal infrastructure for incompressible Euler and Navier–Stokes evolution. It grew out of trying to inspect and formalize a purported Navier–Stokes regularit"
+ },
+ {
+  "pr": 234,
+  "author": "cameronfreer",
+  "kind": "roadmap",
+  "title": "roadmap(Exchangeability): require witness coherence and proof-route independence",
+  "dirs": [
+   "Exchangeability"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-08-15",
+  "updated": "2026-09-27",
+  "body": "Require almost-everywhere agreement of the tail-conditioned and shift-invariant-conditioned canonical directing measures under a contractable finite measure, and preserve transitive import independence of the default, L², and Koopman proofs. The mathematical target uses the two named `ConditionallyIIDWith` witness theorems and finite-measure directing-witness uniqueness. Layer 6 specifies the generalization of both `ConditionallyIIDWith.ae_measure_apply_eq` and `conditionallyIID_ae_unique`, using the existing finite-measure empirical-frequency convergence result. Coordinate measurability comes"
+ },
+ {
+  "pr": 226,
+  "author": "0stellensatz",
+  "kind": "roadmap",
+  "title": "Add roadmap: counting totally ramified extensions of a local field",
+  "dirs": [
+   "LocalFieldsRamification",
+   "MassFormula"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-08-14",
+  "updated": "2026-10-07",
+  "body": "## Summary This roadmap owns the **counting** of totally ramified extensions of a non-archimedean local field: the set `σ_K(n)`, the wild exponent `c(L) = d(L) − n + 1` as its weight, the machinery that evaluates the count, and the two mass formulas of [Serre 1978] with the finiteness, convergence and orbit statements that accompany them. ```text ∑_{L ∈ σ_K(n)} q^{-c(L)} = n ∑_{M} 1 / (#Aut_K(M) · q^{c(M)}) = 1 ``` The directory is `TauCetiRoadmap/MassFormula/`, renamed from `TotallyRamified` during review: the old name claimed the arithmetic of total ramification, which this roadmap does not "
+ },
+ {
+  "pr": 223,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "Add roadmap: algebraic McKay correspondence and skew group algebras",
+  "dirs": [
+   "McKaySkewGroup"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-08-13",
+  "updated": "2026-10-06",
+  "body": "> **Stacked-PR safety:** this roadmap is complete and ready for review. It is marked draft only because this repository automatically enables merge on every non-draft PR, while this PR temporarily targets an unprotected prerequisite branch. Keep it draft until its prerequisites merge; then retarget it to `main` and mark it ready. ## Summary Adds a literature roadmap for the algebraic McKay correspondence: explicit cyclic and binary polyhedral subgroups of `SU(2)`, irreducibles and McKay matrices, named affine ADE graphs and the regular dimension vector `δ`, the algebraic affine-to-finite root-"
+ },
+ {
+  "pr": 222,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "roadmap: add hopfological algebra and categorification at roots of unity",
+  "dirs": [
+   "HopfologicalAlgebra"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-08-13",
+  "updated": "2026-10-06",
+  "body": "This PR adds a roadmap for hopfological algebra: integrals and the Larson–Sweedler Frobenius theorem for finite-dimensional Hopf algebras; the tensor-triangulated stable categories `H-StMod` and `H-stmod`; module algebras, comodule algebras, and smash products; the relative category `C(A,H)` of smash-product modules modulo the integral null ideal and its derived localization `D(A,H)`; strict cofibrancy, cellular and homotopy-invariant property (P), compact generation, and finiteness; Grothendieck rings and modules; the super, characteristic-`p`, Sweedler, Nichols, and Taft examples; and the La"
+ },
+ {
+  "pr": 219,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "Add roadmap: Niemeier glue and explicit Leech constructions",
+  "dirs": [
+   "Rank24LatticeConstructions"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-08-13",
+  "updated": "2026-10-06",
+  "body": "## Summary Adds a construction roadmap for all 23 rootful even unimodular rank-24 lattices from the explicit Conway–Sloane ADE glue table, followed by an explicit Construction-B/odd-shift construction of the rootless Leech lattice. Every rootful row carries typed ADE discriminant coordinates, executable generator-pattern semantics, subgroup order/isotropy/Lagrangian and coset-minimum checks, a literal root-sublattice target, and code identifications where applicable. The roadmap also catches the exceptional `D₄⁶` convention: Conway–Sloane’s displayed generators span over the pinned `F₄`, not m"
+ },
+ {
+  "pr": 196,
+  "author": "bwangpj",
+  "kind": "roadmap",
+  "title": "feat: add cohomological comparison and point counting roadmaps",
+  "dirs": [
+   "CohomologicalPointCounting"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-08-12",
+  "updated": "2026-10-04",
+  "body": "Closes #195 ## Summary This PR adds a seven-roadmap family, **Cohomological comparison and point counting**, whose two principal summits are: - finite-level Artin comparison, including compact supports and relative compatibility; - the Grothendieck--Lefschetz trace formula for constructible finite-Tor-dimension coefficients, followed by cohomological zeta and sheaf $L$-functions. The family is organized as: 1. `FrobeniusGeometry` 2. `ConstructibleEtale` 3. `EtaleBaseChange` 4. `CompactSupport` 5. `ComplexComparison` 6. `EllAdicRealization` 7. `TraceFormula` It also adds the family to the root "
+ },
+ {
+  "pr": 151,
+  "author": "gersh",
+  "kind": "roadmap",
+  "title": "Roadmap: Poincaré’s classical nonintegrability theorem for the planar CR3BP",
+  "dirs": [
+   "RestrictedThreeBody"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-08-04",
+  "updated": "2026-10-04",
+  "body": "## Summary - make Poincaré’s classical planar parameter-analytic theorem the single summit - reduce the dependency graph to focused Hamiltonian mechanics, analytic parameter families, torus Fourier analysis, planar Kepler/Delaunay coordinates, and the effective-resonance obstruction - remove the differential-Galois, higher-variational-equation, singular blow-up, contour, fixed-mass, and spatial milestones - derive the standard Delaunay normalization intrinsically and require explicit angle periods and symplecticity - make the effective-resonance nonvanishing/density calculation the principal s"
+ },
+ {
+  "pr": 126,
+  "author": "Erotemic",
+  "kind": "roadmap",
+  "title": "Roadmap: Hilbert Space Operator Theory",
+  "dirs": [
+   "OneParameterSemigroups",
+   "OperatorTheory",
+   "RepresentationTheory"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-07-31",
+  "updated": "2026-10-05",
+  "body": "This is an initial draft of a roadmap that covers a large amount of [a formalization of Davis-Kahan theory](https://github.com/AIQ-Kitware/aiq-dkps-formalization/) that I've already spent a good deal of time on and the foundations I needed to get there. It supersedes https://github.com/TauCetiProject/TauCetiRoadmap/pull/97 and I have an open issue (https://github.com/TauCetiProject/TauCetiRoadmap/issues/79) asking for guidance on how best to submit these sort of roadmaps, but on reviewing what other roadmaps look like, roadmaps of this scale seem reasonable. I'm marking this as a draft for now"
+ },
+ {
+  "pr": 117,
+  "author": "weiscadence",
+  "kind": "roadmap",
+  "title": "feat: a roadmap for the Laguerre and Jacobi orthogonal polynomials, and their L² bases",
+  "dirs": [
+   "LaguerreJacobi"
+  ],
+  "labels": [
+   "awaiting-author"
+  ],
+  "created": "2026-07-31",
+  "updated": "2026-10-04",
+  "body": "`OrthogonalL2Bases` defers Laguerre and Jacobi to \"a separate future roadmap\", on the grounds that Mathlib has neither family and so grounding them means defining the polynomials first. This is that roadmap. ### What it specifies Two halves, and only the first is new mathematics for the library. 1. **The algebraic families.** `Polynomial.laguerre α n` and `Polynomial.jacobi α β n`, each with its complete basic theory: degree, leading coefficient, three-term recurrence, the derivative identity that shifts the parameters, Rodrigues, and the classical special values. 2. **Their orthogonality rela"
+ },
+ {
+  "pr": 93,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "fix(PDE): correct ellipticity hypotheses and separate the regularity tracks",
+  "dirs": [
+   "PDE"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-07-27",
+  "updated": "2026-10-02",
+  "body": "This PR corrects the elliptic hypotheses in the PDE roadmap and splits Lane E into divergence-form weak and non-divergence-form strong/classical regularity tracks. Uniform ellipticity is stated for possibly non-symmetric coefficient fields by coercivity of both `a(x)` and `a(x)⁻¹`, with the quadratic, operator and mixed upper bounds derived at the same `Λ` rather than made primitive. That formulation and the more familiar coercivity-plus-operator-bound are not the same hypothesis at the same constants, so both conversions are recorded: `(λ, M)` in the operator form becomes `(λ, M²/λ)` in the i"
+ },
+ {
+  "pr": 66,
+  "author": "cameronfreer",
+  "kind": "roadmap",
+  "title": "Add roadmap: graph regularity, finite weak regularity, and arity-3 hypergraph complexes",
+  "dirs": [
+   "AlgebraicTopology",
+   "Regularity"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-07-08",
+  "updated": "2026-10-04",
+  "body": "## Scope Adds a self-contained finite regularity roadmap: graph regularity, finite Frieze–Kannan regularity, strong graph regularity, and an arity-three regular-approximation and induced-counting theorem. The regularity changes are in two files: - `TauCetiRoadmap/Regularity/README.md` — the mathematical specification, layer dependencies, conventions, and completion criteria. - `TauCetiRoadmap/Regularity/Suggested.lean` — suggested interfaces and definitions, importing only Mathlib. Theorem targets deliberately retain `sorry`. Induced removal, arithmetic applications, and exchangeability are co"
+ },
+ {
+  "pr": 58,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "feat: add roadmap for Temperley-Lieb diagrams, categories, and algebras",
+  "dirs": [
+   "TemperleyLieb"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-07-06",
+  "updated": "2026-10-06",
+  "body": "This PR adds a roadmap for Temperley-Lieb diagrams, categories, and algebras: planar matchings with their encodings, counting, and dihedral operations; the diagram category (circles as data) with its monoidal and rigid structure and its universal property as a presented monoidal category; the linear category TL(R, δ) with pivotal, spherical, braided, and ribbon instances; the algebras with the e_i presentation theorem, the unnormalized Markov trace, and conditional expectations; cell modules with the Gram determinant formula and the semisimplicity/nondegeneracy classifications; Jones-Wenzl pro"
+ },
+ {
+  "pr": 57,
+  "author": "kim-em",
+  "kind": "roadmap",
+  "title": "feat: add pivotal and spherical categories roadmap",
+  "dirs": [
+   "PivotalSpherical"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-07-06",
+  "updated": "2026-10-06",
+  "body": "This PR adds a roadmap for pivotal and spherical monoidal categories. It discharges the standing TODO in Mathlib's `CategoryTheory/Monoidal/Rigid/Basic.lean` (\"Define pivotal categories (rigid categories equipped with a natural isomorphism `ᘁᘁ ≅ 𝟙 C`)\") and specifies the theory it opens onto: the dual functor `C ⥤ (Cᵒᵖ)ᴹᵒᵖ` and the double-dual endofunctor built from it, pivotal structures as monoidal trivializations of the double dual, the left and right categorical traces and dimensions, spherical categories, quantum and Frobenius–Perron dimension, the two structural examples (`FDRep G` with "
+ },
+ {
+  "pr": 41,
+  "author": "cameronfreer",
+  "kind": "roadmap",
+  "title": "doc: add grounded roadmap for infinitary syntax, back-and-forth, and Scott analysis",
+  "dirs": [
+   "InfinitaryLogic"
+  ],
+  "labels": [
+   "awaiting-review"
+  ],
+  "created": "2026-06-27",
+  "updated": "2026-10-04",
+  "body": "## Summary Adds `TauCetiRoadmap/InfinitaryLogic/`, a grounded roadmap for the first Tau Ceti infinitary-model-theory spine: - **Layer 0:** the fixed-carrier infinitary syntax `BoundedFormulaInf L ι α n` over `FirstOrder.Language`, with Lω₁ω as the definitional `ι := ℕ` specialization. It includes the carrier-coding and transport algebra (`IndexCoding`, coded connectives, `reindex`), the carrier-generic finitary embedding `toInf`, and carrier-generic substitution, relabeling, `castLE`, and free-variable support with their general realization laws. - **Layer 1:** the back-and-forth recursion `BF"
+ }
+]

@@ -1,0 +1,1576 @@
+[
+ {
+  "name": "AdicSpaces",
+  "where": "main",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "AlgebraicCodingTheory",
+  "where": "main",
+  "arxiv": "math.IT"
+ },
+ {
+  "name": "AlgebraicCurves",
+  "where": "main",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "AlgebraicTopology",
+  "where": "main",
+  "arxiv": "math.AT"
+ },
+ {
+  "name": "AlgebraicVectorBundles",
+  "where": "main",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "AnalyticToricGeometry",
+  "where": "main",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "ArithmeticDirichletSeries",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "BelyiMaps",
+  "where": "main",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "CFSGStatement",
+  "where": "main",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "Chebotarev",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "ClassFieldTheory",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "CombinatorialHeegaardFloer",
+  "where": "main",
+  "arxiv": "math.GT"
+ },
+ {
+  "name": "ConformalMapping",
+  "where": "main",
+  "arxiv": "math.CV"
+ },
+ {
+  "name": "DGAInfinity",
+  "where": "main",
+  "arxiv": "math.CT"
+ },
+ {
+  "name": "DenseGraphLimits",
+  "where": "main",
+  "arxiv": "math.CO"
+ },
+ {
+  "name": "DifferentialGeometry",
+  "where": "main",
+  "arxiv": "math.DG"
+ },
+ {
+  "name": "EllipticCurves",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "Exchangeability",
+  "where": "main",
+  "arxiv": "math.PR"
+ },
+ {
+  "name": "FuchsianOrbifolds",
+  "where": "main",
+  "arxiv": "math.CV"
+ },
+ {
+  "name": "GeometricTopology",
+  "where": "main",
+  "arxiv": "math.GT"
+ },
+ {
+  "name": "GlobalNumberFields",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "GlobalQuadraticForms",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "GrothendieckEulerForms",
+  "where": "main",
+  "arxiv": "math.RT"
+ },
+ {
+  "name": "HeegaardFloer",
+  "where": "main",
+  "arxiv": "math.SG"
+ },
+ {
+  "name": "HopfRinow",
+  "where": "main",
+  "arxiv": "math.DG"
+ },
+ {
+  "name": "IntegralLattices",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "JacobianChallenge",
+  "where": "main",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "LocalFieldsRamification",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "LocalGaloisGroups",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "ModularCurves",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "ModularForms",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "Multiquadratic",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "NumberFieldArithmetic",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "OneParameterSemigroups",
+  "where": "main",
+  "arxiv": "math.FA"
+ },
+ {
+  "name": "OptimalTransport",
+  "where": "main",
+  "arxiv": "math.OC"
+ },
+ {
+  "name": "OrthogonalSpinGroups",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "PDE",
+  "where": "main",
+  "arxiv": "math.AP"
+ },
+ {
+  "name": "PeripheralActions",
+  "where": "main",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "PolynomialGaloisGroups",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "ProfiniteArithmetic",
+  "where": "main",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "ProfiniteCohomology",
+  "where": "main",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "ProfiniteProPGroups",
+  "where": "main",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "QuadraticFormInvariants",
+  "where": "main",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "RealAlgebraicGeometry",
+  "where": "main",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "ReductiveGroups",
+  "where": "main",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "RepresentationTheory",
+  "where": "main",
+  "arxiv": "math.RT"
+ },
+ {
+  "name": "RestrictedProducts",
+  "where": "main",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "StablePeriodicCurved",
+  "where": "main",
+  "arxiv": "math.RT"
+ },
+ {
+  "name": "StableReduction",
+  "where": "main",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "StandardDistributions",
+  "where": "main",
+  "arxiv": "math.PR"
+ },
+ {
+  "name": "ZigzagPreprojective",
+  "where": "main",
+  "arxiv": "math.RT"
+ },
+ {
+  "name": "ContourIntegration",
+  "where": "completed",
+  "arxiv": "math.CV"
+ },
+ {
+  "name": "EffectiveBounds",
+  "where": "completed",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "HodgeStructures",
+  "where": "completed",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "IntegralLattices",
+  "where": "completed",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "OrthogonalL2Bases",
+  "where": "completed",
+  "arxiv": "math.CA"
+ },
+ {
+  "name": "UniversalCovers",
+  "where": "completed",
+  "arxiv": "math.AT"
+ },
+ {
+  "name": "CertifiedPermutationComputation",
+  "where": "PR #717",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "CFSGBasicProperties",
+  "where": "PR #698",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "ChevalleyGroups",
+  "where": "PR #697",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "DGFloer",
+  "where": "PR #655",
+  "arxiv": "math.SG"
+ },
+ {
+  "name": "SporadicOrders",
+  "where": "PR #599",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "AbundanceStatement",
+  "where": "PR #545",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "HamiltonianSystems",
+  "where": "PR #480",
+  "arxiv": "math.SG"
+ },
+ {
+  "name": "CommRingFactorizationSystems",
+  "where": "PR #453",
+  "arxiv": "math.CT"
+ },
+ {
+  "name": "LinearFormsInLogarithms",
+  "where": "PR #451",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "ChevalleyGroups",
+  "where": "PR #447",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "CFSGBasicProperties",
+  "where": "PR #446",
+  "arxiv": "math.GR"
+ },
+ {
+  "name": "GraphConnectivityAndFlows",
+  "where": "PR #444",
+  "arxiv": "math.CO"
+ },
+ {
+  "name": "ClassifyingSpaces",
+  "where": "PR #437",
+  "arxiv": "math.AT"
+ },
+ {
+  "name": "KleinianGroups",
+  "where": "PR #432",
+  "arxiv": "math.GT"
+ },
+ {
+  "name": "ECM",
+  "where": "PR #419",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "PointProcesses",
+  "where": "PR #417",
+  "arxiv": "math.PR"
+ },
+ {
+  "name": "RandomMatrices",
+  "where": "PR #397",
+  "arxiv": "math.PR"
+ },
+ {
+  "name": "OrthogonalFactorization",
+  "where": "PR #341",
+  "arxiv": "math.CT"
+ },
+ {
+  "name": "GorensteinHomologicalAlgebra",
+  "where": "PR #323",
+  "arxiv": "math.RA"
+ },
+ {
+  "name": "ArithmeticHeights",
+  "where": "PR #287",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "ThetaSeries",
+  "where": "PR #286",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "HomotopySpheres",
+  "where": "PR #284",
+  "arxiv": "math.GT"
+ },
+ {
+  "name": "ComplexTori",
+  "where": "PR #280",
+  "arxiv": "math.CV"
+ },
+ {
+  "name": "ComplexManifolds",
+  "where": "PR #279",
+  "arxiv": "math.CV"
+ },
+ {
+  "name": "PlanarTopology",
+  "where": "PR #271",
+  "arxiv": "math.GT"
+ },
+ {
+  "name": "SurfaceTopology",
+  "where": "PR #271",
+  "arxiv": "math.GT"
+ },
+ {
+  "name": "StructuredBlockOperators",
+  "where": "PR #260",
+  "arxiv": "math.NA"
+ },
+ {
+  "name": "DiscreteQuantumWalks",
+  "where": "PR #259",
+  "arxiv": "math.CO"
+ },
+ {
+  "name": "SpectralQuantumWalks",
+  "where": "PR #258",
+  "arxiv": "math.CO"
+ },
+ {
+  "name": "EquitableOperatorReduction",
+  "where": "PR #257",
+  "arxiv": "math.CO"
+ },
+ {
+  "name": "ZerosOfLFunctions",
+  "where": "PR #253",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "LFunctions",
+  "where": "PR #248",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "IncompressibleFlows",
+  "where": "PR #237",
+  "arxiv": "math.AP"
+ },
+ {
+  "name": "MassFormula",
+  "where": "PR #226",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "McKaySkewGroup",
+  "where": "PR #223",
+  "arxiv": "math.RT"
+ },
+ {
+  "name": "HopfologicalAlgebra",
+  "where": "PR #222",
+  "arxiv": "math.KT"
+ },
+ {
+  "name": "Rank24LatticeConstructions",
+  "where": "PR #219",
+  "arxiv": "math.NT"
+ },
+ {
+  "name": "CohomologicalPointCounting",
+  "where": "PR #196",
+  "arxiv": "math.AG"
+ },
+ {
+  "name": "RestrictedThreeBody",
+  "where": "PR #151",
+  "arxiv": "math.DS"
+ },
+ {
+  "name": "OperatorTheory",
+  "where": "PR #126",
+  "arxiv": "math.FA"
+ },
+ {
+  "name": "LaguerreJacobi",
+  "where": "PR #117",
+  "arxiv": "math.CA"
+ },
+ {
+  "name": "Regularity",
+  "where": "PR #66",
+  "arxiv": "math.CO"
+ },
+ {
+  "name": "TemperleyLieb",
+  "where": "PR #58",
+  "arxiv": "math.QA"
+ },
+ {
+  "name": "PivotalSpherical",
+  "where": "PR #57",
+  "arxiv": "math.QA"
+ },
+ {
+  "name": "InfinitaryLogic",
+  "where": "PR #41",
+  "arxiv": "math.LO"
+ },
+ {
+  "name": "AInfCohomology",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 9
+ },
+ {
+  "name": "AbelianSchemesAndArithmeticModuli",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14K",
+  "distance": 6
+ },
+ {
+  "name": "AdditiveCombinatorics",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11B",
+  "distance": 7
+ },
+ {
+  "name": "AdelicAlgebraicGroups",
+  "where": "campaign",
+  "arxiv": "math.GR",
+  "msc": "20G",
+  "distance": 5
+ },
+ {
+  "name": "AdicCoefficientsAndComparisons",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 9
+ },
+ {
+  "name": "AdicEtaleGeometry",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 8
+ },
+ {
+  "name": "AdicSpacesPartII",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 7
+ },
+ {
+  "name": "AlgebraicModularFormsAndSerreWeights",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 6
+ },
+ {
+  "name": "AlgebraicModuliForArithmeticGeometry",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14D",
+  "distance": 6
+ },
+ {
+  "name": "AnabelianGeometryAndNonabelianChabauty",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 9
+ },
+ {
+  "name": "AnalyticNumberTheory",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11M",
+  "distance": 4
+ },
+ {
+  "name": "ArakelovGeometryAndAbelianHeights",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 8
+ },
+ {
+  "name": "ArithmeticDynamics",
+  "where": "campaign",
+  "arxiv": "math.DS",
+  "msc": "37P",
+  "distance": 6
+ },
+ {
+  "name": "ArithmeticGaloisDuality",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 5
+ },
+ {
+  "name": "ArithmeticGaloisRepresentations",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 5
+ },
+ {
+  "name": "ArithmeticKTheory",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19F",
+  "distance": 9
+ },
+ {
+  "name": "ArithmeticLocallySymmetricSpaces",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 7
+ },
+ {
+  "name": "ArithmeticQuantumTopology",
+  "where": "campaign",
+  "arxiv": "math.GT",
+  "msc": "57K",
+  "distance": 9
+ },
+ {
+  "name": "ArithmeticStatistics",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 6
+ },
+ {
+  "name": "AutomorphicBundles",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 8
+ },
+ {
+  "name": "AutomorphicCongruences",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 10
+ },
+ {
+  "name": "AutomorphicFormsOnReductiveGroups",
+  "where": "campaign",
+  "arxiv": "math.RT",
+  "msc": "22E",
+  "distance": 7
+ },
+ {
+  "name": "AutomorphicGaloisRepresentations",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 9
+ },
+ {
+  "name": "AutomorphicGaloisRepresentationsPartII",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 10
+ },
+ {
+  "name": "AutomorphicLFunctionsAndLocalFactors",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 6
+ },
+ {
+  "name": "AutomorphicPadicLFunctions",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 9
+ },
+ {
+  "name": "AutomorphicSpectralTheory",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 8
+ },
+ {
+  "name": "BorelRegulators",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19F",
+  "distance": 8
+ },
+ {
+  "name": "BunGAndNewtonStrata",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 10
+ },
+ {
+  "name": "ClassicalAdicEtaleCohomology",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 8
+ },
+ {
+  "name": "ClassicalArithmeticCompletion",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11A",
+  "distance": 3
+ },
+ {
+  "name": "ClassicalSerreModularity",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 10
+ },
+ {
+  "name": "CohomologyComparisons",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 10
+ },
+ {
+  "name": "ColemanIntegration",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11S",
+  "distance": 6
+ },
+ {
+  "name": "ColemanPowerSeries",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 4
+ },
+ {
+  "name": "CompletedCohomologyAndLocalGlobalCompatibility",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 10
+ },
+ {
+  "name": "CompletedCohomologyPartII",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 8
+ },
+ {
+  "name": "ComplexComparisonPartII",
+  "where": "campaign",
+  "arxiv": "math.CV",
+  "msc": "32C",
+  "distance": 6
+ },
+ {
+  "name": "ComplexMultiplicationAndExplicitReciprocity",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 7
+ },
+ {
+  "name": "ComputationalNumberTheory",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11Y",
+  "distance": 4
+ },
+ {
+  "name": "CrystallineCohomology",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 8
+ },
+ {
+  "name": "DeformationAndDerivedPatchingAlgebra",
+  "where": "campaign",
+  "arxiv": "math.AC",
+  "msc": "13D",
+  "distance": 5
+ },
+ {
+  "name": "DeligneWeightsAndPurity",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 9
+ },
+ {
+  "name": "DerivedDeRhamCohomology",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 8
+ },
+ {
+  "name": "DiamondEtaleCohomology",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 9
+ },
+ {
+  "name": "DiamondSixOperations",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 9
+ },
+ {
+  "name": "DiamondsAndVStacks",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 8
+ },
+ {
+  "name": "DiophantineApproximationAndTranscendence",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11J",
+  "distance": 5
+ },
+ {
+  "name": "DirichletPadicLFunctions",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11S",
+  "distance": 3
+ },
+ {
+  "name": "DrinfeldModulesAndTModules",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 7
+ },
+ {
+  "name": "EffectiveDiophantineMethods",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11Y",
+  "distance": 7
+ },
+ {
+  "name": "EllipticCurveModularity",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 9
+ },
+ {
+  "name": "EllipticKTheory",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19E",
+  "distance": 8
+ },
+ {
+  "name": "EllipticRegulators",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19F",
+  "distance": 9
+ },
+ {
+  "name": "EndoscopicTransferAndUnitaryTraceComparison",
+  "where": "campaign",
+  "arxiv": "math.RT",
+  "msc": "22E",
+  "distance": 10
+ },
+ {
+  "name": "EnhancedDerivedSheaves",
+  "where": "campaign",
+  "arxiv": "math.CT",
+  "msc": "18N",
+  "distance": 8
+ },
+ {
+  "name": "EtaleDualityAndPerverseSheaves",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 9
+ },
+ {
+  "name": "EulerSystemsAndKolyvaginSystems",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 7
+ },
+ {
+  "name": "EulerSystemsCyclotomicMainConjecture",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 8
+ },
+ {
+  "name": "ExcursionOperatorsAndSpectralAction",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11S",
+  "distance": 10
+ },
+ {
+  "name": "ExponentialSumsAndCircleMethod",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11P",
+  "distance": 6
+ },
+ {
+  "name": "FaltingsFinitenessAndIsogenyTheorems",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14K",
+  "distance": 9
+ },
+ {
+  "name": "FarguesFontaineDiamonds",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 9
+ },
+ {
+  "name": "FiniteFieldsAndCharacterSums",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11T",
+  "distance": 6
+ },
+ {
+  "name": "FiniteFlatGroupsAndIntegralPadicHodgeTheory",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14L",
+  "distance": 7
+ },
+ {
+  "name": "FoundationsAndLibraryIntegration",
+  "where": "campaign",
+  "arxiv": "unclassified",
+  "msc": null,
+  "distance": null
+ },
+ {
+  "name": "FunctionFieldArithmetic",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 6
+ },
+ {
+  "name": "GL2AutomorphicRepresentationsAndTransfer",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 9
+ },
+ {
+  "name": "GL2ModularityLifting",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 10
+ },
+ {
+  "name": "GeneralAlgebraicKTheory",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19D",
+  "distance": 7
+ },
+ {
+  "name": "GeneralizedHeegnerCycles",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 10
+ },
+ {
+  "name": "GeometricSatakeAndFusion",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14D",
+  "distance": 10
+ },
+ {
+  "name": "GeometryOfNumbersAndQuadraticArithmetic",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11H",
+  "distance": 5
+ },
+ {
+  "name": "GlobalGaloisDeformations",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 7
+ },
+ {
+  "name": "GlobalShtukasAndFunctionFieldLanglands",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 9
+ },
+ {
+  "name": "GrossZagierAndArithmeticHeights",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 9
+ },
+ {
+  "name": "HabiroCohomologyFoundations",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 10
+ },
+ {
+  "name": "HabiroCyclotomicCompletions",
+  "where": "campaign",
+  "arxiv": "math.AC",
+  "msc": "13J",
+  "distance": 2
+ },
+ {
+  "name": "HabiroNahmSeries",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 7
+ },
+ {
+  "name": "HabiroNumberFields",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 9
+ },
+ {
+  "name": "HabiroRings",
+  "where": "campaign",
+  "arxiv": "math.AC",
+  "msc": "13F",
+  "distance": 9
+ },
+ {
+  "name": "HeckeStacksAndLocalShtukas",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 10
+ },
+ {
+  "name": "HeegnerPointEulerSystems",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 9
+ },
+ {
+  "name": "HeightsRationalPointsAndObstructions",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 8
+ },
+ {
+  "name": "HigherLocalFieldsAndHigherClassFieldTheory",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11S",
+  "distance": 7
+ },
+ {
+  "name": "HilbertModularVarietiesAndShimuraCurves",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 8
+ },
+ {
+  "name": "HodgeTateAndCanonicalSubgroups",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 9
+ },
+ {
+  "name": "IgusaVarietiesAndTorsionConcentration",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 10
+ },
+ {
+  "name": "IntegralHeckeAndGaloisDeterminants",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 5
+ },
+ {
+  "name": "IntegralIwasawaTheory",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 9
+ },
+ {
+  "name": "InverseGaloisAndArithmeticFundamentalGroups",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "12F",
+  "distance": 7
+ },
+ {
+  "name": "K2SymbolsBrauer",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19C",
+  "distance": 5
+ },
+ {
+  "name": "K3BlochGroups",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19D",
+  "distance": 7
+ },
+ {
+  "name": "KTheoryFiniteLocalFields",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19D",
+  "distance": 9
+ },
+ {
+  "name": "KTheoryLowDegrees",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19A",
+  "distance": 4
+ },
+ {
+  "name": "KatoEulerSystems",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 9
+ },
+ {
+  "name": "LanglandsParameterStacks",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 9
+ },
+ {
+  "name": "LefschetzPencilsAndVanishingCycles",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 8
+ },
+ {
+  "name": "LocalGaloisDeformationRings",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 8
+ },
+ {
+  "name": "LocallyAnalyticDistributions",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11S",
+  "distance": 5
+ },
+ {
+  "name": "LogicAndDefinabilityInNumberTheory",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11U",
+  "distance": 6
+ },
+ {
+  "name": "MetaplecticAutomorphicForms",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 7
+ },
+ {
+  "name": "ModularCurvesPartII",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 8
+ },
+ {
+  "name": "ModularIwasawaMainConjectures",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 10
+ },
+ {
+  "name": "ModularSymbolsPadicLFunctions",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 7
+ },
+ {
+  "name": "ModularityAndLanglandsExtensions",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 10
+ },
+ {
+  "name": "MotivesAndAlgebraicCycles",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14C",
+  "distance": 8
+ },
+ {
+  "name": "MotivicEtaleKTheory",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19E",
+  "distance": 9
+ },
+ {
+  "name": "NeronModelsAndSemistableAbelianVarieties",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14K",
+  "distance": 8
+ },
+ {
+  "name": "NoncommutativeAndEquivariantIwasawa",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 10
+ },
+ {
+  "name": "OrdinaryAutomorphicFormsAndModularityLifting",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 9
+ },
+ {
+  "name": "OverconvergentAutomorphicForms",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 10
+ },
+ {
+  "name": "PELModuli",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 9
+ },
+ {
+  "name": "PadicDifferentialEquationsAndRigidCohomology",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 9
+ },
+ {
+  "name": "PadicFamilies",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 9
+ },
+ {
+  "name": "PadicHodgeRegulators",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11S",
+  "distance": 10
+ },
+ {
+  "name": "PadicHodgeTheory",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 9
+ },
+ {
+  "name": "PadicLocalLanglandsForGL2Qp",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11S",
+  "distance": 10
+ },
+ {
+  "name": "PadicMeasuresIwasawaAlgebras",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 4
+ },
+ {
+  "name": "PerfectoidQuotients",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 9
+ },
+ {
+  "name": "PerfectoidShimuraVarieties",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 10
+ },
+ {
+  "name": "PerfectoidSpaces",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 8
+ },
+ {
+  "name": "PeriodsAndSpecialValues",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 10
+ },
+ {
+  "name": "PhiGammaModulesAndIwasawaCohomology",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11S",
+  "distance": 8
+ },
+ {
+  "name": "Polylogarithms",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19F",
+  "distance": 9
+ },
+ {
+  "name": "PotentialAutomorphyInfrastructure",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 10
+ },
+ {
+  "name": "PotentialModularityAndCompatibleSystems",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 9
+ },
+ {
+  "name": "PrismaticCohomology",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 10
+ },
+ {
+  "name": "ProbabilisticAndMetricNumberTheory",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11K",
+  "distance": 5
+ },
+ {
+  "name": "QSeriesPartitionsAndMockModularForms",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 7
+ },
+ {
+  "name": "RankZeroOneBSD",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 10
+ },
+ {
+  "name": "ReductiveGroupsPartII",
+  "where": "campaign",
+  "arxiv": "math.GR",
+  "msc": "20G",
+  "distance": 7
+ },
+ {
+  "name": "RefinedTraceMethods",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19D",
+  "distance": 10
+ },
+ {
+  "name": "RelativeFarguesFontaine",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 10
+ },
+ {
+  "name": "SchemeAndStackFoundations",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14A",
+  "distance": 6
+ },
+ {
+  "name": "SchemeKTheoryOperations",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19E",
+  "distance": 8
+ },
+ {
+  "name": "SelmerIwasawaCohomology",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 7
+ },
+ {
+  "name": "SerreWeightAndLevelOptimisation",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 9
+ },
+ {
+  "name": "ShimuraCompactifications",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 9
+ },
+ {
+  "name": "ShimuraData",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 5
+ },
+ {
+  "name": "ShimuraVarieties",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 9
+ },
+ {
+  "name": "SieveMethodsAndPrimePatterns",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11N",
+  "distance": 6
+ },
+ {
+  "name": "SmallRamificationAndAbelianVarietyBaseCases",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11G",
+  "distance": 8
+ },
+ {
+  "name": "SmoothRepresentationsOfLocalGroups",
+  "where": "campaign",
+  "arxiv": "math.RT",
+  "msc": "22E",
+  "distance": 8
+ },
+ {
+  "name": "SpecialValuesBirchTate",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11R",
+  "distance": 10
+ },
+ {
+  "name": "StableHomotopyKTheory",
+  "where": "campaign",
+  "arxiv": "math.KT",
+  "msc": "19D",
+  "distance": 5
+ },
+ {
+  "name": "TorsionCohomologyInfrastructure",
+  "where": "campaign",
+  "arxiv": "math.NT",
+  "msc": "11F",
+  "distance": 10
+ },
+ {
+  "name": "TropicalAndBerkovichArithmetic",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 7
+ },
+ {
+  "name": "VStackSheavesAndLisseCategories",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 10
+ },
+ {
+  "name": "VectorBundlesAndIsocrystals",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 9
+ },
+ {
+  "name": "WeightsInEtaleCohomology",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14F",
+  "distance": 9
+ },
+ {
+  "name": "WeilConjectures",
+  "where": "campaign",
+  "arxiv": "math.AG",
+  "msc": "14G",
+  "distance": 9
+ }
+]

@@ -1,0 +1,252 @@
+{
+  "areas": [
+    {
+      "id": "unmapped:riemannian-geometry",
+      "title": "Riemannian geometry",
+      "group": "geometry",
+      "summary": "Study smooth manifolds through metrics, connections, geodesics and curvature. Develop comparison theorems, Jacobi fields, the relation between curvature and topology, and geometric variational problems. Existing topology and transport roadmaps cover selected geometric structures and curvature arguments; a dedicated plan would connect these ingredients into a general theory of Riemannian manifolds.",
+      "relatedRoadmaps": [
+        "tauceti:TauCetiRoadmap/GeometricTopology",
+        "tauceti:TauCetiRoadmap/OptimalTransport",
+        "tauceti:TauCetiRoadmap/RepresentationTheory/LieGroups"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Riemannian geometry appears within geometric topology, Lie theory and optimal transport, rather than in its own general roadmap."
+    },
+    {
+      "id": "unmapped:complex-geometry",
+      "title": "Several complex variables and Kähler geometry",
+      "group": "geometry",
+      "summary": "Explore holomorphic functions and spaces in several variables: domains of holomorphy, pseudoconvexity, analytic continuation, complex subvarieties and the ∂̄ equation. Connect Hermitian and Kähler metrics with Hodge theory and vanishing theorems. Existing plans treat conformal mapping, automorphic bundles and arithmetic comparison; a dedicated roadmap would organise the broader analytic geometry.",
+      "relatedRoadmaps": [
+        "tauceti:TauCetiRoadmap/ConformalMapping",
+        "ComplexComparisonPartII",
+        "AutomorphicBundles",
+        "tauceti:TauCetiRoadmap/PDE"
+      ],
+      "reason": "No dedicated roadmap in this atlas. One-variable complex analysis and specialised complex-geometric comparisons are present; several complex variables and Kähler geometry have no standalone plan."
+    },
+    {
+      "id": "unmapped:symplectic-contact-geometry",
+      "title": "Symplectic and contact geometry",
+      "group": "geometry",
+      "summary": "Investigate symplectic forms, Hamiltonian flows, moment maps, symplectic reduction and Lagrangian submanifolds, alongside contact structures and Reeb dynamics. Connect local normal forms to global rigidity, embeddings and invariants. The Heegaard Floer roadmap already develops holomorphic curves and exact Lagrangian Floer theory; a dedicated plan would cover the surrounding geometric landscape.",
+      "relatedRoadmaps": [
+        "tauceti:TauCetiRoadmap/HeegaardFloer",
+        "tauceti:TauCetiRoadmap/GeometricTopology",
+        "tauceti:TauCetiRoadmap/RepresentationTheory/LieGroups"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Holomorphic-curve and Floer constructions supply substantial partial coverage, but they are organised around Floer homology rather than general symplectic and contact geometry."
+    },
+    {
+      "id": "unmapped:graph-theory",
+      "title": "Graph theory",
+      "group": "combinatorics",
+      "summary": "Develop the structure of finite and infinite graphs through connectivity, matchings, colouring, flows, planarity and graph minors. Study how local restrictions control global structure, and how structural theorems support algorithms. Existing plans use graphs in arithmetic, representation theory and topology; a dedicated roadmap would make the general combinatorial theory independently accessible.",
+      "relatedRoadmaps": [
+        "AdditiveCombinatorics",
+        "tauceti:TauCetiRoadmap/RepresentationTheory/QuiverRepresentations",
+        "tauceti:TauCetiRoadmap/GeometricTopology"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Graphs occur as tools and specialised objects, while general graph structure, colouring, matching and minor theory have no dedicated plan."
+    },
+    {
+      "id": "unmapped:extremal-probabilistic-combinatorics",
+      "title": "Extremal and probabilistic combinatorics",
+      "group": "combinatorics",
+      "summary": "Ask how large a combinatorial object can be while avoiding prescribed configurations, and how randomness constructs or describes such objects. Develop extremal graph theory, random graphs, concentration inequalities, the local lemma and hypergraph methods. The additive combinatorics roadmap covers arithmetic patterns and removal; a dedicated plan would extend to general discrete structures.",
+      "relatedRoadmaps": [
+        "AdditiveCombinatorics",
+        "ProbabilisticAndMetricNumberTheory",
+        "tauceti:TauCetiRoadmap/Exchangeability"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Additive combinatorics contains relevant removal and randomness methods, but its principal objects and endpoints are arithmetic."
+    },
+    {
+      "id": "unmapped:enumeration-matroids",
+      "title": "Enumerative combinatorics and matroids",
+      "group": "combinatorics",
+      "summary": "Count discrete structures using generating functions, recurrences, bijections, partially ordered sets and Möbius inversion. Study independence through matroids, including duality, minors, representability and characteristic polynomials. Partition identities and symmetric-group representations already appear in the atlas; a dedicated plan would connect those examples to a broader theory of enumeration and combinatorial geometry.",
+      "relatedRoadmaps": [
+        "QSeriesPartitionsAndMockModularForms",
+        "tauceti:TauCetiRoadmap/RepresentationTheory/SchurWeyl",
+        "FiniteFieldsAndCharacterSums"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Partition formulas and representation-theoretic combinatorics are present, but there is no general enumerative-combinatorics or matroid roadmap."
+    },
+    {
+      "id": "unmapped:ergodic-theory-dynamics",
+      "title": "Ergodic theory and smooth dynamics",
+      "group": "analysis",
+      "summary": "Study long-term behaviour through invariant measures, recurrence, mixing, entropy, symbolic dynamics and hyperbolic systems. Relate orbit structure to measurable and smooth conjugacy, and connect dynamical averages with geometric properties. Existing arithmetic and exchangeability plans include selected ergodic arguments; a dedicated roadmap would develop the general dynamical theory beyond those applications.",
+      "relatedRoadmaps": [
+        "ProbabilisticAndMetricNumberTheory",
+        "ArithmeticDynamics",
+        "tauceti:TauCetiRoadmap/Exchangeability",
+        "tauceti:TauCetiRoadmap/HeegaardFloer"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Ergodic methods and arithmetic dynamics have partial coverage, but general measurable and smooth dynamical systems do not have their own roadmap."
+    },
+    {
+      "id": "unmapped:operator-algebras",
+      "title": "Operator algebras",
+      "group": "analysis",
+      "summary": "Develop C*-algebras and von Neumann algebras through representations, functional calculus, positive maps, states, tensor products and projections. Study how noncommutative algebra encodes analysis and geometry, including traces and operator-algebraic K-theory. Existing semigroup and representation roadmaps provide neighbouring tools; a dedicated plan would organise the operator-algebraic objects and their structural theorems.",
+      "relatedRoadmaps": [
+        "tauceti:TauCetiRoadmap/OneParameterSemigroups",
+        "tauceti:TauCetiRoadmap/RepresentationTheory/CompactGroups",
+        "GeneralAlgebraicKTheory"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Functional analysis, group representations and algebraic K-theory are adjacent subjects; they do not constitute a dedicated C*-algebra or von Neumann-algebra plan."
+    },
+    {
+      "id": "unmapped:real-harmonic-analysis",
+      "title": "Real harmonic analysis",
+      "group": "analysis",
+      "summary": "Study functions through Fourier transforms, singular integrals, maximal operators, oscillation and decomposition across scales. Develop Littlewood–Paley theory, weighted estimates, restriction phenomena and time-frequency methods. The PDE roadmap already includes maximal, interpolation, Calderón–Zygmund and BMO estimates; a dedicated plan would connect that core to the wider theory and its applications.",
+      "relatedRoadmaps": [
+        "tauceti:TauCetiRoadmap/PDE",
+        "tauceti:TauCetiRoadmap/OrthogonalL2Bases",
+        "ExponentialSumsAndCircleMethod",
+        "AdditiveCombinatorics"
+      ],
+      "reason": "No dedicated roadmap in this atlas. The PDE and analytic-number-theory plans contain substantial harmonic analysis, organised around their specific analytic and arithmetic endpoints."
+    },
+    {
+      "id": "unmapped:statistical-inference",
+      "title": "Statistical inference",
+      "group": "analysis",
+      "summary": "Turn probability models and observations into estimators, tests and uncertainty statements. Develop sufficiency, likelihood, decision theory, asymptotic efficiency, nonparametric estimation and Bayesian inference, with explicit assumptions and error guarantees. Existing probability roadmaps study exchangeability and arithmetic distributions; a dedicated plan would address the mathematical theory of learning about unknown parameters and laws.",
+      "relatedRoadmaps": [
+        "tauceti:TauCetiRoadmap/Exchangeability",
+        "ArithmeticStatistics",
+        "tauceti:TauCetiRoadmap/OptimalTransport"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Arithmetic statistics concerns distributions of arithmetic objects, and exchangeability concerns probability representations; neither is a general statistical-inference roadmap."
+    },
+    {
+      "id": "unmapped:stochastic-processes",
+      "title": "Stochastic processes and stochastic calculus",
+      "group": "analysis",
+      "summary": "Develop Brownian motion, Markov processes, martingales, stopping times, stochastic integration and stochastic differential equations. Relate sample-path behaviour and probabilistic representations to generators and evolution equations. The atlas contains exchangeability, conditional-expectation limits and analytic semigroups; a dedicated roadmap would connect these ingredients through a systematic theory of continuous-time random processes.",
+      "relatedRoadmaps": [
+        "tauceti:TauCetiRoadmap/Exchangeability",
+        "tauceti:TauCetiRoadmap/OneParameterSemigroups",
+        "tauceti:TauCetiRoadmap/PDE",
+        "tauceti:TauCetiRoadmap/OptimalTransport"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Existing plans include process-related ingredients but no standalone programme for stochastic integration, stochastic differential equations and general continuous-time processes."
+    },
+    {
+      "id": "unmapped:numerical-analysis",
+      "title": "Numerical analysis",
+      "group": "computation",
+      "summary": "Study approximation with quantitative guarantees: interpolation, quadrature, numerical linear algebra, differential-equation solvers and finite-element methods. Separate consistency, stability, convergence and rounding error, and connect algorithms to the analytic problems they approximate. Certified arithmetic computation already has a roadmap; a dedicated numerical-analysis plan would cover general continuous problems and their discretisations.",
+      "relatedRoadmaps": [
+        "ComputationalNumberTheory",
+        "tauceti:TauCetiRoadmap/PDE",
+        "tauceti:TauCetiRoadmap/OrthogonalL2Bases"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Computational Number Theory includes validated numerical arithmetic, but general numerical linear algebra and numerical differential equations have no dedicated plan."
+    },
+    {
+      "id": "unmapped:optimization-control",
+      "title": "Optimization and control",
+      "group": "computation",
+      "summary": "Develop convex and nonlinear optimization, duality, variational inequalities and convergence guarantees for iterative methods. Study controllability, observability, feedback and optimal control for dynamical systems. Optimal transport already includes convex duality, gradient flows and Sinkhorn iteration; a dedicated roadmap would connect those examples to general optimization and control theory.",
+      "relatedRoadmaps": [
+        "tauceti:TauCetiRoadmap/OptimalTransport",
+        "tauceti:TauCetiRoadmap/OneParameterSemigroups",
+        "tauceti:TauCetiRoadmap/PDE"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Optimization appears extensively inside optimal transport, but general optimization algorithms and mathematical control theory lack a standalone roadmap."
+    },
+    {
+      "id": "unmapped:algorithms-complexity",
+      "title": "Algorithms and computational complexity",
+      "group": "computation",
+      "summary": "Study algorithms through correctness, resource bounds, reductions, complexity classes and lower bounds. Develop general methods for discrete algorithms, randomized computation and computational hardness, with precise models of computation. The arithmetic-computation roadmap treats representations and certified number-theoretic algorithms; a dedicated plan would cover the broader mathematical theory of efficient computation.",
+      "relatedRoadmaps": [
+        "ComputationalNumberTheory",
+        "LogicAndDefinabilityInNumberTheory",
+        "tauceti:TauCetiRoadmap/RepresentationTheory/CharacterTheory"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Arithmetic algorithmics and character-table computation have specialised plans, but general algorithms and complexity theory do not."
+    },
+    {
+      "id": "unmapped:set-theory",
+      "title": "Set theory",
+      "group": "logic",
+      "summary": "Investigate sets, ordinals, cardinals, transfinite constructions and the axioms that govern them. Develop combinatorial set theory, inner models, forcing and independence, carefully distinguishing relative consistency from theoremhood in a fixed theory. The atlas uses logical and categorical foundations throughout; a dedicated set-theory roadmap would study those foundational questions as mathematical objects.",
+      "relatedRoadmaps": [
+        "FoundationsAndLibraryIntegration",
+        "LogicAndDefinabilityInNumberTheory",
+        "EnhancedDerivedSheaves"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Foundational infrastructure and arithmetic definability are present, but axiomatic set theory, forcing and independence have no dedicated roadmap."
+    },
+    {
+      "id": "unmapped:computability-proof-theory",
+      "title": "Computability and proof theory",
+      "group": "logic",
+      "summary": "Study formal deduction and effective computation through computable functions, undecidability, reducibility, incompleteness, proof transformations and ordinal analysis. Relate the strength of theories to the mathematical statements they prove. Arithmetic definability already includes undecidability applications; a dedicated roadmap would develop the general theory of computation and proof systems beyond those applications.",
+      "relatedRoadmaps": [
+        "LogicAndDefinabilityInNumberTheory",
+        "FoundationsAndLibraryIntegration",
+        "ComputationalNumberTheory"
+      ],
+      "reason": "No dedicated roadmap in this atlas. Undecidability occurs within arithmetic definability, but computability and proof theory are not independently organised in the current collection."
+    }
+  ],
+  "groups": [
+    {
+      "id": "geometry",
+      "label": "Differential and complex geometry",
+      "color": "#92b8c7",
+      "description": "Geometry of smooth, complex and symplectic spaces, organised around curvature, analytic structure and geometric transformations.",
+      "topics": [
+        "Riemannian geometry",
+        "Several complex variables and Kähler geometry",
+        "Symplectic and contact geometry"
+      ]
+    },
+    {
+      "id": "combinatorics",
+      "label": "Combinatorics and discrete structures",
+      "color": "#d4b47f",
+      "description": "Finite and infinite discrete structures, their enumeration, extremal behaviour, randomness and structural invariants.",
+      "topics": [
+        "Graph theory",
+        "Extremal and probabilistic combinatorics",
+        "Enumerative combinatorics and matroids"
+      ]
+    },
+    {
+      "id": "computation",
+      "label": "Computation, optimization and control",
+      "color": "#b6a1d8",
+      "description": "Algorithms, approximation and dynamical decision problems, with correctness, convergence and resource guarantees.",
+      "topics": [
+        "Numerical analysis",
+        "Optimization and control",
+        "Algorithms and computational complexity"
+      ]
+    },
+    {
+      "id": "logic",
+      "label": "Logic and foundations",
+      "color": "#a8c7a5",
+      "description": "Formal theories, computability, independence and the mathematical structures that support deduction.",
+      "topics": [
+        "Set theory",
+        "Computability and proof theory"
+      ]
+    }
+  ],
+  "notes": [
+    "These 16 areas have no dedicated roadmap in this atlas of 180 roadmaps. This is a statement about the atlas, not about the presence or absence of mathematics in Tau Ceti, Mathlib or other libraries.",
+    "Several areas already have substantial partial coverage inside neighbouring roadmaps. Their descriptions identify that overlap; a new dedicated plan would need to reuse and connect it.",
+    "Related roadmaps are contextual connections, not asserted prerequisites, ownership transfers or completion dependencies.",
+    "These are subject placeholders for exploration. They contain no approved implementation plan, stage decomposition or recorded completion status and must be excluded from roadmap and layer progress totals.",
+    "Selection is illustrative rather than an exhaustive classification of mathematics. Absence from this list does not imply that an area has a roadmap."
+  ]
+}
