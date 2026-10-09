@@ -1264,7 +1264,7 @@
      "doi": null,
      "arxiv": null,
      "isbn": null,
-     "zbmath": null,
+     "zbmath": "1023.13006",
      "url": null
     },
     "serves": "Reynolds operators, Hilbert–Nagata finite generation, stability, worked examples",
@@ -1272,7 +1272,7 @@
     "local": null,
     "confidence": "high",
     "master_key": "Dolgachev2003Lectures",
-    "verified": "unverified (service stopped)"
+    "verified": "zbmath:1023.13006"
    },
    {
     "key": "Mukai2003",
@@ -1287,7 +1287,7 @@
      "doi": null,
      "arxiv": null,
      "isbn": null,
-     "zbmath": null,
+     "zbmath": "1033.14008",
      "url": null
     },
     "serves": "Invariants, quotients and moduli; quiver examples",
@@ -1295,7 +1295,7 @@
     "local": null,
     "confidence": "high",
     "master_key": "Mukai2003Invariants",
-    "verified": "unverified (service stopped)"
+    "verified": "zbmath:1033.14008"
    },
    {
     "key": "Hilbert1890",

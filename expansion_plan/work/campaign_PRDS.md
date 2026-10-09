@@ -395,7 +395,7 @@ are complete except trivia): about 675 PRs, a tenth of the new surface.
 
 32 roadmap records, 312 listings, 272 distinct works; full entries, identifiers, access and verification are in `references_master.md` (cited here by short form) and `references_master.json`; the machine records are `refs_PRDS.json` and the `references` fields of `slate_PRDS.json`, each carrying `master_key` and `verified`. (?) marks a work not verified in the 2026-10-08 pass (197 of 272: zbMATH stopped early; see master (d)). Pointers are the compilers' and are unverified.
 
-**Conventions and notes.** No probability or dynamics text is held in the local PDF collections; local paths are code. The Degenne et al. Brownian-motion project is identified from #397 `SOURCES.md` and #417 (repository `RemyDegenne/brownian-motion`; paper arXiv:2511.20118, title confirmed by arXiv); the repository was not inspected. The ConcentrationAndFunctionalInequalities porting path is `lean/OAI/Computability/VertexCover/Information/Tensorization.lean` (corrected in `slate_PRDS.json`; §3 still shows the short form).
+**Conventions and notes.** No probability or dynamics text is held in the local PDF collections; local paths are code. The Degenne et al. Brownian-motion project is identified from #397 `SOURCES.md` and #417 (repository `RemyDegenne/brownian-motion`; paper arXiv:2511.20118, title confirmed by arXiv); the repository was not inspected. The ConcentrationAndFunctionalInequalities porting path is `lean/OAI/Computability/VertexCover/Information/Tensorization.lean` (corrected in `slate_PRDS.json` and §3).
 
 **StochasticProcesses** (umbrella, wave A)
 - primary: Kallenberg 2021, *Foundations of Modern Probability* (?); Durrett 2019, *Probability* (?)

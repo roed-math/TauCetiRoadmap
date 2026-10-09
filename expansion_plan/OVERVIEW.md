@@ -745,7 +745,8 @@ Items 1–6 are needed in week 1; the window does not allow them to wait.
     or straight to TauCetiRoadmap PRs after condensation. Under the 6-month window, small campaigns should go
     straight to PRs.
 12. **References (§11):**
-    - Allow the zbMATH verification to resume; it stopped on an HTTP 502 with 2,024 works unchecked.
+    - Retry the zbMATH verification later, with wider spacing. It has twice stopped on an HTTP 502 under load, with
+      2,022 works unchecked.
     - Fetch the 683 freely available works into `references/` from legitimate sources.
     - Arrange library access for the library-only works, wave A first.
 
@@ -801,12 +802,33 @@ By the earliest wave that needs it, 1,582 works serve wave A, 1,034 wave B and 4
 
 Only 48 works are already held locally, mostly in the gq2 and July LMFDB collections.
 
+**By publisher.** The 1,846 library and purchase works are grouped by parent publisher in
+[`work/library_by_publisher.md`](work/library_by_publisher.md), with books, then journal papers grouped by journal,
+and the likely MIT platform for each. The largest groups (works; of which needed by wave A):
+
+| publisher | works | books | journal papers | wave A | platform |
+|---|---:|---:|---:|---:|---|
+| Springer Nature | 645 | 336 | 265 | 313 | SpringerLink |
+| AMS | 227 | 111 | 78 | 121 | AMS eBooks and journals |
+| Elsevier | 183 | 31 | 142 | 100 | ScienceDirect |
+| Cambridge UP | 178 | 137 | 32 | 112 | Cambridge Core |
+| Princeton UP / Annals | 150 | 52 | 97 | 44 | JSTOR |
+| Wiley | 41 | 21 | 20 | 27 | Wiley Online |
+| SMF | 33 | 9 | 17 | 9 | SMF / Numdam |
+| Oxford UP | 30 | 20 | 8 | 18 | Oxford Academic |
+| about 60 others, plus 10 undetermined | 359 | 77 | 258 | 160 | various |
+
+Ten works have no determinable publisher, and 84 journal-to-publisher mappings are marked uncertain. Some works marked
+library are in fact open access (Centre Mersenne journals, LIPIcs, Theory of Computing, Electronic Journal of
+Combinatorics) and can move to the download list.
+
 **Verification is partial.** The lists were compiled from local sources and knowledge, then checked in a single
 polite pass:
-- **Verified:** 197 works against the explorer's catalogue of sources its workers read, 182 on zbMATH, 94 on arXiv,
+- **Verified:** 197 works against the explorer's catalogue of sources its workers read, 184 on zbMATH, 94 on arXiv,
   20 on Crossref, 100 against local copies, and 394 code paths against the local checkouts.
-- **zbMATH stopped** with an HTTP 502 at request 203, and the pass stopped using it, as its rule requires. **2,024
-  works remain unverified.** Re-running the pass resumes from its cache without repeating a request.
+- **zbMATH stopped twice.** It returned HTTP 502 at request 203 on 10-08, and again on the third request of the
+  authorized resume, both times after response times had risen sharply. The pass stopped each time without
+  retrying. **2,022 works remain unverified.** A later resume continues from the cache without repeating a request.
 - **760 corrections were made.** They include four wrong identifiers (an arXiv ID and three DOIs that pointed to other
   works). 318 "free" claims were downgraded to library; only 41 of those were checked online, and the other 277 await
   the resumed pass.
@@ -844,7 +866,8 @@ The compilers also found two errors in the slates, both now fixed:
 | `BRIEF.md`, `PHASE2.md`, `BOUNDARIES.md` | the subagents' instructions and the pre-decided boundary table |
 | `boundary_pass.md` | cross-slate audit: double ownership, dangling prerequisites, cycles, orphans, 25 rulings |
 | `REFS_BRIEF.md`, `REFS_VERIFY_BRIEF.md` | instructions for compiling and verifying the references |
-| `references_master.md`, `references_master.json` | deduplicated bibliography: acquisition list, most-used works, checks for a human, full entries |
+| `references_master.md`, `references_master.json` | deduplicated bibliography: acquisition list, most-used works, checks for a human, full entries, publishers |
+| `library_by_publisher.md` | the library and purchase works grouped by parent publisher and journal, with access platforms |
 | `refs_<CODE>.json` (10) | per-roadmap reference lists, with master keys and verification status |
 | `capacity.md` | throughput, cost and constraint model |
 | `cost_calibration.md` | measured cost per merged PR from the mimir fleet logs |
