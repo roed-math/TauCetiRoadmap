@@ -442,3 +442,133 @@ remaining logic and algorithms members.
 - The slate covers 75 OAI families and Annals #98.
 - The 6 primary families it leaves out belong to COMB, FAMP or tooling.
 - An umbrella row's `est_prs` in the JSON is the sum of its members.
+
+## 8. References by roadmap
+
+23 roadmap records, 232 listings, 206 distinct works; full entries, identifiers, access and verification are in `references_master.md` (cited here by short form) and `references_master.json`; the machine records are `refs_LTCS.json` and the `references` fields of `slate_LTCS.json`, each carrying `master_key` and `verified`. (?) marks a work not verified in the 2026-10-08 pass (154 of 206: zbMATH stopped early; see master (d)). Pointers are the compilers' and are unverified.
+
+**Conventions and notes.** Corrections to §3.0 found while pinning the formal sources: the pinned Mathlib carries `proof_wanted TM2ComputableInPolyTime.comp` (Bailey, #7172), moved by #42284 to `Wanted/Computability/TuringMachine/Computable.lean` outside `Mathlib/`, and the theorem itself is absent; `FinEncoding` is no longer a structure (#37928 unbundled the alphabet to `Encoding α Γ` with `[Fintype Γ]`, leaving `FinEncoding` a deprecated alias, and #34779 made `TM2ComputableInPolyTime` take encoding functions `α → List αΓ`), so §3.0 item 1 should read "through Mathlib `Encoding α Γ` with `[Fintype Γ]`"; `FinTM2` requires `[Fintype (Γ k₀)]` only, and TM files now live in `Mathlib/Computability/TuringMachine/` (#35608; old paths deprecated by #35609). No LTCS book or paper is held locally.
+
+**ComputationalComplexity** (umbrella, wave A)
+- primary: Arora–Barak 2009, *Computational Complexity*, Ch. 1, Ch. 2, Ch. 4 (?); Goldreich 2008, *Computational Complexity* (?)
+- conventions: van Emde Boas 1990, *Machine models and simulations* (?)
+- formal: Mathlib `Computability/TuringMachine/{Computable, …}`; Mathlib `Computability/Encoding`; leanprover-community/mathlib4 PR #7172
+
+**ComputationalComplexity/MachineModels** (wave A)
+- primary: Arora–Barak 2009, *Computational Complexity*, Ch. 1, Ch. 3, Ch. 4 (?)
+- conventions: van Emde Boas 1990, *Machine models and simulations* (?); Hagerup 1998, *Sorting and searching on the word RAM* (?)
+- theorem: Hennie–Stearns 1966, *Two-tape simulation of multitape Turing…* (?); Cook–Reckhow 1973, *Time bounded random access machines* (?)
+- formal: Mathlib `Computability/TuringMachine/{Computable, …}`; Mathlib `Computability/Encoding`; leanprover-community/mathlib4 PR #7172; leanprover-community/mathlib4 PR #32367; leanprover-community/mathlib4 PR #34779; leanprover-community/mathlib4 PR #37928; OAI `Computability/Superstring`; OAI `Computability/DirectedFeedback/CookLevin`; OAI `Computability/Logspace/Deterministic`; OAI `ComparatorChallenges/WeisfeilerLeman`; Tau Ceti 2026, *CertifiedPermutationComputation, Layer…*; AFP `Cook_Levin`; Forster–Kunze–Roth 2020, *Weak call-by-value λ-calculus is…* (?)
+
+**ComputationalComplexity/ComplexityClasses** (wave B)
+- primary: Arora–Barak 2009, *Computational Complexity*, Ch. 2, Ch. 3, Ch. 4 (?); Papadimitriou 1994, *Computational Complexity* (?)
+- conventions: Goldreich 2008, *Computational Complexity* (?); Ausiello et al. 1999, *Complexity and Approximation* (?); Impagliazzo–Paturi 2001, *Complexity of k-SAT* (?); Schaefer 2010, *Complexity of some geometric and…* (?)
+- theorem: Garey–Johnson 1979, *Computers and Intractability* (?); Jerrum–Valiant–Vazirani 1986, *Random generation of combinatorial…* (?); Impagliazzo–Paturi–Zane 2001, *Which problems have strongly…* (?); Papadimitriou 1994, *Complexity of the parity argument and…* (?); Johnson et al. 1988, *How easy is local search?* (?)
+- formal: OAI `ComparatorChallenges/{DirectedFeedback, BinPackingGap, …}`; OAI `Computability/DirectedFeedback/CookLevin`; AFP `Cook_Levin`; Gäher–Kunze 2021, *Mechanising complexity theory* (?)
+
+**ComputationalComplexity/SpaceAndPseudorandomness** (wave B)
+- primary: Arora–Barak 2009, *Computational Complexity*, Ch. 4, Ch. 21 (?); Vadhan 2012, *Pseudorandomness* (?)
+- theorem: Nisan 1992, *Pseudorandom generators for…* (?); Impagliazzo–Nisan–Wigderson 1994, *Pseudorandomness for network algorithms* (?); Saks–Zhou 1999, *BP_H SPACE(S) ⊆ DSPACE(S^{3/2})* (?); Hopcroft–Paul–Valiant 1977, *Time versus space* (?); Cook–Mertz 2024, *Tree evaluation is in space O(log n ·…* (?); Williams 2025, *Simulating time with square-root space* (?)
+- formal: OAI `Computability/Logspace/Deterministic`
+
+**ComputationalComplexity/BooleanCircuitsAndCommunication** (wave B)
+- primary: Jukna 2012, *Boolean Function Complexity* (?); Arora–Barak 2009, *Computational Complexity*, Ch. 6, Ch. 13, Ch. 14 (?); Kushilevitz–Nisan 1997, *Communication Complexity* (?); Rao–Yehudayoff 2020, *Communication Complexity and…* (?)
+- theorem: Mix Barrington 1989, *Bounded-width polynomial-size branching…* (?)
+- formal: OAI `Computability/DepthThree`
+
+**ComputationalComplexity/PCPAndHardnessOfApproximation** (wave C)
+- primary: Arora–Barak 2009, *Computational Complexity*, Ch. 11, Ch. 22 (?); O'Donnell 2014, *Analysis of Boolean Functions*, Ch. 1, Ch. 7, Ch. 11 (?)
+- conventions: Khot 2002, *Power of unique 2-prover 1-round games* (?)
+- theorem: Rubinfeld–Sudan 1996, *Robust characterizations of polynomials…* (?); Dinur 2007, *PCP theorem by gap amplification* (?); Raz 1998, *Parallel repetition theorem* (?); Holenstein 2009, *Parallel repetition* (?); Rao 2011, *Parallel repetition in projection games…* (?); Dinur–Steurer 2014, *Analytical approach to parallel…* (?); Håstad 2001, *Some optimal inapproximability results* (?); Feige 1998, *Threshold of ln n for approximating set…* (?); Khot et al. 2007, *Optimal inapproximability results for…* (?); Khot–Regev 2008, *Vertex cover might be hard to…* (?); Dinur et al. 2018, *Towards a proof of the 2-to-1 games…* (?); Khot–Minzer–Safra 2023, *Pseudorandom sets in Grassmann graph…* (?)
+- statement: OpenAI 2026, *The-Unique-Games-Theorem-September-23-20…* (OAI#102), §6
+- formal: Mathlib `Combinatorics/Optimization/ValuedCSP`; OAI `Computability/UniqueGames/{PCP, Inverse}`; OAI `Computability/VertexCover/{Repetition, Fourier, …}`
+
+**ComputationalComplexity/AlgebraicComplexity** (wave A)
+- primary: Bürgisser–Clausen–Shokrollahi 1997, *Algebraic Complexity Theory* (?); Bürgisser 2000, *Completeness and Reduction in Algebraic…* (?); Shpilka–Yehudayoff 2010, *Arithmetic circuits* (?); Saptharishi 2021, *Survey of lower bounds in arithmetic…* (?)
+- theorem: Strassen 1988, *Asymptotic spectrum of tensors* (?); Mignon–Ressayre 2004, *Quadratic bound for the determinant and…* (?); Nisan 1991, *Lower bounds for non-commutative…* (?); Raz–Shpilka 2005, *Deterministic polynomial identity…* (?)
+- formal: Mathlib `Algebra/MvPolynomial/SchwartzZippel`; OAI `LinearAlgebra/MatrixMultiplication`; OAI `Computability/FourierCircuit`; OAI `Computability/RationalHitting`
+
+**ComputationalComplexity/DescriptiveComplexity** (wave A)
+- primary: Libkin 2004, *Finite Model Theory* (?); Immerman 1999, *Descriptive Complexity* (?); Grohe 2017, *Descriptive Complexity, Canonisation…* (?)
+- theorem: Cai–Fürer–Immerman 1992, *Optimal lower bound on the number of…* (?); Blass–Gurevich–Shelah 1999, *Choiceless polynomial time* (?); Dvořák 2010, *Recognizing graphs by numbers of…* (?); Dell–Grohe–Rattan 2018, *Lovász meets Weisfeiler and Leman* (?); Scheinerman–Ullman 1997, *Fractional Graph Theory* (?)
+- formal: Mathlib `ModelTheory`; OAI `Combinatorics/{VariableWL, ParityLifts}`; OAI `ModelTheory/Choiceless`
+
+**Algorithms** (umbrella, wave A)
+- primary: Cormen et al. 2022, *Algorithms* (?); Williamson–Shmoys 2011, *Design of Approximation Algorithms* (?); Motwani–Raghavan 1995, *Randomized Algorithms* (?)
+- formal: Mathlib `Computability/AkraBazzi`
+
+**Algorithms/CombinatorialAlgorithms** (wave B)
+- primary: Cormen et al. 2022, *Algorithms*, Chs. 8–9, Ch. 14, Ch. 16 (?); Schrijver 2003, *Combinatorial Optimization* (?); Williamson–Shmoys 2011, *Design of Approximation Algorithms* (?); Motwani–Raghavan 1995, *Randomized Algorithms* (?); Cygan et al. 2015, *Parameterized Algorithms* (?)
+- theorem: Schroeppel–Shamir 1981, *T = O(2^{n/2}), S = O(2^{n/4})…* (?); Coffman–Graham 1972, *Optimal scheduling for two-processor…* (?); Grötschel–Lovász–Schrijver 1988, *Geometric Algorithms and Combinatorial…* (?)
+- formal: OAI `ComparatorChallenges/{EditDistance, EditApproximation, …}`; OAI `Computability/{Scheduling, DeterministicSum}`
+
+**Algorithms/AlgebraicAlgorithms** (wave B)
+- primary: von zur Gathen–Gerhard 2013, *Modern Computer Algebra*, Ch. 8, Ch. 9, Ch. 10 (?); Shoup 2009, *Computational Introduction to Number…*; Knuth 1997, *Art of Computer Programming, Vol. 2*, §4.3.3 (?)
+- theorem: Nussbaumer 1982, *Fast Fourier Transform and Convolution…* (?); Bareiss 1968, *Sylvester's identity and multistep…* (?); Harvey–van der Hoeven 2021, *Integer multiplication in time O(n log…* (?)
+- formal: OAI `Computability/FourierCircuit`
+
+**Algorithms/OnlineAlgorithms** (wave A)
+- primary: Borodin–El-Yaniv 1998, *Online Computation and Competitive…* (?); Buchbinder–Naor 2009, *Design of competitive online algorithms…* (?)
+- theorem: Koutsoupias–Papadimitriou 1995, *K-server conjecture* (?); Bartal et al. 1997, *Polylog(n)-competitive algorithm for…* (?); Bansal et al. 2015, *Polylogarithmic-competitive algorithm…* (?); Karp–Vazirani–Vazirani 1990, *Optimal algorithm for on-line bipartite…* (?); Ferguson 1989, *Who solved the secretary problem?* (?); Samuel-Cahn 1984, *Comparison of threshold stop rules and…* (?); Kleinberg–Weinberg 2019, *Matroid prophet inequalities and…* (?)
+
+**Algorithms/MetricEmbeddingsAndConvexRelaxations** (wave A)
+- primary: Matoušek 2002, *Discrete Geometry*, Ch. 15 (?); Matoušek 2013, *Metric embeddings* (?); Deza–Laurent 1997, *Geometry of Cuts and Metrics* (?); Williamson–Shmoys 2011, *Design of Approximation Algorithms*, Ch. 6, Chs. 8 and 15 (?); Barak–Steurer 2016, *Proofs, beliefs, and algorithms through…* (?)
+- theorem: Linial–London–Rabinovich 1995, *Geometry of graphs and some of its…* (?); Fakcharoenphol–Rao–Talwar 2004, *Tight bound on approximating arbitrary…* (?); Brinkman–Charikar 2005, *Impossibility of dimension reduction in…* (?); Heinonen 2001, *Analysis on Metric Spaces* (?); Grigoriev 2001, *Linear lower bound on degrees of…* (?); Arora–Rao–Vazirani 2009, *Expander flows, geometric embeddings…* (?)
+- formal: OAI `ComparatorChallenges/{BoundedTreewidthL1, MatchingPSD}`
+
+**MathematicalLogic** (umbrella, wave A)
+- primary: Shoenfield 1967, *Mathematical Logic* (?); Barwise 1977, *Handbook of Mathematical Logic* (?)
+- formal: Mathlib `ModelTheory`; Mathlib `SetTheory/{ZFC, Cardinal, Ordinal}`; Mathlib `Computability/{Partrec, PartrecCode, Primrec, Halting, …}`
+
+**MathematicalLogic/FirstOrderProofTheory** (wave A)
+- primary: Shoenfield 1967, *Mathematical Logic* (?); Ebbinghaus–Flum–Thomas 2021, *Mathematical Logic* (?); Troelstra–Schwichtenberg 2000, *Basic Proof Theory* (?); Hájek–Pudlák 1993, *Metamathematics of First-Order…* (?)
+- formal: `FormalizedFormalLogic/Foundation`; Han–van Doorn 2020, *Formal proof of the independence of the…* (?); Mathlib `ModelTheory`
+
+**MathematicalLogic/ComputabilityTheory** (wave A)
+- primary: Soare 2016, *Turing Computability* (?); Soare 1987, *Recursively Enumerable Sets and Degrees* (?); Lerman 1983, *Degrees of Unsolvability* (?)
+- theorem: Jockusch–Soare 1972, *Π⁰₁ classes and degrees of theories* (?); Matiyasevich 1993, *Hilbert's Tenth Problem* (?); Davis 1958, *Computability and Unsolvability* (?)
+- statement: OpenAI 2026, *Rigidity-of-the-Turing-degrees-September…* (OAI#241)
+- formal: Mathlib `Computability/{Partrec, PartrecCode, Primrec, Halting, …}`; OAI `Computability/DegreeRigidity`; Forster et al. 2020, *Coq library of undecidable problems* (?); Bayer et al. 2019, *DPRM theorem in Isabelle (short paper)* (?)
+
+**MathematicalLogic/FirstOrderModelTheory** (wave A)
+- primary: Marker 2002, *Model Theory* (?); Tent–Ziegler 2012, *Model Theory* (?); Baldwin 2009, *Categoricity* (?); van den Dries 1998, *Tame Topology and o-minimal Structures* (?); Pila 2022, *Point-Counting and the Zilber-Pink…*
+- theorem: Pila–Wilkie 2006, *Rational points of a definable set* (?)
+- formal: Mathlib `ModelTheory`; OAI `ModelTheory/Categoricity`
+
+**MathematicalLogic/SetTheoryAndForcing** (wave A)
+- primary: Kunen 1980, *Set Theory*, Ch. II, Chs. III–VI, Ch. VII (?); Jech 2003, *Set Theory*, Ch. 8, Ch. 9, Ch. 10 (?); Jech 1973, *Axiom of Choice* (?)
+- formal: Han–van Doorn 2020, *Formal proof of the independence of the…* (?); Independence of the continuum…; OAI `SetTheory/PartitionConsistency`; OAI `Computability/DegreeRigidity`; Mathlib `SetTheory/{ZFC, Cardinal, Ordinal}`
+
+**MathematicalLogic/DescriptiveSetTheory** (wave A)
+- primary: Kechris 1995, *Classical Descriptive Set Theory*, §20 (?); Gao 2009, *Invariant Descriptive Set Theory* (?); Becker–Kechris 1996, *Descriptive Set Theory of Polish Group…* (?); Kechris–Miller 2004, *Orbit Equivalence* (?)
+- conventions: Moschovakis 2009, *Descriptive Set Theory* (?)
+- theorem: Friedman–Stanley 1989, *Borel reducibility theory for classes…* (?)
+- statement: Paolini–Shelah 2024, *Torsion-free abelian groups are Borel…* (?); Thomas 2003, *Classification problem for torsion-free…* (?)
+- formal: Mathlib `Topology/MetricSpace/Polish`
+
+**MathematicalLogic/LambdaCalculusAndTypeTheory** (wave A)
+- primary: Barendregt 1984, *Lambda Calculus* (?); Barendregt 1992, *Lambda calculi with types* (?); Sørensen–Urzyczyn 2006, *Curry–Howard Isomorphism* (?); Girard–Lafont–Taylor 1989, *Proofs and Types* (?)
+- conventions: de Bruijn 1972, *Lambda calculus notation with nameless…* (?)
+- theorem: Takahashi 1995, *Parallel reductions in λ-calculus* (?); Hurkens 1995, *Simplification of Girard's paradox* (?)
+- formal: OAI `Computability/TypeSystem`
+
+**QuantumComputation** (wave A)
+- primary: Nielsen–Chuang 2010, *Quantum Computation and Quantum…*, Ch. 4, Ch. 5, Ch. 6 (?); Kitaev–Shen–Vyalyi 2002, *Classical and Quantum Computation* (?)
+- conventions: Watrous 2018, *Theory of Quantum Information* (?)
+- theorem: Adleman–DeMarrais–Huang 1997, *Quantum computability* (?); Marriott–Watrous 2005, *Quantum Arthur–Merlin games* (?); Kempe–Kitaev–Regev 2006, *Complexity of the local Hamiltonian…* (?); Beals et al. 2001, *Quantum lower bounds by polynomials* (?); Ambainis 2002, *Quantum lower bounds by quantum…* (?); Aaronson–Ambainis 2018, *Forrelation* (?); Cleve et al. 2004, *Consequences and limits of nonlocal…* (?)
+- formal: OAI `InformationTheory/QuantumCircuit`; OAI `Computability/QuantumFactoring`; Lean-QuantumInfo (Lean 4 library for…
+
+**InformationAndCodingTheory** (wave A)
+- primary: Cover–Thomas 2006, *Information Theory*, Ch. 2, Ch. 3, Ch. 5 (?); Csiszár–Körner 2011, *Information Theory* (?); Guruswami–Rudra–Sudan 2023, *Essential Coding Theory*; MacWilliams–Sloane 1977, *Theory of Error-Correcting Codes* (?)
+- conventions: Polyanskiy–Wu 2025, *Information Theory* (?)
+- theorem: Chung et al. 1986, *Some intersection theorems for ordered…* (?); Radhakrishnan 1997, *Entropy proof of Bregman's theorem* (?)
+- formal: `teorth/pfr`; Mathlib `InformationTheory/KullbackLeibler`; Tau Ceti `InformationTheory/{KullbackLeibler/{Convex, Tilted}`; OAI `Computability/VertexCover/Information`
+
+**AutomataLogicAndGames** (wave A)
+- primary: Grädel–Thomas–Wilke 2002, *Automata, Logics, and Infinite Games* (?); Pin 2020, *Mathematical Foundations of Automata…* (?); Straubing 1994, *Finite Automata, Formal Logic, and…* (?); Perrin–Pin 2004, *Infinite Words* (?); Filar–Vrieze 1997, *Competitive Markov Decision Processes* (?); Beck 2008, *Combinatorial Games* (?)
+- theorem: Shepherdson 1959, *Reduction of two-way automata to…* (?); Krohn–Rhodes 1965, *Algebraic theory of machines. I. Prime…* (?); Eggan 1963, *Transition graphs and the star-height…* (?); Ehrenfeucht–Mycielski 1979, *Positional strategies for mean payoff…* (?); Calude et al. 2022, *Deciding parity games in…* (?)
+- formal: Mathlib `Computability/{Language, DFA, NFA, EpsilonNFA, …}`; Mathlib `Topology/Sion`; OAI `Combinatorics/{TwoWayAutomata, Automata}`
+
+**Acquisition list** (not free and not held locally; books needed by a wave-A roadmap, and any work needed by two or more roadmaps of this campaign; journal papers otherwise left to library access, all listed in master (b2); roadmap count in brackets; ★ = wave A): Arora–Barak 2009, *Computational Complexity* [6] ★; Cormen et al. 2022, *Algorithms* [2] ★; van Emde Boas 1990, *Machine models and simulations* [2] ★; Goldreich 2008, *Computational Complexity* [2] ★; Motwani–Raghavan 1995, *Randomized Algorithms* [2] ★; Shoenfield 1967, *Mathematical Logic* [2] ★; Baldwin 2009, *Categoricity* [1] ★; Barendregt 1984, *Lambda Calculus* [1] ★; Barwise 1977, *Handbook of Mathematical Logic* [1] ★; Beck 2008, *Combinatorial Games* [1] ★; Becker–Kechris 1996, *Descriptive Set Theory of Polish Group…* [1] ★; Borodin–El-Yaniv 1998, *Online Computation and Competitive…* [1] ★; Bürgisser 2000, *Completeness and Reduction in Algebraic…* [1] ★; Bürgisser–Clausen–Shokrollahi 1997, *Algebraic Complexity Theory* [1] ★; Cover–Thomas 2006, *Information Theory* [1] ★; Csiszár–Körner 2011, *Information Theory* [1] ★; Davis 1958, *Computability and Unsolvability* [1] ★; Deza–Laurent 1997, *Geometry of Cuts and Metrics* [1] ★; van den Dries 1998, *Tame Topology and o-minimal Structures* [1] ★; Ebbinghaus–Flum–Thomas 2021, *Mathematical Logic* [1] ★; Filar–Vrieze 1997, *Competitive Markov Decision Processes* [1] ★; Gao 2009, *Invariant Descriptive Set Theory* [1] ★; Grädel–Thomas–Wilke 2002, *Automata, Logics, and Infinite Games* [1] ★; Grohe 2017, *Descriptive Complexity, Canonisation…* [1] ★; Hájek–Pudlák 1993, *Metamathematics of First-Order…* [1] ★; Heinonen 2001, *Analysis on Metric Spaces* [1] ★; Immerman 1999, *Descriptive Complexity* [1] ★; Jech 1973, *Axiom of Choice* [1] ★; Jech 2003, *Set Theory* [1] ★; Kechris 1995, *Classical Descriptive Set Theory* [1] ★; Kechris–Miller 2004, *Orbit Equivalence* [1] ★; Kitaev–Shen–Vyalyi 2002, *Classical and Quantum Computation* [1] ★; Kunen 1980, *Set Theory* [1] ★; Lerman 1983, *Degrees of Unsolvability* [1] ★; Libkin 2004, *Finite Model Theory* [1] ★; MacWilliams–Sloane 1977, *Theory of Error-Correcting Codes* [1] ★; Marker 2002, *Model Theory* [1] ★; Matiyasevich 1993, *Hilbert's Tenth Problem* [1] ★; Matoušek 2002, *Discrete Geometry* [1] ★; Nielsen–Chuang 2010, *Quantum Computation and Quantum…* [1] ★; Perrin–Pin 2004, *Infinite Words* [1] ★; Pila 2022, *Point-Counting and the Zilber-Pink…* [1] ★; Polyanskiy–Wu 2025, *Information Theory* [1] ★; Soare 1987, *Recursively Enumerable Sets and Degrees* [1] ★; Soare 2016, *Turing Computability* [1] ★; Sørensen–Urzyczyn 2006, *Curry–Howard Isomorphism* [1] ★; Straubing 1994, *Finite Automata, Formal Logic, and…* [1] ★; Tent–Ziegler 2012, *Model Theory* [1] ★; Troelstra–Schwichtenberg 2000, *Basic Proof Theory* [1] ★.
+
+Full bibliographic entries, identifiers, access evidence and verification status: `references_master.md`.

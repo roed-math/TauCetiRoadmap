@@ -1,87 +1,8 @@
 [
  {
-  "name": "ComputationalComplexity",
+  "roadmap": "ComputationalComplexity",
   "campaign": "LTCS",
-  "topic": "cs.CC",
-  "size": "XL family",
-  "est_prs": 1530,
-  "wave": "A",
-  "scope": "This family develops computational complexity on Mathlib's `Computability`: machine models, complexity classes, space and pseudorandomness, circuits and communication, PCPs and hardness of approximation, algebraic complexity, and descriptive complexity. Its index pins the conventions of §3.0, so 'polynomial time' and 'NP-hard' are defined once for every campaign. Algorithms, quantum computation and automata are separate roadmaps. Boolean Fourier analysis, expanders and polyhedra are imported from COMB and ANA.",
-  "prerequisites": [
-   "Mathlib Computability"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#102",
-    "OAI#103",
-    "OAI#104",
-    "OAI#105",
-    "OAI#106",
-    "OAI#107",
-    "OAI#108",
-    "OAI#109",
-    "OAI#110",
-    "OAI#112",
-    "OAI#113",
-    "OAI#114",
-    "OAI#115",
-    "OAI#116",
-    "OAI#117",
-    "OAI#118",
-    "OAI#120",
-    "OAI#121",
-    "OAI#122",
-    "OAI#124",
-    "OAI#125",
-    "OAI#128",
-    "OAI#130",
-    "OAI#131",
-    "OAI#133",
-    "OAI#135",
-    "OAI#136",
-    "OAI#137",
-    "OAI#138",
-    "OAI#140",
-    "OAI#141",
-    "OAI#142",
-    "OAI#174",
-    "OAI#178",
-    "OAI#243"
-   ]
-  },
-  "porting": [
-   "see members"
-  ],
-  "replaces": [
-   "ResourceBoundedComputation",
-   "ComplexityClasses",
-   "SpaceBoundedComputationAndDerandomization",
-   "BooleanCircuitComplexity",
-   "HardnessOfApproximation",
-   "AlgebraicComplexityTheory",
-   "DescriptiveComplexity",
-   "WeisfeilerLemanAndCountingLogics"
-  ],
-  "parent": null,
-  "children": [
-   "ComputationalComplexity/MachineModels",
-   "ComputationalComplexity/ComplexityClasses",
-   "ComputationalComplexity/SpaceAndPseudorandomness",
-   "ComputationalComplexity/BooleanCircuitsAndCommunication",
-   "ComputationalComplexity/PCPAndHardnessOfApproximation",
-   "ComputationalComplexity/AlgebraicComplexity",
-   "ComputationalComplexity/DescriptiveComplexity"
-  ],
-  "note": "umbrella row: est_prs is the sum of its member rows; do not add both",
-  "secondary_topics": [
-   "cs.LO",
-   "cs.DS"
-  ],
-  "key_objects": [],
-  "milestones": [],
-  "formalizability": "Index only; members carry the work.",
+  "kind": "umbrella",
   "references": [
    {
     "key": "Arora2009",
@@ -224,75 +145,9 @@
   ]
  },
  {
-  "name": "ComputationalComplexity/MachineModels",
+  "roadmap": "ComputationalComplexity/MachineModels",
   "campaign": "LTCS",
-  "topic": "cs.CC",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap makes 'computable in time T', 'in polynomial time' and 'in space S' usable statements. It fixes canonical binary encodings through Mathlib's `FinEncoding` and adopts Mathlib's `FinTM2` with `TM2ComputableInTime`/`TM2ComputableInPolyTime`, every alphabet finite, as the time model. It supplies a structured bit-stack language compiled to `FinTM2` with exact cost, in which every upper bound is proved. It defines the multitape machine with read-only input (space, oracle, nondeterministic and random-tape variants), the one-tape machine, the word RAM and uniform Boolean circuits, and proves the simulations that make FP, P and PSPACE model-independent. Other classes belong to ComplexityClasses and algorithms to the Algorithms family.",
-  "prerequisites": [
-   "Mathlib Computability"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#102",
-    "OAI#103",
-    "OAI#104",
-    "OAI#109",
-    "OAI#110",
-    "OAI#112",
-    "OAI#113",
-    "OAI#115",
-    "OAI#116",
-    "OAI#120",
-    "OAI#121",
-    "OAI#122",
-    "OAI#124",
-    "OAI#125",
-    "OAI#128",
-    "OAI#133",
-    "OAI#138",
-    "OAI#142",
-    "OAI#174",
-    "OAI#178"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI Computability/Superstring (block language, composition, TM2 certificate)",
-   "the private TM2 libraries of the six OAI hardness projects (consolidate)",
-   "OAI comparator WeisfeilerLeman.lean (word RAM), Computability/Logspace",
-   "#717 Layer 1"
-  ],
-  "replaces": [
-   "ResourceBoundedComputation"
-  ],
-  "parent": "ComputationalComplexity",
-  "secondary_topics": [
-   "cs.LO",
-   "cs.DS"
-  ],
-  "key_objects": [
-   "canonical encodings and their polynomial equivalence",
-   "finite-alphabet `FinTM2`, FP",
-   "bit-stack programs with cost semantics",
-   "`MultitapeTM` (time, space, oracle, random tape, nondeterminism)",
-   "one-tape machine",
-   "`WordRAM`",
-   "Boolean circuits and uniform families",
-   "constructible bounds"
-  ],
-  "milestones": [
-   "encoding invariance; binary arithmetic, comparison and parsing in polynomial time",
-   "compiler correctness with exact cost; FP closed under composition and clocked loops",
-   "TM2 ↔ multitape in linear time; one-tape O(T²); Hennie–Stearns O(T log T)",
-   "word RAM ↔ TM2 polynomially, so FP is model-independent",
-   "circuit evaluation in P; uniform O(T²)-size circuits for time-T machines",
-   "universal machine; time and space hierarchy theorems; FP ⊆ Mathlib `Computable`"
-  ],
-  "formalizability": "High: OAI already compiles a block language into TM2ComputableInPolyTime.",
+  "kind": "new",
   "references": [
    {
     "key": "Arora2009",
@@ -711,67 +566,9 @@
   ]
  },
  {
-  "name": "ComputationalComplexity/ComplexityClasses",
+  "roadmap": "ComputationalComplexity/ComplexityClasses",
   "campaign": "LTCS",
-  "topic": "cs.CC",
-  "size": "L",
-  "est_prs": 280,
-  "wave": "B",
-  "scope": "This roadmap defines the classes and reductions of structural complexity theory on MachineModels, for decision, promise, search and counting problems. The classes are P, NP, coNP, PH, PSPACE, EXP, NEXP, BPP, RP, ZPP, P/poly, #P, PP, ⊕P, IP, TFNP with PLS, PPA and PPAD, and ∃ℝ. The reductions are Karp, log-space, Turing, parsimonious and gap-preserving, and the approximation vocabulary is PTAS, FPTAS, APX, FPRAS and FPAUS. P ≠ NP, ETH, SETH and the Unique Games Conjecture are named `Prop`s used only as hypotheses. L and NL are defined here and developed in SpaceAndPseudorandomness. PCP-based hardness is PCPAndHardnessOfApproximation, and rapid-mixing FPRAS constructions are PRDS's.",
-  "prerequisites": [
-   "ComputationalComplexity/MachineModels",
-   "Mathlib ValuedCSP",
-   "RealAlgebraicGeometry"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#102",
-    "OAI#105",
-    "OAI#106",
-    "OAI#112",
-    "OAI#113",
-    "OAI#114",
-    "OAI#115",
-    "OAI#117",
-    "OAI#118",
-    "OAI#121",
-    "OAI#125",
-    "OAI#128",
-    "OAI#131",
-    "OAI#133",
-    "OAI#136",
-    "OAI#138",
-    "OAI#141"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI comparators DirectedFeedback, BinPackingGap, VertexCover (NPVerifier, GapReduction), MatchingFPRAS",
-   "the three OAI Cook–Levin proofs (DirectedFeedback, BinPacking, KMedian)"
-  ],
-  "replaces": [
-   "ComplexityClasses"
-  ],
-  "parent": "ComputationalComplexity",
-  "secondary_topics": [
-   "cs.DS"
-  ],
-  "key_objects": [
-   "languages, promise, search and counting problems",
-   "reductions",
-   "the classes listed",
-   "named hypotheses"
-  ],
-  "milestones": [
-   "Cook–Levin for SAT, 3SAT and circuit-SAT; Karp's catalogue (CLIQUE, IS, VC, 3-COL, HAM-CYCLE, SUBSET-SUM, PARTITION, BIN-PACKING, MAX-CUT, SET-COVER, EXACT-COVER)",
-   "TQBF PSPACE-complete; succinct EXP/NEXP-completeness; Ladner; Baker–Gill–Solovay",
-   "BPP/RP amplification; Adleman; Sipser–Gács–Lautemann; Karp–Lipton; Valiant–Vazirani",
-   "#P-completeness of the 0-1 permanent; JVV counting–sampling equivalence",
-   "IPZ sparsification and ETH lower bounds; End-of-Line and Sperner in PPAD; NP ⊆ ∃ℝ",
-   "IP = PSPACE; Toda's theorem"
-  ],
-  "formalizability": "High: three Lean proofs of Cook–Levin on TM2 exist.",
+  "kind": "new",
   "references": [
    {
     "key": "Arora2009",
@@ -1121,49 +918,9 @@
   ]
  },
  {
-  "name": "ComputationalComplexity/SpaceAndPseudorandomness",
+  "roadmap": "ComputationalComplexity/SpaceAndPseudorandomness",
   "campaign": "LTCS",
-  "topic": "cs.CC",
-  "size": "M",
-  "est_prs": 140,
-  "wave": "B",
-  "scope": "This roadmap develops space-bounded computation on the multitape machine and the pseudorandomness that derandomizes it. Its objects are configuration graphs, the classes L, NL, RL and BPL, k-wise independent families, ε-biased spaces, extractors, and pseudorandom generators for space-bounded machines. It ends with time–space simulations. Expander constructions are imported from COMB's ExpanderGraphs; cryptographic pseudorandomness is outside the family.",
-  "prerequisites": [
-   "ComputationalComplexity/ComplexityClasses",
-   "COMB ExpanderGraphs (proposed)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#103",
-    "OAI#112",
-    "OAI#116",
-    "OAI#137"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI Computability/Logspace"
-  ],
-  "replaces": [
-   "SpaceBoundedComputationAndDerandomization"
-  ],
-  "parent": "ComputationalComplexity",
-  "secondary_topics": [],
-  "key_objects": [
-   "configuration graphs",
-   "L, NL, RL, BPL",
-   "k-wise and ε-biased families",
-   "extractors",
-   "space PRGs"
-  ],
-  "milestones": [
-   "Savitch; NL-completeness of reachability; Immerman–Szelepcsényi",
-   "BPL ⊆ L²; leftover hash lemma; Nisan and INW generators; Saks–Zhou",
-   "Reingold SL = L",
-   "Hopcroft–Paul–Valiant; Cook–Mertz tree evaluation; Williams' √(t log t) simulation"
-  ],
-  "formalizability": "High; Reingold needs the zig-zag spectral bound.",
+  "kind": "new",
   "references": [
    {
     "key": "Arora2009",
@@ -1375,51 +1132,9 @@
   ]
  },
  {
-  "name": "ComputationalComplexity/BooleanCircuitsAndCommunication",
+  "roadmap": "ComputationalComplexity/BooleanCircuitsAndCommunication",
   "campaign": "LTCS",
-  "topic": "cs.CC",
-  "size": "L",
-  "est_prs": 180,
-  "wave": "B",
-  "scope": "This roadmap proves lower bounds for nonuniform and communication models. The models are the circuit classes NCⁱ, ACⁱ, ACC⁰ and TC⁰ with their uniform variants, monotone circuits, formulas, branching programs, finite-memory streaming models, and deterministic, nondeterministic and randomized two-party protocols. Its methods are counting, random restrictions, polynomial approximation, the approximation method, rank, discrepancy and information complexity. Decision-tree and sensitivity measures are COMB's BooleanFunctionAnalysis.",
-  "prerequisites": [
-   "ComputationalComplexity/MachineModels",
-   "InformationAndCodingTheory",
-   "COMB BooleanFunctionAnalysis (proposed)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#112",
-    "OAI#140"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI Computability/DepthThree (25k lines), GeneralizedCircuits"
-  ],
-  "replaces": [
-   "BooleanCircuitComplexity"
-  ],
-  "parent": "ComputationalComplexity",
-  "secondary_topics": [
-   "cs.IT"
-  ],
-  "key_objects": [
-   "circuit classes",
-   "restrictions",
-   "monotone circuits, formulas",
-   "branching programs, streaming models",
-   "protocols, information complexity"
-  ],
-  "milestones": [
-   "Shannon–Lupanov; Håstad's switching lemma and the optimal depth-d parity bound",
-   "Razborov–Smolensky; Paturi–Pudlák–Zane depth-3 bounds",
-   "Razborov monotone clique; Andreev; Khrapchenko; Nechiporuk; shrinkage; Barrington",
-   "rank, fooling-set and discrepancy bounds; disjointness via information complexity; Karchmer–Wigderson",
-   "Razborov–Rudich natural proofs"
-  ],
-  "formalizability": "High; combinatorial throughout.",
+  "kind": "new",
   "references": [
    {
     "key": "Jukna2012",
@@ -1562,55 +1277,9 @@
   ]
  },
  {
-  "name": "ComputationalComplexity/PCPAndHardnessOfApproximation",
+  "roadmap": "ComputationalComplexity/PCPAndHardnessOfApproximation",
   "campaign": "LTCS",
-  "topic": "cs.CC",
-  "size": "L",
-  "est_prs": 320,
-  "wave": "C",
-  "scope": "This roadmap proves the PCP theorem and the classical inapproximability results as gap-preserving reductions in ComplexityClasses' sense. Its objects are constraint satisfaction problems on Mathlib's `ValuedCSP` vocabulary, projection games and Label Cover, Hadamard and long codes, assignment testers and unique games. Its tools are property testing, gap amplification, parallel repetition and Fourier analysis of tests; UGC-conditional results are implications from the named hypothesis. Fourier analysis and expanders come from COMB, codes from InformationAndCodingTheory.",
-  "prerequisites": [
-   "ComputationalComplexity/ComplexityClasses",
-   "InformationAndCodingTheory",
-   "COMB BooleanFunctionAnalysis, ExpanderGraphs (proposed)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#102",
-    "OAI#105",
-    "OAI#106",
-    "OAI#117",
-    "OAI#118",
-    "OAI#125",
-    "OAI#136"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI UniqueGames/PCP and its five copies",
-   "OAI VertexCover/Repetition, VertexCover/Fourier, UniqueGames/Inverse (KMS)"
-  ],
-  "replaces": [
-   "HardnessOfApproximation"
-  ],
-  "parent": "ComputationalComplexity",
-  "secondary_topics": [],
-  "key_objects": [
-   "CSPs, projection games, Label Cover",
-   "long code, folding",
-   "assignment testers",
-   "unique games"
-  ],
-  "milestones": [
-   "BLR linearity and Reed–Muller low-degree tests",
-   "PCP theorem with perfect completeness by Dinur gap amplification",
-   "parallel repetition: Raz, Holenstein, Rao, Dinur–Steurer",
-   "Håstad 3-bit test: Max-3LIN, Max-3SAT 7/8; Feige ln n Set Cover",
-   "UGC ⇒ KKMO Max-Cut and Khot–Regev Vertex Cover",
-   "Khot–Minzer–Safra Grassmann expansion and 2-to-2 hardness (final)"
-  ],
-  "formalizability": "Proven feasible by OAI six times; the value is consolidation.",
+  "kind": "new",
   "references": [
    {
     "key": "Arora2009",
@@ -2052,56 +1721,9 @@
   ]
  },
  {
-  "name": "ComputationalComplexity/AlgebraicComplexity",
+  "roadmap": "ComputationalComplexity/AlgebraicComplexity",
   "campaign": "LTCS",
-  "topic": "cs.CC",
-  "size": "L",
-  "est_prs": 220,
-  "wave": "A",
-  "scope": "This roadmap develops algebraic complexity over a commutative ring or field. Its models are straight-line programs, arithmetic circuits and formulas, and algebraic branching programs. It covers bilinear complexity and tensor rank with the exponent ω of matrix multiplication, linear circuits for the DFT, VP and VNP, partial-derivative measures, and polynomial identity testing. Uniformity statements use MachineModels; Boolean counting complexity is ComplexityClasses; fast algorithms with bit-cost bounds are Algorithms/AlgebraicAlgorithms.",
-  "prerequisites": [
-   "Mathlib MvPolynomial, TensorProduct, SchwartzZippel",
-   "ComputationalComplexity/MachineModels (uniformity layer)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#107",
-    "OAI#108",
-    "OAI#109",
-    "OAI#116",
-    "OAI#130",
-    "OAI#135",
-    "OAI#141"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI LinearAlgebra/MatrixMultiplication (83k lines), LinearAlgebra/MatrixFields (182k)",
-   "OAI Computability/FourierCircuit, RationalHitting"
-  ],
-  "replaces": [
-   "AlgebraicComplexityTheory"
-  ],
-  "parent": "ComputationalComplexity",
-  "secondary_topics": [
-   "math.AG"
-  ],
-  "key_objects": [
-   "straight-line programs, circuits, formulas, ABPs",
-   "tensor rank, border rank, degeneration, ω",
-   "VP, VNP, determinantal complexity",
-   "partial-derivative measures",
-   "hitting sets"
-  ],
-  "milestones": [
-   "homogenization and division elimination; Baur–Strassen; VSBR depth reduction",
-   "Strassen; Schönhage τ-theorem; asymptotic spectrum; laser method with Coppersmith–Winograd tensors",
-   "Cooley–Tukey; Morgenstern's bounded-coefficient bound",
-   "Valiant's VNP-completeness of the permanent; Mignon–Ressayre",
-   "Nisan's noncommutative ABP theorem; homogeneous depth-4 bounds; Raz–Shpilka PIT"
-  ],
-  "formalizability": "High; OAI holds the tensor and Coppersmith–Winograd machinery.",
+  "kind": "new",
   "references": [
    {
     "key": "Burgisser1997",
@@ -2382,55 +2004,9 @@
   ]
  },
  {
-  "name": "ComputationalComplexity/DescriptiveComplexity",
+  "roadmap": "ComputationalComplexity/DescriptiveComplexity",
   "campaign": "LTCS",
-  "topic": "cs.CC",
-  "size": "M",
-  "est_prs": 140,
-  "wave": "A",
-  "scope": "This roadmap relates definability on finite structures to complexity, on Mathlib's `FirstOrder.Language`. Its objects are finite structures and their encodings, first-order, fixed-point, transitive-closure and counting logics, Ehrenfeucht–Fraïssé and bijective pebble games, and the Weisfeiler–Leman algorithm in both conventions, built on #257's equitable partitions. It also covers Cai–Fürer–Immerman graphs and choiceless polynomial time over hereditarily finite sets. Model theory of infinite structures is MathematicalLogic.",
-  "prerequisites": [
-   "Mathlib ModelTheory",
-   "ComputationalComplexity/ComplexityClasses (from Fagin on)",
-   "#257 EquitableOperatorReduction",
-   "COMB StructuralGraphTheory (treewidth; proposed)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#133",
-    "OAI#243"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI Combinatorics/VariableWL, ParityLifts, Computability/WeisfeilerLeman, WLIdentification",
-   "OAI ModelTheory/Choiceless, Computability/WitnessedChoice"
-  ],
-  "replaces": [
-   "DescriptiveComplexity",
-   "WeisfeilerLemanAndCountingLogics"
-  ],
-  "parent": "ComputationalComplexity",
-  "secondary_topics": [
-   "cs.LO",
-   "math.LO"
-  ],
-  "key_objects": [
-   "finite structures",
-   "FO, LFP, TC and counting logics",
-   "pebble games",
-   "k-WL",
-   "CFI graphs",
-   "HF sets, CPT"
-  ],
-  "milestones": [
-   "EF games; Gaifman and Hanf locality; the 0–1 law",
-   "Fagin; Immerman–Vardi; FO(TC) = NL on ordered structures",
-   "Cᵏ ↔ pebble games ↔ WL (Immerman–Lander); Tinhofer; Dvořák and Dell–Grohe–Rattan",
-   "Cai–Fürer–Immerman; Blass–Gurevich–Shelah CPT ⊆ P"
-  ],
-  "formalizability": "High; OAI has WL in both conventions and CFI-type lifts.",
+  "kind": "new",
   "references": [
    {
     "key": "Libkin2004",
@@ -2688,67 +2264,9 @@
   ]
  },
  {
-  "name": "Algorithms",
+  "roadmap": "Algorithms",
   "campaign": "LTCS",
-  "topic": "cs.DS",
-  "size": "XL family",
-  "est_prs": 750,
-  "wave": "A",
-  "scope": "This family develops algorithms with correctness and running-time proofs. It has four members: combinatorial, algebraic and online algorithms, and the metric embeddings and convex relaxations behind approximation algorithms. Every running-time claim names its MachineModels model (word RAM by default) and is a theorem about code in MachineModels' program layer. Existence theorems are imported: flows from #444, matching from COMB, LP duality and polyhedra from ANA. Hardness belongs to ComputationalComplexity.",
-  "prerequisites": [
-   "ComputationalComplexity/MachineModels"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#089",
-    "OAI#094",
-    "OAI#098",
-    "OAI#099",
-    "OAI#102",
-    "OAI#109",
-    "OAI#110",
-    "OAI#111",
-    "OAI#117",
-    "OAI#120",
-    "OAI#121",
-    "OAI#122",
-    "OAI#124",
-    "OAI#125",
-    "OAI#126",
-    "OAI#128",
-    "OAI#130",
-    "OAI#138",
-    "OAI#142",
-    "OAI#307"
-   ]
-  },
-  "porting": [
-   "see members"
-  ],
-  "replaces": [
-   "CombinatorialAlgorithms",
-   "FastAlgebraicAlgorithms",
-   "OnlineAlgorithms",
-   "ConvexRelaxationsAndMetricEmbeddings",
-   "MetricEmbeddings"
-  ],
-  "parent": null,
-  "children": [
-   "Algorithms/CombinatorialAlgorithms",
-   "Algorithms/AlgebraicAlgorithms",
-   "Algorithms/OnlineAlgorithms",
-   "Algorithms/MetricEmbeddingsAndConvexRelaxations"
-  ],
-  "note": "umbrella row: est_prs is the sum of its member rows; do not add both",
-  "secondary_topics": [
-   "cs.CC",
-   "math.MG"
-  ],
-  "key_objects": [],
-  "milestones": [],
-  "formalizability": "Index only; at the low end of the XL-family range.",
+  "kind": "umbrella",
   "references": [
    {
     "key": "Cormen2022",
@@ -2845,57 +2363,9 @@
   ]
  },
  {
-  "name": "Algorithms/CombinatorialAlgorithms",
+  "roadmap": "Algorithms/CombinatorialAlgorithms",
   "campaign": "LTCS",
-  "topic": "cs.DS",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "This roadmap develops combinatorial algorithms on the word RAM, each with a correctness and a running-time theorem. It covers data structures with amortized bounds, sorting and selection, graph search and shortest paths, minimum spanning trees, and flow and matching algorithms on #444's existence theory. It continues with dynamic programming, randomized and exponential-time techniques, and the standard approximation-algorithm templates. Almost-linear max-flow is outside the family.",
-  "prerequisites": [
-   "ComputationalComplexity/MachineModels",
-   "#444 GraphConnectivityAndFlows",
-   "COMB StructuralGraphTheory (proposed)",
-   "ANA PolyhedralCombinatorics (proposed)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#120",
-    "OAI#121",
-    "OAI#124",
-    "OAI#125",
-    "OAI#128",
-    "OAI#138"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI comparators EditDistance, EditApproximation, TreeEdit",
-   "OAI Computability/Scheduling, DeterministicSum, Combinatorics/KMedian"
-  ],
-  "replaces": [
-   "CombinatorialAlgorithms"
-  ],
-  "parent": "Algorithms",
-  "secondary_topics": [
-   "math.CO"
-  ],
-  "key_objects": [
-   "data structures",
-   "graph, flow and matching algorithms",
-   "dynamic programs",
-   "isolation lemma",
-   "approximation templates"
-  ],
-  "milestones": [
-   "heaps, search trees, union–find (inverse Ackermann); Ω(n log n) sorting; linear selection",
-   "BFS/DFS, SCC, Dijkstra, Bellman–Ford, Floyd–Warshall, MST",
-   "Edmonds–Karp, Dinic, push–relabel, min-cost flow; Hopcroft–Karp; Edmonds' blossom",
-   "edit distance, LCS, knapsack, Bellman–Held–Karp; Freivalds; Karger; MVV isolation lemma; colour coding; Schroeppel–Shamir",
-   "greedy Set Cover H_n; LP rounding and primal–dual; Christofides; k-median local search; Coffman–Graham"
-  ],
-  "formalizability": "High once the word-RAM program layer exists.",
+  "kind": "new",
   "references": [
    {
     "key": "Cormen2022",
@@ -3130,49 +2600,9 @@
   ]
  },
  {
-  "name": "Algorithms/AlgebraicAlgorithms",
+  "roadmap": "Algorithms/AlgebraicAlgorithms",
   "campaign": "LTCS",
-  "topic": "cs.DS",
-  "size": "M",
-  "est_prs": 130,
-  "wave": "B",
-  "scope": "This roadmap develops fast exact algorithms for integers and polynomials. Bit-complexity bounds are on the multitape machine and operation counts are in AlgebraicComplexity's model. It covers fast multiplication and FFTs, Newton iteration and division, evaluation, interpolation and remaindering, fast GCD, and factorization over finite fields. Number-theoretic algorithms (primality, ECM, class groups) are NT's and consume this roadmap.",
-  "prerequisites": [
-   "ComputationalComplexity/MachineModels",
-   "ComputationalComplexity/AlgebraicComplexity"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#109",
-    "OAI#130",
-    "OAI#142"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI Computability/FourierCircuit",
-   "coordinate with Birkbeck ComputationalNumberTheory CN.0–CN.1"
-  ],
-  "replaces": [
-   "FastAlgebraicAlgorithms"
-  ],
-  "parent": "Algorithms",
-  "secondary_topics": [
-   "math.NT"
-  ],
-  "key_objects": [
-   "bit and arithmetic cost bounds",
-   "FFT over rings with roots of unity",
-   "factorization over 𝔽_q"
-  ],
-  "milestones": [
-   "Karatsuba, Toom–Cook, Schönhage–Strassen",
-   "Cooley–Tukey, Bluestein, Rader, Nussbaumer; Newton division; multipoint evaluation; fast CRT; half-GCD",
-   "distinct-degree, Berlekamp, Cantor–Zassenhaus; Hensel lifting; Bareiss",
-   "Harvey–van der Hoeven O(n log n) multiplication (final)"
-  ],
-  "formalizability": "High; the final milestone is long.",
+  "kind": "new",
   "references": [
    {
     "key": "Gathen2013",
@@ -3338,49 +2768,9 @@
   ]
  },
  {
-  "name": "Algorithms/OnlineAlgorithms",
+  "roadmap": "Algorithms/OnlineAlgorithms",
   "campaign": "LTCS",
-  "topic": "cs.DS",
-  "size": "M",
-  "est_prs": 110,
-  "wave": "A",
-  "scope": "This roadmap develops competitive analysis and online decision-making. It covers online algorithms against oblivious and adaptive adversaries, Yao's principle, paging, k-server and metrical task systems, online primal–dual and matching, and optimal stopping with secretary problems and prophet inequalities. Minimax comes from AutomataLogicAndGames, FRT trees from MetricEmbeddingsAndConvexRelaxations, and probability and matroids from Mathlib.",
-  "prerequisites": [
-   "Mathlib probability, Matroid",
-   "AutomataLogicAndGames (minimax)",
-   "Algorithms/MetricEmbeddingsAndConvexRelaxations (FRT)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#110",
-    "OAI#111"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "none known"
-  ],
-  "replaces": [
-   "OnlineAlgorithms"
-  ],
-  "parent": "Algorithms",
-  "secondary_topics": [
-   "cs.GT",
-   "math.PR"
-  ],
-  "key_objects": [
-   "online algorithms and adversaries",
-   "metrical task systems",
-   "stopping rules"
-  ],
-  "milestones": [
-   "Yao's principle; ski rental; Sleator–Tarjan; marking H_k",
-   "double coverage on trees; work-function algorithm 2k−1; HST-based randomized k-server and MTS",
-   "online primal–dual; RANKING 1−1/e",
-   "secretary 1/e; Krengel–Sucheston–Garling; Samuel-Cahn; Kleinberg–Weinberg matroid prophet inequality"
-  ],
-  "formalizability": "High; finite probability.",
+  "kind": "new",
   "references": [
    {
     "key": "Borodin1998",
@@ -3592,62 +2982,9 @@
   ]
  },
  {
-  "name": "Algorithms/MetricEmbeddingsAndConvexRelaxations",
+  "roadmap": "Algorithms/MetricEmbeddingsAndConvexRelaxations",
   "campaign": "LTCS",
-  "topic": "cs.DS",
-  "size": "L",
-  "est_prs": 260,
-  "wave": "A",
-  "scope": "This roadmap develops the geometry behind approximation algorithms. Its metric side covers embeddings of finite metric spaces: distortion, ℓ₁ and the cut cone, negative type, dimension reduction, hierarchically separated trees, Poincaré-inequality obstructions and doubling spaces. Its relaxation side covers the LP, SDP and sum-of-squares relaxations these embeddings round, and their integrality gaps. Banach-space invariants (type, cotype, Ribe) are FAMP's; LP and SDP duality are ANA's.",
-  "prerequisites": [
-   "Mathlib normed spaces, Lp, PosSemidef",
-   "#444",
-   "COMB ExpanderGraphs (proposed)",
-   "ANA PolyhedralCombinatorics, convex optimization (proposed)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#089",
-    "OAI#094",
-    "OAI#098",
-    "OAI#099",
-    "OAI#102",
-    "OAI#110",
-    "OAI#117",
-    "OAI#122",
-    "OAI#126",
-    "OAI#307"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI comparators BoundedTreewidthL1, MatchingPSD"
-  ],
-  "replaces": [
-   "ConvexRelaxationsAndMetricEmbeddings",
-   "MetricEmbeddings (GEO report)"
-  ],
-  "parent": "Algorithms",
-  "secondary_topics": [
-   "math.MG",
-   "math.OC"
-  ],
-  "key_objects": [
-   "finite metrics, distortion",
-   "cut cone, negative type",
-   "HSTs",
-   "SDP and SOS relaxations, pseudo-expectations"
-  ],
-  "milestones": [
-   "Fréchet, Bourgain; Johnson–Lindenstrauss; ℓ₁ = cut cone",
-   "Poincaré inequalities, expanders Ω(log n), Enflo; Assouad; Brinkman–Charikar; FRT",
-   "Linial–London–Rabinovich flow–cut gap",
-   "Goemans–Williamson α_GW; Lovász θ; Karger–Motwani–Sudan",
-   "SOS proofs and pseudo-expectations; Grigoriev's 3XOR bound",
-   "Arora–Rao–Vazirani (final)"
-  ],
-  "formalizability": "High; ARV is long but classical.",
+  "kind": "new",
   "references": [
    {
     "key": "Matousek2002",
@@ -3928,62 +3265,9 @@
   ]
  },
  {
-  "name": "MathematicalLogic",
+  "roadmap": "MathematicalLogic",
   "campaign": "LTCS",
-  "topic": "math.LO",
-  "size": "XL family",
-  "est_prs": 1230,
-  "wave": "A",
-  "scope": "This family develops mathematical logic downstream of Mathlib's `ModelTheory`, `Computability` and `SetTheory`: proof theory, computability, model theory, set theory and forcing, descriptive set theory, and the λ-calculus. Its index pins the conventions. Theories are written in Mathlib's `FirstOrder.Language` syntax, with no private formula types, and models of set theory are structures on transitive subsets of `ZFSet`. Gödel numbering goes through `Primcodable`, and relative consistency is stated both by `IsSatisfiable` and proof-theoretically. Infinitary logic is the sibling #41; finite model theory is DescriptiveComplexity.",
-  "prerequisites": [
-   "Mathlib ModelTheory, Computability, SetTheory"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#98"
-   ],
-   "OpenAI": [
-    "OAI#004",
-    "OAI#016",
-    "OAI#143",
-    "OAI#206",
-    "OAI#240",
-    "OAI#241",
-    "OAI#242",
-    "OAI#244",
-    "OAI#245",
-    "OAI#250",
-    "OAI#323",
-    "OAI#376"
-   ]
-  },
-  "porting": [
-   "see members"
-  ],
-  "replaces": [
-   "ComputabilityTheory",
-   "ClassicalModelTheory",
-   "ForcingAndIndependence",
-   "InvariantDescriptiveSetTheory",
-   "LambdaCalculusAndTypeTheory"
-  ],
-  "parent": null,
-  "children": [
-   "MathematicalLogic/FirstOrderProofTheory",
-   "MathematicalLogic/ComputabilityTheory",
-   "MathematicalLogic/FirstOrderModelTheory",
-   "MathematicalLogic/SetTheoryAndForcing",
-   "MathematicalLogic/DescriptiveSetTheory",
-   "MathematicalLogic/LambdaCalculusAndTypeTheory"
-  ],
-  "note": "umbrella row: est_prs is the sum of its member rows; do not add both",
-  "secondary_topics": [
-   "cs.LO"
-  ],
-  "key_objects": [],
-  "milestones": [],
-  "formalizability": "Index only.",
+  "kind": "umbrella",
   "references": [
    {
     "key": "Shoenfield1967",
@@ -4103,46 +3387,9 @@
   ]
  },
  {
-  "name": "MathematicalLogic/FirstOrderProofTheory",
+  "roadmap": "MathematicalLogic/FirstOrderProofTheory",
   "campaign": "LTCS",
-  "topic": "math.LO",
-  "size": "M",
-  "est_prs": 110,
-  "wave": "A",
-  "scope": "This roadmap gives Mathlib's first-order syntax a proof calculus and develops its metatheory. It covers derivations, soundness and completeness, cut elimination and its corollaries, and arithmetization of syntax. It treats Robinson's Q and Peano arithmetic, representability, and the incompleteness and undefinability theorems. Ordinal analysis is outside the family.",
-  "prerequisites": [
-   "Mathlib ModelTheory, Computability"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#240",
-    "OAI#244"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "coordinate with FormalizedFormalLogic/Foundation (Lean 4)",
-   "Flypitch (Lean 3)"
-  ],
-  "replaces": [],
-  "parent": "MathematicalLogic",
-  "secondary_topics": [
-   "cs.LO"
-  ],
-  "key_objects": [
-   "derivations",
-   "provability, consistency",
-   "Q, PA",
-   "Gödel numbering"
-  ],
-  "milestones": [
-   "soundness; Gödel completeness by Henkin in every cardinality",
-   "cut elimination; Herbrand; Craig interpolation; Beth",
-   "Σ₁-completeness of Q; representability; Gödel I and Rosser",
-   "derivability conditions; Gödel II; Löb; Tarski; Church"
-  ],
-  "formalizability": "High; a complete Lean 4 precedent exists outside Mathlib.",
+  "kind": "new",
   "references": [
    {
     "key": "Shoenfield1967",
@@ -4308,56 +3555,9 @@
   ]
  },
  {
-  "name": "MathematicalLogic/ComputabilityTheory",
+  "roadmap": "MathematicalLogic/ComputabilityTheory",
   "campaign": "LTCS",
-  "topic": "math.LO",
-  "size": "L",
-  "est_prs": 220,
-  "wave": "A",
-  "scope": "This roadmap develops relative computability and degree theory from Mathlib's `Nat.RecursiveIn` and `TuringDegree`. It covers the jump and the arithmetical hierarchy, many-one and one-one degrees, priority constructions, the structure of the Turing degrees, and Π⁰₁ classes with basis theorems. It also covers Diophantine sets with Hilbert's tenth problem and undecidable combinatorial problems. Word problems for groups are ALG's CombinatorialGroupTheory, which consumes this roadmap.",
-  "prerequisites": [
-   "Mathlib Computability, NumberTheory/Dioph"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#004",
-    "OAI#206",
-    "OAI#241",
-    "OAI#242",
-    "OAI#250",
-    "OAI#376"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI Computability/DegreeRigidity (84k lines)",
-   "Coq Library of Undecidability Proofs; Isabelle MRDP (precedents)",
-   "Birkbeck LD.4"
-  ],
-  "replaces": [
-   "ComputabilityTheory",
-   "LogicAndDefinabilityInNumberTheory LD.4"
-  ],
-  "parent": "MathematicalLogic",
-  "secondary_topics": [
-   "cs.LO"
-  ],
-  "key_objects": [
-   "jump, arithmetical hierarchy",
-   "m- and 1-degrees",
-   "priority constructions",
-   "Π⁰₁ classes",
-   "Diophantine sets"
-  ],
-  "milestones": [
-   "jump theorem; Kleene normal form; Σₙ₊₁ = c.e. in ∅⁽ⁿ⁾",
-   "Myhill isomorphism; creative and simple sets",
-   "Kleene–Post; Friedberg–Muchnik; Sacks splitting; Spector minimal degree; exact pairs; Friedberg jump inversion",
-   "low, hyperimmune-free and cone-avoiding basis theorems",
-   "MRDP from Mathlib `pow_dioph`; Post correspondence and Post–Markov; Partrec ↔ Turing machines"
-  ],
-  "formalizability": "High; Mathlib already has the hardest MRDP step.",
+  "kind": "new",
   "references": [
    {
     "key": "Soare2016",
@@ -4615,52 +3815,9 @@
   ]
  },
  {
-  "name": "MathematicalLogic/FirstOrderModelTheory",
+  "roadmap": "MathematicalLogic/FirstOrderModelTheory",
   "campaign": "LTCS",
-  "topic": "math.LO",
-  "size": "L",
-  "est_prs": 260,
-  "wave": "A",
-  "scope": "This roadmap develops the model theory of first-order theories on Mathlib's `ModelTheory`. It covers types, countable and saturated models, quantifier elimination, ω-stability and Morley rank, indiscernibles, categoricity, and abstract elementary classes. It ends with o-minimal structures through the Pila–Wilkie counting theorem. Infinitary logic is #41; valued fields and motivic integration stay with LogicAndDefinabilityInNumberTheory; real quantifier elimination is RealAlgebraicGeometry.",
-  "prerequisites": [
-   "Mathlib ModelTheory",
-   "RealAlgebraicGeometry",
-   "MathematicalLogic/SetTheoryAndForcing (Erdős–Rado)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#004",
-    "OAI#016",
-    "OAI#143",
-    "OAI#240"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI ModelTheory/Categoricity, AbstractElementary",
-   "Birkbeck LD.6"
-  ],
-  "replaces": [
-   "ClassicalModelTheory",
-   "LogicAndDefinabilityInNumberTheory LD.6 (foundations)"
-  ],
-  "parent": "MathematicalLogic",
-  "secondary_topics": [],
-  "key_objects": [
-   "types, saturation",
-   "Morley rank",
-   "EM models",
-   "AECs, Galois types",
-   "o-minimal structures"
-  ],
-  "milestones": [
-   "omitting types; Ryll-Nardzewski; Vaught; prime and saturated models; QE for DLO and ACF",
-   "ω-stability and Morley rank; EM models via Erdős–Rado; Morley–Hanf bound",
-   "Morley categoricity; Baldwin–Lachlan; Shelah's presentation theorem for AECs",
-   "monotonicity, cell decomposition, dimension, definable choice; ℝ o-minimal; Pila–Wilkie (final)"
-  ],
-  "formalizability": "High (Marker, van den Dries); Pila–Wilkie is long.",
+  "kind": "new",
   "references": [
    {
     "key": "Marker2002",
@@ -4849,52 +4006,9 @@
   ]
  },
  {
-  "name": "MathematicalLogic/SetTheoryAndForcing",
+  "roadmap": "MathematicalLogic/SetTheoryAndForcing",
   "campaign": "LTCS",
-  "topic": "math.LO",
-  "size": "L",
-  "est_prs": 300,
-  "wave": "A",
-  "scope": "This roadmap develops axiomatic set theory as a first-order theory, combinatorial set theory, inner models and forcing through the classical independence results. Its objects are ZF and ZFC as Mathlib theories, absoluteness and countable transitive models in `ZFSet`, the constructible universe, posets, names and generic extensions, symmetric extensions, and measurable cardinals. It covers Cohen, random, product and finite-support iterated forcing. Relative consistency is stated model-theoretically and, through FirstOrderProofTheory, proof-theoretically.",
-  "prerequisites": [
-   "Mathlib SetTheory, ModelTheory",
-   "MathematicalLogic/FirstOrderProofTheory (proof-theoretic statements)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#240",
-    "OAI#241",
-    "OAI#244",
-    "OAI#323"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI SetTheory/PartitionConsistency (33k lines), PartitionPrinciple (234k, mostly paper-specific), Computability/DegreeRigidity",
-   "Flypitch; Isabelle/ZF forcing"
-  ],
-  "replaces": [
-   "ForcingAndIndependence"
-  ],
-  "parent": "MathematicalLogic",
-  "secondary_topics": [],
-  "key_objects": [
-   "ZF/ZFC as theories",
-   "absoluteness, ctms",
-   "L",
-   "forcing posets, names, generic extensions",
-   "symmetric extensions",
-   "measurable cardinals"
-  ],
-  "milestones": [
-   "Fodor on Mathlib's stationary sets; Δ-system; Erdős–Rado",
-   "reflection; Mostowski collapse; L ⊨ AC + GCH",
-   "forcing theorem; generic model theorem; ccc preservation",
-   "Con(ZFC + ¬CH) by Cohen forcing; random forcing; Cohen's symmetric model of ZF + ¬AC",
-   "MA + ¬CH by finite-support iteration; ultrapowers; Scott's V ≠ L"
-  ],
-  "formalizability": "High; three formalizations of forcing exist.",
+  "kind": "new",
   "references": [
    {
     "key": "Kunen1980",
@@ -5083,53 +4197,9 @@
   ]
  },
  {
-  "name": "MathematicalLogic/DescriptiveSetTheory",
+  "roadmap": "MathematicalLogic/DescriptiveSetTheory",
   "campaign": "LTCS",
-  "topic": "math.LO",
-  "size": "L",
-  "est_prs": 220,
-  "wave": "A",
-  "scope": "This roadmap develops classical and invariant descriptive set theory on Mathlib's Polish spaces and `StandardBorelSpace`. The classical part covers the Borel and projective pointclasses, regularity properties, and infinite games with determinacy. The invariant part covers Polish group actions, the space Mod(L) of countable structures with the logic action, Borel reducibility, countable Borel equivalence relations, and Borel completeness with the Friedman–Stanley jump. Measure-theoretic orbit equivalence is PRDS's MeasuredGroupTheory.",
-  "prerequisites": [
-   "Mathlib Polish spaces, StandardBorelSpace, Baire, SetTheory/Descriptive",
-   "#41 InfinitaryLogic"
-  ],
-  "goals": {
-   "Annals": [
-    "Annals#98"
-   ],
-   "OpenAI": [
-    "OAI#241"
-   ],
-   "LMFDB": []
-  },
-  "porting": [
-   "no Lean source known (Kechris; Gao)"
-  ],
-  "replaces": [
-   "InvariantDescriptiveSetTheory"
-  ],
-  "parent": "MathematicalLogic",
-  "secondary_topics": [
-   "math.GN",
-   "math.DS"
-  ],
-  "key_objects": [
-   "Borel hierarchy",
-   "analytic/coanalytic sets, Π¹₁ ranks",
-   "Polish group actions",
-   "Mod(L)",
-   "Borel reducibility, E₀, CBERs",
-   "Friedman–Stanley jump"
-  ],
-  "milestones": [
-   "Borel hierarchy with universal sets; perfect set theorem for analytic sets; Π¹₁ ranks",
-   "Kuratowski–Ulam; Gale–Stewart; Martin's Borel determinacy",
-   "Becker–Kechris; López-Escobar (from #41)",
-   "Silver; Glimm–Effros and Harrington–Kechris–Louveau; Feldman–Moore; hyperfiniteness",
-   "Friedman–Stanley: graphs, linear orders, groups and fields Borel complete, isomorphism not Borel, the jump; Ulm invariants"
-  ],
-  "formalizability": "High; Mathlib's Polish-space library carries the first layers, and only the López-Escobar layer waits on #41.",
+  "kind": "new",
   "references": [
    {
     "key": "Kechris1995",
@@ -5341,46 +4411,9 @@
   ]
  },
  {
-  "name": "MathematicalLogic/LambdaCalculusAndTypeTheory",
+  "roadmap": "MathematicalLogic/LambdaCalculusAndTypeTheory",
   "campaign": "LTCS",
-  "topic": "math.LO",
-  "size": "M",
-  "est_prs": 120,
-  "wave": "A",
-  "scope": "This roadmap develops untyped and typed λ-calculi and the metatheory of pure type systems. It covers binding and substitution, reduction and confluence, λ-definability, normalization of typed calculi by reducibility, the λ-cube and Curry–Howard. Lean's own kernel metatheory is outside the family.",
-  "prerequisites": [
-   "Mathlib Relation, Partrec"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#245"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI Computability/TypeSystem (30k lines)"
-  ],
-  "replaces": [
-   "LambdaCalculusAndTypeTheory"
-  ],
-  "parent": "MathematicalLogic",
-  "secondary_topics": [
-   "cs.LO"
-  ],
-  "key_objects": [
-   "λ-terms, reductions",
-   "STLC, System F",
-   "pure type systems",
-   "reducibility candidates"
-  ],
-  "milestones": [
-   "de Bruijn substitution lemmas; Church–Rosser; standardization",
-   "λ-definable = Mathlib `Partrec`",
-   "Tait strong normalization; System F by Girard's candidates",
-   "PTS thinning, substitution, subject reduction, uniqueness of types; λ-cube; Girard–Hurkens"
-  ],
-  "formalizability": "High (Barendregt; Sørensen–Urzyczyn).",
+  "kind": "new",
   "references": [
    {
     "key": "Barendregt1984",
@@ -5569,59 +4602,9 @@
   ]
  },
  {
-  "name": "QuantumComputation",
+  "roadmap": "QuantumComputation",
   "campaign": "LTCS",
-  "topic": "cs.CC",
-  "size": "L",
-  "est_prs": 220,
-  "wave": "A",
-  "scope": "This roadmap develops quantum computation in the circuit model on Mathlib's finite-dimensional Hilbert spaces, with states and channels from FAMP's QuantumInformationTheory. It covers gate sets, circuits, measurement and the diamond norm, universality and approximation, and the standard algorithms. It then treats BQP, QMA and local Hamiltonians, quantum query complexity, and nonlocal games. Uniformity is MachineModels'; entropies and capacities are FAMP's; quantum walks are #258/#259.",
-  "prerequisites": [
-   "Mathlib matrices and unitary groups",
-   "ComputationalComplexity/ComplexityClasses (BQP, QMA layer)",
-   "FAMP QuantumInformationTheory (channel layer; proposed)",
-   "COMB BooleanFunctionAnalysis (query layer; proposed)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#274",
-    "OAI#275",
-    "OAI#277",
-    "OAI#279",
-    "OAI#281",
-    "OAI#283",
-    "OAI#284"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI InformationTheory/QuantumCircuit",
-   "OAI Computability/QuantumFactoring (54k lines)"
-  ],
-  "replaces": [
-   "QuantumComputation"
-  ],
-  "parent": null,
-  "secondary_topics": [
-   "math-ph"
-  ],
-  "key_objects": [
-   "circuits over gate sets",
-   "diamond norm",
-   "BQP, QMA",
-   "local Hamiltonians",
-   "query algorithms",
-   "nonlocal games"
-  ],
-  "milestones": [
-   "reversible simulation; universality of {H, T, CNOT}; Solovay–Kitaev",
-   "Deutsch–Jozsa, Simon; QFT, phase estimation, Shor; Grover and exact amplitude amplification",
-   "BPP ⊆ BQP ⊆ PP; Marriott–Watrous; Kitaev local Hamiltonian; perturbative gadgets; QAC⁰",
-   "polynomial and adversary methods; Forrelation",
-   "CHSH, Tsirelson's bound, entangled value"
-  ],
-  "formalizability": "High; finite-dimensional linear algebra.",
+  "kind": "new",
   "references": [
    {
     "key": "Nielsen2010",
@@ -5925,71 +4908,9 @@
   ]
  },
  {
-  "name": "InformationAndCodingTheory",
+  "roadmap": "InformationAndCodingTheory",
   "campaign": "LTCS",
-  "topic": "cs.IT",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap develops Shannon theory and error-correcting codes beyond AlgebraicCodingTheory. Its information side covers information measures of discrete and continuous random variables on Mathlib's KL divergence, their inequalities and strong data-processing constants, typicality, the source and channel coding theorems, and entropy counting. Its coding side covers the classical code bounds, the standard algebraic and combinatorial code families, and unique, list and local decoding. Quantum information is FAMP's; ergodic-theoretic entropy is PRDS's.",
-  "prerequisites": [
-   "Mathlib InformationTheory, binEntropy",
-   "AlgebraicCodingTheory (completed)",
-   "Tau Ceti InformationTheory/KullbackLeibler"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#007",
-    "OAI#028",
-    "OAI#074",
-    "OAI#102",
-    "OAI#113",
-    "OAI#117",
-    "OAI#119",
-    "OAI#122",
-    "OAI#136",
-    "OAI#139",
-    "OAI#140",
-    "OAI#157",
-    "OAI#167",
-    "OAI#170",
-    "OAI#213",
-    "OAI#220",
-    "OAI#229",
-    "OAI#277"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "PFR entropy library (coordinate first)",
-   "OAI VertexCover/Information, InformationTheory/{BooleanNoise,SoftChannel}"
-  ],
-  "replaces": [
-   "ShannonInformationTheory"
-  ],
-  "parent": null,
-  "secondary_topics": [
-   "math.IT",
-   "math.PR",
-   "math.CO"
-  ],
-  "key_objects": [
-   "entropy, mutual information, f-divergences",
-   "SDPI constants",
-   "differential entropy",
-   "channels, capacity",
-   "code families and bounds",
-   "list decoding"
-  ],
-  "milestones": [
-   "chain rules; Shearer; Fano; Pinsker; data processing; Rényi",
-   "SDPI for BSC and BEC; differential entropy; maximum entropy; EPI",
-   "AEP; source coding (Kraft–McMillan, Huffman); channel coding theorem and converse; Brégman via entropy",
-   "Singleton, Hamming, Plotkin, GV, Elias–Bassalygo, Johnson; Delsarte LP bound",
-   "RS, RM, BCH, concatenated, Justesen, expander codes; Berlekamp–Welch; Guruswami–Sudan; local decoding"
-  ],
-  "formalizability": "High; mature sources exist.",
+  "kind": "new",
   "references": [
    {
     "key": "Cover2006",
@@ -6247,55 +5168,9 @@
   ]
  },
  {
-  "name": "AutomataLogicAndGames",
+  "roadmap": "AutomataLogicAndGames",
   "campaign": "LTCS",
-  "topic": "cs.LO",
-  "size": "L",
-  "est_prs": 230,
-  "wave": "A",
-  "scope": "This roadmap develops automata, their algebra and logic, and games on graphs, on Mathlib's `DFA`, `NFA` and regular expressions. Its automata part covers two-way automata and state complexity, syntactic monoids and Green's relations, logical characterizations of regular and star-free languages, star height, and ω-automata with determinization. Its games part covers finite zero-sum games, arenas and strategies, parity, mean-payoff, energy and stochastic games, and Maker–Breaker games. Borel determinacy is DescriptiveSetTheory's.",
-  "prerequisites": [
-   "Mathlib Computability",
-   "ComputationalComplexity/MachineModels (running times)"
-  ],
-  "goals": {
-   "OpenAI": [
-    "OAI#104",
-    "OAI#129",
-    "OAI#134",
-    "OAI#187"
-   ],
-   "LMFDB": [],
-   "Annals": []
-  },
-  "porting": [
-   "OAI Combinatorics/TwoWayAutomata, Combinatorics/Automata, Computability/StarHeight, Computability/MeanPayoff"
-  ],
-  "replaces": [
-   "AutomataAndFiniteSemigroups",
-   "GamesOnGraphs"
-  ],
-  "parent": null,
-  "secondary_topics": [
-   "cs.GT",
-   "math.GR"
-  ],
-  "key_objects": [
-   "two-way automata",
-   "syntactic monoids, Green's relations",
-   "ω-automata",
-   "arenas, strategies",
-   "parity, mean-payoff, stochastic games",
-   "Maker–Breaker games"
-  ],
-  "milestones": [
-   "Shepherdson 2DFA = DFA with state bounds; determinization state complexity",
-   "Schützenberger; McNaughton–Papert; Büchi–Elgot–Trakhtenbrot; Krohn–Rhodes; Eggan; generalized star height",
-   "Büchi complementation; McNaughton and Safra determinization",
-   "von Neumann minimax; positional determinacy of parity (Zielonka) and mean-payoff games; Shapley; Blackwell",
-   "strategy improvement; Calude–Jain–Khoussainov–Li–Stephan quasipolynomial parity; Erdős–Selfridge"
-  ],
-  "formalizability": "High (Grädel–Thomas–Wilke; Pin).",
+  "kind": "new",
   "references": [
    {
     "key": "Gradel2002",

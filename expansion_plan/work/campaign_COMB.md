@@ -278,3 +278,118 @@ Then the other sub-roadmaps, DiscreteGeometryAndIncidences and AdditiveCombinato
 | existing supply, complete (DenseGraphLimits; AlgebraicCodingTheory, LTCS-owned) | 2 | 0 remaining |
 
 The slate serves 69 OpenAI families directly and 7 more through consumer roadmaps, plus Annals #94 (#86 and #99 as feeds). Of COMB's 58 primary refs, only OAI#173 (elementary) needs no roadmap.
+
+## 8. References by roadmap
+
+21 roadmap records, 228 listings, 214 distinct works; full entries, identifiers, access and verification are in `references_master.md` (cited here by short form) and `references_master.json`; the machine records are `refs_COMB.json` and the `references` fields of `slate_COMB.json`, each carrying `master_key` and `verified`. (?) marks a work not verified in the 2026-10-08 pass (166 of 214: zbMATH stopped early; see master (d)). Pointers are the compilers' and are unverified.
+
+**Conventions and notes.** Boundary rulings (`boundary_pass.md` §5). 6: Borsuk–Ulam, ham sandwich, Lovász–Kneser and Quillen's fiber lemma are TOP TopologicalCombinatorics'; DiscreteGeometryAndIncidences cites Matoušek's Borsuk–Ulam book for Tucker's lemma and for what it consumes, and keeps Sperner, KKM, Tucker and their applications. 7: hypercontractivity, the cube log-Sobolev inequality and the OU semigroup are PRDS ConcentrationAndFunctionalInequalities', so BooleanFunctionAnalysis lists no Bonami, Beckner or Gross source; COMB keeps Harris–FKG and BK in ProbabilisticMethod and Russo–Margulis and OSSS in BooleanFunctionAnalysis. No COMB work is held locally.
+
+**GraphTheory** (umbrella, wave A)
+- primary: Diestel 2017, *Graph Theory*, Ch. 3, Ch. 2, Ch. 5 (?); Bondy–Murty 2008, *Graph Theory* (?)
+- formal: Mathlib `Combinatorics/SimpleGraph`
+
+**GraphTheory/MatchingsAndFactors** (wave A)
+- primary: Lovász–Plummer 1986, *Matching Theory* (?); Schrijver 2003, *Combinatorial Optimization*, Part III (?); Diestel 2017, *Graph Theory*, Ch. 2 (?); Godsil 1993, *Algebraic Combinatorics* (?)
+- theorem: Heilmann–Lieb 1972, *Theory of monomer-dimer systems* (?); Kasteleyn 1967, *Graph theory and crystal physics* (?); Kenyon–Propp–Wilson 2000, *Trees and matchings* (?); Gale–Shapley 1962, *College admissions and the stability of…* (?); Gusfield–Irving 1989, *Stable Marriage Problem* (?); Brégman 1973, *Some properties of nonnegative matrices…* (?); Schrijver 1998, *Counting 1-factors in regular bipartite…* (?)
+- formal: Mathlib `Combinatorics/SimpleGraph/Tutte`; OAI `Combinatorics/{PerfectMatching, MatchingCount, …}`
+
+**GraphTheory/GraphColoring** (wave A)
+- primary: Jensen–Toft 1995, *Graph Coloring Problems* (?); Diestel 2017, *Graph Theory*, Ch. 5 (?); Stiebitz et al. 2012, *Graph Edge Coloring* (?); Scheinerman–Ullman 1997, *Fractional Graph Theory* (?)
+- theorem: Alon 1999, *Combinatorial Nullstellensatz* (?); Galvin 1995, *List chromatic index of a bipartite…* (?); Thomassen 1994, *Every planar graph is 5-choosable* (?); Thomassen 2003, *Short list color proof of Grötzsch's…* (?); Kierstead–Kostochka 2008, *Short proof of the Hajnal–Szemerédi…* (?); Dvořák–Postle 2018, *Correspondence coloring and its…* (?)
+- formal: Mathlib `Combinatorics/SimpleGraph/Coloring`; OAI `Combinatorics/ListHadwiger/{Basic, ColorBins}`
+
+**GraphTheory/StructuralGraphTheory** (wave B)
+- primary: Diestel 2017, *Graph Theory*, Ch. 7, Ch. 10, Ch. 12 (?); Bondy–Murty 2008, *Graph Theory* (?); Schaefer 2018, *Crossing Numbers of Graphs* (?); Bang-Jensen–Gutin 2009, *Digraphs: Theory, Algorithms and…*
+- theorem: Thomason 1984, *Extremal function for contractions of…* (?); Seymour–Thomas 1993, *Graph searching and a min-max theorem…* (?); Robertson–Seymour 1986, *Graph minors. V. Excluding a planar…* (?); Thomas–Wollan 2005, *Improved linear edge bound for graph…* (?); van der Holst et al. 1999, *Colin de Verdière graph parameter* (?); Thomassen 1983, *Theorem on paths in planar graphs* (?); Kleitman 1970, *Crossing number of K_{5,n}* (?)
+- formal: OAI `Combinatorics/{Crossing, CompleteCrossing, …}`
+
+**GraphTheory/SpectralGraphTheory** (wave A)
+- primary: Brouwer–Haemers 2012, *Spectra of Graphs* (?); Godsil–Royle 2001, *Algebraic Graph Theory* (?); Lyons–Peres 2016, *Probability on Trees and Networks*, Ch. 2, Ch. 4 (?)
+- conventions: Chung 1997, *Spectral Graph Theory* (?)
+- theorem: Haemers 1995, *Interlacing eigenvalues and graphs* (?); Lovász 1979, *Shannon capacity of a graph* (?); Chaiken 1982, *Combinatorial proof of the all minors…* (?); Terras 2011, *Zeta Functions of Graphs* (?)
+- formal: Mathlib `Combinatorics/SimpleGraph/LapMatrix`; OAI `Combinatorics/GraphSpectrum`; `emberian/graphplay`
+
+**GraphTheory/ExpanderGraphs** (wave A)
+- primary: Hoory–Linial–Wigderson 2006, *Expander graphs and their applications* (?); Lubotzky 1994, *Discrete Groups, Expanding Graphs and…* (?)
+- theorem: Alon 1986, *Eigenvalues and expanders* (?); Bilu–Linial 2006, *Lifts, discrepancy and nearly optimal…* (?); Reingold–Vadhan–Wigderson 2002, *Entropy waves, the zig-zag graph…* (?); Marcus–Spielman–Srivastava 2015, *Interlacing families I* (?); Gillman 1998, *Chernoff bound for random walks on…* (?); Oppenheim 2018, *Local spectral expansion approach to… I* (?); Kaufman–Oppenheim 2020, *High order random walks* (?); Anari et al. 2024, *Log-concave polynomials II* (?); Lubotzky 2018, *High dimensional expanders* (?)
+- statement: Lubotzky–Phillips–Sarnak 1988, *Ramanujan graphs* (?)
+- formal: OAI `Computability/BinPacking/Expanders`
+
+**ExtremalAndProbabilisticCombinatorics** (umbrella, wave A)
+- primary: Alon–Spencer 2016, *Probabilistic Method* (?); Zhao 2023, *Graph Theory and Additive Combinatorics* (?)
+- formal: Dillies–Mehta 2022, *Formalising Szemerédi's Regularity…* (?); `YaelDillies/LeanCamCombi`
+
+**ProbabilisticMethod** (wave A)
+- primary: Alon–Spencer 2016, *Probabilistic Method* (?); Janson–Łuczak–Ruciński 2000, *Random Graphs* (?); Molloy–Reed 2002, *Graph Colouring and the Probabilistic…* (?)
+- theorem: Moser–Tardos 2010, *Constructive proof of the general…* (?); Fox–Sudakov 2011, *Dependent random choice* (?); van den Berg–Kesten 1985, *Inequalities with applications to…* (?); Kim–Vu 2000, *Concentration of multivariate…* (?); Spencer 1985, *Six standard deviations suffice* (?); Park–Pham 2024, *Proof of the Kahn–Kalai conjecture* (?); Balogh–Morris–Samotij 2015, *Independent sets in hypergraphs* (?); Saxton–Thomason 2015, *Hypergraph containers* (?); Wormald 1999, *Differential equation method for random…* (?); Molloy 2019, *List chromatic number of graphs with…* (?)
+- formal: OAI `Combinatorics/{ProgressionColoring/FiniteLocalLemma*, …}`
+
+**ExtremalGraphTheory** (wave A)
+- primary: Bollobás 1978, *Extremal Graph Theory* (?); Zhao 2023, *Graph Theory and Additive Combinatorics* (?); Lovász 2012, *Large Networks and Graph Limits*, Part 3 (?)
+- theorem: Füredi–Simonovits 2013, *History of degenerate (bipartite)…* (?); Kollár–Rónyai–Szabó 1996, *Norm-graphs and bipartite Turán numbers* (?); Keevash 2011, *Hypergraph Turán problems* (?); Conlon–Fox–Sudakov 2010, *Approximate version of Sidorenko's…* (?); Shearer 1983, *Note on the independence number of…* (?); Komlós–Sárközy–Szemerédi 1997, *Blow-up lemma* (?); Alon et al. 2000, *Efficient testing of large graphs* (?); Marcus–Tardos 2004, *Excluded permutation matrices and the…* (?); Aharoni–Haxell 2000, *Hall's theorem for hypergraphs* (?); Aharoni 2001, *Ryser's conjecture for tripartite…* (?)
+- formal: Mathlib `Combinatorics/SimpleGraph/Extremal`; OAI `Combinatorics/{Sidorenko, CliqueFree, …}`
+
+**RamseyTheory** (wave A)
+- primary: Graham–Rothschild–Spencer 1990, *Ramsey Theory* (?); Conlon–Fox–Sudakov 2015, *Recent developments in graph Ramsey…* (?)
+- theorem: Kim 1995, *Ramsey number R(3,t) has order of…* (?); Mattheus–Verstraëte 2024, *Asymptotics of r(4,t)* (?); Campos et al. 2023, *Exponential improvement for diagonal…*; Chvátal et al. 1983, *Ramsey number of a graph with bounded…* (?); Shelah 1988, *Primitive recursive bounds for van der…* (?); Erdős et al. 1973, *Euclidean Ramsey theorems I* (?); Frankl–Rödl 1990, *Partition property of simplices in…* (?); Kříž 1991, *Permutation groups in Euclidean Ramsey…* (?)
+- formal: OAI `Combinatorics/{Ramsey, RamseyFive, SharpRamsey, …}`; `b-mehta/exponential-ramsey`
+
+**ExtremalSetTheory** (wave A)
+- primary: Jukna 2011, *Extremal Combinatorics* (?); Frankl–Tokushige 2018, *Extremal Problems for Finite Sets* (?); Babai–Frankl 1992, *Linear Algebra Methods in Combinatorics* (?)
+- theorem: Ahlswede–Khachatrian 1997, *Complete intersection theorem for…* (?); Frankl–Wilson 1981, *Intersection theorems with geometric…* (?); Alweiss et al. 2021, *Improved bounds for the sunflower lemma* (?); Rao 2020, *Coding for sunflowers* (?); Haussler 1995, *Sphere packing numbers for subsets of…* (?); Kleitman 1966, *Combinatorial conjecture of Erdős* (?); Gilmer 2022, *Constant lower bound for the…* (?)
+- formal: Mathlib `Combinatorics/SetFamily`
+
+**EnumerativeAndAlgebraicCombinatorics** (umbrella, wave A)
+- primary: Stanley 2012, *Enumerative Combinatorics, Volume 1*; Stanley 1999, *Enumerative Combinatorics, Volume 2* (?)
+
+**EnumerativeCombinatorics** (wave A)
+- primary: Stanley 2012, *Enumerative Combinatorics, Volume 1*, Ch. 1, Ch. 2, Ch. 3; Stanley 1999, *Enumerative Combinatorics, Volume 2*, Ch. 5, Ch. 6 (?); Wachs 2007, *Poset topology* (?)
+- conventions: Lando–Zvonkin 2004, *Graphs on Surfaces and Their…* (?)
+- theorem: Gessel–Viennot 1985, *Binomial determinants, paths, and hook…* (?); Pólya–Read 1987, *Combinatorial Enumeration of Groups…* (?); Tutte 1963, *Census of planar maps* (?); Schaeffer 2015, *Planar maps* (?); Garsia–Milne 1981, *Rogers–Ramanujan bijection* (?); Greene–Kleitman 1976, *Structure of Sperner k-families* (?)
+- formal: Mathlib `Combinatorics/Enumerative`; Tau Ceti `Combinatorics/Enumerative`
+
+**SymmetricFunctions** (wave A)
+- primary: Macdonald 1995, *Symmetric Functions and Hall Polynomials*, Ch. I, Ch. III, Ch. VI (?); Stanley 1999, *Enumerative Combinatorics, Volume 2*, Ch. 7 (?); Fulton 1997, *Young Tableaux* (?); Grinberg–Reiner 2014, *Hopf algebras in combinatorics* (?)
+- conventions: Loehr–Remmel 2011, *Computational and combinatorial exposé…* (?)
+- theorem: Gessel 1984, *Multipartite P-partitions and inner…* (?); Stanley 1995, *Symmetric function generalization of…* (?); Shareshian–Wachs 2016, *Chromatic quasisymmetric functions* (?); Gasharov 1996, *Incomparability graphs of (3+1)-free…* (?)
+- formal: Tau Ceti `Combinatorics/Young`; OAI `Combinatorics/Chromatic`
+
+**LogConcavityAndStablePolynomials** (wave A)
+- primary: Brändén 2015, *Unimodality, log-concavity…* (?); Wagner 2011, *Multivariate stable polynomials* (?)
+- theorem: Borcea–Brändén 2009, *Lee–Yang and Pólya–Schur programs. I…* (?); Borcea–Brändén–Liggett 2009, *Negative dependence and the geometry of…* (?); Marcus–Spielman–Srivastava 2015, *Interlacing families I* (?); Marcus–Spielman–Srivastava 2015, *Interlacing families II*; Chudnovsky–Seymour 2007, *Roots of the independence polynomial of…* (?); Gurvits 2008, *Van der Waerden/Schrijver–Valiant like…* (?); Brändén–Huh 2020, *Lorentzian polynomials* (?); Anari et al. 2024, *Log-concave polynomials II* (?)
+- formal: OAI `Probability/StrongRayleigh`
+
+**MatroidsAndSubmodularity** (wave A)
+- primary: Oxley 2011, *Matroid Theory* (?); Schrijver 2003, *Combinatorial Optimization* (?); Fujishige 2005, *Submodular Functions and Optimization* (?)
+- theorem: Lovász 1983, *Submodular functions and convexity* (?); Brylawski–Oxley 1992, *Tutte polynomial and its applications* (?); Bruhn et al. 2013, *Axioms for infinite matroids* (?); Bowler–Carmesin 2015, *Matroid intersection, base packing and…* (?)
+- formal: Mathlib `Combinatorics/Matroid`; `apnelson1/Matroid`; OAI `Combinatorics/{InfiniteMatroid, MatroidCounting}`
+
+**CombinatorialDesignsAndFiniteGeometry** (wave A)
+- primary: Beth–Jungnickel–Lenz 1999, *Design Theory (2 vols.)* (?); Colbourn–Dinitz 2007, *Handbook of Combinatorial Designs* (?); Hirschfeld 1998, *Projective Geometries over Finite Fields* (?); Payne–Thas 2009, *Finite Generalized Quadrangles* (?)
+- theorem: Huffman–Pless 2003, *Fundamentals of Error-Correcting Codes*; MacWilliams–Sloane 1977, *Theory of Error-Correcting Codes* (?); Schmidt 1999, *Cyclotomic integers and finite geometry* (?); Delsarte 1973, *Algebraic approach to the association…* (?); Wootters–Fields 1989, *Optimal state-determination by mutually…* (?); Lidl–Niederreiter 1997, *Finite Fields*
+- formal: Mathlib `Combinatorics/Configuration`; Tau Ceti `InformationTheory/Coding`
+
+**BooleanFunctionAnalysis** (wave A)
+- primary: O'Donnell 2014, *Analysis of Boolean Functions*, Chs. 1–2, Ch. 8, Chs. 9–10 (?)
+- theorem: Kahn–Kalai–Linial 1988, *Influence of variables on Boolean…* (?); Friedgut 1998, *Boolean functions with low average…* (?); Friedgut–Kalai 1996, *Every monotone graph property has a…* (?); Friedgut 1999, *Sharp thresholds of graph properties…* (?); Russo 1981, *Critical percolation probabilities* (?); O'Donnell et al. 2005, *Every decision tree has an influential…* (?); Nisan–Szegedy 1994, *Degree of Boolean functions as real…* (?); Huang 2019, *Induced subgraphs of hypercubes and a…*; Gotsman–Linial 1994, *Spectral properties of threshold…* (?); Mossel–O'Donnell–Oleszkiewicz 2010, *Noise stability of functions with low…* (?)
+- formal: OAI `Combinatorics/{SharpThreshold, GotsmanLinial, …}`
+
+**DiscreteGeometryAndIncidences** (wave A)
+- primary: Matoušek 2002, *Discrete Geometry* (?); Guth 2016, *Polynomial Methods in Combinatorics* (?)
+- theorem: Matoušek 2003, *Using the Borsuk–Ulam Theorem* (?); Sperner 1928, *Neuer Beweis für die Invarianz der…* (?); Knaster et al. 1929, *Ein Beweis des Fixpunktsatzes für…* (?); Freund–Todd 1981, *Constructive proof of Tucker's…* (?); Guth–Katz 2015, *Erdős distinct distances problem in the…* (?); Pach–Sharir 1998, *Number of incidences between points and…* (?); Dey 1998, *Improved bounds for planar k-sets and…* (?); Kahn–Kalai 1993, *Counterexample to Borsuk's conjecture* (?); Komlós–Pintz–Szemerédi 1982, *Lower bound for Heilbronn's problem* (?); Bhattacharya 2020, *Periodicity and decidability of tilings…* (?)
+- formal: OAI `Combinatorics/{HalvingLines, Distances, Crossing}`
+
+**PolyhedralCombinatorics** (wave A)
+- primary: Schrijver 1986, *Theory of Linear and Integer Programming* (?); Schrijver 2003, *Combinatorial Optimization* (?); Ziegler 1995, *Polytopes*, Ch. 1, Ch. 3, Ch. 4 (?); Beck–Robins 2015, *Computing the Continuous Discretely* (?)
+- theorem: Yannakakis 1991, *Expressing combinatorial optimization…* (?); Gouveia–Parrilo–Thomas 2013, *Lifts of convex sets and cone…* (?); Rothvoss 2017, *Matching polytope has exponential…* (?)
+- formal: Mathlib `Geometry/Convex/Cone/Pointed`; Tau Ceti `Analysis/Convex/Polyhedron`; OAI `Combinatorics/{MatchingPSD, PerfectMatching}`
+
+**AdditiveCombinatorics** (wave A)
+- primary: Tao–Vu 2006, *Additive Combinatorics*; Tao 2012, *Higher Order Fourier Analysis*; Zhao 2023, *Graph Theory and Additive Combinatorics* (?)
+- theorem: Green–Ruzsa 2007, *Freiman's theorem in an arbitrary…* (?); Gowers et al. 2024, *Marton's conjecture in abelian groups…* (?); Kelley–Meka 2023, *Strong bounds for 3-progressions*; Ellenberg–Gijswijt 2017, *Large subsets of 𝔽_qⁿ with no…* (?); Gowers 2007, *Hypergraph regularity and the…* (?); Green–Tao–Ziegler 2012, *Inverse theorem for the Gowers…*; Green–Tao 2008, *Primes contain arbitrarily long…*
+- formal: Mathlib `Combinatorics/Additive`; `YaelDillies/LeanAPAP`; `teorth/pfr`; Dahmen–Hölzl–Lewis 2019, *Formalizing the solution to the cap set…* (?); OAI `Combinatorics/{Progressions/Nilpotent, SumProduct}`
+
+**Acquisition list** (not free and not held locally; books needed by a wave-A roadmap, and any work needed by two or more roadmaps of this campaign; journal papers otherwise left to library access, all listed in master (b2); roadmap count in brackets; ★ = wave A): Schrijver 2003, *Combinatorial Optimization* [3] ★; Stanley 1999, *Enumerative Combinatorics, Volume 2* [3] ★; Zhao 2023, *Graph Theory and Additive Combinatorics* [3] ★; Alon–Spencer 2016, *Probabilistic Method* [2] ★; Bondy–Murty 2008, *Graph Theory* [2] ★; Stanley 2012, *Enumerative Combinatorics, Volume 1* [2] ★; Beth–Jungnickel–Lenz 1999, *Design Theory (2 vols.)* [1] ★; Bollobás 1978, *Extremal Graph Theory* [1] ★; Chung 1997, *Spectral Graph Theory* [1] ★; Colbourn–Dinitz 2007, *Handbook of Combinatorial Designs* [1] ★; Frankl–Tokushige 2018, *Extremal Problems for Finite Sets* [1] ★; Fujishige 2005, *Submodular Functions and Optimization* [1] ★; Fulton 1997, *Young Tableaux* [1] ★; Godsil 1993, *Algebraic Combinatorics* [1] ★; Godsil–Royle 2001, *Algebraic Graph Theory* [1] ★; Graham–Rothschild–Spencer 1990, *Ramsey Theory* [1] ★; Gusfield–Irving 1989, *Stable Marriage Problem* [1] ★; Guth 2016, *Polynomial Methods in Combinatorics* [1] ★; Hirschfeld 1998, *Projective Geometries over Finite Fields* [1] ★; Huffman–Pless 2003, *Fundamentals of Error-Correcting Codes* [1] ★; Janson–Łuczak–Ruciński 2000, *Random Graphs* [1] ★; Jensen–Toft 1995, *Graph Coloring Problems* [1] ★; Jukna 2011, *Extremal Combinatorics* [1] ★; Lando–Zvonkin 2004, *Graphs on Surfaces and Their…* [1] ★; Lidl–Niederreiter 1997, *Finite Fields* [1] ★; Lovász 2012, *Large Networks and Graph Limits* [1] ★; Lovász–Plummer 1986, *Matching Theory* [1] ★; Lubotzky 1994, *Discrete Groups, Expanding Graphs and…* [1] ★; Macdonald 1995, *Symmetric Functions and Hall Polynomials* [1] ★; MacWilliams–Sloane 1977, *Theory of Error-Correcting Codes* [1] ★; Matoušek 2002, *Discrete Geometry* [1] ★; Matoušek 2003, *Using the Borsuk–Ulam Theorem* [1] ★; Molloy–Reed 2002, *Graph Colouring and the Probabilistic…* [1] ★; Oxley 2011, *Matroid Theory* [1] ★; Payne–Thas 2009, *Finite Generalized Quadrangles* [1] ★; Pólya–Read 1987, *Combinatorial Enumeration of Groups…* [1] ★; Schrijver 1986, *Theory of Linear and Integer Programming* [1] ★; Stiebitz et al. 2012, *Graph Edge Coloring* [1] ★; Tao 2012, *Higher Order Fourier Analysis* [1] ★; Tao–Vu 2006, *Additive Combinatorics* [1] ★; Terras 2011, *Zeta Functions of Graphs* [1] ★; Ziegler 1995, *Polytopes* [1] ★.
+
+Full bibliographic entries, identifiers, access evidence and verification status: `references_master.md`.

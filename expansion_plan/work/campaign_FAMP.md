@@ -379,3 +379,152 @@ Hilbert modules; Tanimoto, StandardSubspace; Bannon et al., Fredholm), the #126 
 Waves A 6, B 11, C 3 (RandomSchrodinger, ManyBody, AxiomaticQFT); five review units. Existing supply in the
 territory: ≈860 PR-equivalents, almost all #126 (≈830 target items, partly ported code) plus #397 M6 (≈30);
 OneParameterSemigroups is finished. New surface is about five times present supply.
+
+## 8. References by roadmap
+
+25 roadmap records, 336 listings, 298 distinct works; full entries, identifiers, access and verification are in `references_master.md` (cited here by short form) and `references_master.json`; the machine records are `refs_FAMP.json` and the `references` fields of `slate_FAMP.json`, each carrying `master_key` and `verified`. (?) marks a work not verified in the 2026-10-08 pass (199 of 298: zbMATH stopped early; see master (d)). Pointers are the compilers' and are unverified.
+
+**Conventions and notes.** Boundary ruling 4 (`boundary_pass.md` §5): strong convergence (Haagerup–Thorbjørnsen, Collins–Male, Bordenave–Collins, Chen–Garza-Vargas–Tropp–van Handel, Friedman) moves to PRDS StrongConvergenceOfRandomMatrices with Annals #99, so FreeProbability cites no strong-convergence source and stops at Haagerup's inequality, the Brown measure and free entropy; the slate's FreeProbability scope and goals still need the same edit. Each roadmap's OAI Lean directories are cited individually. No FAMP book or paper is held in the local PDF collections.
+
+**OperatorAlgebras** (umbrella, wave A)
+- primary: Takesaki 2002, *Theory of Operator Algebras I* (?); Takesaki 2003, *Theory of Operator Algebras II* (?); Takesaki 2003, *Theory of Operator Algebras III* (?); Kadison–Ringrose 1983, *Fundamentals of the Theory of Operator… I* (?); Kadison–Ringrose 1986, *Fundamentals of the Theory of Operator… II* (?)
+- conventions: Blackadar 2006, *Operator Algebras* (?)
+- formal: Mathlib `Analysis/CStarAlgebra`; Mathlib `Analysis/VonNeumannAlgebra/Basic`
+
+**OperatorAlgebras/VonNeumannAlgebras** (wave A)
+- primary: Anantharaman–Popa 2017, *II_1 Factors* (?); Takesaki 2002, *Theory of Operator Algebras I* (?); Sakai 1971, *C*-Algebras and W*-Algebras* (?); Jones–Sunder 1997, *Subfactors* (?); Sinclair–Smith 2008, *Finite von Neumann Algebras and Masas* (?); Sinclair–Smith 1995, *Hochschild Cohomology of von Neumann…* (?); Brown–Ozawa 2008, *C*-Algebras and Finite-Dimensional…* (?)
+- theorem: Anderson 1979, *Extensions, restrictions, and…* (?); Marcus–Spielman–Srivastava 2015, *Interlacing families II*
+- statement: Connes 1976, *Classification of injective factors…* (?)
+- formal: Mathlib `Analysis/VonNeumannAlgebra/Basic`; Mathlib `Analysis/InnerProductSpace/WeakOperatorTopology`; OAI `Analysis/OperatorAlgebra`; OAI `Analysis/FactorGeneration`; OAI `Analysis/FiniteFactor`; OAI `Analysis/BoundedHochschild`; OAI `Analysis/KadisonKastler`; OAI `Analysis/IrrationalRotation`; OAI `ComparatorChallenges/InterpolatedFactors`
+
+**OperatorAlgebras/ModularTheory** (wave B)
+- primary: Takesaki 2003, *Theory of Operator Algebras II* (?); Strătilă 1981, *Modular Theory in Operator Algebras* (?)
+- conventions: Bratteli–Robinson 1997, *Operator Algebras and Quantum…* (?)
+- theorem: Connes–Takesaki 1977, *Flow of weights on factors of type III* (?); Powers 1967, *Representations of uniformly…* (?); Borchers 1992, *CPT-theorem in two-dimensional theories…* (?); Wiesbrock 1993, *Half-sided modular inclusions of…* (?); Araki–Zsidó 2005, *Extension of the structure theorem of…* (?)
+- statement: Haagerup 1987, *Connes' bicentralizer problem and…* (?)
+- formal: Mathlib `Analysis/InnerProductSpace/StandardSubspace`; Tau Ceti `Analysis/Semigroups/Group/Stone`; OAI `Analysis/ModularTheory`; OAI `Analysis/ModularRecovery`
+
+**OperatorAlgebras/NuclearCStarAlgebras** (wave A)
+- primary: Brown–Ozawa 2008, *C*-Algebras and Finite-Dimensional…* (?); Paulsen 2002, *Completely Bounded Maps and Operator…* (?); Davidson 1996, *C*-Algebras by Example* (?); Pisier 2003, *Operator Space Theory* (?); Loring 1997, *Lifting Solutions to Perturbing…* (?)
+- theorem: Kirchberg 1996, *Derivation problem and the similarity…* (?); Powers 1975, *Simplicity of the C*-algebra associated…* (?); Jiang–Su 1999, *Simple unital projectionless C*-algebra* (?)
+- statement: Kirchberg–Phillips 2000, *Embedding of exact C*-algebras in the…* (?)
+- formal: Mathlib `Analysis/CStarAlgebra/CompletelyPositiveMap`; OAI `Analysis/Nuclearity`; OAI `Analysis/NuclearUltrapower`; OAI `Analysis/Naimark`; OAI `Analysis/Cuntz`; OAI `Analysis/CStarAlgebra`; OAI `ComparatorChallenges/KadisonSimilarity`
+
+**OperatorAlgebras/CStarRegularity** (wave B)
+- primary: Rørdam 2002, *Classification of nuclear, simple…* (?); Antoine–Perera–Thiel 2018, *Tensor products and regularity…* (?)
+- theorem: Coward–Elliott–Ivanescu 2008, *Cuntz semigroup as an invariant for…* (?); Blackadar–Handelman 1982, *Dimension functions and traces on…* (?); Rørdam 2004, *Stable and the real rank of Z-absorbing…* (?); Toms–Winter 2007, *Strongly self-absorbing C*-algebras* (?); Kirchberg–Rørdam 2000, *Non-simple purely infinite C*-algebras* (?); Kirchberg–Rørdam 2002, *Infinite non-simple C*-algebras* (?); Winter–Zacharias 2010, *Nuclear dimension of C*-algebras* (?)
+- statement: Matui–Sato 2012, *Strict comparison and Z-absorption of…* (?); Winter 2012, *Nuclear dimension and Z-stability of…* (?); Tikuisis–White–Winter 2017, *Quasidiagonality of nuclear C*-algebras* (?); Haagerup 2014, *Quasitraces on exact C*-algebras are…* (?)
+- formal: OAI `Analysis/JiangSu`; OAI `Analysis/TracialSplitting`; OAI `Analysis/Quasitrace`; OAI `Analysis/Kaplansky`; OAI `Analysis/WeakInfiniteness`; OAI `Analysis/OInfinity`; OAI `Analysis/PureInfiniteness`; OAI `Analysis/CharacterCriterion`; OAI `Analysis/TraceCone`
+
+**OperatorAlgebras/OperatorKTheory** (wave B)
+- primary: Rørdam–Larsen–Laustsen 2000, *K-Theory for C*-Algebras* (?); Blackadar 1998, *K-Theory for Operator Algebras* (?); Higson–Roe 2000, *Analytic K-Homology* (?); Willett–Yu 2020, *Higher Index Theory* (?)
+- theorem: Cuntz 1981, *K-theory for certain C*-algebras* (?); Pimsner–Voiculescu 1982, *K-groups of reduced crossed products by…* (?); Swan 1962, *Vector bundles and projective modules* (?)
+- statement: Baum–Connes–Higson 1994, *Classifying space for proper actions…* (?)
+- formal: Tau Ceti `Analysis/Fredholm`
+
+**OperatorAlgebras/FreeProbability** (wave B)
+- primary: Voiculescu–Dykema–Nica 1992, *Free Random Variables* (?); Nica–Speicher 2006, *Combinatorics of Free Probability* (?); Mingo–Speicher 2017, *Free Probability and Random Matrices* (?)
+- conventions: Tau Ceti 2026, *RandomMatrices README (Conventions*
+- theorem: Voiculescu 1990, *Circular and semicircular systems and…* (?); Dykema 1994, *Interpolated free group factors* (?); Rădulescu 1994, *Random matrices, amalgamated free…* (?); Haagerup 1979, *Example of a non nuclear C*-algebra…* (?); Brown 1986, *Lidskii's theorem in the type II case* (?); Speicher 1998, *Combinatorial theory of the free…* (?); Voiculescu 1994, *Analogues of entropy and of Fisher's… II* (?); Voiculescu 1998, *Analogues of entropy and of Fisher's…* (?); Biane–Capitaine–Guionnet 2003, *Large deviation bounds for matrix…* (?)
+- statement: Voiculescu 1996, *Analogues of entropy and of Fisher's…* (?); Ge 1998, *Applications of free entropy to finite… II* (?)
+- formal: OAI `Analysis/FreeEntropy`; OAI `Analysis/FreeGroupFactor`; OAI `Analysis/InterpolatedFactors`; OAI `Analysis/BrownMeasure`; OAI `Analysis/FreeWords`; OAI `ComparatorChallenges/FiniteEntropySeparation`
+
+**OperatorAlgebras/L2Invariants** (wave B)
+- primary: Lück 2002, *L²-Invariants* (?); Kammeyer 2019, *ℓ²-Invariants* (?)
+- theorem: Atiyah 1976, *Elliptic operators, discrete groups and…* (?); Fuglede–Kadison 1952, *Determinant theory in finite factors* (?); Lück 1998, *Dimension theory of arbitrary modules…* (?); Cheeger–Gromov 1986, *L_2-cohomology and group cohomology* (?); Lück 1994, *Approximating L²-invariants by their…* (?); Kaplansky 1969, *Fields and Rings* (?)
+- formal: OAI `Analysis/GroupDeterminants`
+
+**SpectralTheory** (umbrella, wave B)
+- primary: Reed–Simon 1980, *Methods of Modern Mathematical Physics I*, Chs. VII–VIII (?); Reed–Simon 1975, *Methods of Modern Mathematical Physics… II*, Ch. X (?); Reed–Simon 1979, *Methods of Modern Mathematical Physics… III*, Ch. XI (?); Reed–Simon 1978, *Methods of Modern Mathematical Physics… IV*, Chs. XII–XIII (?); Schmüdgen 2012, *Unbounded Self-adjoint Operators on…* (?); Simon 2015, *Operator Theory* (?); Teschl 2014, *Mathematical Methods in Quantum…* (?)
+- conventions: Tau Ceti 2026, *OperatorTheory family README and…*
+
+**SpectralTheory/UnboundedOperators** (wave B)
+- primary: Reed–Simon 1975, *Methods of Modern Mathematical Physics… II*, Ch. X (?); Reed–Simon 1978, *Methods of Modern Mathematical Physics… IV*, Ch. XIII (?); Reed–Simon 1979, *Methods of Modern Mathematical Physics… III*, Ch. XI (?); Schmüdgen 2012, *Unbounded Self-adjoint Operators on…* (?); Kato 1976, *Perturbation Theory for Linear Operators*, Ch. VI, Ch. VII, Ch. X (?); Simon 2005, *Trace Ideals and Their Applications* (?)
+- conventions: Tau Ceti 2026, *OperatorTheory family README and…*; Mathlib `MeasureTheory/Measure/ResolventTransform`
+- theorem: Simon 1995, *Spectral analysis of rank one…* (?); Simon–Wolff 1986, *Singular continuous spectrum under rank…* (?)
+- formal: Tau Ceti `Analysis/InnerProductSpace/LinearPMap/SelfAdjoint`; Tau Ceti `Analysis/Complex/Herglotz`; Tau Ceti `Analysis/Complex/Pick`; OAI `Analysis/LiebThirring`
+
+**SpectralTheory/SchrodingerOperators** (wave B)
+- primary: Cycon et al. 1987, *Schrödinger Operators with Application…* (?); Reed–Simon 1975, *Methods of Modern Mathematical Physics… II*, Ch. X (?); Reed–Simon 1978, *Methods of Modern Mathematical Physics… IV*, Ch. XIII (?); Frank–Laptev–Weidl 2023, *Schrödinger Operators* (?); Engel–Nagel 2000, *One-Parameter Semigroups for Linear…* (?)
+- conventions: Lieb–Loss 2001, *Analysis* (?)
+- theorem: Simon 1982, *Schrödinger semigroups* (?); Agmon 1982, *Exponential Decay of Solutions of…* (?); Combes–Thomas 1973, *Asymptotic behaviour of eigenfunctions…* (?); Rumin 2011, *Balanced distribution-energy…* (?); Kuchment 2016, *Overview of periodic elliptic operators* (?)
+- formal: Tau Ceti `Analysis/Fredholm`; OAI `Analysis/LiebThirring`; OAI `Analysis/CoulombIonization`; OAI `MathematicalPhysics/Coulomb`; OAI `MathematicalPhysics/ContinuumCoulomb`; OAI `MathematicalPhysics/BFSS`
+
+**SpectralTheory/SturmLiouvilleAndJacobiOperators** (wave B)
+- primary: Teschl 2014, *Mathematical Methods in Quantum…* (?); Teschl 2000, *Jacobi Operators and Completely…* (?); Weidmann 1987, *Spectral Theory of Ordinary…* (?); Simon 2011, *Szegő's Theorem and Its Descendants* (?); Akhiezer 1965, *Classical Moment Problem and Some…* (?); Damanik–Fillman 2022, *One-Dimensional Ergodic Schrödinger… I* (?)
+- theorem: Gilbert–Pearson 1987, *Subordinacy and analysis of the…* (?); Jitomirskaya–Last 1999, *Power-law subordinacy and singular…* (?); Gordon et al. 1997, *Duality and singular continuous…* (?)
+- statement: Kotani 1984, *Ljapunov indices determine absolutely…* (?); Avila–Jitomirskaya 2009, *Ten Martini Problem* (?)
+- formal: Tau Ceti `Analysis/Complex/Herglotz`; Tau Ceti `Probability/Moments`
+
+**SpectralTheory/RandomSchrodingerOperators** (wave C)
+- primary: Aizenman–Warzel 2015, *Random Operators* (?); Carmona–Lacroix 1990, *Spectral Theory of Random Schrödinger…* (?); Pastur–Figotin 1992, *Spectra of Random and Almost-Periodic…* (?); Kirsch 2008, *Invitation to random Schrödinger…* (?)
+- theorem: Pastur 1980, *Spectral properties of disordered…* (?); Wegner 1981, *Bounds on the density of states in…* (?); Aizenman–Molchanov 1993, *Localization at large disorder and at…* (?); Kunz–Souillard 1980, *Sur le spectre des opérateurs aux…* (?)
+- statement: Klein 1998, *Extended states in the Anderson model…* (?)
+- formal: OAI `MathematicalPhysics/Anderson`; OAI `MathematicalPhysics/PlanarAnderson`
+
+**QuantumTheory** (umbrella, wave A)
+- primary: Bratteli–Robinson 1987, *Operator Algebras and Quantum…* (?); Bratteli–Robinson 1997, *Operator Algebras and Quantum…* (?)
+- conventions: Hall 2013, *Quantum Theory for Mathematicians* (?)
+- formal: PhysLean (formerly HepLean), Lean 4…
+
+**QuantumTheory/QuantumInformationTheory** (wave A)
+- primary: Watrous 2018, *Theory of Quantum Information* (?); Wilde 2017, *Quantum Information Theory*; Holevo 2012, *Quantum Systems, Channels, Information* (?)
+- theorem: Horodecki et al. 2009, *General paradigm for distilling…* (?); Wootters–Fields 1989, *Optimal state-determination by mutually…* (?); Wolf–Giedke–Cirac 2006, *Extremality of Gaussian quantum states* (?)
+- statement: Guha–Erkmen–Shapiro 2008, *Entropy photon-number inequality and…* (?); OpenAI 2026, *Entropy photon-number inequality (OAI…* (OAI#273)
+- formal: Mathlib `Analysis/CStarAlgebra/CompletelyPositiveMap`; Lean-QuantumInfo (Lean 4 library for…; OAI `InformationTheory/AmplitudeDamping`; OAI `InformationTheory/Entanglement`; OAI `InformationTheory/SecretKey`; OAI `InformationTheory/PhotonNumber`; OAI `InformationTheory/SoftChannel`; OAI `Analysis/MutuallyUnbiased`
+
+**QuantumTheory/ManyBodyQuantumMechanics** (wave C)
+- primary: Lieb–Seiringer 2010, *Stability of Matter in Quantum Mechanics* (?); Bratteli–Robinson 1997, *Operator Algebras and Quantum…* (?); Dereziński–Gérard 2013, *Mathematics of Quantization and Quantum…* (?); Solovej 2007, *Many Body Quantum Mechanics* (?); Lieb et al. 2005, *Mathematics of the Bose Gas and its…* (?)
+- conventions: Folland 1989, *Harmonic Analysis in Phase Space* (?)
+- theorem: Mackey 1949, *Theorem of Stone and von Neumann* (?); Slawny 1972, *Factor representations and the…* (?); Reed–Simon 1978, *Methods of Modern Mathematical Physics… IV*, Ch. XIII (?); Lieb 1984, *Bound on the maximum negative…* (?); Coleman 1963, *Structure of fermion density matrices* (?); Lieb 1983, *Density functionals for Coulomb systems* (?); Laughlin 1983, *Anomalous quantum Hall effect* (?); Trugman–Kivelson 1985, *Exact results for the fractional…* (?)
+- formal: PhysLean (formerly HepLean), Lean 4…; OAI `Analysis/Laughlin`; OAI `Analysis/LaughlinFock`; OAI `Analysis/CoulombIonization`; OAI `MathematicalPhysics/Fock`; OAI `MathematicalPhysics/Coulomb`
+
+**QuantumTheory/QuantumSpinSystems** (wave B)
+- primary: Tasaki 2020, *Physics and Mathematics of Quantum…* (?); Nachtergaele–Sims–Young 2019, *Quasi-locality bounds for quantum…* (?); Naaijkens 2017, *Quantum Spin Systems on Infinite…* (?); Bratteli–Robinson 1997, *Operator Algebras and Quantum…* (?)
+- theorem: Knabe 1988, *Energy gaps and elementary excitations…* (?); Nachtergaele 1996, *Spectral gap for some spin chains with…* (?); Fannes–Nachtergaele–Werner 1992, *Finitely correlated states on quantum…* (?); Nachtergaele–Sims 2006, *Lieb–Robinson bounds and the…* (?); Hastings 2007, *Area law for one-dimensional quantum…* (?); Arad et al. 2013, *Area law and sub-exponential algorithm…* (?); Bachmann et al. 2012, *Automorphic equivalence within gapped…* (?); Ueltschi 2013, *Random loop representations for quantum…* (?)
+- formal: OAI `MathematicalPhysics/Heisenberg`; OAI `MathematicalPhysics/TensorNetwork`; OAI `MathematicalPhysics/PEPSFilters`; OAI `MathematicalPhysics/PEPSMove`; OAI `MathematicalPhysics/PEPSSubvolume`
+
+**QuantumTheory/AxiomaticQuantumFieldTheory** (wave C)
+- primary: Streater–Wightman 1964, *PCT, Spin and Statistics, and All That* (?); Haag 1996, *Local Quantum Physics* (?); Glimm–Jaffe 1987, *Quantum Physics* (?); Araki 1999, *Mathematical Theory of Quantum Fields* (?); Varadarajan 1985, *Geometry of Quantum Theory* (?); Longo 2008, *Conformal Nets, Parts I and II* (?)
+- theorem: Osterwalder–Schrader 1975, *Axioms for Euclidean Green's functions… II* (?); Bisognano–Wichmann 1975, *Duality condition for a Hermitian…* (?); Borchers 1992, *CPT-theorem in two-dimensional theories…* (?); Doplicher–Haag–Roberts 1971, *Local observables and particle… I* (?)
+- statement: Kawahigashi–Longo–Müger 2001, *Multi-interval subfactors and…* (?)
+- formal: PhysLean (formerly HepLean), Lean 4…
+
+**(OperatorTheory extension)** (umbrella, wave A)
+- primary: Conway 1990, *Functional Analysis* (?); Conway 2000, *Operator Theory* (?); Bhatia 1997, *Matrix Analysis* (?)
+- conventions: Tau Ceti 2026, *OperatorTheory family README and…*
+
+**NonselfadjointOperatorTheory** (wave A)
+- primary: Sz.-Nagy et al. 2010, *Harmonic Analysis of Operators on…* (?); Agler–McCarthy 2002, *Pick Interpolation and Hilbert Function…* (?); Nikolski 2002, *Operators, Functions, and Systems* (?); Paulsen 2002, *Completely Bounded Maps and Operator…* (?); Radjavi–Rosenthal 1973, *Invariant Subspaces* (?); Davidson 1988, *Nest Algebras* (?)
+- theorem: Crouzeix–Palencia 2017, *Numerical range is a (1+√2)-spectral set* (?); Arveson 1972, *Subalgebras of C*-algebras. II* (?); Shields 1974, *Weighted shift operators and analytic…* (?)
+- formal: Mathlib `Analysis/InnerProductSpace/Reproducing`; Tau Ceti `Analysis/Complex/Pick`; Tau Ceti `Analysis/Fredholm`; OAI `Analysis/NumericalRange`; OAI `Analysis/Crouzeix`; OAI `Analysis/DirectCrouzeix`; OAI `Analysis/HilbertCrouzeix`; OAI `Analysis/StructuralCrouzeix`; OAI `Analysis/Hyperinvariant`; OAI `Analysis/BackwardIntertwiners`
+
+**OperatorConvexityAndTraceInequalities** (wave A)
+- primary: Bhatia 1997, *Matrix Analysis*, Ch. V, Ch. IX, Ch. X (?); Bhatia 2007, *Positive Definite Matrices* (?); Carlen 2010, *Trace inequalities and quantum entropy* (?); Simon 2019, *Loewner's Theorem on Monotone Matrix…* (?); Hiai–Petz 2014, *Matrix Analysis and Applications* (?)
+- theorem: Hansen–Pedersen 2003, *Jensen's operator inequality* (?); Kubo–Ando 1980, *Means of positive linear operators* (?); Lieb 1973, *Convex trace functions and the…* (?); Epstein 1973, *Remarks on two theorems of E. Lieb* (?); Araki 1990, *Inequality of Lieb and Thirring* (?)
+- formal: Mathlib `Analysis/CStarAlgebra/ContinuousFunctionalCalculus`; Tau Ceti `Analysis/Complex/Pick`; OAI `Analysis/Matrix`; OAI `Analysis/QuantumTrace`; OAI `Analysis/StrictMeans`
+
+**BanachSpaceTheory** (umbrella, wave A)
+- primary: Albiac–Kalton 2016, *Banach Space Theory* (?); Lindenstrauss–Tzafriri 1977, *Classical Banach Spaces I* (?); Lindenstrauss–Tzafriri 1979, *Classical Banach Spaces II* (?); Fabian et al. 2011, *Banach Space Theory* (?)
+- conventions: Johnson–Lindenstrauss 2001, *Handbook of the Geometry of Banach…* (?)
+
+**BanachSpaceTheory/BasesAndClassicalSpaces** (wave A)
+- primary: Albiac–Kalton 2016, *Banach Space Theory* (?); Lindenstrauss–Tzafriri 1977, *Classical Banach Spaces I* (?); Diestel 1984, *Sequences and Series in Banach Spaces* (?); Fabian et al. 2011, *Banach Space Theory* (?)
+- theorem: James 1964, *Weakly compact sets* (?); Heinrich 1980, *Ultraproducts in Banach space theory* (?)
+- statement: Enflo 1973, *Counterexample to the approximation…* (?)
+- formal: Mathlib `Analysis/Normed/Module/Bases`; OAI `Analysis/SeparableQuotients`; OAI `Analysis/SphereIsometry`; OAI `Analysis/Nonexpansive`; OAI `Analysis/Cotype`
+
+**BanachSpaceTheory/LocalTheory** (wave B)
+- primary: Albiac–Kalton 2016, *Banach Space Theory* (?); Milman–Schechtman 1986, *Asymptotic Theory of Finite Dimensional…* (?); Pisier 2016, *Martingales in Banach Spaces* (?); Diestel–Jarchow–Tonge 1995, *Absolutely Summing Operators* (?); Tomczak-Jaegermann 1989, *Banach–Mazur Distances and…* (?); Pisier 1989, *Volume of Convex Bodies and Banach…* (?); Goebel–Kirk 1990, *Metric Fixed Point Theory* (?); Banaś–Goebel 1980, *Measures of Noncompactness in Banach…* (?)
+- theorem: Maurey–Pisier 1976, *Séries de variables aléatoires…* (?); Pisier 1982, *Holomorphic semigroups and the geometry…* (?); Kadets et al. 2000, *Banach spaces with the Daugavet property* (?)
+- formal: Mathlib `Analysis/Convex/Uniform`; Mathlib `Probability/Martingale`; OAI `Analysis/Cotype`; OAI `Analysis/MarkovType`; OAI `Analysis/Nonexpansive`; OAI `Analysis/Daugavet`; OAI `Analysis/TreePotential`; OAI `Analysis/MetricEntropy`
+
+**BanachSpaceTheory/NonlinearGeometry** (wave B)
+- primary: Benyamini–Lindenstrauss 2000, *Geometric Nonlinear Functional…* (?); Ostrovskii 2013, *Metric Embeddings* (?); Weaver 2018, *Lipschitz Algebras* (?)
+- theorem: Godefroy–Kalton 2003, *Lipschitz-free Banach spaces* (?); Ball 1992, *Markov chains, Riesz transforms and…* (?); Naor et al. 2006, *Markov chains in smooth Banach spaces…* (?)
+- statement: Mendel–Naor 2008, *Metric cotype* (?)
+- formal: Mathlib `Analysis/Normed/Affine/MazurUlam`; OAI `Analysis/LipschitzEquivalence`; OAI `Analysis/LipschitzFree`; OAI `Analysis/C0Absorption`; OAI `Analysis/MarkovType`; OAI `Analysis/DiamondDistortion`
+
+**Acquisition list** (not free and not held locally; books needed by a wave-A roadmap, and any work needed by two or more roadmaps of this campaign; journal papers otherwise left to library access, all listed in master (b2); roadmap count in brackets; ★ = wave A): Bratteli–Robinson 1997, *Operator Algebras and Quantum…* [4] ★; Albiac–Kalton 2016, *Banach Space Theory* [3] ★; Bhatia 1997, *Matrix Analysis* [2] ★; Brown–Ozawa 2008, *C*-Algebras and Finite-Dimensional…* [2] ★; Fabian et al. 2011, *Banach Space Theory* [2] ★; Lindenstrauss–Tzafriri 1977, *Classical Banach Spaces I* [2] ★; Paulsen 2002, *Completely Bounded Maps and Operator…* [2] ★; Takesaki 2002, *Theory of Operator Algebras I* [2] ★; Takesaki 2003, *Theory of Operator Algebras II* [2] ★; Agler–McCarthy 2002, *Pick Interpolation and Hilbert Function…* [1] ★; Bhatia 2007, *Positive Definite Matrices* [1] ★; Blackadar 2006, *Operator Algebras* [1] ★; Bratteli–Robinson 1987, *Operator Algebras and Quantum…* [1] ★; Conway 1990, *Functional Analysis* [1] ★; Conway 2000, *Operator Theory* [1] ★; Davidson 1988, *Nest Algebras* [1] ★; Davidson 1996, *C*-Algebras by Example* [1] ★; Diestel 1984, *Sequences and Series in Banach Spaces* [1] ★; Hall 2013, *Quantum Theory for Mathematicians* [1] ★; Hiai–Petz 2014, *Matrix Analysis and Applications* [1] ★; Holevo 2012, *Quantum Systems, Channels, Information* [1] ★; Johnson–Lindenstrauss 2001, *Handbook of the Geometry of Banach…* [1] ★; Jones–Sunder 1997, *Subfactors* [1] ★; Kadison–Ringrose 1983, *Fundamentals of the Theory of Operator… I* [1] ★; Kadison–Ringrose 1986, *Fundamentals of the Theory of Operator… II* [1] ★; Lindenstrauss–Tzafriri 1979, *Classical Banach Spaces II* [1] ★; Loring 1997, *Lifting Solutions to Perturbing…* [1] ★; Nikolski 2002, *Operators, Functions, and Systems* [1] ★; Pisier 2003, *Operator Space Theory* [1] ★; Radjavi–Rosenthal 1973, *Invariant Subspaces* [1] ★; Sakai 1971, *C*-Algebras and W*-Algebras* [1] ★; Simon 2019, *Loewner's Theorem on Monotone Matrix…* [1] ★; Sinclair–Smith 1995, *Hochschild Cohomology of von Neumann…* [1] ★; Sinclair–Smith 2008, *Finite von Neumann Algebras and Masas* [1] ★; Sz.-Nagy et al. 2010, *Harmonic Analysis of Operators on…* [1] ★; Takesaki 2003, *Theory of Operator Algebras III* [1] ★; Reed–Simon 1978, *Methods of Modern Mathematical Physics… IV* [4]; Reed–Simon 1975, *Methods of Modern Mathematical Physics… II* [3]; Borchers 1992, *CPT-theorem in two-dimensional theories…* [2]; Reed–Simon 1979, *Methods of Modern Mathematical Physics… III* [2]; Schmüdgen 2012, *Unbounded Self-adjoint Operators on…* [2].
+
+Full bibliographic entries, identifiers, access evidence and verification status: `references_master.md`.

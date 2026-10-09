@@ -204,7 +204,7 @@ Finite tensor categories and symmetric tensor categories in every characteristic
 
 **30. VertexAlgebras** — math.QA; L ≈ 300; wave B.
 Vertex algebras and vertex operator algebras: axioms, modules, the standard constructions and the representation-theoretic finiteness conditions. It starts from Mathlib's `Algebra/Vertex` vertex operators and Hahn series, takes affine algebras from KacMoodyAlgebras and lattices from IntegralLattices and #219, and ends at the holomorphic Leech lattice VOA and the statements of Zhu's modularity and Huang's modular tensor category theorems. The moonshine module is consumed by the NT campaign's QSeriesPartitionsAndMockModularForms QM.6; conformal nets are FAMP's.
-*Headlines:* Borcherds identity and reconstruction; Virasoro; Heisenberg, affine and lattice VOAs; V_Leech holomorphic with V_1 = 0; Zhu's algebra; Zhu and Huang stated. *Needs:* KacMoodyAlgebras; Completed/IntegralLattices; Rank24LatticeConstructions #219; ModularForms; TensorCategories. *Serves:* OpenAI 1 (#280); Annals 1 (#61). *Port:* OAI RepresentationTheory/VertexAlgebra (36k, low reuse). *Formalizability:* textbook (Kac, Frenkel-Ben-Zvi).
+*Headlines:* Borcherds identity and reconstruction; Virasoro; Heisenberg, affine and lattice VOAs; V_Leech holomorphic with dim V_1 = 24; Zhu's algebra; Zhu and Huang stated. *Needs:* KacMoodyAlgebras; Completed/IntegralLattices; Rank24LatticeConstructions #219; ModularForms; TensorCategories. *Serves:* OpenAI 1 (#280); Annals 1 (#61). *Port:* OAI RepresentationTheory/VertexAlgebra (36k, low reuse). *Formalizability:* textbook (Kac, Frenkel-Ben-Zvi).
 
 **31. GrothendieckTeichmuller** — math.QA; L ≈ 230; wave A.
 The Grothendieck-Teichmuller Lie algebra and the Drinfeld associators it acts on. It builds graded free Lie algebras with Hall and Lyndon bases on Mathlib's `FreeLieAlgebra`, the Drinfeld-Kohno Lie algebras t_n, grt_1 with the Ihara bracket, associators and the KZ associator by regularized holonomy, and ends at the Deligne-Drinfeld theorem and the profinite group GT-hat receiving G_Q. Arithmetic of multiple zeta values is the NT campaign's PeriodsAndSpecialValues PS.9; BelyiMaps and PeripheralActions supply the profinite side they explicitly leave to this roadmap.
@@ -295,3 +295,231 @@ ProfiniteCohomology ≈150, StablePeriodicCurved ≈100, ZigzagPreprojective ≈
 GrothendieckEulerForms ≈60, CFSGStatement and PeripheralActions ≈35), plus ReductiveGroups ≈600
 (math.AG); ≈900 in nine open-PR roadmaps; ≈330 in promoted campaign stages (SR expanded ≈250, DDPA
 generic ≈80). About 2,500 in all, 1,900 without ReductiveGroups.
+
+## 8. References by roadmap
+
+36 roadmap records, 391 listings, 342 distinct works; full entries, identifiers, access and verification are in `references_master.md` (cited here by short form) and `references_master.json`; the machine records are `refs_ALG.json` and the `references` fields of `slate_ALG.json`, each carrying `master_key` and `verified`. (?) marks a work not verified in the 2026-10-08 pass (252 of 342: zbMATH stopped early; see master (d)). A title is given at a work's first citation in this section only. Pointers are the compilers' and are unverified.
+
+**Conventions and notes.** Theorem numbers appear only where a campaign README fixes them (SR, DDPA); chapter pointers come from the local PDFs (Brown, Webb, Serre's *Local Fields*) or are certain, else book level. Five RepresentationTheory members reuse that family's citations (Serre GTM 42, Isaacs, Curtis–Reiner, Assem–Simson–Skowroński, Kac, Fulton, Fulton–Harris, Bonnafé, Humphreys) and its conventions: left modules; the bilinear character pairing; ModularInduction's `G₀` as exact `K₀` and its reduction mod ℓ. The DeformationAndDerivedPatchingAlgebra promotion record overlaps NT unit U27 (both kept; master (d8)).
+
+**GeometricGroupTheory** (umbrella, wave A)
+- primary: Bridson–Haefliger 1999, *Metric Spaces of Non-Positive Curvature*, Part I, Part II (?); Druţu–Kapovich 2018, *Geometric Group Theory* (?); de la Harpe 2000, *Geometric Group Theory* (?)
+- conventions: Ghys–de la Harpe 1990, *Sur les groupes hyperboliques d'après…* (?); Geoghegan 2008, *Topological Methods in Group Theory* (?)
+- formal: Mathlib `Geometry/Group/{WordMetric, Growth/}`
+
+**RepresentationsOfReductiveGroups** (umbrella, wave A)
+- primary: Jantzen 2003, *Representations of Algebraic Groups*, Part II (?); Digne–Michel 2020, *Representations of Finite Groups of Lie…* (?); Casselman 1995, *Theory of admissible representations of…* (?); Bernstein 1992, *Representations of p-adic groups* (?); Renard 2010, *Représentations des groupes réductifs…* (?); Chriss–Ginzburg 1997, *Representation Theory and Complex…* (?)
+- conventions: Milne 2017, *Algebraic Groups* (?)
+
+**CommutativeAlgebra** (umbrella, wave A)
+- primary: Matsumura 1986, *Commutative Ring Theory* (?); Bruns–Herzog 1998, *Cohen–Macaulay Rings* (?); Eisenbud 1995, *Commutative Algebra with a View Toward…* (?); Serre 2000, *Local Algebra* (?)
+- conventions: Stacks Project 2026, *Stacks Project*
+- formal: Mathlib `RingTheory/{Regular/RegularSequence, Depth/Rees, …}`
+
+**CombinatorialGroupTheory** (wave A)
+- primary: Lyndon–Schupp 1977, *Combinatorial Group Theory* (?); Rotman 1995, *Theory of Groups* (?); Cannon–Floyd–Parry 1996, *Introductory notes on Richard…* (?)
+- theorem: Bridson 2002, *Geometry of the word problem* (?); Ol'shanskii 1991, *Geometry of Defining Relations in Groups* (?); Collins–Huebschmann 1982, *Spherical diagrams and identities among…* (?); Fox 1953, *Free differential calculus. I*; Klyachko 1993, *Funny property of sphere and equations…* (?); Boone–Higman 1974, *Algebraic characterization of groups…* (?); Brin 2004, *Higher dimensional Thompson groups* (?); Ollivier 2006, *Small cancellation theorem of Gromov* (?)
+- statement: Gerstenhaber–Rothaus 1962, *Solution of sets of equations in groups* (?)
+- formal: Mathlib `GroupTheory/{PresentedGroup, FinitelyPresentedGroup, …}`; Tau Ceti `GroupTheory/Presentation`; OAI `Geometry/HyperbolicGroups`; OAI `GroupTheory/{Kervaire (relative pictures), Thompson, …}`
+
+**GroupsActingOnTrees** (wave A)
+- primary: Serre 1980, *Trees*, Ch. I, Ch. II (?); Dicks–Dunwoody 1989, *Groups Acting on Graphs* (?)
+- conventions: Bass 1993, *Covering theory for graphs of groups* (?)
+- statement: Dunwoody 1985, *Accessibility of finitely presented…* (?)
+- formal: Mathlib `Combinatorics/SimpleGraph/Acyclic`
+
+**CoarseGeometryAndHyperbolicGroups** (wave A)
+- primary: Bridson–Haefliger 1999 (?); Ghys–de la Harpe 1990 (?); Druţu–Kapovich 2018 (?)
+- conventions: Väisälä 2005, *Gromov hyperbolic spaces* (?)
+- theorem: Bowditch 2012, *Relatively hyperbolic groups* (?); Osin 2016, *Acylindrically hyperbolic groups* (?)
+- statement: Bowditch 1998, *Topological characterisation of…* (?); Bestvina–Mess 1991, *Boundary of negatively curved groups* (?)
+- formal: Mathlib `Geometry/Group/{WordMetric, Growth/}`; Tau Ceti `Topology/MetricSpace/Length`; OAI `GroupTheory/Hyperbolic`; OAI `Geometry/HyperbolicGroups`; OAI `GroupTheory/PolycyclicRecognition`; OAI `Topology/ArtinGroups`
+
+**NonpositiveCurvature** (wave A)
+- primary: Bridson–Haefliger 1999, Part II (?); Abramenko–Brown 2008, *Buildings* (?); Davis 2008, *Geometry and Topology of Coxeter Groups* (?); Sageev 2014, *CAT(0) cube complexes and groups* (?)
+- theorem: Haglund–Wise 2008, *Special cube complexes* (?); Charney 2007, *Right-angled Artin groups* (?); Wise 2012, *From Riches to Raags* (?)
+- statement: Wise 2021, *Structure of Groups with a Quasiconvex…* (?); Groves–Manning) 2013, *Virtual Haken conjecture* (?)
+- formal: Tau Ceti `Topology/MetricSpace/Length`; Tau Ceti `GroupTheory/Coxeter`; OAI `GroupTheory/{ArtinCAT0, RightAngledArtin}`
+
+**ArtinGroupsAndGarside** (wave B)
+- primary: Dehornoy et al. 2015, *Foundations of Garside Theory* (?)
+- conventions: Kassel–Turaev 2008, *Braid Groups* (?)
+- theorem: Paris 2002, *Artin monoids inject in their groups* (?); Brieskorn–Saito 1972, *Artin-Gruppen und Coxeter-Gruppen* (?); Deligne 1972, *Les immeubles des groupes de tresses…* (?); van der Lek 1983, *Homotopy type of complex hyperplane…* (?); Salvetti 1987, *Topology of the complement of real…* (?); Charney–Davis 1995, *K(π,1)-problem for hyperplane…* (?)
+- statement: Paris 2014, *K(π,1) conjecture for Artin groups* (?); OpenAI 2026, *Harmonic heights and the Artin K(π,1)…* (OAI#254)
+- formal: Tau Ceti `GroupTheory/Coxeter`; OAI `Topology/ArtinGroups`
+
+**FinitenessPropertiesOfGroups** (wave B)
+- primary: Brown 1982, *Cohomology of Groups*, Chs. VIII–IX; Geoghegan 2008 (?)
+- theorem: Swan 1969, *Groups of cohomological dimension one* (?); Bestvina–Brady 1997, *Morse theory and finiteness properties…* (?)
+- statement: Eckmann–Müller 1980, *Poincaré duality groups of dimension two* (?); Fluch et al. 2013, *Brin–Thompson groups sV are of type F∞* (?)
+- formal: Mathlib `RepresentationTheory/Homological/GroupCohomology`; OAI `GroupTheory/FiniteType`; OAI `GroupTheory/PolycyclicRecognition`
+
+**NilpotentSolvableAndLinearGroups** (wave A)
+- primary: Segal 1983, *Polycyclic Groups* (?); Raghunathan 1972, *Discrete Subgroups of Lie Groups*, Ch. II (?); Clement–Majewicz–Zyman 2017, *Theory of Nilpotent Groups* (?); Druţu–Kapovich 2018 (?)
+- theorem: Wehrfritz 1973, *Infinite Linear Groups* (?); Alperin 1987, *Elementary account of Selberg's lemma* (?); Kleiner 2010, *New proof of Gromov's theorem on groups…* (?)
+- statement: Trofimov 1985, *Graphs with polynomial growth* (?)
+- formal: `Aaron1011/gromov`; OAI `Probability/CriticalPercolation/{Harmonic, …}`; OAI `GroupTheory/PolycyclicRecognition`; Mathlib `GroupTheory/{Nilpotent, Solvable}`
+
+**AmenabilityAndPropertyT** (wave A)
+- primary: Ceccherini-Silberstein–Coornaert 2010, *Cellular Automata and Groups* (?); Bekka–de la Harpe–Valette 2008, *Kazhdan's Property (T)* (?); Juschenko 2022, *Amenability of Discrete Groups by…* (?)
+- theorem: Kesten 1959, *Symmetric random walks on groups* (?); Pisier 2001, *Similarity Problems and Completely…* (?); Ershov–Jaikin-Zapirain 2010, *Property (T) for noncommutative…* (?); Milnor 1971, *Algebraic K-Theory* (?); Lubotzky 1994, *Discrete Groups, Expanding Graphs and…* (?)
+- statement: Shalom 1999, *Bounded generation and Kazhdan's…* (?)
+- formal: Mathlib `MeasureTheory/Group/FoelnerFilter`; OAI `{Analysis/Unitarizability, GroupTheory/SimpleAmenable, …}`
+
+**GroupRings** (wave A)
+- primary: Passman 1977, *Algebraic Structure of Group Rings* (?); Lück 2002, *L²-Invariants* (?)
+- conventions: Weibel 2013, *K-book*, Ch. II
+- theorem: Promislow 1988, *Simple example of a torsion-free, non…* (?); Gardam 2021, *Counterexample to the unit conjecture…* (?); Bass 1976, *Euler characteristics and characters of…* (?); Dykema–Juschenko 2015, *Stable finiteness of group rings* (?)
+- statement: Linnell 1993, *Division rings and group von Neumann…* (?); OpenAI 2026, *Torsion-free group algebra with zero…* (OAI#196); OpenAI 2026, *Torsion-free group algebra that is not…* (OAI#197); OpenAI 2026, *Bass trace conjecture for complex group…* (OAI#207)
+- formal: Mathlib `Algebra/MonoidAlgebra`; OAI `{RingTheory/BassTrace, RingTheory/DirectFiniteness, …}`
+
+**LatticesInSemisimpleGroups** (wave B)
+- primary: Witte Morris 2015, *Arithmetic Groups*; Raghunathan 1972 (?)
+- theorem: Bekka–de la Harpe–Valette 2008 (?); Elstrodt–Grunewald–Mennicke 1998, *Groups Acting on Hyperbolic Space*; Katok 1992, *Fuchsian Groups*; Voight 2021, *Quaternion Algebras*
+- statement: Margulis 1991, *Discrete Subgroups of Semisimple Lie…* (?); Borel–Harish-Chandra 1962, *Arithmetic subgroups of algebraic groups*; Mostow 1973, *Strong Rigidity of Locally Symmetric…* (?); Platonov–Rapinchuk 1994, *Algebraic Groups and Number Theory*
+- formal: Mathlib `MeasureTheory/Group/FundamentalDomain`
+
+**StructureOfFiniteGroups** (wave A)
+- primary: Isaacs 2008, *Finite Group Theory* (?); Kurzweil–Stellmacher 2004, *Theory of Finite Groups* (?); Aschbacher 2000, *Finite Group Theory*; Dixon–Mortimer 1996, *Permutation Groups* (?); Smith 2011, *Subgroup Complexes* (?)
+- conventions: LMFDB 2026, *L-functions and modular forms database…*
+- theorem: Huppert 1967, *Endliche Gruppen I* (?); Doerk–Hawkes 1992, *Finite Soluble Groups* (?); Hall 1940, *Classification of prime-power groups* (?); Hall 1936, *Eulerian functions of a group* (?); Perlis 1977, *Equation ζ_K(s) = ζ_K'(s)* (?); Malle 2002, *Distribution of Galois groups* (?)
+- statement: Kleidman–Liebeck 1990, *Subgroup Structure of the Finite…* (?); Liebeck et al. 2010, *Ore conjecture* (?); OpenAI 2026, *Rational homology and Quillen's…* (OAI#310)
+- formal: Tau Ceti `GroupTheory/{Frattini, Transfer, FrobeniusKernel, …}`; OAI `GroupTheory/FiniteLattice`
+
+**ModularRepresentationTheory** (wave A)
+- primary: Webb 2016, *Finite Group Representation Theory*, Ch. 7, Ch. 9, Ch. 10; Navarro 1998, *Characters and Blocks of Finite Groups* (?); Linckelmann 2018, *Block Theory of Finite Group Algebras…* (?)
+- conventions: Serre 1977, *Linear Representations of Finite Groups*, Part III
+- theorem: Knörr–Robinson 1989, *Some remarks on a conjecture of Alperin* (?)
+- statement: Alperin 1987, *Weights for finite groups* (?); Malle et al. 2024, *Brauer's height zero conjecture* (?); OpenAI 2026, *Blockwise Alperin weight conjecture* (OAI#202); OpenAI 2026, *Donovan's conjecture over algebraic…* (OAI#203)
+- formal: Tau Ceti `RepresentationTheory/GrothendieckGroup`; OAI `RepresentationTheory/{AlperinWeights, Block}`
+
+**KacMoodyAlgebras** (wave A)
+- primary: Kac 1990, *Infinite Dimensional Lie Algebras*, Chs. 1–2, Ch. 3, Ch. 4 (?); Carter 2005, *Lie Algebras of Finite and Affine Type* (?)
+- conventions: Kac 1990 (?)
+- theorem: Moody–Pianzola 1995, *Lie Algebras with Triangular…* (?); Gabber–Kac 1981, *Defining relations of certain…* (?); Macdonald 1972, *Affine root systems and Dedekind's…* (?); Kac–Raina 1987, *Bombay Lectures on Highest Weight…* (?); Frenkel–Kac 1980, *Basic representations of affine Lie…* (?); Frenkel 2007, *Langlands Correspondence for Loop Groups* (?)
+- statement: Feigin–Frenkel 1992, *Affine Kac–Moody algebras at the…* (?)
+- formal: Mathlib `Algebra/Lie/{Killing, Free, UniversalEnveloping}`
+
+**CrystalBases** (wave A)
+- primary: Bump–Schilling 2017, *Crystal Bases* (?)
+- conventions: Bump–Schilling 2017 (?)
+- theorem: Littelmann 1994, *Littlewood–Richardson rule for…* (?); Littelmann 1995, *Paths and root operators in…* (?); Stembridge 2003, *Local characterization of simply-laced…* (?); Hong–Kang 2002, *Quantum Groups and Crystal Bases* (?); Fulton 1997, *Young Tableaux* (?)
+- formal: Mathlib `Combinatorics/Young`
+
+**TiltingAndHomologicalDimensions** (wave A)
+- primary: Assem–Simson–Skowroński 2006, *Representation Theory of Associative…*, Ch. VI (?); Auslander–Reiten–Smalø 1995, *Representation Theory of Artin Algebras* (?)
+- theorem: Happel 1988, *Triangulated Categories in the…* (?); Angeleri Hügel–Happel–Krause 2007, *Handbook of Tilting Theory* (?); Igusa–Todorov 2005, *Finitistic global dimension conjecture…* (?); Tachikawa 1973, *Quasi-Frobenius Rings and…* (?); Müller 1968, *Classification of algebras by dominant…* (?); Skowroński–Yamagata 2011, *Frobenius Algebras I* (?); Auslander–Reiten 1991, *Applications of contravariantly finite…* (?)
+- statement: Rickard 1989, *Morita theory for derived categories* (?); OpenAI 2026, *Algebra of infinite little finitistic…* (OAI#198); OpenAI 2026, *Explicit counterexample to the…* (OAI#199)
+- formal: Tau Ceti `RepresentationTheory/Quiver`; OAI `{Algebra/Finitistic, Algebra/AuslanderReiten, …}`
+
+**RationalAndIntegralRepresentations** (wave A)
+- primary: Curtis–Reiner 1981, *Methods of Representation Theory, Vol. I* (?); Isaacs 1976, *Character Theory of Finite Groups*, Ch. 10 (?)
+- conventions: LMFDB 2026
+- theorem: Serre 1977, Part III, §12; Yamada 1974, *Schur Subgroup of the Brauer Group* (?); Gille–Szamuely 2006, *Central Simple Algebras and Galois…*; Serre 1979, *Local Fields*, Ch. XII; Reiner 1975, *Maximal Orders* (?); Newman 1972, *Integral Matrices* (?); Kuzmanovich–Pavlichenkov 2002, *Finite groups of matrices whose entries…* (?); Tahara 1971, *Finite subgroups of GL(3, Z)* (?); Springer 1977, *Invariant Theory* (?)
+- formal: Tau Ceti `RepresentationTheory/{CharacterTable/, GaloisLattice/, …}`
+
+**HeckeAlgebrasAndKazhdanLusztigTheory** (wave A)
+- primary: Björner–Brenti 2005, *Combinatorics of Coxeter Groups* (?); Humphreys 1990, *Reflection Groups and Coxeter Groups*, Ch. 7 (?); Lusztig 2003, *Hecke Algebras with Unequal Parameters* (?)
+- conventions: Soergel 1997, *Kazhdan–Lusztig polynomials and a…* (?)
+- theorem: Kazhdan–Lusztig 1979, *Representations of Coxeter groups and…* (?); Geck–Pfeiffer 2000, *Characters of Finite Coxeter Groups and…* (?); Curtis–Reiner 1987, *Methods of Representation Theory, Vol… II* (?); Iwahori–Matsumoto 1965, *Some Bruhat decomposition and the…* (?); Lusztig 1989, *Affine Hecke algebras and their graded…* (?); Haines–Kottwitz–Prasad 2010, *Iwahori–Hecke algebras* (?); Dyer 1990, *Reflection subgroups of Coxeter systems* (?); Brenti–Caselli–Marietti 2006, *Special matchings and Kazhdan–Lusztig…* (?)
+- formal: Mathlib `GroupTheory/Coxeter`; Tau Ceti `GroupTheory/Coxeter`; OAI `RepresentationTheory/KazhdanLusztig`
+
+**SoergelBimodules** (wave C)
+- primary: Elias et al. 2020, *Soergel Bimodules* (?)
+- conventions: Soergel 1997 (?)
+- theorem: Soergel 2007, *Kazhdan–Lusztig-Polynome und…* (?); Elias–Williamson 2014, *Hodge theory of Soergel bimodules* (?); Elias–Williamson 2016, *Soergel calculus* (?); Libedinsky 2008, *Sur la catégorie des bimodules de…* (?)
+- statement: Fiebig 2008, *Sheaves on moment graphs and a…* (?); Braden–MacPherson 2001, *From moment graphs to intersection…* (?); Jensen–Williamson 2017, *P-canonical basis for Hecke algebras* (?); Kontorovich et al. 2017, *Schubert calculus and torsion explosion* (?)
+- formal: OAI `RepresentationTheory/KazhdanLusztig`
+
+**RepresentationsOfFiniteGroupsOfLieType** (wave B)
+- primary: Digne–Michel 2020 (?); Carter 1985, *Finite Groups of Lie Type* (?); Geck–Malle 2020, *Character Theory of Finite Groups of…* (?)
+- conventions: Digne–Michel 2020 (?)
+- theorem: Deligne–Lusztig 1976, *Representations of reductive groups…* (?); Green 1955, *Characters of the finite general linear…* (?); Bonnafé 2011, *Representations of SL2(F_q)* (?); Fulton–Harris 1991, *Representation Theory* (?)
+- statement: Lusztig 1984, *Characters of Reductive Groups over a…* (?); Broué 1990, *Isométries parfaites, types de blocs…* (?)
+
+**RationalRepresentationsOfReductiveGroups** (wave B)
+- primary: Jantzen 2003, Part II (?); Humphreys 2006, *Modular Representations of Finite…* (?)
+- conventions: Jantzen 2003 (?)
+- theorem: Brion–Kumar 2005, *Frobenius Splitting Methods in Geometry…* (?)
+- statement: Mathieu 1990, *Filtrations of G-modules* (?); Lusztig 1980, *Some problems in the representation…* (?); Andersen–Jantzen–Soergel 1994, *Representations of quantum groups at a…* (?); Kontorovich et al. 2017 (?)
+- formal: OAI `RepresentationTheory/RestrictedTilting`
+
+**SpringerTheoryAndLocalization** (wave B)
+- primary: Chriss–Ginzburg 1997 (?); Hotta–Takeuchi–Tanisaki 2008, *D-Modules, Perverse Sheaves, and…* (?); Collingwood–McGovern 1993, *Nilpotent Orbits in Semisimple Lie…* (?)
+- conventions: Borho–MacPherson 1981, *Représentations des groupes de Weyl et…* (?)
+- theorem: Jantzen 2004, *Nilpotent orbits in representation…* (?)
+- statement: Brylinski–Kashiwara 1981, *Kazhdan–Lusztig conjecture and…* (?)
+
+**TypesAndSupercuspidalRepresentations** (wave C)
+- primary: Bushnell–Kutzko 1998, *Smooth representations of reductive…* (?); Bushnell–Kutzko 1993, *Admissible Dual of GL(N) via Compact…* (?)
+- conventions: Moy–Prasad 1994, *Unrefined minimal K-types for p-adic…* (?); Fintzen–Kaletha–Spice 2023, *Twisted Yu construction, Harish-Chandra…* (?); Casselman 1995 (?)
+- theorem: Moy–Prasad 1994 (?); Moy–Prasad 1996, *Jacquet functors and unrefined minimal…* (?); Morris 1999, *Level zero G-types* (?); Borel 1976, *Admissible representations of a…* (?); Yu 2001, *Construction of tame supercuspidal…* (?); Fintzen 2021, *Types for tame p-adic groups*; Bushnell–Henniart 2006, *Local Langlands Conjecture for GL(2)* (?)
+- statement: Kim 2007, *Supercuspidal representations* (?)
+
+**CohenMacaulayRings** (wave A)
+- primary: Bruns–Herzog 1998, Ch. 1, Ch. 2, Ch. 3 (?); Matsumura 1986 (?)
+- conventions: Bruns–Herzog 1998 (?)
+- theorem: Eisenbud 1995 (?); Iyengar et al. 2007, *Twenty-Four Hours of Local Cohomology* (?); Leuschke–Wiegand 2012, *Cohen–Macaulay Representations* (?)
+- formal: Mathlib `RingTheory/{Regular/RegularSequence, Depth/Rees, …}`; OAI `RingTheory/Multiplicity`
+
+**MultiplicitiesAndIntersections** (wave B)
+- primary: Serre 2000, Ch. II, Ch. III, Ch. V (?); Huneke–Swanson 2006, *Integral Closure of Ideals, Rings, and…*, Ch. 11 (?)
+- theorem: Bruns–Herzog 1998, Ch. 4 (?); Roberts 1998, *Multiplicities and Chern Classes in…* (?); Nagata 1962, *Local Rings* (?); Lech 1964, *Inequalities related to certain couples…* (?); Monsky 1983, *Hilbert–Kunz function* (?)
+- formal: Mathlib `RingTheory/{Polynomial/HilbertPoly, ReesAlgebra}`; OAI `RingTheory/Multiplicity`
+
+**GradedFreeResolutions** (wave A)
+- primary: Peeva 2011, *Graded Syzygies* (?); Herzog–Hibi 2011, *Monomial Ideals* (?); Eisenbud 1995, Ch. 15 (?)
+- theorem: Bruns–Herzog 1998, Ch. 4 (?); Eisenbud 2005, *Geometry of Syzygies* (?); Green 1998, *Generic initial ideals* (?); Pardue 1996, *Deformation classes of graded modules…* (?); Bayer–Stillman 1987, *Criterion for detecting m-regularity* (?); Clements–Lindström 1969, *Generalization of a combinatorial…* (?)
+- formal: Mathlib `RingTheory/MvPolynomial/{MonomialOrder, Groebner}`
+
+**LocallyNilpotentDerivations** (wave A)
+- primary: Freudenburg 2017, *Algebraic Theory of Locally Nilpotent…* (?); van den Essen 2000, *Polynomial Automorphisms and the…* (?)
+- theorem: Rentschler 1968, *Opérations du groupe additif sur le…* (?); Makar-Limanov 1996, *Hypersurface x + x²y + z² + t³ = 0 in…* (?); Abhyankar–Eakin–Heinzer 1972, *Uniqueness of the coefficient ring in a…* (?)
+- statement: Shestakov–Umirbaev 2004, *Tame and the wild automorphisms of…* (?); Abhyankar–Moh 1975, *Embeddings of the line in the plane* (?); Fujita 1979, *Zariski problem* (?); Miyanishi–Sugie 1980, *Affine surfaces containing cylinderlike…* (?); Gupta 2014, *Cancellation problem for the affine…* (?)
+- formal: Mathlib `RingTheory/{Derivation/, Kaehler/}`; OAI `{Algebra/AffineCancellation, …}`
+
+**NoncommutativeRingTheory** (wave A)
+- primary: Lam 2001, *Noncommutative Rings* (?); McConnell–Robson 2001, *Noncommutative Noetherian Rings* (?); Goodearl–Warfield 2004, *Noncommutative Noetherian Rings* (?)
+- theorem: Rowen 1980, *Polynomial Identities in Ring Theory* (?); Drensky–Formanek 2004, *Polynomial Identity Rings* (?); Krause–Lenagan 2000, *Growth of Algebras and Gelfand–Kirillov…* (?); Golod 1964, *Nil-algebras and finitely approximable…* (?); Ershov 2012, *Golod–Shafarevich groups* (?)
+- formal: Mathlib `RingTheory/{Jacobson/Radical, OreLocalization/}`; OAI `{RingTheory/Kurosh, …}`
+
+**UniversalAlgebra** (wave A)
+- primary: Burris–Sankappanavar 1981, *Universal Algebra* (?); McKenzie–McNulty–Taylor 1987, *Algebras, Lattices, Varieties, Vol. I* (?)
+- conventions: Bergman 2015, *Invitation to General Algebra and…* (?)
+- theorem: Birkhoff 1935, *Structure of abstract algebras* (?); Jónsson 1967, *Algebras whose congruence lattices are…* (?); Grätzer–Schmidt 1963, *Characterizations of congruence…* (?); Pálfy–Pudlák 1980, *Congruence lattices of finite algebras…* (?)
+- statement: OpenAI 2026, *Negative solution to the finite lattice…* (OAI#206)
+- formal: Mathlib `ModelTheory`; OAI `GroupTheory/FiniteLattice`
+
+**TensorCategories** (wave B)
+- primary: Etingof et al. 2015, *Tensor Categories* (?)
+- conventions: Etingof et al. 2015 (?); Deligne–Milne 1982, *Tannakian categories* (?)
+- theorem: Deligne 1990, *Catégories tannakiennes* (?); Deligne 2002, *Catégories tensorielles* (?); Deligne 2007, *La catégorie des représentations du…* (?); Georgiev–Mathieu 1992, *Catégorie de fusion pour les groupes de…* (?); Ostrik 2020, *Symmetric fusion categories in positive…* (?); Etingof–Ostrik 2021, *Frobenius functor for symmetric tensor…* (?); Coulembier–Etingof–Ostrik 2023, *Frobenius exact symmetric tensor…* (?)
+- statement: Benson–Etingof–Ostrik 2023, *New incompressible symmetric tensor…* (?); OpenAI 2026, *Fiber functors for finite symmetric…* (OAI#208)
+- formal: Mathlib `CategoryTheory/Monoidal/{Rigid, Braided}`; OAI `Algebra/FiniteTensor`; OAI `RepresentationTheory/RestrictedTilting`
+
+**VertexAlgebras** (wave B)
+- primary: Kac 1998, *Vertex Algebras for Beginners* (?); Frenkel–Ben-Zvi 2004, *Vertex Algebras and Algebraic Curves* (?); Lepowsky–Li 2004, *Vertex Operator Algebras and Their…* (?)
+- conventions: Kac 1998 (?)
+- theorem: Frenkel–Lepowsky–Meurman 1988, *Vertex Operator Algebras and the Monster* (?); Dong 1993, *Vertex algebras associated with even…* (?); Zhu 1996, *Modular invariance of characters of…* (?); Conway–Sloane 1999, *Sphere Packings, Lattices and Groups*
+- statement: Huang 2008, *Rigidity and modularity of vertex…* (?)
+- formal: Mathlib `Algebra/Vertex/{VertexOperator, HVertexOperator}`; OAI `RepresentationTheory/VertexAlgebra`
+
+**GrothendieckTeichmuller** (wave A)
+- primary: Reutenauer 1993, *Free Lie Algebras* (?); Drinfeld 1991, *Quasitriangular quasi-Hopf algebras and…* (?); Fresse 2017, *Homotopy of Operads and…* (?)
+- conventions: Drinfeld 1991 (?)
+- theorem: Furusho 2010, *Pentagon and hexagon equations* (?); Bar-Natan 1998, *Associators and the… I* (?); Ihara 1991, *Braids, Galois groups, and some…* (?); Ihara 1989, *Galois representation arising from P¹ −…* (?); Brown 2012, *Mixed Tate motives over Z*; OpenAI 2026, *Deligne–Drinfeld conjecture* (OAI#008); Schneps 1997, *Grothendieck–Teichmüller group GT-hat* (?); Belyi 1979, *Galois extensions of a maximal…* (?); Szamuely 2009, *Galois Groups and Fundamental Groups*, §4.7; Ribes–Zalesskii 2010, *Profinite Groups*
+- formal: Mathlib `Algebra/{Lie/Free, FreeAlgebra, Lie/UniversalEnveloping}`; OAI `Algebra/Drinfeld`
+
+**SmoothRepresentationsOfLocalGroups** (promotion unit, wave A)
+- primary: Casselman 1995, §§2–9 (?); Bernstein 1992 (?); Vignéras 1996, *Représentations l-modulaires d'un…* (?); Cartier 1979, *Representations of p-adic groups* (?)
+- conventions: Gross 1998, *Satake isomorphism* (?)
+- theorem: Bernstein 1987, *Second adjointness for representations…* (?); Bernstein 1984, *Le « centre » de Bernstein* (?); Helm 2016, *Bernstein center of the category of…* (?); Dat et al. 2022, *Finiteness for Hecke algebras of p-adic…*, Theorem 1.7
+- formal: leanprover-community/mathlib4 PR #43087
+
+**DeformationAndDerivedPatchingAlgebra (generic stages R03.1–R03.4, R03.6, P7, P9)** (promotion unit, wave A)
+- primary: Schlessinger 1968, *Functors of Artin rings*; Bruns–Herzog 1998 (?); Stacks Project 2026
+- theorem: Khare–Wintenberger 2009, *Serre's modularity conjecture (II)*, §10; Diamond 1997, *Taylor-Wiles construction and…*; Kisin 2009, *Moduli of finite flat group schemes and…*; Calegari–Geraghty 2018, *Modularity lifting beyond the…*; Allen et al. 2023, *Potential automorphy over CM fields*, §6.3.4, §§6.2–6.4
+
+**Acquisition list** (not free and not held locally; books needed by a wave-A roadmap, and any work needed by two or more roadmaps of this campaign; journal papers otherwise left to library access, all listed in master (b2); roadmap count in brackets; ★ = wave A): Bruns–Herzog 1998, *Cohen–Macaulay Rings* [5] ★; Bridson–Haefliger 1999, *Metric Spaces of Non-Positive Curvature* [3] ★; Druţu–Kapovich 2018, *Geometric Group Theory* [3] ★; Eisenbud 1995, *Commutative Algebra with a View Toward…* [3] ★; Chriss–Ginzburg 1997, *Representation Theory and Complex…* [2] ★; Digne–Michel 2020, *Representations of Finite Groups of Lie…* [2] ★; Geoghegan 2008, *Topological Methods in Group Theory* [2] ★; Ghys–de la Harpe 1990, *Sur les groupes hyperboliques d'après…* [2] ★; Jantzen 2003, *Representations of Algebraic Groups* [2] ★; Matsumura 1986, *Commutative Ring Theory* [2] ★; Raghunathan 1972, *Discrete Subgroups of Lie Groups* [2] ★; Serre 1977, *Linear Representations of Finite Groups* [2] ★; Serre 2000, *Local Algebra* [2] ★; Soergel 1997, *Kazhdan–Lusztig polynomials and a…* [2] ★; Abramenko–Brown 2008, *Buildings* [1] ★; Angeleri Hügel–Happel–Krause 2007, *Handbook of Tilting Theory* [1] ★; Assem–Simson–Skowroński 2006, *Representation Theory of Associative…* [1] ★; Auslander–Reiten–Smalø 1995, *Representation Theory of Artin Algebras* [1] ★; Bergman 2015, *Invitation to General Algebra and…* [1] ★; Björner–Brenti 2005, *Combinatorics of Coxeter Groups* [1] ★; Bump–Schilling 2017, *Crystal Bases* [1] ★; Carter 2005, *Lie Algebras of Finite and Affine Type* [1] ★; Ceccherini-Silberstein–Coornaert 2010, *Cellular Automata and Groups* [1] ★; Clement–Majewicz–Zyman 2017, *Theory of Nilpotent Groups* [1] ★; Curtis–Reiner 1981, *Methods of Representation Theory, Vol. I* [1] ★; Curtis–Reiner 1987, *Methods of Representation Theory, Vol… II* [1] ★; Davis 2008, *Geometry and Topology of Coxeter Groups* [1] ★; Dicks–Dunwoody 1989, *Groups Acting on Graphs* [1] ★; Dixon–Mortimer 1996, *Permutation Groups* [1] ★; Doerk–Hawkes 1992, *Finite Soluble Groups* [1] ★; Drensky–Formanek 2004, *Polynomial Identity Rings* [1] ★; Eisenbud 2005, *Geometry of Syzygies* [1] ★; van den Essen 2000, *Polynomial Automorphisms and the…* [1] ★; Frenkel 2007, *Langlands Correspondence for Loop Groups* [1] ★; Fresse 2017, *Homotopy of Operads and…* [1] ★; Freudenburg 2017, *Algebraic Theory of Locally Nilpotent…* [1] ★; Fulton 1997, *Young Tableaux* [1] ★; Geck–Pfeiffer 2000, *Characters of Finite Coxeter Groups and…* [1] ★; Goodearl–Warfield 2004, *Noncommutative Noetherian Rings* [1] ★; Happel 1988, *Triangulated Categories in the…* [1] ★; de la Harpe 2000, *Geometric Group Theory* [1] ★; Herzog–Hibi 2011, *Monomial Ideals* [1] ★; Hong–Kang 2002, *Quantum Groups and Crystal Bases* [1] ★; Humphreys 1990, *Reflection Groups and Coxeter Groups* [1] ★; Huppert 1967, *Endliche Gruppen I* [1] ★; Isaacs 1976, *Character Theory of Finite Groups* [1] ★; Isaacs 2008, *Finite Group Theory* [1] ★; Iyengar et al. 2007, *Twenty-Four Hours of Local Cohomology* [1] ★; Juschenko 2022, *Amenability of Discrete Groups by…* [1] ★; Kac 1990, *Infinite Dimensional Lie Algebras* [1] ★; Kac–Raina 1987, *Bombay Lectures on Highest Weight…* [1] ★; Kleidman–Liebeck 1990, *Subgroup Structure of the Finite…* [1] ★; Krause–Lenagan 2000, *Growth of Algebras and Gelfand–Kirillov…* [1] ★; Kurzweil–Stellmacher 2004, *Theory of Finite Groups* [1] ★; Lam 2001, *Noncommutative Rings* [1] ★; Leuschke–Wiegand 2012, *Cohen–Macaulay Representations* [1] ★; Linckelmann 2018, *Block Theory of Finite Group Algebras…* [1] ★; Lubotzky 1994, *Discrete Groups, Expanding Graphs and…* [1] ★; Lück 2002, *L²-Invariants* [1] ★; Lyndon–Schupp 1977, *Combinatorial Group Theory* [1] ★; McConnell–Robson 2001, *Noncommutative Noetherian Rings* [1] ★; McKenzie–McNulty–Taylor 1987, *Algebras, Lattices, Varieties, Vol. I* [1] ★; Milne 2017, *Algebraic Groups* [1] ★; Milnor 1971, *Algebraic K-Theory* [1] ★; Moody–Pianzola 1995, *Lie Algebras with Triangular…* [1] ★; Navarro 1998, *Characters and Blocks of Finite Groups* [1] ★; Newman 1972, *Integral Matrices* [1] ★; Ol'shanskii 1991, *Geometry of Defining Relations in Groups* [1] ★; Passman 1977, *Algebraic Structure of Group Rings* [1] ★; Peeva 2011, *Graded Syzygies* [1] ★; Pisier 2001, *Similarity Problems and Completely…* [1] ★; Reiner 1975, *Maximal Orders* [1] ★; Renard 2010, *Représentations des groupes réductifs…* [1] ★; Reutenauer 1993, *Free Lie Algebras* [1] ★; Rotman 1995, *Theory of Groups* [1] ★; Rowen 1980, *Polynomial Identities in Ring Theory* [1] ★; Segal 1983, *Polycyclic Groups* [1] ★; Serre 1980, *Trees* [1] ★; Skowroński–Yamagata 2011, *Frobenius Algebras I* [1] ★; Smith 2011, *Subgroup Complexes* [1] ★; Springer 1977, *Invariant Theory* [1] ★; Tachikawa 1973, *Quasi-Frobenius Rings and…* [1] ★; Vignéras 1996, *Représentations l-modulaires d'un…* [1] ★; Wehrfritz 1973, *Infinite Linear Groups* [1] ★; Wise 2012, *From Riches to Raags* [1] ★; Wise 2021, *Structure of Groups with a Quasiconvex…* [1] ★; Yamada 1974, *Schur Subgroup of the Brauer Group* [1] ★.
+
+Full bibliographic entries, identifiers, access evidence and verification status: `references_master.md`.

@@ -1,7 +1,7 @@
 # Tau Ceti expansion plan: roadmaps for the LMFDB, the Annals definitions and the OpenAI papers
 
 Draft for refinement, 2026-10-07; revised the same day for a **6-month spend**. Prepared by Claude with 23 subagents; every number below is traceable to a
-file in [`work/`](work/) (index in §12). Supply was read at TauCetiRoadmap `upstream/main` `b4f19703`, the 78 open
+file in [`work/`](work/) (index in §13). Supply was read at TauCetiRoadmap `upstream/main` `b4f19703`, the 78 open
 PR heads, Tau Ceti code `a91d3aafa` (10-05), Mathlib `6b7abb3c` (09-28), the tauceti-explorer clone `4689b24`, and
 openai/math at its 10-06 release.
 
@@ -200,7 +200,7 @@ LMFDB change, and it is the natural delivery channel.
 - **The largest structural gap is elliptic theory on closed manifolds.** DifferentialGeometry hands analysis of Δ to
   PDE, and PDE treats only domains in ℝⁿ. Six definitions wait on it.
 
-**OpenAI** (seven reports; see §12). Of the 372 families, **23 are elementary** (statable and provable from Mathlib
+**OpenAI** (seven reports; see §13). Of the 372 families, **23 are elementary** (statable and provable from Mathlib
 and Tau Ceti with modest additions), **208 need named roadmaps**, and **141 are frontier**: they rest on
 research-level theory, often recent papers used as black boxes or unrefereed OpenAI companion preprints. Six
 families depend on computer certificates, and two rest on unverified zero-free-region claims for L-functions.
@@ -468,7 +468,9 @@ Supply is already large here, so the job is ownership and ordering.
 - **Standalone:** QuantumComputation, InformationAndCodingTheory, AutomataLogicAndGames.
 - **Design pin (§3.0 of the slate):** problems are over `List Bool`. Time is measured on Mathlib's `FinTM2` with every
   alphabet finite, and upper bounds are proved through a structured bit-stack language compiled with exact cost
-  (after OAI's `Superstring`). Simulation theorems make P, FP and PSPACE model-independent; P ≠ NP, ETH and UGC are
+  (after OAI's `Superstring`). Current Mathlib names (corrected in the slate's §8):
+  - `TM2ComputableInPolyTime` takes encodings `Encoding α Γ` with `[Fintype Γ]`; `FinEncoding` is a deprecated alias.
+  - The composition theorem is still only a `proof_wanted`, now under `Wanted/`. Simulation theorems make P, FP and PSPACE model-independent; P ≠ NP, ETH and UGC are
   named propositions used only as hypotheses.
 - **Reconcile #717's Layer 1** (polynomial-time composition) with MachineModels before #717 merges.
 - **Draft first:** ComputationalComplexity with MachineModels and ComplexityClasses (this makes 28 OAI families
@@ -742,8 +744,83 @@ Items 1–6 are needed in week 1; the window does not allow them to wait.
 11. **Decide whether each campaign's slate goes into the explorer as blueprint drafts** (`research/blueprint/roadmaps/`)
     or straight to TauCetiRoadmap PRs after condensation. Under the 6-month window, small campaigns should go
     straight to PRs.
+12. **References (§11):**
+    - Allow the zbMATH verification to resume; it stopped on an HTTP 502 with 2,024 works unchecked.
+    - Fetch the 683 freely available works into `references/` from legitimate sources.
+    - Arrange library access for the library-only works, wave A first.
 
-## 11. Caveats
+## 11. References for the roadmaps
+
+Every proposed roadmap, umbrella family and campaign promotion unit now carries a reference list: 360 records, 3,804
+citations, **3,063 distinct works**. Of these, 2,547 are books, papers and notes; 433 are code and formal sources;
+58 are OpenAI manuscripts cited as statement sources; the rest are Tau Ceti roadmap READMEs and web resources.
+
+**What a list contains.** Each roadmap's list gives:
+- its primary texts (graduate books or monographs with complete proofs);
+- a source for each headline theorem those texts do not prove;
+- the source whose **conventions** the roadmap should pin, wherever standard texts disagree;
+- its formal sources: Mathlib and Tau Ceti files, OpenAI `lean/OAI` directories, external Lean projects;
+- for frontier milestones, the paper whose result the roadmap states.
+
+The campaigns' pinned conventions are at the head of each campaign's §8. Examples:
+- Lee's sign for curvature and Δ = div grad ≤ 0;
+- Mathlib's e^{−2πi⟨x,ξ⟩} Fourier transform, and normalized Hausdorff measure;
+- Fulton's grading of Chow groups by dimension, with Proj Sym E for projective bundles;
+- Deligne's Corvallis convention for the Deligne torus;
+- symmetric spectra of simplicial sets;
+- Levin–Peres for mixing times.
+
+**Where the lists live:**
+- `campaign_<CODE>.md` §8: short citations per roadmap, plus the campaign's acquisition list (18–46 KB each);
+- `refs_<CODE>.json` and the `references` field of each `slate_<CODE>.json` entry: full records, each with
+  `master_key` and `verified`;
+- [`work/references_master.md`](work/references_master.md) / `.json`: the deduplicated bibliography, with
+  - (a) a summary;
+  - (b) the acquisition list;
+  - (c) the 100 most-used works;
+  - (d) items for a human to check;
+  - (e) code sources by repository;
+  - (f) full entries.
+
+**Most-used works** (number of roadmaps):
+- the Stacks Project (15);
+- Weibel's *K-book* (8);
+- Khare–Wintenberger, *Serre's modularity conjecture II* (7);
+- Scholze, *Étale cohomology of diamonds* (7);
+- Arora–Barak (6);
+- at 5 each: Allen et al., *Potential automorphy over CM fields*; Bridson–Haefliger; Bruns–Herzog; Fargues–Scholze;
+  Hartshorne; Lyons–Peres; Petersen; Platonov–Rapinchuk; Rodrigues Jacinto–Williams; Serre, *Local Fields*.
+
+By the earliest wave that needs it, 1,582 works serve wave A, 1,034 wave B and 447 wave C.
+
+**Acquisition.** Excluding code and manuscripts, works not held locally fall into three groups:
+- **683 freely available:** a download list with URLs, ordered by wave and use. They should go into `references/`
+  only from legitimate sources, as the July batch did.
+- **1,762 library-only.**
+- **54 to purchase,** such as Arora–Barak.
+
+Only 48 works are already held locally, mostly in the gq2 and July LMFDB collections.
+
+**Verification is partial.** The lists were compiled from local sources and knowledge, then checked in a single
+polite pass:
+- **Verified:** 197 works against the explorer's catalogue of sources its workers read, 182 on zbMATH, 94 on arXiv,
+  20 on Crossref, 100 against local copies, and 394 code paths against the local checkouts.
+- **zbMATH stopped** with an HTTP 502 at request 203, and the pass stopped using it, as its rule requires. **2,024
+  works remain unverified.** Re-running the pass resumes from its cache without repeating a request.
+- **760 corrections were made.** They include four wrong identifiers (an arXiv ID and three DOIs that pointed to other
+  works). 318 "free" claims were downgraded to library; only 41 of those were checked online, and the other 277 await
+  the resumed pass.
+- **Not checked at all:** chapter and section pointers recalled rather than read (HTT, Milnor–Stasheff,
+  Goerss–Jardine, Farb–Margalit, Walters, Dembo–Zeitouni, Lyons–Peres and others). Two conflicting Stacks Project
+  tags were left for a human.
+
+Section (d) of the master lists everything above.
+
+The compilers also found two errors in the slates, both now fixed:
+- the Leech lattice VOA has dim V₁ = 24, not V₁ = 0;
+- LTCS's design pin used outdated Mathlib names (§5.10).
+
+## 12. Caveats
 
 - **PR estimates are ±50%.** They rest on the measured ratio of about 14 PRs per layer and about one per target, and
   that ratio is drifting upward as fleets split milestones.
@@ -760,12 +837,15 @@ Items 1–6 are needed in week 1; the window does not allow them to wait.
   there have no wave or scope; read NT's numbers from `campaign_NT.md`.
 - **Explorer data is the 09-14 snapshot plus later blueprints;** Tau Ceti main moves daily.
 
-## 12. File index ([`work/`](work/))
+## 13. File index ([`work/`](work/))
 
 | file | content |
 |---|---|
 | `BRIEF.md`, `PHASE2.md`, `BOUNDARIES.md` | the subagents' instructions and the pre-decided boundary table |
 | `boundary_pass.md` | cross-slate audit: double ownership, dangling prerequisites, cycles, orphans, 25 rulings |
+| `REFS_BRIEF.md`, `REFS_VERIFY_BRIEF.md` | instructions for compiling and verifying the references |
+| `references_master.md`, `references_master.json` | deduplicated bibliography: acquisition list, most-used works, checks for a human, full entries |
+| `refs_<CODE>.json` (10) | per-roadmap reference lists, with master keys and verification status |
 | `capacity.md` | throughput, cost and constraint model |
 | `cost_calibration.md` | measured cost per merged PR from the mimir fleet logs |
 | `coordination.md` | campaign format, explorer build, overlap audit, protocol |
@@ -776,4 +856,4 @@ Items 1–6 are needed in week 1; the window does not allow them to wait.
 | `roadmap_leaves.json` | all proposed roadmaps flattened (from `normalize_slates.py`) |
 | `supply_*.json`, `supply_by_arxiv.md` | supply indexes: Tau Ceti main, open PRs, Birkbeck campaign |
 | `openai_families.json` | the 372 families with manuscripts, abstracts and formalization flags |
-| explorer `opportunities.json`, `roadmap-classification.json`, `roadmap-summaries.json` | copied explorer data |
+| explorer `opportunities.json`, `roadmap-classification.json`, `roadmap-summaries.json`, `explorer_bibliography.json` | copied explorer data |

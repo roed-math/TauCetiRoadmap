@@ -1,39 +1,153 @@
 [
  {
-  "name": "AlgebraicSpaces",
+  "roadmap": "ModuliTheory",
   "campaign": "AG",
-  "family": "ModuliTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap develops the Grothendieck topologies on schemes and the descent theory they support, and builds algebraic spaces on them. It covers the Zariski, étale, smooth, fppf and fpqc topologies and the v- and arc-topologies, effective fpqc descent for quasi-coherent sheaves and affine morphisms, descent of properties of morphisms, torsors under flat group schemes, and Čech and flat cohomology, with H¹_fppf(Spec k, μ_n) = k^×/k^{×n} and Grothendieck's comparison of fppf and étale cohomology for smooth commutative group schemes. Algebraic spaces are fppf sheaves with representable diagonal and an étale atlas; the roadmap develops their morphisms and properties, fibre products, quotients by étale equivalence relations and by free actions of finite groups, Weil restriction, and Artin's representability criterion with its hypotheses. It consumes Mathlib's fpqc and étale sites, ModularCurves Layer 0E's effective descent and ReductiveGroups' fppf quotients rather than rebuilding them. Étale cohomology with torsion coefficients belongs to CohomologicalPointCounting; stacks belong to AlgebraicStacks.",
-  "key_objects": "topologies and coverings; descent data; torsors; flat cohomology; algebraic spaces; étale equivalence relations; Weil restriction",
-  "milestones": "effective fpqc descent; fppf vs étale cohomology for smooth commutative group schemes; Hilbert 90 in the flat topology; X/G an algebraic space for free finite G; representability of Weil restriction",
-  "prerequisites": [
-   "Mathlib AlgebraicGeometry/Sites (Fpqc, Etale, Proetale)",
-   "ModularCurves L0E",
-   "ReductiveGroups L3",
-   "CohomologicalPointCounting #196 (ConstructibleEtale, consumed)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#35",
-    "Annals#6 (base)",
-    "Annals#9 (base)",
-    "Annals#25 (base)"
-   ],
-   "OpenAI": []
-  },
-  "porting": [],
-  "replaces": [
-   "AlgebraicSpaces (Annals 1–51)",
-   "SchemeAndStackFoundations SF.0–SF.1",
-   "AlgebraicModuliForArithmeticGeometry R09.3"
-  ],
-  "formalizability": "high; the Stacks Project gives every proof",
+  "kind": "umbrella",
+  "references": [
+   {
+    "key": "StacksProject",
+    "role": "primary",
+    "authors": "The Stacks Project Authors",
+    "title": "The Stacks Project",
+    "type": "notes",
+    "venue": "online reference, stacks.math.columbia.edu",
+    "year": 2026,
+    "edition": "live; cite stable tags",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://stacks.math.columbia.edu"
+    },
+    "serves": "Family-wide foundations: topologies, descent, algebraic spaces and stacks, Quot, moduli of curves. Conventions: adopt the Stacks Project's definitions (big fppf site of (Sch/S); algebraic space = fppf sheaf with representable diagonal and étale atlas; algebraic stack with representable-by-spaces diagonal and smooth atlas) and cite stable tags; LMB's stricter separation hypotheses are not adopted",
+    "access": "free",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Stacks2026Stacks",
+    "verified": "web (not fetched)"
+   },
+   {
+    "key": "Olsson2016",
+    "role": "primary",
+    "authors": "M. Olsson",
+    "title": "Algebraic Spaces and Stacks",
+    "type": "book",
+    "venue": "AMS Colloquium Publications 62",
+    "year": 2016,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": "1346.14001",
+     "url": null
+    },
+    "serves": "Textbook route through sites, descent, algebraic spaces, stacks, coarse spaces and moduli of curves",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Olsson2016Algebraic",
+    "verified": "zbmath:1346.14001"
+   },
+   {
+    "key": "Laumon2000",
+    "role": "primary",
+    "authors": "G. Laumon, L. Moret-Bailly",
+    "title": "Champs algébriques",
+    "type": "book",
+    "venue": "Ergebnisse der Math. (3) 39, Springer",
+    "year": 2000,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": "0945.14005",
+     "url": null
+    },
+    "serves": "Artin stacks, quasi-coherent sheaves on stacks; cross-check of the separation conventions the family drops",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "LaumonMoretBailly2000Champs",
+    "verified": "zbmath:0945.14005"
+   },
+   {
+    "key": "Fantechi2005",
+    "role": "primary",
+    "authors": "B. Fantechi, L. Göttsche, L. Illusie, S. Kleiman, N. Nitsure, A. Vistoli",
+    "title": "Fundamental Algebraic Geometry: Grothendieck's FGA Explained",
+    "type": "book",
+    "venue": "Mathematical Surveys and Monographs 123, AMS",
+    "year": 2005,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": "1085.14001",
+     "url": null
+    },
+    "serves": "Descent (Vistoli), Hilbert/Quot (Nitsure), Picard (Kleiman), formal GAGA and Grothendieck existence (Illusie)",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "FantechiEtAl2005Fundamental",
+    "verified": "zbmath:1085.14001"
+   },
+   {
+    "key": "Mumford1994",
+    "role": "primary",
+    "authors": "D. Mumford, J. Fogarty, F. Kirwan",
+    "title": "Geometric Invariant Theory",
+    "type": "book",
+    "venue": "Ergebnisse der Math. (2) 34, Springer",
+    "year": 1994,
+    "edition": "3rd",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Quotient constructions (GIT) used by the projective moduli members",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "MumfordFogartyKirwan1994Geometric",
+    "verified": "zbmath:0504.14008 (other edition, 1982)"
+   },
+   {
+    "key": "Alper2025",
+    "role": "primary",
+    "authors": "J. Alper",
+    "title": "Stacks and Moduli",
+    "type": "notes",
+    "venue": "lecture notes, author's web page",
+    "year": 2025,
+    "edition": "working draft",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Modern stack-theoretic treatment of moduli, good moduli spaces and Keel–Mori",
+    "access": "free",
+    "local": null,
+    "confidence": "medium",
+    "master_key": "Alper2025Stacks",
+    "verified": "unverified (service stopped)"
+   }
+  ]
+ },
+ {
+  "roadmap": "AlgebraicSpaces",
+  "campaign": "AG",
+  "kind": "new",
   "references": [
    {
     "key": "StacksProject",
@@ -406,41 +520,9 @@
   ]
  },
  {
-  "name": "AlgebraicStacks",
+  "roadmap": "AlgebraicStacks",
   "campaign": "AG",
-  "family": "ModuliTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Fibred categories and stacks over (Sch)_fppf; algebraic (Artin) stacks with representable diagonal and smooth atlas and Deligne–Mumford stacks with étale atlas; quotient stacks [U/G] and BG; inertia, stabilizer group schemes and residual gerbes, with 'DM ⇔ unramified diagonal' and its stabilizer criterion; properties of morphisms and the valuative criteria for separatedness and properness; quasi-coherent sheaves on stacks; coarse moduli spaces of stacks with finite inertia (Keel–Mori) and rigidification; and groupoid point counts over F_q, with #[X/G](F_q) = #X(F_q)/#G(F_q) for connected G. [A¹/G_m] (not DM) and the non-separated stack of nodal curves are counter-tests. Specific moduli problems are the later members of the family, good moduli spaces are GeometricInvariantTheory, and derived or higher stacks are outside.",
-  "key_objects": "fibred categories, stacks, Artin and DM stacks, quotient stacks, inertia, residual gerbes, coarse spaces",
-  "milestones": "DM criterion via the diagonal; valuative criteria; Keel–Mori; groupoid point counts",
-  "prerequisites": [
-   "AlgebraicSpaces",
-   "ReductiveGroups (group schemes)",
-   "HilbertQuotAndPicardSchemes (atlases in examples)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#6",
-    "Annals#25 (coarse half)",
-    "Annals#9 (base)"
-   ],
-   "OpenAI": [
-    "OAI#069",
-    "OAI#053/#063/#065 (via moduli of curves)"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "AlgebraicStacks (Annals)",
-   "AlgebraicModuliForArithmeticGeometry R09.4–R09.5",
-   "SchemeAndStackFoundations SF.1 (stacks)"
-  ],
-  "formalizability": "high; Olsson and the Stacks Project",
+  "kind": "new",
   "references": [
    {
     "key": "StacksProject",
@@ -721,47 +803,9 @@
   ]
  },
  {
-  "name": "HilbertQuotAndPicardSchemes",
+  "roadmap": "HilbertQuotAndPicardSchemes",
   "campaign": "AG",
-  "family": "ModuliTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap constructs the projective parameter spaces of algebraic geometry. It starts with projective, Grassmann and flag bundles of locally free sheaves and their tautological bundles, Castelnuovo–Mumford regularity and flattening stratifications (the first successor named by AlgebraicVectorBundles), and proves Grothendieck's representability of Hilbert and Quot functors of projective schemes over a Noetherian base, with Hom schemes and Hilbert schemes of points (Fogarty's smoothness for surfaces). It then builds the relative Picard functor and its representability for projective flat X/S with geometrically integral fibres, Pic⁰ and Pic^τ, the tangent space H¹(X, O_X) and smoothness in characteristic zero, and the Néron–Severi group with the theorem of the base, compared with AbundanceStatement's numerical group. Formal deformation theory closes it: Schlessinger's criterion, tangent–obstruction theories of Hilbert, Quot and Hom functors, Grothendieck existence and Artin algebraization. JacobianChallenge's rigidified Picard functor of curves is specialized, not redefined; moduli stacks are AlgebraicStacks.",
-  "key_objects": "P(E), Grassmann and flag bundles; Hilbert, Quot, Hom functors; Hilb^n; Pic_{X/S}, Pic⁰, NS; deformation functors",
-  "milestones": "representability of Hilb and Quot; Fogarty; representability of Pic_{X/S}; theorem of the base; Schlessinger; Grothendieck existence",
-  "prerequisites": [
-   "AlgebraicVectorBundles",
-   "JacobianChallenge B–D",
-   "AbundanceStatement #545 L4B",
-   "Mathlib ProjectiveSpectrum, flatness"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#49"
-   ],
-   "OpenAI": [
-    "OAI#040",
-    "OAI#050",
-    "OAI#053",
-    "OAI#065",
-    "Hom schemes for #051, #052, #062, #063, #067"
-   ]
-  },
-  "porting": [
-   "OAI AlgebraicGeometry/RelativeTriviality (4.6k: Čech on relative P¹)"
-  ],
-  "replaces": [
-   "PicardSchemes (Annals)",
-   "R09.1, R09.2, R09.6",
-   "R09 A0-extension",
-   "SF.3 (Picard), SF.4 (deformations)",
-   "AlgebraicVectorBundles successor 1"
-  ],
-  "formalizability": "high; Fantechi et al., FGA explained",
+  "kind": "new",
   "references": [
    {
     "key": "Fantechi2005",
@@ -1180,45 +1224,9 @@
   ]
  },
  {
-  "name": "GeometricInvariantTheory",
+  "roadmap": "GeometricInvariantTheory",
   "campaign": "AG",
-  "family": "ModuliTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "Mumford's geometric invariant theory over a field and its stack-theoretic form. Linearly reductive group schemes and Reynolds operators; finite generation of invariants (Hilbert, Nagata; Haboush's theorem stated); affine and projective GIT quotients, good and geometric quotients, linearizations, (semi)stability and the Hilbert–Mumford criterion; moment maps for compact group actions and the Kempf–Ness theorem; King stability and moduli of quiver representations, Nakajima quiver varieties; character varieties Hom(π, G)//G of finitely generated groups over ℤ with Procesi–Donkin trace coordinates; and Alper's good moduli spaces (universality, S-equivalence, coherent completeness of [Spec A/G], comparison with Keel–Mori). Reductive groups come from ReductiveGroups and symplectic moment maps from HamiltonianSystems; moduli of sheaves and curves are later members of the family.",
-  "key_objects": "linearly reductive groups, GIT quotients, linearizations, stability, moment maps, quiver moduli, character varieties, good moduli spaces",
-  "milestones": "Hilbert–Nagata finite generation; Hilbert–Mumford criterion; Kempf–Ness; King's theorem; character varieties as affine GIT quotients over ℤ; Alper's universality",
-  "prerequisites": [
-   "ReductiveGroups L6",
-   "HamiltonianSystems #480 (Kempf–Ness layer)",
-   "RepresentationTheory (quivers)",
-   "AlgebraicStacks (good-moduli layers)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#25"
-   ],
-   "OpenAI": [
-    "OAI#027",
-    "OAI#043",
-    "OAI#044",
-    "OAI#054/#055 (via moduli of sheaves)"
-   ]
-  },
-  "porting": [
-   "OAI AlgebraicGeometry/CharacterVarieties (29.6k, family #027)"
-  ],
-  "replaces": [
-   "GeometricInvariantTheory (OAI)",
-   "GoodModuliSpaces (Annals)",
-   "CharacterVarieties (OAI #027)",
-   "Betti-moduli part of CharacterVarietiesAndRigidLocalSystems"
-  ],
-  "formalizability": "high; Mumford–Fogarty–Kirwan, Alper",
+  "kind": "new",
   "references": [
    {
     "key": "Mumford1994",
@@ -1637,42 +1645,9 @@
   ]
  },
  {
-  "name": "ModuliOfCurvesAndStableMaps",
+  "roadmap": "ModuliOfCurvesAndStableMaps",
   "campaign": "AG",
-  "family": "ModuliTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 300,
-  "wave": "B",
-  "scope": "The moduli stacks M̄_{g,n} of stable pointed curves and M̄_{g,n}(X, β) of stable maps to a projective scheme. Algebraicity through tri-canonical embeddings and Hilbert schemes, the Deligne–Mumford property, properness from StableReduction's valuative theorems, smoothness and dimension 3g − 3 + n by deformation theory, the boundary as a normal-crossings divisor stratified by stable graphs, forgetful, clutching and gluing maps, the universal curve and projective coarse spaces; the stack of stable maps as a proper DM stack with evaluation, forgetful and stabilization maps. The tautological classes ψ, κ, λ, the tautological ring and strata algebra, Keel's presentation of A*(M̄_{0,n}), Mumford's formula, string and dilaton, and Pixton's relations as statements complete it. M̄_{0,4} ≅ P¹, M̄_{1,1} and smoothness of M̄_{0,n}(P^r, d) are acceptance tests. Virtual classes are GromovWittenTheory; level structures and arithmetic models are NT.",
-  "key_objects": "stable curves and maps, M̄_{g,n}, M̄_{g,n}(X,β), stable graphs, ψ/κ/λ classes, tautological ring",
-  "milestones": "M̄_{g,n} smooth proper DM of dimension 3g−3+n; normal-crossings boundary; stable maps proper DM; Keel's presentation; Mumford's formula",
-  "prerequisites": [
-   "StableReduction",
-   "AlgebraicStacks",
-   "HilbertQuotAndPicardSchemes",
-   "IntersectionTheory (rational Chow of DM stacks)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#9",
-    "Annals#66 (moduli half)"
-   ],
-   "OpenAI": [
-    "OAI#053",
-    "OAI#063",
-    "OAI#065"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "ModuliOfStableCurves (OAI, Annals)",
-   "ModuliOfStableMaps (Annals 52–100)",
-   "explorer StableReductionPartII"
-  ],
-  "formalizability": "medium; Deligne–Mumford and Arbarello–Cornalba–Griffiths II are explicit",
+  "kind": "new",
   "references": [
    {
     "key": "Arbarello2011",
@@ -1976,43 +1951,9 @@
   ]
  },
  {
-  "name": "ModuliOfSheavesAndHiggsBundles",
+  "roadmap": "ModuliOfSheavesAndHiggsBundles",
   "campaign": "AG",
-  "family": "ModuliTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Stability and moduli of coherent sheaves and Higgs bundles. An abstract slope formalism on abelian and exact categories with Harder–Narasimhan and Jordan–Hölder filtrations, which the isocrystal and Bun_G roadmaps consume; μ- and Gieseker stability of torsion-free sheaves on polarized projective varieties, stable ⇒ simple, Grothendieck's splitting on P¹, the Bogomolov inequality on surfaces, and Gieseker–Maruyama moduli of semistable sheaves by GIT, with dimension r²(g − 1) + 1 for bundles on a curve and Narasimhan–Seshadri stated. Higgs bundles and G-Higgs bundles on curves, their stability and moduli, the Hitchin map and its properness, spectral curves and the BNR correspondence; the nonabelian Hodge correspondence and P = W as statements. Bridgeland stability is DerivedCategoriesOfCoherentSheaves; Betti moduli are GeometricInvariantTheory.",
-  "key_objects": "slope functions, HN/JH filtrations, Gieseker stability, moduli of sheaves, Higgs bundles, Hitchin base, spectral curves",
-  "milestones": "existence and uniqueness of HN filtrations; Bogomolov inequality; projective moduli of semistable sheaves; Hitchin map proper; BNR",
-  "prerequisites": [
-   "GeometricInvariantTheory",
-   "HilbertQuotAndPicardSchemes (Quot)",
-   "IntersectionTheory",
-   "JacobianChallenge B"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#44",
-    "Annals#36"
-   ],
-   "OpenAI": [
-    "OAI#043",
-    "OAI#057",
-    "OAI#058 (statements)",
-    "OAI#054/#055 (Bogomolov input)"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "SlopeStabilityAndHarderNarasimhan (Annals)",
-   "HiggsBundlesAndHitchinFibration (Annals)",
-   "Higgs layers of explorer HodgeStructuresPartII"
-  ],
-  "formalizability": "medium-high; Huybrechts–Lehn; NAH stays a statement",
+  "kind": "new",
   "references": [
    {
     "key": "Huybrechts2010",
@@ -2362,50 +2303,200 @@
   ]
  },
  {
-  "name": "ResolutionOfSingularities",
+  "roadmap": "BirationalGeometry",
   "campaign": "AG",
-  "family": "BirationalGeometry",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 300,
-  "wave": "A",
-  "scope": "Resolution of singularities and the models built from it. Starting from StableReduction's blowups of quasi-coherent ideals (consumed, not rebuilt), it develops strict and total transforms, marked ideals, the Bierstone–Milman/Włodarczyk invariant with maximal contact and coefficient ideals, and proves embedded resolution and principalization for varieties over fields of characteristic zero, functorial for smooth morphisms. Consequences are log resolutions of pairs and SNC compactifications of smooth varieties. Toroidal embeddings, the KKMS semistable reduction theorem over a curve, de Jong's alterations and the weak factorization theorem complete it. Resolution in positive characteristic beyond surfaces is outside; discrepancies are SingularitiesOfPairs.",
-  "key_objects": "marked ideals, transforms, resolution invariant, log resolutions, SNC compactifications, toroidal embeddings, alterations",
-  "milestones": "principalization; embedded resolution (char 0); log resolution of pairs; KKMS semistable reduction; de Jong alterations; weak factorization",
-  "prerequisites": [
-   "StableReduction L4 (blowups)",
-   "Mathlib Normalization, Birational",
-   "ToricVarieties (toroidal layer)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#42"
-   ],
-   "OpenAI": [
-    "OAI#033",
-    "OAI#034",
-    "OAI#037",
-    "OAI#038",
-    "OAI#039",
-    "OAI#041",
-    "OAI#042",
-    "OAI#054",
-    "OAI#064",
-    "OAI#194",
-    "OAI#195"
-   ]
-  },
-  "porting": [
-   "OAI Seshadri Blowup/* (Rees blowups, universal property, uniqueness): land in StableReduction L4 first"
-  ],
-  "replaces": [
-   "AlgebraicModuliForArithmeticGeometry R09.7a–d",
-   "SchemeAndStackFoundations SF.4 (alterations, semistable reduction)",
-   "weak factorization (OAI #054)"
-  ],
-  "formalizability": "medium; Kollár's Lectures and Włodarczyk are elementary but long",
+  "kind": "umbrella",
+  "references": [
+   {
+    "key": "Kollar1998",
+    "role": "primary",
+    "authors": "J. Kollár, S. Mori",
+    "title": "Birational Geometry of Algebraic Varieties",
+    "type": "book",
+    "venue": "Cambridge Tracts in Math. 134, Cambridge Univ. Press",
+    "year": 1998,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Family-wide text: pairs, discrepancies, cone theorem, MMP. Conventions: pin KM §2.3 — K_Y + Δ_Y = f*(K_X + Δ), discrepancy a(E, X, Δ), klt/plt/dlt/lc, Δ an effective ℝ-divisor with K_X+Δ ℝ-Cartier — as #545 does",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "KollarMori1998Birational",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Lazarsfeld2004a",
+    "role": "primary",
+    "authors": "R. Lazarsfeld",
+    "title": "Positivity in Algebraic Geometry I: Classical Setting: Line Bundles and Linear Series",
+    "type": "book",
+    "venue": "Ergebnisse der Math. (3) 48, Springer",
+    "year": 2004,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Ample/nef/big, Iitaka, volume, Seshadri constants; pin ℝ-divisor and numerical-class conventions",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Lazarsfeld2004Positivity",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Lazarsfeld2004b",
+    "role": "primary",
+    "authors": "R. Lazarsfeld",
+    "title": "Positivity in Algebraic Geometry II: Positivity for Vector Bundles, and Multiplier Ideals",
+    "type": "book",
+    "venue": "Ergebnisse der Math. (3) 49, Springer",
+    "year": 2004,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Positive vector bundles, multiplier ideals",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Lazarsfeld2004PositivityII",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Kollar2013",
+    "role": "primary",
+    "authors": "J. Kollár (with S. Kovács)",
+    "title": "Singularities of the Minimal Model Program",
+    "type": "book",
+    "venue": "Cambridge Tracts in Math. 200, Cambridge Univ. Press",
+    "year": 2013,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Singularities of the MMP: dlt modifications, lc centres, adjunction, slc",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Kollar2013Singularities",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Fujino2017",
+    "role": "primary",
+    "authors": "O. Fujino",
+    "title": "Foundations of the Minimal Model Program",
+    "type": "book",
+    "venue": "MSJ Memoirs 35, Math. Soc. Japan",
+    "year": 2017,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Log canonical MMP foundations",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Fujino2017Foundations",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Debarre2001",
+    "role": "primary",
+    "authors": "O. Debarre",
+    "title": "Higher-Dimensional Algebraic Geometry",
+    "type": "book",
+    "venue": "Universitext, Springer",
+    "year": 2001,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Rational curves and cone theorem by bend-and-break",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Debarre2001Higher",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "DebarreM22",
+    "role": "primary",
+    "authors": "O. Debarre",
+    "title": "Higher-dimensional algebraic geometry (course draft M22)",
+    "type": "notes",
+    "venue": "lecture notes, author's web page",
+    "year": null,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://perso.imj-prg.fr/wp-content/uploads/debarre-pub/M22.pdf"
+    },
+    "serves": "Free course draft cited by #545 (Ch. 2–4: ampleness, intersection numbers, cones)",
+    "access": "free",
+    "local": null,
+    "confidence": "medium",
+    "master_key": "DebarreNDHigher",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Jonsson2012",
+    "role": "conventions",
+    "authors": "M. Jonsson, M. Mustață",
+    "title": "Valuations and asymptotic invariants for sequences of ideals",
+    "type": "paper",
+    "venue": "Ann. Inst. Fourier 62, 2145–2209",
+    "year": 2012,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": "1011.3699",
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Log discrepancy A_X(v) = a(E, X) + 1 on valuations: pin the shift between KM discrepancies and valuative log discrepancies",
+    "access": "arxiv",
+    "local": null,
+    "confidence": "medium",
+    "master_key": "JonssonMustata2012Valuations",
+    "verified": "arxiv:1011.3699"
+   }
+  ]
+ },
+ {
+  "roadmap": "ResolutionOfSingularities",
+  "campaign": "AG",
+  "kind": "new",
   "references": [
    {
     "key": "Kollar2007",
@@ -2686,53 +2777,9 @@
   ]
  },
  {
-  "name": "SingularitiesOfPairs",
+  "roadmap": "SingularitiesOfPairs",
   "campaign": "AG",
-  "family": "BirationalGeometry",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Singularities of the minimal model program for pairs (X, Δ), with X normal over a field of characteristic zero and Δ an effective ℝ-Weil divisor with K_X + Δ ℝ-Cartier, extending the divisor and klt API of AbundanceStatement instead of redefining it. Discrepancies over all divisors on all proper birational models; terminal, canonical, klt, plt, dlt, lc and ε-lc; the criterion on one log resolution; lc centres; adjunction and the blowup formula; log canonical thresholds of ideals and divisors and their rationality; b-divisors and generalized pairs; demi-normal schemes and slc pairs. A valuative layer builds Val_X and Val_{X,x}, quasi-monomial and Abhyankar valuations, retraction onto dual complexes of snc models, the log discrepancy on Val_X (Jonsson–Mustață), lct via valuations and the normalized volume of klt germs. Examples: quotient singularities, cones over curves, lct(y² − x³) = 5/6, toric pairs. Iitaka dimension is AsymptoticPositivity; vanishing and rational singularities are VanishingTheorems.",
-  "key_objects": "pairs, discrepancies, klt/plt/dlt/lc/slc, lc centres, lct, b-divisors, generalized pairs, Val_X, A_X(v), normalized volume",
-  "milestones": "log-resolution criterion and its independence; adjunction; rationality of lct; A_X(v) lower semicontinuous with lct = inf A/v; finiteness of normalized volume on klt germs",
-  "prerequisites": [
-   "AbundanceStatement #545 L0–L3",
-   "ResolutionOfSingularities",
-   "Tau Ceti ValuationSpectrum / AdicSpaces L1 (Spv)",
-   "ToricVarieties (examples)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#7",
-    "Annals#18",
-    "Annals#48",
-    "Annals#50"
-   ],
-   "OpenAI": [
-    "OAI#033",
-    "OAI#034",
-    "OAI#035",
-    "OAI#036",
-    "OAI#037",
-    "OAI#038",
-    "OAI#056",
-    "OAI#066"
-   ]
-  },
-  "porting": [
-   "OAI NumericalDimension (29k: Q-Weil divisors, discrepancies, klt members; coordinate with #545)",
-   "OAI CartierSections (monomial valuations)",
-   "OAI LogKodaira (SNC boundaries)"
-  ],
-  "replaces": [
-   "SingularitiesOfPairs (Annals)",
-   "ValuationSpacesOfVarieties (Annals)",
-   "pairs half of PairsAndKodairaDimension (OAI)"
-  ],
-  "formalizability": "high; Kollár–Mori ch. 2, Kollár's Singularities of the MMP",
+  "kind": "new",
   "references": [
    {
     "key": "Kollar1998",
@@ -3105,54 +3152,9 @@
   ]
  },
  {
-  "name": "AsymptoticPositivity",
+  "roadmap": "AsymptoticPositivity",
   "campaign": "AG",
-  "family": "BirationalGeometry",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Asymptotic invariants of line bundles, ℝ-divisors and vector bundles on projective varieties (Lazarsfeld's Positivity I–II), on top of the nef/ample/semiample layer of AbundanceStatement. Iitaka and Kodaira dimension (with log κ̄ of open varieties independent of the snc compactification), the Iitaka fibration, birational invariance of plurigenera, ν and κ_σ; big divisors and Kodaira's lemma, the volume function and its continuity and log-concavity, pseudo-effective and big cones, stable and augmented base loci, Zariski decomposition on surfaces, Fujita approximation and Okounkov bodies; Seshadri constants at one, several and very general points with the Seshadri criterion and Nagata's conjecture stated; ample and nef vector bundles via O_{P(E)}(1); Campana orbifold bases and special varieties; filtrations of section rings by a valuation and the expected vanishing order S(v); Bertini theorems for linear series and generic smoothness in characteristic zero. Kodaira dimension of compact complex manifolds uses ComplexAnalyticSpaces; current-theoretic positivity is ANA's.",
-  "key_objects": "κ, κ̄, ν, κ_σ, Iitaka fibration, vol, Psef/Big cones, B, B₊, Okounkov bodies, Seshadri constants, nef/ample bundles, Campana specialness, S(v)",
-  "milestones": "Iitaka fibration; κ(X×Y)=κ(X)+κ(Y); continuity of vol and Big = int Psef; Fujita approximation; Seshadri criterion; B₊ of a blowup",
-  "prerequisites": [
-   "AbundanceStatement #545 L4–L5",
-   "IntersectionTheory",
-   "HilbertQuotAndPicardSchemes (projective bundles)",
-   "SingularitiesOfPairs (log κ of pairs)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#22",
-    "Annals#39 (S-invariant)"
-   ],
-   "OpenAI": [
-    "OAI#033",
-    "OAI#034",
-    "OAI#035",
-    "OAI#036",
-    "OAI#038",
-    "OAI#039",
-    "OAI#048",
-    "OAI#050",
-    "OAI#057",
-    "OAI#060",
-    "OAI#067"
-   ]
-  },
-  "porting": [
-   "OAI Seshadri (56.6k): multipoint Seshadri constants, ampleness from covers, Bertini/ and Projective/ (9k: generic smoothness, Bertini, ample embeddings)",
-   "OAI SectionFields (5.1k)",
-   "OAI QuadricBundles (ample rank-2 bundles)"
-  ],
-  "replaces": [
-   "PositivityOfLineBundles (Annals)",
-   "positivity half of PositivityAndVanishing (OAI)",
-   "Kodaira-dimension half of PairsAndKodairaDimension (OAI)"
-  ],
-  "formalizability": "high; entirely algebraic",
+  "kind": "new",
   "references": [
    {
     "key": "Lazarsfeld2004a",
@@ -3548,43 +3550,9 @@
   ]
  },
  {
-  "name": "VanishingTheorems",
+  "roadmap": "VanishingTheorems",
   "campaign": "AG",
-  "family": "BirationalGeometry",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "B",
-  "scope": "The cohomology vanishing theorems of birational geometry, proved algebraically. The Cartier isomorphism for smooth schemes in characteristic p and the Deligne–Illusie decomposition of the de Rham complex for W₂-liftable varieties; degeneration of Hodge-to-de Rham in characteristic zero by spreading out; Kodaira–Akizuki–Nakano, Kawamata–Viehweg via cyclic covers, Grauert–Riemenschneider, Kollár injectivity and torsion-freeness; algebraic multiplier ideals of divisors, ideals and linear series with Nadel and local vanishing; rational singularities and 'klt ⇒ rational and Cohen–Macaulay'; Reider on surfaces and Angehrn–Siu stated; Raynaud's counterexample in characteristic p as a counter-test. Serre and Grothendieck duality are imported from CoherentDuality; analytic multiplier ideals and Ohsawa–Takegoshi are ANA's.",
-  "key_objects": "Cartier isomorphism, W₂-liftings, multiplier ideals J(X,Δ), J(a^c), J(‖L‖), rational singularities",
-  "milestones": "Deligne–Illusie; KAN; Kawamata–Viehweg; Nadel; local vanishing; klt ⇒ rational",
-  "prerequisites": [
-   "CoherentDuality",
-   "SingularitiesOfPairs",
-   "ResolutionOfSingularities",
-   "Mathlib SpreadingOut, Witt vectors"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#18 (rational singularities)",
-    "Annals#46 (degeneration route)"
-   ],
-   "OpenAI": [
-    "OAI#034",
-    "OAI#036",
-    "OAI#037",
-    "OAI#038",
-    "OAI#066"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "KodairaVanishingTheorems (Annals)",
-   "vanishing half of PositivityAndVanishing (OAI)"
-  ],
-  "formalizability": "medium-high; Esnault–Viehweg, Lazarsfeld II",
+  "kind": "new",
   "references": [
    {
     "key": "Esnault1992",
@@ -3957,42 +3925,9 @@
   ]
  },
  {
-  "name": "MinimalModelProgram",
+  "roadmap": "MinimalModelProgram",
   "campaign": "AG",
-  "family": "BirationalGeometry",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "XL",
-  "est_prs": 400,
-  "wave": "C",
-  "scope": "The main theorems of the minimal model program in characteristic zero. Cone, contraction, rationality and basepoint-free theorems for klt and lc pairs; extremal rays, flips and flops, the MMP with scaling and dlt modifications; existence of flips and termination with scaling for klt pairs with big boundary (Birkar–Cascini–Hacon–McKernan) and finite generation of log canonical rings; special termination; the MMP and abundance for surfaces and the terminal MMP for threefolds; the canonical bundle formula for lc-trivial fibrations (Kawamata, Ambro, Fujino–Mori); complements and Fano-type pairs, with Birkar's boundedness of complements and BAB as statements. General abundance, the characteristic-p MMP and the Kähler MMP are outside.",
-  "key_objects": "extremal rays, contractions, flips, MMP with scaling, Mori fibre spaces, dlt models, lc-trivial fibrations, discriminant and moduli b-divisors, n-complements",
-  "milestones": "cone theorem with length bound; contraction and basepoint-free theorems; BCHM; finite generation; surface abundance; threefold terminal MMP; canonical bundle formula",
-  "prerequisites": [
-   "VanishingTheorems",
-   "SingularitiesOfPairs",
-   "AsymptoticPositivity",
-   "RationalCurvesAndFanoVarieties (bend-and-break)",
-   "ResolutionOfSingularities"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#033",
-    "OAI#034",
-    "OAI#036",
-    "OAI#037",
-    "OAI#056",
-    "OAI#066",
-    "OAI#068"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "MinimalModelProgram (OAI)"
-  ],
-  "formalizability": "low-medium; BCHM is a long induction, but every step is written down",
+  "kind": "new",
   "references": [
    {
     "key": "Kollar1998",
@@ -4273,42 +4208,9 @@
   ]
  },
  {
-  "name": "RationalCurvesAndFanoVarieties",
+  "roadmap": "RationalCurvesAndFanoVarieties",
   "campaign": "AG",
-  "family": "BirationalGeometry",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Rational curves on algebraic varieties (Kollár; Debarre). Deformation theory of morphisms from curves and dimension estimates for Hom schemes; bend-and-break by reduction mod p and Mori's theorem producing rational curves when K_X is not nef; free and very free curves, uniruled and rationally (chain) connected varieties, the MRC fibration, Graber–Harris–Starr; Kollár–Miyaoka–Mori boundedness of smooth Fano varieties, Picard number and pseudoindex; families of minimal rational curves and VMRTs, Mori's characterization of P^n and Cho–Miyaoka–Shepherd-Barron; complex contact Fano manifolds and their lines (Kebekus–Peternell–Sommese–Wiśniewski). The cone theorem itself is MinimalModelProgram; homogeneous examples come from FlagVarieties.",
-  "key_objects": "Hom schemes, free/very free curves, RC and uniruled varieties, MRC fibration, Fano varieties, VMRT, contact structures",
-  "milestones": "bend-and-break; Mori's theorem; MRC fibration; GHS; KMM boundedness; Mori and CMSB characterizations of P^n",
-  "prerequisites": [
-   "HilbertQuotAndPicardSchemes (Hom schemes)",
-   "AbundanceStatement #545 (cone of curves)",
-   "Mathlib SpreadingOut",
-   "FlagVarieties"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#051",
-    "OAI#052",
-    "OAI#062",
-    "OAI#063",
-    "OAI#067",
-    "OAI#034/#057 (proofs)"
-   ]
-  },
-  "porting": [
-   "OAI Geometry/SplitTangent (32k: rational curves on projective manifolds, foliations)"
-  ],
-  "replaces": [
-   "RationalCurvesAndFanoVarieties (OAI)"
-  ],
-  "formalizability": "medium-high; reduction mod p is the delicate step",
+  "kind": "new",
   "references": [
    {
     "key": "Kollar1996",
@@ -4635,35 +4537,9 @@
   ]
  },
  {
-  "name": "KStabilityOfFanoVarieties",
+  "roadmap": "KStabilityOfFanoVarieties",
   "campaign": "AG",
-  "family": "BirationalGeometry",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "C",
-  "scope": "Log Fano pairs and their K-stability in the valuative and test-configuration forms: β = A − S on divisors over X, the stability threshold δ, K-(semi/poly)stability and uniform K-stability; test configurations, Donaldson–Futaki invariants via the Knudsen–Mumford expansion, and the equivalence of the two definitions (Fujita, Li); K-semistable Fano varieties are klt; δ(P^n) = 1, Bl_p P² is not K-semistable, the barycentre criterion for toric Fanos, and the normalized-volume characterization of K-semistable cones stated. Existence of Kähler–Einstein metrics (YTD) is GEO's; the K-moduli space is outside.",
-  "key_objects": "log Fano pairs, A, S, β, δ, test configurations, DF invariant",
-  "milestones": "Fujita–Li equivalence; K-ss ⇒ klt; δ(P^n)=1; toric barycentre criterion",
-  "prerequisites": [
-   "SingularitiesOfPairs",
-   "AsymptoticPositivity (the S-invariant)",
-   "ToricVarieties",
-   "HilbertQuotAndPicardSchemes (cohomology and base change)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#39"
-   ],
-   "OpenAI": []
-  },
-  "porting": [],
-  "replaces": [
-   "KStabilityOfFanoVarieties (Annals)"
-  ],
-  "formalizability": "medium-high",
+  "kind": "new",
   "references": [
    {
     "key": "Xu2021",
@@ -4875,42 +4751,223 @@
   ]
  },
  {
-  "name": "ComplexAnalyticSpaces",
+  "roadmap": "HodgeTheory",
   "campaign": "AG",
-  "family": "HodgeTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Global complex-analytic geometry of complex spaces. Reduced and nonreduced complex spaces, analytic subsets and dimension, irreducible components, normalization, Oka's coherence theorem, coherent analytic sheaves, Remmert's proper mapping theorem, Remmert–Stein, Grauert's direct image theorem and Cartan–Serre finiteness; projective and proper GAGA, Chow's theorem and algebraization of morphisms; meromorphic functions and maps, algebraic dimension, Moishezon spaces, Fujiki class C, compact Kähler spaces and the Douady space. It generalizes the analytification of CohomologicalPointCounting/ComplexComparison and consumes several complex variables (Weierstrass, C{z}, Cartan A/B) from ANA rather than proving them.",
-  "key_objects": "complex spaces, coherent analytic sheaves, analytic subsets, normalization, meromorphic maps, Moishezon/Fujiki C/Kähler spaces, Douady spaces",
-  "milestones": "Oka coherence; Remmert proper mapping; Grauert direct images; GAGA; Chow's theorem; Moishezon ⇒ algebraic space",
-  "prerequisites": [
-   "ANA SeveralComplexVariables",
-   "ComplexManifolds #279",
-   "CohomologicalPointCounting #196 ComplexComparison L2"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#032",
-    "OAI#033",
-    "OAI#034",
-    "OAI#041",
-    "OAI#046",
-    "OAI#056"
-   ]
-  },
-  "porting": [
-   "OAI Geometry/HypersurfaceGerms (5.1k, with ANA)"
-  ],
-  "replaces": [
-   "ComplexAnalyticSpaces (OAI)",
-   "ComplexComparisonPartII C0–C4"
-  ],
-  "formalizability": "medium; Grauert–Remmert",
+  "kind": "umbrella",
+  "references": [
+   {
+    "key": "Voisin2002",
+    "role": "primary",
+    "authors": "C. Voisin",
+    "title": "Hodge Theory and Complex Algebraic Geometry I",
+    "type": "book",
+    "venue": "Cambridge Studies in Advanced Math. 76, Cambridge Univ. Press",
+    "year": 2002,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Family-wide: Kähler manifolds, Hodge decomposition, Lefschetz, VHS basics",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Voisin2002Hodge",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Voisin2003",
+    "role": "primary",
+    "authors": "C. Voisin",
+    "title": "Hodge Theory and Complex Algebraic Geometry II",
+    "type": "book",
+    "venue": "Cambridge Studies in Advanced Math. 77, Cambridge Univ. Press",
+    "year": 2003,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Family-wide: VHS, Gauss–Manin, algebraic cycles and Hodge classes",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Voisin2003Hodge",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Griffiths1978",
+    "role": "primary",
+    "authors": "P. Griffiths, J. Harris",
+    "title": "Principles of Algebraic Geometry",
+    "type": "book",
+    "venue": "Wiley-Interscience",
+    "year": 1978,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Complex manifolds, Kähler identities, Kodaira embedding",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "GriffithsHarris1978Principles",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Huybrechts2005",
+    "role": "primary",
+    "authors": "D. Huybrechts",
+    "title": "Complex Geometry: An Introduction",
+    "type": "book",
+    "venue": "Universitext, Springer",
+    "year": 2005,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Complex geometry: holomorphic bundles, Chern connection, Kähler identities",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Huybrechts2005Complex",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Peters2008",
+    "role": "primary",
+    "authors": "C. Peters, J. Steenbrink",
+    "title": "Mixed Hodge Structures",
+    "type": "book",
+    "venue": "Ergebnisse der Math. (3) 52, Springer",
+    "year": 2008,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Mixed Hodge structures",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "PetersSteenbrink2008Mixed",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Carlson2017",
+    "role": "primary",
+    "authors": "J. Carlson, S. Müller-Stach, C. Peters",
+    "title": "Period Mappings and Period Domains",
+    "type": "book",
+    "venue": "Cambridge Studies in Advanced Math. 168, Cambridge Univ. Press",
+    "year": 2017,
+    "edition": "2nd",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Period mappings and period domains",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "CarlsonMullerStachPeters2017Period",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "TauCetiHodgeREADME",
+    "role": "conventions",
+    "authors": "Tau Ceti roadmap authors",
+    "title": "Completed/HodgeStructures roadmap README: Conventions (pinned)",
+    "type": "notes",
+    "venue": "TauCetiRoadmap upstream/main, Completed/HodgeStructures/README.md",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/TauCetiProject/TauCetiRoadmap/tree/main/Completed/HodgeStructures"
+    },
+    "serves": "Pinned polarization sign Q(y,x) = (−1)^n Q(x,y) with i^{p−q} Q(v, v̄) > 0 and Weil operator i^{p−q}; a cup-product polarization inserts (−1)^{n(n−1)/2} — all family members inherit this",
+    "access": "free",
+    "local": "/Users/roed/claude/TauCetiRoadmap@upstream/main:Completed/HodgeStructures/README.md",
+    "confidence": "high",
+    "master_key": "TauCeti2026Completed",
+    "verified": "local:/Users/roed/claude/TauCetiRoadmap@upstream/main:Completed/HodgeStructures/README.md"
+   },
+   {
+    "key": "Deligne1979",
+    "role": "conventions",
+    "authors": "P. Deligne",
+    "title": "Variétés de Shimura: interprétation modulaire, et techniques de construction de modèles canoniques",
+    "type": "paper",
+    "venue": "Automorphic Forms, Representations and L-functions (Corvallis), Proc. Sympos. Pure Math. 33, part 2, AMS, 247-289",
+    "year": 1979,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": "0437.14012",
+     "url": null
+    },
+    "serves": "Deligne torus S = Res_{ℂ/ℝ} G_m acting on V^{p,q} by z^{−p} z̄^{−q} (Corvallis article; Hodge II uses the opposite sign): pin this for MT groups and VHS",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Deligne1979Varietes",
+    "verified": "zbmath:0437.14012"
+   },
+   {
+    "key": "TCHodge",
+    "role": "formal",
+    "authors": "Tau Ceti contributors",
+    "title": "TauCeti.Geometry.Hodge (pure, mixed, polarized Hodge structures; period domains; weight one)",
+    "type": "code",
+    "venue": "Tau Ceti (pin a91d3aafa, 2026-10-05)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/TauCetiProject/TauCeti/tree/main/TauCeti/Geometry/Hodge"
+    },
+    "serves": "Completed/HodgeStructures carrier every member lands in",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/TauCeti/TauCeti/Geometry/Hodge",
+    "confidence": "high",
+    "master_key": "TauCeti2026GeometryHodge",
+    "verified": "code-local"
+   }
+  ]
+ },
+ {
+  "roadmap": "ComplexAnalyticSpaces",
+  "campaign": "AG",
+  "kind": "new",
   "references": [
    {
     "key": "Grauert1984",
@@ -5237,56 +5294,9 @@
   ]
  },
  {
-  "name": "KahlerManifolds",
+  "roadmap": "KahlerManifolds",
   "campaign": "AG",
-  "family": "HodgeTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 300,
-  "wave": "B",
-  "scope": "Complex differential geometry and Hodge theory of compact complex and Kähler manifolds (Griffiths–Harris ch. 0–1, Huybrechts, Voisin I). The holomorphic tangent bundle and (p,q)-forms, Dolbeault cohomology, holomorphic distributions and the holomorphic Frobenius theorem; Hermitian metrics on holomorphic bundles, Chern connection and curvature, Griffiths and Nakano positivity, Chern–Weil forms; Kähler metrics, local potentials, Fubini–Study, the Ricci form and the Kähler identities; with GEO's Hodge theorem for elliptic operators, the Hodge decomposition and symmetry, hard Lefschetz and the Hodge–Riemann relations landing in the Completed/HodgeStructures carrier, the ∂∂̄-lemma, Bott–Chern and Aeppli cohomology; Bochner–Kodaira–Nakano and Kodaira vanishing, the Kodaira embedding theorem, the Picard and Albanese tori. Kähler–Einstein, cscK and Calabi–Yau metrics are GEO's; plurisubharmonic analysis is ANA's.",
-  "key_objects": "(p,q)-forms, Dolbeault cohomology, Hermitian bundles, Chern connection, Griffiths/Nakano positivity, Kähler metrics, Bott–Chern cohomology, holomorphic foliations",
-  "milestones": "holomorphic Frobenius; Kähler identities; Hodge decomposition; hard Lefschetz and HR relations; ∂∂̄-lemma; Kodaira vanishing; Kodaira embedding",
-  "prerequisites": [
-   "ComplexManifolds #279",
-   "DifferentialGeometry",
-   "GEO EllipticOperatorsOnManifolds (Hodge theorem)",
-   "Completed/HodgeStructures",
-   "ComplexTori #280"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#64 (Kähler part; KE existence is GEO)"
-   ],
-   "OpenAI": [
-    "OAI#032",
-    "OAI#036",
-    "OAI#041",
-    "OAI#050",
-    "OAI#051",
-    "OAI#052",
-    "OAI#054",
-    "OAI#057",
-    "OAI#068",
-    "OAI#338",
-    "OAI#347",
-    "OAI#359"
-   ]
-  },
-  "porting": [
-   "OAI Geometry/KahlerSplitting (15k: Kähler metrics in charts, holomorphic Frobenius)",
-   "OAI Geometry/QuadricBundles (12.3k: Chern curvature, Griffiths positivity)",
-   "OAI Geometry/SplitTangent (32k: foliations)",
-   "OAI Geometry/Anticanonical (to #279)"
-  ],
-  "replaces": [
-   "KahlerManifoldsAndHodgeTheory (OAI), analytic half",
-   "KahlerGeometry (Annals 52–100 P12) except metric PDE",
-   "Kähler branch of explorer SeveralComplexVariablesKahlerGeometry"
-  ],
-  "formalizability": "medium; textbook, the elliptic input is imported",
+  "kind": "new",
   "references": [
    {
     "key": "Griffiths1978",
@@ -5636,44 +5646,9 @@
   ]
  },
  {
-  "name": "HodgeTheoryOfAlgebraicVarieties",
+  "roadmap": "HodgeTheoryOfAlgebraicVarieties",
   "campaign": "AG",
-  "family": "HodgeTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "C",
-  "scope": "Hodge theory of complex algebraic varieties. Algebraic de Rham cohomology, the Hodge filtration and Grothendieck's algebraic de Rham–Betti comparison; the cycle class map to Betti cohomology, Hodge classes, the Lefschetz (1,1) theorem and the Hodge conjecture as a typed statement; Deligne's mixed Hodge structure on the cohomology of smooth quasi-projective varieties via log de Rham complexes and of proper varieties via cubical hyperresolutions, with functoriality and strictness; Hodge numbers of hypersurfaces and complete intersections; Hodge classes on abelian varieties, Lefschetz and Weil classes; the analytic Albanese map of a compact Kähler manifold compared with Tau Ceti's algebraic Albanese. Analytic foundations are KahlerManifolds; motives are MotivesAndAlgebraicCycles.",
-  "key_objects": "algebraic de Rham cohomology, cycle class, Hodge classes, Deligne MHS, log de Rham complexes, Weil classes",
-  "milestones": "de Rham–Betti comparison; Lefschetz (1,1); Deligne's MHS and strictness; Hodge numbers of hypersurfaces",
-  "prerequisites": [
-   "KahlerManifolds",
-   "ComplexAnalyticSpaces (GAGA)",
-   "CohomologicalPointCounting #196 ComplexComparison",
-   "ResolutionOfSingularities (SNC compactifications)",
-   "IntersectionTheory"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#46 (complex part)"
-   ],
-   "OpenAI": [
-    "OAI#032",
-    "OAI#043 (MHS)",
-    "OAI#051",
-    "OAI#057",
-    "OAI#001 (Weil classes)"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "KahlerManifoldsAndHodgeTheory (OAI), algebraic half",
-   "ComplexComparisonPartII C5",
-   "Deligne-MHS layer of VariationsOfHodgeStructure (OAI)"
-  ],
-  "formalizability": "medium",
+  "kind": "new",
   "references": [
    {
     "key": "Voisin2002",
@@ -6000,42 +5975,9 @@
   ]
  },
  {
-  "name": "VariationsOfHodgeStructure",
+  "roadmap": "VariationsOfHodgeStructure",
   "campaign": "AG",
-  "family": "HodgeTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "C",
-  "scope": "The successor named by Completed/HodgeStructures. Local systems and flat bundles; variations of (polarized) Hodge structure with Griffiths transversality; period domains as complex manifolds open in flag varieties, period maps from the universal cover and monodromy into Aut(V, Q)(ℤ); the Gauss–Manin connection and the VHS of a smooth projective family; Griffiths' curvature computation and the Hodge metric; the theorem of the fixed part and Deligne semisimplicity; quasi-unipotent monodromy, Schmid's nilpotent orbit theorem in one variable and the limiting mixed Hodge structure; semipositivity of f_*ω (Fujita–Kawamata) and Viehweg's weak positivity. The weight-one case recovers ℍ and modular curves. ShimuraData's homogeneous VHS must consume this carrier; Saito's Hodge modules are outside.",
-  "key_objects": "local systems, VHS, period domains, period maps, Gauss–Manin connection, Hodge metric, limiting MHS",
-  "milestones": "Griffiths transversality of geometric VHS; curvature of period domains; theorem of the fixed part; semisimplicity; nilpotent orbit theorem (one variable); f_*ω semipositive",
-  "prerequisites": [
-   "KahlerManifolds",
-   "HodgeTheoryOfAlgebraicVarieties",
-   "Completed/HodgeStructures",
-   "FlagVarieties (compact duals)",
-   "UniversalCovers"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#2"
-   ],
-   "OpenAI": [
-    "OAI#032",
-    "OAI#033",
-    "OAI#041",
-    "OAI#043"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "VariationsOfHodgeStructure (OAI, Annals; TauCetiRoadmap issue #167)",
-   "variation/period-map stages of explorer HodgeStructuresPartII"
-  ],
-  "formalizability": "medium-low at Schmid",
+  "kind": "new",
   "references": [
    {
     "key": "Carlson2017",
@@ -6339,39 +6281,9 @@
   ]
  },
  {
-  "name": "MumfordTateGroups",
+  "roadmap": "MumfordTateGroups",
   "campaign": "AG",
-  "family": "HodgeTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "M",
-  "est_prs": 110,
-  "wave": "A",
-  "scope": "Hodge tensors and the Mumford–Tate group of a ℚ-Hodge structure as the smallest ℚ-subgroup of GL(V) × G_m containing the image of the Deligne torus, with its Tannakian and stabilizer-of-Hodge-tensors descriptions; the Hodge group; reductivity for polarizable structures; CM Hodge structures, with CM ⇔ Mumford–Tate group a torus; elliptic curves (GL₂ versus a CM torus) and abelian surfaces as examples; Mumford–Tate domains; generic Mumford–Tate groups in a VHS. The Deligne torus comes from Weil restriction in ReductiveGroupSchemes; Shimura data are NT's.",
-  "key_objects": "Hodge tensors, MT(V), Hodge group, CM Hodge structures, MT domains",
-  "milestones": "Tannakian description; reductivity for polarizable V; CM ⇔ torus; generic MT group locally constant off a countable union",
-  "prerequisites": [
-   "Completed/HodgeStructures",
-   "ReductiveGroups L4–L6",
-   "Tau Ceti Tannakian reconstruction",
-   "ReductiveGroupSchemes (Deligne torus)",
-   "VariationsOfHodgeStructure (last layer)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#40"
-   ],
-   "OpenAI": [
-    "OAI#032",
-    "OAI#001"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "MumfordTateGroups (Annals)"
-  ],
-  "formalizability": "high",
+  "kind": "new",
   "references": [
    {
     "key": "Moonen2004",
@@ -6629,42 +6541,9 @@
   ]
  },
  {
-  "name": "K3AndHyperkahlerManifolds",
+  "roadmap": "K3AndHyperkahlerManifolds",
   "campaign": "AG",
-  "family": "HodgeTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "C",
-  "scope": "K3 surfaces and irreducible holomorphic symplectic manifolds (Huybrechts' Lectures on K3; Gross–Huybrechts–Joyce). The K3 lattice from IntegralLattices and Hodge structures of K3 type, Picard and transcendental lattices, the period domain, global Torelli and surjectivity of the period map, Kähler and ample cones and (−2)-classes, elliptic K3 surfaces, the Kuga–Satake construction via OrthogonalSpinGroups' Clifford algebras; Hilbert schemes of points on K3 surfaces (Beauville), the Beauville–Bogomolov–Fujiki form and Fujiki relation, Matsushita's theorem on Lagrangian fibrations, cubic fourfolds with the Fano variety of lines and Hassett's special divisors. The Beauville–Bogomolov decomposition is stated, its holonomy input belonging to GEO; hyperkähler metrics are GEO's.",
-  "key_objects": "K3 lattice, periods, Kähler cone, Kuga–Satake abelian variety, IHS manifolds, BBF form, Lagrangian fibrations, Hassett divisors",
-  "milestones": "global Torelli; surjectivity of the period map; Kuga–Satake; BBF form and Fujiki relation; Matsushita; Beauville–Donagi",
-  "prerequisites": [
-   "AlgebraicSurfaces",
-   "KahlerManifolds",
-   "VariationsOfHodgeStructure",
-   "IntegralLattices",
-   "OrthogonalSpinGroups",
-   "GEO CalabiYauAndComplexMongeAmpere (Yau's theorem)",
-   "AbelianVarieties"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#032",
-    "OAI#041",
-    "OAI#042",
-    "OAI#054",
-    "OAI#055"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "K3AndHyperkahlerManifolds (OAI)"
-  ],
-  "formalizability": "medium",
+  "kind": "new",
   "references": [
    {
     "key": "Huybrechts2016",
@@ -7037,42 +6916,154 @@
   ]
  },
  {
-  "name": "CoherentDuality",
+  "roadmap": "SheafTheory",
   "campaign": "AG",
-  "family": "SheafTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "Derived categories of quasi-coherent sheaves on schemes: D_qc, D^b_coh and Perf, with Perf ⊆ D^b_coh and equality exactly for regular schemes; Grothendieck coherence of Rf_* for proper maps; the right adjoint f^× and f^! via compactification; dualizing complexes and Grothendieck local duality; Grothendieck duality for proper morphisms and its base change; f^! = f*ω_f[n] for smooth f; Serre duality on projective Cohen–Macaulay schemes, recovering JacobianChallenge's and StableReduction's curve cases; Hodge numbers h^{p,q} = h^q(Ω^p) and Serre symmetry for smooth projective varieties. f_! ≠ f_* for A¹ ⊂ P¹ is a test. Nagata compactification is consumed from CohomologicalPointCounting/CompactSupport.",
-  "key_objects": "D_qc, D^b_coh, Perf, f^×, f^!, dualizing complexes, ω_f",
-  "milestones": "Perf = D^b_coh iff regular; coherence of Rf_*; Grothendieck duality with base change; Serre duality for projective CM schemes",
-  "prerequisites": [
-   "Mathlib DerivedCategory, Triangulated",
-   "Tau Ceti QuasicoherentSheaf / FinitelyPresentedSheaf",
-   "JacobianChallenge B",
-   "StableReduction L2",
-   "CohomologicalPointCounting #196 CompactSupport L1"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#10",
-    "Annals#16 (coherent)"
-   ],
-   "OpenAI": [
-    "OAI#040, #060 (Serre duality, Hodge numbers; proofs)"
-   ]
-  },
-  "porting": [
-   "OAI Seshadri Cohomology/ (7.7k: Čech computations, finiteness on curves and surfaces)"
-  ],
-  "replaces": [
-   "CoherentDuality (Annals)",
-   "SchemeAndStackFoundations SF.2 (coherent part)"
-  ],
-  "formalizability": "medium; Neeman's and Lipman's routes avoid residual complexes",
+  "kind": "umbrella",
+  "references": [
+   {
+    "key": "Kashiwara1990",
+    "role": "primary",
+    "authors": "M. Kashiwara, P. Schapira",
+    "title": "Sheaves on Manifolds",
+    "type": "book",
+    "venue": "Grundlehren der mathematischen Wissenschaften 292, Springer",
+    "year": 1990,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Family-wide: derived categories of sheaves, six operations, microsupport, constructible sheaves",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "KashiwaraSchapira1990Sheaves",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "StacksProject",
+    "role": "primary",
+    "authors": "The Stacks Project Authors",
+    "title": "The Stacks Project",
+    "type": "notes",
+    "venue": "online reference, stacks.math.columbia.edu",
+    "year": 2026,
+    "edition": "live; cite stable tags",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://stacks.math.columbia.edu"
+    },
+    "serves": "Derived Categories of Schemes, Duality for Schemes chapters",
+    "access": "free",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Stacks2026Stacks",
+    "verified": "web (not fetched)"
+   },
+   {
+    "key": "Huybrechts2006",
+    "role": "primary",
+    "authors": "D. Huybrechts",
+    "title": "Fourier–Mukai Transforms in Algebraic Geometry",
+    "type": "book",
+    "venue": "Oxford Mathematical Monographs, Oxford Univ. Press",
+    "year": 2006,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Derived categories of coherent sheaves and Fourier–Mukai",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Huybrechts2006Fourier",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Beilinson1982",
+    "role": "conventions",
+    "authors": "A. Beilinson, J. Bernstein, P. Deligne",
+    "title": "Faisceaux pervers",
+    "type": "book",
+    "venue": "Astérisque 100",
+    "year": 1982,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "BBD normalization: on smooth X of pure dimension d, L[d] is perverse; middle perversity t-structure by gluing",
+    "access": "free",
+    "local": null,
+    "confidence": "high",
+    "master_key": "BeilinsonBernsteinDeligne1982Faisceaux",
+    "verified": "explorer-catalogue"
+   },
+   {
+    "key": "Hotta2008",
+    "role": "conventions",
+    "authors": "R. Hotta, K. Takeuchi, T. Tanisaki",
+    "title": "D-Modules, Perverse Sheaves, and Representation Theory",
+    "type": "book",
+    "venue": "Progress in Mathematics 236, Birkhäuser",
+    "year": 2008,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "DR(M) = Ω_X ⊗^L M [d_X] so that DR(O_X) = ℂ_X[d_X] is perverse; pin this shift across D-modules and perverse sheaves",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "HottaTakeuchiTanisaki2008D",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Dimca2004",
+    "role": "primary",
+    "authors": "A. Dimca",
+    "title": "Sheaves in Topology",
+    "type": "book",
+    "venue": "Universitext, Springer",
+    "year": 2004,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Constructible and perverse sheaves on complex varieties",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Dimca2004Sheaves",
+    "verified": "unverified (service stopped)"
+   }
+  ]
+ },
+ {
+  "roadmap": "CoherentDuality",
+  "campaign": "AG",
+  "kind": "new",
   "references": [
    {
     "key": "StacksProject",
@@ -7399,43 +7390,9 @@
   ]
  },
  {
-  "name": "DerivedCategoriesOfCoherentSheaves",
+  "roadmap": "DerivedCategoriesOfCoherentSheaves",
   "campaign": "AG",
-  "family": "SheafTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "D^b(Coh X) for smooth projective X: Serre functors, exceptional collections and semiorthogonal decompositions (Beilinson on P^n, Kuznetsov components of cubic fourfolds and Fano threefolds), Fourier–Mukai transforms and Orlov's representability theorem, Bondal–Orlov reconstruction, spherical twists, numerical Grothendieck groups from GrothendieckEulerForms; Bridgeland stability conditions with the support property, Bridgeland's deformation theorem, stability conditions on surfaces by tilting and tilt stability on threefolds with the Bayer–Macrì–Toda inequality stated. DG enhancements come from DGAInfinity; slope stability and the Bogomolov inequality come from ModuliOfSheavesAndHiggsBundles.",
-  "key_objects": "Serre functors, exceptional collections, SODs, FM kernels, spherical objects, stability conditions, Stab(X)",
-  "milestones": "Beilinson's collection; Orlov's theorem; Bondal–Orlov; Bridgeland deformation theorem; stability conditions on surfaces",
-  "prerequisites": [
-   "CoherentDuality",
-   "ModuliOfSheavesAndHiggsBundles (Bogomolov)",
-   "GrothendieckEulerForms",
-   "DGAInfinity",
-   "IntersectionTheory (Chern characters)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#58 (with TOP)"
-   ],
-   "OpenAI": [
-    "OAI#040",
-    "OAI#054",
-    "OAI#055",
-    "OAI#043 (proof)"
-   ]
-  },
-  "porting": [
-   "OAI AlgebraicGeometry/Stability (0.6k: tilt-wall inequalities)"
-  ],
-  "replaces": [
-   "DerivedCategoriesAndStability (OAI)"
-  ],
-  "formalizability": "medium",
+  "kind": "new",
   "references": [
    {
     "key": "Huybrechts2006",
@@ -7785,41 +7742,9 @@
   ]
  },
  {
-  "name": "PerverseSheavesOnComplexVarieties",
+  "roadmap": "PerverseSheavesOnComplexVarieties",
   "campaign": "AG",
-  "family": "SheafTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Constructible and perverse sheaves on complex algebraic varieties. Complex-algebraic and semialgebraic stratifications, D^b_c(X^an) and its stability under the six operations (Verdier's generic base change); the middle-perversity t-structure by gluing, the heart, intermediate extension and IC(L), Verdier self-duality and Artin vanishing; the decomposition theorem for proper maps (BBD §6, spreading out to finite fields through the ℓ-adic theorem and Artin comparison), relative hard Lefschetz and the perverse filtration; nearby and vanishing cycles on X^an; rigid local systems on P¹ minus points with Katz's index criterion and middle convolution. The nodal curve, the small resolutions of xy = zw and the failure of tensor closure are tests. Sheaves on locally compact spaces and Verdier duality come from TOP's TopologicalSixOperations; ℓ-adic perverse sheaves are EtaleDualityAndPerverseSheaves.",
-  "key_objects": "stratifications, D^b_c, perverse t-structure, IC complexes, perverse filtration, ψ/φ, rigid local systems, middle convolution",
-  "milestones": "constructibility of six operations; perverse t-structure and IC; decomposition theorem over ℂ; Katz's rigidity criterion",
-  "prerequisites": [
-   "TOP TopologicalSixOperations",
-   "CohomologicalPointCounting #196 ComplexComparison",
-   "EtaleDualityAndPerverseSheaves (EDC.5, EDC.7)",
-   "RealAlgebraicGeometry (semialgebraic stratification)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#41",
-    "Annals#67",
-    "Annals#5 (stratified part)"
-   ],
-   "OpenAI": [
-    "OAI#043 (perverse filtration)"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "PerverseSheavesOnComplexVarieties (Annals)",
-   "constructible layer of TopologicalSixOperations (Annals)",
-   "rigidity layers of CharacterVarietiesAndRigidLocalSystems (Annals 52–100)"
-  ],
-  "formalizability": "medium; BBD via finite fields is the long step",
+  "kind": "new",
   "references": [
    {
     "key": "Beilinson1982",
@@ -8031,37 +7956,9 @@
   ]
  },
  {
-  "name": "AlgebraicDModules",
+  "roadmap": "AlgebraicDModules",
   "campaign": "AG",
-  "family": "SheafTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Rings of differential operators D_X on smooth varieties in characteristic zero; coherent D-modules, good filtrations and characteristic varieties; Bernstein's inequality; holonomic modules, finite length and stability under direct and inverse image; Kashiwara's equivalence; the de Rham and solution functors to D^b_c(X^an); Bernstein–Sato polynomials; regular holonomic modules and the Riemann–Hilbert correspondence; twisted differential operators on flag varieties, on which ALG's Beilinson–Bernstein localization builds. D/D∂, D/Dx and D/D(x∂ − λ) with monodromy e^{2πiλ} are tests. Saito's Hodge modules and D-modules on Bun_G are outside.",
-  "key_objects": "D_X, good filtrations, characteristic varieties, holonomic and regular holonomic modules, de Rham functor, b-functions, TDOs",
-  "milestones": "Bernstein inequality; Kashiwara equivalence; stability of holonomicity; existence of b-functions; Riemann–Hilbert",
-  "prerequisites": [
-   "CoherentDuality",
-   "AlgebraicVectorBundles",
-   "PerverseSheavesOnComplexVarieties",
-   "ComplexAnalyticSpaces (analytic de Rham)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#15"
-   ],
-   "OpenAI": [
-    "OAI#069 (algebraic layer)"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "AlgebraicDModules (Annals)"
-  ],
-  "formalizability": "medium; Hotta–Takeuchi–Tanisaki",
+  "kind": "new",
   "references": [
    {
     "key": "Hotta2008",
@@ -8227,36 +8124,9 @@
   ]
  },
  {
-  "name": "MicrolocalSheafTheory",
+  "roadmap": "MicrolocalSheafTheory",
   "campaign": "AG",
-  "family": "SheafTheory",
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "B",
-  "scope": "Kashiwara–Schapira microlocal sheaf theory on real manifolds: the microsupport SS(F) ⊆ T*M of F ∈ D^b(k_M), the non-characteristic deformation lemma, the microlocal Morse lemma, bounds under proper pushforward and non-characteristic pullback, SS(F) ⊆ 0_M iff F is locally constant, SS(k_Z) = T*_Z M, involutivity, ℝ-constructible sheaves in the semialgebraic setting with conic Lagrangian microsupport, and the characteristic cycle of a constructible sheaf. Beilinson's singular support of étale sheaves is NT/AG consumer material; subanalytic geometry has no supplier and is outside.",
-  "key_objects": "microsupport, non-characteristic maps, ℝ-constructible sheaves, characteristic cycles",
-  "milestones": "microlocal Morse lemma; functorial bounds; involutivity; Lagrangian microsupport of ℝ-constructible sheaves",
-  "prerequisites": [
-   "TOP TopologicalSixOperations",
-   "DifferentialGeometry (cotangent bundles)",
-   "RealAlgebraicGeometry"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#5 (microsupport)"
-   ],
-   "OpenAI": [
-    "OAI#304"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "MicrolocalSheafTheory (Annals)"
-  ],
-  "formalizability": "medium",
+  "kind": "new",
   "references": [
    {
     "key": "Kashiwara1990",
@@ -8376,56 +8246,9 @@
   ]
  },
  {
-  "name": "IntersectionTheory",
+  "roadmap": "IntersectionTheory",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 300,
-  "wave": "A",
-  "scope": "Fulton's intersection theory over a field, on Mathlib's AlgebraicCycle and OrderOfVanishing. Rational equivalence and Chow groups, proper pushforward and flat pullback, intersection with Cartier divisors, Chern and Segre classes of vector bundles via projective bundles, the splitting principle and Whitney formula, deformation to the normal cone and refined Gysin maps, the intersection ring of a smooth variety and the projection formula; CH*(P^n), the projective bundle formula, CH₀ of a curve (consuming JacobianChallenge); intersection numbers of line bundles on proper varieties identified with the Snapper polynomial, degree and Bézout for projective varieties, intersection theory on smooth projective surfaces with adjunction, Riemann–Roch and the Hodge index theorem; Grothendieck–Riemann–Roch for projective morphisms of smooth varieties; Chow groups of DM stacks with ℚ-coefficients; Mumford's infinite-dimensionality of CH₀ as a counter-test. Equivariant Chow groups are EquivariantCohomologyAndLocalization; motives are MotivesAndAlgebraicCycles.",
-  "key_objects": "cycles, CH_k, Gysin maps, Chern/Segre classes, normal cones, intersection ring, Snapper polynomial, Todd class",
-  "milestones": "intersection with divisors and commutativity; Chern classes and splitting principle; refined Gysin maps; projection formula; Hodge index; GRR",
-  "prerequisites": [
-   "AlgebraicVectorBundles",
-   "HilbertQuotAndPicardSchemes (projective bundles)",
-   "AbundanceStatement #545 L1, L4A",
-   "StableReduction L4 (surface case reused)",
-   "Mathlib AlgebraicCycle"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#12",
-    "Annals#33",
-    "Annals#14/#22/#24/#49 (supplier)"
-   ],
-   "OpenAI": [
-    "OAI#017",
-    "OAI#032",
-    "OAI#039",
-    "OAI#040",
-    "OAI#053",
-    "OAI#055",
-    "OAI#067",
-    "OAI#108",
-    "OAI#166",
-    "OAI#170"
-   ]
-  },
-  "porting": [
-   "OAI Seshadri Intersection/* (χ-based surface intersection numbers)",
-   "OAI PlaneCurves (multiplicity, effective cycles ↔ forms)"
-  ],
-  "replaces": [
-   "IntersectionTheory (Annals)",
-   "SchemeAndStackFoundations SF.5",
-   "MotivesAndAlgebraicCycles MC.0 (cycles)",
-   "AlgebraicVectorBundles successor 2",
-   "general part of #545 L4D"
-  ],
-  "formalizability": "high; Fulton is explicit",
+  "kind": "new",
   "references": [
    {
     "key": "Fulton1998",
@@ -8752,40 +8575,9 @@
   ]
  },
  {
-  "name": "EquivariantCohomologyAndLocalization",
+  "roadmap": "EquivariantCohomologyAndLocalization",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "B",
-  "scope": "Borel equivariant cohomology of spaces with actions of compact Lie groups and tori; Edidin–Graham equivariant Chow groups and equivariant Chern classes; Atiyah–Bott/Berline–Vergne localization and its Chow-theoretic form for torus actions; Białynicki-Birula decompositions and equivariant formality; GKM descriptions of the equivariant cohomology of toric and flag varieties; Duistermaat–Heckman stated. The classifying spaces of compact Lie groups are imported from TOP; virtual localization is GromovWittenTheory.",
-  "key_objects": "H*_G, A*_G, equivariant Chern classes, fixed loci, BB cells, GKM graphs",
-  "milestones": "localization theorem (topological and Chow); BB decomposition; GKM for toric and flag varieties",
-  "prerequisites": [
-   "IntersectionTheory",
-   "TOP ClassifyingSpaces #437 (extended to compact Lie groups)",
-   "ReductiveGroups (tori)",
-   "ToricVarieties",
-   "FlagVarieties"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#040",
-    "OAI#044",
-    "OAI#053",
-    "OAI#065",
-    "OAI#068"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "EquivariantCohomologyAndLocalization (OAI)"
-  ],
-  "formalizability": "medium-high",
+  "kind": "new",
   "references": [
    {
     "key": "Anderson2023",
@@ -9020,42 +8812,9 @@
   ]
  },
  {
-  "name": "GromovWittenTheory",
+  "roadmap": "GromovWittenTheory",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "XL",
-  "est_prs": 400,
-  "wave": "C",
-  "scope": "Algebraic Gromov–Witten theory. Cone stacks and the intrinsic normal cone, perfect obstruction theories and virtual fundamental classes (Behrend–Fantechi, Li–Tian), virtual pullback and functoriality, virtual localization (Graber–Pandharipande); the obstruction theory of moduli of stable maps; GW and descendant invariants with the Kontsevich–Manin axioms, the Novikov ring, small and big quantum cohomology and WDVV; Quot-scheme obstruction theories on surfaces. QH(P^n) = ℤ[h, q]/(h^{n+1} − q), Kontsevich's count of rational plane curves and degree-zero invariants as classical intersections are acceptance tests; Givental's formalism and the Virasoro conjecture are statements. The symplectic construction is GEO's PseudoholomorphicCurveModuli.",
-  "key_objects": "intrinsic normal cone, POTs, virtual classes, GW and descendant invariants, quantum product",
-  "milestones": "existence of virtual classes; virtual localization; Kontsevich–Manin axioms; WDVV and associativity of QH; Kontsevich's formula",
-  "prerequisites": [
-   "ModuliOfCurvesAndStableMaps",
-   "IntersectionTheory (refined Gysin)",
-   "EquivariantCohomologyAndLocalization",
-   "AlgebraicStacks",
-   "HilbertQuotAndPicardSchemes"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#66"
-   ],
-   "OpenAI": [
-    "OAI#040",
-    "OAI#053",
-    "OAI#063",
-    "OAI#065"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "VirtualClassesAndGromovWitten (OAI)",
-   "GromovWittenTheory (Annals 52–100)"
-  ],
-  "formalizability": "low-medium; cotangent-complex-free route via Siebert/Kim–Kresch–Pantev where possible",
+  "kind": "new",
   "references": [
    {
     "key": "Cox1999",
@@ -9336,37 +9095,9 @@
   ]
  },
  {
-  "name": "ToricVarieties",
+  "roadmap": "ToricVarieties",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "Normal toric varieties X_Σ over an arbitrary base ring from arbitrary rational polyhedral fans, generalizing AnalyticToricGeometry's algebraic cone-to-fan layer, which is consumed. The orbit–cone correspondence; smooth ⇔ unimodular, complete ⇔ |Σ| = N_ℝ, simplicial ⇔ ℚ-factorial; torus-invariant Weil and Cartier divisors, support functions, Cl and Pic; nefness and ampleness by convexity and the polytope of a polarized toric variety; toric resolution by subdivision; cohomology of line bundles; the intersection ring and Stanley–Reisner presentation of a smooth complete toric variety; toroidal embeddings without self-intersection. P^n, the A₁ cone and weighted projective spaces are examples. Analytic realizations stay with AnalyticToricGeometry; toroidal compactifications of Shimura varieties are NT's.",
-  "key_objects": "fans, X_Σ, orbits, T-divisors, support functions, polytopes, toric morphisms, toroidal embeddings",
-  "milestones": "orbit–cone correspondence; smoothness and completeness criteria; Pic via support functions; ampleness by strict convexity; Demazure vanishing; intersection ring",
-  "prerequisites": [
-   "AnalyticToricGeometry L0",
-   "AbundanceStatement #545 L1",
-   "IntersectionTheory (last layer)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#28",
-    "examples for #18, #22, #39"
-   ],
-   "OpenAI": [
-    "OAI#039/#041 (toroidal models)"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "ToricVarieties (Annals)"
-  ],
-  "formalizability": "high; Cox–Little–Schenck",
+  "kind": "new",
   "references": [
    {
     "key": "Cox2011",
@@ -9555,40 +9286,9 @@
   ]
  },
  {
-  "name": "FlagVarieties",
+  "roadmap": "FlagVarieties",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "A",
-  "scope": "Projective homogeneous varieties: G/P for a parabolic subgroup of a reductive group as a smooth projective variety, Borel's fixed-point theorem, the Bruhat decomposition and Schubert cells and varieties, Pic(G/P) and line bundles L_λ, Borel–Weil–Bott, the tangent bundle and its global generation, Grassmannians and partial flag varieties of GL_n matched with HilbertQuotAndPicardSchemes, Schubert classes and Chevalley's formula, minuscule and cominuscule varieties, adjoint varieties P(O_min) ⊂ P(𝔤) with their contact structure, and normality of Schubert varieties stated. Affine flag varieties are AffineGrassmannians; equivariant cohomology is EquivariantCohomologyAndLocalization.",
-  "key_objects": "G/P, Schubert cells and varieties, L_λ, Schubert classes, adjoint varieties",
-  "milestones": "G/P projective; Bruhat decomposition; Borel–Weil–Bott; Chevalley's formula; contact structure on adjoint varieties",
-  "prerequisites": [
-   "ReductiveGroups L3, L7",
-   "RepresentationTheory/LieHighestWeight",
-   "HilbertQuotAndPicardSchemes (Grassmannians)",
-   "IntersectionTheory"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#15/#53 (via ALG)"
-   ],
-   "OpenAI": [
-    "OAI#043",
-    "OAI#044",
-    "OAI#062",
-    "OAI#067"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "FlagVarieties (OAI)"
-  ],
-  "formalizability": "high; Jantzen II, Brion–Kumar",
+  "kind": "new",
   "references": [
    {
     "key": "Jantzen2003",
@@ -9823,38 +9523,9 @@
   ]
  },
  {
-  "name": "AffineGrassmannians",
+  "roadmap": "AffineGrassmannians",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "XL",
-  "est_prs": 350,
-  "wave": "C",
-  "scope": "Ind-schemes, loop groups LG and L⁺G and Beauville–Laszlo gluing; the affine Grassmannian Gr_G over a field as an ind-projective ind-scheme with the lattice model for GL_n and π₀(Gr_G) = π₁(G); Schubert varieties of dimension ⟨2ρ, λ⟩ and the affine flag variety; the determinant line bundle and the central extension of the loop group; affine Springer fibres; the geometric Satake equivalence of Mirković–Vilonen. CB GeometricSatakeAndFusion (Witt-vector and B_dR Grassmannians) compares with it and CB EndoscopicTransfer ET.2b consumes it.",
-  "key_objects": "ind-schemes, LG, L⁺G, Gr_G, affine Schubert varieties, affine flags, determinant bundle",
-  "milestones": "ind-projectivity; π₀(Gr_G) = π₁(G); dimension of Schubert varieties; MV geometric Satake",
-  "prerequisites": [
-   "ReductiveGroupSchemes",
-   "AlgebraicVectorBundles",
-   "AlgebraicStacks",
-   "PerverseSheavesOnComplexVarieties",
-   "BruhatTitsTheory"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#55"
-   ],
-   "OpenAI": [
-    "OAI#044 (BFN input)"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "AffineGrassmannians (Annals 52–100)"
-  ],
-  "formalizability": "medium; Zhu's notes",
+  "kind": "new",
   "references": [
    {
     "key": "Zhu2017",
@@ -10089,40 +9760,9 @@
   ]
  },
  {
-  "name": "ReductiveGroupSchemes",
+  "roadmap": "ReductiveGroupSchemes",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "SGA 3 XIX–XXVI made definite as the successor of ReductiveGroups' over-a-base layer: reductive group schemes over an arbitrary base, maximal tori étale-locally, the étale-local root datum and its type, split forms, Demazure's existence and isomorphism theorems over any base (consuming ChevalleyGroups' Chevalley–Demazure schemes), automorphism schemes and the classification of forms by Out-torsors, Weil restriction and the Deligne torus, and the Langlands dual group over ℤ. Groups over local fields and buildings are BruhatTitsTheory.",
-  "key_objects": "reductive group schemes, étale-local root data, pinnings, Aut and Out schemes, forms, Weil restriction, dual groups",
-  "milestones": "tori étale-locally; Demazure existence and isomorphism; forms ↔ Out-torsors; Langlands dual over ℤ",
-  "prerequisites": [
-   "ReductiveGroups L6–L9",
-   "ChevalleyGroups #447/#697",
-   "AlgebraicSpaces (fppf torsors)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#8 (base)",
-    "Annals#26"
-   ],
-   "OpenAI": [
-    "OAI#014",
-    "OAI#018"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "ReductiveGroupSchemes (Annals)",
-   "ReductiveGroups L8 (sibling, not an edit)",
-   "ReductiveGroupsPartII RG2.0a, RG2.5"
-  ],
-  "formalizability": "medium; Conrad's notes",
+  "kind": "new",
   "references": [
    {
     "key": "Demazure1970SGA3",
@@ -10288,47 +9928,9 @@
   ]
  },
  {
-  "name": "GeometryOfCurves",
+  "roadmap": "GeometryOfCurves",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "Projective geometry of curves beyond Riemann–Roch, starting where AlgebraicCurves stops. Noether's theorem that the canonical map embeds non-hyperelliptic curves, Petri's description of canonical ideals, Clifford's theorem, gonality over k and k̄ with gon ≤ ⌊(g+3)/2⌋ and Brill–Noether existence, the Castelnuovo–Severi inequality, plane models and the genus–degree formula with δ-invariants; hyperelliptic curves in all characteristics with models y² + h(x)y = f(x), the hyperelliptic involution, Weierstrass points and genus-two Igusa–Clebsch and Igusa invariants characterizing k̄-isomorphism, with genus-two automorphism groups; finite group actions on curves and compact Riemann surfaces (signatures, generating vectors, Riemann–Hurwitz, Hurwitz and Wiman bounds) and the group-algebra decomposition of Jacobians (Kani–Rosen); Torelli's theorem. Minimal models over DVRs, cluster pictures and LMFDB labels remain NT's HyperellipticCurves and LMFDB lane.",
-  "key_objects": "canonical models, gonality, g^r_d, plane models, hyperelliptic models, Igusa invariants, signatures and generating vectors",
-  "milestones": "Noether and Petri; Clifford; Brill–Noether existence; Castelnuovo–Severi; Igusa invariants classify genus 2; Riemann-existence classification of actions; Kani–Rosen; Torelli",
-  "prerequisites": [
-   "AlgebraicCurves (L10–L12)",
-   "JacobianChallenge",
-   "BelyiMaps (Riemann existence)",
-   "FuchsianOrbifolds",
-   "AbelianVarieties (isogeny decomposition)"
-  ],
-  "goals": {
-   "LMFDB": [
-    "g2c",
-    "hgcwa",
-    "modcurve",
-    "shimcurve"
-   ],
-   "Annals": [
-    "Annals#17 (Torelli)"
-   ],
-   "OpenAI": [
-    "OAI#108 (plane curves)"
-   ]
-  },
-  "porting": [
-   "OAI AlgebraicGeometry/PlaneCurves (37k: multiplicities, configuration loci)"
-  ],
-  "replaces": [
-   "CanonicalModelsAndGonality (LMFDB P10)",
-   "GroupActionsOnRiemannSurfaces (LMFDB P19)",
-   "geometric half of HyperellipticCurves (LMFDB P5)"
-  ],
-  "formalizability": "high",
+  "kind": "new",
   "references": [
    {
     "key": "Arbarello1985",
@@ -10747,48 +10349,9 @@
   ]
  },
  {
-  "name": "AbelianVarieties",
+  "roadmap": "AbelianVarieties",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 300,
-  "wave": "B",
-  "scope": "Abelian varieties and abelian schemes, built once over a base and specialized to fields. Rigidity, the theorem of the cube, dual abelian schemes through the Picard scheme, polarizations and the Weil pairing, isogenies and finite flat quotients, Cartier duality; Riemann–Roch for abelian varieties and Mumford's theta group; Poincaré complete reducibility, End⁰ semisimple, positivity of the Rosati involution and Albert's classification; the Albanese variety; complex abelian varieties via Riemann relations and polarizable weight −1 Hodge structures, CM types and CM abelian varieties; Serre–Tate and Grothendieck–Messing deformation theory stated. JacobianChallenge Layer E's dual and polarizations are consumed by alias where they land first; Tate's isogeny theorem, Honda–Tate, Néron models and moduli of abelian varieties are NT's.",
-  "key_objects": "abelian schemes, dual, polarizations, Weil pairing, theta groups, End⁰, Rosati involution, Albanese, complex tori with polarization, CM types",
-  "milestones": "theorem of the cube; dual abelian scheme; Poincaré reducibility; Rosati positivity; Albert classification; Riemann relations",
-  "prerequisites": [
-   "JacobianChallenge E",
-   "HilbertQuotAndPicardSchemes",
-   "AlgebraicSpaces (fppf quotients)",
-   "ComplexTori #280",
-   "Completed/HodgeStructures",
-   "RepresentationTheory/SemisimpleAlgebras"
-  ],
-  "goals": {
-   "LMFDB": [
-    "g2c (End data)",
-    "ecnf",
-    "av.fq (via NT)"
-   ],
-   "Annals": [
-    "Annals#1",
-    "Annals#49 (abelian case)"
-   ],
-   "OpenAI": [
-    "OAI#001",
-    "OAI#016",
-    "OAI#032",
-    "OAI#040"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "AbelianSchemesAndArithmeticModuli A0–A5 (campaign)",
-   "EndomorphismAlgebrasOfAbelianVarieties (LMFDB P4)"
-  ],
-  "formalizability": "high; Mumford, Milne, van der Geer–Moonen",
+  "kind": "new",
   "references": [
    {
     "key": "Mumford2008",
@@ -11138,43 +10701,9 @@
   ]
  },
  {
-  "name": "SingularityTheory",
+  "roadmap": "SingularityTheory",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Singularities of hypersurfaces and surfaces. Milnor and Tjurina numbers, the Milnor fibration and bouquet theorem, monodromy and Seifert forms, Brieskorn–Pham examples; plane curve singularities with Puiseux expansions, δ-invariants and Zariski equisingularity; μ-constant families, Lê–Ramanujam and Teissier's μ* criterion, Whitney stratifications; normal surface singularities with minimal resolutions, dual graphs, Mumford and Grauert contractibility, rational singularities and geometric genus, ADE singularities; Artin approximation and algebraization of analytic germs. High-dimensional fibred links and their classification by Seifert forms belong to TOP; SCV comes from ANA.",
-  "key_objects": "Milnor fibre, μ, τ, Seifert form, Puiseux pairs, Whitney stratifications, resolution graphs, rational singularities",
-  "milestones": "Milnor fibration theorem; bouquet theorem; Zariski equisingularity of plane curves; Lê–Ramanujam; Grauert contractibility; Artin's rational-singularity criterion",
-  "prerequisites": [
-   "ANA SeveralComplexVariables",
-   "ResolutionOfSingularities",
-   "DifferentialGeometry (Ehresmann, Morse)",
-   "GeometricTopology",
-   "HilbertQuotAndPicardSchemes (Artin approximation)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#048",
-    "OAI#059",
-    "OAI#064",
-    "OAI#108",
-    "OAI#037 (proof)"
-   ]
-  },
-  "porting": [
-   "OAI Geometry/HypersurfaceGerms (5.1k)"
-  ],
-  "replaces": [
-   "SingularityTheory (OAI)",
-   "PlaneCurveSingularities (OAI #108)"
-  ],
-  "formalizability": "medium",
+  "kind": "new",
   "references": [
    {
     "key": "Milnor1968",
@@ -11524,44 +11053,9 @@
   ]
  },
  {
-  "name": "AlgebraicSurfaces",
+  "roadmap": "AlgebraicSurfaces",
   "campaign": "AG",
-  "family": null,
-  "origin": "new",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Smooth projective and compact complex surfaces (Beauville; Barth–Hulek–Peters–Van de Ven). Noether's formula, Castelnuovo's contractibility criterion and minimal models, ruled and rational surfaces with Castelnuovo's rationality criterion, the Enriques–Kodaira classification of minimal algebraic surfaces in all characteristics (Bombieri–Mumford in characteristic 2 and 3 stated), elliptic fibrations with Kodaira's fibre classification and canonical bundle formula, surfaces of general type with the Bogomolov–Miyaoka–Yau inequality stated, Hirzebruch–Kummer covers; then compact complex surfaces, 'Kähler iff b₁ even' and class VII surfaces (Hopf, Inoue, Enoki, Kato) as statements. Hilbert modular surfaces are NT's worked examples; K3 surfaces are K3AndHyperkahlerManifolds.",
-  "key_objects": "minimal surfaces, (−1)-curves, ruled surfaces, elliptic fibrations, Kodaira fibres, numerical invariants",
-  "milestones": "Castelnuovo contraction; minimal model uniqueness for κ ≥ 0; Castelnuovo rationality; Enriques–Kodaira (algebraic, char 0); Kodaira's fibre classification",
-  "prerequisites": [
-   "IntersectionTheory (surfaces)",
-   "ResolutionOfSingularities",
-   "HilbertQuotAndPicardSchemes",
-   "AsymptoticPositivity",
-   "KahlerManifolds (complex layer)",
-   "StableReduction L4–L5"
-  ],
-  "goals": {
-   "LMFDB": [
-    "hmsurface (via NT)"
-   ],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#042",
-    "OAI#060",
-    "OAI#195",
-    "OAI#039/#040/#048 (proofs)"
-   ]
-  },
-  "porting": [
-   "OAI AlgebraicGeometry/SurfaceCones (44k, family #195: Kummer surfaces, duality on surfaces)"
-  ],
-  "replaces": [
-   "AlgebraicAndComplexSurfaces (OAI)"
-  ],
-  "formalizability": "medium-high for the algebraic classification",
+  "kind": "new",
   "references": [
    {
     "key": "Beauville1996",
@@ -11911,36 +11405,9 @@
   ]
  },
  {
-  "name": "EtaleDualityAndPerverseSheaves",
+  "roadmap": "EtaleDualityAndPerverseSheaves",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "cohomology",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Exceptional inverse image, Verdier duality, smooth traces, relative purity and Poincaré duality for ℓ-adic and torsion étale sheaves on schemes; Gysin maps and cycle classes; weak Lefschetz and the projective-bundle and blowup formulas; the ℓ-adic perverse t-structure, intermediate extension and the decomposition theorem for pure complexes over finite fields. Starts where CohomologicalPointCounting stops; complex-topological perverse sheaves are PerverseSheavesOnComplexVarieties.",
-  "prerequisites": [
-   "CohomologicalPointCounting #196"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#3",
-    "Annals#16",
-    "Annals#41"
-   ],
-   "OpenAI": [
-    "OAI#014",
-    "OAI#043"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "EtaleDualityAndPerverseSheaves EDC.0–EDC.8"
-  ],
-  "direct_demand": "5 rows: Annals #3, #16, #41; OAI #014, #043",
+  "kind": "promotion",
   "references": [
    {
     "key": "Artin1972SGA4",
@@ -12129,35 +11596,9 @@
   ]
  },
  {
-  "name": "LefschetzPencilsAndVanishingCycles",
+  "roadmap": "LefschetzPencilsAndVanishingCycles",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "cohomology",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Nearby and vanishing cycles for étale sheaves over henselian traits, inertia and the monodromy operator, Picard–Lefschetz for ordinary quadratic singularities, existence of Lefschetz pencils, global vanishing cycles, Kazhdan–Margulis irreducibility and big monodromy, perverse nearby cycles. Supplier to WeilConjecturesAndWeights (Weil I).",
-  "prerequisites": [
-   "CohomologicalPointCounting #196",
-   "EtaleDualityAndPerverseSheaves"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#41"
-   ],
-   "OpenAI": [
-    "OAI#059",
-    "OAI#064"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "LefschetzPencilsAndVanishingCycles LPV.0–LPV.7"
-  ],
-  "direct_demand": "4 rows: Annals #41; OAI #059, #064",
+  "kind": "promotion",
   "references": [
    {
     "key": "Deligne1973SGA7",
@@ -12369,37 +11810,9 @@
   ]
  },
  {
-  "name": "WeilConjecturesAndWeights",
+  "roadmap": "WeilConjecturesAndWeights",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "cohomology",
-  "topic": "math.AG",
-  "size": "XL",
-  "est_prs": 400,
-  "wave": "C",
-  "scope": "Rationality and functional equation of zeta functions from TraceFormula and Poincaré duality, Deligne's Weil I by Lefschetz pencils and tensor-power estimates, Weil II weights for sheaves and direct images, mixed complexes and geometric semisimplicity, absolute hard Lefschetz, Betti-number comparison and point-count bounds; the curve case also by Stepanov–Bombieri as an independent route. Three overlapping campaign roadmaps become one.",
-  "prerequisites": [
-   "CohomologicalPointCounting #196 (TraceFormula)",
-   "EtaleDualityAndPerverseSheaves",
-   "LefschetzPencilsAndVanishingCycles",
-   "IntersectionTheory (surface route)",
-   "AlgebraicCurves"
-  ],
-  "goals": {
-   "LMFDB": [
-    "av.fq"
-   ],
-   "Annals": [],
-   "OpenAI": []
-  },
-  "porting": [],
-  "replaces": [
-   "WeilConjectures WC.1–WC.7",
-   "DeligneWeightsAndPurity DWP.0–DWP.10",
-   "WeightsInEtaleCohomology R34.1–R34.6"
-  ],
-  "direct_demand": "0 direct rows; indirect via LMFDB av.fq and NT FiniteFieldsAndCharacterSums, CurvesOverFiniteFields",
+  "kind": "promotion",
   "references": [
    {
     "key": "Deligne1974WeilI",
@@ -12657,39 +12070,9 @@
   ]
  },
  {
-  "name": "MotivesAndAlgebraicCycles",
+  "roadmap": "MotivesAndAlgebraicCycles",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "cohomology",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "C",
-  "scope": "Adequate equivalence relations, pure Chow and numerical motives with Tate twists, realizations and compatibility of cycle classes, Jannsen's semisimplicity, the standard conjectures as statements, Voevodsky's geometric motives and motivic cohomology as statements with the comparison to higher Chow groups, Nori motives, motivic Galois groups and periods. Cycles come from IntersectionTheory; motivic homotopy is TOP's.",
-  "prerequisites": [
-   "IntersectionTheory",
-   "CohomologicalPointCounting #196 (EllAdicRealization)",
-   "HodgeTheoryOfAlgebraicVarieties",
-   "CrystallineCohomology"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#14",
-    "Annals#33",
-    "Annals#59"
-   ],
-   "OpenAI": [
-    "OAI#001",
-    "OAI#032"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "MotivesAndAlgebraicCycles MC.1–MC.7 (MC.0 goes to IntersectionTheory)"
-  ],
-  "direct_demand": "6 rows: Annals #14, #33, #59; OAI #001, #032",
+  "kind": "promotion",
   "references": [
    {
     "key": "StacksProject",
@@ -12993,34 +12376,9 @@
   ]
  },
  {
-  "name": "FormalAndRigidAnalyticGeometry",
+  "roadmap": "FormalAndRigidAnalyticGeometry",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "p-adic",
-  "topic": "math.AG",
-  "size": "XL",
-  "est_prs": 350,
-  "wave": "A",
-  "scope": "Formal schemes, Spf, formal completion, the theorem on formal functions and formal GAGA (wave A); morphisms and fibre products of adic spaces, analytification of finite-type schemes, Raynaud generic fibres, coherent sheaves and Kiehl's theorem, finite and étale morphisms, étale and pro-étale sites, sousperfectoid spaces, dagger spaces and overconvergent de Rham complexes. Extends AdicSpaces as a sibling.",
-  "prerequisites": [
-   "AdicSpaces",
-   "Mathlib adic completion"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#34",
-    "Annals#38"
-   ],
-   "OpenAI": []
-  },
-  "porting": [],
-  "replaces": [
-   "AdicSpacesPartII R0–R5, F0–F1",
-   "AdicEtaleGeometry A0–A3"
-  ],
-  "direct_demand": "3 rows: Annals #34, #38",
+  "kind": "promotion",
   "references": [
    {
     "key": "Huber1996",
@@ -13370,33 +12728,9 @@
   ]
  },
  {
-  "name": "EtaleCohomologyOfAdicSpaces",
+  "roadmap": "EtaleCohomologyOfAdicSpaces",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "p-adic",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "C",
-  "scope": "Huber's étale cohomology of analytic adic spaces: étale sheaves, direct images, nearby cycles from formal models, invariance under extension of algebraically closed base field, proper support and duality for curves, comparison with algebraic étale cohomology, and the presentations used for diamondification.",
-  "prerequisites": [
-   "FormalAndRigidAnalyticGeometry",
-   "CohomologicalPointCounting #196"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#001"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "ClassicalAdicEtaleCohomology H0–H5",
-   "AdicEtaleGeometry A4"
-  ],
-  "direct_demand": "1 row: OAI #001",
+  "kind": "promotion",
   "references": [
    {
     "key": "Huber1996",
@@ -13516,40 +12850,9 @@
   ]
  },
  {
-  "name": "PerfectoidSpacesAndDiamonds",
+  "roadmap": "PerfectoidSpacesAndDiamonds",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "p-adic",
-  "topic": "math.AG",
-  "size": "XL",
-  "est_prs": 400,
-  "wave": "A",
-  "scope": "Perfectoid rings and fields, tilting and untilting, almost mathematics and almost purity, perfectoid spaces and their sheaf property (perfectoid-ring layers are wave A); pro-étale and v-topologies on perfectoid spaces, diamonds, small v-stacks, spatial diamonds and the diamond of an analytic adic space. Big Cohen–Macaulay algebras in mixed characteristic are ALG consumers.",
-  "prerequisites": [
-   "AdicSpaces",
-   "FormalAndRigidAnalyticGeometry"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#27"
-   ],
-   "OpenAI": [
-    "OAI#001",
-    "OAI#193",
-    "OAI#194",
-    "OAI#311",
-    "OAI#313"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "PerfectoidSpaces P0–P3",
-   "PerfectoidQuotients Q0 (perfectoid-ring part)",
-   "DiamondsAndVStacks"
-  ],
-  "direct_demand": "6 rows: Annals #27; OAI #001, #193, #194, #311, #313",
+  "kind": "promotion",
   "references": [
    {
     "key": "Scholze2012",
@@ -13830,34 +13133,9 @@
   ]
  },
  {
-  "name": "SixOperationsForDiamonds",
+  "roadmap": "SixOperationsForDiamonds",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "p-adic",
-  "topic": "math.AG",
-  "size": "XL",
-  "est_prs": 450,
-  "wave": "C",
-  "scope": "Étale sheaves on diamonds and small v-stacks with the four and then six operations, proper base change, cohomological smoothness and biduality, adic coefficients, comparison with étale cohomology of schemes via v-sheaves, Artin v-stacks with solid and lisse coefficients. Diamonds and six operations 7 → 2 per coordination §4.6 (with the previous unit).",
-  "prerequisites": [
-   "PerfectoidSpacesAndDiamonds",
-   "EtaleCohomologyOfAdicSpaces",
-   "TOP EnhancedDerivedSheaves"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": []
-  },
-  "porting": [],
-  "replaces": [
-   "DiamondEtaleCohomology",
-   "DiamondSixOperations",
-   "VStackSheavesAndLisseCategories",
-   "AdicCoefficientsAndComparisons"
-  ],
-  "direct_demand": "0 direct rows; geometric-Langlands consumers in NT",
+  "kind": "promotion",
   "references": [
    {
     "key": "Scholze2017",
@@ -14069,37 +13347,9 @@
   ]
  },
  {
-  "name": "FarguesFontaineCurve",
+  "roadmap": "FarguesFontaineCurve",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "p-adic",
-  "topic": "math.AG",
-  "size": "XL",
-  "est_prs": 400,
-  "wave": "C",
-  "scope": "The Fargues–Fontaine curve as an adic space (from AdicSpaces L6) and as a diamond, its relative version over perfectoid bases, vector bundles and their classification by isocrystals and slopes (consuming the abstract HN formalism of ModuliOfSheavesAndHiggsBundles), Banach–Colmez spaces. Bun_G and Newton strata stay with NT's geometric-Langlands lane.",
-  "prerequisites": [
-   "AdicSpaces L6",
-   "PerfectoidSpacesAndDiamonds",
-   "SixOperationsForDiamonds",
-   "ModuliOfSheavesAndHiggsBundles (HN formalism)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#311",
-    "OAI#313"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "FarguesFontaineDiamonds",
-   "RelativeFarguesFontaine",
-   "VectorBundlesAndIsocrystals"
-  ],
-  "direct_demand": "2 rows: OAI #311, #313",
+  "kind": "promotion",
   "references": [
    {
     "key": "Fargues2021",
@@ -14334,34 +13584,9 @@
   ]
  },
  {
-  "name": "CrystallineCohomology",
+  "roadmap": "CrystallineCohomology",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "p-adic",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 300,
-  "wave": "A",
-  "scope": "Divided-power envelopes, the crystalline site, crystals, crystalline cohomology with base change, finiteness and Frobenius, comparison with de Rham cohomology of lifts, de Rham–Witt complexes and logarithmic crystalline cohomology. The Cartier isomorphism of smooth schemes is VanishingTheorems'.",
-  "prerequisites": [
-   "Mathlib DividedPowers, WittVector",
-   "VanishingTheorems (Cartier isomorphism)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#46"
-   ],
-   "OpenAI": [
-    "OAI#001"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "CrystallineCohomology CR.0–CR.x"
-  ],
-  "direct_demand": "2 rows: Annals #46; OAI #001",
+  "kind": "promotion",
   "references": [
    {
     "key": "Berthelot1978",
@@ -14665,30 +13890,9 @@
   ]
  },
  {
-  "name": "RigidCohomologyAndPadicDifferentialEquations",
+  "roadmap": "RigidCohomologyAndPadicDifferentialEquations",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "p-adic",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Dagger algebras, Robba rings, p-adic differential modules and Frobenius slopes, local monodromy and the p-adic local monodromy theorem stated, overconvergent isocrystals, rigid cohomology with finiteness, and p-adic weights.",
-  "prerequisites": [
-   "FormalAndRigidAnalyticGeometry (dagger)",
-   "CrystallineCohomology"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": []
-  },
-  "porting": [],
-  "replaces": [
-   "PadicDifferentialEquationsAndRigidCohomology"
-  ],
-  "direct_demand": "0 direct rows",
+  "kind": "promotion",
   "references": [
    {
     "key": "Kedlaya2010",
@@ -14877,38 +14081,9 @@
   ]
  },
  {
-  "name": "PrismaticCohomology",
+  "roadmap": "PrismaticCohomology",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "p-adic",
-  "topic": "math.AG",
-  "size": "XL family",
-  "est_prs": 700,
-  "wave": "B",
-  "scope": "Family of two sub-roadmaps: (i) cotangent complex, derived de Rham cohomology and quasisyntomic descent; (ii) δ-rings and prisms (wave A), the prismatic site, relative and absolute prismatic cohomology, Hodge–Tate and crystalline comparisons, Nygaard filtration, A_inf-cohomology and the integral comparison diagram.",
-  "prerequisites": [
-   "PerfectoidSpacesAndDiamonds",
-   "CrystallineCohomology",
-   "Mathlib derived categories / TOP EnhancedDerivedSheaves"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#46",
-    "Annals#51"
-   ],
-   "OpenAI": []
-  },
-  "porting": [],
-  "replaces": [
-   "PrismaticCohomology",
-   "DerivedDeRhamCohomology",
-   "AInfCohomology",
-   "CohomologyComparisons",
-   "PerfectoidQuotients (prismatic part)"
-  ],
-  "direct_demand": "3 rows: Annals #46, #51",
+  "kind": "promotion",
   "references": [
    {
     "key": "Bhatt2022",
@@ -15304,32 +14479,9 @@
   ]
  },
  {
-  "name": "HabiroCohomology",
+  "roadmap": "HabiroCohomology",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "p-adic",
-  "topic": "math.AG",
-  "size": "XL family",
-  "est_prs": 600,
-  "wave": "A",
-  "scope": "Cyclotomic completions and classical Habiro rings (wave A, distance 2), relative Habiro rings of étale algebras with Frobenius lifts and q-Witt rings, q-de Rham and q-Hodge filtrations, Habiro-valued cohomology compared with crystalline and prismatic cohomology. HabiroNahmSeries and HabiroNumberFields stay NT consumers unless the owner keeps all five together.",
-  "prerequisites": [
-   "PrismaticCohomology",
-   "CrystallineCohomology"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": []
-  },
-  "porting": [],
-  "replaces": [
-   "HabiroCyclotomicCompletions (math.AC)",
-   "HabiroRings (math.AC)",
-   "HabiroCohomologyFoundations"
-  ],
-  "direct_demand": "0 direct rows; Birkbeck focus item",
+  "kind": "promotion",
   "references": [
    {
     "key": "Habiro2004",
@@ -15495,36 +14647,9 @@
   ]
  },
  {
-  "name": "BerkovichAndTropicalGeometry",
+  "roadmap": "BerkovichAndTropicalGeometry",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "p-adic",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "Berkovich spectra and analytification, the Berkovich line and its point types, discs, annuli and metric trees, semistable models and skeletons of curves, divisors and the slope formula, tropicalization with multiplicities and faithful tropicalization of curves. Local heights and integration are NT.",
-  "prerequisites": [
-   "AdicSpaces L1",
-   "StableReduction (semistable models)",
-   "Mathlib valuations"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#47",
-    "Annals#24"
-   ],
-   "OpenAI": [
-    "OAI#019"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "TropicalAndBerkovichArithmetic TB.0–TB.5 (TB.6–TB.7 to NT)"
-  ],
-  "direct_demand": "3 rows: Annals #47, #24 (NT part); OAI #019",
+  "kind": "promotion",
   "references": [
    {
     "key": "Berkovich1990",
@@ -15713,38 +14838,9 @@
   ]
  },
  {
-  "name": "BruhatTitsTheory",
+  "roadmap": "BruhatTitsTheory",
   "campaign": "AG",
-  "family": null,
-  "origin": "campaign-promotion",
-  "lane": "foundations",
-  "topic": "math.AG",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Reductive groups over nonarchimedean local fields: relative roots and Tits indices, valued root data, the Bruhat–Tits building, parahoric group schemes and integral models, Moy–Prasad filtrations (the Annals #23 gap). Boundary with ALG (math.GR) open: buildings could go there.",
-  "prerequisites": [
-   "ReductiveGroups",
-   "ReductiveGroupSchemes",
-   "LocalFieldsRamification"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#23",
-    "Annals#26",
-    "Annals#43"
-   ],
-   "OpenAI": [
-    "OAI#014",
-    "OAI#018"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "ReductiveGroupsPartII RG2.1–RG2.4 (RG2.0a, RG2.5 to ReductiveGroupSchemes)"
-  ],
-  "direct_demand": "6 rows: Annals #23, #26, #43; OAI #014, #018",
+  "kind": "promotion",
   "references": [
    {
     "key": "Bruhat1972",

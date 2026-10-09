@@ -1,36 +1,8 @@
 [
  {
-  "name": "UnstableHomotopyTheory",
+  "roadmap": "UnstableHomotopyTheory",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "Homotopy theory of spaces past AlgebraicTopology's Hurewicz and Whitehead theorems: fibrations, Eilenberg–MacLane spaces, Postnikov and Whitehead towers, obstruction theory, the plus construction, Serre classes, localization and completion of nilpotent spaces, and rational homotopy theory. Mapping and loop spaces use the compactly generated carrier of #284 (Stage 3A); the Serre spectral sequence is AlgebraicTopology's. It owns K(A,n) for all n and A (K(G,1) of discrete groups is #437's). Stems and EHP stay with #284, spectra and the Steenrod algebra with StableHomotopyTheory. If DGFloer (#655) merges first, its Layer 1–2 items are consumed here.",
-  "prerequisites": [
-   "AlgebraicTopology",
-   "HomotopySpheres (#284)",
-   "ClassifyingSpaces (#437)",
-   "Completed/UniversalCovers",
-   "DGFloer (#655) Layers 1–2 if merged first"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#321",
-    "OAI#347",
-    "OAI#345"
-   ]
-  },
-  "porting": [
-   "OAI Topology/Homotopy",
-   "OAI GroupTheory/FiniteType (CWWhitehead, cylinders)"
-  ],
-  "replaces": [
-   "StableHomotopyKTheory H.2 (homotopy fibres), H.3",
-   "DGFloer L1 items 2, 4 (ownership)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Hatcher2002",
@@ -357,35 +329,9 @@
   ]
  },
  {
-  "name": "HomotopicalAlgebra",
+  "roadmap": "HomotopicalAlgebra",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 220,
-  "wave": "A",
-  "scope": "Model-category and simplicial homotopy theory past Mathlib's model-category and Kan-complex files: the Kan–Quillen model structure and its Quillen equivalence with spaces, cofibrantly generated and combinatorial model categories, transfer, left Bousfield localization, Reedy and projective diagram structures, homotopy (co)limits and simplicial model categories. It owns the homotopy theory of small categories: nerves, Quillen's Theorems A and B, Thomason's homotopy-colimit theorem and Thomason's model structure on Cat. It follows Mathlib's design where Mathlib work is in progress, without waiting. Quasicategories are InfinityCategories, strict n-categories StrictHigherCategories, spectra StableHomotopyTheory.",
-  "prerequisites": [
-   "Mathlib ModelCategory, SimplicialSet, Presentable",
-   "AlgebraicTopology Stage 8"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#312",
-    "OAI#317",
-    "OAI#193",
-    "OAI#209"
-   ]
-  },
-  "porting": [
-   "OAI CategoryTheory/Thomason (Sd², Ex²)",
-   "Mathlib model-category work (coordinate)"
-  ],
-  "replaces": [
-   "ModelCategoriesAndStrictHigherCategories (model part)",
-   "StableHomotopyKTheory H.1 (nerves), H.2 (Quillen A/B)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Hovey1999",
@@ -666,35 +612,9 @@
   ]
  },
  {
-  "name": "CharacteristicClassesAndCobordism",
+  "roadmap": "CharacteristicClassesAndCobordism",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 230,
-  "wave": "B",
-  "scope": "Vector and principal bundles, their classifying spaces, characteristic classes in singular cohomology, and the cobordism theorems characteristic numbers detect. It extends #284's Grassmannians, BSO and stable classification to unstable classification by BO(n), BU(n), BSp(n) and to principal G-bundles with Milnor's EG → BG (it owns BG for non-discrete G; #437 owns discrete G). It constructs Stiefel–Whitney, Chern, Pontryagin and Euler classes and the Thom isomorphism, and its cobordism layers prove Pontryagin–Thom for unoriented and oriented bordism, Thom's computation of MO_*, rational oriented bordism and the signature theorem. Chern–Weil forms are GEO's, Chow-group Chern classes AG's.",
-  "prerequisites": [
-   "AlgebraicTopology",
-   "HomotopySpheres (#284) Stages 4–5",
-   "GeometricTopology L1",
-   "DifferentialGeometry",
-   "StableHomotopyTheory/SteenrodAlgebraAndAdamsSpectralSequence (last layers)",
-   "RepresentationTheory/LieGroups"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#79 (interface)"
-   ],
-   "OpenAI": [
-    "OAI#345",
-    "OAI#335"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "new (the Thom-isomorphism need was mis-assigned to AlgebraicTopology, which excludes bordism)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "MilnorStasheff1974",
@@ -952,35 +872,9 @@
   ]
  },
  {
-  "name": "InfinityCategories",
+  "roadmap": "InfinityCategories",
   "campaign": "TOP",
-  "topic": "math.CT",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "The quasicategory model of (∞,1)-categories, as far as stable and presentable ∞-categories, symmetric monoidal structures and Ind-completion. On Mathlib's quasicategories it builds the Joyal model structure (with HomotopicalAlgebra's tools), mapping spaces, limits, Kan extensions, adjunctions, cartesian fibrations with straightening for the shapes consumers use, presentability, stable ∞-categories with t-structures, ∞-operads, and the dg nerve from DGAInfinity's pretriangulated DG categories. It replaces EnhancedDerivedSheaves E0, E3 and E5:abstract/presentability; that roadmap's sheaf-theoretic remainder moves to AG as a consumer.",
-  "prerequisites": [
-   "Mathlib Quasicategory",
-   "HomotopicalAlgebra",
-   "DGAInfinity"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#58",
-    "Annals#78"
-   ],
-   "OpenAI": [
-    "OAI#069",
-    "OAI#014"
-   ]
-  },
-  "porting": [
-   "Lean ∞-cosmos project (Riehl–Verity): coordinate first"
-  ],
-  "replaces": [
-   "EnhancedDerivedSheaves E0, E3, E5:abstract, E5:presentability"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "LurieHTT",
@@ -1238,30 +1132,9 @@
   ]
  },
  {
-  "name": "StrictHigherCategories",
+  "roadmap": "StrictHigherCategories",
   "campaign": "TOP",
-  "topic": "math.CT",
-  "size": "M",
-  "est_prs": 120,
-  "wave": "B",
-  "scope": "Strict globular n- and ω-categories and their homotopy theory, up to Thomason-type model structures and the statement of Grothendieck's homotopy hypothesis: polygraphs, Street's orientals and nerve, Steiner complexes, the Gray tensor product, coherators and globular ∞-groupoids. It consumes HomotopicalAlgebra (transfer, Kan–Quillen, Thomason on Cat) and builds no quasicategory theory. The homotopy hypothesis is stated; its general proof is open. OAI's `CategoryTheory/Thomason` (225 files) and `Globular` are the porting source, coordinate first.",
-  "prerequisites": [
-   "HomotopicalAlgebra"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#312",
-    "OAI#317"
-   ]
-  },
-  "porting": [
-   "OAI CategoryTheory/Thomason, Globular"
-  ],
-  "replaces": [
-   "ModelCategoriesAndStrictHigherCategories (strict part)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "AraEtAl2025",
@@ -1565,29 +1438,9 @@
   ]
  },
  {
-  "name": "KhovanovHomology",
+  "roadmap": "KhovanovHomology",
   "campaign": "TOP",
-  "topic": "math.GT",
-  "size": "L",
-  "est_prs": 180,
-  "wave": "A",
-  "scope": "Khovanov homology of oriented links and its concordance invariants. On GeometricTopology Layer 4 and Tau Ceti's PD codes, Kauffman bracket and Jones polynomial, it builds the cube of resolutions over ℤ, proves Reidemeister invariance and χ = Jones, develops Bar-Natan's local theory as the computational engine, and reaches Lee's spectral sequence and Rasmussen's s with |s| ≤ 2g₄ and the Milnor conjecture. It owns s: its PR corrects the four GeometricTopology lines that expect s from CombinatorialHeegaardFloer, which keeps τ. sl(N) homologies and Khovanov homotopy types are out of scope.",
-  "prerequisites": [
-   "GeometricTopology L4, L6",
-   "Tau Ceti KnotTheory",
-   "TemperleyLieb (#58, optional)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#74"
-   ],
-   "OpenAI": []
-  },
-  "porting": [],
-  "replaces": [
-   "KhovanovHomology (Annals P24)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Khovanov2000",
@@ -1845,39 +1698,9 @@
   ]
  },
  {
-  "name": "HyperbolicManifolds",
+  "roadmap": "HyperbolicManifolds",
   "campaign": "TOP",
-  "topic": "math.GT",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Hyperbolic n-space and the geometry and rigidity of its discrete isometry groups: models, Isom(ℍⁿ) ≅ PO(n,1), limit sets, convex cores, geometric finiteness, Schottky groups, the Margulis lemma with thick–thin and cusps, arithmetic groups of simplest type, and Mostow rigidity by the Gromov–Thurston route, with ℓ¹-homology, simplicial volume and bounded cohomology of groups and spaces developed for it. Dimension 3 is #432, curvature and volume GeometricTopology Layer 7, dimension 2 FuchsianOrbifolds, lattices in Lie groups ALG's. Hyperbolic Dehn filling and Jørgensen–Thurston are stated.",
-  "prerequisites": [
-   "GeometricTopology L7",
-   "KleinianGroups (#432)",
-   "FuchsianOrbifolds",
-   "GEO RiemannianGeometry",
-   "ALG AmenableGroupsAndGrowth"
-  ],
-  "goals": {
-   "LMFDB": [
-    "bmf (via #432)"
-   ],
-   "Annals": [
-    "Annals#63"
-   ],
-   "OpenAI": [
-    "OAI#335",
-    "OAI#246",
-    "OAI#358",
-    "OAI#023"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "HyperbolicManifolds (Annals P11)",
-   "BoundedCohomology (geometry report)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Ratcliffe2019",
@@ -2181,36 +2004,9 @@
   ]
  },
  {
-  "name": "TeichmullerTheory",
+  "roadmap": "TeichmullerTheory",
   "campaign": "TOP",
-  "topic": "math.GT",
-  "size": "L",
-  "est_prs": 280,
-  "wave": "B",
-  "scope": "Teichmüller and moduli spaces of hyperbolic surfaces and their mapping class groups, starting where SurfaceTopology (#271 Layer 9: curves, Dehn twists, Dehn–Lickorish) stops: marked hyperbolic structures, Fenchel–Nielsen coordinates, proper discontinuity of Mod(S), Dehn–Nielsen–Baer, the Birman exact sequence, the symplectic representation, and Nielsen–Thurston via measured laminations. The quasiconformal layers (Teichmüller's theorems, quadratic differentials, Bers embedding) consume ANA's quasiconformal-maps roadmap; Weil–Petersson is defined with Wolpert's formula. Braid and Hurwitz actions on generating vectors go to AG's GroupActionsOnRiemannSurfaces.",
-  "prerequisites": [
-   "PlanarTopology and SurfaceTopology (#271)",
-   "FuchsianOrbifolds",
-   "HyperbolicManifolds",
-   "ConformalMapping",
-   "ComplexManifolds (#279)",
-   "ANA quasiconformal maps (qc layers)"
-  ],
-  "goals": {
-   "LMFDB": [
-    "hgcwa"
-   ],
-   "Annals": [
-    "Annals#72"
-   ],
-   "OpenAI": [
-    "OAI#027"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "TeichmullerTheory (Annals P23)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "FarbMargalit2012",
@@ -2422,32 +2218,9 @@
   ]
  },
  {
-  "name": "ThreeManifoldTopology",
+  "roadmap": "ThreeManifoldTopology",
   "campaign": "TOP",
-  "topic": "math.GT",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Proofs of the classical topology of 3-manifolds whose statements GeometricTopology gives: Moise's theorem on PlanarTopology's PL toolkit (#271), the Kneser–Milnor prime decomposition, Dehn's lemma and the loop and sphere theorems, incompressible surfaces and Haken hierarchies, normal surfaces with Haken's unknot algorithm, Seifert fibered spaces, Waldhausen's theorem and the JSJ decomposition. Geometrization stays a GeometricTopology Layer 8 statement; Heegaard splittings stay in Layer 9, Dehn surgery in Layer 5.",
-  "prerequisites": [
-   "PlanarTopology (#271)",
-   "GeometricTopology L1, L5, L8, L11",
-   "AlgebraicTopology",
-   "ALG CombinatorialGroupTheory"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#368",
-    "OAI#358",
-    "OAI#306"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "new"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Hempel1976",
@@ -2751,35 +2524,9 @@
   ]
  },
  {
-  "name": "SurgeryTheoryAndFourManifolds",
+  "roadmap": "SurgeryTheoryAndFourManifolds",
   "campaign": "TOP",
-  "topic": "math.GT",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "C",
-  "scope": "Surgery beyond the simply connected case and the topology of 4-manifolds. It extends #284 Stage 7 with Whitehead torsion and the s-cobordism theorem, normal invariants, Poincaré complexes and the Spivak fibration, Wall's exact sequence with L_n(ℤπ) from HermitianKTheoryAndLTheory, the finiteness obstruction in K̃₀(ℤπ), and assembly with Farrell–Jones and Borel stated. Its 4-dimensional layers prove Whitehead–Milnor, Rokhlin and Davis's reflection construction, set up Kirby calculus and Kirby–Siebenmann, and state Freedman, Donaldson, disc embedding, good groups and the D(2) problem.",
-  "prerequisites": [
-   "HomotopySpheres (#284)",
-   "AlgebraicKTheory/HermitianKTheoryAndLTheory",
-   "AlgebraicKTheory/ClassicalKTheory",
-   "CharacteristicClassesAndCobordism",
-   "ClassifyingSpaces (#437)",
-   "ALG GroupCohomologyFiniteness, NonpositiveCurvature"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#305",
-    "OAI#320",
-    "OAI#321",
-    "OAI#315"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "FourManifoldTopology (geometry report)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Wall1999",
@@ -3198,38 +2945,9 @@
   ]
  },
  {
-  "name": "TransformationGroups",
+  "roadmap": "TransformationGroups",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "B",
-  "scope": "Compact and finite group actions on spaces and manifolds and the equivariant cohomology that controls them: G-CW complexes, classifying spaces for families E_F G, orbit types, the slice and principal-orbit theorems, Borel cohomology, Smith theory, the Borel–Atiyah–Segal–Quillen localization theorem, Newman's theorem, and covering and cohomological dimension. Gleason–Yamabe and Montgomery–Zippin are ALG's, consumed to state the reduction of Hilbert–Smith to ℤ_p-actions. Equivariant Chow groups and GKM stay in AG's EquivariantCohomologyAndLocalization, which consumes these layers.",
-  "prerequisites": [
-   "CharacteristicClassesAndCobordism",
-   "TopologicalSixOperations",
-   "ClassifyingSpaces (#437)",
-   "RepresentationTheory/LieGroups",
-   "ALG locally compact groups"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#304",
-    "OAI#315",
-    "OAI#345",
-    "OAI#040",
-    "OAI#044",
-    "OAI#053",
-    "OAI#065",
-    "OAI#068"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "TransformationGroups (geometry report) minus Hilbert's fifth problem"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Bredon1972",
@@ -3533,36 +3251,9 @@
   ]
  },
  {
-  "name": "TopologicalSixOperations",
+  "roadmap": "TopologicalSixOperations",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Sheaves on locally compact Hausdorff spaces with the six operations. From #196 ComplexComparison L5–L7 (local systems, sheaf versus singular cohomology, j_! and Rf_! for triangulated spaces) it extends Rf_! to all locally proper maps with proper base change and the projection formula, constructs f^!, and proves Verdier and Poincaré–Verdier duality with Borel–Moore homology. It owns local systems over arbitrary rings, c-soft resolutions, cohomological dimension, and constructible complexes for semialgebraic and complex-algebraic stratifications. #196's Rf_! is its restriction. Perverse sheaves, microsupport and D-modules are AG consumers.",
-  "prerequisites": [
-   "CohomologicalPointCounting (#196) ComplexComparison L5–L7",
-   "RealAlgebraicGeometry",
-   "AlgebraicTopology"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#16",
-    "Annals#5",
-    "Annals#67",
-    "Annals#41 (via AG)",
-    "Annals#15 (via AG)"
-   ],
-   "OpenAI": [
-    "OAI#304"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "TopologicalSixOperations (Annals)",
-   "foundation of MicrolocalSheafTheory asked by OAI#304"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "KashiwaraSchapira1990",
@@ -3797,32 +3488,9 @@
   ]
  },
  {
-  "name": "TopologicalCombinatorics",
+  "roadmap": "TopologicalCombinatorics",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "M",
-  "est_prs": 110,
-  "wave": "A",
-  "scope": "Topological methods for combinatorial and group-theoretic problems: order complexes, nerves, free ℤ/2- and ℤ/p-spaces and their index. It proves the nerve theorem, Quillen's fiber lemma, discrete Morse theory, shellability, Borsuk–Ulam in its equivalent forms, ham-sandwich and polynomial ham-sandwich, Lovász–Kneser, topological Tverberg for primes, and Quillen's theorems on p-subgroup posets. Solomon–Tits comes from ALG's buildings; incidence applications stay in COMB's DiscreteGeometryAndIncidences, which consumes this roadmap.",
-  "prerequisites": [
-   "AlgebraicTopology",
-   "GeometricTopology L11 (with #435)",
-   "ALG BuildingsAndCosetComplexes"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#166",
-    "OAI#310",
-    "OAI#074"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "Borsuk–Ulam target of COMB DiscreteGeometryAndIncidences",
-   "poset topology (unowned)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Matousek2003",
@@ -4126,42 +3794,9 @@
   ]
  },
  {
-  "name": "StableHomotopyTheory",
+  "roadmap": "StableHomotopyTheory",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "XL family (umbrella)",
-  "est_prs": 0,
-  "wave": "B",
-  "scope": "Umbrella for the stable homotopy category and its computational machinery, from spectra to the chromatic filtration; PR estimates are carried by its seven sub-roadmaps (≈1,490). It is the single owner of spectra: #284 keeps stems as colimit groups, Freudenthal, EHP, Toda brackets, real Bott, stable J and framed Pontryagin–Thom, all consumed; StableHomotopyKTheory H.4–H.6 and EnhancedDerivedSheaves E5:spectra-comparison are absorbed. The point-set model of spectra is fixed once, in Spectra.",
-  "prerequisites": [
-   "UnstableHomotopyTheory",
-   "HomotopicalAlgebra",
-   "HomotopySpheres (#284)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#78"
-   ],
-   "OpenAI": [
-    "OAI#285",
-    "OAI#302",
-    "OAI#308",
-    "OAI#309",
-    "OAI#311",
-    "OAI#313",
-    "OAI#314",
-    "OAI#316",
-    "OAI#318",
-    "OAI#319"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "StableHomotopyTheory and ChromaticHomotopyTheory (geometry report)",
-   "ChromaticHomotopyTheory (Annals P25)",
-   "StableHomotopyKTheory H.4–H.6"
-  ],
+  "kind": "umbrella",
   "references": [
    {
     "key": "Adams1974",
@@ -4304,37 +3939,9 @@
   ]
  },
  {
-  "name": "StableHomotopyTheory/Spectra",
+  "roadmap": "StableHomotopyTheory/Spectra",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 230,
-  "wave": "B",
-  "scope": "Spectra and the stable homotopy category. It fixes one model (recommended: symmetric spectra of simplicial sets, compared with sequential spectra and #284's suspension spectra), builds the triangulated SHC with smash product and function spectra, and identifies π_*𝕊 with #284's stems. It proves Brown representability, constructs Eilenberg–MacLane and Moore spectra, Postnikov towers, the Atiyah–Hirzebruch spectral sequence, rationalization, p-completion and Bousfield localization, and compares spectra with the stabilization of spaces in InfinityCategories.",
-  "prerequisites": [
-   "HomotopicalAlgebra",
-   "UnstableHomotopyTheory",
-   "HomotopySpheres (#284)",
-   "InfinityCategories (last layer)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#78"
-   ],
-   "OpenAI": [
-    "OAI#308",
-    "OAI#309",
-    "OAI#316",
-    "OAI#193",
-    "OAI#209"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "StableHomotopyKTheory H.5:spectra, H.6",
-   "EnhancedDerivedSheaves E5:spectra-comparison"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "HoveyShipleySmith2000",
@@ -4638,32 +4245,9 @@
   ]
  },
  {
-  "name": "StableHomotopyTheory/InfiniteLoopSpacesAndRingSpectra",
+  "roadmap": "StableHomotopyTheory/InfiniteLoopSpacesAndRingSpectra",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "B",
-  "scope": "From spaces with coherent multiplications to spectra, and structured ring spectra: Γ-spaces, the group completion theorem, the recognition principle, little-cubes operads with May's approximation theorem, A_∞/E_∞ ring spectra, modules, relative smash products and Thom spectra as E_∞-rings, compared with InfinityCategories' ∞-operads. HigherAlgebraicKTheory uses its group completion theorem to identify the plus construction with the group completion of projective modules.",
-  "prerequisites": [
-   "StableHomotopyTheory/Spectra",
-   "UnstableHomotopyTheory",
-   "InfinityCategories"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#78"
-   ],
-   "OpenAI": [
-    "OAI#193",
-    "OAI#209"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "StableHomotopyKTheory H.4, H.5:S-delooping (multiplicative part)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "May1972",
@@ -4898,33 +4482,9 @@
   ]
  },
  {
-  "name": "StableHomotopyTheory/SteenrodAlgebraAndAdamsSpectralSequence",
+  "roadmap": "StableHomotopyTheory/SteenrodAlgebraAndAdamsSpectralSequence",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 230,
-  "wave": "B",
-  "scope": "Cohomology operations and the Adams spectral sequence: Steenrod squares and powers on spaces with Cartan and Adem relations, the Steenrod algebra and Milnor's dual, H*(K(ℤ/p,n)), the Adams spectral sequence with convergence, Ext over the mod-2 Steenrod algebra through t − s ≤ 13 (consistent with #284), the May spectral sequence and Lambda algebra, Hopf invariant one, Kervaire classes and Browder's theorem. Its squares feed the Wu formula and Thom's computation in CharacteristicClassesAndCobordism.",
-  "prerequisites": [
-   "StableHomotopyTheory/Spectra",
-   "UnstableHomotopyTheory",
-   "HomotopySpheres (#284)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#78"
-   ],
-   "OpenAI": [
-    "OAI#309",
-    "OAI#316",
-    "OAI#319"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "StableHomotopyTheory (geometry report), Steenrod/Adams part"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "SteenrodEpstein1962",
@@ -5228,30 +4788,9 @@
   ]
  },
  {
-  "name": "StableHomotopyTheory/TopologicalKTheory",
+  "roadmap": "StableHomotopyTheory/TopologicalKTheory",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "B",
-  "scope": "Complex and real topological K-theory: K⁰ and KO⁰ from vector bundles, complex Bott periodicity (Atiyah–Bott) with real periodicity from #284 Stage 4B, KU, KO, ku, ko, Adams operations, the Chern character, the K-theory Thom isomorphism, Hopf invariant one via Adams operations, vector fields on spheres, the e-invariant and image of J, and KU-homology. Operator K-theory and analytic K-homology are FAMP's OperatorKTheory, which identifies K₀(C(X)) with K⁰(X) against this roadmap; index theory is GEO's.",
-  "prerequisites": [
-   "StableHomotopyTheory/Spectra",
-   "CharacteristicClassesAndCobordism",
-   "HomotopySpheres (#284) Stage 4",
-   "RepresentationTheory/SpinRepresentations"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#285"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "RefinedTraceMethods RT.4:topological"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Atiyah1967",
@@ -5509,34 +5048,9 @@
   ]
  },
  {
-  "name": "StableHomotopyTheory/ComplexCobordism",
+  "roadmap": "StableHomotopyTheory/ComplexCobordism",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "C",
-  "scope": "Complex-oriented cohomology theories and their formal groups: formal group laws and Lazard's theorem (on Mathlib's `FormalGroup`), complex orientations, MU and Quillen's theorem, MU_*MU and BP_*BP, BP and BP⟨n⟩, the Adams–Novikov spectral sequence, Landweber exactness and Conner–Floyd, Morava K(n) and E-theories, and the chromatic spectral sequence through the α-family. Height and Lubin–Tate deformation come from the formal-groups owner (§6).",
-  "prerequisites": [
-   "StableHomotopyTheory/Spectra",
-   "StableHomotopyTheory/InfiniteLoopSpacesAndRingSpectra",
-   "StableHomotopyTheory/SteenrodAlgebraAndAdamsSpectralSequence",
-   "formal-groups owner"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#78"
-   ],
-   "OpenAI": [
-    "OAI#302",
-    "OAI#308",
-    "OAI#319"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "MU/BP parts of StableHomotopyTheory (geometry report) and ChromaticHomotopyTheory (Annals P25)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Ravenel1986",
@@ -5840,37 +5354,9 @@
   ]
  },
  {
-  "name": "StableHomotopyTheory/ChromaticHomotopyTheory",
+  "roadmap": "StableHomotopyTheory/ChromaticHomotopyTheory",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 230,
-  "wave": "C",
-  "scope": "The chromatic filtration: Bousfield classes, L_n and L_K(n), fracture squares, the Morava stabilizer group with continuous cohomology (from ProfiniteCohomology) and change of rings, Lubin–Tate spectra, the smash-product theorem, the thick subcategory theorem from nilpotence, v_n-self maps and telescopes. It owns Balmer's tensor-triangular spectrum in general, with finite spectra and Thomason's perfect complexes as worked cases. Nilpotence, periodicity, Devinatz–Hopkins, Goerss–Hopkins–Miller, chromatic convergence and splitting, Hovey–Strickland and the telescope disproof are stated.",
-  "prerequisites": [
-   "StableHomotopyTheory/ComplexCobordism",
-   "ProfiniteCohomology",
-   "formal-groups owner"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#78"
-   ],
-   "OpenAI": [
-    "OAI#308",
-    "OAI#309",
-    "OAI#311",
-    "OAI#313",
-    "OAI#314",
-    "OAI#318",
-    "OAI#319"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "ChromaticHomotopyTheory (geometry report; Annals P25)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Ravenel1992",
@@ -6220,29 +5706,9 @@
   ]
  },
  {
-  "name": "StableHomotopyTheory/EquivariantStableHomotopyTheory",
+  "roadmap": "StableHomotopyTheory/EquivariantStableHomotopyTheory",
   "campaign": "TOP",
-  "topic": "math.AT",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "C",
-  "scope": "Genuine equivariant stable homotopy theory for finite groups: genuine G-spectra, Mackey functors, Bredon and RO(G)-graded cohomology, categorical, geometric and homotopy fixed points, the Tate construction, tom Dieck splitting, Wirthmüller and Adams isomorphisms, the HHR norm and the Balmer–Sanders spectrum. It supplies genuine C_p-spectra and Tate constructions to TraceMethods and consumes TransformationGroups' G-CW complexes; the Segal conjecture and HHR detection are stated.",
-  "prerequisites": [
-   "StableHomotopyTheory/Spectra",
-   "TransformationGroups"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#314",
-    "OAI#309"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "layer for family 314 in ChromaticHomotopyTheory (geometry report)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "LewisMaySteinberger1986",
@@ -6523,50 +5989,9 @@
   ]
  },
  {
-  "name": "AlgebraicKTheory",
+  "roadmap": "AlgebraicKTheory",
   "campaign": "TOP",
-  "topic": "math.KT",
-  "size": "XL family (umbrella)",
-  "est_prs": 0,
-  "wave": "A",
-  "scope": "Umbrella for algebraic K-theory of rings, exact categories and schemes, trace methods, hermitian K- and L-theory, and the motivic machinery that computes K-groups of fields; PR estimates are carried by its seven sub-roadmaps (≈1,660). It consolidates the Birkbeck campaign's general K-theory roadmaps; the arithmetic ones stay in NT as consumers. Categorical K₀ is GrothendieckEulerForms', Hochschild cochains DGAInfinity's, spectra StableHomotopyTheory's.",
-  "prerequisites": [
-   "GrothendieckEulerForms",
-   "StableHomotopyTheory",
-   "UnstableHomotopyTheory",
-   "HomotopicalAlgebra"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#10",
-    "Annals#14",
-    "Annals#58",
-    "Annals#78"
-   ],
-   "OpenAI": [
-    "OAI#009",
-    "OAI#193",
-    "OAI#207",
-    "OAI#209",
-    "OAI#247",
-    "OAI#304",
-    "OAI#305",
-    "OAI#320",
-    "OAI#340"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "StableHomotopyKTheory",
-   "GeneralAlgebraicKTheory",
-   "SchemeKTheoryOperations",
-   "KTheoryLowDegrees",
-   "K2SymbolsBrauer",
-   "K3BlochGroups",
-   "RefinedTraceMethods",
-   "MotivicEtaleKTheory"
-  ],
+  "kind": "umbrella",
   "references": [
    {
     "key": "Weibel2013",
@@ -6686,36 +6111,9 @@
   ]
  },
  {
-  "name": "AlgebraicKTheory/ClassicalKTheory",
+  "roadmap": "AlgebraicKTheory/ClassicalKTheory",
   "campaign": "TOP",
-  "topic": "math.KT",
-  "size": "L",
-  "est_prs": 230,
-  "wave": "A",
-  "scope": "K₀, K₁, K₂ of rings by algebraic means and Milnor K-theory of fields: K₀ from projectives and idempotents (compared with GrothendieckEulerForms' split K₀) with rank, determinant, Pic and the Hattori–Stallings trace; K₁ with the Whitehead lemma, SK₁, relative groups, Milnor squares and Wh(π); K₂ through Steinberg groups over arbitrary rings and Matsumoto; tame symbols, reciprocity laws, Bass–Tate, K₂(ℚ) and the low-degree fundamental theorem. Bass–Milnor–Serre and Merkurjev–Suslin are stated; Tate's comparison with Hilbert symbols stays in NT.",
-  "prerequisites": [
-   "GrothendieckEulerForms",
-   "Mathlib PicardGroup, Transvection"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#207",
-    "OAI#247",
-    "OAI#009",
-    "OAI#196",
-    "OAI#197"
-   ]
-  },
-  "porting": [
-   "OAI RingTheory/BassTrace (ModuleK0)",
-   "OAI GroupTheory/PeriodicGroups/Steinberg"
-  ],
-  "replaces": [
-   "KTheoryLowDegrees (Z, U)",
-   "K2SymbolsBrauer T.1–T.6"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Weibel2013",
@@ -7111,36 +6509,9 @@
   ]
  },
  {
-  "name": "AlgebraicKTheory/HigherAlgebraicKTheory",
+  "roadmap": "AlgebraicKTheory/HigherAlgebraicKTheory",
   "campaign": "TOP",
-  "topic": "math.KT",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "Quillen and Waldhausen K-theory: K(R) via the plus construction and via group completion, the Q-construction with Q = +, resolution, dévissage, additivity and localization, G-theory and the fundamental theorem, Waldhausen's S• with approximation and fibration theorems, nonconnective K-theory, products, Quillen's K(𝔽_q), and K₃ of fields with the Bloch group and Suslin's sequence. A-theory is defined and the stable parametrized h-cobordism theorem stated; arithmetic computations stay in NT.",
-  "prerequisites": [
-   "AlgebraicKTheory/ClassicalKTheory",
-   "UnstableHomotopyTheory",
-   "HomotopicalAlgebra",
-   "StableHomotopyTheory/Spectra",
-   "StableHomotopyTheory/InfiniteLoopSpacesAndRingSpectra",
-   "StableHomotopyTheory/TopologicalKTheory (Brauer lifting)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#193",
-    "OAI#209",
-    "OAI#340"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "GeneralAlgebraicKTheory K.1–K.7",
-   "K3BlochGroups V.1–V.4",
-   "KTheoryFiniteLocalFields L.1"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Weibel2013",
@@ -7398,32 +6769,9 @@
   ]
  },
  {
-  "name": "AlgebraicKTheory/KTheoryOfSchemes",
+  "roadmap": "AlgebraicKTheory/KTheoryOfSchemes",
   "campaign": "TOP",
-  "topic": "math.KT",
-  "size": "L",
-  "est_prs": 230,
-  "wave": "C",
-  "scope": "K-theory of schemes after Thomason–Trobaugh: perfect complexes, K and G and the Cartan map, supports and localization, Nisnevich descent, homotopy invariance and the projective bundle formula, the Gersten conjecture for smooth varieties, Bloch's formula, λ- and Adams operations, KH and Riemann–Roch without denominators. Land–Tamme for truncating invariants and cdh descent are stated. Perfect complexes come from AG (CoherentDuality, AlgebraicVectorBundles); Chow groups and GRR are AG's.",
-  "prerequisites": [
-   "AlgebraicKTheory/HigherAlgebraicKTheory",
-   "AG CoherentDuality",
-   "AlgebraicVectorBundles"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#10"
-   ],
-   "OpenAI": [
-    "OAI#193",
-    "OAI#209"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "SchemeKTheoryOperations S.1–S.7"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "ThomasonTrobaugh1990",
@@ -7681,32 +7029,9 @@
   ]
  },
  {
-  "name": "AlgebraicKTheory/TraceMethods",
+  "roadmap": "AlgebraicKTheory/TraceMethods",
   "campaign": "TOP",
-  "topic": "math.KT",
-  "size": "L",
-  "est_prs": 220,
-  "wave": "C",
-  "scope": "Hochschild and cyclic homology on DGAInfinity Layer 8's complex (HC, HC⁻, HP, SBI, Morita invariance, HKR for homology, Goodwillie's theorem), then THH of ring spectra, cyclotomic spectra (Nikolaus–Scholze), TC, TC⁻, TP, Bökstedt periodicity, the Dennis and cyclotomic traces and Dundas–Goodwillie–McCarthy. Refined TC and Habiro comparisons stay in the AG Habiro lane.",
-  "prerequisites": [
-   "DGAInfinity L8",
-   "AlgebraicKTheory/HigherAlgebraicKTheory",
-   "StableHomotopyTheory/InfiniteLoopSpacesAndRingSpectra",
-   "StableHomotopyTheory/EquivariantStableHomotopyTheory"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#58"
-   ],
-   "OpenAI": [
-    "OAI#193"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "RefinedTraceMethods RT.1–RT.3"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Loday1998",
@@ -8010,31 +7335,9 @@
   ]
  },
  {
-  "name": "AlgebraicKTheory/HermitianKTheoryAndLTheory",
+  "roadmap": "AlgebraicKTheory/HermitianKTheoryAndLTheory",
   "campaign": "TOP",
-  "topic": "math.KT",
-  "size": "L",
-  "est_prs": 180,
-  "wave": "A",
-  "scope": "Forms over rings with involution and their K- and L-theories: Witt groups extending Tau Ceti's Witt ring of fields, Grothendieck–Witt groups, Wall's L-groups (quadratic and symmetric) with Ranicki's algebraic surgery and the identification of L_n(ℤ) with #284's groups, L-groups of finite groups in low degrees, and Balmer's Witt groups of triangulated categories with duality. Karoubi periodicity is stated. Geometric surgery is SurgeryTheoryAndFourManifolds; NT's GN.6 consumes these groups.",
-  "prerequisites": [
-   "Tau Ceti QuadraticForm/Witt",
-   "QuadraticFormInvariants",
-   "HomotopySpheres (#284) Stage 7"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#304",
-    "OAI#305",
-    "OAI#320"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "new (Witt groups of triangulated categories were unowned)"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "Ranicki1992",
@@ -8315,32 +7618,9 @@
   ]
  },
  {
-  "name": "AlgebraicKTheory/MotivicHomotopyTheory",
+  "roadmap": "AlgebraicKTheory/MotivicHomotopyTheory",
   "campaign": "TOP",
-  "topic": "math.KT",
-  "size": "L",
-  "est_prs": 300,
-  "wave": "C",
-  "scope": "Unstable and stable 𝔸¹-homotopy theory over a field: Nisnevich topology, H(k), motivic spheres, SH(k), sheaves with transfers and DM(k) with cancellation, motivic cohomology compared with higher Chow groups (cycle complexes from AG) and with Milnor K-theory, KGL, MGL, HZ, the slice tower and motivic spectral sequence, and Morel's π₀𝕊_k = GW(k). The motivic Steenrod algebra, six operations on SH(−) and the Chow t-structure are stated; AG's MotivesAndAlgebraicCycles consumes DM(k).",
-  "prerequisites": [
-   "AlgebraicKTheory/KTheoryOfSchemes",
-   "HomotopicalAlgebra",
-   "StableHomotopyTheory/Spectra",
-   "AG cycle complexes"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#78",
-    "Annals#14"
-   ],
-   "OpenAI": []
-  },
-  "porting": [],
-  "replaces": [
-   "MotivicHomotopyTheory (Annals P26)",
-   "MotivicEtaleKTheory M.4 (comparison), M.5a, M.6"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "MorelVoevodsky1999",
@@ -8690,28 +7970,9 @@
   ]
  },
  {
-  "name": "AlgebraicKTheory/NormResidueTheorem",
+  "roadmap": "AlgebraicKTheory/NormResidueTheorem",
   "campaign": "TOP",
-  "topic": "math.KT",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "C",
-  "scope": "The proof of K^M_n(F)/ℓ ≅ H^n(F, μ_ℓ^{⊗n}) following Haesemeyer–Weibel: motivic operations, norm varieties and Rost's degree formulas, the Rost motive, Hilbert 90 for Milnor K-theory, prime powers and general fields, with Merkurjev–Suslin, the Milnor conjecture and Quillen–Lichtenbaum as consequences. Applications to number rings stay in NT.",
-  "prerequisites": [
-   "AlgebraicKTheory/MotivicHomotopyTheory",
-   "ProfiniteCohomology"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#009 (Merkurjev–Suslin, statement)"
-   ]
-  },
-  "porting": [],
-  "replaces": [
-   "MotivicEtaleKTheory M.5a–d, M.7"
-  ],
+  "kind": "new",
   "references": [
    {
     "key": "HaesemeyerWeibel2019",

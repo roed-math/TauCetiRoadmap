@@ -1,0 +1,510 @@
+{
+  "works": [
+    {
+      "id": "weibel-kbook",
+      "title": "The K-book: An introduction to algebraic K-theory",
+      "authors": "Charles A. Weibel",
+      "url": "https://sites.math.rutgers.edu/~weibel/Kbook.html",
+      "aliases": [
+        "Weibel",
+        "K-book",
+        "Kbook"
+      ],
+      "roadmapIds": [
+        "ArithmeticKTheory",
+        "ArithmeticQuantumTopology",
+        "BorelRegulators",
+        "EllipticKTheory",
+        "EllipticRegulators",
+        "GeneralAlgebraicKTheory",
+        "HabiroCohomologyFoundations",
+        "HabiroCyclotomicCompletions",
+        "HabiroNahmSeries",
+        "HabiroNumberFields",
+        "HabiroRings",
+        "K2SymbolsBrauer",
+        "K3BlochGroups",
+        "KTheoryFiniteLocalFields",
+        "KTheoryLowDegrees",
+        "MotivesAndAlgebraicCycles",
+        "MotivicEtaleKTheory",
+        "PadicHodgeRegulators",
+        "PeriodsAndSpecialValues",
+        "Polylogarithms",
+        "RefinedTraceMethods",
+        "SchemeKTheoryOperations",
+        "SpecialValuesBirchTate",
+        "StableHomotopyKTheory"
+      ]
+    },
+    {
+      "id": "handbook-k-theory",
+      "title": "Handbook of K-theory",
+      "authors": "Eric M. Friedlander and Daniel R. Grayson (editors)",
+      "aliases": [
+        "Handbook"
+      ],
+      "roadmapIds": [
+        "ArithmeticKTheory",
+        "ArithmeticQuantumTopology",
+        "BorelRegulators",
+        "EllipticKTheory",
+        "EllipticRegulators",
+        "GeneralAlgebraicKTheory",
+        "HabiroCohomologyFoundations",
+        "HabiroCyclotomicCompletions",
+        "HabiroNahmSeries",
+        "HabiroNumberFields",
+        "HabiroRings",
+        "K2SymbolsBrauer",
+        "K3BlochGroups",
+        "KTheoryFiniteLocalFields",
+        "KTheoryLowDegrees",
+        "MotivesAndAlgebraicCycles",
+        "MotivicEtaleKTheory",
+        "PadicHodgeRegulators",
+        "PeriodsAndSpecialValues",
+        "Polylogarithms",
+        "RefinedTraceMethods",
+        "SchemeKTheoryOperations",
+        "SpecialValuesBirchTate",
+        "StableHomotopyKTheory"
+      ]
+    },
+    {
+      "id": "tate-k2",
+      "title": "Relations between K2 and Galois cohomology",
+      "authors": "John Tate",
+      "url": "https://gdz.sub.uni-goettingen.de/download/pdf/PPN356556735_0036/LOG_0020.pdf",
+      "aliases": [
+        "Tate (1976)",
+        "Tate1976",
+        "Tate_K2Galois"
+      ]
+    },
+    {
+      "id": "thomason-trobaugh",
+      "title": "Higher Algebraic K-Theory of Schemes and of Derived Categories",
+      "authors": "Robert Thomason; Thomas Trobaugh",
+      "url": "https://www.sas.rochester.edu/mth/sites/doug-ravenel/otherpapers/Thomason-Trobaugh.pdf",
+      "aliases": [
+        "Thomason–Trobaugh",
+        "Thomason-Trobaugh",
+        "ThomasonTrobaugh_SchemeK"
+      ]
+    },
+    {
+      "id": "etale-cohomology-diamonds",
+      "title": "Etale cohomology of diamonds",
+      "authors": "Peter Scholze",
+      "url": "https://people.mpim-bonn.mpg.de/scholze/EtCohDiamonds.pdf",
+      "aliases": [
+        "ECD",
+        "Etale cohomology of diamonds",
+        "Étale cohomology of diamonds"
+      ]
+    },
+    {
+      "id": "BLZ04",
+      "title": "L. Berger, H. Li and H. J. Zhu, Construction of some families of 2-dimensional crystalline representations, Math. Ann. 329 (2004), 365–377.",
+      "authors": "",
+      "aliases": [
+        "BLZ04"
+      ],
+      "caseSensitive": true,
+      "url": "https://arxiv.org/abs/math/0310275"
+    },
+    {
+      "id": "CARAYOL86",
+      "title": "H. Carayol, Sur les représentations ℓ-adiques associées aux formes modulaires de Hilbert, Ann. Sci. École Norm. Sup. 19 (1986), 409–468.",
+      "authors": "",
+      "aliases": [
+        "CARAYOL86"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "CESNAVICIUS17",
+      "title": "K. Česnavičius, A modular description of X_0(n), arXiv:1511.07475; Algebra & Number Theory 11 (2017).",
+      "authors": "",
+      "aliases": [
+        "CESNAVICIUS17"
+      ],
+      "caseSensitive": true,
+      "url": "https://arxiv.org/abs/1511.07475"
+    },
+    {
+      "id": "CONRAD07",
+      "title": "B. Conrad, Arithmetic moduli of generalized elliptic curves, J. Inst. Math. Jussieu 6 (2007), 209–278.",
+      "authors": "",
+      "aliases": [
+        "CONRAD07"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "DELIGNE69",
+      "title": "Formes modulaires et représentations l-adiques",
+      "authors": "Pierre Deligne",
+      "aliases": [
+        "DELIGNE69"
+      ],
+      "caseSensitive": true,
+      "url": "https://www.numdam.org/item/SB_1968-1969__11__139_0.pdf"
+    },
+    {
+      "id": "DELIGNE73",
+      "title": "Les constantes des équations fonctionnelles des fonctions L",
+      "authors": "Pierre Deligne",
+      "aliases": [
+        "DELIGNE73"
+      ],
+      "caseSensitive": true,
+      "url": "https://publications.ias.edu/sites/default/files/Number20.pdf"
+    },
+    {
+      "id": "DIAMOND97",
+      "title": "The Taylor–Wiles construction and multiplicity one",
+      "authors": "Fred Diamond",
+      "aliases": [
+        "DIAMOND97"
+      ],
+      "caseSensitive": true,
+      "url": "https://link.springer.com/content/pdf/10.1007/s002220050144.pdf"
+    },
+    {
+      "id": "DIEULEFAIT04",
+      "title": "Existence of families of Galois representations and new cases of the Fontaine–Mazur conjecture",
+      "authors": "Luis Dieulefait",
+      "aliases": [
+        "DIEULEFAIT04"
+      ],
+      "caseSensitive": true,
+      "url": "https://arxiv.org/pdf/math/0304433"
+    },
+    {
+      "id": "DP23",
+      "title": "L. Dieulefait and A. Pacetti, A simplified proof of Serre’s conjectures, arXiv:2108.07577; published in RACSAM 117 (2023), article 153, DOI 10.1007/s13398-023-01478-8.",
+      "authors": "",
+      "aliases": [
+        "DP23"
+      ],
+      "caseSensitive": true,
+      "url": "https://arxiv.org/abs/2108.07577"
+    },
+    {
+      "id": "EDIXHOVEN92",
+      "title": "The weight in Serre’s conjectures on modular forms",
+      "authors": "Bas Edixhoven",
+      "aliases": [
+        "EDIXHOVEN92"
+      ],
+      "caseSensitive": true,
+      "url": "https://websites.math.leidenuniv.nl/edixhoven/public_html_rennes/publications/weight.dvi"
+    },
+    {
+      "id": "EMERTON11",
+      "title": "Local-global compatibility in the p-adic Langlands programme for GL2/Q",
+      "authors": "Matthew Emerton",
+      "aliases": [
+        "EMERTON11"
+      ],
+      "caseSensitive": true,
+      "url": "https://math.uchicago.edu/~emerton/pdffiles/lg.pdf"
+    },
+    {
+      "id": "FALTINGS83",
+      "title": "Endlichkeitssätze für abelsche Varietäten über Zahlkörpern",
+      "authors": "Gerd Faltings",
+      "aliases": [
+        "FALTINGS83"
+      ],
+      "caseSensitive": true,
+      "url": "https://math.uchicago.edu/~drinfeld/Deligne%27s_conjecture_Manin_conf/Faltings_argument/Faltings.pdf"
+    },
+    {
+      "id": "FONTAINE85",
+      "title": "Il n’y a pas de variété abélienne sur Z",
+      "authors": "Jean-Marc Fontaine",
+      "aliases": [
+        "FONTAINE85"
+      ],
+      "caseSensitive": true,
+      "url": "https://link.springer.com/content/pdf/10.1007/BF01388584.pdf"
+    },
+    {
+      "id": "GEE11",
+      "title": "Automorphic lifts of prescribed types",
+      "authors": "Toby Gee",
+      "aliases": [
+        "GEE11"
+      ],
+      "caseSensitive": true,
+      "url": "https://arxiv.org/pdf/0810.1877"
+    },
+    {
+      "id": "JL70",
+      "title": "Automorphic forms on GL(2)",
+      "authors": "Hervé Jacquet; Robert Langlands",
+      "aliases": [
+        "JL70"
+      ],
+      "caseSensitive": true,
+      "url": "https://publications.ias.edu/sites/default/files/automorphic-forms-on-gl2_rpl.pdf"
+    },
+    {
+      "id": "KATZ73",
+      "title": "p-adic properties of modular schemes and modular forms",
+      "authors": "Nicholas M. Katz",
+      "aliases": [
+        "KATZ73"
+      ],
+      "caseSensitive": true,
+      "url": "https://web.math.princeton.edu/~nmk/old/padicpropMFMS.pdf"
+    },
+    {
+      "id": "KHARE06",
+      "title": "Serre’s modularity conjecture: the level one case",
+      "authors": "Chandrashekhar Khare",
+      "aliases": [
+        "KHARE06"
+      ],
+      "caseSensitive": true,
+      "url": "https://arxiv.org/pdf/math/0504080"
+    },
+    {
+      "id": "KISIN08",
+      "title": "M. Kisin, Potentially semi-stable deformation rings, J. Amer. Math. Soc. 21 (2008), 513–546.",
+      "authors": "",
+      "aliases": [
+        "KISIN08"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "KISIN09F",
+      "title": "M. Kisin, Moduli of finite flat group schemes, and modularity, Ann. of Math. 170 (2009), 1085–1180.",
+      "authors": "",
+      "aliases": [
+        "KISIN09F"
+      ],
+      "caseSensitive": true,
+      "url": "https://annals.math.princeton.edu/2009/170-3/p03"
+    },
+    {
+      "id": "KISIN2",
+      "title": "M. Kisin, Modularity of 2-adic Barsotti–Tate representations, Invent. Math. 178 (2009), 587–634.",
+      "authors": "",
+      "aliases": [
+        "KISIN2"
+      ],
+      "caseSensitive": true,
+      "url": "https://link.springer.com/article/10.1007/s00222-009-0207-5"
+    },
+    {
+      "id": "LANGLANDS80",
+      "title": "Base change for GL(2)",
+      "authors": "Robert Langlands",
+      "aliases": [
+        "LANGLANDS80"
+      ],
+      "caseSensitive": true,
+      "url": "https://publications.ias.edu/sites/default/files/book-ps.pdf"
+    },
+    {
+      "id": "LIU13",
+      "title": "T. Liu, The correspondence between Barsotti–Tate groups and Kisin modules when p=2, J. Théorie Nombres Bordeaux 25 (2013), 661–676.",
+      "authors": "",
+      "aliases": [
+        "LIU13"
+      ],
+      "caseSensitive": true,
+      "url": "https://www.math.purdue.edu/~tongliu/pub/2BT.pdf"
+    },
+    {
+      "id": "MAZUR89",
+      "title": "Deforming Galois representations",
+      "authors": "Barry Mazur",
+      "aliases": [
+        "MAZUR89"
+      ],
+      "caseSensitive": true,
+      "url": "https://bpb-us-e1.wpmucdn.com/sites.harvard.edu/dist/a/189/files/2023/01/Deforming-Galois-Representations.pdf"
+    },
+    {
+      "id": "PAN22",
+      "title": "L. Pan, The Fontaine–Mazur conjecture in the residually reducible case, arXiv:1901.07166; Ann. of Math. (2022).",
+      "authors": "",
+      "aliases": [
+        "PAN22"
+      ],
+      "caseSensitive": true,
+      "url": "https://arxiv.org/abs/1901.07166"
+    },
+    {
+      "id": "PASKUNAS15",
+      "title": "On the Breuil–Mézard conjecture",
+      "authors": "Vytautas Paškūnas",
+      "aliases": [
+        "PASKUNAS15"
+      ],
+      "caseSensitive": true,
+      "url": "https://arxiv.org/pdf/1209.5205"
+    },
+    {
+      "id": "PASKUNAS16",
+      "title": "On 2-dimensional 2-adic Galois representations of local and global fields",
+      "authors": "Vytautas Paškūnas",
+      "aliases": [
+        "PASKUNAS16"
+      ],
+      "caseSensitive": true,
+      "url": "https://msp.org/ant/2016/10-6/ant-v10-n6-p06-p.pdf"
+    },
+    {
+      "id": "R02_KI_HabiroPublished2004",
+      "title": "Cyclotomic completions of polynomial rings",
+      "authors": "Kazuo Habiro",
+      "aliases": [
+        "R02_KI_HabiroPublished2004"
+      ],
+      "caseSensitive": true,
+      "url": "https://ems.press/content/serial-article-files/40881"
+    },
+    {
+      "id": "RIBET90",
+      "title": "On modular representations of Gal(Qbar/Q) arising from modular forms",
+      "authors": "Kenneth Ribet",
+      "aliases": [
+        "RIBET90"
+      ],
+      "caseSensitive": true,
+      "url": "https://math.berkeley.edu/~ribet/Articles/invent_100.pdf"
+    },
+    {
+      "id": "RT97",
+      "title": "An elementary case of Serre’s conjecture",
+      "authors": "David E. Rohrlich; Jerrold B. Tunnell",
+      "aliases": [
+        "RT97"
+      ],
+      "caseSensitive": true,
+      "url": "https://msp.org/pjm/1997/181-3/pjm-v181-n3-p16-p.pdf"
+    },
+    {
+      "id": "SCHOOF05",
+      "title": "Abelian varieties over Q with bad reduction in one prime only",
+      "authors": "René Schoof",
+      "aliases": [
+        "SCHOOF05"
+      ],
+      "caseSensitive": true,
+      "url": "https://www.mat.uniroma2.it/~schoof/abvar1prime.pdf"
+    },
+    {
+      "id": "SERRE87",
+      "title": "Sur les représentations modulaires de degré 2 de Gal(Qbar/Q)",
+      "authors": "Jean-Pierre Serre",
+      "aliases": [
+        "SERRE87"
+      ],
+      "caseSensitive": true,
+      "url": "https://www.college-de-france.fr/media/jean-pierre-serre/UPL5835292064138487263_Serre_Repr.modulaires_Galois.pdf"
+    },
+    {
+      "id": "SGA7",
+      "title": "SGA 7 I–II, Groupes de monodromie en géométrie algébrique, for nearby/vanishing cycles, semistable curves and Lefschetz-pencil results.",
+      "authors": "",
+      "aliases": [
+        "SGA7"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "SHIMURA71",
+      "title": "G. Shimura, Introduction to the Arithmetic Theory of Automorphic Functions (1971), and the primary canonical-model/Galois-realisation papers required for the selected Shimura curves.",
+      "authors": "",
+      "aliases": [
+        "SHIMURA71"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "SNOWDEN09",
+      "title": "A. Snowden, On two dimensional weight two odd representations of totally real fields, arXiv:0905.4266v1 (2009), especially Theorem 7.2.1 and Proposition 9.4.1.",
+      "authors": "",
+      "aliases": [
+        "SNOWDEN09"
+      ],
+      "caseSensitive": true,
+      "url": "https://arxiv.org/abs/0905.4266"
+    },
+    {
+      "id": "SUP_Bloch_HigherRegulators_2000",
+      "title": "Higher Regulators, Algebraic K-Theory, and Zeta Functions of Elliptic Curves",
+      "authors": "Spencer Bloch",
+      "aliases": [
+        "SUP_Bloch_HigherRegulators_2000"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "SUP_YZZ_GrossZagier_2013",
+      "title": "The Gross–Zagier Formula on Shimura Curves",
+      "authors": "Xinyi Yuan; Shou-Wu Zhang; Wei Zhang",
+      "aliases": [
+        "SUP_YZZ_GrossZagier_2013"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "TATE94",
+      "title": "The non-existence of certain Galois extensions of Q unramified outside 2",
+      "authors": "John Tate",
+      "aliases": [
+        "TATE94"
+      ],
+      "caseSensitive": true,
+      "url": "https://www.ams.org/books/conm/174/01857/conm174-01857.pdf"
+    },
+    {
+      "id": "TAYLOR02",
+      "title": "Remarks on a conjecture of Fontaine and Mazur",
+      "authors": "Richard Taylor",
+      "aliases": [
+        "TAYLOR02"
+      ],
+      "caseSensitive": true,
+      "url": "https://virtualmath1.stanford.edu/~rltaylor/fm.pdf"
+    },
+    {
+      "id": "TUNG21",
+      "title": "S.-N. Tung, On the automorphy of 2-dimensional potentially semistable deformation rings of G_Qp, Algebra & Number Theory 15 (2021), 2173–2194; and On the modularity of 2-adic potentially semi-stable deformation rings, Math. Z. 298 (2021), 107–159.",
+      "authors": "",
+      "aliases": [
+        "TUNG21"
+      ],
+      "caseSensitive": true
+    },
+    {
+      "id": "TUNNELL81",
+      "title": "Artin’s conjecture for representations of octahedral type",
+      "authors": "Jerrold B. Tunnell",
+      "aliases": [
+        "TUNNELL81"
+      ],
+      "caseSensitive": true,
+      "url": "https://www.ams.org/journals/bull/1981-05-02/S0273-0979-1981-14936-3/S0273-0979-1981-14936-3.pdf"
+    },
+    {
+      "id": "WIESE04",
+      "title": "Dihedral Galois representations and Katz modular forms",
+      "authors": "Gabor Wiese",
+      "aliases": [
+        "WIESE04"
+      ],
+      "caseSensitive": true,
+      "url": "https://www.maths.tcd.ie/EMIS/journals/DMJDMV/vol-09/07.pdf"
+    }
+  ]
+}

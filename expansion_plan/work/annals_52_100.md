@@ -139,7 +139,7 @@ Kim and Fintzen are stated with their residue-characteristic hypotheses.
 This roadmap covers locality, the Borcherds identity, reconstruction, and conformal vectors with the
 Virasoro relations. It covers modules, the Lie algebra V₁, affine, Heisenberg and lattice VOAs (central
 charge rank L), holomorphic VOAs and the cyclic orbifold. It proves that V_Leech is holomorphic with
-V₁ = 0, and states Zhu's modularity theorem.
+dim V₁ = 24 (its V₁ is the rank-24 Heisenberg algebra), and states Zhu's modularity theorem.
 
 ### 2.2 Riemannian, Kähler and Lie-group geometry
 

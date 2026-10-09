@@ -248,3 +248,176 @@ Existing supply in GEO territory, as remaining PRs by size class: DifferentialGe
 ≈ 200 (F1–F4), DGFloer #655 ≈ 250, HamiltonianSystems #480 ≈ 100, HopfRinow 0 (done), #334 0 (superseded): about
 **800**, all of it foundations that the slate consumes. Geometry layers inside OptimalTransport (ANA) and
 GeometricTopology L7 (TOP) are counted by their campaigns.
+
+## 8. References by roadmap
+
+26 roadmap records, 289 listings, 234 distinct works; full entries, identifiers, access and verification are in `references_master.md` (cited here by short form) and `references_master.json`; the machine records are `refs_GEO.json` and the `references` fields of `slate_GEO.json`, each carrying `master_key` and `verified`. (?) marks a work not verified in the 2026-10-08 pass (185 of 234: zbMATH stopped early; see master (d)). Pointers are the compilers' and are unverified.
+
+**Conventions and notes.** Curvature as Tau Ceti/Lee: R(X,Y)Z = ∇_X∇_Y Z − ∇_Y∇_X Z − ∇_[X,Y]Z, sec(u,v) = ⟨R(u,v)v,u⟩/|u∧v|², Ric(u,v) = tr(w ↦ R(w,u)v); do Carmo, Gallot–Hulin–Lafontaine, Milnor and O'Neill use −R. Δ = div ∘ grad ≤ 0 (DifferentialGeometry, Mathlib, PDE), spectra of −Δ; Warner, Lawson–Michelsohn and Berline–Getzler–Vergne use nonnegative Laplacians. H = tr_g II (Lee divides by n). ι_{X_H}ω = dH, ω_can = −dλ_can, g = ω(·, J·) (#480, #655, Tau Ceti). Lorentzian signature (−,+,…,+). Kähler ω = g(J·,·). No GEO book is held in full locally; some Tau Ceti READMEs hold extracts only.
+
+**RiemannianGeometry** (umbrella, wave A)
+- primary: Lee 2018, *Riemannian Manifolds*, Chs. 4–5 (?); Petersen 2016, *Riemannian Geometry*, Chs. 3–4, Chs. 6–7, 12, Ch. 10 (?); do Carmo 1992, *Riemannian Geometry*, Ch. 5, Ch. 6, Ch. 9 (?)
+- conventions: Tau Ceti `Geometry/Manifold/VectorBundle/CovariantDerivative/Curv…`; Tau Ceti 2026, *RiemannianGeometry blueprint draft…*; Tau Ceti 2026, *DifferentialGeometry roadmap…*
+- formal: Tau Ceti 2026, *HopfRinow roadmap (Levi-Civita…*, Ch. 7 §2, Ch. 9 §2; Tau Ceti `Geometry/Manifold/Riemannian`; Mathlib `Geometry/Manifold/VectorBundle/{Riemannian, …}`
+
+**RiemannianGeometry/CurvatureAndSubmanifolds** (wave A)
+- primary: Lee 2018, *Riemannian Manifolds*, Ch. 7, Ch. 8, Ch. 9 (?); Petersen 2016, *Riemannian Geometry*, Chs. 3–4 (?); Besse 1987, *Einstein Manifolds*, Ch. 1 (?)
+- conventions: Tau Ceti `Geometry/Manifold/VectorBundle/CovariantDerivative/Curv…`
+- theorem: do Carmo 1976, *Differential Geometry of Curves and…* (?); Milnor 1976, *Curvatures of left invariant metrics on…* (?)
+- formal: Tau Ceti `Geometry/Manifold/VectorBundle/CovariantDerivative`; OAI `lean/OAI` (release tree)
+
+**RiemannianGeometry/ComparisonGeometry** (wave A)
+- primary: Petersen 2016, *Riemannian Geometry*, Chs. 6–7 and 12 (?); Lee 2018, *Riemannian Manifolds*, Chs. 10–12 (?); Cheeger–Ebin 1975, *Comparison Theorems in Riemannian…*, Ch. 1, Ch. 2, Ch. 8 (?); Ballmann 2016, *Riccati Equation and Volume Estimates*, Lemma 3.3, §5, Cor. 5.4
+- conventions: Tau Ceti 2026, *RiemannianGeometry blueprint draft…*; Tau Ceti 2026, *OptimalTransport roadmap (L6…*
+- statement: Cheeger–Gromoll 1972, *Structure of complete manifolds of…* (?); Brendle–Schoen 2009, *Manifolds with 1/4-pinched curvature…* (?)
+- formal: OAI `lean/OAI` (release tree)
+
+**RiemannianGeometry/SymmetricSpaces** (wave B)
+- primary: Helgason 1978, *Differential Geometry, Lie Groups, and…*, Chs. IV–VII, Ch. X (?); Eberlein 1996, *Geometry of Nonpositively Curved…* (?); Petersen 2016, *Riemannian Geometry*, Ch. 10 (?)
+- conventions: Knapp 2002, *Lie Groups Beyond an Introduction* (?)
+- theorem: Kobayashi–Nomizu 1969, *Foundations of Differential Geometry… II*, Vol. II, Ch. XI (?); Bridson–Haefliger 1999, *Metric Spaces of Non-Positive Curvature* (?)
+- formal: Tau Ceti 2026, *RepresentationTheory/LieGroups roadmap…*; Tau Ceti `Geometry/Manifold/Riemannian`
+
+**RiemannianGeometry/VariationalTheoryOfGeodesics** (wave B)
+- primary: Milnor 1963, *Morse Theory*, Part III, Part IV (?); Klingenberg 1978, *Closed Geodesics* (?); Besse 1978, *Manifolds All of Whose Geodesics Are…* (?); Ballmann 2015, *Critical Point Theory of the Energy…*, Prop. 3.7, §6, Cor. 6.5 (?)
+- conventions: Tau Ceti 2026, *HamiltonianSystems roadmap, open PR…*
+- theorem: Paternain 1999, *Geodesic Flows* (?)
+- statement: Grayson 1989, *Shortening embedded curves* (?); Gromoll–Meyer 1969, *Periodic geodesics on compact…* (?); Bangert 1993, *Existence of closed geodesics on…* (?); Franks 1992, *Geodesics on S² and periodic points of…* (?)
+- formal: Tau Ceti `Geometry/Manifold/Morse`
+
+**RiemannianGeometry/RicciCurvatureAndLimitSpaces** (wave C)
+- primary: Cheeger 2001, *Degeneration of Riemannian Metrics…* (?); Cheeger–Colding 1996, *Lower bounds on Ricci curvature and the…* (?); Cheeger–Colding 1997, *Structure of spaces with Ricci… III* (?)
+- conventions: Tau Ceti 2026, *OptimalTransport roadmap (L6…*
+- theorem: Villani 2009, *Optimal Transport*, Ch. 29 (?)
+- statement: Cheeger–Naber 2015, *Regularity of Einstein manifolds and…* (?); Cheeger–Jiang–Naber 2021, *Rectifiability of singular sets of…* (?); De Philippis–Gigli 2018, *Non-collapsed spaces with Ricci…* (?)
+- formal: OAI `lean/OAI` (release tree)
+
+**RiemannianGeometry/IsometricEmbeddings** (wave B)
+- primary: Han–Hong 2006, *Isometric Embedding of Riemannian…* (?); Eliashberg–Mishachev 2002, *H-Principle* (?); Gromov 1986, *Partial Differential Relations* (?)
+- theorem: Conti–De Lellis–Székelyhidi 2012, *h-principle and rigidity for C^{1,α}…* (?); Günther 1989, *Zum Einbettungssatz von J. Nash* (?); do Carmo 1976, *Differential Geometry of Curves and…*, §5 (?)
+- statement: Nirenberg 1953, *Weyl and Minkowski problems in…* (?)
+- formal: `leanprover-community/sphere-eversion`; Massot–van Doorn–Nash 2023, *Formalising the h-principle and sphere…* (?); OAI `lean/OAI` (release tree)
+
+**GlobalAnalysisOnManifolds** (umbrella, wave A)
+- primary: Taylor 2011, *Partial Differential Equations I*, Ch. 4, Ch. 5 (?); Nicolaescu 2021, *Geometry of Manifolds* (?); Aubin 1998, *Some Nonlinear Problems in Riemannian…* (?)
+- conventions: Tau Ceti 2026, *DifferentialGeometry roadmap…*; Tau Ceti 2026, *PDE roadmap (Δ sign and 2π…*; Warner 1983, *Foundations of Differentiable Manifolds…* (?)
+- formal: Tau Ceti `Analysis/Sobolev`
+
+**GlobalAnalysisOnManifolds/EllipticOperators** (wave A)
+- primary: Taylor 2011, *Partial Differential Equations I*, Ch. 4, Ch. 5 (?); Warner 1983, *Foundations of Differentiable Manifolds…*, Ch. 6 (?); Lawson–Michelsohn 1989, *Spin Geometry*, Ch. III (?)
+- conventions: Tau Ceti 2026, *DifferentialGeometry roadmap…*; Tau Ceti 2026, *PDE roadmap (Δ sign and 2π…*
+- theorem: Gilbarg–Trudinger 2001, *Elliptic Partial Differential Equations…*, Ch. 6, Ch. 9 (?); Schwarz 1995, *Hodge Decomposition — A Method for…* (?); Petersen 2016, *Riemannian Geometry*, Ch. 9 (?); Aronszajn 1957, *Unique continuation theorem for…* (?); Lee–Uhlmann 1989, *Determining anisotropic real-analytic…* (?)
+- formal: Tau Ceti `Analysis/Sobolev`; `abenenson/rellich-kondrachov`; OAI `lean/OAI` (release tree)
+
+**GlobalAnalysisOnManifolds/SpectralGeometry** (wave B)
+- primary: Chavel 1984, *Eigenvalues in Riemannian Geometry* (?); Berger–Gauduchon–Mazet 1971, *Le spectre d'une variété riemannienne* (?); Schoen–Yau 1994, *Differential Geometry* (?); Li 2012, *Geometric Analysis* (?)
+- theorem: Sunada 1985, *Riemannian coverings and isospectral…* (?); Brüning 1978, *Über Knoten von Eigenfunktionen des…* (?)
+- statement: Donnelly–Fefferman 1988, *Nodal sets of eigenfunctions on…* (?); Logunov 2018, *Nodal sets of Laplace eigenfunctions* (?); Colding–Minicozzi 1997, *Harmonic functions on manifolds* (?)
+- formal: OAI `lean/OAI` (release tree)
+
+**GlobalAnalysisOnManifolds/DiracOperatorsAndIndexTheory** (wave B)
+- primary: Berline–Getzler–Vergne 1992, *Heat Kernels and Dirac Operators* (?); Lawson–Michelsohn 1989, *Spin Geometry*, Chs. I–IV (?); Roe 1998, *Elliptic Operators, Topology and…* (?)
+- conventions: Tau Ceti 2026, *OrthogonalSpinGroups roadmap (Clifford…*
+- theorem: Gilkey 1995, *Invariance Theory, the Heat Equation…* (?); Hitchin 1974, *Compact four-dimensional Einstein…* (?)
+- statement: Atiyah–Singer 1968, *Index of elliptic operators I, III* (?); Gromov–Lawson 1980, *Classification of simply connected…* (?); Atiyah–Singer 1971, *Index of elliptic operators IV* (?)
+- formal: Mathlib `LinearAlgebra/CliffordAlgebra`
+
+**GlobalAnalysisOnManifolds/MinimalSubmanifolds** (wave B)
+- primary: Colding–Minicozzi 2011, *Minimal Surfaces* (?); Simon 1983, *Geometric Measure Theory* (?); Giusti 1984, *Minimal Surfaces and Functions of…* (?); Maggi 2012, *Sets of Finite Perimeter and Geometric…* (?)
+- conventions: Lee 2018, *Riemannian Manifolds*, Ch. 8 (?)
+- theorem: Harvey–Lawson 1982, *Calibrated geometries* (?); Urbano 1990, *Minimal surfaces with low index in the…* (?); Schoen–Yau 1979, *Structure of manifolds with positive…* (?); Gromov 2018, *Metric inequalities with scalar…* (?)
+- statement: Chodosh–Li 2024, *Stable minimal hypersurfaces in R⁴* (?); Pitts 1981, *Existence and Regularity of Minimal…* (?); Marques–Neves 2014, *Min-max theory and the Willmore…* (?)
+- formal: OAI `lean/OAI` (release tree)
+
+**GlobalAnalysisOnManifolds/GeometricFlows** (wave C)
+- primary: Chow–Knopf 2004, *Ricci Flow* (?); Topping 2006, *Ricci Flow* (?); Mantegazza 2011, *Mean Curvature Flow* (?)
+- theorem: Brakke 1978, *Motion of a Surface by Its Mean…* (?); Eells–Sampson 1964, *Harmonic mappings of Riemannian…* (?); Cao 1985, *Deformation of Kähler metrics to…* (?); Chen–He 2008, *Calabi flow* (?)
+- statement: Perelman 2003, *Ricci flow with surgery on…*; Morgan–Tian 2007, *Ricci Flow and the Poincaré Conjecture*; Bamler–Kleiner 2022, *Uniqueness and stability of Ricci flow…* (?); Colding–Minicozzi 2012, *Generic mean curvature flow I* (?)
+
+**GlobalAnalysisOnManifolds/GaugeTheory** (wave C)
+- primary: Donaldson–Kronheimer 1990, *Geometry of Four-Manifolds* (?); Freed–Uhlenbeck 1991, *Instantons and Four-Manifolds* (?); Morgan 1996, *Seiberg–Witten Equations and…* (?); Wehrheim 2004, *Uhlenbeck Compactness* (?)
+- theorem: Uhlenbeck–Yau 1986, *Existence of Hermitian–Yang–Mills…* (?); Hitchin 1987, *Self-duality equations on a Riemann…* (?)
+- statement: Floer 1988, *Instanton-invariant for 3-manifolds* (?); Donaldson 1990, *Polynomial invariants for smooth…* (?); Kronheimer–Mrowka 2007, *Monopoles and Three-Manifolds* (?)
+
+**SymplecticAndContactGeometry** (umbrella, wave A)
+- primary: McDuff–Salamon 2017, *Symplectic Topology*; McDuff–Salamon 2012, *J-holomorphic Curves and Symplectic…* (?); Cannas da Silva 2001, *Symplectic Geometry* (?); Geiges 2008, *Contact Topology* (?)
+- conventions: Tau Ceti 2026, *HamiltonianSystems roadmap, open PR…*; Tau Ceti 2026, *DGFloer roadmap, open PR #655 (sign…*; Tau Ceti `Geometry/Symplectic`; Tau Ceti 2026, *SymplecticContactGeometry blueprint…*
+- formal: Tau Ceti 2026, *HeegaardFloer roadmap (Lanes M, F0–F3*
+
+**SymplecticAndContactGeometry/SymplecticManifolds** (wave B)
+- primary: McDuff–Salamon 2017, *Symplectic Topology*, Ch. 3, Ch. 5, Ch. 7; Cannas da Silva 2001, *Symplectic Geometry*, §§18 (?); Audin 2004, *Torus Actions on Symplectic Manifolds* (?)
+- conventions: Tau Ceti 2026, *SymplecticContactGeometry blueprint…*; Tau Ceti 2026, *HamiltonianSystems roadmap, open PR…*
+- theorem: Delzant 1988, *Hamiltoniens périodiques et images…*, Thm 2.1, Prop. 4.1; Lerman 1995, *Symplectic cuts* (?); Arnold 1989, *Mathematical Methods of Classical…* (?); Gutt–Hutchings 2018, *Symplectic capacities from positive…* (?)
+- formal: OAI `lean/OAI` (release tree)
+
+**SymplecticAndContactGeometry/ContactGeometry** (wave A)
+- primary: Geiges 2008, *Contact Topology*, Ch. 2, Ch. 3, Ch. 4 (?); Geiges 2006, *Contact geometry*, §2.1, Thm 2.20; Ozbagci–Stipsicz 2004, *Surgery on Contact 3-Manifolds and…* (?)
+- conventions: Tau Ceti 2026, *SymplecticContactGeometry blueprint…*
+- theorem: Etnyre 2005, *Legendrian and transversal knots* (?); Cieliebak–Eliashberg 2012, *From Stein to Weinstein and Back* (?)
+- statement: Eliashberg 1989, *Classification of overtwisted contact…* (?); Gromov 1985, *Pseudoholomorphic curves in symplectic…* (?); Giroux 2002, *Géométrie de contact* (?); Taubes 2007, *Seiberg–Witten equations and the…* (?); Borman–Eliashberg–Murphy 2015, *Existence and classification of…* (?)
+- formal: Tau Ceti `Geometry/Manifold/Distribution`; Tau Ceti 2026, *DGFloer roadmap, open PR #655 (sign…*
+
+**SymplecticAndContactGeometry/PseudoholomorphicCurves** (wave B)
+- primary: McDuff–Salamon 2012, *J-holomorphic Curves and Symplectic…*, Ch. 2, Ch. 3, Ch. 4 (?); Wendl 2010, *Holomorphic Curves in Symplectic and…* (?); Audin–Lafontaine 1994, *Holomorphic Curves in Symplectic…* (?)
+- conventions: Tau Ceti `Geometry/Symplectic`
+- statement: McDuff 1990, *Structure of rational and ruled…* (?)
+- formal: Tau Ceti 2026, *HeegaardFloer roadmap (Lanes M, F0–F3*; `t4v1/damian_formalizare`
+
+**SymplecticAndContactGeometry/FloerTheoryAndSymplecticRigidity** (wave B)
+- primary: McDuff–Salamon 2017, *Symplectic Topology*, Ch. 9, Ch. 10, Ch. 11; McDuff–Salamon 2012, *J-holomorphic Curves and Symplectic…*, Ch. 8, Ch. 12 (?); Hofer–Zehnder 1994, *Symplectic Invariants and Hamiltonian…* (?); Polterovich 2001, *Geometry of the Group of Symplectic…* (?)
+- conventions: Tau Ceti 2026, *DGFloer roadmap, open PR #655 (sign…*
+- theorem: Schwarz 2000, *Action spectrum for closed…* (?); Oh 2005, *Construction of spectral invariants of…* (?); Rudyak–Oprea 1999, *Lusternik–Schnirelmann category of…* (?); Viterbo 1992, *Symplectic topology as the geometry of…* (?); Laudenbach–Sikorav 1985, *Persistance d'intersection avec la…* (?)
+- statement: Abouzaid 2012, *Nearby Lagrangians with vanishing…* (?); Kragh 2013, *Parametrized ring-spectra and the…* (?); OpenAI 2026, *Counterexample to the nearby Lagrangian…* (OAI#340); McDuff–Polterovich 1994, *Symplectic packings and algebraic…* (?); OpenAI 2026, *Symplectic Ball Packings in Higher…* (OAI#343); Hutchings 2014, *Embedded contact homology* (?)
+- formal: OAI `lean/OAI` (release tree)
+
+**ConnectionsAndCharacteristicClasses** (wave A)
+- primary: Kobayashi–Nomizu 1963, *Foundations of Differential Geometry… I*, Vol. I, Chs. II–III, Ch. IV (?); Kobayashi–Nomizu 1969, *Foundations of Differential Geometry… II*, Vol. II, Ch. XII (?); Tu 2017, *Differential Geometry* (?)
+- conventions: Tau Ceti `Geometry/Manifold/VectorBundle/CovariantDerivative`
+- theorem: Milnor–Stasheff 1974, *Characteristic Classes*, Appendix C (?); Bott–Tu 1982, *Differential Forms in Algebraic Topology* (?); Chern–Simons 1974, *Characteristic forms and geometric…* (?); Belavin et al. 1975, *Pseudoparticle solutions of the…* (?); Joyce 2007, *Riemannian Holonomy Groups and…* (?)
+- statement: Berger 1955, *Sur les groupes d'holonomie homogène…* (?)
+- formal: Tau Ceti 2026, *DifferentialGeometry roadmap…*, §10; `urkud/DeRhamCohomology`
+
+**LorentzianGeometry** (wave B)
+- primary: O'Neill 1983, *Semi-Riemannian Geometry with…*, Ch. 14 (?); Beem–Ehrlich–Easley 1996, *Global Lorentzian Geometry* (?); Hawking–Ellis 1973, *Large Scale Structure of Space-Time* (?); Wald 1984, *General Relativity* (?)
+- conventions: Tau Ceti `Geometry/Manifold/VectorBundle/CovariantDerivative/Curv…`
+- theorem: Minguzzi 2019, *Lorentzian causality theory* (?); Choquet-Bruhat 2009, *General Relativity and the Einstein…* (?); Bernal–Sánchez 2003, *Smooth Cauchy hypersurfaces and…* (?); Bernal–Sánchez 2007, *Globally hyperbolic spacetimes can be…* (?); Bartnik 1986, *Mass of an asymptotically flat manifold* (?)
+- statement: Schoen–Yau 1979, *Proof of the positive mass conjecture…* (?); Huisken–Ilmanen 2001, *Inverse mean curvature flow and the…* (?); OpenAI 2026, *Spacetime Penrose inequality and…* (OAI#260); Choquet-Bruhat–Geroch 1969, *Global aspects of the Cauchy problem in…* (?)
+- formal: OAI `lean/OAI` (release tree)
+
+**KahlerGeometry** (wave C)
+- primary: Székelyhidi 2014, *Extremal Kähler Metrics* (?); Tian 2000, *Canonical Metrics in Kähler Geometry* (?); Ballmann 2006, *Kähler Manifolds* (?); Joyce 2007, *Riemannian Holonomy Groups and…* (?)
+- conventions: Huybrechts 2005, *Complex Geometry* (?)
+- theorem: Hitchin et al. 1987, *Hyperkähler metrics and supersymmetry* (?); Lu 1968, *Holomorphic mappings of complex…* (?)
+- statement: Beauville 1983, *Variétés kähleriennes dont la première…* (?); Mori 1979, *Projective manifolds with ample tangent…* (?); Siu–Yau 1980, *Compact Kähler manifolds of positive…* (?)
+- formal: Tau Ceti 2026, *ComplexManifolds roadmap, open PR #279…*; OAI `lean/OAI` (release tree)
+
+**MetricGeometry** (wave A)
+- primary: Burago–Burago–Ivanov 2001, *Metric Geometry* (?); Bridson–Haefliger 1999, *Metric Spaces of Non-Positive Curvature*, Part I, Part II (?); Alexander–Kapovitch–Petrunin 2024, *Alexandrov Geometry* (?)
+- conventions: Tau Ceti 2026, *OptimalTransport roadmap (L6…*
+- theorem: Burago–Gromov–Perelman 1992, *A. D. Alexandrov spaces with curvature…* (?); van den Dries–Wilkie 1984, *Gromov's theorem on groups of…* (?); Sturm 2006, *Geometry of metric measure spaces I*
+- statement: Kapovitch 2007, *Perelman's stability theorem* (?)
+- formal: Mathlib `Topology/MetricSpace/GromovHausdorff`; Tau Ceti `Geometry/Manifold/Riemannian`; OAI `lean/OAI` (release tree)
+
+**MetricEmbeddings** (wave A)
+- primary: Matoušek 2002, *Discrete Geometry*, Ch. 15 (?); Ostrovskii 2013, *Metric Embeddings* (?); Heinonen 2001, *Analysis on Metric Spaces* (?); Deza–Laurent 1997, *Geometry of Cuts and Metrics* (?)
+- theorem: Benyamini–Lindenstrauss 2000, *Geometric Nonlinear Functional…* (?); Brinkman–Charikar 2005, *Impossibility of dimension reduction in…* (?); Dranishnikov et al. 2002, *Uniform embeddings into Hilbert space…* (?)
+- statement: Gupta et al. 2004, *Cuts, trees and ℓ₁-embeddings of graphs* (?); Cheeger–Kleiner 2010, *Differentiating maps into L¹, and the…* (?); Bonk–Kleiner 2005, *Conformal dimension and Gromov…* (?); OpenAI 2026, *Modulus Proof of Cannon's Conjecture* (OAI#246)
+- formal: Mathlib `Topology/MetricSpace/Lipschitz`; OAI `lean/OAI` (release tree)
+
+**ConvexBodies** (wave A)
+- primary: Schneider 2014, *Convex Bodies*, Ch. 4, Ch. 5, Ch. 7 (?); Gardner 2006, *Geometric Tomography* (?); Artstein-Avidan et al. 2015, *Asymptotic Geometric Analysis, Part I* (?)
+- conventions: Tau Ceti 2026, *ArithmeticHeights roadmap, open PR #287…*
+- theorem: Bombieri–Gubler 2006, *Heights in Diophantine Geometry*, App. C.3; Shenfeld–van Handel 2023, *Extremals of the Alexandrov–Fenchel…* (?); Cheng–Yau 1976, *Regularity of the solution of the…* (?); Brazitikos et al. 2014, *Geometry of Isotropic Convex Bodies* (?)
+- statement: Bourgain–Milman 1987, *New volume ratio properties for convex…* (?); Iriyeh–Shibata 2020, *Symmetric Mahler's conjecture for the…* (?); OpenAI 2026, *Mahler Conjecture for General Convex…* (OAI#087); Böröczky et al. 2012, *Log-Brunn–Minkowski inequality* (?); OpenAI 2026, *Logarithmic Brunn–Minkowski conjecture* (OAI#091); Klartag–Lehec 2024, *Affirmative resolution of Bourgain's…* (?)
+- formal: Mathlib `Analysis/Convex/Body`; OAI `lean/OAI` (release tree)
+
+**PackingCoveringAndEnergy** (wave B)
+- primary: Conway–Sloane 1999, *Sphere Packings, Lattices and Groups*, Chs. 1–4, Ch. 9, Ch. 13; Zong 1999, *Sphere Packings* (?); Martinet 2003, *Perfect Lattices in Euclidean Spaces* (?); Rogers 1964, *Packing and Covering* (?); Borodachov–Hardin–Saff 2019, *Discrete Energy on Rectifiable Sets* (?)
+- conventions: Tau Ceti 2026, *IntegralLattices roadmap (completed*; LMFDB 2026, *L-functions and modular forms database…*
+- theorem: Fejes Tóth (G. Fejes Tóth et al. 2023, *Lagerungen* (?); Venkov 2001, *Réseaux et designs sphériques* (?); Cohn–Elkies 2003, *New upper bounds on sphere packings I* (?); Cohn–Kumar 2007, *Universally optimal distribution of…* (?)
+- statement: Viazovska 2017, *Sphere packing problem in dimension 8* (?); Cohn et al. 2017, *Sphere packing problem in dimension 24* (?); Cohn et al. 2022, *Universal optimality of the E₈ and…* (?)
+- formal: Tau Ceti 2026, *ThetaSeries roadmap, open PR #286…*; `math-inc/Sphere-Packing-Lean`; OAI `lean/OAI` (release tree)
+
+**Acquisition list** (not free and not held locally; books needed by a wave-A roadmap, and any work needed by two or more roadmaps of this campaign; journal papers otherwise left to library access, all listed in master (b2); roadmap count in brackets; ★ = wave A): Petersen 2016, *Riemannian Geometry* [5] ★; Lee 2018, *Riemannian Manifolds* [4] ★; McDuff–Salamon 2012, *J-holomorphic Curves and Symplectic…* [3] ★; McDuff–Salamon 2017, *Symplectic Topology* [3] ★; Bridson–Haefliger 1999, *Metric Spaces of Non-Positive Curvature* [2] ★; do Carmo 1976, *Differential Geometry of Curves and…* [2] ★; Geiges 2008, *Contact Topology* [2] ★; Joyce 2007, *Riemannian Holonomy Groups and…* [2] ★; Kobayashi–Nomizu 1969, *Foundations of Differential Geometry… II* [2] ★; Lawson–Michelsohn 1989, *Spin Geometry* [2] ★; Taylor 2011, *Partial Differential Equations I* [2] ★; Warner 1983, *Foundations of Differentiable Manifolds…* [2] ★; Artstein-Avidan et al. 2015, *Asymptotic Geometric Analysis, Part I* [1] ★; Aubin 1998, *Some Nonlinear Problems in Riemannian…* [1] ★; Benyamini–Lindenstrauss 2000, *Geometric Nonlinear Functional…* [1] ★; Besse 1987, *Einstein Manifolds* [1] ★; Bombieri–Gubler 2006, *Heights in Diophantine Geometry* [1] ★; Bott–Tu 1982, *Differential Forms in Algebraic Topology* [1] ★; Brazitikos et al. 2014, *Geometry of Isotropic Convex Bodies* [1] ★; Burago–Burago–Ivanov 2001, *Metric Geometry* [1] ★; Cheeger–Ebin 1975, *Comparison Theorems in Riemannian…* [1] ★; Cieliebak–Eliashberg 2012, *From Stein to Weinstein and Back* [1] ★; Deza–Laurent 1997, *Geometry of Cuts and Metrics* [1] ★; do Carmo 1992, *Riemannian Geometry* [1] ★; Gardner 2006, *Geometric Tomography* [1] ★; Gilbarg–Trudinger 2001, *Elliptic Partial Differential Equations…* [1] ★; Heinonen 2001, *Analysis on Metric Spaces* [1] ★; Kobayashi–Nomizu 1963, *Foundations of Differential Geometry… I* [1] ★; Matoušek 2002, *Discrete Geometry* [1] ★; Milnor–Stasheff 1974, *Characteristic Classes* [1] ★; Ostrovskii 2013, *Metric Embeddings* [1] ★; Ozbagci–Stipsicz 2004, *Surgery on Contact 3-Manifolds and…* [1] ★; Schneider 2014, *Convex Bodies* [1] ★; Schwarz 1995, *Hodge Decomposition — A Method for…* [1] ★; Tu 2017, *Differential Geometry* [1] ★.
+
+Full bibliographic entries, identifiers, access evidence and verification status: `references_master.md`.

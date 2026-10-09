@@ -264,3 +264,181 @@ Next: GeometricFunctionTheory (ConformalMapping is finished, so workers can star
 **Existing supply in the territory:** ≈1,050 PRs remaining, estimated at about 14 PRs per remaining layer.
 - On main, ≈560: PDE with #93 ~210, OptimalTransport ~300, FuchsianOrbifolds ~40, ConformalMapping ~10.
 - In open PRs, ≈490: #237 ~200, #279 ~90, #280 ~80, #117 ~70, #260 ~50.
+
+## 8. References by roadmap
+
+32 roadmap records, 343 listings, 295 distinct works; full entries, identifiers, access and verification are in `references_master.md` (cited here by short form) and `references_master.json`; the machine records are `refs_ANA.json` and the `references` fields of `slate_ANA.json`, each carrying `master_key` and `verified`. (?) marks a work not verified in the 2026-10-08 pass (233 of 295: zbMATH stopped early; see master (d)). A title is given at a work's first citation in this section only. Pointers are the compilers' and are unverified.
+
+**Conventions and notes.** Fourier transform: Mathlib's 𝓕 (`Real.fourier_eq`, `Real.fourierChar`), 𝓕f(ξ) = ∫ e^{−2πi⟨x,ξ⟩} f(x) dx, no Plancherel constants, ∂ⱼ ↦ 2πiξⱼ (Grafakos, Stein–Weiss, Mattila agree; Evans's unitary e^{−ix·ξ} estimates are restated, not copied). Fourier series: `fourierCoeff` on `AddCircle T` with probability Haar measure, T = 1 canonical; 2π-periodic statements (Katznelson, Zygmund) transported along T = 2π. Laplacian Δ = Σ∂ᵢ² (symbol −4π²|ξ|²). Sobolev: W^{k,p} by weak derivatives (Tau Ceti `W1p`, `Wkp`); whole-space H^{s,p} is Mathlib's `MemSobolev` with Bessel symbol (1+‖ξ‖²)^{s/2}, periodic H^s uses (1+4π²|k|²)^{s/2} (#237): equivalent norms, different constants, so estimates name the scale. BV and perimeter as Evans–Gariepy and Maggi (outer normal; Ambrosio–Fusco–Pallara's inner normal is −ν_E). Hausdorff measure: `μH[d]` unnormalized, `μHE[d]` normalized (Federer's ℋ^d) for area, coarea, perimeter, currents and varifolds. Also: H^p(𝔻) with dθ/2π; Beltrami μ = f_z̄/f_z; chordal Loewner hcap(K_t) = 2t; (dd^c log|z|)ⁿ = δ₀; NLS iu_t + Δu = μ|u|^{p−1}u with μ = +1 defocusing; special functions as in DLMF.
+
+**HarmonicAnalysis** (umbrella, wave A)
+- primary: Grafakos 2014, *Classical Fourier Analysis*, Ch. 1, Ch. 2, Ch. 5 (?); Grafakos 2014, *Modern Fourier Analysis*, Ch. 1, Ch. 2, Ch. 3 (?); Stein 1993, *Harmonic Analysis* (?); Stein–Weiss 1971, *Fourier Analysis on Euclidean Spaces*, Ch. IV (?); Muscalu–Schlag 2013, *Classical and Multilinear Harmonic…* (?)
+- conventions: Mathlib `Analysis/Fourier`
+- formal: `fpvandoorn/carleson`
+
+**HarmonicAnalysis/ClassicalFourierAnalysis** (wave A)
+- primary: Katznelson 2004, *Harmonic Analysis*, Chs. I–III (?); Zygmund 2002, *Trigonometric Series, Vols. I & II*, Ch. VII, Ch. VIII (?); Grafakos 2014, Chs. 3–4 (?); Duren 1970, *Theory of H^p Spaces* (?); Garnett 2007, *Bounded Analytic Functions*, Ch. II (?); Stein–Weiss 1971, Ch. IV (?)
+- conventions: Mathlib `Analysis/Fourier`
+- theorem: Rudin 1987, *Real and Complex Analysis*, Ch. 19, Ch. 17 (?); Groemer 1996, *Geometric Applications of Fourier…* (?)
+- formal: `fpvandoorn/carleson`; OAI `Analysis/Littlewood`; OAI `Geometry/ProjectionBodies`
+
+**HarmonicAnalysis/RealVariableHarmonicAnalysis** (wave A)
+- primary: Grafakos 2014, Ch. 1, Ch. 5, Ch. 7 (?); Grafakos 2014, Ch. 1, Ch. 2, Ch. 3 (?); Stein 1993, Chs. III–IV, Ch. V (?); Bergh–Löfström 1976, *Interpolation Spaces* (?); Triebel 1983, *Theory of Function Spaces* (?)
+- theorem: Coifman–Meyer–Stein 1985, *Some new function spaces and their…* (?); Stein 1976, *Maximal functions. I. Spherical means* (?); Lerner–Nazarov 2019, *Intuitive dyadic calculus* (?); David–Journé 1984, *Boundedness criterion for generalized…* (?); Nazarov–Treil–Volberg 2003, *Tb-theorem on non-homogeneous spaces* (?); Coifman–McIntosh–Meyer 1982, *L'intégrale de Cauchy définit un…* (?); Jones–Seeger–Wright 2008, *Strong variational and jump…* (?); Kinnunen 1997, *Hardy–Littlewood maximal function of a…* (?)
+- formal: `fpvandoorn/carleson`; OAI `Analysis/DiskMaximal`
+
+**HarmonicAnalysis/TimeFrequencyAnalysis** (wave B)
+- primary: Grafakos 2014, Ch. 6 (?); Thiele 2006, *Wave Packet Analysis* (?); Muscalu–Schlag 2013, Vol. II (?)
+- theorem: Becker et al. 2024, *Carleson operators on doubling metric…* (?); Antonov 1996, *Convergence of Fourier series* (?); Lacey–Thiele 1999, *Calderón's conjecture* (?); Oberlin et al. 2012, *Variation norm Carleson theorem* (?); Lacey–Li 2010, *Conjecture of E. M. Stein on the…* (?); Bateman–Thiele 2013, *L^p estimates for the Hilbert…* (?); Kovač 2012, *Boundedness of the twisted paraproduct* (?)
+- statement: OpenAI 2026, *Uniform Hilbert transform estimate for…* (OAI#083); OpenAI 2026, *L³ bound for the trilinear Hilbert…* (OAI#086)
+- formal: `fpvandoorn/carleson`; OAI `Analysis/TriangularHilbert`
+
+**HarmonicAnalysis/FourierRestriction** (wave A)
+- primary: Stein 1993, Chs. VIII–IX (?); Demeter 2020, *Fourier Restriction, Decoupling, and…* (?); Mattila 2015, *Fourier Analysis and Hausdorff Dimension* (?); Łaba–Shubin) 2003, *Harmonic Analysis* (?); Sogge 2017, *Fourier Integrals in Classical Analysis* (?)
+- theorem: Tao 1999, *Bochner–Riesz conjecture implies the…* (?); Bennett–Carbery–Tao 2006, *Multilinear restriction and Kakeya…* (?); Bourgain–Guth 2011, *Bounds on oscillatory integral…* (?); Guth 2016, *Restriction estimate using polynomial…* (?); Du–Guth–Li 2017, *Sharp Schrödinger maximal estimate in ℝ²* (?)
+- statement: OpenAI 2026, *Diagonal Fourier extension for…* (OAI#077); OpenAI 2026, *Bochner–Riesz multipliers in three…* (OAI#078); OpenAI 2026, *Critical local smoothing for the…* (OAI#079); OpenAI 2026, *Endpoint pointwise convergence for the…* (OAI#080)
+
+**HarmonicAnalysis/Decoupling** (wave B)
+- primary: Demeter 2020 (?)
+- theorem: Bourgain–Demeter 2015, *Proof of the ℓ² decoupling conjecture* (?); Bourgain–Demeter–Guth 2016, *Proof of the main conjecture in…*; Bourgain–Guth 2011 (?); Wolff 2000, *Local smoothing type estimates on L^p…* (?); Bourgain 1993, *Fourier transform restriction phenomena…* (?)
+- statement: Demeter–Guth–Wang 2020, *Small cap decouplings* (?); Guth–Wang–Zhang 2020, *Sharp square function estimate for the…* (?)
+
+**HarmonicAnalysis/KakeyaAndBrascampLieb** (wave A)
+- primary: Łaba–Shubin) 2003 (?); Mattila 2015 (?); Guth 2016, *Polynomial Methods in Combinatorics* (?)
+- theorem: Wolff 1995, *Improved bound for Kakeya type maximal…* (?); Lieb 1990, *Gaussian kernels have only Gaussian…* (?); Bennett et al. 2008, *Brascamp–Lieb inequalities* (?); Bennett–Carbery–Tao 2006 (?); Guth 2010, *Endpoint case of the…* (?); Wongkew 1993, *Volumes of tubular neighbourhoods of…* (?)
+- statement: Wang–Zahl 2025, *Volume estimates for unions of convex…* (?); OpenAI 2026, *Kakeya maximal conjecture in three…* (OAI#074)
+- formal: OAI `MeasureTheory/Falconer`
+
+**GeometricMeasureTheory** (umbrella, wave A)
+- primary: Federer 1969, *Geometric Measure Theory*, Ch. 4 (?); Evans–Gariepy 2015, *Measure Theory and Fine Properties of…*, Ch. 3, Ch. 5 (?); Mattila 1995, *Geometry of Sets and Measures in…* (?); Simon 1983, *Geometric Measure Theory* (?); Ambrosio–Fusco–Pallara 2000, *Functions of Bounded Variation and Free…* (?); Maggi 2012, *Sets of Finite Perimeter and Geometric…* (?)
+- conventions: Mathlib `MeasureTheory/Measure/Hausdorff`; Mathlib `Topology/EMetricSpace/BoundedVariation`
+
+**GeometricMeasureTheory/RectifiabilityAndBV** (wave A)
+- primary: Federer 1969 (?); Evans–Gariepy 2015, Ch. 3, Ch. 5 (?); Ambrosio–Fusco–Pallara 2000, Chs. 3–4 (?); Maggi 2012, Part II (?); Mattila 1995 (?)
+- formal: Mathlib `MeasureTheory/Measure/Hausdorff`; Tau Ceti `Analysis/Sobolev`; OAI `Analysis/CircleDomains`; OAI `Geometry/Perimeter`; OAI `Geometry/CAT0Fillings`
+
+**GeometricMeasureTheory/CurrentsAndVarifolds** (wave B)
+- primary: Federer 1969, Ch. 4 (?); Simon 1983 (?); Krantz–Parks 2008, *Geometric Integration Theory* (?)
+- theorem: Federer–Fleming 1960, *Normal and integral currents* (?); Allard 1972, *First variation of a varifold* (?); Ambrosio–Kirchheim 2000, *Currents in metric spaces* (?); Wenger 2005, *Isoperimetric inequalities of Euclidean…* (?)
+- formal: OAI `Geometry/CAT0Fillings`; OAI `Geometry/Varifold`
+
+**GeometricMeasureTheory/MinimalBoundariesAndIsoperimetry** (wave B)
+- primary: Giusti 1984, *Minimal Surfaces and Functions of…*, Part I (?); Maggi 2012, Part III (?); Simon 1983 (?)
+- theorem: Simons 1968, *Minimal varieties in Riemannian…* (?); Bombieri–De Giorgi–Giusti 1969, *Minimal cones and the Bernstein problem* (?); Morgan 2003, *Regularity of isoperimetric…* (?); Ros 2005, *Isoperimetric problem* (?)
+- statement: Almgren 2000, *Almgren's Big Regularity Paper* (?)
+- formal: OAI `Geometry/Perimeter`; OAI `Geometry/StableBernstein`
+
+**GeometricMeasureTheory/QuantitativeRectifiability** (wave B)
+- primary: David–Semmes 1993, *Analysis of and on Uniformly…* (?); Tolsa 2014, *Analytic Capacity, the Cauchy…* (?); Mattila 1995 (?)
+- theorem: David–Semmes 1991, *Singular integrals and rectifiable sets…* (?); Jones 1990, *Rectifiable sets and the traveling…* (?); Okikiolu 1992, *Characterization of subsets of…* (?); Mattila–Melnikov–Verdera 1996, *Cauchy integral, analytic capacity, and…* (?)
+- statement: Nazarov–Tolsa–Volberg 2014, *Uniform rectifiability of AD-regular…* (?); Tolsa 2003, *Painlevé's problem and the…* (?); Azzam et al. 2016, *Rectifiability of harmonic measure* (?); OpenAI 2026, *Riesz transforms and uniform…* (OAI#081)
+- formal: OAI `Analysis/RieszRectifiability`
+
+**GeometricMeasureTheory/FractalGeometry** (wave A)
+- primary: Falconer 2014, *Fractal Geometry*, Ch. 9 (?); Mattila 1995 (?); Mattila 2015 (?); Bishop–Peres 2017, *Fractals in Probability and Analysis* (?)
+- theorem: Feng–Hu 2009, *Dimension theory of iterated function…* (?); Erdős 1939, *Family of symmetric Bernoulli…* (?); Garsia 1962, *Arithmetic properties of Bernoulli…* (?); Wolff 1999, *Recent work connected with the Kakeya…* (?)
+- statement: Ren–Wang 2023, *Furstenberg sets estimate in the plane* (?); OpenAI 2026, *Falconer distance conjecture in all…* (OAI#073)
+- formal: OAI `MeasureTheory/Falconer`; OAI `MeasureTheory/SelfSimilar`
+
+**ComplexAnalysis** (umbrella, wave A)
+- primary: Ahlfors 1979, *Complex Analysis* (?); Conway 1978, *Functions of One Complex Variable I* (?); Conway 1995, *Functions of One Complex Variable II*, Ch. 17 (?); Hörmander 1990, *Complex Analysis in Several Variables* (?); Forster 1981, *Riemann Surfaces*, §27
+- formal: Mathlib `Analysis/Complex`; Tau Ceti `Analysis/Complex/Conformal`; Tau Ceti `Analysis/Contour`
+
+**ComplexAnalysis/GeometricFunctionTheory** (wave A)
+- primary: Duren 1983, *Univalent Functions*, Ch. 2, Ch. 3 (?); Pommerenke 1992, *Boundary Behaviour of Conformal Maps*, Ch. 2, Ch. 3 (?); Pommerenke 1975, *Univalent Functions* (?); Garnett–Marshall 2005, *Harmonic Measure* (?); Ransford 1995, *Potential Theory in the Complex Plane* (?); Lawler 2005, *Conformally Invariant Processes in the…* (?)
+- theorem: Conway 1995, Ch. 17 (?); de Branges 1985, *Proof of the Bieberbach conjecture* (?)
+- formal: Tau Ceti `Analysis/Complex/Conformal`; OAI `Analysis/IntegralMeans`
+
+**ComplexAnalysis/QuasiconformalMapsAndUniformization** (wave A)
+- primary: Ahlfors 2006, *Quasiconformal Mappings*, Ch. IV, Ch. V (?); Lehto–Virtanen 1973, *Quasiconformal Mappings in the Plane* (?); Astala–Iwaniec–Martin 2009, *Elliptic Partial Differential Equations…* (?); Ahlfors 1973, *Conformal Invariants* (?); Stephenson 2005, *Circle Packing* (?)
+- theorem: Goluzin 1969, *Geometric Theory of Functions of a…* (?); Rodin–Sullivan 1987, *Convergence of circle packings to the…* (?); Forster 1981, §27
+- formal: OAI `Analysis/CircleDomains`; Tau Ceti `Analysis/Sobolev`
+
+**ComplexAnalysis/LinearDifferentialEquationsAndSpecialFunctions** (wave A)
+- primary: Hille 1976, *Ordinary Differential Equations in the…* (?); Iwasaki et al. 1991, *From Gauss to Painlevé* (?); Olver 1974, *Asymptotics and Special Functions* (?); Wasow 1965, *Asymptotic Expansions for Ordinary…* (?); Watson 1944, *Treatise on the Theory of Bessel…* (?)
+- conventions: Olver et al. 2010, *NIST Digital Library of Mathematical…*, Ch. 10, Ch. 13, Ch. 15 (?); Roberts–Rodriguez Villegas 2022, *Hypergeometric motives*
+- theorem: Beukers–Heckman 1989, *Monodromy for the hypergeometric…*; Calegari–Dimitrov–Tang 2024, *Unbounded denominators conjecture*
+- formal: Mathlib `Analysis/SpecialFunctions`; `CBirkbeck/tauceti-explorer`
+
+**ComplexAnalysis/SeveralComplexVariables** (wave A)
+- primary: Hörmander 1990, Ch. IV, Ch. V, Ch. VI (?); Gunning–Rossi 1965, *Analytic Functions of Several Complex…* (?); Krantz 1992, *Function Theory of Several Complex…* (?); Grauert–Remmert 1979, *Theory of Stein Spaces* (?); Demailly 2012, *Complex Analytic and Differential…*, Chs. I–II (?); Lebl n.d., *Tasty Bits of Several Complex Variables* (?)
+- theorem: Andreotti–Frankel 1959, *Lefschetz theorem on hyperplane sections* (?)
+- formal: Tau Ceti `Analysis/Complex/CauchyIntegralPolydisc`; OAI `Geometry/HypersurfaceGerms`; OAI `Analysis/SymmetricDomains`
+
+**ComplexAnalysis/OkaTheoryAndHyperbolicity** (wave B)
+- primary: Forstnerič 2017, *Stein Manifolds and Holomorphic Mappings* (?); Kobayashi 1998, *Hyperbolic Complex Spaces* (?); Lang 1987, *Complex Hyperbolic Spaces* (?)
+- theorem: Brody 1978, *Compact manifolds and hyperbolicity* (?); Grauert 1958, *Analytische Faserungen über…* (?); Gromov 1989, *Oka's principle for holomorphic…* (?); Forstnerič 2006, *Runge approximation on convex sets…* (?)
+- statement: Green–Griffiths 1980, *Two applications of algebraic geometry…* (?)
+- formal: `lana-agents/oka`
+
+**ComplexAnalysis/PluripotentialTheory** (wave B)
+- primary: Demailly 2012, Ch. III, Ch. VIII (?); Demailly 2012, *Analytic Methods in Algebraic Geometry* (?); Guedj–Zeriahi 2017, *Degenerate Complex Monge–Ampère…* (?); Klimek 1991, *Pluripotential Theory* (?)
+- theorem: Bedford–Taylor 1982, *New capacity for plurisubharmonic…* (?); Siu 1974, *Analyticity of sets associated to…* (?); Ohsawa–Takegoshi 1987, *Extension of L² holomorphic functions* (?); Kołodziej 1998, *Complex Monge–Ampère equation* (?)
+- formal: OAI `Geometry/TamingCompatibility`
+
+**NonlinearPDE** (umbrella, wave A)
+- primary: Evans 2010, *Partial Differential Equations*, Ch. 5, Chs. 3, 10, Ch. 8 (?); Gilbarg–Trudinger 2001, *Elliptic Partial Differential Equations…*, Ch. 3, Ch. 8, Ch. 9 (?); Taylor 2011, *Partial Differential Equations I–III* (?); Tao 2006, *Nonlinear Dispersive Equations* (?); Bahouri–Chemin–Danchin 2011, *Fourier Analysis and Nonlinear Partial…* (?)
+- conventions: Mathlib `Analysis/InnerProductSpace/Laplacian`; Mathlib `Analysis/Distribution`; Tau Ceti `Analysis/Sobolev`
+- formal: Tau Ceti `Analysis/PDE`
+
+**NonlinearPDE/NonlinearEllipticEquations** (wave B)
+- primary: Caffarelli–Cabré 1995, *Fully Nonlinear Elliptic Equations* (?); Crandall–Ishii–Lions 1992, *User's guide to viscosity solutions of…* (?); Gilbarg–Trudinger 2001, Ch. 17 (?); Lindqvist 2016, *Infinity Laplace Equation* (?)
+- theorem: Jensen 1993, *Uniqueness of Lipschitz extensions* (?); Evans–Savin 2008, *C^{1,α} regularity for infinity…* (?); Gidas–Ni–Nirenberg 1979, *Symmetry and related properties via the…* (?); Gidas–Spruck 1981, *Global and local behavior of positive…* (?); Caffarelli–Gidas–Spruck 1989, *Asymptotic symmetry and local behavior…* (?); DiBenedetto 1983, *C^{1+α} local regularity of weak…* (?); Crandall–Lions 1983, *Viscosity solutions of Hamilton–Jacobi…*, Ch. 10 (?)
+
+**NonlinearPDE/FreeBoundariesAndPhaseTransitions** (wave B)
+- primary: Petrosyan et al. 2012, *Regularity of Free Boundaries in…* (?); Caffarelli–Salsa 2005, *Geometric Approach to Free Boundary…* (?); Velichkov 2023, *Regularity of the One-Phase Free…* (?)
+- theorem: Caffarelli–Jerison–Kenig 2004, *Global energy minimizers for free…* (?); Modica 1985, *Gradient bound and a Liouville theorem…* (?); Ghoussoub–Gui 1998, *Conjecture of De Giorgi and some…* (?); Ambrosio–Cabré 2000, *Entire solutions of semilinear elliptic…* (?); Savin 2009, *Regularity of flat level sets in phase…* (?)
+- statement: Jerison–Savin 2015, *Some remarks on stability of cones for…* (?); De Silva–Jerison 2009, *Singular energy minimizing free boundary* (?); OpenAI 2026, *Critical dimension for one-phase…* (OAI#367); OpenAI 2026, *Positive resolution of De Giorgi's…* (OAI#375)
+
+**NonlinearPDE/CalculusOfVariations** (wave A)
+- primary: Dacorogna 2008, *Direct Methods in the Calculus of…* (?); Giusti 2003, *Direct Methods in the Calculus of…* (?); Braides 2002, *Γ-convergence for Beginners* (?); Ciarlet 1988, *Mathematical Elasticity, Vol. I* (?); Struwe 2008, *Variational Methods* (?); Ambrosio–Fusco–Pallara 2000 (?)
+- theorem: Ball 1977, *Convexity conditions and existence…* (?); Müller 1990, *Higher integrability of determinants…* (?); Modica–Mortola 1977, *Un esempio di Γ⁻-convergenza* (?)
+- formal: `scottnarmstrong/DeGiorgi`; Tau Ceti `Analysis/Sobolev`
+
+**NonlinearPDE/DispersiveEquations** (wave A)
+- primary: Tao 2006, Chs. 2–3 (?); Cazenave 2003, *Semilinear Schrödinger Equations* (?); Linares–Ponce 2015, *Nonlinear Dispersive Equations* (?); Sogge 2008, *Non-Linear Wave Equations* (?)
+- conventions: Mathlib `Analysis/Fourier`
+- theorem: Keel–Tao 1998, *Endpoint Strichartz estimates* (?); Ginibre–Velo 1985, *Scattering theory in the energy space…* (?); Glassey 1977, *Blowing up of solutions to the Cauchy…* (?); Bourgain 1993 (?)
+- statement: Merle et al. 2022, *Blow up for the energy super critical…* (?); OpenAI 2026, *Stable self-similar blowup for a…* (OAI#371)
+- formal: OAI `MathematicalPhysics/DefocusingNLS`
+
+**NonlinearPDE/KineticEquations** (wave B)
+- primary: Glassey 1996, *Cauchy Problem in Kinetic Theory* (?); Villani 2002, *Review of mathematical topics in…* (?); Gallagher et al. 2013, *From Newton to Boltzmann* (?)
+- theorem: Golse et al. 1988, *Regularity of the moments of the…* (?); Pfaffelmoser 1992, *Global classical solutions of the…* (?); Glassey–Strauss 1986, *Singularity formation in a…* (?); DiPerna–Lions 1989, *Cauchy problem for Boltzmann equations* (?); Dobrushin 1979, *Vlasov equations* (?)
+- statement: Bodineau et al. 2023, *Statistical dynamics of a hard sphere…* (?); OpenAI 2026, *Hard-sphere fluctuations on the regular…* (OAI#364)
+- formal: OAI `Analysis/VlasovMaxwell`; OAI `MathematicalPhysics/Boltzmann`
+
+**NonlinearPDE/HyperbolicSystemsAndConservationLaws** (wave A)
+- primary: Dafermos 2016, *Hyperbolic Conservation Laws in…* (?); Bressan 2000, *Hyperbolic Systems of Conservation Laws* (?); Majda 1984, *Compressible Fluid Flow and Systems of…* (?); Sogge 2008 (?); Hörmander 1997, *Nonlinear Hyperbolic Differential…* (?)
+- theorem: Kružkov 1970, *First order quasilinear equations in…* (?); Glimm 1965, *Solutions in the large for nonlinear…* (?); Kato 1975, *Cauchy problem for quasi-linear…* (?); John 1981, *Blow-up for quasilinear wave equations…* (?); Klainerman 1986, *Null condition and global existence to…* (?); Sideris 1985, *Formation of singularities in…* (?)
+
+**NonlinearPDE/EinsteinEvolutionEquations** (wave C)
+- primary: Ringström 2009, *Cauchy Problem in General Relativity* (?); Choquet-Bruhat 2009, *General Relativity and the Einstein…* (?)
+- theorem: Fourès-Bruhat 1952, *Théorème d'existence pour certains…* (?); Choquet-Bruhat–Geroch 1969, *Global aspects of the Cauchy problem in…* (?); Sbierski 2016, *Existence of a maximal Cauchy…* (?); Bartnik–Isenberg 2004, *Constraint equations* (?)
+- statement: Christodoulou–Klainerman 1993, *Global Nonlinear Stability of the…* (?); Giorgi–Klainerman–Szeftel 2022, *Wave equations estimates and the…* (?); Dafermos–Luk 2017, *Interior of dynamical vacuum black… I* (?); OpenAI 2026, *Generic C¹ future inextendibility near…* (OAI#264)
+
+**NonlinearPDE/ConvexIntegration** (wave B)
+- primary: Buckmaster–Vicol 2019, *Convex integration and phenomenologies…* (?); De Lellis–Székelyhidi 2017, *High dimensionality and h-principle in…* (?)
+- theorem: Tartar 1979, *Compensated compactness and…* (?); De Lellis–Székelyhidi 2009, *Euler equations as a differential…* (?); Chiodaroli–De Lellis–Kreml 2015, *Global ill-posedness of the isentropic…* (?); Daneri–Székelyhidi 2017, *Non-uniqueness and h-principle for…* (?); Isett 2018, *Proof of Onsager's conjecture* (?); Buckmaster–Vicol 2019, *Nonuniqueness of weak solutions to the…* (?)
+- statement: Albritton–Brué–Colombo 2022, *Non-uniqueness of Leray solutions of…* (?)
+
+**NonlinearPDE/UniqueContinuationAndInverseProblems** (wave B)
+- primary: Isakov 2017, *Inverse Problems for Partial…* (?); Uhlmann 2009, *Electrical impedance tomography and…* (?)
+- theorem: Aronszajn 1957, *Unique continuation theorem for…* (?); Garofalo–Lin 1986, *Monotonicity properties of variational…* (?); Kohn–Vogelius 1984, *Determining conductivity by boundary…* (?); Sylvester–Uhlmann 1987, *Global uniqueness theorem for an…* (?); Lee–Uhlmann 1989, *Determining anisotropic real-analytic…* (?); Kenig–Sjöstrand–Uhlmann 2007, *Calderón problem with partial data* (?); Nakamura–Uhlmann 1994, *Global uniqueness for an inverse…* (?); Eskin–Ralston 2002, *Inverse boundary value problem for…* (?)
+- formal: OAI `Analysis/Conductivity`; `abenenson/rellich-kondrachov`
+
+**ConicOptimizationAndSpectrahedra** (wave A)
+- primary: Ben-Tal–Nemirovski 2001, *Modern Convex Optimization* (?); Blekherman–Parrilo–Thomas 2013, *Semidefinite Optimization and Convex…* (?); Marshall 2008, *Positive Polynomials and Sums of Squares* (?)
+- theorem: Borwein–Wolkowicz 1981, *Facial reduction for a cone-convex…* (?); Gårding 1959, *Inequality for hyperbolic polynomials* (?); Renegar 2006, *Hyperbolic programs, and their…* (?); Putinar 1993, *Positive polynomials on compact…* (?); Lasserre 2001, *Global optimization with polynomials…* (?)
+- statement: Helton–Vinnikov 2007, *Linear matrix inequality representation…* (?); Scheiderer 2018, *Spectrahedral shadows* (?)
+- formal: OAI `Analysis/HyperbolicCones`; Tau Ceti `Analysis/Convex`
+
+**ValidatedNumerics** (wave A)
+- primary: Moore–Kearfott–Cloud 2009, *Interval Analysis* (?); Tucker 2011, *Validated Numerics* (?); Neumaier 1990, *Interval Methods for Systems of…* (?); Rump 2010, *Verification methods* (?)
+- conventions: Society 2015, *IEEE Standard for Interval Arithmetic…* (?)
+- theorem: Krawczyk 1969, *Newton-Algorithmen zur Bestimmung von…* (?); Makino–Berz 2003, *Taylor models and other validated…* (?); Johansson 2017, *Arb: efficient arbitrary-precision…*
+- formal: `alerad/leancert`; OAI `Analysis/PlanarPacking`; Melquiond 2008, *Proving bounds on real-valued functions…* (?); Mathlib `Analysis/ODE`
+
+**Acquisition list** (not free and not held locally; books needed by a wave-A roadmap, and any work needed by two or more roadmaps of this campaign; journal papers otherwise left to library access, all listed in master (b2); roadmap count in brackets; ★ = wave A): Mattila 1995, *Geometry of Sets and Measures in…* [4] ★; Ambrosio–Fusco–Pallara 2000, *Functions of Bounded Variation and Free…* [3] ★; Federer 1969, *Geometric Measure Theory* [3] ★; Grafakos 2014, *Classical Fourier Analysis* [3] ★; Grafakos 2014, *Modern Fourier Analysis* [3] ★; Maggi 2012, *Sets of Finite Perimeter and Geometric…* [3] ★; Mattila 2015, *Fourier Analysis and Hausdorff Dimension* [3] ★; Stein 1993, *Harmonic Analysis* [3] ★; Bourgain 1993, *Fourier transform restriction phenomena…* [2] ★; Conway 1995, *Functions of One Complex Variable II* [2] ★; Demeter 2020, *Fourier Restriction, Decoupling, and…* [2] ★; Evans–Gariepy 2015, *Measure Theory and Fine Properties of…* [2] ★; Gilbarg–Trudinger 2001, *Elliptic Partial Differential Equations…* [2] ★; Hörmander 1990, *Complex Analysis in Several Variables* [2] ★; Łaba–Shubin) 2003, *Harmonic Analysis* [2] ★; Muscalu–Schlag 2013, *Classical and Multilinear Harmonic…* [2] ★; Sogge 2008, *Non-Linear Wave Equations* [2] ★; Stein–Weiss 1971, *Fourier Analysis on Euclidean Spaces* [2] ★; Tao 2006, *Nonlinear Dispersive Equations* [2] ★; Ahlfors 1973, *Conformal Invariants* [1] ★; Ahlfors 1979, *Complex Analysis* [1] ★; Ahlfors 2006, *Quasiconformal Mappings* [1] ★; Astala–Iwaniec–Martin 2009, *Elliptic Partial Differential Equations…* [1] ★; Bahouri–Chemin–Danchin 2011, *Fourier Analysis and Nonlinear Partial…* [1] ★; Bergh–Löfström 1976, *Interpolation Spaces* [1] ★; Bishop–Peres 2017, *Fractals in Probability and Analysis* [1] ★; Blekherman–Parrilo–Thomas 2013, *Semidefinite Optimization and Convex…* [1] ★; Braides 2002, *Γ-convergence for Beginners* [1] ★; Bressan 2000, *Hyperbolic Systems of Conservation Laws* [1] ★; Cazenave 2003, *Semilinear Schrödinger Equations* [1] ★; Ciarlet 1988, *Mathematical Elasticity, Vol. I* [1] ★; Conway 1978, *Functions of One Complex Variable I* [1] ★; Dacorogna 2008, *Direct Methods in the Calculus of…* [1] ★; Dafermos 2016, *Hyperbolic Conservation Laws in…* [1] ★; Duren 1970, *Theory of H^p Spaces* [1] ★; Duren 1983, *Univalent Functions* [1] ★; Evans 2010, *Partial Differential Equations* [1] ★; Falconer 2014, *Fractal Geometry* [1] ★; Garnett 2007, *Bounded Analytic Functions* [1] ★; Garnett–Marshall 2005, *Harmonic Measure* [1] ★; Giusti 2003, *Direct Methods in the Calculus of…* [1] ★; Goluzin 1969, *Geometric Theory of Functions of a…* [1] ★; Grauert–Remmert 1979, *Theory of Stein Spaces* [1] ★; Groemer 1996, *Geometric Applications of Fourier…* [1] ★; Gunning–Rossi 1965, *Analytic Functions of Several Complex…* [1] ★; Guth 2016, *Polynomial Methods in Combinatorics* [1] ★; Hille 1976, *Ordinary Differential Equations in the…* [1] ★; Hörmander 1997, *Nonlinear Hyperbolic Differential…* [1] ★; Iwasaki et al. 1991, *From Gauss to Painlevé* [1] ★; Katznelson 2004, *Harmonic Analysis* [1] ★; Krantz 1992, *Function Theory of Several Complex…* [1] ★; Lawler 2005, *Conformally Invariant Processes in the…* [1] ★; Lehto–Virtanen 1973, *Quasiconformal Mappings in the Plane* [1] ★; Linares–Ponce 2015, *Nonlinear Dispersive Equations* [1] ★; Majda 1984, *Compressible Fluid Flow and Systems of…* [1] ★; Marshall 2008, *Positive Polynomials and Sums of Squares* [1] ★; Moore–Kearfott–Cloud 2009, *Interval Analysis* [1] ★; Neumaier 1990, *Interval Methods for Systems of…* [1] ★; Olver 1974, *Asymptotics and Special Functions* [1] ★; Pommerenke 1975, *Univalent Functions* [1] ★; Pommerenke 1992, *Boundary Behaviour of Conformal Maps* [1] ★; Ransford 1995, *Potential Theory in the Complex Plane* [1] ★; Rudin 1987, *Real and Complex Analysis* [1] ★; Sogge 2017, *Fourier Integrals in Classical Analysis* [1] ★; Stephenson 2005, *Circle Packing* [1] ★; Struwe 2008, *Variational Methods* [1] ★; Taylor 2011, *Partial Differential Equations I–III* [1] ★; Triebel 1983, *Theory of Function Spaces* [1] ★; Tucker 2011, *Validated Numerics* [1] ★; Wasow 1965, *Asymptotic Expansions for Ordinary…* [1] ★; Watson 1944, *Treatise on the Theory of Bessel…* [1] ★; Zygmund 2002, *Trigonometric Series, Vols. I & II* [1] ★.
+
+Full bibliographic entries, identifiers, access evidence and verification status: `references_master.md`.

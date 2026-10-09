@@ -1,51 +1,176 @@
 [
  {
-  "name": "HarmonicAnalysis/ClassicalFourierAnalysis",
+  "roadmap": "HarmonicAnalysis",
   "campaign": "ANA",
-  "family": "HarmonicAnalysis",
-  "topic": "math.CA",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap builds the classical Fourier analysis of the circle, the torus, the disc and Euclidean space that Mathlib's Fourier transform and Fourier coefficients leave open. On 𝕋ⁿ it covers kernels, summability, divergence phenomena, the conjugate function and inequalities for trigonometric polynomials. On the disc and half-plane it covers the Hardy spaces H^p, p ≠ 2, ∞, with boundary values and factorization, consuming FAMP's H²(𝔻) and H^∞ carriers. On ℝⁿ it covers the Hilbert transform, Paley–Wiener theory, radial Fourier transforms, spherical harmonics and the cosine and Funk transforms. Higher-dimensional singular integrals are RealVariableHarmonicAnalysis's, a.e. convergence of Fourier series TimeFrequencyAnalysis's, and Bessel asymptotics LinearDifferentialEquationsAndSpecialFunctions'.",
-  "key_objects": "Fejér and Poisson kernels; conjugate function; H^p(𝔻), H^p(ℂ₊); inner and outer functions; spherical and zonal harmonics; Gegenbauer polynomials; Hankel, cosine and Funk transforms.",
-  "milestones": [
-   "Fejér's theorem and Lebesgue-point convergence",
-   "Kolmogorov's divergent L¹ Fourier series",
-   "M. Riesz L^p theorem and Zygmund L log L",
-   "Fatou's theorem and Riesz factorization",
-   "F. and M. Riesz; Szegő",
-   "Paley–Wiener",
-   "Funk–Hecke and Bochner–Hecke",
-   "injectivity of the cosine transform on even measures"
-  ],
-  "prerequisites": [
-   "Mathlib Fourier (AddCircle, FourierTransform, PoissonSummation, besselJ)",
-   "Completed/OrthogonalL2Bases",
-   "LaguerreJacobi #117 (Gegenbauer layer only)",
-   "FAMP NonselfadjointOperatorTheory (H²(𝔻), H^∞ identification only)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#075",
-    "OAI#076",
-    "OAI#088",
-    "OAI#090",
-    "OAI#369"
-   ]
-  },
-  "porting": [
-   "OAI Lean Analysis/Littlewood (Bernstein, Rudin–Shapiro)",
-   "carleson DirichletKernel",
-   "OAI Geometry/ProjectionBodies (cosine transform)"
-  ],
-  "replaces": [
-   "RealHarmonicAnalysis (openai_analysis, Fourier-series part)",
-   "ConvexBodies (spherical-harmonics need, OAI#088)"
-  ],
-  "formalizability": "High: textbook (Katznelson, Zygmund, Duren, Stein–Weiss); Mathlib has the Fourier core.",
+  "kind": "umbrella",
+  "references": [
+   {
+    "key": "Grafakos2014a",
+    "role": "primary",
+    "authors": "L. Grafakos",
+    "title": "Classical Fourier Analysis",
+    "type": "book",
+    "venue": "Graduate Texts in Mathematics 249, Springer",
+    "year": 2014,
+    "edition": "3rd",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "3rd ed.: Lorentz spaces and interpolation (Ch. 1), maximal functions (Ch. 2), CZ (Ch. 5), Littlewood–Paley (Ch. 6), weights (Ch. 7); Mathlib's 2π normalization",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Grafakos2014Classical",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Grafakos2014b",
+    "role": "primary",
+    "authors": "L. Grafakos",
+    "title": "Modern Fourier Analysis",
+    "type": "book",
+    "venue": "Graduate Texts in Mathematics 250, Springer",
+    "year": 2014,
+    "edition": "3rd",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "3rd ed.: function spaces (Ch. 1), H^p (Ch. 2), BMO (Ch. 3), T(1) (Ch. 4), Fourier integrals (Ch. 5), Carleson–Hunt (Ch. 6), multilinear (Ch. 7)",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Grafakos2014Modern",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Stein1993",
+    "role": "primary",
+    "authors": "E. M. Stein",
+    "title": "Harmonic Analysis: Real-Variable Methods, Orthogonality, and Oscillatory Integrals",
+    "type": "book",
+    "venue": "Princeton Mathematical Series 43, Princeton University Press",
+    "year": 1993,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "real-variable methods, Hardy spaces, weights, oscillatory integrals: statement reference for all six members",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Stein1993Harmonic",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Stein1971",
+    "role": "primary",
+    "authors": "E. M. Stein, G. Weiss",
+    "title": "Introduction to Fourier Analysis on Euclidean Spaces",
+    "type": "book",
+    "venue": "Princeton Mathematical Series 32, Princeton University Press",
+    "year": 1971,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Fourier analysis on ℝⁿ: H^p on tubes, spherical harmonics and radial transforms (Ch. IV)",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "SteinWeiss1971Fourier",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Muscalu2013",
+    "role": "primary",
+    "authors": "C. Muscalu, W. Schlag",
+    "title": "Classical and Multilinear Harmonic Analysis, Vols. I–II",
+    "type": "book",
+    "venue": "Cambridge Studies in Advanced Mathematics 137–138, Cambridge University Press",
+    "year": 2013,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "classical through multilinear and time–frequency analysis with complete proofs",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "MuscaluSchlag2013Classical",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Mathlib2026Fourier",
+    "role": "conventions",
+    "authors": "Mathlib contributors",
+    "title": "Mathlib Analysis/Fourier: FourierTransform.lean (Real.fourier_eq, 𝓕, 𝓕⁻), AddCircle.lean (fourier, fourierCoeff), AddCircleMulti, Inversion, LpSpace, PoissonSummation, RiemannLebesgueLemma; Analysis/Complex/Circle.lean (Real.fourierChar)",
+    "type": "code",
+    "venue": "leanprover-community/mathlib4 @ 6b7abb3c (2026-09-28)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/leanprover-community/mathlib4/tree/master/Mathlib/Analysis/Fourier"
+    },
+    "serves": "pins the Fourier transform: Real.fourier_eq gives 𝓕f(ξ) = ∫ e^{−2πi⟨x,ξ⟩} f(x) dx via Real.fourierChar (𝐞 x = e^{2πix}), 𝓕⁻ with +; Plancherel without constants; fourierCoeff on AddCircle T against the probability Haar measure with fourier n = e^{2πinx/T}, T = 1 canonical (the name Real.fourierIntegral predates the pinned Mathlib)",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/mathlib/Mathlib/Analysis/Fourier",
+    "confidence": "high",
+    "master_key": "Mathlib2026AnalysisFourier",
+    "verified": "code-local"
+   },
+   {
+    "key": "vanDoorn2025",
+    "role": "formal",
+    "authors": "F. van Doorn, C. Thiele et al. (Carleson project)",
+    "title": "carleson: Lean formalization of Carleson's theorem and its metric generalization (doubling spaces, Lorentz spaces, real interpolation, Calderón–Zygmund decomposition, Hilbert and Dirichlet kernels, tiles and forests)",
+    "type": "code",
+    "venue": "github.com/fpvandoorn/carleson (pinned 306ae5b in the OAI lakefile)",
+    "year": 2025,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/fpvandoorn/carleson"
+    },
+    "serves": "Lorentz spaces, real interpolation, CZ decomposition, tiles, metric Carleson; coordinate with van Doorn–Thiele before porting",
+    "access": "code",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Doorn2025carleson",
+    "verified": "code (not fetched)"
+   }
+  ]
+ },
+ {
+  "roadmap": "HarmonicAnalysis/ClassicalFourierAnalysis",
+  "campaign": "ANA",
+  "kind": "new",
   "references": [
    {
     "key": "Katznelson2004",
@@ -326,54 +451,9 @@
   ]
  },
  {
-  "name": "HarmonicAnalysis/RealVariableHarmonicAnalysis",
+  "roadmap": "HarmonicAnalysis/RealVariableHarmonicAnalysis",
   "campaign": "ANA",
-  "family": "HarmonicAnalysis",
-  "topic": "math.CA",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap develops the real-variable theory of operators and function spaces on ℝⁿ, 𝕋ⁿ, ℤⁿ and spaces of homogeneous type, starting where PDE Lane B stops and consuming IncompressibleFlows Layer 10. It builds Lorentz and Orlicz spaces with real and complex interpolation of Banach couples, maximal operators beyond Hardy–Littlewood, real Hardy spaces with H¹–BMO duality and tent spaces, and Muckenhoupt weights with extrapolation and sparse domination. It develops vector-valued and non-doubling Calderón–Zygmund theory, the T(1) and T(b) theorems, Calderón commutators and Coifman–Meyer multipliers, variation norms, Triebel–Lizorkin and negative-order Besov spaces on domains, and discrete analogues on ℤⁿ. Modulation-invariant operators are TimeFrequencyAnalysis's, curvature FourierRestriction's, and singular integrals on rectifiable sets QuantitativeRectifiability's.",
-  "key_objects": "Lorentz L^{p,q}, Orlicz L log L; interpolation functors; H^p(ℝⁿ), BMO, tent spaces; A_p weights; sparse operators; CZ kernels on (X, μ); variation norms V^r; F^s_{p,q}, B^s_{p,q}(Ω).",
-  "milestones": [
-   "Marcinkiewicz in Lorentz form; Stein interpolation",
-   "Stein spherical maximal theorem (n ≥ 3)",
-   "Fefferman H¹–BMO duality",
-   "Muckenhoupt and Coifman–Fefferman; Rubio de Francia",
-   "Lerner sparse domination and the A₂ theorem",
-   "David–Journé T(1); Nazarov–Treil–Volberg T(1)",
-   "Coifman–McIntosh–Meyer",
-   "Lépingle and Jones–Seeger–Wright",
-   "Kinnunen"
-  ],
-  "prerequisites": [
-   "PDE (main) Lane B",
-   "IncompressibleFlows #237 Layer 10",
-   "Mathlib distributions, Fourier multipliers, Bessel-potential spaces"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#075",
-    "OAI#078",
-    "OAI#081",
-    "OAI#083",
-    "OAI#085",
-    "OAI#216",
-    "OAI#225",
-    "OAI#261"
-   ]
-  },
-  "porting": [
-   "fpvandoorn/carleson (Lorentz spaces, real interpolation, rearrangement, CZ decomposition; coordinate with van Doorn–Thiele)",
-   "OAI Lean Analysis/DiskMaximal",
-   "OAI Lean Analysis/RieszRectifiability (truncated Riesz transforms on L²(μ))"
-  ],
-  "replaces": [
-   "RealHarmonicAnalysis (openai_analysis; probability share cross-need)"
-  ],
-  "formalizability": "High; carleson already has Lorentz spaces and interpolation in Lean.",
+  "kind": "new",
   "references": [
    {
     "key": "Grafakos2014a",
@@ -723,47 +803,9 @@
   ]
  },
  {
-  "name": "HarmonicAnalysis/TimeFrequencyAnalysis",
+  "roadmap": "HarmonicAnalysis/TimeFrequencyAnalysis",
   "campaign": "ANA",
-  "family": "HarmonicAnalysis",
-  "topic": "math.CA",
-  "size": "L",
-  "est_prs": 200,
-  "wave": "B",
-  "scope": "This roadmap treats operators invariant under modulations as well as translations and dilations, analyzed by phase-space decompositions into tiles. It builds tile structures, trees, forests and antichains with the size and density lemmas in the doubling-metric generality of the Carleson project, and proves the metric Carleson and Carleson–Hunt theorems with extrapolation near L¹. It then proves boundedness of the bilinear Hilbert transform, the variational Carleson theorem and the Lacey–Li and Bateman–Thiele theorems on Hilbert transforms along vector fields, and develops heat-flow methods for multilinear forms. Coifman–Meyer multipliers are RealVariableHarmonicAnalysis's and Gowers-norm inverse theorems COMB's; trilinear Hilbert transforms and Lipschitz vector fields enter only as statements.",
-  "key_objects": "tiles, trees, forests, antichains; Carleson operator; bilinear and triangular Hilbert transforms; directional Hilbert transforms; multilinear singular forms.",
-  "milestones": [
-   "metric Carleson theorem",
-   "Carleson–Hunt",
-   "Antonov / Sjölin–Soria near L¹",
-   "Lacey–Thiele BHT",
-   "variational Carleson",
-   "Lacey–Li",
-   "Bateman–Thiele",
-   "Kovač twisted paraproduct"
-  ],
-  "prerequisites": [
-   "HarmonicAnalysis/RealVariableHarmonicAnalysis (Lorentz, interpolation)",
-   "PDE (main) Lane B"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#075",
-    "OAI#082",
-    "OAI#083",
-    "OAI#086"
-   ]
-  },
-  "porting": [
-   "fpvandoorn/carleson (tiles, forests, Carleson–Hunt; pinned in the OAI lakefile; coordinate first)",
-   "OAI Lean Analysis/TriangularHilbert (heat-flow method)"
-  ],
-  "replaces": [
-   "TimeFrequencyAnalysis (openai_analysis)"
-  ],
-  "formalizability": "Very high for Carleson–Hunt (already in Lean); BHT reuses the tile machinery.",
+  "kind": "new",
   "references": [
    {
     "key": "Grafakos2014b",
@@ -1090,55 +1132,9 @@
   ]
  },
  {
-  "name": "HarmonicAnalysis/FourierRestriction",
+  "roadmap": "HarmonicAnalysis/FourierRestriction",
   "campaign": "ANA",
-  "family": "HarmonicAnalysis",
-  "topic": "math.CA",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap develops Fourier analysis with curvature: oscillatory integrals and the restriction, Bochner–Riesz, local-smoothing and Schrödinger-maximal problems. It builds stationary phase in ℝⁿ, oscillatory integral operators, surface measures on curved hypersurfaces with their Fourier decay, and extension operators, and proves the classical linear theorems before the wave-packet, multilinear and polynomial-partitioning methods. Kakeya and Brascamp–Lieb inputs are KakeyaAndBrascampLieb's, decoupling is Decoupling's, Strichartz estimates for evolution equations are DispersiveEquations', and the polynomial ham-sandwich theorem is COMB's. One-variable exponential sums stay with NT's ExponentialSumsAndCircleMethod, which consumes the stationary-phase layer.",
-  "key_objects": "oscillatory integral operators; surface measure σ_S and extension operator E_S; Bochner–Riesz means; half-wave and Schrödinger propagators; wave packets; multilinear extension operators.",
-  "milestones": [
-   "stationary phase and decay of σ̂_S",
-   "Stein–Tomas",
-   "planar restriction",
-   "Carleson–Sjölin; Fefferman ball multiplier",
-   "BR ⇒ restriction",
-   "BCT multilinear restriction",
-   "Bourgain–Guth",
-   "Guth ℝ³ partitioning estimate",
-   "MSS local smoothing",
-   "Du–Guth–Li (n = 2)"
-  ],
-  "prerequisites": [
-   "HarmonicAnalysis/RealVariableHarmonicAnalysis (Stein interpolation, square functions)",
-   "HarmonicAnalysis/KakeyaAndBrascampLieb",
-   "COMB DiscreteGeometryAndIncidences (polynomial ham sandwich)",
-   "Mathlib Fourier transform and Hausdorff measure",
-   "DifferentialGeometry (main) hypersurfaces"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#89"
-   ],
-   "OpenAI": [
-    "OAI#073",
-    "OAI#077",
-    "OAI#078",
-    "OAI#079",
-    "OAI#080"
-   ]
-  },
-  "porting": [
-   "no Lean source; OAI comparator statements for 077–080; Stein, Demeter, Mattila, Guth"
-  ],
-  "replaces": [
-   "FourierRestriction (openai_analysis)",
-   "FourierRestrictionAndDecoupling (annals_52_100 P37, restriction part)"
-  ],
-  "formalizability": "Medium: long elementary estimates; the multilinear layers wait on Kakeya.",
+  "kind": "new",
   "references": [
    {
     "key": "Stein1993",
@@ -1465,45 +1461,9 @@
   ]
  },
  {
-  "name": "HarmonicAnalysis/Decoupling",
+  "roadmap": "HarmonicAnalysis/Decoupling",
   "campaign": "ANA",
-  "family": "HarmonicAnalysis",
-  "topic": "math.CA",
-  "size": "M",
-  "est_prs": 110,
-  "wave": "B",
-  "scope": "This roadmap proves ℓ² and ℓ^p decoupling inequalities and their standard applications. It builds decoupling constants, parabolic rescaling and the Bourgain–Guth multilinear-to-linear reduction, and runs induction on scales for curved hypersurfaces, the cone and nondegenerate curves. Its applications are Vinogradov's mean value theorem, exported to NT's ExponentialSumsAndCircleMethod (ES.2), Strichartz estimates on tori and local smoothing. Small-cap decoupling and sharp local smoothing are stated. Multilinear restriction and Kakeya are consumed from FourierRestriction and KakeyaAndBrascampLieb.",
-  "key_objects": "decoupling constants Dec(δ); caps and wave-packet decompositions; nondegenerate curves; Vinogradov integrals J_{s,k}.",
-  "milestones": [
-   "Bourgain–Guth reduction",
-   "Bourgain–Demeter (paraboloid, cone)",
-   "Bourgain–Demeter–Guth (moment curve)",
-   "Vinogradov mean value theorem",
-   "Strichartz on tori",
-   "ℓ^p decoupling ⇒ local smoothing"
-  ],
-  "prerequisites": [
-   "HarmonicAnalysis/FourierRestriction",
-   "HarmonicAnalysis/KakeyaAndBrascampLieb"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#89"
-   ],
-   "OpenAI": [
-    "OAI#077",
-    "OAI#079"
-   ]
-  },
-  "porting": [
-   "no Lean source; Demeter, Fourier Restriction, Decoupling and Applications"
-  ],
-  "replaces": [
-   "FourierRestrictionAndDecoupling (decoupling part)",
-   "ExponentialSumsAndCircleMethod ES.2 decoupling layer (Birkbeck campaign; coordination §3.3)"
-  ],
-  "formalizability": "Medium: the induction on scales is the long pole; statements are short.",
+  "kind": "new",
   "references": [
    {
     "key": "Demeter2020a",
@@ -1692,49 +1652,9 @@
   ]
  },
  {
-  "name": "HarmonicAnalysis/KakeyaAndBrascampLieb",
+  "roadmap": "HarmonicAnalysis/KakeyaAndBrascampLieb",
   "campaign": "ANA",
-  "family": "HarmonicAnalysis",
-  "topic": "math.CA",
-  "size": "M",
-  "est_prs": 120,
-  "wave": "A",
-  "scope": "This roadmap develops the geometry of tubes in ℝⁿ that controls restriction theory. It constructs Besicovitch sets, proves the planar Kakeya theorems, formulates the Kakeya set and maximal conjectures with their implications, and proves the bush and hairbrush bounds. It builds Brascamp–Lieb inequalities with Lieb's theorem and the Bennett–Carbery–Christ–Tao finiteness criterion, and proves multilinear Kakeya with Guth's endpoint; the Wang–Zahl three-dimensional theorem is stated. Polynomial partitioning, ham sandwich and finite-field Kakeya are COMB's DiscreteGeometryAndIncidences, Milnor–Thom bounds AG's, Furstenberg sets and projections FractalGeometry's, and the Brascamp–Lieb variance inequality PRDS's.",
-  "key_objects": "Besicovitch and Nikodym sets; δ-tubes; Kakeya maximal function f*_δ; Brascamp–Lieb data (B_j, p_j) and constants; multilinear Kakeya.",
-  "milestones": [
-   "Besicovitch construction; Davies",
-   "Córdoba planar maximal bound",
-   "bush and hairbrush",
-   "Lieb's theorem; BCCT finiteness",
-   "BCT multilinear Kakeya",
-   "Guth endpoint",
-   "Wongkew"
-  ],
-  "prerequisites": [
-   "Mathlib Hausdorff dimension",
-   "COMB DiscreteGeometryAndIncidences (ham sandwich, partitioning)",
-   "AG Milnor–Thom/Warren targets",
-   "GeometricMeasureTheory/FractalGeometry (Furstenberg statements)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#89"
-   ],
-   "OpenAI": [
-    "OAI#074",
-    "OAI#078"
-   ]
-  },
-  "porting": [
-   "OAI Lean MeasureTheory/Falconer (fixed-scale Kakeya file)",
-   "Guth, Polynomial Methods in Combinatorics; Mattila"
-  ],
-  "replaces": [
-   "KakeyaAndProjections (openai_analysis, Kakeya part)",
-   "FourierRestrictionAndDecoupling (Kakeya part)"
-  ],
-  "formalizability": "Medium–high; Guth's endpoint needs the topological polynomial method.",
+  "kind": "new",
   "references": [
    {
     "key": "Wolff2003",
@@ -2015,49 +1935,200 @@
   ]
  },
  {
-  "name": "GeometricMeasureTheory/RectifiabilityAndBV",
+  "roadmap": "GeometricMeasureTheory",
   "campaign": "ANA",
-  "family": "GeometricMeasureTheory",
-  "topic": "math.CA",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap develops rectifiability and functions of bounded variation in ℝⁿ (Federer, Evans–Gariepy, Ambrosio–Fusco–Pallara, Maggi). It proves the area and coarea formulas, builds rectifiable sets and measures with densities and approximate tangent planes, and proves the rectifiable half of the Besicovitch–Federer theorem. It develops BV(Ω), sets of finite perimeter with De Giorgi's structure theorem, Gauss–Green and the sharp isoperimetric inequality, and SBV with Ambrosio compactness and Mumford–Shah existence. Currents and varifolds are CurrentsAndVarifolds', regularity of minimizers MinimalBoundariesAndIsoperimetry's, the unrectifiable half of Besicovitch–Federer FractalGeometry's, and one-variable BV Mathlib's.",
-  "key_objects": "Jacobians J_k f; rectifiable sets and measures; approximate tangent planes; BV(Ω), |Du|, P(E,Ω), ∂*E; SBV; Mumford–Shah functional.",
-  "milestones": [
-   "area and coarea formulas",
-   "rectifiable structure and densities",
-   "BV compactness and coarea",
-   "De Giorgi structure; Gauss–Green",
-   "sharp isoperimetric inequality",
-   "Ambrosio SBV compactness; Mumford–Shah existence"
-  ],
-  "prerequisites": [
-   "Mathlib Hausdorff measure, Rademacher, covering theorems",
-   "Tau Ceti Sobolev (Wkp)",
-   "FAMP BanachSpaceTheory/NonlinearGeometry (Kirszbraun; McShane suffices for the core)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#71"
-   ],
-   "OpenAI": [
-    "OAI#071",
-    "OAI#085",
-    "OAI#337",
-    "OAI#354",
-    "OAI#366"
-   ]
-  },
-  "porting": [
-   "OAI Lean Analysis/CircleDomains/Sobolev (ACL, planar coarea)",
-   "OAI Lean Geometry/Perimeter, Geometry/CAT0Fillings (Euclidean BV)"
-  ],
-  "replaces": [
-   "GeometricMeasureTheory (openai_analysis #5, annals P22, geometry share; rectifiability and BV part)"
-  ],
-  "formalizability": "Medium–high; area/coarea is the long pole, everything downstream reuses it.",
+  "kind": "umbrella",
+  "references": [
+   {
+    "key": "Federer1969",
+    "role": "primary",
+    "authors": "H. Federer",
+    "title": "Geometric Measure Theory",
+    "type": "book",
+    "venue": "Grundlehren der mathematischen Wissenschaften 153, Springer",
+    "year": 1969,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "the reference: Hausdorff measure (2.10), area and coarea (3.2), structure theory (3.3), currents (Ch. 4)",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Federer1969Geometric",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Evans2015",
+    "role": "primary",
+    "authors": "L. C. Evans, R. F. Gariepy",
+    "title": "Measure Theory and Fine Properties of Functions",
+    "type": "book",
+    "venue": "Textbooks in Mathematics, CRC Press",
+    "year": 2015,
+    "edition": "revised",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "area and coarea formulas (Ch. 3), BV and perimeter (Ch. 5); pins the outer normal: Dχ_E = −ν_E|Dχ_E|",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "EvansGariepy2015Measure",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Mattila1995",
+    "role": "primary",
+    "authors": "P. Mattila",
+    "title": "Geometry of Sets and Measures in Euclidean Spaces: Fractals and Rectifiability",
+    "type": "book",
+    "venue": "Cambridge Studies in Advanced Mathematics 44, Cambridge University Press",
+    "year": 1995,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "rectifiability, densities, projections, Besicovitch–Federer",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Mattila1995Geometry",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Simon1983",
+    "role": "primary",
+    "authors": "L. Simon",
+    "title": "Lectures on Geometric Measure Theory",
+    "type": "book",
+    "venue": "Proceedings of the Centre for Mathematical Analysis 3, Australian National University",
+    "year": 1983,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "rectifiable sets, varifolds, Allard, currents in one course",
+    "access": "free",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Simon1983Lectures",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Ambrosio2000a",
+    "role": "primary",
+    "authors": "L. Ambrosio, N. Fusco, D. Pallara",
+    "title": "Functions of Bounded Variation and Free Discontinuity Problems",
+    "type": "book",
+    "venue": "Oxford Mathematical Monographs, Oxford University Press",
+    "year": 2000,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "BV(Ω), SBV, free-discontinuity problems; note its generalized inner normal is −ν_E",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "AmbrosioFuscoPallara2000Functions",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Maggi2012",
+    "role": "primary",
+    "authors": "F. Maggi",
+    "title": "Sets of Finite Perimeter and Geometric Variational Problems: An Introduction to Geometric Measure Theory",
+    "type": "book",
+    "venue": "Cambridge Studies in Advanced Mathematics 135, Cambridge University Press",
+    "year": 2012,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "sets of finite perimeter and regularity of minimizers (Parts II–III)",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Maggi2012Sets",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Mathlib2026GMT",
+    "role": "conventions",
+    "authors": "Mathlib contributors",
+    "title": "Mathlib geometric measure theory: MeasureTheory/Measure/Hausdorff.lean (μH), Geometry/Euclidean/Volume/Measure.lean (μHE), Topology/MetricSpace/HausdorffDimension.lean (dimH), MeasureTheory/Covering/*, Analysis/Calculus/Rademacher.lean, MeasureTheory/Function/Jacobian.lean",
+    "type": "code",
+    "venue": "leanprover-community/mathlib4 @ 6b7abb3c (2026-09-28)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/leanprover-community/mathlib4/tree/master/Mathlib/MeasureTheory/Measure/Hausdorff.lean"
+    },
+    "serves": "pins Hausdorff measure: μH[d] is unnormalized (Σ diam^d); μHE[d] is normalized to Lebesgue on d-planes (Federer's ℋ^d); area, coarea, perimeter, currents and varifolds use μHE",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/mathlib/Mathlib/MeasureTheory/Measure/Hausdorff.lean",
+    "confidence": "high",
+    "master_key": "Mathlib2026MeasureHausdorff",
+    "verified": "code-local"
+   },
+   {
+    "key": "Mathlib2026BV",
+    "role": "conventions",
+    "authors": "Mathlib contributors",
+    "title": "Mathlib Topology/EMetricSpace/BoundedVariation.lean (eVariationOn, BoundedVariationOn: one-variable pointwise variation)",
+    "type": "code",
+    "venue": "leanprover-community/mathlib4 @ 6b7abb3c (2026-09-28)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/leanprover-community/mathlib4/tree/master/Mathlib/Topology/EMetricSpace/BoundedVariation.lean"
+    },
+    "serves": "one-variable eVariationOn is the pointwise variation; |Du|(I) equals the essential variation, a bridge theorem, not a definition",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/mathlib/Mathlib/Topology/EMetricSpace/BoundedVariation.lean",
+    "confidence": "high",
+    "master_key": "Mathlib2026EMetricSpaceBoundedVariation",
+    "verified": "code-local"
+   }
+  ]
+ },
+ {
+  "roadmap": "GeometricMeasureTheory/RectifiabilityAndBV",
+  "campaign": "ANA",
+  "kind": "new",
   "references": [
    {
     "key": "Federer1969",
@@ -2292,49 +2363,9 @@
   ]
  },
  {
-  "name": "GeometricMeasureTheory/CurrentsAndVarifolds",
+  "roadmap": "GeometricMeasureTheory/CurrentsAndVarifolds",
   "campaign": "ANA",
-  "family": "GeometricMeasureTheory",
-  "topic": "math.CA",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "This roadmap builds the two weak notions of submanifold in geometric measure theory and their compactness theory (Federer, Simon, Ambrosio–Kirchheim). For currents it develops mass, boundary and flat norm, normal, rectifiable and integral currents, Federer–Fleming compactness, the deformation theorem, slicing and the Plateau problem, and Ambrosio–Kirchheim currents in metric spaces. For varifolds it develops first variation, the monotonicity formula, and Allard's compactness and regularity theorems. Regularity of area-minimizing hypersurfaces is MinimalBoundariesAndIsoperimetry's; min–max and the smooth theory of minimal submanifolds are GEO's MinimalSubmanifolds, and Brakke flow is GEO's GeometricFlows.",
-  "key_objects": "currents 𝒟_k(U), M, ∂, flat norm; N_k, R_k, I_k; metric currents; varifolds V, δV, H; density Θ; tangent cones.",
-  "milestones": [
-   "boundary rectifiability and closure",
-   "Federer–Fleming compactness",
-   "deformation theorem; isoperimetric inequality",
-   "Plateau existence",
-   "Ambrosio–Kirchheim; Wenger",
-   "monotonicity formula",
-   "Allard compactness and regularity"
-  ],
-  "prerequisites": [
-   "GeometricMeasureTheory/RectifiabilityAndBV",
-   "DifferentialGeometry (main) forms; Mathlib flat exterior calculus"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#71",
-    "Annals#85"
-   ],
-   "OpenAI": [
-    "OAI#337",
-    "OAI#346",
-    "OAI#349"
-   ]
-  },
-  "porting": [
-   "OAI Lean Geometry/IntegralFillings, Geometry/CAT0Fillings (metric currents)",
-   "OAI Lean Geometry/Varifold"
-  ],
-  "replaces": [
-   "GeometricMeasureTheory (currents and varifolds part; annals P22)",
-   "MinimalSubmanifolds (geometry share; varifold layer)"
-  ],
-  "formalizability": "Medium; Allard regularity is the hardest single proof.",
+  "kind": "new",
   "references": [
    {
     "key": "Federer1969",
@@ -2546,49 +2577,9 @@
   ]
  },
  {
-  "name": "GeometricMeasureTheory/MinimalBoundariesAndIsoperimetry",
+  "roadmap": "GeometricMeasureTheory/MinimalBoundariesAndIsoperimetry",
   "campaign": "ANA",
-  "family": "GeometricMeasureTheory",
-  "topic": "math.CA",
-  "size": "M",
-  "est_prs": 130,
-  "wave": "B",
-  "scope": "This roadmap develops the regularity theory of perimeter minimizers and the isoperimetric problem (Giusti, Maggi). It proves density and monotonicity estimates, De Giorgi's ε-regularity, minimizing tangent cones and Federer's dimension reduction in an abstract form that free-boundary problems reuse. It proves Simons' classification of stable cones, the minimality of the Simons cone, the n − 8 bound on singular sets and Bernstein's theorem, exporting them to GEO's MinimalSubmanifolds. It proves existence and regularity of isoperimetric regions in compact manifolds and flat tori with their constant-mean-curvature boundaries. Almgren's higher-codimension regularity is stated, and index and min–max theory are GEO's.",
-  "key_objects": "perimeter almost-minimizers; excess; minimizing cones; singular set; Simons cone; isoperimetric profile I_M.",
-  "milestones": [
-   "ε-regularity",
-   "tangent cones; dimension reduction",
-   "Simons classification",
-   "BDG minimality of the Simons cone",
-   "Bernstein (n ≤ 8)",
-   "isoperimetric regions: existence, regularity, CMC"
-  ],
-  "prerequisites": [
-   "GeometricMeasureTheory/RectifiabilityAndBV",
-   "GeometricMeasureTheory/CurrentsAndVarifolds (monotonicity)",
-   "GEO RiemannianGeometry (ambient manifolds)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#260",
-    "OAI#278",
-    "OAI#336",
-    "OAI#337",
-    "OAI#354",
-    "OAI#367",
-    "OAI#375"
-   ]
-  },
-  "porting": [
-   "OAI Lean Geometry/Perimeter, Geometry/CubicTorus, Geometry/StableBernstein"
-  ],
-  "replaces": [
-   "GeometricMeasureTheory (regularity and isoperimetric layer)",
-   "GeometricMeasureTheory (geometry share: minimal cones, OAI#375)"
-  ],
-  "formalizability": "Medium; Giusti's book is a complete route.",
+  "kind": "new",
   "references": [
    {
     "key": "Giusti1984",
@@ -2823,43 +2814,9 @@
   ]
  },
  {
-  "name": "GeometricMeasureTheory/QuantitativeRectifiability",
+  "roadmap": "GeometricMeasureTheory/QuantitativeRectifiability",
   "campaign": "ANA",
-  "family": "GeometricMeasureTheory",
-  "topic": "math.CA",
-  "size": "M",
-  "est_prs": 120,
-  "wave": "B",
-  "scope": "This roadmap develops quantitative rectifiability of sets and measures (David–Semmes, Tolsa). It builds Ahlfors–David regular measures, Jones β-numbers and Menger curvature, proves the analyst's traveling salesman theorem, and characterizes uniform rectifiability by big pieces of Lipschitz images and by the Carleson β² condition. It proves that odd Calderón–Zygmund kernels are bounded on uniformly rectifiable sets and the Mattila–Melnikov–Verdera theorem, and states Nazarov–Tolsa–Volberg, Tolsa's semiadditivity and the harmonic-measure characterization, with the four-corner Cantor set as counterexample. Qualitative rectifiability is RectifiabilityAndBV's and non-doubling Calderón–Zygmund theory RealVariableHarmonicAnalysis's.",
-  "key_objects": "AD-regular measures; β_∞, β_2; Menger curvature c²(μ); BPLI; Carleson measures on Σ; Cauchy and Riesz transforms on Σ.",
-  "milestones": [
-   "traveling salesman theorem",
-   "UR ⇔ Carleson β²",
-   "CZ boundedness on UR sets",
-   "Mattila–Melnikov–Verdera",
-   "four-corner Cantor set"
-  ],
-  "prerequisites": [
-   "GeometricMeasureTheory/RectifiabilityAndBV",
-   "HarmonicAnalysis/RealVariableHarmonicAnalysis (non-doubling CZ)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#84"
-   ],
-   "OpenAI": [
-    "OAI#081"
-   ]
-  },
-  "porting": [
-   "OAI Lean Analysis/RieszRectifiability/Foundations (ADRegular, UniformlyRectifiable)"
-  ],
-  "replaces": [
-   "QuantitativeRectifiability (annals P31)",
-   "GeometricMeasureTheory (uniform rectifiability part)"
-  ],
-  "formalizability": "Medium; NTV and Tolsa remain statements.",
+  "kind": "new",
   "references": [
    {
     "key": "David1993",
@@ -3140,49 +3097,9 @@
   ]
  },
  {
-  "name": "GeometricMeasureTheory/FractalGeometry",
+  "roadmap": "GeometricMeasureTheory/FractalGeometry",
   "campaign": "ANA",
-  "family": "GeometricMeasureTheory",
-  "topic": "math.CA",
-  "size": "L",
-  "est_prs": 220,
-  "wave": "A",
-  "scope": "This roadmap develops the dimension theory of sets and measures in Euclidean and metric spaces (Falconer, Mattila, Bishop–Peres). It builds box, packing, Assouad and Fourier dimensions, gauge Hausdorff measures, Riesz energies and capacities, Frostman's lemma and the dimensions of measures. It proves the Marstrand–Kaufman–Mattila projection and slicing theorems and the classical bounds for Falconer's distance problem and Furstenberg sets, with recent projection and Furstenberg theorems stated. It develops iterated function systems, self-similar measures and Bernoulli convolutions, consuming entropy from PRDS's ErgodicTheory. Kakeya is KakeyaAndBrascampLieb's and rectifiability RectifiabilityAndBV's.",
-  "key_objects": "dim_B, dim_P, dim_A, dim_F; gauge measures H^φ; I_s(μ), Cap_s; Frostman measures; IFS and attractors; self-similar measures; Bernoulli convolutions ν_λ.",
-  "milestones": [
-   "Frostman lemma (analytic sets)",
-   "Marstrand–Kaufman–Mattila",
-   "Mattila integral; Wolff–Erdoğan",
-   "Wolff Furstenberg bound",
-   "Moran–Hutchinson",
-   "Feng–Hu",
-   "Erdős Pisot; Garsia"
-  ],
-  "prerequisites": [
-   "Mathlib Hausdorff measure and dimH",
-   "Mathlib Fourier transform of measures",
-   "PRDS ErgodicTheory (entropy) for the exact-dimensionality layer"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#073",
-    "OAI#148",
-    "OAI#153",
-    "OAI#223",
-    "OAI#230"
-   ]
-  },
-  "porting": [
-   "OAI Lean MeasureTheory/Falconer/Frostman and the Furstenberg campaign",
-   "OAI Lean MeasureTheory/SelfSimilar"
-  ],
-  "replaces": [
-   "FractalGeometry (geometry and probability shares)",
-   "KakeyaAndProjections (projections, Frostman, Falconer part)"
-  ],
-  "formalizability": "High for the classical layers; owned by ANA rather than PRDS (BOUNDARIES: fractal dimension theory).",
+  "kind": "new",
   "references": [
    {
     "key": "Falconer2014",
@@ -3463,53 +3380,200 @@
   ]
  },
  {
-  "name": "ComplexAnalysis/GeometricFunctionTheory",
+  "roadmap": "ComplexAnalysis",
   "campaign": "ANA",
-  "family": "ComplexAnalysis",
-  "topic": "math.CV",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap develops univalent functions and the boundary behavior of conformal maps, starting where ConformalMapping stops. It builds the classes S and Σ with their coefficient and distortion theory, Löwner chains and the chordal and radial Loewner equations through de Branges' theorem, and prime ends with Carathéodory's general correspondence and Kellogg–Warschawski regularity. It develops logarithmic potential theory in the plane, harmonic measure and integral-means spectra. SLE and planar Brownian motion are PRDS's and consume the Loewner and harmonic-measure layers; Riesz energies in ℝⁿ are FractalGeometry's, and value distribution is Mathlib's.",
-  "key_objects": "S, Σ; Grunsky coefficients; Löwner chains, driving functions, hcap; prime ends; logarithmic capacity, Green function g_Ω; harmonic measure ω_Ω; Bloch space; integral-means spectrum β_f(t).",
-  "milestones": [
-   "area theorem; Koebe one-quarter; distortion",
-   "Loewner equation; |a₃| ≤ 3",
-   "de Branges",
-   "prime ends; kernel theorem",
-   "Kellogg–Warschawski",
-   "Wiener criterion; Beurling projection",
-   "Pommerenke/Makarov integral means"
-  ],
-  "prerequisites": [
-   "ConformalMapping (main) and its Tau Ceti code",
-   "Completed/ContourIntegration",
-   "PDE (main) Lane C (Perron, Green kernels)",
-   "Mathlib subharmonic and harmonic functions"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#072",
-    "OAI#218",
-    "OAI#223",
-    "OAI#224",
-    "OAI#230",
-    "OAI#232",
-    "OAI#267",
-    "OAI#325"
-   ]
-  },
-  "porting": [
-   "OAI Lean Analysis/IntegralMeans (schlicht class, integral means)",
-   "Tau Ceti Analysis/Complex/Conformal (Koebe step, prime-end crosscuts, length–area)"
-  ],
-  "replaces": [
-   "UnivalentFunctionsAndQuasiconformalMaps (univalent part)",
-   "GeometricFunctionTheory (probability share)"
-  ],
-  "formalizability": "High: Tau Ceti's conformal library is mature and ConformalMapping is essentially finished.",
+  "kind": "umbrella",
+  "references": [
+   {
+    "key": "Ahlfors1979",
+    "role": "primary",
+    "authors": "L. V. Ahlfors",
+    "title": "Complex Analysis",
+    "type": "book",
+    "venue": "McGraw-Hill",
+    "year": 1979,
+    "edition": "3rd",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "one-variable foundation shared with ConformalMapping and ContourIntegration",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Ahlfors1979Complex",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Conway1978",
+    "role": "primary",
+    "authors": "J. B. Conway",
+    "title": "Functions of One Complex Variable I",
+    "type": "book",
+    "venue": "Graduate Texts in Mathematics 11, Springer",
+    "year": 1978,
+    "edition": "2nd",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "one-variable foundation (cited by ConformalMapping)",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Conway1978Functions",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Conway1995",
+    "role": "primary",
+    "authors": "J. B. Conway",
+    "title": "Functions of One Complex Variable II",
+    "type": "book",
+    "venue": "Graduate Texts in Mathematics 159, Springer",
+    "year": 1995,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "conformal equivalence, univalent functions and de Branges (Ch. 17), harmonic and potential theory",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Conway1995Functions",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Hormander1990",
+    "role": "primary",
+    "authors": "L. Hörmander",
+    "title": "An Introduction to Complex Analysis in Several Variables",
+    "type": "book",
+    "venue": "North-Holland Mathematical Library 7, North-Holland",
+    "year": 1990,
+    "edition": "3rd",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "several variables: Hartogs, L² ∂̄, Stein manifolds, coherent sheaves",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Hormander1990Complex",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Forster1981",
+    "role": "primary",
+    "authors": "O. Forster",
+    "title": "Lectures on Riemann Surfaces",
+    "type": "book",
+    "venue": "Graduate Texts in Mathematics 81, Springer",
+    "year": 1981,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Riemann surfaces, coverings, uniformization of simply connected surfaces (§27); cited by ComplexManifolds #279",
+    "access": "library",
+    "local": "/Users/roed/claude/references/Forster -- Lectures on Riemann surfaces.pdf",
+    "confidence": "high",
+    "master_key": "Forster1981Lectures",
+    "verified": "local:/Users/roed/claude/references/Forster -- Lectures on Riemann surfaces.pdf"
+   },
+   {
+    "key": "Mathlib2026Complex",
+    "role": "formal",
+    "authors": "Mathlib contributors",
+    "title": "Mathlib Analysis/Complex (CauchyIntegral, Harmonic/*, Schwarz, UnitDisc, ValueDistribution/*, RiemannMapping.lean partial results)",
+    "type": "code",
+    "venue": "leanprover-community/mathlib4 @ 6b7abb3c (2026-09-28)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/leanprover-community/mathlib4/tree/master/Mathlib/Analysis/Complex"
+    },
+    "serves": "Cauchy integral, harmonic functions, Schwarz, value distribution, partial RMT",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/mathlib/Mathlib/Analysis/Complex",
+    "confidence": "high",
+    "master_key": "Mathlib2026AnalysisComplex",
+    "verified": "code-local"
+   },
+   {
+    "key": "TauCeti2026Conformal",
+    "role": "formal",
+    "authors": "Tau Ceti contributors",
+    "title": "Tau Ceti Analysis/Complex/Conformal (RiemannMapping, Caratheodory, Koebe, PrimeEnd, Crosscut, LengthArea, Reflection, SchwarzChristoffel)",
+    "type": "code",
+    "venue": "TauCetiProject/TauCeti @ a91d3aafa (2026-10-05)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/TauCetiProject/TauCeti/tree/main/TauCeti/Analysis/Complex/Conformal"
+    },
+    "serves": "ConformalMapping's code: RMT, Carathéodory, Koebe, prime-end crosscuts, length–area",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/TauCeti/TauCeti/Analysis/Complex/Conformal",
+    "confidence": "high",
+    "master_key": "TauCeti2026ComplexConformal",
+    "verified": "code-local"
+   },
+   {
+    "key": "TauCeti2026Contour",
+    "role": "formal",
+    "authors": "Tau Ceti contributors",
+    "title": "Tau Ceti Analysis/Contour (Completed/ContourIntegration: residues, homological Cauchy, Hungerbühler–Wasem)",
+    "type": "code",
+    "venue": "TauCetiProject/TauCeti @ a91d3aafa (2026-10-05)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/TauCetiProject/TauCeti/tree/main/TauCeti/Analysis/Contour"
+    },
+    "serves": "Completed/ContourIntegration: residues and homological Cauchy",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/TauCeti/TauCeti/Analysis/Contour",
+    "confidence": "high",
+    "master_key": "TauCeti2026AnalysisContour",
+    "verified": "code-local"
+   }
+  ]
+ },
+ {
+  "roadmap": "ComplexAnalysis/GeometricFunctionTheory",
+  "campaign": "ANA",
+  "kind": "new",
   "references": [
    {
     "key": "Duren1983",
@@ -3744,47 +3808,9 @@
   ]
  },
  {
-  "name": "ComplexAnalysis/QuasiconformalMapsAndUniformization",
+  "roadmap": "ComplexAnalysis/QuasiconformalMapsAndUniformization",
   "campaign": "ANA",
-  "family": "ComplexAnalysis",
-  "topic": "math.CV",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap develops quasiconformal maps, extremal length and the uniformization of plane domains and Riemann surfaces. It builds the modulus of curve families, the equivalent definitions of K-quasiconformality, the Beurling transform and the measurable Riemann mapping theorem with parameters, and quasisymmetry with the Beurling–Ahlfors extension. It proves Koebe's uniformization of finitely connected domains by circle domains, removability theorems, the circle-packing theorem with Rodin–Sullivan convergence, and the Koebe–Poincaré uniformization theorem for Riemann surfaces, which no roadmap owns today. Teichmüller spaces are TOP's, and quasisymmetric analysis on metric spaces beyond the plane is GEO's.",
-  "key_objects": "mod Γ; K-qc maps; Beltrami coefficients μ; Beurling transform; quasisymmetric maps and quasicircles; circle domains; circle packings.",
-  "milestones": [
-   "equivalence of qc definitions",
-   "Ahlfors–Bers MRMT with parameters",
-   "Beurling–Ahlfors",
-   "Koebe circle-domain uniformization",
-   "Koebe–Andreev–Thurston; Rodin–Sullivan",
-   "Koebe–Poincaré uniformization"
-  ],
-  "prerequisites": [
-   "ConformalMapping (main)",
-   "Tau Ceti Sobolev W^{1,2}",
-   "PDE (main) Lanes B–C (CZ bounds, Perron)",
-   "Completed/UniversalCovers"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#72"
-   ],
-   "OpenAI": [
-    "OAI#071",
-    "OAI#246"
-   ]
-  },
-  "porting": [
-   "OAI Lean Analysis/CircleDomains (Modulus, Sobolev; 211k lines)",
-   "OAI ComparatorChallenges/KoebeCircle"
-  ],
-  "replaces": [
-   "UnivalentFunctionsAndQuasiconformalMaps (qc and circle-domain part)"
-  ],
-  "formalizability": "High; nothing in any roadmap owns the uniformization theorem for Riemann surfaces today.",
+  "kind": "new",
   "references": [
    {
     "key": "Ahlfors2006",
@@ -4019,45 +4045,9 @@
   ]
  },
  {
-  "name": "ComplexAnalysis/LinearDifferentialEquationsAndSpecialFunctions",
+  "roadmap": "ComplexAnalysis/LinearDifferentialEquationsAndSpecialFunctions",
   "campaign": "ANA",
-  "family": "ComplexAnalysis",
-  "topic": "math.CA",
-  "size": "M",
-  "est_prs": 130,
-  "wave": "A",
-  "scope": "This roadmap develops linear ordinary differential equations in the complex domain and the special functions they define. It builds monodromy of holomorphic linear systems, regular singular points with Fuchs' criterion and the Frobenius method, the Gauss and generalized hypergeometric equations with Schwarz's list, and the identification of hypergeometric monodromy with NT's hypergeometric groups. For irregular singular points it develops sectorial asymptotic expansions and applies them to the confluent hypergeometric, Whittaker and Bessel equations. Real ODE existence is Mathlib's, orthogonal polynomials LaguerreJacobi's (#117), and Levelt's theorem, the Beukers–Heckman criteria and hypergeometric motives NT's HypergeometricMotives.",
-  "key_objects": "holomorphic connections on trivial bundles; monodromy representations; regular singular points; P-symbol; ₂F₁, pFq equations; Whittaker functions; Bessel J, Y, I, K.",
-  "milestones": [
-   "Fuchs criterion; Frobenius method",
-   "Riemann's characterization of ₂F₁",
-   "Schwarz list",
-   "monodromy of pFq = hypergeometric group",
-   "sectorial asymptotics",
-   "Bessel and Whittaker asymptotics"
-  ],
-  "prerequisites": [
-   "Mathlib besselJ and regularized hypergeometric series",
-   "Completed/ContourIntegration",
-   "LaguerreJacobi #117",
-   "NT HypergeometricMotives (Levelt, consumed)"
-  ],
-  "goals": {
-   "LMFDB": [
-    "hgm",
-    "maass"
-   ],
-   "Annals": [],
-   "OpenAI": []
-  },
-  "porting": [
-   "explorer draft ConformalMappingPartII stages O0, S0, H0"
-  ],
-  "replaces": [
-   "ConformalMappingPartII (explorer draft; complex-ODE, Schwarzian and hypergeometric stages)",
-   "MaassFormsAndSpectralTheory (NT; K-Bessel layer)"
-  ],
-  "formalizability": "High: classical (Hille, Ince, Olver, Watson).",
+  "kind": "new",
   "references": [
    {
     "key": "Hille1976",
@@ -4315,53 +4305,9 @@
   ]
  },
  {
-  "name": "ComplexAnalysis/SeveralComplexVariables",
+  "roadmap": "ComplexAnalysis/SeveralComplexVariables",
   "campaign": "ANA",
-  "family": "ComplexAnalysis",
-  "topic": "math.CV",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap develops holomorphic functions of several variables and the function theory of domains and Stein manifolds (Hörmander, Gunning–Rossi). It builds Hartogs phenomena, the ring ℂ{z} with Weierstrass preparation and division, germs of analytic sets, and Oka's and Cartan's coherence theorems on ℂⁿ. It develops plurisubharmonic functions and pseudoconvexity, Hörmander's L² solution of ∂̄ and the Levi problem, Stein manifolds with Cartan's Theorems A and B and the embedding theorem, Bergman kernels, and automorphisms of bounded domains. Global complex spaces are AG's ComplexAnalyticSpaces, closed positive currents PluripotentialTheory's, and complex manifolds and bundles ComplexManifolds #279's.",
-  "key_objects": "ℂ{z}; Weierstrass polynomials; analytic germs; coherent sheaves on domains; psh functions; pseudoconvex domains; ∂̄ with weights e^{−φ}; Stein manifolds; Bergman kernel K_Ω.",
-  "milestones": [
-   "Hartogs extension",
-   "Weierstrass preparation; Rückert",
-   "Oka and Cartan coherence",
-   "Hörmander L² ∂̄; Levi problem",
-   "Cartan A/B; Oka–Weil; embedding",
-   "Cartan uniqueness; ball ≇ polydisc",
-   "Andreotti–Frankel"
-  ],
-  "prerequisites": [
-   "Mathlib several-variable analyticity and distributions",
-   "Tau Ceti CauchyIntegralPolydisc and Morse theory",
-   "ComplexManifolds #279 (Stein-manifold layers)",
-   "DifferentialGeometry (main) forms"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#032",
-    "OAI#042",
-    "OAI#046",
-    "OAI#058",
-    "OAI#059",
-    "OAI#064",
-    "OAI#338",
-    "OAI#359"
-   ]
-  },
-  "porting": [
-   "explorer draft SeveralComplexVariablesKahlerGeometry CV.0–CV.3",
-   "OAI Lean Geometry/HypersurfaceGerms, Analysis/SymmetricDomains (Cartan uniqueness, Bishop discs)"
-  ],
-  "replaces": [
-   "SeveralComplexVariables (algebraic-geometry and geometry shares)",
-   "SeveralComplexVariablesKahlerGeometry (explorer draft, CV.0–CV.3)"
-  ],
-  "formalizability": "High; AG's ComplexAnalyticSpaces and SingularityTheory list it as a prerequisite.",
+  "kind": "new",
   "references": [
    {
     "key": "Hormander1990",
@@ -4596,43 +4542,9 @@
   ]
  },
  {
-  "name": "ComplexAnalysis/OkaTheoryAndHyperbolicity",
+  "roadmap": "ComplexAnalysis/OkaTheoryAndHyperbolicity",
   "campaign": "ANA",
-  "family": "ComplexAnalysis",
-  "topic": "math.CV",
-  "size": "M",
-  "est_prs": 120,
-  "wave": "B",
-  "scope": "This roadmap develops holomorphic maps into complex manifolds from the two opposite ends, rigidity and flexibility. It builds the Kobayashi pseudodistance, the Ahlfors–Schwarz lemma and Brody's lemma and theorem, and hyperbolic embeddedness of hyperplane complements. On the flexible side it builds sprays, the convex approximation property and Oka manifolds, and proves the Oka–Grauert and Gromov Oka principles and Forstnerič's equivalence of CAP with the Oka property, with the standard examples. Stein manifolds are SeveralComplexVariables', K3 surfaces AG's, and Green–Griffiths–Lang is stated only.",
-  "key_objects": "Kobayashi pseudodistance d_X; Brody curves; sprays; CAP; Oka manifolds; Oka maps.",
-  "milestones": [
-   "Ahlfors–Schwarz",
-   "Brody lemma and theorem",
-   "Oka–Grauert",
-   "Gromov Oka principle",
-   "CAP ⇔ Oka",
-   "standard Oka examples"
-  ],
-  "prerequisites": [
-   "ComplexAnalysis/SeveralComplexVariables",
-   "ComplexManifolds #279",
-   "ConformalMapping (Schwarz–Pick)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#042",
-    "OAI#051"
-   ]
-  },
-  "porting": [
-   "lana-agents/oka (OAI lakefile dependency; coordinate first)"
-  ],
-  "replaces": [
-   "OkaTheoryAndHyperbolicity (algebraic-geometry share)"
-  ],
-  "formalizability": "Medium; Forstnerič's book is the route.",
+  "kind": "new",
   "references": [
    {
     "key": "Forstneric2017",
@@ -4844,58 +4756,9 @@
   ]
  },
  {
-  "name": "ComplexAnalysis/PluripotentialTheory",
+  "roadmap": "ComplexAnalysis/PluripotentialTheory",
   "campaign": "ANA",
-  "family": "ComplexAnalysis",
-  "topic": "math.CV",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "This roadmap develops pluripotential theory on domains of ℂⁿ and on complex manifolds (Demailly, Guedj–Zeriahi). It builds closed positive currents, quasi-plurisubharmonic functions, Lelong numbers with Siu's theorem, and the Bedford–Taylor complex Monge–Ampère operator with capacities, pluripolar sets and the Siciak extremal function. On complex manifolds it develops Demailly regularization, singular Hermitian metrics, analytic multiplier ideals with Nadel vanishing, the Ohsawa–Takegoshi extension theorem, and the Monge–Ampère operator on compact Kähler manifolds with Kołodziej's estimate. Yau's theorem and Kähler–Einstein metrics are GEO's CalabiYauAndComplexMongeAmpere, algebraic multiplier ideals AG's VanishingTheorems, and real Monge–Ampère OptimalTransport's.",
-  "key_objects": "closed positive (p,p)-currents; quasi-psh functions; Lelong numbers ν(T,x); (dd^c u)^n; capacities; Siciak extremal V_K; singular metrics e^{−φ}; multiplier ideals 𝒥(φ).",
-  "milestones": [
-   "Siu analyticity",
-   "Skoda integrability",
-   "Bedford–Taylor operator; comparison principle",
-   "Josefson",
-   "Demailly regularization",
-   "Nadel coherence and vanishing",
-   "Ohsawa–Takegoshi",
-   "Kołodziej L^∞"
-  ],
-  "prerequisites": [
-   "ComplexAnalysis/SeveralComplexVariables",
-   "AG KahlerManifolds (compact Kähler layers)",
-   "DifferentialGeometry (main)",
-   "ComplexManifolds #279"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#76",
-    "Annals#91"
-   ],
-   "OpenAI": [
-    "OAI#033",
-    "OAI#034",
-    "OAI#036",
-    "OAI#041",
-    "OAI#051",
-    "OAI#057",
-    "OAI#062",
-    "OAI#068",
-    "OAI#087",
-    "OAI#342"
-   ]
-  },
-  "porting": [
-   "OAI Lean Geometry/TamingCompatibility (positive-current concentration)"
-  ],
-  "replaces": [
-   "PositiveCurrentsAndMongeAmpere (algebraic-geometry and geometry shares)",
-   "CalabiYauAndComplexMongeAmpere (pluripotential part)"
-  ],
-  "formalizability": "Medium; the compact-Kähler layers wait on AG's KahlerManifolds.",
+  "kind": "new",
   "references": [
    {
     "key": "Demailly2012a",
@@ -5107,44 +4970,223 @@
   ]
  },
  {
-  "name": "NonlinearPDE/NonlinearEllipticEquations",
+  "roadmap": "NonlinearPDE",
   "campaign": "ANA",
-  "family": "NonlinearPDE",
-  "topic": "math.AP",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "B",
-  "scope": "This roadmap develops nonlinear second-order elliptic equations beyond the linear PDE roadmap; PR #93 names it as the separate roadmap viscosity solutions need. It builds viscosity solutions with comparison, Perron's method and stability, and the Caffarelli–Cabré regularity theory of fully nonlinear equations on #93's ABP and Krylov–Safonov. It treats the infinity Laplacian, semilinear equations (moving planes, Pohozaev identities, Liouville theorems), quasilinear equations of p-Laplacian type, and first-order Hamilton–Jacobi equations. Real Monge–Ampère is OptimalTransport's, free boundaries FreeBoundariesAndPhaseTransitions', and complex Monge–Ampère PluripotentialTheory's and GEO's.",
-  "key_objects": "viscosity sub/supersolutions; semijets; Pucci operators M^±; AMLE and Δ_∞; moving planes; p-Laplacian; Hamilton–Jacobi equations.",
-  "milestones": [
-   "Jensen–Ishii comparison; Perron",
-   "Caffarelli C^{1,α}, W^{2,p}; Evans–Krylov",
-   "Jensen uniqueness for Δ_∞; Evans–Savin",
-   "Gidas–Ni–Nirenberg; Gidas–Spruck; CGS",
-   "DiBenedetto–Tolksdorf",
-   "Crandall–Lions; Hopf–Lax"
-  ],
-  "prerequisites": [
-   "PDE (main) with #93 (ABP, Krylov–Safonov)",
-   "NonlinearPDE/CalculusOfVariations (p-Laplacian minimizers)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#367",
-    "OAI#370",
-    "OAI#375",
-    "OAI#377"
-   ]
-  },
-  "porting": [
-   "no Lean source"
-  ],
-  "replaces": [
-   "NonlinearEllipticPDE (openai_analysis #16; viscosity, semilinear and quasilinear part)"
-  ],
-  "formalizability": "Medium–high; Caffarelli–Cabré is a complete route.",
+  "kind": "umbrella",
+  "references": [
+   {
+    "key": "Evans2010",
+    "role": "primary",
+    "authors": "L. C. Evans",
+    "title": "Partial Differential Equations",
+    "type": "book",
+    "venue": "Graduate Studies in Mathematics 19, AMS",
+    "year": 2010,
+    "edition": "2nd",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "cited by PDE: Sobolev (Ch. 5), Hamilton–Jacobi (Chs. 3, 10), calculus of variations (Ch. 8), conservation laws (Ch. 11), nonlinear waves (Ch. 12)",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Evans2010Partial",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Gilbarg2001",
+    "role": "primary",
+    "authors": "D. Gilbarg, N. S. Trudinger",
+    "title": "Elliptic Partial Differential Equations of Second Order",
+    "type": "book",
+    "venue": "Classics in Mathematics, Springer (reprint of the 1983 2nd ed.)",
+    "year": 2001,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "maximum principles (Ch. 3), De Giorgi–Nash (Ch. 8), ABP and Krylov–Safonov (Ch. 9), fully nonlinear (Ch. 17)",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "GilbargTrudinger2001Elliptic",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Taylor2011",
+    "role": "primary",
+    "authors": "M. E. Taylor",
+    "title": "Partial Differential Equations I–III",
+    "type": "book",
+    "venue": "Applied Mathematical Sciences 115–117, Springer",
+    "year": 2011,
+    "edition": "2nd",
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "nonlinear elliptic, hyperbolic and fluid equations in one treatment",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Taylor2011PartialIII",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Tao2006",
+    "role": "primary",
+    "authors": "T. Tao",
+    "title": "Nonlinear Dispersive Equations: Local and Global Analysis",
+    "type": "book",
+    "venue": "CBMS Regional Conference Series in Mathematics 106, AMS",
+    "year": 2006,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "dispersive estimates and well-posedness (cited by PDE)",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "Tao2006Nonlinear",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Bahouri2011",
+    "role": "primary",
+    "authors": "H. Bahouri, J.-Y. Chemin, R. Danchin",
+    "title": "Fourier Analysis and Nonlinear Partial Differential Equations",
+    "type": "book",
+    "venue": "Grundlehren der mathematischen Wissenschaften 343, Springer",
+    "year": 2011,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": null
+    },
+    "serves": "Littlewood–Paley and Besov machinery (cited by #237)",
+    "access": "library",
+    "local": null,
+    "confidence": "high",
+    "master_key": "BahouriCheminDanchin2011Fourier",
+    "verified": "unverified (service stopped)"
+   },
+   {
+    "key": "Mathlib2026Laplacian",
+    "role": "conventions",
+    "authors": "Mathlib contributors",
+    "title": "Mathlib Analysis/InnerProductSpace/Laplacian.lean (Δ as the trace of the second derivative) and InnerProductSpace/Harmonic/*",
+    "type": "code",
+    "venue": "leanprover-community/mathlib4 @ 6b7abb3c (2026-09-28)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/leanprover-community/mathlib4/tree/master/Mathlib/Analysis/InnerProductSpace/Laplacian.lean"
+    },
+    "serves": "pins Δ = Σ ∂ᵢ² (−Δ ≥ 0, symbol −4π²|ξ|²), as PDE and #237 do",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/mathlib/Mathlib/Analysis/InnerProductSpace/Laplacian.lean",
+    "confidence": "high",
+    "master_key": "Mathlib2026InnerProductSpaceLaplacian",
+    "verified": "code-local"
+   },
+   {
+    "key": "Mathlib2026Sobolev",
+    "role": "conventions",
+    "authors": "Mathlib contributors",
+    "title": "Mathlib Analysis/Distribution (Sobolev.lean: besselPotential, MemSobolev; FourierMultiplier, TemperedDistribution, TestFunction) and FunctionalSpaces/SobolevInequality.lean (Gagliardo–Nirenberg–Sobolev)",
+    "type": "code",
+    "venue": "leanprover-community/mathlib4 @ 6b7abb3c (2026-09-28)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/leanprover-community/mathlib4/tree/master/Mathlib/Analysis/Distribution"
+    },
+    "serves": "pins H^{s,p}: MemSobolev with Bessel symbol (1+‖ξ‖²)^{s/2} in the 2π frequency variable, i.e. (1 − Δ/4π²)^{s/2}; periodic H^s weight (1+4π²|k|²)^{s/2} (#237)",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/mathlib/Mathlib/Analysis/Distribution",
+    "confidence": "high",
+    "master_key": "Mathlib2026AnalysisDistribution",
+    "verified": "code-local"
+   },
+   {
+    "key": "TauCeti2026Sobolev",
+    "role": "conventions",
+    "authors": "Tau Ceti contributors",
+    "title": "Tau Ceti Analysis/Sobolev (W1p, Wkp, WeakDeriv, Morrey, Poincare, RellichKondrachov, BesselPotential)",
+    "type": "code",
+    "venue": "TauCetiProject/TauCeti @ a91d3aafa (2026-10-05)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/TauCetiProject/TauCeti/tree/main/TauCeti/Analysis/Sobolev"
+    },
+    "serves": "pins W^{k,p}(Ω) by weak derivatives (TauCeti.W1p, Wkp): the Lᵖ norm of the jet (u, ∇u) with the Euclidean norm on ℝ × E, Hilbert at p = 2; W^{k,p}_0 is the closure of C_c^∞; W^{k,p} = H^{k,p} for 1 < p < ∞ is a theorem, never a definition",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/TauCeti/TauCeti/Analysis/Sobolev",
+    "confidence": "high",
+    "master_key": "TauCeti2026AnalysisSobolev",
+    "verified": "code-local"
+   },
+   {
+    "key": "TauCeti2026PDE",
+    "role": "formal",
+    "authors": "Tau Ceti contributors",
+    "title": "Tau Ceti Analysis/PDE (EnergyForm, MaximumPrinciple, Perron, GreenFunction, Harnack, Spectrum, FundamentalSolution)",
+    "type": "code",
+    "venue": "TauCetiProject/TauCeti @ a91d3aafa (2026-10-05)",
+    "year": 2026,
+    "edition": null,
+    "ids": {
+     "doi": null,
+     "arxiv": null,
+     "isbn": null,
+     "zbmath": null,
+     "url": "https://github.com/TauCetiProject/TauCeti/tree/main/TauCeti/Analysis/PDE"
+    },
+    "serves": "energy forms, maximum principles, Perron, Green functions, Dirichlet spectrum",
+    "access": "code",
+    "local": "/Users/roed/claude/tauceti-archive-base/.lake/packages/TauCeti/TauCeti/Analysis/PDE",
+    "confidence": "high",
+    "master_key": "TauCeti2026AnalysisPDE",
+    "verified": "code-local"
+   }
+  ]
+ },
+ {
+  "roadmap": "NonlinearPDE/NonlinearEllipticEquations",
+  "campaign": "ANA",
+  "kind": "new",
   "references": [
    {
     "key": "Caffarelli1995",
@@ -5402,44 +5444,9 @@
   ]
  },
  {
-  "name": "NonlinearPDE/FreeBoundariesAndPhaseTransitions",
+  "roadmap": "NonlinearPDE/FreeBoundariesAndPhaseTransitions",
   "campaign": "ANA",
-  "family": "NonlinearPDE",
-  "topic": "math.AP",
-  "size": "M",
-  "est_prs": 130,
-  "wave": "B",
-  "scope": "This roadmap develops free-boundary problems and the Allen–Cahn equation. It proves Caffarelli's regularity theory for the obstacle problem and the Alt–Caffarelli theory of the one-phase Bernoulli problem through Weiss monotonicity, De Silva's flatness theorem and dimension bounds for singular sets. For Allen–Cahn it proves Modica's estimate, De Giorgi's conjecture in dimensions 2 and 3, and Savin's flat-level-set theorem. Classification of stable free-boundary cones is stated as frontier. Γ-convergence is CalculusOfVariations', viscosity methods NonlinearEllipticEquations', and minimal cones MinimalBoundariesAndIsoperimetry's.",
-  "key_objects": "obstacle problem; one-phase functional J(u); Weiss energy; blow-ups; Allen–Cahn solutions; stable and monotone solutions.",
-  "milestones": [
-   "Caffarelli obstacle regularity",
-   "Alt–Caffarelli; Weiss",
-   "De Silva flatness",
-   "Caffarelli–Jerison–Kenig",
-   "Modica estimate",
-   "Ghoussoub–Gui; Ambrosio–Cabré",
-   "Savin"
-  ],
-  "prerequisites": [
-   "NonlinearPDE/NonlinearEllipticEquations",
-   "NonlinearPDE/CalculusOfVariations",
-   "GeometricMeasureTheory/MinimalBoundariesAndIsoperimetry (dimension reduction)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#367",
-    "OAI#375"
-   ]
-  },
-  "porting": [
-   "no Lean source (Tau Ceti H¹ supplies the energy space)"
-  ],
-  "replaces": [
-   "NonlinearEllipticPDE (free-boundary and Allen–Cahn part)"
-  ],
-  "formalizability": "Medium; Savin's theorem is the long pole.",
+  "kind": "new",
   "references": [
    {
     "key": "Petrosyan2012",
@@ -5720,47 +5727,9 @@
   ]
  },
  {
-  "name": "NonlinearPDE/CalculusOfVariations",
+  "roadmap": "NonlinearPDE/CalculusOfVariations",
   "campaign": "ANA",
-  "family": "NonlinearPDE",
-  "topic": "math.AP",
-  "size": "L",
-  "est_prs": 220,
-  "wave": "A",
-  "scope": "This roadmap develops the direct method for integral functionals on Sobolev spaces and its vector-valued and variational-limit theory (Dacorogna, Giusti, Braides). It proves lower semicontinuity and existence, the convexity hierarchy with Morrey's theorem, weak continuity of Jacobians, and the existence theories of nonlinear and linear elasticity with Korn's inequalities. It proves regularity of minimizers of convex scalar functionals (Hilbert's 19th problem) with De Giorgi's vectorial counterexample, Γ-convergence with Modica–Mortola, free-discontinuity functionals, and critical-point theory. Minimal surfaces are GMT's and GEO's, and harmonic maps GEO's.",
-  "key_objects": "integral functionals; quasiconvex envelopes; null Lagrangians; Jacobians; Lamé operator and traction map; Γ-limits; Palais–Smale sequences.",
-  "milestones": [
-   "Tonelli; Morrey quasiconvexity",
-   "weak continuity of determinants; Müller",
-   "Ball elasticity",
-   "Korn; Lamé well-posedness",
-   "Hilbert's 19th problem",
-   "Modica–Mortola",
-   "mountain pass"
-  ],
-  "prerequisites": [
-   "PDE (main) Lanes A, D, E",
-   "Tau Ceti Sobolev",
-   "HarmonicAnalysis/RealVariableHarmonicAnalysis (H¹ for Müller)",
-   "GeometricMeasureTheory/RectifiabilityAndBV (SBV)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#366",
-    "OAI#368",
-    "OAI#372",
-    "OAI#375"
-   ]
-  },
-  "porting": [
-   "no Lean source"
-  ],
-  "replaces": [
-   "CalculusOfVariations (openai_analysis #17)"
-  ],
-  "formalizability": "High.",
+  "kind": "new",
   "references": [
    {
     "key": "Dacorogna2008",
@@ -6018,47 +5987,9 @@
   ]
  },
  {
-  "name": "NonlinearPDE/DispersiveEquations",
+  "roadmap": "NonlinearPDE/DispersiveEquations",
   "campaign": "ANA",
-  "family": "NonlinearPDE",
-  "topic": "math.AP",
-  "size": "L",
-  "est_prs": 250,
-  "wave": "A",
-  "scope": "This roadmap develops linear and nonlinear Schrödinger and wave equations on ℝⁿ and 𝕋ⁿ (Tao, Cazenave, Linares–Ponce), replacing the PDE roadmap's Strichartz stretch goal. It builds the free propagators, dispersive and Strichartz estimates with the Keel–Tao endpoint, and local well-posedness in Sobolev spaces by Duhamel and contraction arguments. It proves conservation laws, global well-posedness and scattering for defocusing subcritical equations, virial blow-up, Bourgain-space theory on tori, and the fundamental solutions and energy estimates of the wave equation. Restriction and decoupling estimates are HarmonicAnalysis', and quasilinear hyperbolic systems HyperbolicSystemsAndConservationLaws'.",
-  "key_objects": "propagators; admissible pairs; Duhamel operator; X^{s,b}; mass, energy, momentum; virial and Morawetz functionals; wave fundamental solutions.",
-  "milestones": [
-   "dispersive decay; Strichartz; Keel–Tao",
-   "subcritical LWP; H^k(𝕋^d) LWP",
-   "global H¹ defocusing NLS",
-   "Glassey blow-up",
-   "Ginibre–Velo scattering",
-   "Bourgain L⁴(𝕋²)",
-   "Kirchhoff formula"
-  ],
-  "prerequisites": [
-   "PDE (main)",
-   "IncompressibleFlows #237 (periodic H^s)",
-   "HarmonicAnalysis/RealVariableHarmonicAnalysis",
-   "Mathlib Fourier multipliers and Bessel-potential spaces"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#079",
-    "OAI#080",
-    "OAI#362",
-    "OAI#371"
-   ]
-  },
-  "porting": [
-   "OAI Lean MathematicalPhysics/DefocusingNLS (191k lines, NLS on tori)"
-  ],
-  "replaces": [
-   "DispersiveEquations (openai_analysis #18)"
-  ],
-  "formalizability": "High for linear and subcritical theory.",
+  "kind": "new",
   "references": [
    {
     "key": "Tao2006",
@@ -6339,46 +6270,9 @@
   ]
  },
  {
-  "name": "NonlinearPDE/KineticEquations",
+  "roadmap": "NonlinearPDE/KineticEquations",
   "campaign": "ANA",
-  "family": "NonlinearPDE",
-  "topic": "math.AP",
-  "size": "M",
-  "est_prs": 130,
-  "wave": "B",
-  "scope": "This roadmap develops transport equations in phase space (Glassey, Villani, Cercignani–Illner–Pulvirenti). It builds characteristics and velocity averaging, the Vlasov–Poisson and relativistic Vlasov–Maxwell systems with their global and continuation theorems, and mean-field limits in Wasserstein distance. It develops the Boltzmann collision operator, the H-theorem and DiPerna–Lions renormalized solutions on #237's renormalized transport, and the BBGKY hierarchy with Lanford's theorem; fluctuations beyond Lanford's time are stated. Incompressible fluids are IncompressibleFlows', and wave fundamental solutions DispersiveEquations'.",
-  "key_objects": "phase-space densities; velocity averages; Vlasov–Poisson and Vlasov–Maxwell systems; collision kernels and Q(f,f); Maxwellians; BBGKY marginals.",
-  "milestones": [
-   "velocity averaging",
-   "Pfaffelmoser / Lions–Perthame",
-   "Dobrushin stability",
-   "Glassey–Strauss",
-   "H-theorem; Carleman representation",
-   "DiPerna–Lions Boltzmann",
-   "Lanford"
-  ],
-  "prerequisites": [
-   "IncompressibleFlows #237 (renormalized transport)",
-   "OptimalTransport (main) Wasserstein layer",
-   "NonlinearPDE/DispersiveEquations (wave fundamental solution)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#362",
-    "OAI#363",
-    "OAI#364"
-   ]
-  },
-  "porting": [
-   "OAI Lean Analysis/VlasovMaxwell (formalized)",
-   "OAI Lean MathematicalPhysics/Boltzmann (160k lines)"
-  ],
-  "replaces": [
-   "KineticEquations (openai_analysis #19)"
-  ],
-  "formalizability": "Medium; Lanford's theorem is combinatorially heavy.",
+  "kind": "new",
   "references": [
    {
     "key": "Glassey1996",
@@ -6659,43 +6553,9 @@
   ]
  },
  {
-  "name": "NonlinearPDE/HyperbolicSystemsAndConservationLaws",
+  "roadmap": "NonlinearPDE/HyperbolicSystemsAndConservationLaws",
   "campaign": "ANA",
-  "family": "NonlinearPDE",
-  "topic": "math.AP",
-  "size": "L",
-  "est_prs": 220,
-  "wave": "A",
-  "scope": "This roadmap develops first-order hyperbolic systems and nonlinear wave equations (Dafermos, Bressan, Majda, Sogge). It proves the entropy theory of scalar conservation laws, Lax's solution of the Riemann problem and Glimm's existence theorem for systems, and Kato's local well-posedness of quasilinear symmetric hyperbolic systems. It proves local well-posedness of quasilinear wave equations, John's blow-up and Klainerman's null-condition theorem, and treats compressible Euler with Sideris's blow-up. Non-uniqueness is ConvexIntegration's, and the Einstein equations are EinsteinEvolutionEquations', which consume the quasilinear wave layer.",
-  "key_objects": "entropy solutions; Rankine–Hugoniot curves; Riemann problem; Glimm scheme; symmetric hyperbolic systems; quasilinear wave equations; null forms; compressible Euler.",
-  "milestones": [
-   "Kružkov",
-   "Lax Riemann solver",
-   "Glimm",
-   "Kato quasilinear LWP",
-   "quasilinear wave LWP",
-   "John blow-up; Klainerman null condition",
-   "Sideris"
-  ],
-  "prerequisites": [
-   "PDE (main) Lanes A and F",
-   "Mathlib distributions"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#87",
-    "Annals#88"
-   ],
-   "OpenAI": []
-  },
-  "porting": [
-   "no Lean source"
-  ],
-  "replaces": [
-   "HyperbolicConservationLaws (annals_52_100 P36)"
-  ],
-  "formalizability": "Medium–high; Glimm's scheme is the long pole.",
+  "kind": "new",
   "references": [
    {
     "key": "Dafermos2016",
@@ -6953,44 +6813,9 @@
   ]
  },
  {
-  "name": "NonlinearPDE/EinsteinEvolutionEquations",
+  "roadmap": "NonlinearPDE/EinsteinEvolutionEquations",
   "campaign": "ANA",
-  "family": "NonlinearPDE",
-  "topic": "math.AP",
-  "size": "M",
-  "est_prs": 130,
-  "wave": "C",
-  "scope": "This roadmap develops the Cauchy problem for the Einstein equations (Ringström, Choquet-Bruhat). It builds initial data sets with the constraint equations and the conformal method, wave gauge and the reduced equations, Choquet-Bruhat's local existence with geometric uniqueness, and the Choquet-Bruhat–Geroch maximal globally hyperbolic development. It proves Birkhoff's theorem and treats the scalar-field and Maxwell couplings; stability of Minkowski and Kerr spacetimes and strong cosmic censorship are stated. Lorentzian geometry, causality and the explicit black-hole families are GEO's LorentzianGeometry, and positive mass and Penrose inequalities GEO's.",
-  "key_objects": "initial data sets; constraint equations; Lichnerowicz equation; wave gauge; globally hyperbolic developments; MGHD.",
-  "milestones": [
-   "conformal method (CMC)",
-   "Choquet-Bruhat local existence",
-   "geometric uniqueness",
-   "MGHD",
-   "Birkhoff"
-  ],
-  "prerequisites": [
-   "GEO LorentzianGeometry",
-   "NonlinearPDE/HyperbolicSystemsAndConservationLaws",
-   "GEO EllipticOperatorsOnManifolds"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#87"
-   ],
-   "OpenAI": [
-    "OAI#264"
-   ]
-  },
-  "porting": [
-   "no Lean source"
-  ],
-  "replaces": [
-   "EinsteinEvolutionEquations (annals_52_100 P35)",
-   "MathematicalRelativity (probability share; evolution part)"
-  ],
-  "formalizability": "Medium; everything past local theory is a statement.",
+  "kind": "new",
   "references": [
    {
     "key": "Ringstrom2009",
@@ -7225,40 +7050,9 @@
   ]
  },
  {
-  "name": "NonlinearPDE/ConvexIntegration",
+  "roadmap": "NonlinearPDE/ConvexIntegration",
   "campaign": "ANA",
-  "family": "NonlinearPDE",
-  "topic": "math.AP",
-  "size": "M",
-  "est_prs": 110,
-  "wave": "B",
-  "scope": "This roadmap develops convex integration for fluid equations and its non-uniqueness theorems. It builds Tartar's subsolution framework, Λ-convex hulls and iterative schemes with Mikado flows. It proves De Lellis–Székelyhidi wild solutions of Euler, Chiodaroli–De Lellis–Kreml non-uniqueness for compressible Euler, Isett's flexible half of Onsager's conjecture and Buckmaster–Vicol non-uniqueness for Navier–Stokes; Albritton–Brué–Colombo is stated. Leray–Hopf theory and Onsager's rigid half are IncompressibleFlows', and Nash–Kuiper is GEO's IsometricEmbeddings.",
-  "key_objects": "subsolutions; Λ-convex hulls; Reynolds stress; Mikado flows; intermittent building blocks.",
-  "milestones": [
-   "De Lellis–Székelyhidi",
-   "Chiodaroli–De Lellis–Kreml",
-   "Isett (Onsager)",
-   "Buckmaster–Vicol"
-  ],
-  "prerequisites": [
-   "IncompressibleFlows #237",
-   "NonlinearPDE/HyperbolicSystemsAndConservationLaws (compressible Euler)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [
-    "Annals#88",
-    "Annals#90"
-   ],
-   "OpenAI": []
-  },
-  "porting": [
-   "no Lean source"
-  ],
-  "replaces": [
-   "ConvexIntegration (annals_52_100 P38)"
-  ],
-  "formalizability": "Medium–low; long iterative estimates, short statements.",
+  "kind": "new",
   "references": [
    {
     "key": "Buckmaster2019b",
@@ -7470,46 +7264,9 @@
   ]
  },
  {
-  "name": "NonlinearPDE/UniqueContinuationAndInverseProblems",
+  "roadmap": "NonlinearPDE/UniqueContinuationAndInverseProblems",
   "campaign": "ANA",
-  "family": "NonlinearPDE",
-  "topic": "math.AP",
-  "size": "M",
-  "est_prs": 130,
-  "wave": "B",
-  "scope": "This roadmap develops unique continuation for elliptic equations and its use in Calderón-type inverse problems. It proves Carleman estimates, strong unique continuation, frequency-function doubling, three-ball inequalities and Runge approximation. It builds Dirichlet-to-Neumann maps for conductivities, metrics with connections and the Lamé system, and proves boundary determination, Sylvester–Uhlmann uniqueness through complex geometrical optics, Lee–Uhlmann, partial-data uniqueness and isotropic elasticity near constant coefficients. Elliptic theory on manifolds with boundary and the DN map as an operator are consumed from GEO's EllipticOperatorsOnManifolds, and Neumann eigenvalues of Euclidean domains are the PDE roadmap's.",
-  "key_objects": "Carleman weights; frequency function; DN maps Λ_γ, Λ_g; CGO solutions; Runge approximation.",
-  "milestones": [
-   "Carleman estimates; Aronszajn–Cordes",
-   "Garofalo–Lin doubling",
-   "Kohn–Vogelius",
-   "Sylvester–Uhlmann",
-   "Lee–Uhlmann",
-   "Kenig–Sjöstrand–Uhlmann"
-  ],
-  "prerequisites": [
-   "PDE (main)",
-   "GEO EllipticOperatorsOnManifolds (manifolds with boundary, DN map)",
-   "NonlinearPDE/CalculusOfVariations (Lamé)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#350",
-    "OAI#365",
-    "OAI#372"
-   ]
-  },
-  "porting": [
-   "OAI Lean Analysis/Conductivity (DN operator)",
-   "abenenson/rellich-kondrachov via GEO"
-  ],
-  "replaces": [
-   "InverseBoundaryProblems (openai_analysis #21)",
-   "EllipticTheoryOnManifolds (openai_analysis #20; unique-continuation part)"
-  ],
-  "formalizability": "Medium.",
+  "kind": "new",
   "references": [
    {
     "key": "Isakov2017",
@@ -7790,47 +7547,9 @@
   ]
  },
  {
-  "name": "ConicOptimizationAndSpectrahedra",
+  "roadmap": "ConicOptimizationAndSpectrahedra",
   "campaign": "ANA",
-  "family": null,
-  "topic": "math.OC",
-  "size": "M",
-  "est_prs": 100,
-  "wave": "A",
-  "scope": "This roadmap develops the convex-analytic and real-algebraic theory of conic optimization (Ben-Tal–Nemirovski, Blekherman–Parrilo–Thomas). It builds conic programs with strong duality and facial reduction, the semidefinite and second-order cones, spectrahedra and their shadows, and hyperbolic polynomials with their cones. It proves the Positivstellensätze used in optimization with convergence of the Lasserre hierarchy, and states Helton–Vinnikov, the generalized Lax conjecture and Scheiderer's theorem. LP duality and polyhedra are COMB's PolyhedralCombinatorics, real stable polynomials COMB's, and rounding, sum-of-squares proof systems and the ellipsoid method LTCS's, which import SDP duality from here.",
-  "key_objects": "conic programs; PSD and Lorentz cones; spectrahedra and shadows; hyperbolic polynomials and cones; quadratic modules; moment matrices.",
-  "milestones": [
-   "conic strong duality; facial reduction",
-   "Gårding",
-   "spectrahedra are hyperbolicity cones",
-   "Schmüdgen; Putinar",
-   "Lasserre convergence"
-  ],
-  "prerequisites": [
-   "Mathlib convex cones and PosSemidef",
-   "Tau Ceti Analysis/Convex (Fenchel–Moreau, polyhedra, Stiemke)",
-   "RealAlgebraicGeometry (main)",
-   "COMB PolyhedralCombinatorics (LP duality)"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#095",
-    "OAI#102",
-    "OAI#117",
-    "OAI#122",
-    "OAI#126"
-   ]
-  },
-  "porting": [
-   "OAI Lean Analysis/HyperbolicCones"
-  ],
-  "replaces": [
-   "ConvexAlgebraicGeometry (geometry share)",
-   "ConvexRelaxationsAndMetricEmbeddings (SDP-duality part; LTCS asks ANA for it)"
-  ],
-  "formalizability": "High; low direct demand, so it is drafted late.",
+  "kind": "new",
   "references": [
    {
     "key": "BenTal2001",
@@ -8111,49 +7830,9 @@
   ]
  },
  {
-  "name": "ValidatedNumerics",
+  "roadmap": "ValidatedNumerics",
   "campaign": "ANA",
-  "family": null,
-  "topic": "math.NA",
-  "size": "M",
-  "est_prs": 110,
-  "wave": "A",
-  "scope": "This roadmap develops the mathematics of computer-assisted proofs with rigorous real and complex enclosures. It builds interval and ball arithmetic with the fundamental theorem of interval arithmetic, Taylor models, and enclosures of elementary and Gamma functions. It proves the Moore–Krawczyk existence-and-uniqueness theorem, verified eigenvalue and linear-system enclosures, rigorous quadrature and a posteriori enclosures of ODE flows, and the soundness of branch-and-bound certificates for inequalities on boxes, each with a verified executable procedure. p-adic precision and L-value approximation stay with NT's computational roadmaps, exact finite linear algebra with StructuredBlockOperators (#260), and sum-of-squares certificates with ConicOptimizationAndSpectrahedra.",
-  "key_objects": "intervals and balls; inclusion functions; Taylor models; Krawczyk operator; verified eigenpair enclosures; ODE enclosures; box certificates.",
-  "milestones": [
-   "fundamental theorem of interval arithmetic",
-   "Taylor-model remainder bounds",
-   "Moore/Krawczyk theorem",
-   "Rump enclosures",
-   "a posteriori Picard–Lindelöf",
-   "box-certificate soundness"
-  ],
-  "prerequisites": [
-   "Mathlib real analysis, Taylor, Picard–Lindelöf, Gershgorin",
-   "Tau Ceti Analysis/ODE"
-  ],
-  "goals": {
-   "LMFDB": [],
-   "Annals": [],
-   "OpenAI": [
-    "OAI#090",
-    "OAI#222",
-    "OAI#229",
-    "OAI#266",
-    "OAI#268",
-    "OAI#269",
-    "OAI#272"
-   ]
-  },
-  "porting": [
-   "alerad/leancert (OAI lakefile dependency; coordinate first)",
-   "OAI Lean Analysis/PlanarPacking (Cohn–Elkies certificates via leancert)"
-  ],
-  "replaces": [
-   "Certified exact/interval computation (probability share cluster)",
-   "ComputationalNumberTheory CN.4 (real part; NT campaign routes it to ANA)"
-  ],
-  "formalizability": "High: elementary analysis plus verified programs; precedent #717 CertifiedPermutationComputation.",
+  "kind": "new",
   "references": [
    {
     "key": "Moore2009",

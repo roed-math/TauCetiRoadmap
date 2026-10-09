@@ -382,3 +382,381 @@ promotion needs Chris Birkbeck's agreement to the consolidation and renaming (RE
 
 At 35 PRs/week per active roadmap the slate keeps 33 roadmaps busy for six to seven weeks; the whole NT territory is
 about a quarter of the ~100k PRs the credits buy.
+
+## 8. References by roadmap
+
+82 roadmap records, 686 listings, 553 distinct works; full entries, identifiers, access and verification are in `references_master.md` (cited here by short form) and `references_master.json`; the machine records are `refs_NT.json` and the `references` fields of `slate_NT.json`, each carrying `master_key` and `verified`. (?) marks a work not verified in the 2026-10-08 pass (179 of 553: zbMATH stopped early; see master (d)). A title is given at a work's first citation in this section only. Pointers are the compilers' and are unverified.
+
+**Conventions and notes.** Promotion units U1–U44 list the sources their member campaign READMEs cite (README aliases such as KW2, CSnc, RJW decoded); theorem locators appear only where a README or a pinned Tau Ceti roadmap gives them. Units are listed in §2.3 order; their wave in `references_master` is the order tier (1 = A, 2 = B, 3 = C). Umbrellas carry the family-wide primaries. U27 shares five works with ALG's DeformationAndDerivedPatchingAlgebra promotion record (master (d8)).
+
+**S1 LMFDBLabelsAndCompleteness** (wave A)
+- primary: Cohen 1993, *Computational Algebraic Number Theory*
+- conventions: LMFDB 2026, *L-functions and modular forms database…*; Jones–Roberts 2014, *Database of number fields*; Jones–Roberts 2006, *Database of local fields*; Best et al. 2021, *Computing classical modular forms*; Cremona 1997, *Algorithms for Modular Elliptic Curves*; Rouse et al. 2022, *l-adic images of Galois for elliptic…* (?)
+- theorem: Pohst 1982, *Computation of number fields of small…*; Serre 1978, *Une "formule de masse" pour les…*; Krasner 1966, *Nombre des extensions d'un degré donné…*; Sturm 1987, *Congruence of modular forms*; Bach 1990, *Explicit bounds for primality testing…*
+- formal: Tau Ceti `NumberTheory/NumberField/IntrinsicLabel`; Tau Ceti `NumberTheory/ModularForms/SturmBound`
+
+**S2 ArithmeticOfFiniteFields** (umbrella, wave A)
+- primary: Lidl–Niederreiter 1997, *Finite Fields*; Stichtenoth 2009, *Algebraic Function Fields and Codes*, Ch. V; Milne 2008, *Abelian Varieties*
+
+**S2.1 CharacterSumsOverFiniteFields** (wave A)
+- primary: Berndt–Evans–Williams 1998, *Gauss and Jacobi Sums*; Ireland–Rosen 1990, *Classical Introduction to Modern Number…*; Iwaniec–Kowalski 2004, *Analytic Number Theory*, Ch. 11; Lidl–Niederreiter 1997; Kowalski 2021, *Exponential sums over finite fields*
+- theorem: Weil 1948, *Some exponential sums*; Bombieri 1973, *Counting points on curves over finite…*
+- formal: Mathlib `NumberTheory/GaussSum`
+
+**S2.2 CurvesOverFiniteFields** (wave A)
+- primary: Stichtenoth 2009, Ch. V; Rosen 2002, *Number Theory in Function Fields*; Serre 2020, *Rational Points on Curves over Finite…*
+- conventions: Dupuy et al. 2021, *Isogeny classes of abelian varieties…*
+- theorem: Bombieri 1973; Serre 1983, *Sur le nombre des points rationnels…*; Ihara 1981, *Some remarks on the number of rational…*
+- formal: Tau Ceti `AlgebraicGeometry/EllipticCurve/HasseBound`
+
+**S2.3 AbelianVarietiesOverFiniteFields** (wave B)
+- primary: Milne 2008; Mumford 1974, *Abelian Varieties*
+- conventions: Dupuy et al. 2021
+- theorem: Tate 1966, *Endomorphisms of abelian varieties over…*; Honda 1968, *Isogeny classes of abelian varieties…*; Chai–Conrad–Oort 2014, *Complex Multiplication and Lifting…* (?); Waterhouse 1969, *Abelian varieties over finite fields*; Waterhouse–Milne 1971, *Abelian varieties over finite fields*; Deligne 1969, *Variétés abéliennes ordinaires sur un…* (?); Centeleghe–Stix 2015, *Categories of abelian varieties over… I* (?); Marseglia 2021, *Computing square-free polarized abelian…* (?); Howe–Nart–Ritzenthaler 2009, *Jacobians in isogeny classes of abelian…* (?)
+
+**S3 HyperellipticCurves** (wave A)
+- primary: Cassels–Flynn 1996, *Prolegomena to a Middlebrow Arithmetic…*; Liu 2002, *Algebraic Geometry and Arithmetic Curves*
+- conventions: Booker et al. 2016, *Database of genus-2 curves over the…*
+- theorem: Igusa 1960, *Arithmetic variety of moduli for genus…*; Mestre 1991, *Construction de courbes de genre 2 à…*; Cardona–Quer 2005, *Field of moduli and field of definition…*; Liu 1994, *Modèles minimaux des courbes de genre…*; Liu 1994, *Conducteur et discriminant minimal de…*; Dokchitser et al. 2023, *Arithmetic of hyperelliptic curves over…*; Brumer–Kramer 1994, *Conductor of an abelian variety*; Stoll 2001, *Implementing 2-descent for Jacobians of…*; Poonen–Schaefer 1997, *Explicit descent for Jacobians of…*
+
+**S4 QuaternionArithmetic** (wave A)
+- primary: Voight 2021, *Quaternion Algebras*; Vignéras 1980, *Arithmétique des Algèbres de Quaternions*; Alsina–Bayer 2004, *Quaternion Orders, Quadratic Forms, and…*; Katok 1992, *Fuchsian Groups*
+- theorem: Shimizu 1965, *Zeta functions of quaternion algebras*; Pizer 1980, *Algorithm for computing modular forms…*
+- formal: Tau Ceti `Algebra/Quaternion`; Mathlib `Algebra/Quaternion`
+
+**S5 ArtinRepresentations** (wave B)
+- primary: Serre 1979, *Local Fields*, Ch. VI; Neukirch 1999, *Algebraic Number Theory*, Ch. VII; Martinet 1977, *Character theory and Artin L-functions* (?); Serre 1977, *Linear Representations of Finite Groups*
+- conventions: Deligne 1973, *Les constantes des équations…*; Tate 1979, *Number theoretic background* (?)
+- theorem: Tate 1977, *Local constants*; Rohrlich 1994, *Elliptic curves and the Weil-Deligne…* (?); Deligne–Serre 1974, *Formes modulaires de poids 1* (?); Langlands 1980, *Base Change for GL(2)*; Tunnell 1981, *Artin's conjecture for representations…*
+- statement: Tate 1984, *Les Conjectures de Stark sur les…* (?)
+- formal: Tau Ceti `NumberTheory/LocalField/Herbrand`
+
+**S6 SatoTateGroups** (wave A)
+- primary: Sutherland 2019, *Sato-Tate distributions*; Serre 2012, *N_X(p)*; Bump 2013, *Lie Groups*
+- conventions: Fité et al. 2012, *Sato-Tate distributions and Galois…*
+- theorem: Fité–Kedlaya–Sutherland 2023, *Sato-Tate groups of abelian threefolds*; Banaszak–Kedlaya 2015, *Algebraic Sato-Tate group and Sato-Tate…*; Serre 1968, *Abelian l-adic Representations and…*; Ribet 2004, *Abelian varieties over Q and modular…* (?); Mumford 1974
+
+**S7 AdelicImagesAndModularCurves** (wave A)
+- primary: Serre 1972, *Propriétés galoisiennes des points…*; Diamond–Shurman 2005, *Modular Forms*, Ch. 3; Shimura 1971, *Arithmetic Theory of Automorphic…*; Deligne–Rapoport 1973, *Les schémas de modules de courbes…*
+- theorem: Dickson 1901, *Linear Groups with an Exposition of the…*; Rouse et al. 2022 (?); Rouse–Zureick-Brown 2015, *Elliptic curves over Q and 2-adic…* (?); Zywina 2015, *Possible images of the mod l…* (?); Sutherland 2016, *Computing images of Galois…*; Mazur 1977, *Modular curves and the Eisenstein ideal*; Mazur 1978, *Rational isogenies of prime degree*; Kenku 1982, *Number of Q-isomorphism classes of…*
+
+**S8 EllipticCurvePeriodsAndModularParametrizations** (wave B)
+- primary: Cremona 1997; Silverman 2009, *Arithmetic of Elliptic Curves*, Ch. VI (?); Diamond–Shurman 2005
+- conventions: Tate 1966, *Conjectures of Birch and…* (?)
+- theorem: Manin 1972, *Parabolic points and zeta functions of…* (?); Zagier 1985, *Modular parametrizations of elliptic…* (?); Edixhoven 1991, *Manin constants of modular elliptic…* (?); Agashe–Ribet–Stein 2006, *Manin constant* (?); Watkins 2002, *Computing the modular degree of an…* (?)
+- statement: Stevens 1989, *Stickelberger elements and modular…* (?)
+
+**S9 HypergeometricMotives** (wave B)
+- primary: Beukers–Heckman 1989, *Monodromy for the hypergeometric…*; Katz 1990, *Exponential Sums and Differential…* (?)
+- conventions: Roberts–Rodriguez Villegas 2022, *Hypergeometric motives*; LMFDB 2026
+- theorem: Levelt 1961, *Hypergeometric Functions* (?); Greene 1987, *Hypergeometric functions over finite…*; Beukers–Cohen–Mellit 2015, *Finite hypergeometric functions*; Corti–Golyshev 2011, *Hypergeometric equations and weighted…* (?); Fedorov 2018, *Variations of Hodge structures for…* (?); Berndt–Evans–Williams 1998
+
+**S10 PadicExtensionFamilies** (wave A)
+- primary: Serre 1979, Ch. I and IV
+- conventions: Jones–Roberts 2006
+- theorem: Ore 1928, *Newtonsche Polygone in der Theorie der…*; Guàrdia–Montes–Nart 2012, *Newton polygons of higher order in…*; Greve–Pauli 2012, *Ramification polygons, splitting…*; Heiermann 1996, *De nouveaux invariants numériques pour…*; Keating 2015, *Indices of inseparability in towers of…*; Krasner 1966; Serre 1978; Pauli–Sinclair 2017, *Enumerating extensions of (π)-adic…*; Monge 2014, *Family of Eisenstein polynomials…*
+- formal: Tau Ceti `NumberTheory/LocalField/Eisenstein`; Mathlib `Analysis/Normed/Field/Krasner`
+
+**S11 ClassicalAutomorphicForms** (umbrella, wave A)
+- primary: Bump 1997, *Automorphic Forms and Representations*; Miyake 1989, *Modular Forms*; Shimura 1971
+
+**S11.1 MaassFormsAndSpectralTheory** (wave A)
+- primary: Iwaniec 2002, *Spectral Methods of Automorphic Forms*; Bump 1997; Hejhal 1983, *Selberg Trace Formula for PSL(2,R)…* (?); Elstrodt–Grunewald–Mennicke 1998, *Groups Acting on Hyperbolic Space*
+- conventions: Booker et al. 2006, *Effective computation of Maass cusp…*
+- theorem: Selberg 1965, *Estimation of Fourier coefficients of…*; Weil 1948; Booker–Strömbergsson–Then 2013, *Bounds and algorithms for the K-Bessel…*
+
+**S11.2 HilbertModularForms** (wave B)
+- primary: Freitag 1990, *Hilbert Modular Forms* (?); Garrett 1990, *Holomorphic Hilbert Modular Forms* (?); van der Geer 1988, *Hilbert Modular Surfaces* (?)
+- conventions: Dembélé–Voight 2013, *Explicit methods for Hilbert modular…* (?)
+- theorem: Shimura 1978, *Special values of the zeta functions…* (?)
+- statement: Jacquet–Langlands 1970, *Automorphic Forms on GL(2)*; Langlands 1980
+
+**S11.3 BianchiModularForms** (wave B)
+- primary: Elstrodt–Grunewald–Mennicke 1998; Cremona 1984, *Hyperbolic tessellations, modular…* (?); Şengün 2014, *Arithmetic aspects of Bianchi groups* (?)
+- theorem: Harder 1987, *Eisenstein cohomology of arithmetic…* (?)
+
+**S11.4 SiegelModularForms** (wave B)
+- primary: van der Geer 2008, *Siegel modular forms and their…*; Freitag 1983, *Siegelsche Modulfunktionen* (?); Klingen 1990, *Siegel Modular Forms* (?)
+- theorem: Igusa 1962, *Siegel modular forms of genus two* (?); Andrianov 1974, *Euler products corresponding to Siegel…* (?); Roberts–Schmidt 2007, *Local Newforms for GSp(4)* (?); Eichler–Zagier 1985, *Theory of Jacobi Forms*; Maass 1979, *Über eine Spezialschar von Modulformen…* (?); Poor–Yuen 2015, *Paramodular cusp forms* (?)
+- statement: Brumer–Kramer 2014, *Paramodular abelian varieties of odd…* (?)
+
+**S11.5 NoncongruenceModularForms** (wave A)
+- primary: Diamond–Shurman 2005
+- theorem: Wohlfahrt 1964, *Extension of F. Klein's level concept*; Hsu 1996, *Identifying congruence subgroups of the…*
+- statement: Atkin–Swinnerton-Dyer 1971, *Modular forms on noncongruence subgroups*; Calegari–Dimitrov–Tang 2024, *Unbounded denominators conjecture*
+- formal: Mathlib `NumberTheory/ModularForms`
+
+**S12 MetaplecticFormsAndTheta** (umbrella, wave A)
+- primary: Bump 1997; Gelbart 1976, *Weil's Representation and the Spectrum…*
+
+**S12.1 FiniteQuadraticModulesAndWeilRepresentation** (wave A)
+- primary: Milnor–Husemoller 1973, *Symmetric Bilinear Forms*; Nikulin 1979, *Integral symmetric bilinear forms and…*
+- conventions: Bruinier 2002, *Borcherds Products on O(2,l) and Chern…*
+- theorem: Wall 1963, *Quadratic forms on finite groups, and…*; Scheithauer 2009, *Weil representation of SL2(Z) and some…* (?); Strömberg 2013, *Weil representations associated with…*
+
+**S12.2 HalfIntegralWeightModularForms** (wave A)
+- primary: Koblitz 1993, *Elliptic Curves and Modular Forms*, Ch. IV; Iwaniec 1997, *Classical Automorphic Forms*
+- theorem: Shimura 1973, *Modular forms of half integral weight*; Kohnen 1980, *Modular forms of half-integral weight…*; Niwa 1975, *Modular forms of half integral weight…*; Shintani 1975, *Construction of holomorphic cusp forms…*; Serre–Stark 1977, *Modular forms of weight 1/2*; Eichler–Zagier 1985
+- statement: Waldspurger 1981, *Sur les coefficients de Fourier des…*; Kohnen–Zagier 1981, *Values of L-series of modular forms at…*
+
+**S12.3 WeilRepresentationAndThetaCorrespondence** (wave B)
+- primary: Weil 1964, *Sur certains groupes d'opérateurs…* (?); Mœglin–Vignéras–Waldspurger 1987, *Correspondances de Howe sur un Corps…* (?); Kudla 1996, *Local theta correspondence*
+- theorem: Ranga Rao 1993, *Some explicit formulas in the theory of…* (?); Kudla–Rallis 1988, *Weil-Siegel formula* (?); Bruinier 2002
+
+**S12.4 HigherMetaplecticCoversAndGaussSums** (wave B)
+- primary: Kubota 1969, *Automorphic Functions and the…* (?); Kazhdan–Patterson 1984, *Metaplectic forms* (?)
+- theorem: Patterson 1977, *Cubic analogue of the theta series I, II* (?); Heath-Brown–Patterson 1979, *Distribution of Kummer sums at prime…* (?); Heath-Brown 2000, *Kummer's conjecture for cubic Gauss sums* (?)
+- statement: OpenAI 2026, *An-unconditional-first-moment-for-cubic…* (OAI#023)
+- formal: OAI `NumberTheory/CubicMoment`
+
+**S13 AdelicAlgebraicGroups** (umbrella, wave A)
+- primary: Platonov–Rapinchuk 1994, *Algebraic Groups and Number Theory*; Weil 1982, *Adeles and Algebraic Groups*; Borel 1969, *Introduction aux Groupes Arithmétiques*
+
+**S13.1 AlgebraicGroupStrongApproximation** (wave A)
+- primary: Platonov–Rapinchuk 1994, Ch. 7; Conrad 2012, *Weil and Grothendieck approaches to…*
+- theorem: Kneser 1966, *Strong approximation*; Rapinchuk 2014, *Strong approximation for algebraic…*
+- formal: Tau Ceti `Topology/Algebra/RestrictedProduct`
+
+**S13.2 ArithmeticReductionTheory** (wave A)
+- primary: Borel 1969; Platonov–Rapinchuk 1994
+- theorem: Borel–Harish-Chandra 1962, *Arithmetic subgroups of algebraic groups*
+
+**S13.3 AdelicFourierAnalysis** (wave A)
+- primary: Tate 1967, *Fourier analysis in number fields and…*; Ramakrishnan–Valenza 1999, *Fourier Analysis on Number Fields*; Weil 1974, *Basic Number Theory*; Kudla 2004, *Tate's thesis*
+- conventions: Tate 1977
+
+**S13.4 TamagawaMeasures** (wave B)
+- primary: Weil 1982; Platonov–Rapinchuk 1994
+- theorem: Ono 1963, *Tamagawa number of algebraic tori* (?); Ono 1965, *Relative theory of Tamagawa numbers* (?); Siegel 1945, *Mean value theorem in geometry of…* (?); Langlands 1966, *Volume of the fundamental domain for…* (?)
+- statement: Kottwitz 1988, *Tamagawa numbers* (?)
+
+**S13.5 OrthogonalTamagawaAndLatticeMass** (wave B)
+- primary: O'Meara 1963, *Quadratic Forms*; Kneser 2002, *Quadratische Formen (revised with R…* (?); Kitaoka 1993, *Arithmetic of Quadratic Forms* (?)
+- conventions: Gan–Yu 2000, *Group schemes and local densities*, Thm 7.3 (?)
+- theorem: Siegel 1935, *Über die analytische Theorie der…* (?); Mars 1969, *Les nombres de Tamagawa de certains…* (?); Weil 1982; Cho 2015, *Group schemes and local densities of…*, Thm 5.2 (?); Conway–Sloane 1988, *Low-dimensional lattices IV*; Conway–Sloane 1999, *Sphere Packings, Lattices and Groups*, Ch. 16
+
+**S14 FormalGroupsAndLubinTateTheory** (wave A)
+- primary: Hazewinkel 1978, *Formal Groups and Applications*; Milne 2020, *Class Field Theory*, Ch. I; Cassels–Fröhlich 1967, *Algebraic Number Theory*; Neukirch 1999, Ch. V
+- conventions: Serre 1979
+- theorem: Lubin–Tate 1965, *Formal complex multiplication in local…*; Lubin–Tate 1966, *Formal moduli for one-parameter formal…*; Lazard 1955, *Sur les groupes de Lie formels à un…*; Coleman 1979, *Division values in local fields*; de Shalit 1987, *Iwasawa Theory of Elliptic Curves with…*, Ch. I; Iwasawa 1986, *Local Class Field Theory*
+- formal: Mathlib `RingTheory/FormalGroup/Basic`; Tau Ceti `AlgebraicGeometry/EllipticCurve/FormalGroup`
+
+**S15 PowerReciprocityLaws** (wave A)
+- primary: Lemmermeyer 2000, *Reciprocity Laws*; Ireland–Rosen 1990; Neukirch 1999
+- conventions: Serre 1979
+- theorem: Artin–Tate 2009, *Class Field Theory*, Ch. XII; Washington 1997, *Cyclotomic Fields*; Weil 1952, *Jacobi sums as "Grössencharaktere"*
+- formal: Tau Ceti `NumberTheory/HilbertSymbol`; OAI `NumberTheory/CubicMoment`
+
+**S16 BirationalAnabelianGeometry** (wave A)
+- primary: Neukirch–Schmidt–Wingberg 2008, *Cohomology of Number Fields*, Ch. XII; Engler–Prestel 2005, *Valued Fields*
+- theorem: Neukirch 1969, *Kennzeichnung der p-adischen und der…*; Uchida 1976, *Isomorphisms of Galois groups*; Uchida 1977, *Isomorphisms of Galois groups of…*; Engler–Koenigsmann 1998, *Abelian subgroups of pro-p Galois groups*; Topaz 2017, *Commuting-liftable subgroups of Galois… II*; Bogomolov–Tschinkel 2008, *Reconstruction of function fields*; Pop 2012, *Birational anabelian program initiated… I*; Pop–Stix 2017, *Arithmetic in the fundamental group of…*; OpenAI 2026, *Reconstruction-of-Function-Fields-from-M…* (OAI#009); OpenAI 2026, *The-p-adic-section-conjecture-September…* (OAI#019); OpenAI 2026, *Open-Homomorphisms-of-Global-Solvably-Cl…* (OAI#031)
+- formal: OAI `Algebra/BogomolovPop`
+
+**S17 MultiplicativeNumberTheory** (umbrella, wave A)
+- primary: Davenport 2000, *Multiplicative Number Theory*; Montgomery–Vaughan 2007, *Multiplicative Number Theory I…*; Iwaniec–Kowalski 2004; Tenenbaum 2015, *Analytic and Probabilistic Number Theory*; Koukoulopoulos 2019, *Distribution of Prime Numbers*
+
+**S17.1 PrimesInArithmeticProgressions** (wave B)
+- primary: Davenport 2000; Montgomery–Vaughan 2007; Koukoulopoulos 2019
+- theorem: Heath-Brown 1992, *Zero-free regions for Dirichlet…* (?); Montgomery–Vaughan 1973, *Large sieve* (?); Stark 1974, *Some effective cases of the…* (?); Lagarias–Odlyzko 1977, *Effective versions of the Chebotarev…* (?)
+- statement: OpenAI 2026, *Uniform-exclusion-of-Landau-Siegel-zeros…* (OAI#003)
+- formal: OAI `NumberTheory/SiegelZeros`; `AlexKontorovich/PrimeNumberTheoremAnd`
+
+**S17.2 MultiplicativeFunctionsInShortIntervals** (wave A)
+- primary: Koukoulopoulos 2019; Tenenbaum 2015
+- theorem: Halász 1968, *Über die Mittelwerte multiplikativer…*; Shiu 1980, *Brun-Titchmarsh theorem for…*; Matomäki–Radziwiłł 2016, *Multiplicative functions in short…*; Matomäki–Radziwiłł–Tao 2015, *Averaged form of Chowla's conjecture*; Tao 2016, *Logarithmically averaged Chowla and…*
+- statement: OpenAI 2026, *Ordinary-two-point-correlations-of-multi…* (OAI#007)
+- formal: OAI `NumberTheory/SiegelZeros`
+
+**S17.3 AnatomyOfIntegers** (wave A)
+- primary: Tenenbaum 2015; Koukoulopoulos 2019
+- theorem: Hardy–Ramanujan 1917, *Normal number of prime factors of a…*; Erdős–Kac 1940, *Gaussian law of errors in the theory of…*; Erdős–Wintner 1939, *Additive arithmetical functions and…*; Selberg 1954, *Note on a paper by L. G. Sathe*; Hildebrand 1986, *Number of positive integers <= x and…*; Hildebrand–Tenenbaum 1993, *Integers without large prime factors*; Billingsley 1972, *Distribution of large prime divisors*; Ford 1998, *Distribution of totients*
+- formal: OAI `NumberTheory/SiegelZeros`; Mathlib `NumberTheory/SelbergSieve`; `AlexKontorovich/PrimeNumberTheoremAnd`
+
+**S18 ArakelovGeometry** (wave B)
+- primary: Bombieri–Gubler 2006, *Heights in Diophantine Geometry*; Moriwaki 2014, *Arakelov Geometry* (?); Soulé et al. 1992, *Arakelov Geometry* (?)
+- conventions: Deligne 1985, *Preuve des conjectures de Tate et…* (?)
+- theorem: Faltings 1984, *Calculus on arithmetic surfaces* (?); Gillet–Soulé 1990, *Arithmetic intersection theory* (?); Zhang 1995, *Small points and adelic metrics* (?); Zhang 1995, *Positive line bundles on arithmetic…* (?); Call–Silverman 1993, *Canonical heights on varieties with…* (?); Deligne 1987, *Le déterminant de la cohomologie* (?); Faltings 1983, *Endlichkeitssätze für abelsche…*; Raynaud 1985, *Hauteurs et isogénies* (?); Pazuki 2012, *Theta height and Faltings height* (?)
+- formal: ArithmeticHeights roadmap and its Lean…
+
+**SieveMethodsAndPrimePatterns** (unit, order ?)
+- primary: Kedlaya 2025, *Analytic number theory*, Chs. 11-18; Tao–Vu 2006, *Additive Combinatorics*
+- theorem: Maynard 2015, *Small gaps between primes*, Chs. 20-21; Green–Tao 2008, *Primes contain arbitrarily long…*; Green–Tao 2010, *Linear equations in primes*; Green–Tao 2012, *Möbius function is strongly orthogonal…*; Green–Tao–Ziegler 2012, *Inverse theorem for the Gowers…*; Hooley 1967, *Artin's conjecture*; Heath-Brown 1986, *Artin's conjecture for primitive roots*; Heath-Brown 1995, *Mean value estimate for real character…*; Ford et al. 2018, *Long gaps between primes*; Poonen 2003, *Squarefree values of multivariable…*
+- formal: Mathlib `NumberTheory/SelbergSieve`
+
+**ExponentialSumsAndCircleMethod** (unit, order ?)
+- primary: Vaughan 1997, *Hardy-Littlewood Method*; Kedlaya 2025
+- theorem: Bourgain–Demeter–Guth 2016, *Proof of the main conjecture in…*
+
+**DiophantineApproximationAndTranscendence** (unit, order ?)
+- primary: Waldschmidt 2000, *Diophantine Approximation on Linear…*; Schmidt 1980, *Diophantine Approximation* (?); Kubilius 1964, *Probabilistic Methods in the Theory of…* (?); Kuipers–Niederreiter 1974, *Uniform Distribution of Sequences* (?); Bombieri–Gubler 2006; Baker 1975, *Transcendental Number Theory* (?)
+- theorem: Roth 1955, *Rational approximations to algebraic…* (?); Koukoulopoulos–Maynard 2020, *Duffin-Schaeffer conjecture*
+
+**ArithmeticStatistics** (unit, order ?)
+- theorem: Bhargava–Shankar 2015, *Ternary cubic forms having bounded…*; Bhargava–Shankar 2015, *Binary quartic forms having bounded…*; Davenport–Heilbronn 1971, *Density of discriminants of cubic… II* (?); Bhargava 2005, *Density of discriminants of quartic…* (?); Smith 2023, *Distribution of l^infinity-Selmer… II*
+- statement: Cohen–Lenstra 1984, *Heuristics on class groups of number…* (?)
+
+**CertifiedArithmeticComputation** (unit, order ?)
+- primary: Shoup 2009, *Computational Introduction to Number…*; Cohen 1993; de Weger 1989, *Algorithms for Diophantine Equations*
+- theorem: Tzanakis–de Weger 1989, *Practical solution of the Thue equation*; Balakrishnan et al. 2023, *Quadratic Chabauty for modular curves*
+
+**ClassicalArithmeticCompletion** (unit, order ?)
+- primary: Shoup 2009; Kedlaya 2021, *Class field theory* (?); Smyth 2008, *Mahler measure of algebraic numbers*; Fröhlich 1983, *Galois Module Structure of Algebraic…*
+- theorem: Dobrowolski 1979, *Question of Lehmer and the number of…*
+
+**ArithmeticGaloisDuality** (unit, order ?)
+- primary: Neukirch–Schmidt–Wingberg 2008; Milne 2006, *Arithmetic Duality Theorems*; Rodrigues Jacinto–Williams 2023, *P-adic L-functions*, Sec. 10.5; Rubin 2000, *Euler Systems*
+- theorem: Khare–Wintenberger 2009, *Serre's modularity conjecture (II)*; Mazur 1989, *Deforming Galois representations*; Greenberg 1989, *Iwasawa theory for p-adic…*; Bloch–Kato 1990, *L-functions and Tamagawa numbers of…*
+
+**FunctionFieldArithmetic** (unit, order ?)
+- primary: Rosen 2002, Chs. 5-9 and 12; Weil 1974; Tate 1967; Drinfeld 1974, *Elliptic modules*
+- theorem: Anderson 1986, *t-motives*; Pink 2013, *Compactification of Drinfeld modular…*; Taguchi 1995, *Tate conjecture for t-motives* (?); Taelman 2012, *Special L-values of Drinfeld modules*; Papanikolas 2008, *Tannakian duality for Anderson-Drinfeld…*
+
+**HigherLocalFieldsAndHigherClassFieldTheory** (unit, order ?)
+- primary: Fesenko–Kurihara 2000, *Invitation to Higher Local Fields*
+- theorem: Kato 2000, *Existence theorem for higher local…*
+
+**InverseGaloisAndArithmeticFundamentalGroups** (unit, order ?)
+- primary: Grothendieck–Raynaud 1971, *Revêtements étales et groupe…*; Serre 2008, *Galois Theory* (?); Malle–Matzat 2018, *Inverse Galois Theory*
+
+**ModularCurvesPartII** (unit, order ?)
+- primary: Katz–Mazur 1985, *Arithmetic Moduli of Elliptic Curves*; Deligne–Rapoport 1973; Shimura 1971; Loeffler 2014, *Modular Curves* (?)
+- theorem: Serre 1956, *Géométrie algébrique et géométrie…*; Conrad 2007, *Arithmetic moduli of generalized…*; Česnavičius 2017, *Modular description of X_0(n)*; Deligne 1969, *Formes modulaires et représentations…*; Ribet 1990, *Modular representations of Gal(Qbar/Q)…*; Diamond 1997, *Taylor-Wiles construction and…*
+- formal: `CBirkbeck/AINTLIB`
+
+**ShimuraVarieties** (unit, order ?)
+- primary: Deligne 1979, *Variétés de Shimura*; Milne 2005, *Shimura varieties*, Secs. 1-5; Lan 2013, *Arithmetic Compactifications of…*, Chs. 1-2; Faltings–Chai 1990, *Degeneration of Abelian Varieties*
+- theorem: Deligne 1971, *Travaux de Shimura*; Milne 1983, *Action of an automorphism of C on a…*; Milne 1999, *Descent for Shimura varieties*; Baily–Borel 1966, *Compactification of arithmetic…*; Borel 1972, *Some metric properties of arithmetic…*; Carayol 1986, *Sur la mauvaise réduction des courbes…*; Boutot–Carayol 1991, *Uniformisation p-adique des courbes de…*; Rapoport 1978, *Compactifications de l'espace de…*; Saito 2009, *Hilbert modular forms and p-adic Hodge…*; Birkbeck–Heuer–Williams 2023, *Overconvergent Hilbert modular forms…*, Secs. 5
+
+**ShimuraCompactificationsAndAutomorphicBundles** (unit, order ?)
+- primary: Ash et al. 2010, *Smooth Compactifications of Locally…* (?); Pink 1990, *Arithmetical Compactification of Mixed…*; Faltings–Chai 1990; Lan 2013; Milne 1990, *Canonical models of (mixed) Shimura…*
+- theorem: Harris 1985, *Arithmetic vector bundles and… I* (?)
+
+**FaltingsFinitenessAndRationalPoints** (unit, order ?)
+- primary: Faltings–Chai 1990; Poonen 2017, *Rational Points on Varieties*, Secs. 5.7, Ch. 8, Sec. 9.5 (?); Milne 2006
+- theorem: Faltings 1983; Zarhin 1985, *Finiteness theorem for unpolarized…* (?); Zhang 1998, *Equidistribution of small points on…* (?); Ullmo 1998, *Positivité et discrétion des points…*
+- statement: Pila 2022, *Point-Counting and the Zilber-Pink…*; OpenAI 2026, *The-Abelian-Zilber-Pink-Conjecture-Septe…* (OAI#016)
+
+**AnabelianGeometryAndNonabelianChabauty** (unit, order ?)
+- theorem: Mochizuki 1996, *Profinite Grothendieck conjecture for…* (?); Kim 2009, *Unipotent Albanese map and Selmer…*; Balakrishnan–Dogra 2018, *Quadratic Chabauty and rational points I*; Balakrishnan–Dogra 2021, *Quadratic Chabauty and rational points… II*
+
+**ComplexMultiplicationAndExplicitReciprocity** (unit, order ?)
+- primary: Milne 2020, *Complex Multiplication*, Secs. 1-4 (?); Silverman 1994, *Advanced Topics in the Arithmetic of…*, Ch. II
+- theorem: Milne 2007, *Fundamental theorem of complex…*
+
+**ArithmeticDynamics** (unit, order ?)
+- primary: Silverman 2007, *Arithmetic of Dynamical Systems* (?); Silverman 2012, *Moduli Spaces and Arithmetic Dynamics* (?)
+- theorem: Call–Silverman 1993, Thm 1.1, Prop. 1.2, Cor. 1.1.1 (?)
+
+**AutomorphicFormsAndSpectralDecomposition** (unit, order ?)
+- primary: Borel–Jacquet 1979, *Automorphic forms and automorphic…* (?); Langlands 1979, *Notion of an automorphic representation* (?); Arthur 2005, *Trace formula*, Secs. 1-23; Mœglin–Waldspurger 1995, *Spectral Decomposition and Eisenstein…* (?)
+- theorem: Franke 1998, *Harmonic analysis in weighted L2-spaces*, Secs. 1-2 (?); Bernstein–Krötz 2014, *Smooth Fréchet globalizations of…*, Thm 1.1 (?); Borel–Wallach 2000, *Continuous Cohomology, Discrete…* (?); Arthur 1978, *Trace formula for reductive groups I* (?); Langlands 1976, *Functional Equations Satisfied by…* (?)
+
+**TraceFormulasAndEndoscopy** (unit, order ?)
+- primary: Harris–Taylor 2001, *Geometry and Cohomology of Some Simple…* (?)
+- theorem: Caraiani–Scholze 2024, *Generic part of the cohomology of…*, Sec. 5; Shin 2011, *Galois representations arising from…* (?); Shin 2009, *Counting points on Igusa varieties* (?); Ngô 2010, *Le lemme fondamental pour les algèbres…* (?); Langlands–Shelstad 1987, *Definition of transfer factors*, Secs. 3-6 (?); Kottwitz–Shelstad 1999, *Foundations of twisted endoscopy* (?); Waldspurger 1997, *Le lemme fondamental implique le…* (?); Scholze 2013, *Local Langlands correspondence for GL_n…* (?); Jacquet–Rallis 2011, *Gross-Prasad conjecture for unitary…* (?)
+- statement: Arthur 2013, *Endoscopic Classification of…* (?); Mok 2015, *Endoscopic classification of…*
+
+**AutomorphicLFunctions** (unit, order ?)
+- primary: Tate 1967; Godement–Jacquet 1972, *Zeta Functions of Simple Algebras* (?)
+- theorem: Jacquet et al. 1983, *Rankin-Selberg convolutions* (?); Jacquet 2009, *Archimedean Rankin-Selberg integrals* (?)
+- statement: Selberg 1992, *Old and new conjectures and results…* (?)
+
+**GL2AutomorphicRepresentationsAndTransfer** (unit, order ?)
+- primary: Jacquet–Langlands 1970; Bushnell–Henniart 2006, *Local Langlands Conjecture for GL(2)* (?)
+- theorem: Langlands 1980; Arthur–Clozel 1989, *Simple Algebras, Base Change, and the…*; Tunnell 1981; Rohrlich–Tunnell 1997, *Elementary case of Serre's conjecture*; Wiese 2004, *Dihedral Galois representations and…*
+
+**ArithmeticLocallySymmetricSpaces** (unit, order ?)
+- primary: Borel–Serre 1973, *Corners and arithmetic groups*, Secs. 4-11 (?)
+- theorem: Allen et al. 2023, *Potential automorphy over CM fields*, Secs. 2.1-2.4; Franke 1998 (?)
+
+**PadicFamiliesOfAutomorphicForms** (unit, order ?)
+- primary: Hida 1993, *Elementary Theory of L-functions and…* (?); Bellaïche 2021, *Eigenbook* (?); Rodrigues Jacinto–Williams 2023
+- theorem: Hida 1986, *Galois representations into…* (?); Coleman 1997, *p-adic Banach spaces and families of…*; Coleman–Mazur 1998, *Eigencurve* (?); Buzzard 2007, *Eigenvarieties* (?); Pollack–Stevens 2011, *Overconvergent modular symbols and…*; Birkbeck–Heuer–Williams 2023, Secs. 3-4; Andreatta–Iovita–Pilloni 2016, *Overconvergent Hilbert modular cusp…* (?); Hida 2005, *p-adic automorphic forms on reductive…*, Secs. 2 (?); Boxer–Pilloni 2021, *Higher Coleman theory*
+
+**QSeriesPartitionsAndMockModularForms** (unit, order ?)
+- primary: Zwegers 2002, *Mock Theta Functions*; Andrews 1976, *Theory of Partitions* (?)
+- theorem: Rademacher 1937, *Partition function p(n)* (?); Bruinier–Funke 2004, *Two geometric theta lifts*; Frenkel–Lepowsky–Meurman 1988, *Vertex Operator Algebras and the Monster* (?); Borcherds 1992, *Monstrous moonshine and monstrous Lie…*
+
+**ArithmeticGaloisRepresentations** (unit, order ?)
+- conventions: Deligne 1973
+- theorem: Serre 1987, *Sur les représentations modulaires de…*; Khare–Wintenberger 2009, *Serre's modularity conjecture (I)*; Khare–Wintenberger 2009
+
+**PadicGaloisRepresentations** (unit, order ?)
+- primary: Fontaine 1994, *Le corps des périodes p-adiques* (?)
+- conventions: Lei–Loeffler–Zerbes 2011, *Coleman maps and the p-adic regulator*
+- theorem: Fontaine–Laffaille 1982, *Construction de représentations…*, Sec. 0.9, Thm 8.4; Kisin 2008, *Potentially semi-stable deformation…*; Saito 2009; Kedlaya 2004, *P-adic local monodromy theorem*; Fontaine 1990, *Représentations p-adiques des corps… I* (?); Cherbonnier–Colmez 1998, *Représentations p-adiques…* (?); Herr 1998, *Sur la cohomologie galoisienne des…* (?); Berger 2004, *Limites de représentations cristallines*; Kedlaya–Pottharst–Xiao 2014, *Cohomology of arithmetic families of…*
+
+**GaloisDeformationTheory** (unit, order ?)
+- primary: Mazur 1989
+- theorem: Khare–Wintenberger 2009; Kisin 2008; Kisin 2009, *Moduli of finite flat group schemes and…*; Kisin 2009, *Modularity of 2-adic Barsotti-Tate…*; Savitt 2005, *Conjecture of Conrad, Diamond, and…*; Diamond 1997; Calegari–Geraghty 2018, *Modularity lifting beyond the…*; Fontaine–Laffaille 1982; Liu 2013, *Correspondence between Barsotti-Tate…*; Allen et al. 2023
+
+**GaloisRepresentationsOfModularForms** (unit, order ?)
+- primary: Katz 1973, *p-adic properties of modular schemes…*
+- theorem: Deligne 1969; Deligne–Serre 1974 (?); Carayol 1986, *Sur les représentations l-adiques…*; Saito 2009; Khare–Wintenberger 2009; Chenevier 2014, *P-adic analytic space of…*; Scholze 2015, *Torsion in the cohomology of locally…*, Secs. 4.3; Allen et al. 2023, Secs. 2.3-2.4; Dasgupta et al. 2023, *Residually indistinguishable case of…* (?); Serre 1987; Edixhoven 1992, *Weight in Serre's conjectures on…*
+
+**ModularityLiftingOverQ** (unit, order ?)
+- theorem: Kisin 2009; Kisin 2009, *Fontaine-Mazur conjecture for GL_2* (?); Diamond 1997; Khare–Wintenberger 2009; Hida 1986 (?); Skinner–Wiles 2001, *Nearly ordinary deformations of…*; Ribet 1990; Diamond 1995, *Refined conjecture of Serre* (?); Taylor 2002, *Remarks on a conjecture of Fontaine and…*; Moret-Bailly 1989, *Groupes de Picard et problèmes de… II* (?); Gee 2011, *Automorphic lifts of prescribed types*; Pan 2022, *Fontaine-Mazur conjecture in the…*; Dieulefait–Pacetti 2023, *Simplified proof of Serre's conjecture*; Emerton 2011, *Local-global compatibility in the…* (?)
+
+**SerreModularityAndEllipticCurveModularity** (unit, order ?)
+- theorem: Khare 2006, *Serre's modularity conjecture*; Khare–Wintenberger 2009; Tate 1994, *Non-existence of certain Galois…*; Fontaine 1985, *Il n'y a pas de variété abélienne sur Z*; Schoof 2005, *Abelian varieties over Q with bad…*; Rosser–Schoenfeld 1962, *Approximate formulas for some functions…* (?); Dieulefait–Pacetti 2023; Rohrlich–Tunnell 1997; Kisin 2009; Faltings 1983; Shimura 1971
+- statement: Serre 1987
+
+**CompletedCohomologyAndPadicLocalLanglands** (unit, order ?)
+- primary: Calegari–Emerton 2012, *Completed cohomology - a survey* (?)
+- theorem: Emerton 2011 (?); Emerton 2006, *Interpolation of systems of eigenvalues…* (?); Scholze 2015, Sec. 4.2; Colmez 2010, *Représentations de GL_2(Q_p) et…* (?); Paškūnas 2015, *Breuil-Mézard conjecture*; Paškūnas 2016, *2-dimensional 2-adic Galois…*; Hu–Tan 2015, *Breuil-Mézard conjecture for non-scalar…* (?); Tung 2021, *Automorphy of 2-dimensional potentially…*
+
+**HigherRankGaloisRepresentationsAndPotentialAutomorphy** (unit, order ?)
+- theorem: Shin 2011, Secs. 5-7 (?); Chenevier–Harris 2013, *Construction of automorphic Galois… II* (?); Harris et al. 2016, *Rigid cohomology of certain Shimura…*, Thm 7.13, Cor. 7.14 (?); Caraiani 2012, *Local-global compatibility and the…*; Caraiani–Scholze 2017, *Generic part of the cohomology of…*; Caraiani–Scholze 2024; Scholze 2015; Allen et al. 2023; Calegari–Geraghty 2018; Newton–Thorne 2021, *Symmetric power functoriality for…*; Hansen–Johansson 2025, *Perfectoid Shimura varieties and the…*; Boxer–Pilloni 2021, Sec. 4.4
+- statement: Arthur 2013 (?); Mok 2015
+
+**GeometrizationOfLocalLanglands** (unit, order ?)
+- primary: Fargues–Scholze 2021, *Geometrization of the local Langlands…*; Scholze–Weinstein 2020, *Berkeley Lectures on p-adic Geometry*, Secs. 19-24; Scholze 2017, *Étale cohomology of diamonds*; Clausen–Scholze 2019, *Condensed mathematics* (?)
+- theorem: Bhatt–Scholze 2017, *Projectivity of the Witt vector affine…*; Zhu 2017, *Affine Grassmannians and the geometric…*; Kottwitz 1985, *Isocrystals with additional structure* (?)
+
+**SpectralActionAndLanglandsParameters** (unit, order ?)
+- primary: Fargues–Scholze 2021
+- theorem: Dat et al. 2020, *Moduli of Langlands parameters* (?); Laumon–Rapoport–Stuhler 1993, *D-elliptic sheaves and the Langlands…*; Hausberger 2005, *Uniformisation des variétés de…*; Lafforgue 2018, *Chtoucas pour les groupes réductifs et…*
+
+**GlobalShtukasAndFunctionFieldLanglands** (unit, order ?)
+- primary: Lafforgue 2018
+- theorem: Lafforgue 2002, *Chtoucas de Drinfeld et correspondance…* (?); Mirković–Vilonen 2007, *Geometric Langlands duality and…*; Drinfeld 1974
+
+**PadicMeasuresAndIwasawaAlgebras** (unit, order ?)
+- primary: Rodrigues Jacinto–Williams 2023, Thm 3.43; Washington 1997
+- theorem: Mahler 1958, *Interpolation series for continuous…*; Amice 1964, *Interpolation p-adique*; Amice–Vélu 1975, *Distributions p-adiques associées aux…*; Višik 1976, *Non-archimedean measures connected with…* (?)
+- formal: Tau Ceti `Topology/Algebra/Group/Profinite/ProP`
+
+**CyclotomicIwasawaTheory** (unit, order ?)
+- primary: Rodrigues Jacinto–Williams 2023, Secs. 2-8; Washington 1997, Sec. 7.5; Besser 2012, *Heidelberg lectures on Coleman…*
+- theorem: Coleman 1979; Lang 1990, *Cyclotomic Fields I and II (with an…*; Rubin 2000; Mazur–Wiles 1984, *Class fields of abelian extensions of Q*; Wiles 1990, *Iwasawa conjecture for totally real…*; Greither 1992, *Class groups of abelian fields, and the…*, Thm 3.2; Kurihara 2025, *Class groups and Iwasawa modules of…*, Sec. 4; Dasgupta–Kakde 2023, *Brumer-Stark conjecture*; Coleman 1985, *Torsion points on curves and p-adic…*
+
+**EulerAndKolyvaginSystems** (unit, order ?)
+- primary: Mazur–Rubin 2004, *Kolyvagin Systems*; Rubin 2000
+- theorem: Mazur–Rubin 2016, *Controlling Selmer groups in the higher…* (?); Burns–Sakamoto–Sano 2018, *Theory of higher rank Euler, Kolyvagin… II*; Kolyvagin 1990, *Euler systems*
+
+**HeegnerPointsAndGrossZagier** (unit, order ?)
+- theorem: Kolyvagin 1990; Howard 2004, *Heegner point Kolyvagin system*, Secs. 1.1-1.7 (?); Zhang 2014, *Selmer groups and the indivisibility of…*, Secs. 3-11; Burungale et al. 2026, *Non-vanishing of Kolyvagin systems and…*, Secs. 1-2; Cornut–Vatsal 2005, *CM points and quaternion algebras* (?); Rubin 1987, *Tate-Shafarevich groups and L-functions…*; Gross–Zagier 1986, *Heegner points and derivatives of…*, Chs. II-IV; Yuan–Zhang–Zhang 2013, *Gross-Zagier Formula on Shimura Curves*, Chs. 1-8; Zhang 2001, *Heights of Heegner points on Shimura…*, Secs. 3-7 (?); Conrad 2004, *Gross-Zagier revisited*, Secs. 2-10; Cai–Shu–Tian 2014, *Explicit Gross-Zagier and Waldspurger…* (?); Castella–Hsieh 2018, *Heegner cycles and p-adic L-functions*; Longo–Vigni 2019, *Kolyvagin systems and Iwasawa theory of…*; Bertolini–Darmon–Prasanna 2013, *Generalized Heegner cycles and p-adic…* (?)
+
+**PadicLFunctionsOfModularForms** (unit, order ?)
+- primary: Rodrigues Jacinto–Williams 2023
+- theorem: Pollack–Stevens 2011; Kato 2004, *p-adic Hodge theory and values of zeta…*; Hsieh 2014, *Special values of anticyclotomic…* (?); Eischen–Wan 2016, *p-adic Eisenstein series and…*, Secs. 1.3; Eischen et al. 2020, *p-adic L-functions for unitary groups*; Ribet 1976, *Modular construction of unramified…* (?); Deligne–Ribet 1980, *Values of abelian L-functions at…* (?); Wan 2015, *Iwasawa main conjecture for Hilbert…* (?)
+
+**MainConjecturesAndBSD** (unit, order ?)
+- theorem: Skinner–Urban 2014, *Iwasawa main conjectures for GL_2* (?); Fouquet–Wan 2021, *Iwasawa main conjecture for universal…*; Kato 2004; Wan 2015 (?); Jetchev–Skinner–Wan 2017, *Birch and Swinnerton-Dyer formula for…*; Burungale et al. 2024, *Zeta elements for elliptic curves and…*; Castella et al. 2022, *Anticyclotomic Iwasawa theory of…*; Keller–Yin 2024, *Anticyclotomic Iwasawa theory of…*; Castella 2018, *P-part of the Birch-Swinnerton-Dyer…*; Kobayashi 2003, *Iwasawa theory for elliptic curves at…* (?); Lei–Loeffler–Zerbes 2011; Gross–Zagier 1986; Kolyvagin 1990
+
+**SpecialValueConjectures** (unit, order ?)
+- theorem: Huber–Müller-Stach 2014, *Relation between Nori motives and…*; Burns–Venjakob 2006, *Leading terms of zeta isomorphisms and…*; Brown 2012, *Mixed Tate motives over Z*; Ihara–Kaneko–Zagier 2006, *Derivation and double shuffle relations…* (?); Coates et al. 2005, *GL_2 main conjecture for elliptic…*; Kakde 2013, *Main conjecture of Iwasawa theory for…*; Ritter–Weiss 2011, *"main conjecture" of equivariant…*; Kolster 1989, *Relation between the 2-primary parts of…*
+- statement: Deligne 1979, *Valeurs de fonctions L et périodes…* (?); Bloch–Kato 1990; Burns–Flach 2001, *Tamagawa numbers for motives with…* (?); Fukaya–Kato 2006, *Formulation of conjectures on p-adic…* (?)
+
+**KTheoryOfNumberFields** (unit, order ?)
+- primary: Weibel 2013, *K-book*, Chs. IV, VI; Friedlander–Grayson 2005, *Handbook of K-Theory*; Bloch 2000, *Higher Regulators, Algebraic K-Theory…*, Lectures 1-7
+- theorem: Quillen 1972, *Cohomology and K-theory of the general…* (?); Borel 1974, *Stable real cohomology of arithmetic…*, Prop. 12.2 (?); Soulé 1979, *K-théorie des anneaux d'entiers de…* (?); Rognes–Weibel 2000, *Two-primary algebraic K-theory of rings…* (?); Hesselholt–Madsen 2003, *K-theory of local fields*; Suslin 1983, *K-theory of algebraically closed fields* (?); Tate 1976, *Relations between K2 and Galois…*
+
+**RegulatorsAndPolylogarithms** (unit, order ?)
+- primary: Friedlander–Grayson 2005; Bloch 2000; Weibel 2013, Chs. V, VI
+- theorem: Goncharov 1995, *Geometry of configurations…*; Goncharov–Rudenko 2018, *Motivic correlators, cluster varieties…*, Sec. 2; Beilinson 1985, *Higher regulators and values of…* (?); Beilinson 1986, *Higher regulators of modular curves* (?); Thomason–Trobaugh 1990, *Higher algebraic K-theory of schemes…*; Garoufalidis et al. 2024, *Habiro ring of a number field*, Sec. 3.1, Thm 9; Huber–Kings 2011, *P-adic analogue of the Borel regulator…*; Besser–de Jeu 2003, *Syntomic regulator for the K-theory of…*
+- statement: Zagier 1991, *Polylogarithms, Dedekind zeta functions…* (?)
+
+**Acquisition list** (not free and not held locally; books needed by a wave-A roadmap, and any work needed by two or more roadmaps of this campaign; journal papers otherwise left to library access, all listed in master (b2); roadmap count in brackets; ★ = wave A): Koukoulopoulos 2019, *Distribution of Prime Numbers* [4] ★; Platonov–Rapinchuk 1994, *Algebraic Groups and Number Theory* [4] ★; Shimura 1971, *Arithmetic Theory of Automorphic…* [4] ★; Bump 1997, *Automorphic Forms and Representations* [3] ★; Diamond–Shurman 2005, *Modular Forms* [3] ★; Tenenbaum 2015, *Analytic and Probabilistic Number Theory* [3] ★; Weil 1982, *Adeles and Algebraic Groups* [3] ★; Berndt–Evans–Williams 1998, *Gauss and Jacobi Sums* [2] ★; Borel 1969, *Introduction aux Groupes Arithmétiques* [2] ★; Cohen 1993, *Computational Algebraic Number Theory* [2] ★; Davenport 2000, *Multiplicative Number Theory* [2] ★; Deligne–Rapoport 1973, *Les schémas de modules de courbes…* [2] ★; Eichler–Zagier 1985, *Theory of Jacobi Forms* [2] ★; Elstrodt–Grunewald–Mennicke 1998, *Groups Acting on Hyperbolic Space* [2] ★; Ireland–Rosen 1990, *Classical Introduction to Modern Number…* [2] ★; Krasner 1966, *Nombre des extensions d'un degré donné…* [2] ★; Lidl–Niederreiter 1997, *Finite Fields* [2] ★; Montgomery–Vaughan 2007, *Multiplicative Number Theory I…* [2] ★; Mumford 1974, *Abelian Varieties* [2] ★; Rosen 2002, *Number Theory in Function Fields* [2] ★; Serre 1978, *Une "formule de masse" pour les…* [2] ★; Tate 1977, *Local constants* [2] ★; Weil 1948, *Some exponential sums* [2] ★; Weil 1974, *Basic Number Theory* [2] ★; Alsina–Bayer 2004, *Quaternion Orders, Quadratic Forms, and…* [1] ★; Artin–Tate 2009, *Class Field Theory* [1] ★; Bump 2013, *Lie Groups* [1] ★; Cassels–Flynn 1996, *Prolegomena to a Middlebrow Arithmetic…* [1] ★; Engler–Prestel 2005, *Valued Fields* [1] ★; Gelbart 1976, *Weil's Representation and the Spectrum…* [1] ★; Hazewinkel 1978, *Formal Groups and Applications* [1] ★; Hejhal 1983, *Selberg Trace Formula for PSL(2,R)…* [1] ★; Iwaniec 1997, *Classical Automorphic Forms* [1] ★; Iwaniec 2002, *Spectral Methods of Automorphic Forms* [1] ★; Iwasawa 1986, *Local Class Field Theory* [1] ★; Katok 1992, *Fuchsian Groups* [1] ★; Koblitz 1993, *Elliptic Curves and Modular Forms* [1] ★; Lemmermeyer 2000, *Reciprocity Laws* [1] ★; Liu 2002, *Algebraic Geometry and Arithmetic Curves* [1] ★; Milnor–Husemoller 1973, *Symmetric Bilinear Forms* [1] ★; Miyake 1989, *Modular Forms* [1] ★; Ramakrishnan–Valenza 1999, *Fourier Analysis on Number Fields* [1] ★; Serre 1968, *Abelian l-adic Representations and…* [1] ★; Serre 2012, *N_X(p)* [1] ★; Serre 2020, *Rational Points on Curves over Finite…* [1] ★; de Shalit 1987, *Iwasawa Theory of Elliptic Curves with…* [1] ★; Vignéras 1980, *Arithmétique des Algèbres de Quaternions* [1] ★; Diamond 1997, *Taylor-Wiles construction and…* [3]; Faltings–Chai 1990, *Degeneration of Abelian Varieties* [3]; Kolyvagin 1990, *Euler systems* [3]; Arthur 2013, *Endoscopic Classification of…* [2]; Bloch 2000, *Higher Regulators, Algebraic K-Theory…* [2]; Bloch–Kato 1990, *L-functions and Tamagawa numbers of…* [2]; Bombieri–Gubler 2006, *Heights in Diophantine Geometry* [2]; Call–Silverman 1993, *Canonical heights on varieties with…* [2]; Deligne–Serre 1974, *Formes modulaires de poids 1* [2]; Drinfeld 1974, *Elliptic modules* [2]; Franke 1998, *Harmonic analysis in weighted L2-spaces* [2]; Friedlander–Grayson 2005, *Handbook of K-Theory* [2]; Gross–Zagier 1986, *Heegner points and derivatives of…* [2]; Hida 1986, *Galois representations into…* [2]; Kisin 2008, *Potentially semi-stable deformation…* [2]; Shin 2011, *Galois representations arising from…* [2]; Wan 2015, *Iwasawa main conjecture for Hilbert…* [2].
+
+Full bibliographic entries, identifiers, access evidence and verification status: `references_master.md`.

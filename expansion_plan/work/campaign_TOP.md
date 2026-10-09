@@ -245,3 +245,169 @@ Existing supply in the territory: ≈1,070 PRs left on TOP-topic main roadmaps (
 ≈260, CombinatorialHeegaardFloer ≈325, DGAInfinity ≈410), ≈460 on adjacent RT/SG/CV roadmaps, and ≈1,090 in open PRs
 (#271 ≈400, #284 ≈250, #432 ≈110, #222, #341, #453 ≈100 each, #437 ≈40). The nine campaign roadmaps routed to TOP
 (≈765 PR-equivalents at 85 each) are absorbed into the slate, not additional.
+
+## 8. References by roadmap
+
+29 roadmap records, 349 listings, 315 distinct works; full entries, identifiers, access and verification are in `references_master.md` (cited here by short form) and `references_master.json`; the machine records are `refs_TOP.json` and the `references` fields of `slate_TOP.json`, each carrying `master_key` and `verified`. (?) marks a work not verified in the 2026-10-08 pass (242 of 315: zbMATH stopped early; see master (d)). A title is given at a work's first citation in this section only. Pointers are the compilers' and are unverified.
+
+**Conventions and notes.** Spectra are symmetric spectra of simplicial sets (Hovey–Shipley–Smith), carried into the equivariant (Mandell; Hausmann) and motivic (Jardine) layers; ∞-categories follow HTT's definitions; K-theory follows the K-book's numbering; L-groups follow Ranicki; the six operations follow Kashiwara–Schapira's sign and shift conventions. Theorem numbers are given only where reused from a Tau Ceti README or certain.
+
+**UnstableHomotopyTheory** (wave A)
+- primary: Hatcher 2002, *Algebraic Topology*, §4.2–4.3, §4.3, Thm 4.57 (?); May–Ponto 2012, *More Concise Algebraic Topology* (?); Whitehead 1978, *Homotopy Theory* (?); Félix–Halperin–Thomas 2001, *Rational Homotopy Theory* (?)
+- conventions: Steenrod 1967, *Convenient category of topological…*
+- theorem: Serre 1953, *Groupes d'homotopie et classes de…* (?); Sullivan 1977, *Infinitesimal computations in topology* (?); Hilton–Mislin–Roitberg 1975, *Localization of Nilpotent Groups and…* (?); Bousfield–Kan 1972, *Homotopy Limits, Completions and…* (?); Cornea et al. 2003, *Lusternik–Schnirelmann Category* (?); Weibel 2013, *K-book*, Ch. IV §1
+- formal: Tau Ceti `AlgebraicTopology/EilenbergMacLane`; Mathlib `Topology/Homotopy`; OAI `Topology/Homotopy`
+
+**HomotopicalAlgebra** (wave A)
+- primary: Hovey 1999, *Model Categories*, §2.1, §2.4, Ch. 3 (?); Goerss–Jardine 2009, *Simplicial Homotopy Theory*, Ch. I §11, Ch. II, Ch. VII; Hirschhorn 2003, *Model Categories and Their Localizations*, Ch. 3–4, Ch. 15, Ch. 18–19 (?); Riehl 2014, *Categorical Homotopy Theory* (?)
+- theorem: Quillen 1967, *Homotopical Algebra* (?); Lurie 2009, *Higher Topos Theory*, App. A.2–A.3 (?); Beke 2000, *Sheafifiable homotopy model categories* (?); Quillen 1973, *Higher algebraic K-theory*, §1 (?); Thomason 1979, *Homotopy colimits in the category of…* (?); Thomason 1980, *Cat as a closed model category* (?)
+- formal: Mathlib `AlgebraicTopology/ModelCategory`; OAI `CategoryTheory/Thomason`
+
+**CharacteristicClassesAndCobordism** (wave B)
+- primary: Milnor–Stasheff 1974, *Characteristic Classes*, §5–7, §8, §9 (?); Husemoller 1994, *Fibre Bundles* (?); Steenrod 1951, *Topology of Fibre Bundles* (?); Stong 1968, *Cobordism Theory* (?)
+- theorem: Milnor 1956, *Construction of universal bundles, II* (?); Borel 1953, *Sur la cohomologie des espaces fibrés…* (?); Thom 1954, *Quelques propriétés globales des…*; Pontryagin 1959, *Smooth manifolds and their applications…* (?); Hirzebruch 1966, *Topological Methods in Algebraic…* (?)
+- statement: Milnor 1956, *Manifolds homeomorphic to the 7-sphere* (?)
+- formal: Mathlib `Topology/FiberBundle`
+
+**InfinityCategories** (wave A)
+- primary: Lurie 2009, §2.2.5, §2.2.1, §3.2 (?); Lurie 2017, *Higher Algebra*, §1.1, §1.2, §1.3 (?); Cisinski 2019, *Higher Categories and Homotopical…* (?); Lurie n.d., *Kerodon: an online resource for…*; Riehl–Verity 2022, *∞-Category Theory*
+- theorem: Joyal 2002, *Quasi-categories and Kan complexes* (?); Joyal 2008, *Theory of quasi-categories and its…* (?); Liu–Zheng 2012, *Enhanced six operations and base change…*, §2 (?)
+- formal: Mathlib `AlgebraicTopology/Quasicategory`; `emilyriehl/infinity-cosmos`; McKoen 2026, *Formalization of Functor…* (?)
+
+**StrictHigherCategories** (wave B)
+- primary: Ara et al. 2025, *Polygraphs* (?)
+- conventions: Maltsiniotis 2010, *Grothendieck ∞-groupoids, and still…* (?)
+- theorem: Street 1987, *Algebra of oriented simplexes* (?); Steiner 2004, *Omega-categories and chain complexes* (?); Lafont–Métayer–Worytkiewicz 2010, *Folk model structure on omega-cat* (?); Ara–Maltsiniotis 2014, *Vers une structure de catégorie de…* (?); Ara–Maltsiniotis 2020, *Joint et tranches pour les ∞-catégories…* (?); Ara 2013, *Homotopy theory of Grothendieck…* (?)
+- statement: Grothendieck 1983, *Pursuing Stacks (À la poursuite des…* (?); Henry 2020, *Weak model categories in classical and…* (?); OpenAI 2026, *Grothendieck homotopy hypothesis via…* (OAI#312); OpenAI 2026, *Thomason Model Structures in Every…* (OAI#317)
+- formal: OAI `CategoryTheory/Thomason`
+
+**KhovanovHomology** (wave A)
+- primary: Khovanov 2000, *Categorification of the Jones polynomial*; Bar-Natan 2002, *Khovanov's categorification of the…*; Bar-Natan 2005, *Khovanov's homology for tangles and…*; Turner 2017, *Five lectures on Khovanov homology* (?)
+- conventions: Viro 2004, *Khovanov homology, its definitions and…* (?); Lickorish 1997, *Knot Theory* (?)
+- theorem: Lee 2005, *Endomorphism of the Khovanov invariant*; Rasmussen 2010, *Khovanov homology and the slice genus*; Lee 2002, *Support of the Khovanov's invariants…* (?)
+- statement: Kronheimer–Mrowka 2011, *Khovanov homology is an unknot-detector*
+- formal: Tau Ceti `KnotTheory/PDCode`
+
+**HyperbolicManifolds** (wave B)
+- primary: Ratcliffe 2019, *Foundations of Hyperbolic Manifolds*, Thm 11.8.5 (?); Benedetti–Petronio 1992, *Hyperbolic Geometry* (?); Kapovich 2001, *Hyperbolic Manifolds and Discrete Groups* (?); Frigerio 2017, *Bounded Cohomology of Discrete Groups* (?); Witte Morris 2015, *Arithmetic Groups*
+- theorem: Gromov 1982, *Volume and bounded cohomology* (?); Thurston 1980, *Geometry and Topology of Three-Manifolds*, Ch. 6 (?); Haagerup–Munkholm 1981, *Simplices of maximal volume in…* (?); Mostow 1973, *Strong Rigidity of Locally Symmetric…* (?); Prasad 1973, *Strong rigidity of Q-rank 1 lattices* (?); Bowditch 1993, *Geometrical finiteness for hyperbolic…* (?)
+- statement: OpenAI 2026, *Modulus Proof of Cannon's Conjecture* (OAI#246); OpenAI 2026, *Integral scalar curvature bound for…* (OAI#335)
+
+**TeichmullerTheory** (wave B)
+- primary: Farb–Margalit 2012, *Primer on Mapping Class Groups*, Ch. 4, Ch. 6, Ch. 8 (?); Buser 1992, *Geometry and Spectra of Compact Riemann…* (?); Hubbard 2006, *Teichmüller Theory and Applications to…* (?); Imayoshi–Taniguchi 1992, *Teichmüller Spaces* (?)
+- conventions: Wolpert 1983, *Symplectic geometry of deformations of…* (?)
+- theorem: Ahlfors 2006, *Quasiconformal Mappings* (?); Fathi–Laudenbach–Poénaru 2012, *Thurston's Work on Surfaces* (?)
+- statement: Masur–Minsky 1999, *Geometry of the complex of curves I* (?); Hatcher–Thurston 1980, *Presentation for the mapping class…* (?)
+
+**ThreeManifoldTopology** (wave B)
+- primary: Hempel 1976, *3-Manifolds*, Ch. 3, Ch. 4 (?); Jaco 1980, *Three-Manifold Topology* (?); Hatcher n.d., *Basic 3-Manifold Topology* (?); Matveev 2007, *Algorithmic Topology and Classification…* (?)
+- theorem: Moise 1977, *Geometric Topology in Dimensions 2 and 3* (?); Milnor 1962, *Unique decomposition theorem for…* (?); Papakyriakopoulos 1957, *Dehn's lemma and the asphericity of…* (?); Waldhausen 1968, *Irreducible 3-manifolds which are…* (?); Jaco–Shalen 1979, *Seifert fibered spaces in 3-manifolds* (?); Johannson 1979, *Homotopy Equivalences of 3-Manifolds…* (?); Haken 1961, *Theorie der Normalflächen* (?); Scott 1983, *Geometries of 3-manifolds* (?)
+- formal: Tau Ceti `LowDimTopology`
+
+**SurgeryTheoryAndFourManifolds** (wave C)
+- primary: Wall 1999, *Surgery on Compact Manifolds* (?); Ranicki 2002, *Algebraic and Geometric Surgery* (?); Cohen 1973, *Simple-Homotopy Theory* (?); Brown 1982, *Cohomology of Groups*, Ch. VIII; Gompf–Stipsicz 1999, *4-Manifolds and Kirby Calculus* (?)
+- theorem: Milnor 1966, *Whitehead torsion* (?); Kervaire 1965, *Le théorème de Barden–Mazur–Stallings* (?); Wall 1965, *Finiteness conditions for CW-complexes* (?); Spivak 1967, *Spaces satisfying Poincaré duality* (?); Kirby 1989, *Topology of 4-Manifolds* (?); Davis 2008, *Geometry and Topology of Coxeter Groups* (?)
+- statement: Lück–Reich 2005, *Baum–Connes and the Farrell–Jones…* (?); Freedman–Quinn 1990, *Topology of 4-Manifolds* (?); Behrens et al. 2021, *Disc Embedding Theorem* (?); Donaldson 1983, *Application of gauge theory to…* (?); OpenAI 2026, *Boundary-only obstruction to…* (OAI#305); OpenAI 2026, *Nonhomeomorphic closed aspherical…* (OAI#320); OpenAI 2026, *Counterexample to Wall's D(2) Problem* (OAI#321)
+
+**TransformationGroups** (wave B)
+- primary: Bredon 1972, *Compact Transformation Groups* (?); tom Dieck 1987, *Transformation Groups* (?); Allday–Puppe 1993, *Cohomological Methods in Transformation…* (?); Lück 2005, *Survey on classifying spaces for…* (?); Bredon 1997, *Sheaf Theory* (?)
+- theorem: Hsiang 1975, *Cohomology Theory of Topological…* (?); Quillen 1971, *Spectrum of an equivariant cohomology… II* (?); Borel 1960, *Seminar on Transformation Groups* (?); Smith 1938, *Transformations of finite period* (?); Newman 1931, *Theorem on periodic transformations of…* (?)
+- statement: Yang 1960, *p-adic transformation groups* (?); Pardon 2013, *Hilbert–Smith conjecture for…* (?); OpenAI 2026, *Hilbert–Smith conjecture in every…* (OAI#304)
+
+**TopologicalSixOperations** (wave B)
+- primary: Kashiwara–Schapira 1990, *Sheaves on Manifolds*, Ch. II, Ch. III, Ch. VIII (?); Iversen 1986, *Cohomology of Sheaves* (?); Bredon 1997 (?); Dimca 2004, *Sheaves in Topology* (?); Schürmann 2003, *Topology of Singular Spaces and…* (?)
+- theorem: Verdier 1965, *Dualité dans la cohomologie des espaces…* (?); Spaltenstein 1988, *Resolutions of unbounded complexes* (?); Kashiwara–Schapira 2006, *Categories and Sheaves*; Borel–Moore 1960, *Homology theory for locally compact…* (?)
+- formal: Mathlib `Topology/Sheaves`
+
+**TopologicalCombinatorics** (wave A)
+- primary: Matoušek 2003, *Using the Borsuk–Ulam Theorem*, Ch. 2 (?); Kozlov 2008, *Combinatorial Algebraic Topology* (?); Björner 1995, *Topological methods* (?); Wachs 2007, *Poset topology* (?); Smith 2011, *Subgroup Complexes* (?)
+- theorem: Quillen 1978, *Homotopy properties of the poset of…* (?); Forman 1998, *Morse theory for cell complexes* (?); Lovász 1978, *Kneser's conjecture, chromatic number…* (?); Bárány–Shlosman–Szűcs 1981, *Topological generalization of a theorem…* (?); Stone–Tukey 1942, *Generalized "sandwich" theorems* (?); Brown 1975, *Euler characteristics of groups* (?)
+- statement: Aschbacher–Smith 1993, *Quillen's conjecture for the…* (?); OpenAI 2026, *Rational homology and Quillen's…* (OAI#310)
+
+**StableHomotopyTheory** (umbrella, wave B)
+- primary: Adams 1974, *Stable Homotopy and Generalised Homology*, Part III (?); Ravenel 1986, *Complex Cobordism and Stable Homotopy…* (?); Barnes–Roitzheim 2020, *Foundations of Stable Homotopy Theory* (?); Lurie 2017 (?)
+- conventions: Hovey–Palmieri–Strickland 1997, *Axiomatic stable homotopy theory* (?); Hovey–Shipley–Smith 2000, *Symmetric spectra* (?)
+
+**StableHomotopyTheory/Spectra** (wave B)
+- primary: Schwede 2012, *Symmetric Spectra* (?); Adams 1974 (?); Barnes–Roitzheim 2020 (?)
+- conventions: Hovey–Shipley–Smith 2000 (?)
+- theorem: Bousfield–Friedlander 1978, *Homotopy theory of Γ-spaces, spectra…* (?); Mandell et al. 2001, *Model categories of diagram spectra* (?); Brown 1962, *Cohomology theories* (?); Spanier–Whitehead 1955, *Duality in homotopy theory* (?); Atiyah–Hirzebruch 1961, *Vector bundles and homogeneous spaces* (?); Bousfield 1979, *Localization of spectra with respect to…* (?); Serre 1953 (?); Lurie 2017, §1.4 (?)
+- formal: Mathlib `CategoryTheory/Triangulated`
+
+**StableHomotopyTheory/InfiniteLoopSpacesAndRingSpectra** (wave B)
+- primary: May 1972, *Geometry of Iterated Loop Spaces* (?); Adams 1978, *Infinite Loop Spaces* (?); Elmendorf et al. 1997, *Rings, Modules, and Algebras in Stable…* (?)
+- conventions: Hovey–Shipley–Smith 2000 (?)
+- theorem: Segal 1974, *Categories and cohomology theories* (?); McDuff–Segal 1976, *Homology fibrations and the…* (?); Boardman–Vogt 1973, *Homotopy Invariant Algebraic Structures…* (?); Schwede–Shipley 2000, *Algebras and modules in monoidal model…* (?); Lurie 2017, Ch. 5 (?); Ando et al. 2014, *∞-categorical approach to R-line…* (?)
+
+**StableHomotopyTheory/SteenrodAlgebraAndAdamsSpectralSequence** (wave B)
+- primary: Steenrod–Epstein 1962, *Cohomology Operations* (?); Mosher–Tangora 1968, *Cohomology Operations and Applications…* (?); Hatcher 2002, §4. (?); Ravenel 1986, Ch. 2, Ch. 3 (?)
+- theorem: Milnor 1958, *Steenrod algebra and its dual* (?); Adem 1952, *Iteration of the Steenrod squares in…* (?); Serre 1953, *Cohomologie modulo 2 des complexes…* (?); Adams 1958, *Structure and applications of the…* (?); Adams 1960, *Non-existence of elements of Hopf…* (?); Browder 1969, *Kervaire invariant of framed manifolds…*
+- statement: Hill–Hopkins–Ravenel 2016, *Nonexistence of elements of Kervaire…* (?); OpenAI 2026, *Kervaire invariant problem at the prime…* (OAI#309); OpenAI 2026, *Stable Hurewicz Image of the Sphere at…* (OAI#316)
+
+**StableHomotopyTheory/TopologicalKTheory** (wave B)
+- primary: Atiyah 1967, *K-Theory* (?); Karoubi 1978, *K-Theory: An Introduction* (?); Hatcher 2017, *Vector Bundles and K-Theory*
+- theorem: Atiyah–Bott 1964, *Periodicity theorem for complex vector…* (?); Bott 1959, *Stable homotopy of the classical groups*; Atiyah–Bott–Shapiro 1964, *Clifford modules* (?); Adams–Atiyah 1966, *K-theory and the Hopf invariant* (?); Adams 1962, *Vector fields on spheres* (?); Adams 1963, *Groups J(X) I–IV* (?)
+- statement: Quillen 1971, *Adams conjecture* (?); Atiyah–Segal 1969, *Equivariant K-theory and completion* (?)
+
+**StableHomotopyTheory/ComplexCobordism** (wave C)
+- primary: Ravenel 1986, App. A2, Ch. 4, Ch. 5 (?); Adams 1974, Part II (?); Lurie 2010, *Chromatic Homotopy Theory (Math 252x…* (?)
+- theorem: Lazard 1955, *Sur les groupes de Lie formels à un…*; Milnor 1960, *Cobordism ring Ω* and a complex… I* (?); Quillen 1969, *Formal group laws of unoriented and…* (?); Brown–Peterson 1966, *Spectrum whose Z_p cohomology is the…* (?); Landweber 1976, *Homological properties of comodules…* (?); Conner–Floyd 1966, *Relation of Cobordism to K-Theories* (?); Miller–Ravenel–Wilson 1977, *Periodic phenomena in the Adams–Novikov…* (?)
+- statement: Hahn–Wilson 2022, *Redshift and multiplication for…* (?); OpenAI 2026, *Finite Smith–Toda Complexes at Varying…* (OAI#308)
+- formal: Mathlib `RingTheory/FormalGroup/Basic`
+
+**StableHomotopyTheory/ChromaticHomotopyTheory** (wave C)
+- primary: Ravenel 1992, *Nilpotence and Periodicity in Stable…* (?); Hovey–Strickland 1999, *Morava K-theories and localisation* (?); Lurie 2010 (?); Barthel–Beaudry 2020, *Chromatic structures in stable…* (?)
+- theorem: Ravenel 1984, *Localization with respect to certain…* (?); Hopkins–Smith 1998, *Nilpotence and stable homotopy theory II* (?); Balmer 2005, *Spectrum of prime ideals in tensor…* (?); Thomason 1997, *Classification of triangulated…* (?)
+- statement: Devinatz–Hopkins–Smith 1988, *Nilpotence and stable homotopy theory I* (?); Devinatz–Hopkins 2004, *Homotopy fixed point spectra for closed…* (?); Goerss–Hopkins 2004, *Moduli spaces of commutative ring…* (?); Burklund et al. 2023, *K-theoretic counterexamples to…* (?); OpenAI 2026, *Stabilizer orbits and thick tensor…* (OAI#311); OpenAI 2026, *Finite generation for the K(n)-local…* (OAI#313); OpenAI 2026, *Filtered chromatic splitting at generic…* (OAI#318)
+
+**StableHomotopyTheory/EquivariantStableHomotopyTheory** (wave C)
+- primary: Lewis–May–Steinberger 1986, *Equivariant Stable Homotopy Theory* (?); May 1996, *Equivariant Homotopy and Cohomology…* (?); Hill–Hopkins–Ravenel 2021, *Equivariant Stable Homotopy Theory and…* (?)
+- conventions: Mandell 2004, *Equivariant symmetric spectra* (?); Hausmann 2017, *G-symmetric spectra, semistability and…* (?)
+- theorem: Mandell–May 2002, *Equivariant orthogonal spectra and…* (?); Greenlees–May 1995, *Generalized Tate cohomology* (?); tom Dieck 1975, *Orbittypen und äquivariante Homologie II* (?); Balmer–Sanders 2017, *Spectrum of the equivariant stable…* (?)
+- statement: Carlsson 1984, *Equivariant stable homotopy and Segal's…* (?); Hill–Hopkins–Ravenel 2016 (?); OpenAI 2026, *Cyclic length and chromatic fixed-point…* (OAI#314)
+
+**AlgebraicKTheory** (umbrella, wave A)
+- primary: Weibel 2013, Ch. II, Ch. III, Ch. IV–V; Friedlander–Grayson 2005, *Handbook of K-Theory*; Srinivas 1996, *Algebraic K-Theory* (?); Rosenberg 1994, *Algebraic K-Theory and Its Applications* (?)
+- theorem: Quillen 1973 (?)
+
+**AlgebraicKTheory/ClassicalKTheory** (wave A)
+- primary: Weibel 2013, Ch. I, Ch. II, Ch. III; Milnor 1971, *Algebraic K-Theory* (?); Bass 1968, *Algebraic K-Theory* (?); Gille–Szamuely 2006, *Central Simple Algebras and Galois…*, Ch. 6, Ch. 7
+- theorem: Milnor 1970, *Algebraic K-theory and quadratic forms*; Matsumoto 1969, *Sur les sous-groupes arithmétiques des…* (?); Bass–Tate 1973, *Milnor ring of a global field* (?); Bass 1976, *Euler characteristics and characters of…* (?); Dennis–Stein 1973, *K₂ of radical ideals and semi-local…* (?); Milnor 1966 (?)
+- statement: Bass–Milnor–Serre 1967, *Solution of the congruence subgroup…*; Merkurjev–Suslin 1982, *K-cohomology of Severi–Brauer varieties…* (?); OpenAI 2026, *Bass trace conjecture and the…* (OAI#207)
+- formal: Tau Ceti `CategoryTheory/GrothendieckGroup`; Mathlib `RingTheory/PicardGroup`; OAI `{RingTheory/BassTrace, RingTheory/DirectFiniteness, …}`; OAI `GroupTheory/PeriodicGroups/Steinberg`
+
+**AlgebraicKTheory/HigherAlgebraicKTheory** (wave B)
+- primary: Weibel 2013, Ch. IV, Ch. V, Ch. VI §5; Schlichting 2011, *Higher algebraic K-theory (after…* (?)
+- theorem: Quillen 1973 (?); Grayson 1976, *Higher algebraic K-theory* (?); Waldhausen 1985, *Algebraic K-theory of spaces* (?); Schlichting 2006, *Negative K-theory of derived categories*; Thomason–Trobaugh 1990, *Higher algebraic K-theory of schemes…*, §1; Quillen 1972, *Cohomology and K-theory of the general…* (?); McDuff–Segal 1976 (?); Suslin 1991, *K₃ of a field and the Bloch group* (?)
+- statement: Waldhausen–Jahren–Rognes 2013, *Spaces of PL Manifolds and Categories…* (?)
+
+**AlgebraicKTheory/KTheoryOfSchemes** (wave C)
+- primary: Thomason–Trobaugh 1990; Weibel 2013, Ch. V; Fulton–Lang 1985, *Riemann–Roch Algebra* (?)
+- theorem: Quillen 1973, §7 (?); Bloch 1974, *K₂ and algebraic cycles* (?); Soulé 1985, *Opérations en K-théorie algébrique*; Weibel 1989, *Homotopy algebraic K-theory* (?)
+- statement: Panin 2003, *Equicharacteristic case of the Gersten…* (?); Land–Tamme 2019, *K-theory of pullbacks* (?); Kerz–Strunk–Tamme 2018, *Algebraic K-theory and descent for…* (?); OpenAI 2026, *Integral counterexample to Gersten's…* (OAI#209)
+
+**AlgebraicKTheory/TraceMethods** (wave C)
+- primary: Loday 1998, *Cyclic Homology* (?); Weibel 1994, *Homological Algebra*, Ch. 9; Nikolaus–Scholze 2018, *Topological cyclic homology*; Dundas–Goodwillie–McCarthy 2013, *Local Structure of Algebraic K-Theory* (?)
+- theorem: Hochschild–Kostant–Rosenberg 1962, *Differential forms on regular affine…* (?); Goodwillie 1985, *Cyclic homology, derivations, and the…* (?); Goodwillie 1986, *Relative algebraic K-theory and cyclic…* (?); Bökstedt–Hsiang–Madsen 1993, *Cyclotomic trace and algebraic K-theory…* (?); Bökstedt 1985, *Topological Hochschild homology* (?); Hesselholt–Madsen 1997, *K-theory of finite algebras over Witt…* (?); Antieau et al. 2022, *Beilinson fiber square*
+- statement: Land–Tamme 2019 (?); Hahn–Wilson 2022 (?)
+
+**AlgebraicKTheory/HermitianKTheoryAndLTheory** (wave A)
+- primary: Ranicki 1992, *Algebraic L-Theory and Topological…* (?); Wall 1999 (?); Knus 1991, *Quadratic and Hermitian Forms over Rings* (?); Balmer 2005, *Witt groups* (?); Milnor–Husemoller 1973, *Symmetric Bilinear Forms*; Lam 2005, *Quadratic Forms over Fields*; Elman–Karpenko–Merkurjev 2008, *Algebraic and Geometric Theory of…*
+- theorem: Ranicki 1980, *Algebraic theory of surgery I, II* (?); Balmer 2000, *Triangular Witt groups. Part I* (?); Schlichting 2017, *Hermitian K-theory, derived…* (?)
+- statement: Karoubi 1980, *Le théorème fondamental de la K-théorie…* (?)
+- formal: Tau Ceti `LinearAlgebra/QuadraticForm/Witt`
+
+**AlgebraicKTheory/MotivicHomotopyTheory** (wave C)
+- primary: Morel–Voevodsky 1999, *A¹-homotopy theory of schemes* (?); Mazza–Voevodsky–Weibel 2006, *Motivic Cohomology*; Voevodsky–Suslin–Friedlander 2000, *Cycles, Transfers, and Motivic Homology…* (?)
+- conventions: Jardine 2000, *Motivic symmetric spectra* (?)
+- theorem: Voevodsky 1998, *A¹-homotopy theory* (?); Voevodsky 2010, *Cancellation theorem* (?); Voevodsky 2002, *Motivic cohomology groups are…* (?); Bloch 1986, *Algebraic cycles and higher K-theory* (?); Nesterenko–Suslin 1989, *Homology of the general linear group…* (?); Morel 2004, *Motivic π₀ of the sphere spectrum* (?); Levine 2008, *Homotopy coniveau tower* (?); Friedlander–Suslin 2002, *Spectral sequence relating algebraic…* (?)
+- statement: Voevodsky 2003, *Reduced power operations in motivic…*; Cisinski–Déglise 2019, *Triangulated Categories of Mixed Motives*; Bachmann et al. 2022, *Chow t-structure on the ∞-category of…* (?)
+
+**AlgebraicKTheory/NormResidueTheorem** (wave C)
+- primary: Haesemeyer–Weibel 2019, *Norm Residue Theorem in Motivic…* (?); Weibel 2009, *Norm residue isomorphism theorem* (?); Gille–Szamuely 2006, Ch. 8; Mazza–Voevodsky–Weibel 2006
+- conventions: Serre 1997, *Galois Cohomology*
+- theorem: Voevodsky 2003, *Motivic cohomology with Z/2-coefficients* (?); Voevodsky 2011, *Motivic cohomology with Z/l-coefficients*; Voevodsky 2003; Suslin–Joukhovitski 2006, *Norm varieties* (?); Suslin–Voevodsky 2000, *Bloch–Kato conjecture and motivic…* (?); Merkurjev–Suslin 1982 (?)
+
+**Acquisition list** (not free and not held locally; books needed by a wave-A roadmap, and any work needed by two or more roadmaps of this campaign; journal papers otherwise left to library access, all listed in master (b2); roadmap count in brackets; ★ = wave A): Quillen 1973, *Higher algebraic K-theory* [4] ★; Merkurjev–Suslin 1982, *K-cohomology of Severi–Brauer varieties…* [2] ★; Milnor 1966, *Whitehead torsion* [2] ★; Serre 1953, *Groupes d'homotopie et classes de…* [2] ★; Wall 1999, *Surgery on Compact Manifolds* [2] ★; Bass 1968, *Algebraic K-Theory* [1] ★; Bousfield–Kan 1972, *Homotopy Limits, Completions and…* [1] ★; Cornea et al. 2003, *Lusternik–Schnirelmann Category* [1] ★; Félix–Halperin–Thomas 2001, *Rational Homotopy Theory* [1] ★; Friedlander–Grayson 2005, *Handbook of K-Theory* [1] ★; Goerss–Jardine 2009, *Simplicial Homotopy Theory* [1] ★; Hilton–Mislin–Roitberg 1975, *Localization of Nilpotent Groups and…* [1] ★; Hirschhorn 2003, *Model Categories and Their Localizations* [1] ★; Hovey 1999, *Model Categories* [1] ★; Knus 1991, *Quadratic and Hermitian Forms over Rings* [1] ★; Kozlov 2008, *Combinatorial Algebraic Topology* [1] ★; Lickorish 1997, *Knot Theory* [1] ★; Matoušek 2003, *Using the Borsuk–Ulam Theorem* [1] ★; Milnor 1971, *Algebraic K-Theory* [1] ★; Milnor–Husemoller 1973, *Symmetric Bilinear Forms* [1] ★; Quillen 1967, *Homotopical Algebra* [1] ★; Ranicki 1992, *Algebraic L-Theory and Topological…* [1] ★; Rosenberg 1994, *Algebraic K-Theory and Its Applications* [1] ★; Smith 2011, *Subgroup Complexes* [1] ★; Srinivas 1996, *Algebraic K-Theory* [1] ★; Whitehead 1978, *Homotopy Theory* [1] ★; Adams 1974, *Stable Homotopy and Generalised Homology* [3]; Ravenel 1986, *Complex Cobordism and Stable Homotopy…* [3]; Barnes–Roitzheim 2020, *Foundations of Stable Homotopy Theory* [2]; Bredon 1997, *Sheaf Theory* [2]; McDuff–Segal 1976, *Homology fibrations and the…* [2].
+
+Full bibliographic entries, identifiers, access evidence and verification status: `references_master.md`.
